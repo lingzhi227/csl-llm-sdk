@@ -1,0 +1,136 @@
+param memcpy_params;
+param rank:u16;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const kernel=@import_module("kernel.csl");
+const to_root=@get_color(2);const to_peer=@get_color(3);
+const iq=@get_input_queue(if(rank==0) @as(u16,2) else @as(u16,3));
+const oq=@get_output_queue(if(rank==0) @as(u16,3) else @as(u16,2));
+const receive_task=@get_local_task_id(10);const send_task=@get_local_task_id(11);
+const transfer_ut=@get_ut_id(2);
+const transfer_dst=@get_dsr(dsr_dest,5);const transfer_src=@get_dsr(dsr_src1,5);
+var recurrent_storage=@zeros([8194]f32);
+var query_storage=@zeros([66]f32);var key_storage=@zeros([66]f32);
+var value_storage=@zeros([130]f32);
+var prediction=@zeros([130]f32);var final_output=@zeros([130]f32);
+// Every frame: u32 generation, token, message-phase, then128 FP32 raw words.
+var send_packet=@zeros([131]u32);var receive_packet=@zeros([131]u32);
+var parameters=@zeros([2]f32); // beta, explicit decay.
+var control=@zeros([3]u32); // generation, token, initialization mode(1=adopt,0=zero).
+// gen,last_token,total_commits,initializations,phase,error,receives,sends,
+// generation_commits,token_unblocks,received_words,local_updates.
+var state=@zeros([12]u32);
+// sequence,local_prediction,prediction_transfer,delta_ready/received,delta_send,
+// state_updated,local_output,output_transfer,commit,unblock.
+var events=@zeros([10]u32);
+fn mark(slot:u16) void {events[0]+=1;events[slot]=events[0];}
+fn fail(code:u32) void {state[4]=9;state[5]=code;sys.unblock_cmd_stream();}
+fn header(message:u32) void {send_packet[0]=control[0];send_packet[1]=control[1];send_packet[2]=message;}
+fn valid_header(message:u32) bool {
+  return receive_packet[0]==control[0] and receive_packet[1]==control[1] and receive_packet[2]==message;
+}
+fn arm_receive() void {
+  const fabric=@get_dsd(fabin_dsd,.{.input_queue=iq,.extent=131});
+  const memory=@get_dsd(mem1d_dsd,.{.base_address=&receive_packet,.extent=131});
+  @load_to_dsr(transfer_dst,memory);
+  @load_to_dsr(transfer_src,fabric,.{.async=true,.activate=receive_task,.ut_id=transfer_ut});
+  @mov32(transfer_dst,transfer_src,.{.async=true});
+}
+fn arm_send() void {
+  const fabric=@get_dsd(fabout_dsd,.{.output_queue=oq,.extent=131});
+  const memory=@get_dsd(mem1d_dsd,.{.base_address=&send_packet,.extent=131});
+  @load_to_dsr(transfer_dst,fabric,.{.async=true,.activate=send_task,.ut_id=transfer_ut});
+  @load_to_dsr(transfer_src,memory);
+  @mov32(transfer_dst,transfer_src,.{.async=true});
+}
+fn commit() void {
+  state[1]=control[1];state[2]+=1;state[8]+=1;state[4]=4;mark(8);
+  state[9]=1;mark(9);sys.unblock_cmd_stream();
+}
+fn update_local(delta:[*]f32) void {
+  kernel.update_state(@ptrcast([*]f32,&recurrent_storage[1]),@ptrcast([*]f32,&key_storage[1]),delta);
+  state[11]+=1;mark(5);
+  kernel.reduce(@ptrcast([*]f32,&recurrent_storage[1]),@ptrcast([*]f32,&query_storage[1]),
+                @ptrcast([*]f32,&send_packet[3]));
+  mark(6);
+}
+fn initialize() void {
+  if((state[4]>=1 and state[4]<=3) or control[0]<=state[0] or control[1]!=0 or control[2]>1){fail(1);return;}
+  if(control[2]==1 and state[3]!=0){fail(2);return;}
+  if(control[2]==0){
+    const all=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]f32,&recurrent_storage[1]),.extent=8192});
+    @fmovs(all,0.0);
+  }
+  state[0]=control[0];state[1]=0;state[3]+=1;state[4]=0;state[5]=0;
+  for(@range(u16,6))|i|{state[i+6]=0;}
+  for(@range(u16,10))|i|{events[i]=0;}
+  sys.unblock_cmd_stream();
+}
+fn token() void {
+  if(control[0]!=state[0] or control[1]!=state[1]+1 or (state[4]!=0 and state[4]!=4)){fail(3);return;}
+  for(@range(u16,10))|i|{events[i]=0;}
+  state[4]=1;state[5]=0;state[6]=0;state[7]=0;state[9]=0;state[10]=0;state[11]=0;
+  kernel.decay_predict(@ptrcast([*]f32,&recurrent_storage[1]),@ptrcast([*]f32,&key_storage[1]),parameters[1],
+                      @ptrcast([*]f32,&send_packet[3]));
+  mark(1);
+  if(comptime rank==0){arm_receive();}else{header(1);arm_send();}
+}
+task received_complete() void {
+  // The complete131-word transfer has finished before header or body consumption.
+  if(comptime rank==0){
+    if(state[4]==1){
+      if(!valid_header(1)){fail(4);return;}
+      state[6]+=1;state[10]+=131;mark(2);
+      for(@range(u16,128))|i|{
+        prediction[i+1]=@bitcast(f32,send_packet[i+3])+@bitcast(f32,receive_packet[i+3]);
+        const delta:f32=parameters[0]*(value_storage[i+1]-prediction[i+1]);
+        send_packet[i+3]=@bitcast(u32,delta);
+      }
+      mark(3);state[4]=2;header(2);arm_send();
+    }else if(state[4]==3){
+      if(!valid_header(3)){fail(5);return;}
+      state[6]+=1;state[10]+=131;mark(7);
+      for(@range(u16,128))|i|{final_output[i+1]=@bitcast(f32,send_packet[i+3])+@bitcast(f32,receive_packet[i+3]);}
+      commit();
+    }else{fail(6);}
+  }else{
+    if(state[4]!=2 or !valid_header(2)){fail(7);return;}
+    state[6]+=1;state[10]+=131;mark(3);
+    update_local(@ptrcast([*]f32,&receive_packet[3]));
+    state[4]=3;header(3);arm_send();
+  }
+}
+task sent_complete() void {
+  state[7]+=1;
+  if(comptime rank==0){
+    if(state[4]!=2){fail(8);return;}
+    mark(4);
+    // Delta source can be consumed/reused only after its send completion.
+    update_local(@ptrcast([*]f32,&send_packet[3]));
+    state[4]=3;header(3);arm_receive();
+  }else{
+    if(state[4]==1){mark(2);state[4]=2;arm_receive();}
+    else if(state[4]==3){mark(7);commit();}
+    else{fail(9);}
+  }
+}
+const rp:[*]f32=&recurrent_storage;const qp:[*]f32=&query_storage;const kp:[*]f32=&key_storage;
+const vp:[*]f32=&value_storage;const pp:[*]f32=&prediction;const yp:[*]f32=&final_output;
+const tx:[*]u32=&send_packet;const rx:[*]u32=&receive_packet;const cp:[*]u32=&control;
+const sp:[*]u32=&state;const ep:[*]u32=&events;const ap:[*]f32=&parameters;
+comptime{
+  @bind_local_task(received_complete,receive_task);@bind_local_task(sent_complete,send_task);
+  if(rank==0){
+    @initialize_queue(iq,.{.color=to_root});@initialize_queue(oq,.{.color=to_peer});
+    @set_local_color_config(to_root,.{.routes=.{.rx=.{EAST},.tx=.{RAMP}}});
+    @set_local_color_config(to_peer,.{.routes=.{.rx=.{RAMP},.tx=.{EAST}}});
+  }else{
+    @initialize_queue(iq,.{.color=to_peer});@initialize_queue(oq,.{.color=to_root});
+    @set_local_color_config(to_root,.{.routes=.{.rx=.{RAMP},.tx=.{WEST}}});
+    @set_local_color_config(to_peer,.{.routes=.{.rx=.{WEST},.tx=.{RAMP}}});
+  }
+  @export_symbol(rp,"recurrent_storage");@export_symbol(qp,"query_storage");@export_symbol(kp,"key_storage");
+  @export_symbol(vp,"value_storage");@export_symbol(pp,"prediction");@export_symbol(yp,"final_output");
+  @export_symbol(tx,"send_packet");@export_symbol(rx,"receive_packet");@export_symbol(cp,"control");
+  @export_symbol(sp,"state");@export_symbol(ep,"events");@export_symbol(ap,"parameters");
+  @export_symbol(initialize);@export_symbol(token);
+}

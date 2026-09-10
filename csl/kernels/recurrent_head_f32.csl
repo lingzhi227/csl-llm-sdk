@@ -1,0 +1,35 @@
+// One64x128 key-row shard. Synchronous DSR3/4 leases, persistent FP32 state.
+const state_dst=@get_dsr(dsr_dest,3);
+const state_src=@get_dsr(dsr_src0,3);
+const delta_src=@get_dsr(dsr_src1,3);
+const sum_dst=@get_dsr(dsr_dest,4);
+const sum_src=@get_dsr(dsr_src0,4);
+const matrix_src=@get_dsr(dsr_src1,4);
+fn accumulate(value:f32) void {@fmacs(sum_dst,sum_src,matrix_src,value);}
+fn update(value:f32) void {@fmacs(state_dst,state_src,delta_src,value);}
+fn reduce(matrix:[*]f32,vector:[*]f32,result:[*]f32) void {
+  const output=@get_dsd(mem1d_dsd,.{.base_address=result,.extent=128});
+  const row=@get_dsd(mem1d_dsd,.{.base_address=matrix,.extent=128});
+  const x=@get_dsd(mem1d_dsd,.{.base_address=vector,.extent=64});
+  @fmovs(output,0.0);
+  @load_to_dsr(sum_dst,output,.{.save_address=false});
+  @load_to_dsr(sum_src,output,.{.save_address=false});
+  @load_to_dsr(matrix_src,row,.{.save_address=true});
+  @map(accumulate,x);
+}
+fn decay_predict(matrix:[*]f32,key:[*]f32,decay:f32,prediction:[*]f32) void {
+  const all=@get_dsd(mem1d_dsd,.{.base_address=matrix,.extent=8192});
+  @load_to_dsr(state_dst,all,.{.save_address=false});
+  @load_to_dsr(state_src,all,.{.save_address=false});
+  @fmuls(state_dst,state_src,decay);
+  reduce(matrix,key,prediction);
+}
+fn update_state(matrix:[*]f32,key:[*]f32,delta:[*]f32) void {
+  const row=@get_dsd(mem1d_dsd,.{.base_address=matrix,.extent=128});
+  const correction=@get_dsd(mem1d_dsd,.{.base_address=delta,.extent=128});
+  const k=@get_dsd(mem1d_dsd,.{.base_address=key,.extent=64});
+  @load_to_dsr(state_dst,row,.{.save_address=true});
+  @load_to_dsr(state_src,row,.{.save_address=true});
+  @load_to_dsr(delta_src,correction,.{.save_address=false});
+  @map(update,k);
+}

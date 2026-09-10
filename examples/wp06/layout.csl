@@ -1,0 +1,10 @@
+const memcpy=@import_module("<memcpy/get_params>",.{.width=2,.height=1});
+layout{
+ @set_rectangle(2,1);
+ for(@range(i16,2))|x|{@set_tile_code(x,0,"pe.csl",.{.memcpy_params=memcpy.get_params(x),.rank=@as(u16,x)});}
+ @export_name("recurrent_storage",[*]f32,false);@export_name("query_storage",[*]f32,false);@export_name("key_storage",[*]f32,false);
+ @export_name("value_storage",[*]f32,false);@export_name("prediction",[*]f32,false);@export_name("final_output",[*]f32,false);
+ @export_name("send_packet",[*]u32,false);@export_name("receive_packet",[*]u32,false);@export_name("control",[*]u32,false);
+ @export_name("state",[*]u32,false);@export_name("events",[*]u32,false);@export_name("parameters",[*]f32,false);
+ @export_name("initialize",fn()void);@export_name("token",fn()void);
+}

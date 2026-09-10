@@ -1,0 +1,740 @@
+{
+  "package": "WP06",
+  "candidate": "001",
+  "scope": "synthetic single full128x128 recurrent head; normalized/scaled q,k and explicit beta/decay inputs; no whole layer",
+  "passed": true,
+  "tokens": 4,
+  "generations": 3,
+  "runtime_instances": 1,
+  "numerical_policy": {
+    "name": "recurrent128-two64-fma-v1",
+    "key_dim": 128,
+    "value_dim": 128,
+    "key_rows_per_pe": 64,
+    "boundary": "q/k already normalized, q already scaled; v,beta,decay are explicit FP32 inputs",
+    "state_order": "FP32 multiply decay in place; local prediction64 ordered FMAs; root FP32 sum; delta subtraction then multiply; state update FMA; local output64 ordered FMAs; root FP32 sum",
+    "state_bound": "prior bound*abs(decay) plus FP32 multiply; update adds key*delta propagated error plus one FMA rounding",
+    "reduction_bound": "input perturbation plus gamma64*absolute products on each PE, followed by FP32 two-part sum",
+    "delta_bound": "beta*prediction bound plus gamma2*abs(beta)*(abs(v)+abs(prediction)+prediction_bound)",
+    "domain": "bounded finite synthetic FP32 inputs; beta and decay in[0,1]; no overflow/subnormal correctness claim",
+    "reset": "generation1 adopts uploaded initial state, generation2/3 zero entire device state; token counters restart",
+    "official_boundary": "normalization disabled; official divides raw q by sqrt128 and exponentiates g; candidate receives actual resulting FP32 q and decay",
+    "source_reference_comparison": {
+      "atol": 3e-06,
+      "rtol": 3e-06,
+      "scope": "separate tiny official-body comparison, not CSL stage tolerances"
+    }
+  },
+  "stages": [
+    {
+      "call": 1,
+      "generation": 1,
+      "token": 1,
+      "stages": {
+        "prediction": {
+          "passed": true,
+          "max_absolute_error": 4.156390787102282e-10,
+          "max_error_over_bound": 0.006188012275878755
+        },
+        "delta": {
+          "passed": true,
+          "max_absolute_error": 1.2627879186766222e-08,
+          "max_error_over_bound": 0.30143556196455895
+        },
+        "state": {
+          "passed": true,
+          "max_absolute_error": 2.6426524163403187e-09,
+          "max_error_over_bound": 0.3649398652805797
+        },
+        "output": {
+          "passed": true,
+          "max_absolute_error": 4.441547040638476e-10,
+          "max_error_over_bound": 0.009684951915405316
+        }
+      },
+      "checks": {
+        "numerical_stages": true,
+        "protocol_state_events": true,
+        "guards": true,
+        "immutable_inputs": true,
+        "output_transport_bits": true,
+        "stable_ids": true,
+        "beta_zero_delta": true
+      },
+      "metadata": [
+        [
+          1,
+          1,
+          1,
+          1,
+          4,
+          0,
+          2,
+          1,
+          1,
+          1,
+          262,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          4,
+          0,
+          1,
+          2,
+          1,
+          1,
+          131,
+          1
+        ]
+      ],
+      "events": [
+        [
+          9,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        [
+          8,
+          1,
+          2,
+          3,
+          0,
+          4,
+          5,
+          6,
+          7,
+          8
+        ]
+      ],
+      "receive_headers": [
+        [
+          1,
+          1,
+          3
+        ],
+        [
+          1,
+          1,
+          2
+        ]
+      ],
+      "send_buffer_headers": [
+        [
+          1,
+          1,
+          3
+        ],
+        [
+          1,
+          1,
+          3
+        ]
+      ]
+    },
+    {
+      "call": 2,
+      "generation": 1,
+      "token": 2,
+      "stages": {
+        "prediction": {
+          "passed": true,
+          "max_absolute_error": 1.6431076516748577e-09,
+          "max_error_over_bound": 0.009184607652125204
+        },
+        "delta": {
+          "passed": true,
+          "max_absolute_error": 0.0,
+          "max_error_over_bound": 0.0
+        },
+        "state": {
+          "passed": true,
+          "max_absolute_error": 1.3213262081701593e-09,
+          "max_error_over_bound": 0.2717191670361825
+        },
+        "output": {
+          "passed": true,
+          "max_absolute_error": 2.5559197564407193e-10,
+          "max_error_over_bound": 0.01042268829894167
+        }
+      },
+      "checks": {
+        "numerical_stages": true,
+        "protocol_state_events": true,
+        "guards": true,
+        "immutable_inputs": true,
+        "output_transport_bits": true,
+        "stable_ids": true,
+        "beta_zero_delta": true
+      },
+      "metadata": [
+        [
+          1,
+          2,
+          2,
+          1,
+          4,
+          0,
+          2,
+          1,
+          2,
+          1,
+          262,
+          1
+        ],
+        [
+          1,
+          2,
+          2,
+          1,
+          4,
+          0,
+          1,
+          2,
+          2,
+          1,
+          131,
+          1
+        ]
+      ],
+      "events": [
+        [
+          9,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        [
+          8,
+          1,
+          2,
+          3,
+          0,
+          4,
+          5,
+          6,
+          7,
+          8
+        ]
+      ],
+      "receive_headers": [
+        [
+          1,
+          2,
+          3
+        ],
+        [
+          1,
+          2,
+          2
+        ]
+      ],
+      "send_buffer_headers": [
+        [
+          1,
+          2,
+          3
+        ],
+        [
+          1,
+          2,
+          3
+        ]
+      ]
+    },
+    {
+      "call": 3,
+      "generation": 2,
+      "token": 1,
+      "stages": {
+        "prediction": {
+          "passed": true,
+          "max_absolute_error": 0.0,
+          "max_error_over_bound": 0.0
+        },
+        "delta": {
+          "passed": true,
+          "max_absolute_error": 0.0,
+          "max_error_over_bound": 0.0
+        },
+        "state": {
+          "passed": true,
+          "max_absolute_error": 1.7462298274040222e-09,
+          "max_error_over_bound": 0.2877455193730085
+        },
+        "output": {
+          "passed": true,
+          "max_absolute_error": 5.448171557995152e-10,
+          "max_error_over_bound": 0.005906909364883068
+        }
+      },
+      "checks": {
+        "numerical_stages": true,
+        "protocol_state_events": true,
+        "guards": true,
+        "immutable_inputs": true,
+        "output_transport_bits": true,
+        "stable_ids": true,
+        "beta_zero_delta": true
+      },
+      "metadata": [
+        [
+          2,
+          1,
+          3,
+          2,
+          4,
+          0,
+          2,
+          1,
+          1,
+          1,
+          262,
+          1
+        ],
+        [
+          2,
+          1,
+          3,
+          2,
+          4,
+          0,
+          1,
+          2,
+          1,
+          1,
+          131,
+          1
+        ]
+      ],
+      "events": [
+        [
+          9,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        [
+          8,
+          1,
+          2,
+          3,
+          0,
+          4,
+          5,
+          6,
+          7,
+          8
+        ]
+      ],
+      "receive_headers": [
+        [
+          2,
+          1,
+          3
+        ],
+        [
+          2,
+          1,
+          2
+        ]
+      ],
+      "send_buffer_headers": [
+        [
+          2,
+          1,
+          3
+        ],
+        [
+          2,
+          1,
+          3
+        ]
+      ]
+    },
+    {
+      "call": 4,
+      "generation": 3,
+      "token": 1,
+      "stages": {
+        "prediction": {
+          "passed": true,
+          "max_absolute_error": 0.0,
+          "max_error_over_bound": 0.0
+        },
+        "delta": {
+          "passed": true,
+          "max_absolute_error": 0.0,
+          "max_error_over_bound": 0.0
+        },
+        "state": {
+          "passed": true,
+          "max_absolute_error": 0.0,
+          "max_error_over_bound": 0.0
+        },
+        "output": {
+          "passed": true,
+          "max_absolute_error": 0.0,
+          "max_error_over_bound": 0.0
+        }
+      },
+      "checks": {
+        "numerical_stages": true,
+        "protocol_state_events": true,
+        "guards": true,
+        "immutable_inputs": true,
+        "output_transport_bits": true,
+        "stable_ids": true,
+        "beta_zero_delta": true
+      },
+      "metadata": [
+        [
+          3,
+          1,
+          4,
+          3,
+          4,
+          0,
+          2,
+          1,
+          1,
+          1,
+          262,
+          1
+        ],
+        [
+          3,
+          1,
+          4,
+          3,
+          4,
+          0,
+          1,
+          2,
+          1,
+          1,
+          131,
+          1
+        ]
+      ],
+      "events": [
+        [
+          9,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        [
+          8,
+          1,
+          2,
+          3,
+          0,
+          4,
+          5,
+          6,
+          7,
+          8
+        ]
+      ],
+      "receive_headers": [
+        [
+          3,
+          1,
+          3
+        ],
+        [
+          3,
+          1,
+          2
+        ]
+      ],
+      "send_buffer_headers": [
+        [
+          3,
+          1,
+          3
+        ],
+        [
+          3,
+          1,
+          3
+        ]
+      ]
+    }
+  ],
+  "initializations": [
+    {
+      "generation": 1,
+      "adopt_uploaded_state": true,
+      "states": [
+        [
+          1,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "passed": true
+    },
+    {
+      "generation": 2,
+      "adopt_uploaded_state": false,
+      "states": [
+        [
+          2,
+          0,
+          2,
+          2,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          2,
+          0,
+          2,
+          2,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "passed": true
+    },
+    {
+      "generation": 3,
+      "adopt_uploaded_state": false,
+      "states": [
+        [
+          3,
+          0,
+          3,
+          3,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          3,
+          0,
+          3,
+          3,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "passed": true
+    }
+  ],
+  "sram": {
+    "out_0_0.elf": {
+      "low_section_end": 42256,
+      "low_section_bytes": 42248,
+      "static_allocated_section_bytes": 42646,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 49152,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    "out_1_0.elf": {
+      "low_section_end": 41936,
+      "low_section_bytes": 41928,
+      "static_allocated_section_bytes": 42328,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 49152,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    }
+  },
+  "execution": [
+    {
+      "name": "compile",
+      "seconds": 4.113954633940011,
+      "observed_live_cgroup_max_bytes": 419053568,
+      "deadline_seconds": 300,
+      "execution": "normal_exit",
+      "cleanup": "unit_stopped"
+    },
+    {
+      "name": "simulate",
+      "seconds": 81.67754863388836,
+      "observed_live_cgroup_max_bytes": 209616896,
+      "deadline_seconds": 300,
+      "execution": "normal_exit",
+      "cleanup": "unit_stopped"
+    }
+  ],
+  "verification": {
+    "source_count": 22,
+    "source_unchanged": true,
+    "compiled_count": 15,
+    "compiled_unchanged": true,
+    "allocated_run_bytes": 8581120,
+    "normal_stop": true
+  },
+  "owned_units_quiescent": true,
+  "cpu_reference": {
+    "passed": true,
+    "checks": [
+      {
+        "generation": 1,
+        "token": 1,
+        "stage": "output",
+        "passed": true,
+        "max_absolute_error": 2.2636603762239346e-10
+      },
+      {
+        "generation": 1,
+        "token": 1,
+        "stage": "state",
+        "passed": true,
+        "max_absolute_error": 2.6426524163403187e-09
+      },
+      {
+        "generation": 1,
+        "token": 2,
+        "stage": "output",
+        "passed": true,
+        "max_absolute_error": 1.7946444623353347e-10
+      },
+      {
+        "generation": 1,
+        "token": 2,
+        "stage": "state",
+        "passed": true,
+        "max_absolute_error": 1.3213262081701593e-09
+      },
+      {
+        "generation": 2,
+        "token": 1,
+        "stage": "output",
+        "passed": true,
+        "max_absolute_error": 2.7009009698902853e-10
+      },
+      {
+        "generation": 2,
+        "token": 1,
+        "stage": "state",
+        "passed": true,
+        "max_absolute_error": 1.7462298274040222e-09
+      },
+      {
+        "generation": 3,
+        "token": 1,
+        "stage": "output",
+        "passed": true,
+        "max_absolute_error": 0.0
+      },
+      {
+        "generation": 3,
+        "token": 1,
+        "stage": "state",
+        "passed": true,
+        "max_absolute_error": 0.0
+      }
+    ],
+    "torch": "2.4.0+cu121",
+    "device": "cpu",
+    "threads": 1,
+    "source_sha256": "762feb6c7426a7f15b5bf830df54c07438bf9e7c27b8cdb23179045920412c3b",
+    "upstream_commit": "4815a0a6a064214f2d8208c094464a5a6b76ca8d",
+    "definition_lines": {
+      "l2norm": [
+        294,
+        297
+      ],
+      "torch_recurrent_gated_delta_rule": [
+        438,
+        497
+      ]
+    },
+    "adaptation": "remove hub decorators only; unchanged official bodies; explicit torch dependency; no complete Transformers runtime",
+    "boundary": "official normalization disabled; exact q division and exp(g) results become candidate FP32 inputs",
+    "output_hashes": {
+      "fixtures.json": "fac36206a60e47ba3f84f8e7958c8fe7ee8e0c851b778fe4104112d53938a462",
+      "oracles.json": "4b1dd1a0acdb1f72aced1981015e479937d91c94ca475a9e0e7b4f8e8d756703",
+      "numerical-policy.json": "949a77e14cdf3474495dc40c2114b2a83bd6bef643412f4ff14f5a446366ab60"
+    }
+  },
+  "limitations": "host waits for both PE command completions; local commits are not a distributed atomic transaction; error drain/recovery unqualified",
+  "host_tests": 41,
+  "file_hashes": {
+    "source-manifest.json": "19332cff604de8b87fcf29bb0c30a3a29ac6a030dc42b49a88baa155130ee091",
+    "compiled-subset-before-run.json": "af1c2950943c5fc8aaf40492b964d636dcdcb8f855f7ab6868d90ab2b4251b5b",
+    "observations.json": "8248c016b4f4830d41c52699cdcc2a50fa570dabc6caed541bdc278130eeb643",
+    "result.json": "376ac61e27926aff45cb2f52647bb8b3870794b4ff430bd8ddb2342a0d962559",
+    "post-run-verification.json": "14065cf5eb1fda23a1ca27fb54f2d76f6fcbd80c01a88caf3a367df707379eee"
+  }
+}

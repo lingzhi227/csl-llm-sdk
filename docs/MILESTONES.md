@@ -1,5 +1,12 @@
 # Accepted milestones
 
+## WP06 — Accepted, September 10, 2026
+
+One full128×128 synthetic recurrent head passed four token updates across three
+generations on two PEs. All prediction, delta, full-state and output gates passed;
+state persistence, resets and framed transfer lifecycle were verified. Both PEs
+fit48 KiB including4 KiB stack allowance. See [report](WP06-REPORT.md).
+
 ## WP05 — Accepted, September 10, 2026
 
 Four full5120 ordinary RMS calls and64 signed conversion probes passed with

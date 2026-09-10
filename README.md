@@ -2,7 +2,7 @@
 
 **Handwritten CSL inference for open language models on one to three Cerebras WSE-3 systems.** We are building the numerical kernels, execution schedules and persistent inference state, while reusing Cerebras tooling for layout, compilation, communication and program execution. The first target is text inference for **Qwen3.8-27B**; support for related model architectures is a longer-term goal.
 
-**Current result:** real BF16 weight slices run in the SDK 2.10.1 simulator, including persistent accumulation across all 5120 input columns for 128 outputs and a two-PE projection → fabric transfer → sum → RMS normalization chain. Full-model text generation and physical one/two/three-system inference remain unvalidated. Completed experiments below are simulator results, not hardware performance measurements.
+**Current result:** real BF16 weight slices run in the SDK 2.10.1 simulator, including persistent accumulation across all 5120 input columns for 128 outputs and a two-PE projection → fabric transfer → sum → RMS normalization chain. Synthetic full5120 RMS with BF16 output and a full128×128 persistent DeltaNet head also pass their scoped checks. Full-model text generation and physical one/two/three-system inference remain unvalidated. Completed experiments below are simulator results, not hardware performance measurements.
 
 ## 1. Project design
 
@@ -46,6 +46,15 @@ The intended deployment paths are **single-wafer weight streaming** and **two/th
 | [`PUBLIC_MANIFEST.json`](PUBLIC_MANIFEST.json) | Integrity inventory of the published files. |
 
 ## 3. Completed development log — newest first
+
+### WP06 · Full128×128 persistent DeltaNet head · September 10, 2026
+
+Two simulated PEs retain a full FP32 recurrent state and compute decay, prediction reduction, delta distribution, state update and output reduction entirely in CSL. Four token updates across three request generations passed independent checks of every full state and intermediate vector.
+
+- Continuous tokens preserve state; resets establish zero state before changed inputs. Packet identities, event order, guards and commit counters passed.
+- Both compiled PEs fit48 KiB including a4 KiB stack allowance. Simulation completed normally in81.7 seconds with observed210 MB memory use.
+
+**Scope:** one synthetic full-size recurrent head with normalized/scaled Q/K and explicit beta/decay inputs. [Report](docs/WP06-REPORT.md) · [Arithmetic and ownership](docs/WP06-DESIGN.md) · [Evidence](evidence/wp06.json) · [Example](examples/wp06)
 
 ### WP05 · RMS5120 with device BF16 rounding · September 10, 2026
 
@@ -110,6 +119,6 @@ For simulator experiments, follow the linked milestone reports and the
 
 The guarded research harness runs one heavy job at a time with a 20 GiB RAM ceiling, zero task swap, an 8 GiB available-memory reserve and bounded deadlines/cache usage. These are local resource controls, not performance requirements for the eventual inference SDK. See the reports and runner implementation for exact limitations.
 
-**Next:** a full128×128 DeltaNet recurrent head with persistent state and device reductions, followed by gated normalization, remaining model kernels and complete-model integration. Work in progress is not listed above as completed. See [current status](docs/STATUS.md) and [milestone details](docs/MILESTONES.md).
+**Next:**128-element direct-gain gated RMS with the correct early dtype cast and SiLU(z), then composition with the recurrent head, remaining model kernels and complete-model integration. Work in progress is not listed above as completed. See [current status](docs/STATUS.md) and [milestone details](docs/MILESTONES.md).
 
 MIT licensed; see [LICENSE](LICENSE). This is an independent research project, not an official Cerebras inference product.
