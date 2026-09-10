@@ -1,6 +1,6 @@
 # Implementation status
 
-WP00–WP08 and WP10–WP14 accepted, 2026-09-10. Continuous development is
+WP00–WP08 and WP10–WP15 accepted, 2026-09-10. Continuous development is
 active under bounded control-node packages. Full-model inference remains incomplete.
 
 | Component | Status |
@@ -27,7 +27,8 @@ active under bounded control-node packages. Full-model inference remains incompl
 | WP12 Q/K-to-attention composition | Accepted: one PE, original synthetic Q/K/V/gate through normalization/rotation, device copy and persistent cache8 attention; ten successes, overflow/reset and normal stop |
 | WP13 original attention projections | Accepted: all1024 selected Q/rawgate/K/V rows over5120columns, four common inputs, eight independent single-PE runtimes;4096final outputs and lifecycle/source gates pass for standalone projection coverage |
 | WP14 original hidden Q/K preprocessing | Accepted: four full5120 Q/K projection PEs hand off exact operands to a trained RMS/partialRoPE consumer; one dense call atposition1, all source/stage/retention checks and normalstop; no attention/KV composition |
-| WP15 original projected attention | Source/CPU/protocol/resource preparation for consecutive original-hidden tokens with persistent KV; SDK execution not yet admitted |
+| WP15 original projected attention | Accepted: ten PEs, all1024 selected rows/full5120columns, two same-request original-hidden tokens, persistent KV, exact device handoff and all source/stage/cast/cache/retention gates; normal stop in1187.19s |
+| WP16 original full MLP | Source, acquisition, full CPU-reference and CSL resource planning at5120→17408→5120; downloads/CPU/SDK not yet admitted |
 | Full generation, physical WSE-3 | Not implemented/qualified here |
 
 Attempt wp00-001 failed in the installed wrapper's temporary-directory mount before

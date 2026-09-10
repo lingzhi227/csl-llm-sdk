@@ -2123,13 +2123,13 @@
   "numerical_artifacts": {
     "wp14-device-observations.json": "460956140e4d066c4b2b4357d996f86187648257d4b3fb4c688db09449a1533d",
     "wp14-reference-static.json": "923be8d49e968ef4585fea07048c32393e4c2b184b948ae39e78ee36962afa0e",
-    "wp14-reference-case0.json": "a26dc80ec68090b94b6e4bd9baef40f185f2941e95e8760f2126c399c264f5f4",
-    "wp14-reference-case1.json": "f81a115cecbb4ed3e3a9cf726bb6fe984c430077b4b2871b33d45948f724bcb7",
-    "wp14-reference-case2.json": "08f62e584b57ce28824afab46d79fa57e401c0bf1565a76870574b43fca67801",
-    "wp14-reference-case3.json": "d6f4b977370d7e3a0be7077c72c2db8da5d1076061f9f194d2f9d479869f5505"
+    "wp14-reference-case0.json": "5d90c4e01442e31e336e9526db04370cfb045a9a48435b2663b8ec4239569a8f",
+    "wp14-reference-case1.json": "bc831e7c24117cdf3a2b63343eeebd47f970dabe6c935724370a7f1d4ac55d13",
+    "wp14-reference-case2.json": "d98944d3d363abd17d5ab433f6e8d292c4cda6b8769321e4b2ec4978448fa5be",
+    "wp14-reference-case3.json": "aa4330c35cb1fec7bc98d565810b3752f3a5967620f39c53a22b49500de23c55"
   },
-  "typed_array_count": 335,
-  "omitted_parameter_arrays": 6,
+  "typed_array_count": 327,
+  "omitted_parameter_arrays": 14,
   "original_input_artifact": "wp13-inputs.json",
   "original_input_artifact_sha256": "15e9a818b12f93f4f5da815abac2c41ff45c527d988da0975aa029c844351ad5",
   "journal": {
@@ -2140,5 +2140,5 @@
     "launch_pairs": 59
   },
   "reference_boundary": "Original projection-input hidden, not embeddings or a completed upstream block. CPU has four cases; connected SDK scope is densecase0/position1 only.",
-  "publication_note": "Typed arrays preserve binary payload hashes. Four complete resident projection-weight buffers and two complete norm-parameter arrays are omitted with dtype/shape/hash retained. Their actual-run original-byte checks passed. Downloaded weight files, raw NPZ archives, SDK products and private runtime paths are excluded. CPU source intervals remain conservative; no rotary product/sum zero occurred in this SDK case."
+  "publication_note": "Typed arrays preserve binary payload hashes. Four complete resident projection-weight buffers, two complete norm-parameter arrays and eight direct static1+w parameter-transform arrays are omitted with dtype/shape/hash retained. Their actual-run original-byte checks passed. Downloaded weight files, raw NPZ archives, SDK products and private runtime paths are excluded. CPU source intervals remain conservative; no rotary product/sum zero occurred in this SDK case."
 }

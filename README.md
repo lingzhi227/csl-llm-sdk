@@ -2,7 +2,7 @@
 
 **Building inference for open language models with handwritten Cerebras Systems Language (CSL), targeting one to three WSE-3 systems.** We implement the numerical kernels, execution control and persistent model state, and use the Cerebras SDK to compile and run the device programs. The first target is **Qwen3.8-27B text inference**; the longer-term goal is a reusable SDK for related model architectures.
 
-**Working today:** SDK 2.10.1 simulator experiments cover original-weight matrix–vector products, communication between processing elements, full-dimension normalization, a persistent DeltaNet recurrent head, its input/output processing, a full-dimension attention head with persistent KV cache, device-side query/key normalization with bounded rotary encoding, their on-device single-head attention composition, all selected-head Q/rawgate/K/V original-weight projections across eight bounded four-case runs, and a connected five-PE path from original hidden input through trained Q/K projections, device handoff, normalization and rotary encoding. **Still ahead:** complete-model text generation and execution on physical single- or multiple-wafer systems. The completed log below records the exact scope of each result.
+**Working today:** SDK 2.10.1 simulator experiments cover original-weight matrix–vector products, communication between processing elements, full-dimension normalization, a persistent DeltaNet recurrent head, its input/output processing, a full-dimension attention head with persistent KV cache, device-side query/key normalization with bounded rotary encoding, their on-device single-head attention composition, all selected-head Q/rawgate/K/V original-weight projections across eight bounded four-case runs, and a connected ten-PE path for two original-hidden tokens through all selected Q/rawgate/K/V projections, trained Q/K normalization/rotary encoding and attention with persistent KV. **Still ahead:** complete-model text generation and execution on physical single- or multiple-wafer systems. The completed log below records the exact scope of each result.
 
 ## 1. Project design
 
@@ -60,6 +60,12 @@ These are deployment targets; current simulator results do not establish cluster
 
 Each **WP** is a scoped development milestone. Device results below come from the SDK simulator; WP04 is a CPU/source audit. **BF16** means bfloat16 data, and **FP32** means 32-bit floating-point arithmetic. Reports contain numerical thresholds, failure history and reproduction details.
 
+### WP15 · Original projections through persistent selected attention · September 10, 2026
+
+Connected eight original-weight projection PEs to Q/K preprocessing and attention consumers. Two original 5,120-element module inputs produce Q256/rawgate256/K256/V256 at positions 0/1 in the same request and runtime; token 2 retains and consumes token 1 K/V. All source, actual-operand stage, exact cast, frame, cache, retained-weight and shutdown checks passed independent audit. All 2,048 projection, 1,024 Q/K and 512 final attention BF16 values match their official references. Simulation took 1,187.19 seconds with 267.37 MiB peak memory. The conservative token-2 source gate alone cannot reject uniform attention; actual Q/K dot checks independently reject that counterexample. Scope is one selected query/KV head and two tokens.
+
+[Code and reproduction](examples/wp15) · [Protocol](docs/WP15-PROTOCOL.md) · [Report](docs/WP15-REPORT.md) · [Evidence](evidence/wp15.json)
+
 ### WP14 · Original hidden input through connected Q/K preprocessing · September 10, 2026
 
 Connected four full-width projection PEs to a fifth PE for trained Q/K normalization and partial rotary encoding. One dense projection-input hidden vector spans all 5,120 columns, producing Q256/K256 and transferring them entirely on device at text position 1. Independent source, stage, cast, transport and retained-buffer checks passed, followed by normal shutdown in 256.01 seconds. All 512 projection and 512 final consumer BF16 values match their official references. This selected Q/K call does not yet include projected V/gate, attention or persistent KV.
@@ -68,7 +74,7 @@ Connected four full-width projection PEs to a fifth PE for trained Q/K normaliza
 
 ### WP13 · Original weights for all selected-head projections · September 10, 2026
 
-Qualified layer3/head0 Q256, rawgate256, K256 and V256 over all 5,120 input columns. Eight independent single-PE runs each exercised four common inputs, including column 5,119 one-hot and zero after nonzero, covering all 1,024 selected rows. Independent source, prefix, rounding, state and shutdown checks passed for all 4,096 final outputs. This is complete selected-row coverage across separate runtimes; simultaneous full-head production and attention integration remain future work.
+Qualified layer3/head0 Q256, rawgate256, K256 and V256 over all 5,120 input columns. Eight independent single-PE runs each exercised four common inputs, including column 5,119 one-hot and zero after nonzero, covering all 1,024 selected rows. Independent source, prefix, rounding, state and shutdown checks passed for all 4,096 final outputs. This establishes complete selected-row coverage across separate runtimes; the connected two-token path is recorded in WP15.
 
 [Code](examples/wp13) · [Design](docs/WP13-DESIGN.md) · [Report](docs/WP13-REPORT.md) · [Evidence](evidence/wp13.json)
 
@@ -154,6 +160,6 @@ python3 -m unittest discover -s tests -v
 
 For simulator runs, follow the milestone reports and the [development guide](docs/DEVELOPMENT.md). A separately installed Cerebras SDK 2.10.1 and Singularity are required. The repository includes source and sanitized evidence; SDK distributions, model weight payloads and private runtime artifacts are excluded.
 
-**In progress (WP15):** preparing source references, communication and resource plans for all selected Q/rawgate/K/V projections feeding attention across consecutive tokens with a persistent KV cache. SDK execution of this next composition is pending review. Integration of recurrent input processing, state updates and gated output has passed eight-token numerical checks, but final weight readback still fails; that experiment is not accepted as completed. Complete-model integration and physical one-to-three-system trials follow. See [current status](docs/STATUS.md) and [milestone details](docs/MILESTONES.md).
+**In progress (WP16):** preparing the original layer-3 MLP at its full 5,120 → 17,408 → 5,120 dimensions, including pinned SiLU semantics, segmented weight acquisition, a full CPU reference and bounded CSL diagnostics. New MLP downloads and CPU/SDK jobs require reviewed resource recipes. Integration of recurrent input processing, state updates and gated output has passed eight-token numerical checks, but final weight readback still fails; WP09 remains unaccepted. Complete-model integration and physical one-to-three-system trials follow. See [current status](docs/STATUS.md) and [milestone details](docs/MILESTONES.md).
 
 MIT licensed; see [LICENSE](LICENSE). This is an independent research project, not an official Cerebras inference product.

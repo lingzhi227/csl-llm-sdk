@@ -94,7 +94,8 @@ five-PE simulator; it does not qualify V/gate attention, cache or a complete lay
 
 The [accepted evidence](../evidence/wp14.json) includes typed numerical arrays,
 the full identified transfer journal and original archive hashes. Complete
-resident-weight and normalization-parameter payloads are omitted with their shape,
+resident-weight, normalization-parameter and direct static1+w parameter-transform
+payloads are omitted with their shape,
 dtype and hash retained; reproduce them from the pinned selected-weight download.
 
 ## Reviewed device design and estimates
@@ -137,3 +138,7 @@ primary exception if stop also fails. The bounded supervisor owns a unique unit,
 enforces one heavy job,20GiB RAM/Swap0 and resource reserves, and stops its unit.
 Postflight must verify that exact unit has no PID/control group; a failed unit
 keeps its failure evidence before any explicitly scoped reset of failed state.
+
+Public evidence now retains327 typed arrays and14 omitted parameter-array identities.
+Eight direct static1+w traces were moved to omitted records in the WP15 publication;
+the accepted original archives and Git history remain unchanged.

@@ -1,0 +1,703 @@
+{
+  "pes": 10,
+  "producer_slabs": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "consumer_pes": {
+    "qk": 8,
+    "attention": 9
+  },
+  "traffic": {
+    "copies": 3050,
+    "launches": 151,
+    "host_bytes": 43897600,
+    "payload_bytes": 22192404,
+    "max_host_buffer_bytes": 57352,
+    "fabric": {
+      "tokens": 2,
+      "data_frames": 24,
+      "ack_frames": 24,
+      "data_words": 140,
+      "ack_words": 13,
+      "injected_bytes": 14688,
+      "route_byte_hops": 53856,
+      "note": "Logical injected payload and line route byte-hops; not measured hardware utilization"
+    }
+  },
+  "buffers": {
+    "producer": {
+      "arrays": {
+        "weights_storage": [
+          14338,
+          16
+        ],
+        "input_storage": [
+          114,
+          32
+        ],
+        "output_storage": [
+          130,
+          32
+        ],
+        "bf16_storage": [
+          130,
+          16
+        ],
+        "control": [
+          5,
+          32
+        ],
+        "state": [
+          13,
+          32
+        ],
+        "timing": [
+          276,
+          16
+        ],
+        "weight_guard_snapshot": [
+          5,
+          32
+        ],
+        "qk_input": [
+          1,
+          16
+        ],
+        "qk_weights": [
+          1,
+          16
+        ],
+        "qk_frequencies": [
+          1,
+          32
+        ],
+        "qk_probe_inputs": [
+          1,
+          32
+        ],
+        "qk_stats": [
+          1,
+          32
+        ],
+        "qk_rms_stages": [
+          1,
+          32
+        ],
+        "qk_normalized": [
+          1,
+          16
+        ],
+        "qk_trig": [
+          1,
+          32
+        ],
+        "qk_trig_casts": [
+          1,
+          16
+        ],
+        "qk_rotary_stages": [
+          1,
+          32
+        ],
+        "qk_product_casts": [
+          1,
+          16
+        ],
+        "qk_output": [
+          1,
+          16
+        ],
+        "qk_probes": [
+          1,
+          32
+        ],
+        "qk_state": [
+          1,
+          32
+        ],
+        "qk_events": [
+          1,
+          32
+        ],
+        "qk_control": [
+          1,
+          32
+        ],
+        "attention_cache": [
+          1,
+          16
+        ],
+        "attention_input": [
+          1,
+          16
+        ],
+        "attention_scores": [
+          1,
+          32
+        ],
+        "attention_score_casts": [
+          1,
+          16
+        ],
+        "attention_stats": [
+          1,
+          32
+        ],
+        "attention_stages": [
+          1,
+          32
+        ],
+        "attention_casts": [
+          1,
+          16
+        ],
+        "attention_state": [
+          1,
+          32
+        ],
+        "attention_events": [
+          1,
+          32
+        ],
+        "request_control": [
+          4,
+          32
+        ],
+        "request_state": [
+          8,
+          32
+        ],
+        "handoff_control": [
+          10,
+          32
+        ],
+        "handoff_state": [
+          32,
+          32
+        ],
+        "wire_data": [
+          142,
+          32
+        ],
+        "wire_ack": [
+          15,
+          32
+        ]
+      },
+      "explicit_kernel_and_timestamp_bytes": 524,
+      "total": 32004,
+      "excludes": "Code,padding,compiler state,memcpy allocations,stack; actual ELF end+4096<=49152 required on all10PEs"
+    },
+    "qk": {
+      "arrays": {
+        "weights_storage": [
+          1,
+          16
+        ],
+        "input_storage": [
+          1,
+          32
+        ],
+        "output_storage": [
+          1,
+          32
+        ],
+        "bf16_storage": [
+          1,
+          16
+        ],
+        "control": [
+          1,
+          32
+        ],
+        "state": [
+          1,
+          32
+        ],
+        "timing": [
+          1,
+          16
+        ],
+        "weight_guard_snapshot": [
+          1,
+          32
+        ],
+        "qk_input": [
+          514,
+          16
+        ],
+        "qk_weights": [
+          514,
+          16
+        ],
+        "qk_frequencies": [
+          34,
+          32
+        ],
+        "qk_probe_inputs": [
+          10,
+          32
+        ],
+        "qk_stats": [
+          10,
+          32
+        ],
+        "qk_rms_stages": [
+          1026,
+          32
+        ],
+        "qk_normalized": [
+          514,
+          16
+        ],
+        "qk_trig": [
+          130,
+          32
+        ],
+        "qk_trig_casts": [
+          66,
+          16
+        ],
+        "qk_rotary_stages": [
+          386,
+          32
+        ],
+        "qk_product_casts": [
+          258,
+          16
+        ],
+        "qk_output": [
+          514,
+          16
+        ],
+        "qk_probes": [
+          34,
+          32
+        ],
+        "qk_state": [
+          16,
+          32
+        ],
+        "qk_events": [
+          10,
+          32
+        ],
+        "qk_control": [
+          3,
+          32
+        ],
+        "attention_cache": [
+          1,
+          16
+        ],
+        "attention_input": [
+          1,
+          16
+        ],
+        "attention_scores": [
+          1,
+          32
+        ],
+        "attention_score_casts": [
+          1,
+          16
+        ],
+        "attention_stats": [
+          1,
+          32
+        ],
+        "attention_stages": [
+          1,
+          32
+        ],
+        "attention_casts": [
+          1,
+          16
+        ],
+        "attention_state": [
+          1,
+          32
+        ],
+        "attention_events": [
+          1,
+          32
+        ],
+        "request_control": [
+          4,
+          32
+        ],
+        "request_state": [
+          8,
+          32
+        ],
+        "handoff_control": [
+          10,
+          32
+        ],
+        "handoff_state": [
+          32,
+          32
+        ],
+        "wire_data": [
+          142,
+          32
+        ],
+        "wire_ack": [
+          15,
+          32
+        ]
+      },
+      "explicit_kernel_and_timestamp_bytes": 0,
+      "total": 12294,
+      "excludes": "Code,padding,compiler state,memcpy allocations,stack; actual ELF end+4096<=49152 required on all10PEs"
+    },
+    "attention": {
+      "arrays": {
+        "weights_storage": [
+          1,
+          16
+        ],
+        "input_storage": [
+          1,
+          32
+        ],
+        "output_storage": [
+          1,
+          32
+        ],
+        "bf16_storage": [
+          1,
+          16
+        ],
+        "control": [
+          1,
+          32
+        ],
+        "state": [
+          1,
+          32
+        ],
+        "timing": [
+          1,
+          16
+        ],
+        "weight_guard_snapshot": [
+          1,
+          32
+        ],
+        "qk_input": [
+          1,
+          16
+        ],
+        "qk_weights": [
+          1,
+          16
+        ],
+        "qk_frequencies": [
+          1,
+          32
+        ],
+        "qk_probe_inputs": [
+          1,
+          32
+        ],
+        "qk_stats": [
+          1,
+          32
+        ],
+        "qk_rms_stages": [
+          1,
+          32
+        ],
+        "qk_normalized": [
+          1,
+          16
+        ],
+        "qk_trig": [
+          1,
+          32
+        ],
+        "qk_trig_casts": [
+          1,
+          16
+        ],
+        "qk_rotary_stages": [
+          1,
+          32
+        ],
+        "qk_product_casts": [
+          1,
+          16
+        ],
+        "qk_output": [
+          1,
+          16
+        ],
+        "qk_probes": [
+          1,
+          32
+        ],
+        "qk_state": [
+          1,
+          32
+        ],
+        "qk_events": [
+          1,
+          32
+        ],
+        "qk_control": [
+          1,
+          32
+        ],
+        "attention_cache": [
+          4098,
+          16
+        ],
+        "attention_input": [
+          1026,
+          16
+        ],
+        "attention_scores": [
+          42,
+          32
+        ],
+        "attention_score_casts": [
+          26,
+          16
+        ],
+        "attention_stats": [
+          3,
+          32
+        ],
+        "attention_stages": [
+          1282,
+          32
+        ],
+        "attention_casts": [
+          770,
+          16
+        ],
+        "attention_state": [
+          16,
+          32
+        ],
+        "attention_events": [
+          12,
+          32
+        ],
+        "request_control": [
+          4,
+          32
+        ],
+        "request_state": [
+          8,
+          32
+        ],
+        "handoff_control": [
+          10,
+          32
+        ],
+        "handoff_state": [
+          32,
+          32
+        ],
+        "wire_data": [
+          142,
+          32
+        ],
+        "wire_ack": [
+          15,
+          32
+        ]
+      },
+      "explicit_kernel_and_timestamp_bytes": 0,
+      "total": 18182,
+      "excludes": "Code,padding,compiler state,memcpy allocations,stack; actual ELF end+4096<=49152 required on all10PEs"
+    }
+  },
+  "routes": [
+    {
+      "link": 0,
+      "source": 0,
+      "destination": 8,
+      "data_color": 2,
+      "ack_color": 11,
+      "source_queue": 2,
+      "receiver_queue": 2,
+      "hops": 8
+    },
+    {
+      "link": 1,
+      "source": 1,
+      "destination": 8,
+      "data_color": 3,
+      "ack_color": 12,
+      "source_queue": 2,
+      "receiver_queue": 3,
+      "hops": 7
+    },
+    {
+      "link": 2,
+      "source": 2,
+      "destination": 9,
+      "data_color": 4,
+      "ack_color": 13,
+      "source_queue": 2,
+      "receiver_queue": 2,
+      "hops": 7
+    },
+    {
+      "link": 3,
+      "source": 3,
+      "destination": 9,
+      "data_color": 5,
+      "ack_color": 14,
+      "source_queue": 2,
+      "receiver_queue": 3,
+      "hops": 6
+    },
+    {
+      "link": 4,
+      "source": 4,
+      "destination": 8,
+      "data_color": 6,
+      "ack_color": 15,
+      "source_queue": 2,
+      "receiver_queue": 4,
+      "hops": 4
+    },
+    {
+      "link": 5,
+      "source": 5,
+      "destination": 8,
+      "data_color": 7,
+      "ack_color": 16,
+      "source_queue": 2,
+      "receiver_queue": 5,
+      "hops": 3
+    },
+    {
+      "link": 6,
+      "source": 6,
+      "destination": 9,
+      "data_color": 8,
+      "ack_color": 17,
+      "source_queue": 2,
+      "receiver_queue": 4,
+      "hops": 3
+    },
+    {
+      "link": 7,
+      "source": 7,
+      "destination": 9,
+      "data_color": 9,
+      "ack_color": 18,
+      "source_queue": 2,
+      "receiver_queue": 5,
+      "hops": 2
+    },
+    {
+      "link": 8,
+      "source": 8,
+      "destination": 9,
+      "data_color": 10,
+      "ack_color": 19,
+      "source_queue": 6,
+      "receiver_queue": 6,
+      "hops": 1
+    }
+  ],
+  "leases": {
+    "producer": {
+      "IQ": [
+        2
+      ],
+      "OQ": [
+        2
+      ]
+    },
+    "qk": {
+      "IQ": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "OQ": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ]
+    },
+    "attention": {
+      "IQ": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "OQ": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ]
+    },
+    "shared_serial_transport": {
+      "tasks": [
+        10,
+        11
+      ],
+      "UT": [
+        2
+      ],
+      "DSR_dest": [
+        5
+      ],
+      "DSR_src1": [
+        5
+      ]
+    },
+    "producer_GEMV_DSR": [
+      3,
+      4
+    ],
+    "SDK_reserved_colors": [
+      20,
+      21,
+      22,
+      23
+    ],
+    "SDK_reserved_queues": [
+      0,
+      1
+    ]
+  },
+  "planning_estimate_seconds": 1100,
+  "planning_hard_seconds": 1200,
+  "estimate_basis": "WP14 measured256.0076s for4 producers x1 token; this proposal8x2 gives4x contraction/readback work =1024.0304s. Allow75.9696s for additional10PE routing/attention/cache/metadata work. This additive allowance and scaling are unmeasured, not a performance guarantee. Controller may refuse before SDK admission.",
+  "supervisor": "Original guard retains SDK300/CPU60. Separate guarded_wp15.py requires exact controller manifest admission, compile<=300 and simulate<=1200. Recipe preparation grants no SDK permission.",
+  "resource_limits": {
+    "RAM": 21474836480,
+    "swap": 0,
+    "available_RAM_reserve": 8589934592,
+    "cache": 21474836480,
+    "free_SSD_reserve": 34359738368,
+    "compiler_parallelism": 1,
+    "simulator_threads": 1
+  },
+  "planning_only": true,
+  "sdk_execution_authorized": false
+}
