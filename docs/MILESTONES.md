@@ -2,6 +2,15 @@
 
 Only accepted results are listed below. Unresolved integration work and the remaining scope are tracked in [implementation status](STATUS.md).
 
+## WP14 — Accepted, September 10, 2026
+
+One dense5120-column original projection input flows through four Q/K projection
+PEs, exact device handoffs and trained RMS256/partialRoPE64 at position1 on a
+fifth PE. Source, stage, cast, transport, post-consumer producer retention and
+normalstop checks pass;512projection/512consumer official BF16 matches. This is a
+selected Q/K call without V/gate attention or KV persistence.
+See [report](WP14-REPORT.md) and [evidence](../evidence/wp14.json).
+
 ## WP13 — Accepted, September 10, 2026
 
 Original selected layer3/head0 Q256/rawgate256/K256/V256 rows span all5120 input

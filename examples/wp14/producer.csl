@@ -1,0 +1,224 @@
+// WP14 draft: unchanged GEMV arithmetic, explicit retained-output handoff.
+param slab_id: u32;
+param rank:u16;
+param memcpy_params;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const clock=@import_module("<time>");
+const kernel=@import_module("kernel.csl",.{.rows=128,.columns=112});
+var weights_storage=@zeros([14338]u16);
+var input_storage=@zeros([114]f32);
+var output_storage=@zeros([130]f32);
+// control: generation,total_columns,tile_index,column_offset,valid_columns.
+var control=@zeros([5]u32);
+// state: phase,generation,total,tiles,consumed,commit_generation,error,last_valid,
+// cumulative_accumulates,begin_count,finalize_count.
+var state=@zeros([13]u32);
+// state[11]=global output slab; state[12]=release count.
+var bf16_storage=@zeros([130]u16);
+var timing=@zeros([276]u16);
+// finalize snapshot: left, right, generation, snapshot_event, commit_event.
+var weight_guard_snapshot=@zeros([5]u32);
+var started=@zeros([3]u16);var ended=@zeros([3]u16);
+fn reject(code:u32) void {state[0]=3;state[6]=code;sys.unblock_cmd_stream();}
+fn begin() void {
+  if(control[0]<=state[1] or control[1]==0 or control[1]>5120 or (state[0]!=0 and state[0]!=4)){reject(1);return;}
+  for(@range(u16,24))|i|{handoff_state[i]=0;}
+  handoff_state[0]=control[0];handoff_state[1]=1;
+  state[0]=1;state[1]=control[0];state[2]=control[1];state[3]=0;state[4]=0;
+  state[5]=0;state[6]=0;state[7]=0;state[9]+=1;state[11]=slab_id;
+  const yd=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]f32,&output_storage[1]),.extent=128});
+  @fmovs(yd,0.0);
+  for(@range(u16,276))|i|{timing[i]=0;}
+  sys.unblock_cmd_stream();
+}
+fn accumulate() void {
+  if(state[0]!=1 or control[0]!=state[1] or control[1]!=state[2] or control[2]!=state[3] or control[3]!=state[4] or state[4]>=state[2]){reject(2);return;}
+  const remaining:u32=state[2]-state[4];
+  const expected:u32=if(remaining>112) @as(u32,112) else remaining;
+  if(control[4]!=expected or state[3]>=46){reject(3);return;}
+  clock.enable_tsc();clock.get_timestamp(&started);
+  kernel.compute(@ptrcast([*]u16,&weights_storage[1]),@ptrcast([*]f32,&input_storage[1]),
+                 @ptrcast([*]f32,&output_storage[1]),@as(u16,control[4]));
+  clock.get_timestamp(&ended);clock.disable_tsc();
+  const offset:u16=@as(u16,state[3])*6;
+  for(@range(u16,3))|i|{timing[offset+i]=started[i];timing[offset+i+3]=ended[i];}
+  state[3]+=1;state[4]+=control[4];state[7]=control[4];state[8]+=1;
+  sys.unblock_cmd_stream();
+}
+fn finalize() void {
+  if(state[0]!=1 or control[0]!=state[1] or control[1]!=state[2] or state[4]!=state[2] or state[3]!=(state[2]+111)/112){reject(4);return;}
+  for(@range(u16,128))|i|{
+    const raw:u32=@bitcast(u32,output_storage[i+1]);
+    const odd:u32=(raw>>16)&1;
+    bf16_storage[i+1]=@as(u16,(raw+0x00007fff+odd)>>16);
+  }
+  weight_guard_snapshot[0]=@as(u32,weights_storage[0]);
+  weight_guard_snapshot[1]=@as(u32,weights_storage[14337]);
+  weight_guard_snapshot[2]=state[1];weight_guard_snapshot[3]=1;
+  state[0]=2;state[5]=state[1];state[10]+=1;
+  weight_guard_snapshot[4]=2;sys.unblock_cmd_stream();
+}
+fn release() void {
+  if(state[0]!=2 or control[0]!=state[1] or handoff_state[2]!=3 or handoff_state[6]!=1 or handoff_state[8]!=0){reject(5);return;}
+  state[0]=4;state[12]+=1;sys.unblock_cmd_stream();
+}
+var handoff_control=@zeros([8]u32);
+var handoff_state=@zeros([24]u32);
+var wire_data=@zeros([140]u32);
+var wire_ack=@zeros([10]u32);
+var qk_input=@zeros([1]u16);
+var qk_weights=@zeros([1]u16);
+var qk_frequencies=@zeros([1]f32);
+var qk_probe_inputs=@zeros([1]f32);
+var qk_stats=@zeros([1]f32);
+var qk_rms_stages=@zeros([1]f32);
+var qk_normalized=@zeros([1]u16);
+var qk_trig=@zeros([1]f32);
+var qk_trig_casts=@zeros([1]u16);
+var qk_rotary_stages=@zeros([1]f32);
+var qk_product_casts=@zeros([1]u16);
+var qk_output=@zeros([1]u16);
+var qk_probes=@zeros([1]f32);
+var qk_state=@zeros([1]u32);
+var qk_events=@zeros([1]u32);
+var qk_control=@zeros([1]u32);
+
+const receive_task=@get_local_task_id(10);const send_task=@get_local_task_id(11);
+const transfer_ut=@get_ut_id(2);
+const transfer_dst=@get_dsr(dsr_dest,5);const transfer_src=@get_dsr(dsr_src1,5);
+// See docs/WP14-PROTOCOL.md for the24 handoff_state slots and packet fields.
+fn wire_guards() void {
+ wire_data[0]=0xa55aa55a;wire_data[139]=0x5aa55aa5;
+ wire_ack[0]=0xa55aa55a;wire_ack[9]=0x5aa55aa5;
+}
+fn mark(slot:u16) void {handoff_state[13]+=1;handoff_state[slot]=handoff_state[13];}
+fn valid_descriptor() bool {
+ if(handoff_control[2]>3){return false;}
+ const slab:u32=if(handoff_control[2]<2) handoff_control[2] else handoff_control[2]+2;
+ return handoff_control[0]==handoff_state[0] and handoff_control[1]==handoff_state[1] and
+  handoff_control[3]==slab and handoff_control[4]==handoff_control[2]/2 and
+  handoff_control[5]==(handoff_control[2]%2)*128 and handoff_control[6]==128 and
+  handoff_control[7]==handoff_control[2]*128 and handoff_control[7]+128<=512;
+}
+
+fn initialize_consumer() void {wire_guards();sys.unblock_cmd_stream();}
+fn arm_handoff() void {sys.unblock_cmd_stream();}
+fn preprocess() void {sys.unblock_cmd_stream();}
+fn handoff_fail(code:u32) void {handoff_state[2]=9;handoff_state[8]=code;sys.unblock_cmd_stream();}
+fn handoff() void {
+ if(handoff_control[2]!=@as(u32,rank)){sys.unblock_cmd_stream();return;}
+ if(!valid_descriptor() or state[0]!=2 or state[5]!=state[1] or handoff_state[2]!=0){handoff_fail(10);return;}
+ handoff_state[2]=2;handoff_state[4]=@as(u32,rank);handoff_state[9]=1;
+ wire_data[1]=0x514b4441;wire_data[2]=1;
+ for(@range(u16,8))|i|{wire_data[3+i]=handoff_control[i];}
+ for(@range(u16,128))|i|{wire_data[11+i]=@as(u32,bf16_storage[1+i]);}
+ const fabric=@get_dsd(fabout_dsd,.{.output_queue=@get_output_queue(2),.extent=138});
+ const memory=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]u32,&wire_data[1]),.extent=138});
+ @load_to_dsr(transfer_dst,fabric,.{.async=true,.activate=send_task,.ut_id=transfer_ut});
+ @load_to_dsr(transfer_src,memory);@mov32(transfer_dst,transfer_src,.{.async=true});
+}
+task sent_complete() void {
+ if(handoff_state[2]!=2){handoff_fail(11);return;}
+ handoff_state[5]=1;handoff_state[7]=138;
+ const fabric=@get_dsd(fabin_dsd,.{.input_queue=@get_input_queue(2),.extent=8});
+ const memory=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]u32,&wire_ack[1]),.extent=8});
+ @load_to_dsr(transfer_dst,memory);
+ @load_to_dsr(transfer_src,fabric,.{.async=true,.activate=receive_task,.ut_id=transfer_ut});
+ @mov32(transfer_dst,transfer_src,.{.async=true});
+}
+task received_complete() void {
+ if(handoff_state[2]!=2 or handoff_state[5]!=1 or wire_ack[1]!=0x514b414b or wire_ack[2]!=1 or
+  wire_ack[3]!=handoff_control[0] or wire_ack[4]!=handoff_control[1] or wire_ack[5]!=@as(u32,rank) or
+  wire_ack[6]!=slab_id or wire_ack[7]!=handoff_control[7] or wire_ack[8]!=0){handoff_fail(12);return;}
+ handoff_state[2]=3;handoff_state[3]=@as(u32,1)<<rank;handoff_state[6]=1;
+ handoff_state[10]=1;handoff_state[11]=1;handoff_state[23]=1;
+ handoff_state[20]=slab_id;handoff_state[21]=handoff_control[7];handoff_state[22]=128;
+ mark(16);mark(17);sys.unblock_cmd_stream();
+}
+
+const bp:[*]u16=&bf16_storage;
+const wp:[*]u16=&weights_storage;const xp:[*]f32=&input_storage;const yp:[*]f32=&output_storage;
+const cp:[*]u32=&control;const sp:[*]u32=&state;const tp:[*]u16=&timing;
+const gp:[*]u32=&weight_guard_snapshot;
+const ptr_handoff_control:[*]u32=&handoff_control;
+const ptr_handoff_state:[*]u32=&handoff_state;
+const ptr_wire_data:[*]u32=&wire_data;
+const ptr_wire_ack:[*]u32=&wire_ack;
+const ptr_qk_input:[*]u16=&qk_input;
+const ptr_qk_weights:[*]u16=&qk_weights;
+const ptr_qk_frequencies:[*]f32=&qk_frequencies;
+const ptr_qk_probe_inputs:[*]f32=&qk_probe_inputs;
+const ptr_qk_stats:[*]f32=&qk_stats;
+const ptr_qk_rms_stages:[*]f32=&qk_rms_stages;
+const ptr_qk_normalized:[*]u16=&qk_normalized;
+const ptr_qk_trig:[*]f32=&qk_trig;
+const ptr_qk_trig_casts:[*]u16=&qk_trig_casts;
+const ptr_qk_rotary_stages:[*]f32=&qk_rotary_stages;
+const ptr_qk_product_casts:[*]u16=&qk_product_casts;
+const ptr_qk_output:[*]u16=&qk_output;
+const ptr_qk_probes:[*]f32=&qk_probes;
+const ptr_qk_state:[*]u32=&qk_state;
+const ptr_qk_events:[*]u32=&qk_events;
+const ptr_qk_control:[*]u32=&qk_control;
+comptime{
+  @export_symbol(ptr_handoff_control,"handoff_control");
+  @export_symbol(ptr_handoff_state,"handoff_state");
+  @export_symbol(ptr_wire_data,"wire_data");
+  @export_symbol(ptr_wire_ack,"wire_ack");
+  @export_symbol(ptr_qk_input,"qk_input");
+  @export_symbol(ptr_qk_weights,"qk_weights");
+  @export_symbol(ptr_qk_frequencies,"qk_frequencies");
+  @export_symbol(ptr_qk_probe_inputs,"qk_probe_inputs");
+  @export_symbol(ptr_qk_stats,"qk_stats");
+  @export_symbol(ptr_qk_rms_stages,"qk_rms_stages");
+  @export_symbol(ptr_qk_normalized,"qk_normalized");
+  @export_symbol(ptr_qk_trig,"qk_trig");
+  @export_symbol(ptr_qk_trig_casts,"qk_trig_casts");
+  @export_symbol(ptr_qk_rotary_stages,"qk_rotary_stages");
+  @export_symbol(ptr_qk_product_casts,"qk_product_casts");
+  @export_symbol(ptr_qk_output,"qk_output");
+  @export_symbol(ptr_qk_probes,"qk_probes");
+  @export_symbol(ptr_qk_state,"qk_state");
+  @export_symbol(ptr_qk_events,"qk_events");
+  @export_symbol(ptr_qk_control,"qk_control");
+  @initialize_queue(@get_output_queue(2),.{.color=@get_color(2+rank)});
+  @initialize_queue(@get_input_queue(2),.{.color=@get_color(6+rank)});
+  if(rank==0){
+   @set_local_color_config(@get_color(2),.{.routes=.{.rx=.{RAMP},.tx=.{EAST}}});
+   @set_local_color_config(@get_color(6),.{.routes=.{.rx=.{EAST},.tx=.{RAMP}}});
+  }else if(rank>0){
+   @set_local_color_config(@get_color(2),.{.routes=.{.rx=.{WEST},.tx=.{EAST}}});
+   @set_local_color_config(@get_color(6),.{.routes=.{.rx=.{EAST},.tx=.{WEST}}});
+  }
+  if(rank==1){
+   @set_local_color_config(@get_color(3),.{.routes=.{.rx=.{RAMP},.tx=.{EAST}}});
+   @set_local_color_config(@get_color(7),.{.routes=.{.rx=.{EAST},.tx=.{RAMP}}});
+  }else if(rank>1){
+   @set_local_color_config(@get_color(3),.{.routes=.{.rx=.{WEST},.tx=.{EAST}}});
+   @set_local_color_config(@get_color(7),.{.routes=.{.rx=.{EAST},.tx=.{WEST}}});
+  }
+  if(rank==2){
+   @set_local_color_config(@get_color(4),.{.routes=.{.rx=.{RAMP},.tx=.{EAST}}});
+   @set_local_color_config(@get_color(8),.{.routes=.{.rx=.{EAST},.tx=.{RAMP}}});
+  }else if(rank>2){
+   @set_local_color_config(@get_color(4),.{.routes=.{.rx=.{WEST},.tx=.{EAST}}});
+   @set_local_color_config(@get_color(8),.{.routes=.{.rx=.{EAST},.tx=.{WEST}}});
+  }
+  if(rank==3){
+   @set_local_color_config(@get_color(5),.{.routes=.{.rx=.{RAMP},.tx=.{EAST}}});
+   @set_local_color_config(@get_color(9),.{.routes=.{.rx=.{EAST},.tx=.{RAMP}}});
+  }else if(rank>3){
+   @set_local_color_config(@get_color(5),.{.routes=.{.rx=.{WEST},.tx=.{EAST}}});
+   @set_local_color_config(@get_color(9),.{.routes=.{.rx=.{EAST},.tx=.{WEST}}});
+  }
+ @bind_local_task(received_complete,receive_task);@bind_local_task(sent_complete,send_task);
+ @export_symbol(initialize_consumer);@export_symbol(arm_handoff);@export_symbol(handoff);@export_symbol(preprocess);
+
+  @export_symbol(wp,"weights_storage");@export_symbol(xp,"input_storage");
+  @export_symbol(yp,"output_storage");@export_symbol(cp,"control");
+  @export_symbol(sp,"state");@export_symbol(tp,"timing");
+  @export_symbol(gp,"weight_guard_snapshot");
+  @export_symbol(bp,"bf16_storage");
+  @export_symbol(release);
+  @export_symbol(begin);@export_symbol(accumulate);@export_symbol(finalize);
+}

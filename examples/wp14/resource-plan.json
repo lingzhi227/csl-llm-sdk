@@ -1,0 +1,262 @@
+{
+  "status": "draft_not_sdk_authorized",
+  "traffic": {
+    "copies": 704,
+    "launches": 59,
+    "host_bytes": 10940872,
+    "payload_bytes": 5530824,
+    "host_slots": 2735218,
+    "max_host_buffer_bytes": 57352,
+    "data_frames": 4,
+    "data_frame_words": 138,
+    "ack_frames": 4,
+    "ack_frame_words": 8,
+    "fabric_bytes": 2336
+  },
+  "buffers": {
+    "producer": {
+      "arrays": {
+        "weights_storage": [
+          14338,
+          16
+        ],
+        "input_storage": [
+          114,
+          32
+        ],
+        "output_storage": [
+          130,
+          32
+        ],
+        "bf16_storage": [
+          130,
+          16
+        ],
+        "control": [
+          5,
+          32
+        ],
+        "state": [
+          13,
+          32
+        ],
+        "timing": [
+          276,
+          16
+        ],
+        "weight_guard_snapshot": [
+          5,
+          32
+        ],
+        "handoff_control": [
+          8,
+          32
+        ],
+        "handoff_state": [
+          24,
+          32
+        ],
+        "wire_data": [
+          140,
+          32
+        ],
+        "wire_ack": [
+          10,
+          32
+        ],
+        "qk_input": [
+          1,
+          16
+        ],
+        "qk_weights": [
+          1,
+          16
+        ],
+        "qk_frequencies": [
+          1,
+          32
+        ],
+        "qk_probe_inputs": [
+          1,
+          32
+        ],
+        "qk_stats": [
+          1,
+          32
+        ],
+        "qk_rms_stages": [
+          1,
+          32
+        ],
+        "qk_normalized": [
+          1,
+          16
+        ],
+        "qk_trig": [
+          1,
+          32
+        ],
+        "qk_trig_casts": [
+          1,
+          16
+        ],
+        "qk_rotary_stages": [
+          1,
+          32
+        ],
+        "qk_product_casts": [
+          1,
+          16
+        ],
+        "qk_output": [
+          1,
+          16
+        ],
+        "qk_probes": [
+          1,
+          32
+        ],
+        "qk_state": [
+          1,
+          32
+        ],
+        "qk_events": [
+          1,
+          32
+        ],
+        "qk_control": [
+          1,
+          32
+        ]
+      },
+      "explicit_kernel_and_timestamp_bytes": 524,
+      "total": 31860,
+      "excludes": "Code, padding, compiler state, memcpy allocations and stack; actual ELF gate required."
+    },
+    "consumer": {
+      "arrays": {
+        "qk_input": [
+          514,
+          16
+        ],
+        "qk_weights": [
+          514,
+          16
+        ],
+        "qk_frequencies": [
+          34,
+          32
+        ],
+        "qk_probe_inputs": [
+          10,
+          32
+        ],
+        "qk_stats": [
+          10,
+          32
+        ],
+        "qk_rms_stages": [
+          1026,
+          32
+        ],
+        "qk_normalized": [
+          514,
+          16
+        ],
+        "qk_trig": [
+          130,
+          32
+        ],
+        "qk_trig_casts": [
+          66,
+          16
+        ],
+        "qk_rotary_stages": [
+          386,
+          32
+        ],
+        "qk_product_casts": [
+          258,
+          16
+        ],
+        "qk_output": [
+          514,
+          16
+        ],
+        "qk_probes": [
+          34,
+          32
+        ],
+        "qk_state": [
+          16,
+          32
+        ],
+        "qk_events": [
+          10,
+          32
+        ],
+        "qk_control": [
+          3,
+          32
+        ],
+        "handoff_control": [
+          8,
+          32
+        ],
+        "handoff_state": [
+          24,
+          32
+        ],
+        "wire_data": [
+          140,
+          32
+        ],
+        "wire_ack": [
+          10,
+          32
+        ],
+        "weights_storage": [
+          1,
+          16
+        ],
+        "input_storage": [
+          1,
+          32
+        ],
+        "output_storage": [
+          1,
+          32
+        ],
+        "bf16_storage": [
+          1,
+          16
+        ],
+        "control": [
+          1,
+          32
+        ],
+        "state": [
+          1,
+          32
+        ],
+        "timing": [
+          1,
+          16
+        ],
+        "weight_guard_snapshot": [
+          1,
+          32
+        ]
+      },
+      "explicit_kernel_and_timestamp_bytes": 0,
+      "total": 12150,
+      "excludes": "Code, padding, compiler state, memcpy allocations and stack; actual ELF gate required."
+    }
+  },
+  "estimate_seconds": 265,
+  "hard_seconds": 300,
+  "measured_projection_baseline_seconds": 233.91479276493192,
+  "consumer_allowance_seconds": 6,
+  "unmeasured_protocol_readback_allowance_seconds": 25.08520723506808,
+  "estimate_caveat": "Planning assumption for92 extra copy calls and10 extra launches versus WP13; includes8 new retained-output reads and moves4 whole-weight reads after consumer without repetition. The25.085207second allowance for fifthPE/protocol/readback remains unmeasured; controller may require a communication diagnostic."
+}

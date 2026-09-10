@@ -1,6 +1,6 @@
 # Implementation status
 
-WP00–WP08 and WP10–WP13 accepted, 2026-09-10. Continuous development is
+WP00–WP08 and WP10–WP14 accepted, 2026-09-10. Continuous development is
 active under bounded control-node packages. Full-model inference remains incomplete.
 
 | Component | Status |
@@ -25,7 +25,9 @@ active under bounded control-node packages. Full-model inference remains incompl
 | WP10 attention core and KV cache | Accepted: one256-dimensional query/KV head, capacity8; ten tokens, overflow/reset and normal stop; all2560outputs match official BF16 reference |
 | WP11 Q/K preprocessing | Accepted: ordinary RMS256 and device partial RoPE64 for text positions0–7; ten calls and all5120official BF16 outputs match, with separate product casts and tail/sign checks |
 | WP12 Q/K-to-attention composition | Accepted: one PE, original synthetic Q/K/V/gate through normalization/rotation, device copy and persistent cache8 attention; ten successes, overflow/reset and normal stop |
-| WP13 original attention projections | Accepted: all1024 selected Q/rawgate/K/V rows over5120columns, four common inputs, eight independent single-PE runtimes;4096final outputs and lifecycle/source gates pass; device consumer remains future work |
+| WP13 original attention projections | Accepted: all1024 selected Q/rawgate/K/V rows over5120columns, four common inputs, eight independent single-PE runtimes;4096final outputs and lifecycle/source gates pass for standalone projection coverage |
+| WP14 original hidden Q/K preprocessing | Accepted: four full5120 Q/K projection PEs hand off exact operands to a trained RMS/partialRoPE consumer; one dense call atposition1, all source/stage/retention checks and normalstop; no attention/KV composition |
+| WP15 original projected attention | Source/CPU/protocol/resource preparation for consecutive original-hidden tokens with persistent KV; SDK execution not yet admitted |
 | Full generation, physical WSE-3 | Not implemented/qualified here |
 
 Attempt wp00-001 failed in the installed wrapper's temporary-directory mount before

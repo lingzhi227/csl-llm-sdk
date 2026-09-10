@@ -2,7 +2,7 @@
 
 **Building inference for open language models with handwritten Cerebras Systems Language (CSL), targeting one to three WSE-3 systems.** We implement the numerical kernels, execution control and persistent model state, and use the Cerebras SDK to compile and run the device programs. The first target is **Qwen3.8-27B text inference**; the longer-term goal is a reusable SDK for related model architectures.
 
-**Working today:** SDK 2.10.1 simulator experiments cover original-weight matrix–vector products, communication between processing elements, full-dimension normalization, a persistent DeltaNet recurrent head, its input/output processing, a full-dimension attention head with persistent KV cache, device-side query/key normalization with bounded rotary encoding, their on-device single-head attention composition, and all selected-head Q/rawgate/K/V original-weight projections across eight bounded four-case runs. **Still ahead:** complete-model text generation and execution on physical single- or multiple-wafer systems. The completed log below records the exact scope of each result.
+**Working today:** SDK 2.10.1 simulator experiments cover original-weight matrix–vector products, communication between processing elements, full-dimension normalization, a persistent DeltaNet recurrent head, its input/output processing, a full-dimension attention head with persistent KV cache, device-side query/key normalization with bounded rotary encoding, their on-device single-head attention composition, all selected-head Q/rawgate/K/V original-weight projections across eight bounded four-case runs, and a connected five-PE path from original hidden input through trained Q/K projections, device handoff, normalization and rotary encoding. **Still ahead:** complete-model text generation and execution on physical single- or multiple-wafer systems. The completed log below records the exact scope of each result.
 
 ## 1. Project design
 
@@ -59,6 +59,12 @@ These are deployment targets; current simulator results do not establish cluster
 ## 3. Completed development log — newest first
 
 Each **WP** is a scoped development milestone. Device results below come from the SDK simulator; WP04 is a CPU/source audit. **BF16** means bfloat16 data, and **FP32** means 32-bit floating-point arithmetic. Reports contain numerical thresholds, failure history and reproduction details.
+
+### WP14 · Original hidden input through connected Q/K preprocessing · September 10, 2026
+
+Connected four full-width projection PEs to a fifth PE for trained Q/K normalization and partial rotary encoding. One dense projection-input hidden vector spans all 5,120 columns, producing Q256/K256 and transferring them entirely on device at text position 1. Independent source, stage, cast, transport and retained-buffer checks passed, followed by normal shutdown in 256.01 seconds. All 512 projection and 512 final consumer BF16 values match their official references. This selected Q/K call does not yet include projected V/gate, attention or persistent KV.
+
+[Code and reproduction](examples/wp14) · [Protocol](docs/WP14-PROTOCOL.md) · [Report](docs/WP14-REPORT.md) · [Evidence](evidence/wp14.json)
 
 ### WP13 · Original weights for all selected-head projections · September 10, 2026
 
@@ -148,6 +154,6 @@ python3 -m unittest discover -s tests -v
 
 For simulator runs, follow the milestone reports and the [development guide](docs/DEVELOPMENT.md). A separately installed Cerebras SDK 2.10.1 and Singularity are required. The repository includes source and sanitized evidence; SDK distributions, model weight payloads and private runtime artifacts are excluded.
 
-**In progress (WP14):** preparing bounded CPU references and a communication protocol for original hidden input through trained Q/K projections, device handoff, trained Q/K RMS normalization and partial rotary embedding. SDK execution of this connected path is pending review. Integration of recurrent input processing, state updates and gated output has passed eight-token numerical checks, but final weight readback still fails; that experiment is not accepted as completed. Complete-model integration and physical one-to-three-system trials follow. See [current status](docs/STATUS.md) and [milestone details](docs/MILESTONES.md).
+**In progress (WP15):** preparing source references, communication and resource plans for all selected Q/rawgate/K/V projections feeding attention across consecutive tokens with a persistent KV cache. SDK execution of this next composition is pending review. Integration of recurrent input processing, state updates and gated output has passed eight-token numerical checks, but final weight readback still fails; that experiment is not accepted as completed. Complete-model integration and physical one-to-three-system trials follow. See [current status](docs/STATUS.md) and [milestone details](docs/MILESTONES.md).
 
 MIT licensed; see [LICENSE](LICENSE). This is an independent research project, not an official Cerebras inference product.

@@ -1,0 +1,45 @@
+const memcpy=@import_module("<memcpy/get_params>",.{.width=5,.height=1});
+layout{
+ @set_rectangle(5,1);
+ for(@range(i16,4))|x|{
+  @set_tile_code(x,0,"producer.csl",.{.memcpy_params=memcpy.get_params(x),.rank=@as(u16,x),
+    .slab_id=if(x<2) @as(u32,x) else @as(u32,x+2)});
+ }
+ @set_tile_code(4,0,"consumer.csl",.{.memcpy_params=memcpy.get_params(4)});
+ @export_name("weights_storage",[*]u16,false);
+ @export_name("input_storage",[*]f32,false);
+ @export_name("output_storage",[*]f32,false);
+ @export_name("bf16_storage",[*]u16,false);
+ @export_name("control",[*]u32,false);
+ @export_name("state",[*]u32,false);
+ @export_name("timing",[*]u16,false);
+ @export_name("weight_guard_snapshot",[*]u32,false);
+ @export_name("handoff_control",[*]u32,false);
+ @export_name("handoff_state",[*]u32,false);
+ @export_name("wire_data",[*]u32,false);
+ @export_name("wire_ack",[*]u32,false);
+ @export_name("qk_input",[*]u16,false);
+ @export_name("qk_weights",[*]u16,false);
+ @export_name("qk_frequencies",[*]f32,false);
+ @export_name("qk_probe_inputs",[*]f32,false);
+ @export_name("qk_stats",[*]f32,false);
+ @export_name("qk_rms_stages",[*]f32,false);
+ @export_name("qk_normalized",[*]u16,false);
+ @export_name("qk_trig",[*]f32,false);
+ @export_name("qk_trig_casts",[*]u16,false);
+ @export_name("qk_rotary_stages",[*]f32,false);
+ @export_name("qk_product_casts",[*]u16,false);
+ @export_name("qk_output",[*]u16,false);
+ @export_name("qk_probes",[*]f32,false);
+ @export_name("qk_state",[*]u32,false);
+ @export_name("qk_events",[*]u32,false);
+ @export_name("qk_control",[*]u32,false);
+ @export_name("initialize_consumer",fn()void);
+ @export_name("begin",fn()void);
+ @export_name("accumulate",fn()void);
+ @export_name("finalize",fn()void);
+ @export_name("arm_handoff",fn()void);
+ @export_name("handoff",fn()void);
+ @export_name("preprocess",fn()void);
+ @export_name("release",fn()void);
+}
