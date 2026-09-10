@@ -1,0 +1,668 @@
+{
+  "milestone": "WP05",
+  "status": "accepted_by_control_node",
+  "scope": "synthetic full5120 ordinary offset-gain RMS with actual device BF16 RNE; not full model or DeltaNet gated RMS",
+  "cases": [
+    {
+      "call": 1,
+      "case": "zero",
+      "stages": {
+        "squares": {
+          "passed": true,
+          "max_absolute_error": 0.0,
+          "max_error_over_bound": 0.0
+        },
+        "denominator": {
+          "passed": true,
+          "max_absolute_error": 0.0,
+          "max_error_over_bound": 0.0
+        },
+        "precast": {
+          "passed": true,
+          "max_absolute_error": 0.0,
+          "max_error_over_bound": 0.0
+        },
+        "gain_using_actual_inverse": {
+          "passed": true,
+          "max_absolute_error": 0.0,
+          "max_error_over_bound": 0.0
+        }
+      },
+      "checks": {
+        "stage_gates": true,
+        "sqrt_actual_denominator": true,
+        "inverse_actual_sqrt": true,
+        "device_rne_of_actual_precast": true,
+        "conversion_probe": true,
+        "probe_input_immutable": true,
+        "staging_guards": true,
+        "output_guards": true,
+        "state": true,
+        "stable_ids": true,
+        "kernel_timestamp": true,
+        "zero_or_annihilated_elements": true,
+        "rounding_order_adversary": true
+      },
+      "state": [
+        1,
+        1,
+        2,
+        0,
+        5120,
+        1,
+        5120
+      ],
+      "scalar_actual": [
+        0.0,
+        9.999999974752427e-07,
+        0.0010000000474974513,
+        999.9999389648438
+      ],
+      "sqrt_relative_error": 4.8759830002595256e-08,
+      "inverse_relative_error": 1.353770786135394e-08,
+      "oracle_bf16_mismatch_count": 0,
+      "oracle_bf16_parity_is_not_conversion_gate": true,
+      "device_gain_lifecycle": "consumed then overwritten by BF16 output; host original gain and frozen fixture immutable",
+      "gain_before_cast_adversary_differences": 0,
+      "probe_input_bits": [
+        1065385984,
+        1065451520,
+        3212869632,
+        3212935168,
+        1065385983,
+        1065385985,
+        3212869631,
+        3212869633,
+        0,
+        2147483648,
+        1065353216,
+        3212836864,
+        1073709056,
+        3221192704,
+        1073774592,
+        3221258240
+      ],
+      "probe_output_bits": [
+        16256,
+        16258,
+        49024,
+        49026,
+        16256,
+        16257,
+        49024,
+        49025,
+        0,
+        32768,
+        16256,
+        49024,
+        16384,
+        49152,
+        16384,
+        49152
+      ],
+      "raw_timestamp_words": [
+        5,
+        0,
+        0,
+        59620,
+        3,
+        0
+      ],
+      "kernel_cycles": 256223
+    },
+    {
+      "call": 2,
+      "case": "unit_gain",
+      "stages": {
+        "squares": {
+          "passed": true,
+          "max_absolute_error": 0.0,
+          "max_error_over_bound": 0.0
+        },
+        "denominator": {
+          "passed": true,
+          "max_absolute_error": 1.3580347957287131e-09,
+          "max_error_over_bound": 2.0332409313995753e-06
+        },
+        "precast": {
+          "passed": true,
+          "max_absolute_error": 1.0382723547586181e-07,
+          "max_error_over_bound": 0.0002725795911761718
+        },
+        "gain_using_actual_inverse": {
+          "passed": true,
+          "max_absolute_error": 5.960464477539063e-08,
+          "max_error_over_bound": 0.30982919868866926
+        }
+      },
+      "checks": {
+        "stage_gates": true,
+        "sqrt_actual_denominator": true,
+        "inverse_actual_sqrt": true,
+        "device_rne_of_actual_precast": true,
+        "conversion_probe": true,
+        "probe_input_immutable": true,
+        "staging_guards": true,
+        "output_guards": true,
+        "state": true,
+        "stable_ids": true,
+        "kernel_timestamp": true,
+        "zero_or_annihilated_elements": true,
+        "rounding_order_adversary": true
+      },
+      "state": [
+        2,
+        2,
+        2,
+        0,
+        5120,
+        2,
+        5120
+      ],
+      "scalar_actual": [
+        5598.375,
+        1.0934336185455322,
+        1.0456737279891968,
+        0.9563212394714355
+      ],
+      "sqrt_relative_error": 3.3444512519346694e-08,
+      "inverse_relative_error": 4.366654650671868e-09,
+      "oracle_bf16_mismatch_count": 0,
+      "oracle_bf16_parity_is_not_conversion_gate": true,
+      "device_gain_lifecycle": "consumed then overwritten by BF16 output; host original gain and frozen fixture immutable",
+      "gain_before_cast_adversary_differences": 0,
+      "probe_input_bits": [
+        1065385984,
+        1065451520,
+        3212869632,
+        3212935168,
+        1065385983,
+        1065385985,
+        3212869631,
+        3212869633,
+        0,
+        2147483648,
+        1065353216,
+        3212836864,
+        1073709056,
+        3221192704,
+        1073774592,
+        3221258240
+      ],
+      "probe_output_bits": [
+        16256,
+        16258,
+        49024,
+        49026,
+        16256,
+        16257,
+        49024,
+        49025,
+        0,
+        32768,
+        16256,
+        49024,
+        16384,
+        49152,
+        16384,
+        49152
+      ],
+      "raw_timestamp_words": [
+        5,
+        0,
+        0,
+        59698,
+        3,
+        0
+      ],
+      "kernel_cycles": 256301
+    },
+    {
+      "call": 3,
+      "case": "signed_offset_gain",
+      "stages": {
+        "squares": {
+          "passed": true,
+          "max_absolute_error": 0.0,
+          "max_error_over_bound": 0.0
+        },
+        "denominator": {
+          "passed": true,
+          "max_absolute_error": 1.3278963706397917e-08,
+          "max_error_over_bound": 6.954780333029395e-05
+        },
+        "precast": {
+          "passed": true,
+          "max_absolute_error": 3.13228150083944e-07,
+          "max_error_over_bound": 0.0004731213411167681
+        },
+        "gain_using_actual_inverse": {
+          "passed": true,
+          "max_absolute_error": 2.1047890186309814e-07,
+          "max_error_over_bound": 0.5469812310148389
+        }
+      },
+      "checks": {
+        "stage_gates": true,
+        "sqrt_actual_denominator": true,
+        "inverse_actual_sqrt": true,
+        "device_rne_of_actual_precast": true,
+        "conversion_probe": true,
+        "probe_input_immutable": true,
+        "staging_guards": true,
+        "output_guards": true,
+        "state": true,
+        "stable_ids": true,
+        "kernel_timestamp": true,
+        "zero_or_annihilated_elements": true,
+        "rounding_order_adversary": true
+      },
+      "state": [
+        3,
+        3,
+        2,
+        0,
+        5120,
+        3,
+        5120
+      ],
+      "scalar_actual": [
+        1600.37109375,
+        0.31257349252700806,
+        0.5590826869010925,
+        1.7886441946029663
+      ],
+      "sqrt_relative_error": 6.675944286204159e-08,
+      "inverse_relative_error": 2.2286670698335348e-09,
+      "oracle_bf16_mismatch_count": 0,
+      "oracle_bf16_parity_is_not_conversion_gate": true,
+      "device_gain_lifecycle": "consumed then overwritten by BF16 output; host original gain and frozen fixture immutable",
+      "gain_before_cast_adversary_differences": 368,
+      "probe_input_bits": [
+        1065385984,
+        1065451520,
+        3212869632,
+        3212935168,
+        1065385983,
+        1065385985,
+        3212869631,
+        3212869633,
+        0,
+        2147483648,
+        1065353216,
+        3212836864,
+        1073709056,
+        3221192704,
+        1073774592,
+        3221258240
+      ],
+      "probe_output_bits": [
+        16256,
+        16258,
+        49024,
+        49026,
+        16256,
+        16257,
+        49024,
+        49025,
+        0,
+        32768,
+        16256,
+        49024,
+        16384,
+        49152,
+        16384,
+        49152
+      ],
+      "raw_timestamp_words": [
+        5,
+        0,
+        0,
+        59698,
+        3,
+        0
+      ],
+      "kernel_cycles": 256301
+    },
+    {
+      "call": 4,
+      "case": "rounding_boundary",
+      "stages": {
+        "squares": {
+          "passed": true,
+          "max_absolute_error": 0.0,
+          "max_error_over_bound": 0.0
+        },
+        "denominator": {
+          "passed": true,
+          "max_absolute_error": 9.400939693371413e-08,
+          "max_error_over_bound": 0.00011720634301132512
+        },
+        "precast": {
+          "passed": true,
+          "max_absolute_error": 3.674685769006203e-07,
+          "max_error_over_bound": 0.0006538334064221348
+        },
+        "gain_using_actual_inverse": {
+          "passed": true,
+          "max_absolute_error": 1.4994293451309204e-07,
+          "max_error_over_bound": 0.5444816227539019
+        }
+      },
+      "checks": {
+        "stage_gates": true,
+        "sqrt_actual_denominator": true,
+        "inverse_actual_sqrt": true,
+        "device_rne_of_actual_precast": true,
+        "conversion_probe": true,
+        "probe_input_immutable": true,
+        "staging_guards": true,
+        "output_guards": true,
+        "state": true,
+        "stable_ids": true,
+        "kernel_timestamp": true,
+        "zero_or_annihilated_elements": true,
+        "rounding_order_adversary": true
+      },
+      "state": [
+        4,
+        4,
+        2,
+        0,
+        5120,
+        4,
+        5120
+      ],
+      "scalar_actual": [
+        6722.953125,
+        1.313077688217163,
+        1.1458959579467773,
+        0.872679591178894
+      ],
+      "sqrt_relative_error": 5.39870586353827e-08,
+      "inverse_relative_error": 1.6114540830900948e-08,
+      "oracle_bf16_mismatch_count": 0,
+      "oracle_bf16_parity_is_not_conversion_gate": true,
+      "device_gain_lifecycle": "consumed then overwritten by BF16 output; host original gain and frozen fixture immutable",
+      "gain_before_cast_adversary_differences": 1692,
+      "probe_input_bits": [
+        1065385984,
+        1065451520,
+        3212869632,
+        3212935168,
+        1065385983,
+        1065385985,
+        3212869631,
+        3212869633,
+        0,
+        2147483648,
+        1065353216,
+        3212836864,
+        1073709056,
+        3221192704,
+        1073774592,
+        3221258240
+      ],
+      "probe_output_bits": [
+        16256,
+        16258,
+        49024,
+        49026,
+        16256,
+        16257,
+        49024,
+        49025,
+        0,
+        32768,
+        16256,
+        49024,
+        16384,
+        49152,
+        16384,
+        49152
+      ],
+      "raw_timestamp_words": [
+        5,
+        0,
+        0,
+        59698,
+        3,
+        0
+      ],
+      "kernel_cycles": 256301
+    }
+  ],
+  "policy": {
+    "name": "ordinary-rms5120-offset-gain-v1",
+    "columns": 5120,
+    "epsilon_f32": 9.999999974752427e-07,
+    "unit_roundoff": 5.960464477539063e-08,
+    "sum_bound": "gamma(2*N)*sum(x*x)+2*N*min_normal",
+    "denominator_bound": "sum_bound/N + gamma(2)*(abs(sum/N)+epsilon+sum_bound/N)+2*min_normal",
+    "sqrt_relative_budget": 9.5367431640625e-07,
+    "reciprocal_relative_budget": 9.5367431640625e-07,
+    "stage_gates": "independent sqrt(actual denominator), reciprocal(actual sqrt), gain application using actual inverse",
+    "gain": "BF16 exact expansion, FP32(1+w), then FP32(FP32(x*inverse)*(1+w))",
+    "output": "exact BF16 RNE of actual pre-cast FP32 bits; mathematical-oracle BF16 parity reported separately",
+    "domain": "synthetic finite normal BF16 inputs/gains or zero; bounded products, no overflow/subnormal result claim",
+    "in_place": "FP32 staging overwritten with pre-cast; BF16 gain slot overwritten with output after gain consumption; both host originals remain immutable; next call reloads full gain",
+    "conversion_probe_scope": "16 finite normal signed midpoint/adjacent/zero patterns; not unrestricted NaN/subnormal support"
+  },
+  "sram_admission": {
+    "low_section_end": 36368,
+    "low_section_bytes": 36364,
+    "static_allocated_section_bytes": 36752,
+    "stack_allowance_bytes": 4096,
+    "ordinary_address_ceiling": 49152,
+    "passed": true,
+    "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+  },
+  "footprint": {
+    "elf_class_bits": 64,
+    "allocated_sections": [
+      {
+        "name": ".data.lo",
+        "type": 1,
+        "address": 0,
+        "bytes": 56
+      },
+      {
+        "name": ".text",
+        "type": 1,
+        "address": 56,
+        "bytes": 4048
+      },
+      {
+        "name": ".data",
+        "type": 1,
+        "address": 4104,
+        "bytes": 56
+      },
+      {
+        "name": ".bss",
+        "type": 8,
+        "address": 4160,
+        "bytes": 31180
+      },
+      {
+        "name": ".task_table",
+        "type": 1,
+        "address": 35344,
+        "bytes": 1024
+      },
+      {
+        "name": ".entry_ival",
+        "type": 1,
+        "address": 64572,
+        "bytes": 2
+      },
+      {
+        "name": ".fpcw",
+        "type": 1,
+        "address": 64536,
+        "bytes": 2
+      },
+      {
+        "name": ".fscale",
+        "type": 1,
+        "address": 64538,
+        "bytes": 2
+      },
+      {
+        "name": ".blocked_ival",
+        "type": 1,
+        "address": 64520,
+        "bytes": 4
+      },
+      {
+        "name": ".active_ival",
+        "type": 1,
+        "address": 64524,
+        "bytes": 4
+      },
+      {
+        "name": ".blocked_ut_ival",
+        "type": 1,
+        "address": 64516,
+        "bytes": 4
+      },
+      {
+        "name": ".fabric_routes",
+        "type": 1,
+        "address": 63488,
+        "bytes": 48
+      },
+      {
+        "name": ".fabric_switches",
+        "type": 1,
+        "address": 63744,
+        "bytes": 192
+      },
+      {
+        "name": ".ce_in_q",
+        "type": 1,
+        "address": 63360,
+        "bytes": 8
+      },
+      {
+        "name": ".ce_out_q",
+        "type": 1,
+        "address": 63232,
+        "bytes": 2
+      },
+      {
+        "name": ".prng_state",
+        "type": 1,
+        "address": 64416,
+        "bytes": 16
+      },
+      {
+        "name": ".filters",
+        "type": 1,
+        "address": 63104,
+        "bytes": 96
+      },
+      {
+        "name": ".user_cfg_0",
+        "type": 1,
+        "address": 64528,
+        "bytes": 2
+      },
+      {
+        "name": ".user_cfg_1",
+        "type": 1,
+        "address": 64530,
+        "bytes": 2
+      },
+      {
+        "name": ".user_cfg_2",
+        "type": 1,
+        "address": 64548,
+        "bytes": 2
+      },
+      {
+        "name": ".user_cfg_3",
+        "type": 1,
+        "address": 64574,
+        "bytes": 2
+      }
+    ],
+    "static_allocated_section_bytes": 36752,
+    "scope": "ELF SHF_ALLOC sections; excludes unrepresented runtime stack/scratch demand"
+  },
+  "steps": [
+    {
+      "name": "compile",
+      "execution": "normal_exit",
+      "wall_seconds": 4.110701350029558,
+      "deadline_seconds": 300,
+      "peak_cgroup_bytes": 462970880,
+      "cleanup": "unit_stopped"
+    },
+    {
+      "name": "simulate",
+      "execution": "normal_exit",
+      "wall_seconds": 57.10400715004653,
+      "deadline_seconds": 180,
+      "peak_cgroup_bytes": 194994176,
+      "cleanup": "unit_stopped"
+    }
+  ],
+  "memory_scope": "observed live-cgroup maxima, not guaranteed lifetime peaks",
+  "simulator_statistics": {
+    "cycle_count": 3561455,
+    "cycles_per_second": 63723.04179297668,
+    "fabric_x": 8,
+    "fabric_y": 3,
+    "hwtile_count": 10,
+    "idle_ce_cycles": 21964,
+    "idle_wavelet_cycles": 22005,
+    "init_time": 0.018764019012451172,
+    "iotile_count": 4,
+    "nodes": 1,
+    "nultile_count": 32,
+    "sim_stop_cause": "Stopped due to idleness",
+    "sim_time": 55.88959503173828,
+    "simulated_tile_count": 14,
+    "sunset_count": 0,
+    "threads": 1,
+    "tile_count": 46,
+    "tile_cycles_per_second": 892122.5851016735,
+    "tile_cycles_per_second_per_thread": 892122.5851016735,
+    "total_time": 55.90835905075073
+  },
+  "source_and_input_files_unchanged": 18,
+  "compiled_files_unchanged": 11,
+  "owned_units_absent_after_exit": true,
+  "normal_sdk_stop": true,
+  "run_allocated_bytes": 2879488,
+  "source_sha256": {
+    "compile_entry.py": "9fb61afb42fa25b688d49147b0e2c9927548b906f25046025f96f9660d65e969",
+    "core/qwen38/__init__.py": "92977aa9088ee68919bc3eff6b0c1a1e2f5162f15b7b0744ca75d02e63e3a01b",
+    "core/qwen38/elf_inventory.py": "625c548eceb21c8ce0eba710887111bd853fb5d77c07cb36922ec47c28a43161",
+    "core/qwen38/locking.py": "a9546705141a7e0e3887a22c036e6695f0852d3825876dfc5f21d7ca27fa3629",
+    "core/qwen38/resources.py": "67610eddb4c1cb4557f6bba8179a26aa87be2638627315785689ac5ea3724049",
+    "core/qwen38/rms_numerics.py": "3f3b6f5df5a3ccf2af8da27a711501608d44d20cb32c3b6773ec84b68f7d0767",
+    "driver.py": "061af1ed95b9fbffe6c22e0aabb3fd0b2318f1e4e95c715784f2677a1183820c",
+    "kernel.csl": "0b13a980e54581c236c67dc2ecab1a179b6e85895558f4c7f2008cd76b5c7cf3",
+    "layout.csl": "c25b4c30cbfabc39a31a2cc5c169420a5ccb0e68aa545e9db6fecd0bf7de2881",
+    "pe.csl": "09bff229ed41ee812b00eefce1f3a35f2b262bd11cd86b8dce64b80724324c54",
+    "tools/guarded_run.py": "d6a5bdc4676f7b32d795a200aa715e43bfa5e39edc126f830f3335f3da69c38d",
+    "tools/sdk_container.py": "f40d7382ad2242b6d99b6e93717adf910738656d2ef2ac6bbd97b4a0d35f0cc9"
+  },
+  "candidate_history": [
+    {
+      "id": "wp05-001",
+      "status": "controller_interrupted_noncompliant_not_accepted",
+      "reason": "incorrect61440 admission instead of49152; lowend46624+4096=50720 exceeds48KiB",
+      "compile_seconds": 4.101995787816122,
+      "interrupted_simulator_seconds": 35.68762951018289,
+      "cleanup": "owned processes stopped, PID0 and empty cgroup verified"
+    },
+    {
+      "id": "wp05-002",
+      "status": "passed",
+      "repair": "gain/output share storage after per-element gain consumption;48KiB gate; stack4KiB and all arithmetic/fixtures/thresholds unchanged"
+    }
+  ]
+}

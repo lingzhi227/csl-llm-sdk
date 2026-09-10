@@ -1,0 +1,37 @@
+param memcpy_params;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const kernel=@import_module("kernel.csl");
+const clock=@import_module("<time>");
+var staging=@zeros([5122]f32);
+var gain_output_storage=@zeros([5122]u16);
+var stats=@zeros([4]f32);
+var control=@zeros([1]u32);
+// generation, calls, phase, error, output_count, probe_calls, valid_count.
+var state=@zeros([7]u32);
+var probe_input=@zeros([18]u32);
+var probe_output=@zeros([18]u16);
+var timing=@zeros([6]u16);
+var started=@zeros([3]u16);var ended=@zeros([3]u16);
+fn compute() void {
+  if(control[0]<=state[0]){state[2]=3;state[3]=1;sys.unblock_cmd_stream();return;}
+  state[2]=1;state[3]=0;state[4]=0;state[6]=0;
+  clock.enable_tsc();clock.get_timestamp(&started);
+  kernel.compute(@ptrcast([*]f32,&staging[1]),@ptrcast([*]u16,&gain_output_storage[1]),&stats);
+  clock.get_timestamp(&ended);clock.disable_tsc();
+  for(@range(u16,3))|i|{timing[i]=started[i];timing[i+3]=ended[i];}
+  state[0]=control[0];state[1]+=1;state[2]=2;state[4]=5120;state[6]=5120;
+  sys.unblock_cmd_stream();
+}
+fn convert_probe() void {
+  for(@range(u16,16))|i|{probe_output[i+1]=kernel.round_bf16(probe_input[i+1]);}
+  state[5]+=1;sys.unblock_cmd_stream();
+}
+const xp:[*]f32=&staging;const gp:[*]u16=&gain_output_storage;
+const sp:[*]f32=&stats;const cp:[*]u32=&control;const ep:[*]u32=&state;
+const pip:[*]u32=&probe_input;const pop:[*]u16=&probe_output;const tp:[*]u16=&timing;
+comptime{
+  @export_symbol(xp,"staging");@export_symbol(gp,"gain_output_storage");
+  @export_symbol(sp,"stats");@export_symbol(cp,"control");@export_symbol(ep,"state");
+  @export_symbol(pip,"probe_input");@export_symbol(pop,"probe_output");@export_symbol(tp,"timing");
+  @export_symbol(compute);@export_symbol(convert_probe);
+}

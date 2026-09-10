@@ -2,6 +2,25 @@
 import struct
 
 
+def admit_wse3_sram(footprint, stack_allowance=4096, ceiling=49152):
+    """48 KiB application SRAM; high device configuration addresses add no capacity."""
+    if type(stack_allowance) is not int or stack_allowance < 4096:
+        raise ValueError('At least the declared 4 KiB stack allowance is required')
+    if type(ceiling) is not int or not 0 < ceiling <= 49152:
+        raise ValueError('Application SRAM ceiling cannot exceed 48 KiB')
+    config_names={'.entry_ival','.fpcw','.fscale','.blocked_ival','.active_ival','.blocked_ut_ival',
+                  '.fabric_routes','.fabric_switches','.ce_in_q','.ce_out_q','.prng_state','.filters',
+                  '.user_cfg_0','.user_cfg_1','.user_cfg_2','.user_cfg_3'}
+    low=[s for s in footprint['allocated_sections'] if not (s['name'] in config_names and s['address']>=63104)]
+    if not low: raise ValueError('No application SRAM sections')
+    end=max(s['address']+s['bytes'] for s in low)
+    return {'low_section_end':end,'low_section_bytes':sum(s['bytes'] for s in low),
+            'static_allocated_section_bytes':footprint['static_allocated_section_bytes'],
+            'stack_allowance_bytes':stack_allowance,'ordinary_address_ceiling':ceiling,
+            'passed':end+stack_allowance<=ceiling,
+            'scope':'48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak'}
+
+
 def inventory(data):
     if data[:4]!=b'\x7fELF' or data[5] not in (1,2):
         raise ValueError('Unsupported ELF header')

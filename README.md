@@ -47,6 +47,15 @@ The intended deployment paths are **single-wafer weight streaming** and **two/th
 
 ## 3. Completed development log — newest first
 
+### WP05 · RMS5120 with device BF16 rounding · September 10, 2026
+
+One simulated PE computes full5120 ordinary RMS with offset gain `(1+w)`, observable FP32 intermediate results and actual BF16 round-to-nearest-even output. Four calls and16 signed rounding probes per call passed all independent numerical, state and guard checks.
+
+- Shared gain/output storage reduces the payload to30 KiB; actual code/data plus a4 KiB stack allowance fits the48 KiB application budget.
+- Simulation completed normally in57.1 seconds. The earlier candidate with an incorrect SRAM admission ceiling was stopped and explicitly excluded.
+
+**Scope:** a synthetic full-dimension RMS operator, not a model layer or DeltaNet gated norm. [Report](docs/WP05-REPORT.md) · [Storage and error contract](docs/WP05-DESIGN.md) · [Evidence](evidence/wp05.json) · [Example](examples/wp05)
+
 ### WP04 · Pinned semantics and CPU references · September 10, 2026
 
 Matched 851 text-backbone/head tensor metadata entries to the pinned candidate implementation and traced operator equations, precision boundaries and persistent state. Primary inference sources confirmed that DeltaNet swish gating and full-attention sigmoid gating belong to different branches.
@@ -101,6 +110,6 @@ For simulator experiments, follow the linked milestone reports and the
 
 The guarded research harness runs one heavy job at a time with a 20 GiB RAM ceiling, zero task swap, an 8 GiB available-memory reserve and bounded deadlines/cache usage. These are local resource controls, not performance requirements for the eventual inference SDK. See the reports and runner implementation for exact limitations.
 
-**Next:** full-5120 contraction with tiled weight loading and persistent accumulation, followed by remaining model kernels, reference qualification and complete-model integration. Work in progress is not listed above as completed. See [current status](docs/STATUS.md) and [milestone details](docs/MILESTONES.md).
+**Next:** a full128×128 DeltaNet recurrent head with persistent state and device reductions, followed by gated normalization, remaining model kernels and complete-model integration. Work in progress is not listed above as completed. See [current status](docs/STATUS.md) and [milestone details](docs/MILESTONES.md).
 
 MIT licensed; see [LICENSE](LICENSE). This is an independent research project, not an official Cerebras inference product.

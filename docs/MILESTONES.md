@@ -1,5 +1,12 @@
 # Accepted milestones
 
+## WP05 — Accepted, September 10, 2026
+
+Four full5120 ordinary RMS calls and64 signed conversion probes passed with
+offset gain and actual BF16 RNE. Shared gain/output storage plus a4 KiB stack
+allowance fits the48 KiB application budget. The first noncompliant SRAM
+candidate was stopped and excluded. See [report](WP05-REPORT.md).
+
 ## WP04 — Accepted, September 10, 2026
 
 Pinned source/metadata audit matched851 text tensors and established branch-specific
