@@ -34,6 +34,15 @@ The intended deployment paths are **single-wafer weight streaming** and **two/th
 
 ## 2. Completed development log — newest first
 
+### WP04 · Pinned semantics and CPU references · September 10, 2026
+
+Matched 851 text-backbone/head tensor metadata entries to the pinned candidate implementation and traced operator equations, precision boundaries and persistent state. Primary inference sources confirmed that DeltaNet swish gating and full-attention sigmoid gating belong to different branches.
+
+- Twenty-seven small CPU checks passed using extracted, unchanged official function bodies and independent references: RMS5120, a128×128 recurrent head, causal attention24Q/4KV/head256, convolution and partial RoPE.
+- The reference process completed in2.1 seconds under a2 GiB/60-second limit, without loading model weights or installing dependencies.
+
+**Scope:** source/metadata audit and selected function-body execution; full Transformers runtime, checkpoint loading and whole-model numerical parity remain unvalidated. [Report](docs/WP04-REPORT.md) · [Equation and dtype contract](docs/WP04-SEMANTICS.md) · [Evidence](evidence/wp04.json) · [CPU fixtures](examples/wp04)
+
 ### WP03 · Persistent full-width contraction · September 10, 2026
 
 One simulated PE accumulates an original BF16 128×5120 slab across 45 full tiles and an 80-column tail. Four calls in one runtime passed independent intermediate and final checks, including exact global-column-5119 one-hot and zero after nonzero.

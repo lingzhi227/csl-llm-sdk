@@ -1,5 +1,12 @@
 # Accepted milestones
 
+## WP04 — Accepted, September 10, 2026
+
+Pinned source/metadata audit matched851 text tensors and established branch-specific
+equations. Twenty-seven bounded CPU checks passed extracted official function bodies
+against small independent references. Full runtime/model integration remains open.
+See [report](WP04-REPORT.md) and [semantic contract](WP04-SEMANTICS.md).
+
 ## WP03 — Accepted, September 10, 2026
 
 Original BF16 rows 0:128 span all 5120 input columns using device-owned persistent

@@ -1,0 +1,389 @@
+{
+  "milestone": "WP04",
+  "status": "accepted_by_control_node",
+  "scope": "pinned source equations, 851 tensor metadata matches and extracted official function-body CPU fixtures; no full runtime/model",
+  "cpu_result": {
+    "passed": true,
+    "scope": "exact selected upstream fallback bodies plus independent tiny CPU oracles; not package/model integration",
+    "upstream_commit": "4815a0a6a064214f2d8208c094464a5a6b76ca8d",
+    "source_sha256": "762feb6c7426a7f15b5bf830df54c07438bf9e7c27b8cdb23179045920412c3b",
+    "ast_adaptation": "remove decorators only; no function-body edits; future annotations; explicit torch/F/nn/silu dependencies",
+    "definitions": {
+      "Qwen3_5RMSNormGated": {
+        "start": 218,
+        "end": 234
+      },
+      "causal_conv1d_update": {
+        "start": 250,
+        "end": 266
+      },
+      "causal_conv1d_fn": {
+        "start": 270,
+        "end": 289
+      },
+      "l2norm": {
+        "start": 294,
+        "end": 297
+      },
+      "torch_chunk_gated_delta_rule": {
+        "start": 301,
+        "end": 434
+      },
+      "torch_recurrent_gated_delta_rule": {
+        "start": 438,
+        "end": 497
+      },
+      "rotate_half": {
+        "start": 666,
+        "end": 670
+      },
+      "apply_rotary_pos_emb": {
+        "start": 674,
+        "end": 709
+      },
+      "repeat_kv": {
+        "start": 712,
+        "end": 721
+      },
+      "eager_attention_forward": {
+        "start": 724,
+        "end": 746
+      },
+      "Qwen3_5RMSNorm": {
+        "start": 841,
+        "end": 858
+      },
+      "is_torchdynamo_exporting": {
+        "file": "import_utils.py",
+        "start": 1731,
+        "end": 1737
+      }
+    },
+    "checks": [
+      {
+        "name": "rms5120_offset_gain_fp32",
+        "passed": true,
+        "elements": 5120,
+        "max_absolute_error": 1.836575378444394e-07,
+        "atol": 2e-06,
+        "rtol": 2e-06
+      },
+      {
+        "name": "rms5120_bf16_output",
+        "passed": true,
+        "elements": 5120,
+        "max_absolute_error": 0.0,
+        "atol": 0,
+        "rtol": 0
+      },
+      {
+        "name": "rms_zero_input",
+        "passed": true,
+        "elements": 5120,
+        "max_absolute_error": 0.0,
+        "atol": 0,
+        "rtol": 0
+      },
+      {
+        "name": "zero_weight_is_unit_gain_not_zero_output",
+        "passed": true
+      },
+      {
+        "name": "minus_one_weight_annihilates",
+        "passed": true,
+        "elements": 5120,
+        "max_absolute_error": 0.0,
+        "atol": 0,
+        "rtol": 0
+      },
+      {
+        "name": "gated_rms128_direct_gain_silu",
+        "passed": true,
+        "elements": 128,
+        "max_absolute_error": 3.7108618311521013e-07,
+        "atol": 2e-06,
+        "rtol": 2e-06
+      },
+      {
+        "name": "gated_zero_weight_zeroes_output",
+        "passed": true,
+        "elements": 128,
+        "max_absolute_error": 0.0,
+        "atol": 0,
+        "rtol": 0
+      },
+      {
+        "name": "sigmoid_and_swish_same_raw_gate_not_equivalent",
+        "passed": true
+      },
+      {
+        "name": "recurrent128_output_fp64_oracle",
+        "passed": true,
+        "elements": 256,
+        "max_absolute_error": 1.1299192617794315e-09,
+        "atol": 2e-06,
+        "rtol": 2e-06
+      },
+      {
+        "name": "recurrent128_state_fp64_oracle",
+        "passed": true,
+        "elements": 16384,
+        "max_absolute_error": 7.851226384303356e-09,
+        "atol": 2e-06,
+        "rtol": 2e-06
+      },
+      {
+        "name": "recurrent_initial_state_not_mutated",
+        "passed": true,
+        "elements": 16384,
+        "max_absolute_error": 0.0,
+        "atol": 0,
+        "rtol": 0
+      },
+      {
+        "name": "decode_two_steps_equals_sequence",
+        "passed": true,
+        "elements": 256,
+        "max_absolute_error": 0.0,
+        "atol": 0,
+        "rtol": 0
+      },
+      {
+        "name": "decode_final_state_equals_sequence",
+        "passed": true,
+        "elements": 16384,
+        "max_absolute_error": 0.0,
+        "atol": 0,
+        "rtol": 0
+      },
+      {
+        "name": "prefill_chunk_vs_decode_output",
+        "passed": true,
+        "elements": 256,
+        "max_absolute_error": 3.026798367500305e-09,
+        "atol": 2e-06,
+        "rtol": 2e-06
+      },
+      {
+        "name": "prefill_chunk_vs_decode_state",
+        "passed": true,
+        "elements": 16384,
+        "max_absolute_error": 7.450580596923828e-09,
+        "atol": 2e-06,
+        "rtol": 2e-06
+      },
+      {
+        "name": "zero_input_zero_recurrent_state",
+        "passed": true,
+        "elements": 16384,
+        "max_absolute_error": 0.0,
+        "atol": 0,
+        "rtol": 0
+      },
+      {
+        "name": "zero_input_zero_recurrent_output",
+        "passed": true,
+        "elements": 256,
+        "max_absolute_error": 0.0,
+        "atol": 0,
+        "rtol": 0
+      },
+      {
+        "name": "conv4_prefill_vs_cached_decode",
+        "passed": true,
+        "elements": 18,
+        "max_absolute_error": 0.0,
+        "atol": 2e-06,
+        "rtol": 2e-06
+      },
+      {
+        "name": "conv4_final_history",
+        "passed": true,
+        "elements": 12,
+        "max_absolute_error": 0.0,
+        "atol": 0,
+        "rtol": 0
+      },
+      {
+        "name": "conv4_first_position_has_no_future",
+        "passed": true
+      },
+      {
+        "name": "attention24q4kv256_causal_fp64_oracle",
+        "passed": true,
+        "elements": 12288,
+        "max_absolute_error": 3.4851139751879145e-08,
+        "atol": 2e-06,
+        "rtol": 2e-06
+      },
+      {
+        "name": "future_probability_zero",
+        "passed": true,
+        "elements": 24,
+        "max_absolute_error": 0.0,
+        "atol": 0,
+        "rtol": 0
+      },
+      {
+        "name": "first_token_uses_own_value",
+        "passed": true,
+        "elements": 6144,
+        "max_absolute_error": 0.0,
+        "atol": 0,
+        "rtol": 0
+      },
+      {
+        "name": "rope_position_zero_identity",
+        "passed": true,
+        "elements": 6144,
+        "max_absolute_error": 0.0,
+        "atol": 0,
+        "rtol": 0
+      },
+      {
+        "name": "rope_unrotated_tail192",
+        "passed": true,
+        "elements": 9216,
+        "max_absolute_error": 0.0,
+        "atol": 0,
+        "rtol": 0
+      },
+      {
+        "name": "rope_position_one_split_half_pair",
+        "passed": true,
+        "elements": 1,
+        "max_absolute_error": 1.3401309617577795e-08,
+        "atol": 2e-06,
+        "rtol": 2e-06
+      },
+      {
+        "name": "q_gate_interleaved_per_head",
+        "passed": true
+      }
+    ],
+    "gate_counterexample": {
+      "raw_gate": [
+        -2.0,
+        0.0,
+        2.0
+      ],
+      "branch_input": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "sigmoid_branch": [
+        0.11920291930437088,
+        0.5,
+        0.8807970285415649
+      ],
+      "swish_branch": [
+        -0.23840583860874176,
+        0.0,
+        1.7615940570831299
+      ]
+    },
+    "python": "3.11.14 (main, Oct 28 2025, 12:11:26) [Clang 20.1.4 ]",
+    "torch": "2.4.0+cu121",
+    "threads": 1,
+    "device": "cpu",
+    "original_model_weights_loaded": false
+  },
+  "cpu_run": {
+    "execution": "normal_exit",
+    "wall_seconds": 2.055806594900787,
+    "peak_cgroup_bytes": 206217216,
+    "deadline_seconds": 60,
+    "cleanup": "unit_stopped"
+  },
+  "enforced_memory_bytes": 2147483648,
+  "enforced_swap_bytes": 0,
+  "remote_frozen_files": 19,
+  "local_text_frozen_files": 16,
+  "remote_only_incidental_pyc_files": 3,
+  "all_remote_hashes_unchanged": true,
+  "owned_unit_absent_after_exit": true,
+  "metadata_audit": {
+    "passed": true,
+    "matched_tensors": 851,
+    "unexpected_text_tensors": [],
+    "scope": "name/shape/dtype/index metadata only; no tensor-content or model execution",
+    "sources": {
+      "config.json": "191e0af232104ed8b65258cf3fb2b842e288008baca7633c11b82a1ac7203aab",
+      "tensor-headers.json": "579fff9d80f52a29770ea8a2ebcc5d63796db1400016ad7635a4b67d294f5a62",
+      "model.safetensors.index.json": "77042094076611b69791a610065f28b7013b8c621795fa86ddccc8bac7d1b9df"
+    }
+  },
+  "new_primary_source_acquisition": {
+    "payload_bytes": 559639,
+    "files": [
+      {
+        "file": "model-card.md",
+        "url": "https://huggingface.co/Qwen/Qwen3.8-27B/raw/1d4bf0f2ff6012fd82039f2fa52739d0dd7c60c0/README.md",
+        "bytes": 65012,
+        "sha256": "57e4bdb258ee1a7d2635c5174ebd4e56abe392505cdb5f8bbb356b0dc4293641"
+      },
+      {
+        "file": "cache_utils.py",
+        "url": "https://raw.githubusercontent.com/huggingface/transformers/4815a0a6a064214f2d8208c094464a5a6b76ca8d/src/transformers/cache_utils.py",
+        "bytes": 104677,
+        "sha256": "702144bb44553f6339ea1bf23c8205a708bb5f8c7c09cb3a2db484182646743c"
+      },
+      {
+        "file": "modular_qwen3_5.py",
+        "url": "https://raw.githubusercontent.com/huggingface/transformers/4815a0a6a064214f2d8208c094464a5a6b76ca8d/src/transformers/models/qwen3_5/modular_qwen3_5.py",
+        "bytes": 28483,
+        "sha256": "cdbc31aadf5a8380f094716d7991343fcfa8c128e6595e6f5463d97d7a8cb1ac"
+      },
+      {
+        "file": "sglang_qwen3_5.py",
+        "url": "https://raw.githubusercontent.com/sgl-project/sglang/9a2f17f41d185614a17f740c006c4aca84c016bf/python/sglang/srt/models/qwen3_5.py",
+        "bytes": 110077,
+        "sha256": "451439c233728c7025211dd2472e5062eb573ea51eb9936d44b4c5440ffa2f09"
+      },
+      {
+        "file": "sglang_qwen3_next.py",
+        "url": "https://raw.githubusercontent.com/sgl-project/sglang/9a2f17f41d185614a17f740c006c4aca84c016bf/python/sglang/srt/models/qwen3_next.py",
+        "bytes": 47999,
+        "sha256": "a1e6c16514f6dd44420aa599f6d55c917db1d0dca7f0a42a2deca1109c1323bb"
+      },
+      {
+        "file": "vllm_qwen_gdn_linear_attn.py",
+        "url": "https://raw.githubusercontent.com/vllm-project/vllm/9521c60bdc0ccd1264961c284c64f4873335aed1/vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py",
+        "bytes": 77101,
+        "sha256": "b80f8e6f3fff442fb880aebb3209c52f814f66490009f4ac4003de603576d10a"
+      },
+      {
+        "file": "import_utils.py",
+        "url": "https://raw.githubusercontent.com/huggingface/transformers/4815a0a6a064214f2d8208c094464a5a6b76ca8d/src/transformers/utils/import_utils.py",
+        "bytes": 126290,
+        "sha256": "e147f99cf68352e3260e9780930501c3becc0c40a5ff04150ff641b724161732"
+      }
+    ]
+  },
+  "executed_source_hashes": {
+    "reference_checks.py": "b843f1949d6170ec99b25578901f261549a94d592c61a4b6ed1f5e0eaa7548d0",
+    "import_utils.py": "e147f99cf68352e3260e9780930501c3becc0c40a5ff04150ff641b724161732",
+    "modeling_qwen3_5.py": "762feb6c7426a7f15b5bf830df54c07438bf9e7c27b8cdb23179045920412c3b",
+    "tools/guarded_run.py": "c7b8f966b062294a251ab1db147e60c66b6632c360a1eb777f4cebe156c97efc",
+    "core/qwen38/resources.py": "67610eddb4c1cb4557f6bba8179a26aa87be2638627315785689ac5ea3724049",
+    "core/qwen38/resource_ledger.py": "f5dd528b6d2c399f5eee29af63f8a08f3f27122c3df19ee9a6e444490eae28b8",
+    "core/qwen38/ranged.py": "f624f91b6fa2c0ab26a70853953ce21e72cff7a004eb4845a3251e04bc93b271",
+    "core/qwen38/chain_numerics.py": "388bef9e18a66eea2bb2d297257b16a00e857080ee9615f6c72ce99b29b989dd",
+    "core/qwen38/locking.py": "a9546705141a7e0e3887a22c036e6695f0852d3825876dfc5f21d7ca27fa3629",
+    "core/qwen38/stream_schedule.py": "d967bf97aa35bc9c89dcb5c288687a18e1436773a413b8cc78de070a2612b8d7",
+    "core/qwen38/codecs.py": "ff392fd861c27523fd01f6abdb330bf54f0583e3b8e6081ed6309dd4361ef7fa",
+    "core/qwen38/stream_numerics.py": "d6232e679b07444db0f20af6c9925805d2e658c403b38d7a59cc6dc568ad285b",
+    "core/qwen38/numerics.py": "fee8e59d860620b4d860b2e1ca773feaf27ba15d800a7cc7744e145391a7898d",
+    "core/qwen38/elf_inventory.py": "5513cec5266140bb9bbbd27e25cf7295147c985dbb8ac27d1c18319c1b98c961",
+    "core/qwen38/__init__.py": "92977aa9088ee68919bc3eff6b0c1a1e2f5162f15b7b0744ca75d02e63e3a01b"
+  },
+  "failure_history": [
+    {
+      "run": "wp04-cpu-001",
+      "seconds": 2.0645366590470076,
+      "reason": "AST harness omitted exact upstream export-detection helper; preserved failure, added same-commit helper body",
+      "model_semantics_changed": false
+    }
+  ]
+}

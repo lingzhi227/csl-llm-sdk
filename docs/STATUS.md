@@ -1,6 +1,6 @@
 # Implementation status
 
-WP00–WP03 accepted, 2026-09-10. Continuous development is
+WP00–WP04 accepted, 2026-09-10. Continuous development is
 active under bounded control-node packages. Full model M0 and inference remain incomplete.
 
 | Component | Status |
@@ -11,7 +11,8 @@ active under bounded control-node packages. Full model M0 and inference remain i
 | cgroup bounded execution | Actual MemoryMax 20 GiB and MemorySwapMax 0 confirmed; serial execution |
 | Native memcpy16 SDK bit copy | One WSE-3 PE, seven BF16 bit patterns, SDK 2.10.1 simulator; exact output and normal stop/exit |
 | Packed-u32/raw-u32 SDK transfer | CPU codec tests only; no SDK qualification |
-| Model semantics, full checkpoint, GPU reference | Not qualified; no full-model download/execution |
+| Pinned model structure/equations | 851 metadata matches and27 extracted-function CPU checks accepted; full runtime integration remains open |
+| Full checkpoint, GPU reference | Not qualified; no full-model download/execution |
 | Local 128×112 BF16 GEMV | Four same-runtime SDK calls passed on an original Qwen3.8 weight slice; WP01 accepted |
 | Two-PE GEMV/fabric/SUM/RMS128 | Four SDK calls with both device join orders accepted; reduced unit-gain operator fixture |
 | Persistent 128×5120 contraction | Four full-width same-runtime SDK calls accepted, 46 tiles each; 128 selected output rows |

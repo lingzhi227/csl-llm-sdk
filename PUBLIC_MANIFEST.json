@@ -1,8 +1,8 @@
 {
-  "README.md": "80e5f7bda990d7d25716dceee0e6b84ec2864f1a7f31ab4308efd199b32e2bbd",
+  "README.md": "decd86d77262b9051d09b4c9f686e3b5f4567cbb317e58ff590fa68128c535c0",
   "LICENSE": "9a36237af23778b2e828b65ddca4ceeed111806709c0de1468a7d94200a69566",
   ".gitignore": "7ce76ae4e2446e018a7fd97a9168cb3b9594d660c875e2b2cdb7f1a3fb9b97b7",
-  "docs/STATUS.md": "33ab15242c02f1d8ecdd086c3c23fbe78ab0ed21f56fb401bb65e4e61b8d9eb5",
+  "docs/STATUS.md": "92629875f7f9a372dcd14a7a5134bc5919950ae73788d2eca7ce2d8dc224536c",
   "core/qwen38/__init__.py": "92977aa9088ee68919bc3eff6b0c1a1e2f5162f15b7b0744ca75d02e63e3a01b",
   "core/qwen38/codecs.py": "ff392fd861c27523fd01f6abdb330bf54f0583e3b8e6081ed6309dd4361ef7fa",
   "core/qwen38/locking.py": "a9546705141a7e0e3887a22c036e6695f0852d3825876dfc5f21d7ca27fa3629",
@@ -11,7 +11,7 @@
   "tests/test_container.py": "45f9938cbb8915984a1ed89adefd6e39c0af8beb52c1f87ecbbf923e79a20afe",
   "tests/test_locking.py": "2789005d15cbf93bcc90baa86829d8c9c6f963da24ea8c5d8409bdd5d5ef1b7b",
   "tests/test_resources.py": "cf20a3bddc33a7904200e9a7c32bba9a8db62db081014a70790bd28fab4fc53c",
-  "tools/guarded_run.py": "ef348694793deca35cdb3efd868382a1ab544da131594eaf9df7ec1fa1450a2f",
+  "tools/guarded_run.py": "d6a5bdc4676f7b32d795a200aa715e43bfa5e39edc126f830f3335f3da69c38d",
   "tools/sdk_container.py": "f40d7382ad2242b6d99b6e93717adf910738656d2ef2ac6bbd97b4a0d35f0cc9",
   "docs/WP00-REPORT.md": "0b0ad5bdcebf66fc461df7bb2035998d87f331d611644a082aca20ad830b0448",
   "tests/test_prepare.py": "92568528d0e8783580c169423fba67cd57cd9fb7b5fd4203002b0f4ba1a1d768",
@@ -20,7 +20,7 @@
   "examples/wp00/driver.py": "b3b6ad635ac357d7fd6b0b207e4b2c4d3742ad2f8775b7cbf2d726fb28a8958d",
   "examples/wp00/layout.csl": "01954ddb984d89eaaef393ba3ac847ecea1358ff5d54d4a8f92e68a88ee9766f",
   "examples/wp00/pe.csl": "98f6b972e90056ea548291407254e90174f5e9f7646fd2d6c3ca5d153ab7be62",
-  "docs/MILESTONES.md": "bccb643842e45acaa4236bb57f05e06f6910870f010b8cd93ee187d696a42961",
+  "docs/MILESTONES.md": "9eabaab8437ec191323647d2c0de59adc5c5e7a34d8960bb488fc634abfc3382",
   "evidence/wp00.json": "4c82ee7c9fa107a633789403133cd0f9bb61dfb77574b814cc0c726bc5937a5a",
   "core/qwen38/elf_inventory.py": "5513cec5266140bb9bbbd27e25cf7295147c985dbb8ac27d1c18319c1b98c961",
   "core/qwen38/numerics.py": "fee8e59d860620b4d860b2e1ca773feaf27ba15d800a7cc7744e145391a7898d",
@@ -67,5 +67,13 @@
   "examples/wp03/pe.csl": "6f8ccfcb14312c4c4dfca082719b15c50ac2556a5e17d69e5f4d84df73de2eee",
   "examples/wp03/layout.csl": "96738da01f3063fbdbcb76be5395a5f0afb729bd50c34ecf8fac0c734624411b",
   "examples/wp03/driver.py": "666f3d33f4634f329f79ddac50edf24f2bf9cceb7538a236bf433b9ee200b876",
-  "examples/wp03/compile_entry.py": "1bf40f9bd75e9f5f76b7cef5dab8a5d4e9288a074ec5bf88f6effa802aa3162f"
+  "examples/wp03/compile_entry.py": "1bf40f9bd75e9f5f76b7cef5dab8a5d4e9288a074ec5bf88f6effa802aa3162f",
+  "docs/WP04-SEMANTICS.md": "161117ff6ff8c841fe8a89a7031fc9ff878c48f4737050acf05e1b359cc6bc38",
+  "docs/WP04-REPORT.md": "f5afefbc500c479dbc1e3c3617a88a3257ff4ef39948a05c94e38d9723faa5f1",
+  "evidence/wp04.json": "39fa04fb2a7cbbf9a802c4907d8b53db1f8f5b2f785b447c4891b346c4db94a6",
+  "examples/wp04/reference_checks.py": "b843f1949d6170ec99b25578901f261549a94d592c61a4b6ed1f5e0eaa7548d0",
+  "tools/audit_wp04_shapes.py": "2fa2a836868a557af8730f3c40381c703339b6c41f083fee3ddc9f81257215e3",
+  "tools/fetch_wp04_sources.py": "8c2cbc5746968c5f6de30fe0a3b7fc5f73ad386eccbffe9c2e522f0886a84a5c",
+  "tools/prepare_wp04.py": "c33ddd98715d730b66f5739f2f697944044c1117b626e981b139d4c95cc164f5",
+  "tests/test_cpu_profile.py": "22a986e50baec347649dea075fff7d4267a2c13495986a4ebb2173f1f322230e"
 }

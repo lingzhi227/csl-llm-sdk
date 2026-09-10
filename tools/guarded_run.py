@@ -29,24 +29,30 @@ def main():
     parser.add_argument('--cache', type=Path, required=True)
     parser.add_argument('--work', type=Path, required=True)
     parser.add_argument('--spec', type=Path, required=True)
+    parser.add_argument('--profile', choices=('sdk', 'cpu-reference'), default='sdk')
     args = parser.parse_args()
+    cpu_reference = args.profile == 'cpu-reference'
+    max_seconds = 60 if cpu_reference else 300
+    memory_limit = 2 * GIB if cpu_reference else 20 * GIB
     cache, work = args.cache.resolve(), args.work.resolve()
     if not work.is_relative_to(cache) or cache == work:
         raise ValueError('Work directory must be inside the project cache')
     spec = json.loads(args.spec.read_text())
+    if spec.get('required_profile', args.profile) != args.profile:
+        raise ValueError('Execution profile differs from the frozen specification')
     if len(spec['steps']) not in (1, 2):
         raise ValueError('Only one or two serial steps are allowed')
     for step in spec['steps']:
-        if type(step['seconds']) is not int or not 1 <= step['seconds'] <= 300:
-            raise ValueError('Step deadline must be 1..300 seconds')
+        if type(step['seconds']) is not int or not 1 <= step['seconds'] <= max_seconds:
+            raise ValueError(f'Step deadline must be 1..{max_seconds} seconds')
         if not step['argv'] or not all(type(x) is str for x in step['argv']):
             raise ValueError('argv must be a nonempty string array')
-    budget = Budget()
+    budget = Budget(job_ram=memory_limit)
     receipt = work/'supervisor.json'
     if receipt.exists():
         raise ValueError('Run already attempted; use a newly reviewed frozen run')
     report = {'started_utc': datetime.now(timezone.utc).isoformat(), 'steps': [],
-              'status': 'running', 'scope': 'bounded_microexperiment'}
+              'status': 'running', 'scope': 'bounded_microexperiment', 'profile': args.profile}
     def save():
         temporary = receipt.with_suffix('.tmp')
         temporary.write_text(json.dumps(report, indent=2)+'\n')
@@ -76,16 +82,18 @@ def main():
             try:
                 command = ['systemd-run', '--user', '--quiet', '--unit='+unit,
                            '--service-type=exec', '--working-directory='+str(work),
-                           '-p', 'RemainAfterExit=yes', '-p', 'MemoryMax=20G',
+                           '-p', 'RemainAfterExit=yes', '-p', 'MemoryMax='+str(memory_limit),
                            '-p', 'MemorySwapMax=0', '-p', 'TasksMax=128',
-                           '-p', 'CPUQuota=400%', '-p', 'KillMode=control-group',
+                           '-p', 'CPUQuota='+('100%' if cpu_reference else '400%'), '-p', 'KillMode=control-group',
                            '-p', 'TimeoutStopSec=5', '-p', 'SendSIGKILL=yes',
                            '-p', 'LimitCORE=0', '-p', 'LimitFSIZE=67108864',
                            '-p', 'RuntimeMaxSec='+str(step['seconds']),
                            '-p', 'StandardOutput=append:'+str(work/(step['name']+'.log')),
                            '-p', 'StandardError=inherit',
                            '--setenv=TMPDIR='+str(work/'tmp'), '--setenv=OMP_NUM_THREADS=1',
-                           '--setenv=OPENBLAS_NUM_THREADS=1', *step['argv']]
+                           '--setenv=OPENBLAS_NUM_THREADS=1',
+                           '--setenv=MKL_NUM_THREADS=1', '--setenv=PYTHONDONTWRITEBYTECODE=1',
+                           *(['--setenv=CUDA_VISIBLE_DEVICES='] if cpu_reference else []), *step['argv']]
                 (work/'tmp').mkdir(exist_ok=True)
                 subprocess.run(command, check=True, capture_output=True, text=True, timeout=20)
                 while True:
