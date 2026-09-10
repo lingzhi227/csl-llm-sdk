@@ -1,0 +1,105 @@
+// Reduced two-PE operator chain. Unit gain; not Qwen hidden5120 RMSNorm.
+param memcpy_params;
+param rank:u16;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const math=@import_module("<math>");
+const kernel=@import_module("kernel.csl",.{.rows=128,.columns=56});
+const partial_color=@get_color(2);
+const iq=@get_input_queue(2);
+const oq=@get_output_queue(2);
+const receive_task=@get_local_task_id(10);
+const send_task=@get_local_task_id(11);
+const transfer_ut=@get_ut_id(2);
+const transfer_dst=@get_dsr(dsr_dest,5);
+const transfer_src=@get_dsr(dsr_src1,5);
+var weights_storage=@zeros([7170]u16);
+var input_storage=@zeros([58]f32);
+var partial=@zeros([130]f32);
+var received=@zeros([130]f32);
+var summed=@zeros([130]f32);
+var normalized=@zeros([130]f32);
+var stats=@zeros([4]f32);
+var events=@zeros([14]u32);
+var mode=@zeros([1]u32);
+var local_ready:bool=false;
+var remote_ready:bool=false;
+var committed:bool=false;
+var busy:bool=false;
+fn mark(slot:u16) void {events[1]+=1;events[slot]=events[1];}
+fn finish() void {
+  mark(6);events[10]+=1;busy=false;sys.unblock_cmd_stream();
+}
+fn local_compute() void {
+  kernel.compute(@ptrcast([*]u16,&weights_storage[1]),
+                 @ptrcast([*]f32,&input_storage[1]),
+                 @ptrcast([*]f32,&partial[1]));
+  local_ready=true;mark(2);
+}
+fn join() void {
+  if(!local_ready or !remote_ready or committed){return;}
+  committed=true;
+  for(@range(u16,128))|i|{summed[i+1]=partial[i+1]+received[i+1];}
+  mark(4);events[9]+=1;
+  var squares:f32=0.0;
+  for(@range(u16,128))|i|{squares+=summed[i+1]*summed[i+1];}
+  const q:f32=squares/128.0+0.000001;
+  const root:f32=math.sqrt_f32(q);
+  const inverse:f32=1.0/root;
+  stats[0]=squares;stats[1]=q;stats[2]=root;stats[3]=inverse;
+  const source=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]f32,&summed[1]),.extent=128});
+  const target=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]f32,&normalized[1]),.extent=128});
+  @fmuls(target,source,inverse);
+  mark(5);finish();
+}
+fn arm_receive() void {
+  const fabric=@get_dsd(fabin_dsd,.{.input_queue=iq,.extent=128});
+  const memory=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]f32,&received[1]),.extent=128});
+  @load_to_dsr(transfer_dst,memory);
+  @load_to_dsr(transfer_src,fabric,.{.async=true,.activate=receive_task,.ut_id=transfer_ut});
+  mark(12);@mov32(transfer_dst,transfer_src,.{.async=true});
+}
+fn compute() void {
+  for(@range(u16,13))|i|{events[i+1]=0;}
+  local_ready=false;remote_ready=false;committed=false;busy=true;events[0]+=1;
+  if(mode[0]>1){events[11]=1;finish();return;}
+  if(comptime rank==0){
+    if(mode[0]==0){local_compute();arm_receive();}
+    else{arm_receive();}
+  }else{
+    local_compute();
+    const fabric=@get_dsd(fabout_dsd,.{.output_queue=oq,.extent=128});
+    const memory=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]f32,&partial[1]),.extent=128});
+    @load_to_dsr(transfer_dst,fabric,.{.async=true,.activate=send_task,.ut_id=transfer_ut});
+    @load_to_dsr(transfer_src,memory);
+    mark(13);@mov32(transfer_dst,transfer_src,.{.async=true});
+  }
+}
+task received_complete() void {
+  if(!busy or remote_ready){events[11]=2;return;}
+  remote_ready=true;events[8]+=1;mark(3);
+  // Remote-first starts local arithmetic only after actual receive completion.
+  if(mode[0]==1){local_compute();}
+  join();
+}
+task sent_complete() void {mark(7);finish();}
+const wp:[*]u16=&weights_storage;
+const xp:[*]f32=&input_storage;
+const pp:[*]f32=&partial;const rp:[*]f32=&received;
+const sp:[*]f32=&summed;const np:[*]f32=&normalized;
+const st:[*]f32=&stats;const ep:[*]u32=&events;const mp:[*]u32=&mode;
+comptime{
+  @bind_local_task(received_complete,receive_task);
+  @bind_local_task(sent_complete,send_task);
+  if(rank==0){
+    @initialize_queue(iq,.{.color=partial_color});
+    @set_local_color_config(partial_color,.{.routes=.{.rx=.{EAST},.tx=.{RAMP}}});
+  }else{
+    @initialize_queue(oq,.{.color=partial_color});
+    @set_local_color_config(partial_color,.{.routes=.{.rx=.{RAMP},.tx=.{WEST}}});
+  }
+  @export_symbol(wp,"weights_storage");@export_symbol(xp,"input_storage");
+  @export_symbol(pp,"partial");@export_symbol(rp,"received");
+  @export_symbol(sp,"summed");@export_symbol(np,"normalized");
+  @export_symbol(st,"stats");@export_symbol(ep,"events");@export_symbol(mp,"mode");
+  @export_symbol(compute);
+}

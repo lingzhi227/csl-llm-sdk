@@ -23,3 +23,12 @@ An original 128×112 BF16 up-projection slice completed four calls in one runtim
 including changed input, exact last-column one-hot and zero-after-nonzero. All
 weight/guard/counter/handle checks passed; normal SDK stop and process exit were
 recorded. See [report](WP01-REPORT.md). This is a local GEMV tile, not full inference.
+
+## WP02 — Accepted, September 10, 2026
+
+Two adjacent PEs split the original tile into two56-column contractions, send
+partial FP32 results over fabric, SUM on the receiving PE and normalize128 elements
+with unit gain. Four calls passed all independent stage/approximation/state gates
+and exercised local-first and receive-complete-first joins. Normal SDK stop/exit
+was recorded. This is an on-wafer reduced chain, not physical cluster inference.
+See [report](WP02-REPORT.md) and [evidence](../evidence/wp02.json).

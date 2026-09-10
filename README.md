@@ -6,7 +6,7 @@ a resource-aware foundation. **Full
 Qwen3.8 inference is not implemented or qualified.** Current code covers Linux
 resource admission, a single-heavy-job lock, a bounded systemd runner, explicit
 bit-preserving host transfer codecs, and an original-BF16 local GEMV with warm-call
-validation. These are foundations for handwritten CSL
+validation, plus a two-PE fabric/SUM/RMS chain with explicit completion joins. These are foundations for handwritten CSL
 kernels using Cerebras SDK compilation, layout and runtime.
 
 Planned target: text-only Qwen3.8-27B, a one-WSE-3 BF16 streamed path, a separately
@@ -67,6 +67,7 @@ are not evidence of SDK transfer or hardware execution.
 
 See [status](docs/STATUS.md) and the [WP01 GEMV report](docs/WP01-REPORT.md) for
 qualified scope, bounded original-weight acquisition and synthetic reproduction.
+The [WP02 report](docs/WP02-REPORT.md) covers the two-PE chain and its resource ledger.
 
 ## Reproduce the tiny native memcpy example
 
