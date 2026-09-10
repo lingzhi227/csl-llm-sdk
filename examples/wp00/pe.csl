@@ -1,0 +1,15 @@
+param memcpy_params;
+const sys = @import_module("<memcpy/memcpy>", memcpy_params);
+var input = @zeros([7]u16);
+var output = @zeros([7]u16);
+fn copy_bits() void {
+  for (@range(u16, 7)) |i| { output[i] = input[i]; }
+  sys.unblock_cmd_stream();
+}
+const input_ptr: [*]u16 = &input;
+const output_ptr: [*]u16 = &output;
+comptime {
+  @export_symbol(input_ptr, "input");
+  @export_symbol(output_ptr, "output");
+  @export_symbol(copy_bits);
+}

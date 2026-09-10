@@ -1,0 +1,60 @@
+{
+  "milestone": "WP00",
+  "scope": "one PE, one invocation, native memcpy16 raw-bit copy in SDK 2.10.1 WSE3 simulator",
+  "bits": {
+    "expected": [
+      0,
+      32768,
+      16256,
+      49024,
+      32640,
+      65408,
+      32705
+    ],
+    "actual": [
+      0,
+      32768,
+      16256,
+      49024,
+      32640,
+      65408,
+      32705
+    ],
+    "raw_d2h_containers": [
+      0,
+      32768,
+      16256,
+      49024,
+      32640,
+      65408,
+      32705
+    ],
+    "bit_equal": true,
+    "logical_bytes": 14,
+    "host_bytes": 28,
+    "sdk_count": 7,
+    "sdk_unit": "16bit_elements_in_u32_containers"
+  },
+  "execution": {
+    "compiler_exit": 0,
+    "simulator_exit": 0,
+    "sdk_stop_returned": true,
+    "compiler_outer_wall_seconds": 4.083871445152909,
+    "simulation_outer_wall_seconds": 2.058936407091096,
+    "timing_scope": "systemd/container-inclusive host wall time; not device timing"
+  },
+  "source_sha256": {
+    "layout.csl": "01954ddb984d89eaaef393ba3ac847ecea1358ff5d54d4a8f92e68a88ee9766f",
+    "pe.csl": "98f6b972e90056ea548291407254e90174f5e9f7646fd2d6c3ca5d153ab7be62",
+    "driver.py": "b3b6ad635ac357d7fd6b0b207e4b2c4d3742ad2f8775b7cbf2d726fb28a8958d",
+    "compile_entry.py": "be97073a5aa56ca75f3ecd8f7b1a9b9a586219c90f6c3be815b691b3dd4eb2b4"
+  },
+  "sdk_image_sha256": "fff17e81c61dcb6012bdee2941a6fdc570f5c8604967530e7b7108651258193d",
+  "limitations": [
+    "No BF16 arithmetic",
+    "No packed-stream SDK test",
+    "No repeated-request reset",
+    "No full model",
+    "No physical hardware or cluster"
+  ]
+}
