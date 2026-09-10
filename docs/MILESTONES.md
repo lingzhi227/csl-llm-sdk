@@ -1,5 +1,12 @@
 # Accepted milestones
 
+## WP08 — Accepted, September 10, 2026
+
+Repaired one-PE selected-head preprocessing passed eight tokens, full width4
+history, all numerical/conversion gates and reset checks. The first failed
+beta-source/exp candidate is excluded; thresholds and fixtures were unchanged.
+See [report](WP08-REPORT.md).
+
 ## WP07 — Accepted, September 10, 2026
 
 Standalone BF16 direct-gain gated RMS128 and its third-PE recurrence composition

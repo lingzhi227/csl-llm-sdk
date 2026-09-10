@@ -1,6 +1,6 @@
 # Implementation status
 
-WP00–WP07 accepted, 2026-09-10. Continuous development is
+WP00–WP08 accepted, 2026-09-10. Continuous development is
 active under bounded control-node packages. Full model M0 and inference remain incomplete.
 
 | Component | Status |
@@ -20,6 +20,7 @@ active under bounded control-node packages. Full model M0 and inference remain i
 | Ordinary RMS5120 + device BF16 RNE | Four synthetic calls accepted under48 KiB application SRAM; shared gain/output lifecycle |
 | Full128×128 recurrent state | Four synthetic tokens/three generations on two PEs accepted; all device reductions and updates, normalized/scaled inputs |
 | BF16 gated RMS128 and recurrence composition | Four standalone calls and four composed tokens accepted; third consumer PE, input/early/product/final BF16 casts, ACK before root completion |
+| Selected-head preprocessing384 | Eight tokens accepted: width4 history, BF16 conv/SiLU, Q/K L2/scaling, beta/g/decay; pending-gates/finalize commands; standalone only |
 | Full generation, physical WSE-3 | Not implemented/qualified here |
 
 Attempt wp00-001 failed in the installed wrapper's temporary-directory mount before

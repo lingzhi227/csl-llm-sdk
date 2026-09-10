@@ -1,0 +1,45 @@
+// Selected matching128Q/128K/128V head; persistent projected-input history.
+const math=@import_module("<math>");
+const bounded_exp=@import_module("exp_kernel.csl");
+fn round_bf16(raw:u32) u16 {const odd:u32=(raw>>16)&1;return @as(u16,(raw+0x00007fff+odd)>>16);}
+fn expand(raw:u16) f32 {return @bitcast(f32,@as(u32,raw)<<16);}
+fn exponential_negative_abs(x:f32) f32 {return bounded_exp.exp_f32(if(x<0.0) x else -x);}
+fn sigmoid_from_exp(x:f32,e:f32) f32 {return if(x<0.0) e/(1.0+e) else 1.0/(1.0+e);}
+// stage: convpre384, activationpre384, activationexp384.
+// casts: conv384, activation384. outputs: normalizedQ/K, scaledQ, expandedV.
+fn compute_vectors(history:[*]u16,weights:[*]u16,input:[*]u16,
+           stage:[*]f32,casts:[*]u16,outputs:[*]f32,norm_stats:[*]f32) void {
+ for(@range(u16,384))|c|{
+  const base:u16=c*4;
+  for(@range(u16,3))|j|{history[base+j]=history[base+j+1];}
+  history[base+3]=input[c];
+  var sum:f32=0.0;
+  for(@range(u16,4))|j|{sum+=expand(history[base+j])*expand(weights[base+j]);}
+  stage[c]=sum;const rounded=round_bf16(@bitcast(u32,sum));casts[c]=rounded;
+  const x:f32=expand(rounded);const e=exponential_negative_abs(x);stage[c+768]=e;
+  const activation:f32=x*sigmoid_from_exp(x,e);stage[c+384]=activation;
+  casts[c+384]=round_bf16(@bitcast(u32,activation));
+ }
+ for(@range(u16,2))|group|{
+  var square:f32=0.0;
+  for(@range(u16,128))|i|{const x=expand(casts[384+group*128+i]);square+=x*x;}
+  const denominator:f32=square+0.000001;const root:f32=math.sqrt_f32(denominator);const inverse:f32=1.0/root;
+  norm_stats[group*4]=square;norm_stats[group*4+1]=denominator;norm_stats[group*4+2]=root;norm_stats[group*4+3]=inverse;
+  for(@range(u16,128))|i|{outputs[group*128+i]=expand(casts[384+group*128+i])*inverse;}
+ }
+ for(@range(u16,128))|i|{outputs[256+i]=outputs[i]/11.313708498984761;outputs[384+i]=expand(casts[640+i]);}
+}
+// Separate finalize command materializes fixed global BF16 parameters as FP32 slots.
+fn compute_gates(gates:[*]f32,beta_bits:[*]u16) void {
+ const a=gates[11];const b=gates[12];const A_log=gates[13];const dt_bias=gates[14];
+ const t:f32=a+dt_bias;const eb=exponential_negative_abs(b);const beta=sigmoid_from_exp(b,eb);
+ beta_bits[0]=round_bf16(@bitcast(u32,beta));
+ const ea=bounded_exp.exp_f32(A_log);const et=exponential_negative_abs(t);
+ const ratio:f32=et/(2.0+et);const square_ratio:f32=ratio*ratio;
+ var term:f32=ratio;var series:f32=ratio;
+ for(@range(u16,6))|j|{term*=square_ratio;series+=term/@as(f32,2*j+3);}
+ const logp:f32=2.0*series;const positive:f32=if(t>0.0) t else 0.0;
+ const softplus:f32=positive+logp;const g:f32=-ea*softplus;const decay=bounded_exp.exp_f32(g);
+ gates[0]=t;gates[1]=eb;gates[2]=beta;gates[3]=ea;gates[4]=et;gates[5]=ratio;
+ gates[6]=logp;gates[7]=softplus;gates[8]=g;gates[9]=decay;gates[10]=expand(beta_bits[0]);
+}

@@ -47,6 +47,16 @@ The intended deployment paths are **single-wafer weight streaming** and **two/th
 
 ## 3. Completed development log — newest first
 
+### WP08 · Causal input preprocessing and gates · September 10, 2026
+
+One simulated PE preprocesses matching128-channel Q/K/V groups: width4 causal convolution/history, BF16 SiLU, FP32 Q/K L2 normalization/scaling and beta/decay gates. Eight tokens cross the history window and a request reset.
+
+- The repaired candidate passed complete history, all intermediate stages, exact BF16 conversions and parameter-source checks with unchanged numerical thresholds.
+- Two serial device commands separate vector/history work from scalar gate finalization. The earlier numerical failure is retained and excluded.
+- Simulation took68.6 seconds with observed187 MB memory use; actual code/data plus4 KiB stack uses28,272 of49,152 bytes.
+
+**Scope:** synthetic selected-head preprocessing; no projections, all-channel layer or recurrence integration. [Report](docs/WP08-REPORT.md) · [Precision/history](docs/WP08-DESIGN.md) · [Repair evidence](docs/WP08-CANDIDATE-REPAIR.md) · [Evidence](evidence/wp08.json) · [Example](examples/wp08)
+
 ### WP07 · Gated RMS and device recurrence composition · September 10, 2026
 
 BF16 direct-gain gated RMS128 passed four standalone calls, then consumed the recurrent head's output on a third simulated PE. Device conversions preserve the input, early-normalization, gain-product and final-output dtype boundaries.
@@ -129,6 +139,6 @@ For simulator experiments, follow the linked milestone reports and the
 
 The guarded research harness runs one heavy job at a time with a 20 GiB RAM ceiling, zero task swap, an 8 GiB available-memory reserve and bounded deadlines/cache usage. These are local resource controls, not performance requirements for the eventual inference SDK. See the reports and runner implementation for exact limitations.
 
-**Next:** selected full-head input preprocessing: convolution/history, SiLU, Q/K normalization and decay/update gates; then device composition, remaining model kernels and complete-model integration. Work in progress is not listed above as completed. See [current status](docs/STATUS.md) and [milestone details](docs/MILESTONES.md).
+**Next:** four-PE device composition of preprocessing, recurrent state updates and gated output, checked both stage-by-stage and end-to-end from original synthetic inputs; then remaining model kernels and complete-model integration. Work in progress is not listed above as completed. See [current status](docs/STATUS.md) and [milestone details](docs/MILESTONES.md).
 
 MIT licensed; see [LICENSE](LICENSE). This is an independent research project, not an official Cerebras inference product.
