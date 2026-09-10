@@ -32,7 +32,20 @@ The device-execution box describes what the compiled program does; it is not an 
 
 The intended deployment paths are **single-wafer weight streaming** and **two/three-wafer pipeline parallelism**. Host-mediated stage transport is the initial cluster design; direct inter-wafer transport requires separate qualification. A quantized resident path is a separate experiment. Neither these deployment paths nor CS-Torch graph interoperability is established by the current microexperiments.
 
-## 2. Completed development log — newest first
+## 2. Repository guide
+
+| Path | What to read or use |
+|---|---|
+| [`csl/kernels/`](csl/kernels) | Handwritten device arithmetic. |
+| [`examples/`](examples) | Per-milestone CSL layouts, device programs and Python drivers. Start with WP01 for arithmetic or WP02 for composition. |
+| [`core/qwen38/`](core/qwen38) | Host-side contracts, bit codecs, numerical reference/checking utilities and resource accounting. |
+| [`tools/`](tools) | Bounded weight acquisition, reproducible run preparation, SDK container entry and guarded execution. |
+| [`tests/`](tests) | Lightweight host checks; these do not substitute for SDK or hardware execution. |
+| [`docs/`](docs) | Detailed experiment reports, design rationale, status and kernel provenance. |
+| [`evidence/`](evidence) | Sanitized accepted-result summaries; raw model weights and private runtime artifacts are excluded. |
+| [`PUBLIC_MANIFEST.json`](PUBLIC_MANIFEST.json) | Integrity inventory of the published files. |
+
+## 3. Completed development log — newest first
 
 ### WP04 · Pinned semantics and CPU references · September 10, 2026
 
@@ -74,19 +87,6 @@ A handwritten 128×112 GEMV uses lossless BF16-to-FP32 expansion and FP32 accumu
 Established resource admission, a single-heavy-job lock, bounded compilation/simulation and explicit host transfer codecs. A single simulated PE preserved seven BF16 bit patterns through native upload, device copy and readback, followed by normal shutdown.
 
 **Scope:** transfer and execution foundations; no neural arithmetic. [Report](docs/WP00-REPORT.md) · [Evidence](evidence/wp00.json) · [Example](examples/wp00)
-
-## 3. Repository guide
-
-| Path | What to read or use |
-|---|---|
-| [`csl/kernels/`](csl/kernels) | Handwritten device arithmetic. |
-| [`examples/`](examples) | Per-milestone CSL layouts, device programs and Python drivers. Start with WP01 for arithmetic or WP02 for composition. |
-| [`core/qwen38/`](core/qwen38) | Host-side contracts, bit codecs, numerical reference/checking utilities and resource accounting. |
-| [`tools/`](tools) | Bounded weight acquisition, reproducible run preparation, SDK container entry and guarded execution. |
-| [`tests/`](tests) | Lightweight host checks; these do not substitute for SDK or hardware execution. |
-| [`docs/`](docs) | Detailed experiment reports, design rationale, status and kernel provenance. |
-| [`evidence/`](evidence) | Sanitized accepted-result summaries; raw model weights and private runtime artifacts are excluded. |
-| [`PUBLIC_MANIFEST.json`](PUBLIC_MANIFEST.json) | Integrity inventory of the published files. |
 
 ## 4. Reproduce and follow development
 
