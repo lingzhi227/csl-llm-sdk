@@ -1,89 +1,87 @@
 # CSL-LLM SDK
 
-Research toward handwritten CSL inference for open LLM architectures on WSE-3
-clusters, starting with an independent Qwen3.8 implementation. Early code provides
-a resource-aware foundation. **Full
-Qwen3.8 inference is not implemented or qualified.** Current code covers Linux
-resource admission, a single-heavy-job lock, a bounded systemd runner, explicit
-bit-preserving host transfer codecs, and an original-BF16 local GEMV with warm-call
-validation, plus a two-PE fabric/SUM/RMS chain with explicit completion joins. These are foundations for handwritten CSL
-kernels using Cerebras SDK compilation, layout and runtime.
+**Handwritten CSL inference for open language models on one to three Cerebras WSE-3 systems.** We are building the numerical kernels, execution schedules and persistent inference state, while reusing Cerebras tooling for layout, compilation, communication and program execution. The first target is text inference for **Qwen3.8-27B**; support for related model architectures is a longer-term goal.
 
-Planned target: text-only Qwen3.8-27B, a one-WSE-3 BF16 streamed path, a separately
-qualified W8 resident path, and two/three-WSE-3 pipeline paths. Optional ML graph
-integration and direct physical inter-wafer transport are unqualified. This project
-is independent of the earlier CSL-LLM implementation.
+**Current result:** real BF16 weight slices run in the SDK 2.10.1 simulator, including a two-PE projection → fabric transfer → sum → RMS normalization chain. Full-model text generation and physical one/two/three-system inference remain unvalidated. Completed experiments below are simulator results, not hardware performance measurements.
 
-## Lightweight checks
+## 1. Project design
 
-Python 3.10+; the core and tests use the standard library. Run from this checkout:
+```mermaid
+flowchart TB
+    Model["Pinned model configuration and original weights"] --> Plan["Our graph, tensor placement and resource plan"]
+    Kernels["Our handwritten CSL numerical kernels"] --> Build
+    Plan --> Control["Our CSL control logic and state layout"]
+    Control --> Build["Cerebras SdkLayout or CSL layout + CSL compiler"]
+    Build --> Program["Compiled device program"]
+    Program --> Runtime["Cerebras SdkRuntime / SdkLauncher"]
+    Host["Our host orchestration and weight transport"] --> Runtime
+    Runtime --> Execution["Device execution: CSL tasks + kernels + persistent state"]
+    Model --> Reference["Independent CPU / GPU reference implementation"]
+    Execution --> Validation["Compare intermediate tensors, state and final outputs"]
+    Reference --> Validation
+```
+
+The device-execution box describes what the compiled program does; it is not an additional post-compilation assembly step. We define data dependencies, buffer ownership and completion events before compilation. The SDK executes those definitions; it does not automatically supply an LLM inference scheduler.
+
+| Component | Responsibility |
+|---|---|
+| Our CSL kernels | Projections, normalization, attention, DeltaNet recurrence, FFN and vocabulary selection. Only the subsets logged below are qualified. |
+| Our control logic and state | Order operations, join communication and compute completion, manage tile buffers, and eventually retain KV cache, recurrent state and token positions across calls. |
+| Cerebras SDK | Layout/compiler, device task and communication primitives, host transfers, launches and supported appliance execution. |
+| Independent reference | Establish expected numerical results. Current microexperiments use CPU references; official model/GPU references and applicable CS-Torch/Model Zoo tools are planned. |
+
+The intended deployment paths are **single-wafer weight streaming** and **two/three-wafer pipeline parallelism**. Host-mediated stage transport is the initial cluster design; direct inter-wafer transport requires separate qualification. A quantized resident path is a separate experiment. Neither these deployment paths nor CS-Torch graph interoperability is established by the current microexperiments.
+
+## 2. Completed development log — newest first
+
+### WP02 · Two-PE execution chain · September 10, 2026
+
+Two PEs split an original 128×112 BF16 weight tile into 56-column contractions. Handwritten CSL computes the partials, transfers one through on-wafer fabric, sums them and performs 128-element RMS normalization with unit gain.
+
+- Four calls in one runtime passed independent checks of partials, sum, normalization, square sum, square root and reciprocal.
+- Device event records verified both local-first and receive-first completion, with exactly one receive, commit and unblock per root invocation.
+- Transferred partials were bit-exact; guards, weights, counters and exported handles remained valid. Execution stopped normally.
+
+**Scope:** a reduced operator chain on two simulated PEs; not full hidden-size normalization or multi-wafer inference. [Report](docs/WP02-REPORT.md) · [Design and ownership](docs/WP02-DESIGN.md) · [Evidence](evidence/wp02.json) · [Example](examples/wp02)
+
+### WP01 · Original-weight BF16 GEMV · September 10, 2026
+
+A handwritten 128×112 GEMV uses lossless BF16-to-FP32 expansion and FP32 accumulation. Four calls in one runtime cover changed inputs, a last-column one-hot and zero after nonzero input. The largest absolute error was approximately 1.86×10⁻⁹, within the predeclared forward-error bound; state and guard checks passed.
+
+**Scope:** one real-weight projection tile on one simulated PE. [Report](docs/WP01-REPORT.md) · [Evidence](evidence/wp01.json) · [Kernel](csl/kernels/local_gemv_bf16_f32_colmajor.csl) · [Example](examples/wp01)
+
+### WP00 · Bounded execution and native bit transfer · September 10, 2026
+
+Established resource admission, a single-heavy-job lock, bounded compilation/simulation and explicit host transfer codecs. A single simulated PE preserved seven BF16 bit patterns through native upload, device copy and readback, followed by normal shutdown.
+
+**Scope:** transfer and execution foundations; no neural arithmetic. [Report](docs/WP00-REPORT.md) · [Evidence](evidence/wp00.json) · [Example](examples/wp00)
+
+## 3. Repository guide
+
+| Path | What to read or use |
+|---|---|
+| [`csl/kernels/`](csl/kernels) | Handwritten device arithmetic. |
+| [`examples/`](examples) | Per-milestone CSL layouts, device programs and Python drivers. Start with WP01 for arithmetic or WP02 for composition. |
+| [`core/qwen38/`](core/qwen38) | Host-side contracts, bit codecs, numerical reference/checking utilities and resource accounting. |
+| [`tools/`](tools) | Bounded weight acquisition, reproducible run preparation, SDK container entry and guarded execution. |
+| [`tests/`](tests) | Lightweight host checks; these do not substitute for SDK or hardware execution. |
+| [`docs/`](docs) | Detailed experiment reports, design rationale, status and kernel provenance. |
+| [`evidence/`](evidence) | Sanitized accepted-result summaries; raw model weights and private runtime artifacts are excluded. |
+| [`PUBLIC_MANIFEST.json`](PUBLIC_MANIFEST.json) | Integrity inventory of the published files. |
+
+## 4. Reproduce and follow development
+
+Run the lightweight checks with Python 3.10+:
 
 ```sh
 python3 -m unittest discover -s tests -v
-mkdir -p /path/to/project-cache
-PYTHONPATH=core python3 -m qwen38.resources \
-  --cache /path/to/project-cache --planned-write-bytes 134217728
 ```
 
-Preflight requires Linux `/proc/meminfo`; unknown readings fail closed. It neither
-reserves resources nor starts work. The tests run on macOS and Linux. SDK examples
-require a separately installed, licensed Cerebras SDK 2.10.1 and Singularity; no
-SDK distribution, model weights or private deployment settings are included.
+For simulator experiments, follow the linked milestone reports and the
+[development and reproduction guide](docs/DEVELOPMENT.md). They require a separately installed Cerebras SDK 2.10.1 and Singularity; the repository does not distribute the SDK or model checkpoints. Original-weight acquisition and synthetic fixtures are explicitly distinguished.
 
-## Resource policy
+The guarded research harness runs one heavy job at a time with a 20 GiB RAM ceiling, zero task swap, an 8 GiB available-memory reserve and bounded deadlines/cache usage. These are local resource controls, not performance requirements for the eventual inference SDK. See the reports and runner implementation for exact limitations.
 
-One heavy job at a time, compiler and simulator serial. Defaults: job MemoryMax
-20 GiB, task swap zero, 8 GiB available RAM reserve, 20 GiB active cache and 32 GiB
-free disk reserve. These are ceilings, not allocation targets. The runner enforces
-cgroup memory/CPU/process/deadline limits and samples disk and MemAvailable each
-second. Disk reserves are sampled guards, **not filesystem quotas**; transient
-overshoot is possible. Each regular output file is limited to 64 MiB, core dumps
-are disabled, and the cache traversal is bounded to 10,000 entries.
+**Next:** full-5120 contraction with tiled weight loading and persistent accumulation, followed by remaining model kernels, reference qualification and complete-model integration. Work in progress is not listed above as completed. See [current status](docs/STATUS.md) and [milestone details](docs/MILESTONES.md).
 
-Put active small files on SSD and verified cold archives on HDD. Keep checkpoints
-and vendor environments outside Git and off the review laptop. Never remove
-unrelated data to pass admission. Check mount identity before archival; there is
-no automatic SSD fallback or automatic retry. Existing machine swap use is not
-attributed to the new job; its cgroup swap limit is zero.
-
-`tools/guarded_run.py` accepts a JSON spec with `planned_write_bytes` and one or two
-`steps`, each containing `name`, an explicit `argv` array and `seconds` (1–300).
-Use a fresh work directory inside the cache. `tools/sdk_container.py` binds that
-work directory before its temporary directory and explicitly sets container
-`TMPDIR=/tmp`. The runner is a local research harness, not a security boundary or
-a complete persistent inference lifecycle manager. Phase-specific device reset,
-cancellation and recovery remain future work. Failure records stay immutable.
-
-## Transfer contracts
-
-- `memcpy16_containers`: one valid low u16 per u32 host container. D2H upper bits
-  are ignored explicitly. Logical bytes and host container bytes are different.
-- `packed_u32_stream`: low halfword first, two u16 per u32, zero odd-tail padding.
-- `raw_u32`: one unsigned u32 bit value per word, little-endian serialization.
-
-Inputs are contiguous one-dimensional unsigned bit arrays; floating-point casts,
-empty inputs, incorrect units and mismatched formats are rejected. CPU round trips
-are not evidence of SDK transfer or hardware execution.
-
-See [status](docs/STATUS.md) and the [WP01 GEMV report](docs/WP01-REPORT.md) for
-qualified scope, bounded original-weight acquisition and synthetic reproduction.
-The [WP02 report](docs/WP02-REPORT.md) covers the two-PE chain and its resource ledger.
-
-## Reproduce the tiny native memcpy example
-
-This example copies seven u16 BF16 bit patterns on one PE. It performs no neural
-arithmetic. Preparation does not launch a compiler, simulator or download.
-
-```sh
-python3 tools/prepare_wp00.py --run /path/to/project-cache/my-new-run \
-  --image /path/to/already-installed-sdk-2.10.1.sif
-# Review source-manifest.json and steps.json in that new bundle first.
-python3 /path/to/project-cache/my-new-run/tools/guarded_run.py \
-  --cache /path/to/project-cache --work /path/to/project-cache/my-new-run \
-  --spec /path/to/project-cache/my-new-run/steps.json
-```
-
-Use the reviewed SDK image identified in [WP00 results](docs/WP00-REPORT.md).
-The runner needs a working systemd user manager with cgroup v2 memory delegation.
-If a previous unit remains, inspect its ownership and processes before clearing
-that specific failed unit. Do not bypass the lock or overwrite an attempted run.
+MIT licensed; see [LICENSE](LICENSE). This is an independent research project, not an official Cerebras inference product.
