@@ -1,0 +1,21 @@
+const memcpy=@import_module("<memcpy/get_params>",.{.width=1,.height=1});
+layout{
+ @set_rectangle(1,1);@set_tile_code(0,0,"pe.csl",.{.memcpy_params=memcpy.get_params(0)});
+ @export_name("input",[*]u16,false);
+ @export_name("weights",[*]u16,false);
+ @export_name("frequencies",[*]f32,false);
+ @export_name("probe_inputs",[*]f32,false);
+ @export_name("stats",[*]f32,false);
+ @export_name("rms_stages",[*]f32,false);
+ @export_name("normalized",[*]u16,false);
+ @export_name("trig",[*]f32,false);
+ @export_name("trig_casts",[*]u16,false);
+ @export_name("rotary_stages",[*]f32,false);
+ @export_name("product_casts",[*]u16,false);
+ @export_name("output",[*]u16,false);
+ @export_name("probes",[*]f32,false);
+ @export_name("state",[*]u32,false);
+ @export_name("events",[*]u32,false);
+ @export_name("control",[*]u32,false);
+ @export_name("initialize",fn()void);@export_name("token",fn()void);
+}

@@ -1,0 +1,63 @@
+param memcpy_params;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const kernel=@import_module("kernel.csl");
+var input=@zeros([514]u16);var weights=@zeros([514]u16);var frequencies=@zeros([34]f32);var probe_inputs=@zeros([10]f32);
+var stats=@zeros([10]f32);var rms_stages=@zeros([1026]f32);var normalized=@zeros([514]u16);
+var trig=@zeros([130]f32);var trig_casts=@zeros([66]u16);var rotary_stages=@zeros([386]f32);
+var product_casts=@zeros([258]u16);var output=@zeros([514]u16);var probes=@zeros([34]f32);
+var control=@zeros([3]u32);var state=@zeros([16]u32);var events=@zeros([10]u32);
+fn initialize() void {
+ if(control[0]<=state[0] or control[1]!=0 or control[2]!=0){state[6]=1;sys.unblock_cmd_stream();return;}
+ state[0]=control[0];state[1]=0;state[3]+=1;state[4]=0;state[5]=0;state[6]=0;state[7]=0;
+ state[8]=256;state[9]=64;state[10]=7;
+ for(@range(u16,5))|i|{state[i+11]=0;}
+ for(@range(u16,10))|i|{events[i]=0;}
+ sys.unblock_cmd_stream();
+}
+fn token() void {
+ if(control[0]!=state[0] or control[1]!=state[4] or control[1]>7 or control[2]!=state[2]+1){state[6]=2;sys.unblock_cmd_stream();return;}
+ for(@range(u16,10))|i|{events[i]=0;}
+ state[5]=1;state[7]=0;events[0]=1;
+ state[11]=kernel.compute(@ptrcast([*]u16,&input[1]),@ptrcast([*]u16,&weights[1]),@ptrcast([*]f32,&frequencies[1]),&control,
+  &stats,@ptrcast([*]f32,&rms_stages[1]),@ptrcast([*]u16,&normalized[1]),@ptrcast([*]f32,&trig[1]),@ptrcast([*]u16,&trig_casts[1]),
+  @ptrcast([*]f32,&rotary_stages[1]),@ptrcast([*]u16,&product_casts[1]),@ptrcast([*]u16,&output[1]),
+  @ptrcast([*]f32,&probe_inputs[1]),@ptrcast([*]f32,&probes[1]),&events);
+ state[12]=@as(u32,input[0]);state[13]=@as(u32,input[513]);state[14]=@as(u32,weights[0]);state[15]=@as(u32,weights[513]);
+ state[1]=control[1];state[2]+=1;state[4]+=1;state[5]=3;state[6]=0;state[7]=1;events[7]=8;events[9]=1;
+ sys.unblock_cmd_stream();
+}
+const ptr_input:[*]u16=&input;
+const ptr_weights:[*]u16=&weights;
+const ptr_frequencies:[*]f32=&frequencies;
+const ptr_probe_inputs:[*]f32=&probe_inputs;
+const ptr_stats:[*]f32=&stats;
+const ptr_rms_stages:[*]f32=&rms_stages;
+const ptr_normalized:[*]u16=&normalized;
+const ptr_trig:[*]f32=&trig;
+const ptr_trig_casts:[*]u16=&trig_casts;
+const ptr_rotary_stages:[*]f32=&rotary_stages;
+const ptr_product_casts:[*]u16=&product_casts;
+const ptr_output:[*]u16=&output;
+const ptr_probes:[*]f32=&probes;
+const ptr_state:[*]u32=&state;
+const ptr_events:[*]u32=&events;
+const ptr_control:[*]u32=&control;
+comptime{
+ @export_symbol(ptr_input,"input");
+ @export_symbol(ptr_weights,"weights");
+ @export_symbol(ptr_frequencies,"frequencies");
+ @export_symbol(ptr_probe_inputs,"probe_inputs");
+ @export_symbol(ptr_stats,"stats");
+ @export_symbol(ptr_rms_stages,"rms_stages");
+ @export_symbol(ptr_normalized,"normalized");
+ @export_symbol(ptr_trig,"trig");
+ @export_symbol(ptr_trig_casts,"trig_casts");
+ @export_symbol(ptr_rotary_stages,"rotary_stages");
+ @export_symbol(ptr_product_casts,"product_casts");
+ @export_symbol(ptr_output,"output");
+ @export_symbol(ptr_probes,"probes");
+ @export_symbol(ptr_state,"state");
+ @export_symbol(ptr_events,"events");
+ @export_symbol(ptr_control,"control");
+ @export_symbol(initialize);@export_symbol(token);
+}

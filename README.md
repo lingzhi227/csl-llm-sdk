@@ -2,7 +2,7 @@
 
 **Building inference for open language models with handwritten Cerebras Systems Language (CSL), targeting one to three WSE-3 systems.** We implement the numerical kernels, execution control and persistent model state, and use the Cerebras SDK to compile and run the device programs. The first target is **Qwen3.8-27B text inference**; the longer-term goal is a reusable SDK for related model architectures.
 
-**Working today:** SDK 2.10.1 simulator experiments cover original-weight matrix–vector products, communication between processing elements, full-dimension normalization, a persistent DeltaNet recurrent head, its input/output processing, and a full-dimension attention head with persistent KV cache. **Still ahead:** complete-model text generation and execution on physical single- or multiple-wafer systems. The completed log below records the exact scope of each result.
+**Working today:** SDK 2.10.1 simulator experiments cover original-weight matrix–vector products, communication between processing elements, full-dimension normalization, a persistent DeltaNet recurrent head, its input/output processing, a full-dimension attention head with persistent KV cache, and device-side query/key normalization with bounded rotary encoding. **Still ahead:** complete-model text generation and execution on physical single- or multiple-wafer systems. The completed log below records the exact scope of each result.
 
 ## 1. Project design
 
@@ -59,6 +59,12 @@ These are deployment targets; current simulator results do not establish cluster
 ## 3. Completed development log — newest first
 
 Each **WP** is a scoped development milestone. Device results below come from the SDK simulator; WP04 is a CPU/source audit. **BF16** means bfloat16 data, and **FP32** means 32-bit floating-point arithmetic. Reports contain numerical thresholds, failure history and reproduction details.
+
+### WP11 · Query/key normalization and device rotary encoding · September 10, 2026
+
+Implemented ordinary RMS normalization for a pair of 256-dimensional Q/K heads, then partial rotary encoding of their first 64 coordinates. Angles and sin/cos are computed in CSL for text positions 0–7. Ten calls matched all 5,120 official BF16 outputs, with separate product rounding, unchanged tails, reset and normal shutdown checks. Long-context positions and composition with attention remain separate work.
+
+[Code](examples/wp11) · [Design](docs/WP11-DESIGN.md) · [Report](docs/WP11-REPORT.md) · [Evidence](evidence/wp11.json)
 
 ### WP10 · Attention head with persistent KV cache · September 10, 2026
 
@@ -130,6 +136,6 @@ python3 -m unittest discover -s tests -v
 
 For simulator runs, follow the milestone reports and the [development guide](docs/DEVELOPMENT.md). A separately installed Cerebras SDK 2.10.1 and Singularity are required. The repository includes source and sanitized evidence; SDK distributions, model weight payloads and private runtime artifacts are excluded.
 
-**In progress:** device-side Q/K normalization and bounded-position partial rotary encoding, followed by composition with the accepted attention core. Integration of recurrent input processing, state updates and gated output has passed eight-token numerical checks, but final weight readback still fails; that experiment is not accepted as completed. Complete-model integration and physical one-to-three-system trials follow. See [current status](docs/STATUS.md) and [milestone details](docs/MILESTONES.md).
+**In progress:** on-device composition of Q/K processing with the accepted attention and KV-cache core. Integration of recurrent input processing, state updates and gated output has passed eight-token numerical checks, but final weight readback still fails; that experiment is not accepted as completed. Complete-model integration and physical one-to-three-system trials follow. See [current status](docs/STATUS.md) and [milestone details](docs/MILESTONES.md).
 
 MIT licensed; see [LICENSE](LICENSE). This is an independent research project, not an official Cerebras inference product.

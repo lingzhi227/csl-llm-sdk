@@ -1,6 +1,14 @@
 # Accepted milestones
 
-Only accepted results are listed below. Ongoing WP09 integration and WP11 Q/K preprocessing work are tracked in [implementation status](STATUS.md).
+Only accepted results are listed below. Ongoing WP09 integration and WP12 attention-composition work are tracked in [implementation status](STATUS.md).
+
+## WP11 — Accepted, September 10, 2026
+
+One Q/K pair passed ordinary RMS256 and device partial RoPE64 for text positions0–7.
+Ten calls match all5120official BF16 outputs;9600RNE boundaries,3840tail elements,
+zero signs, fixed trig probes, reset and normal stop passed. Composition with
+attention and long-context positions remain separate. See [report](WP11-REPORT.md)
+and [evidence](../evidence/wp11.json).
 
 ## WP10 — Accepted, September 10, 2026
 
