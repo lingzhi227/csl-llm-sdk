@@ -1,0 +1,41 @@
+param memcpy_params;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const kernel=@import_module("kernel.csl");
+var cache=@zeros([4098]u16);var input=@zeros([1026]u16);
+var scores=@zeros([42]f32);var score_casts=@zeros([26]u16);var stats=@zeros([3]f32);
+var stages=@zeros([1282]f32);var casts=@zeros([770]u16);
+var control=@zeros([2]u32);var state=@zeros([16]u32);var events=@zeros([12]u32);
+fn initialize() void {
+ if(control[0]<=state[0] or control[1]!=0){state[6]=2;sys.unblock_cmd_stream();return;}
+ state[0]=control[0];state[1]=0;state[3]+=1;state[4]=0;state[5]=0;state[6]=0;
+ state[8]=0;state[10]=0;state[11]=8;state[12]=256;state[13]=0;state[14]=0;state[15]=0;
+ for(@range(u16,12))|i|{events[i]=0;}
+ // Metadata invalidation deliberately retains physical stale cache words.
+ sys.unblock_cmd_stream();
+}
+fn token() void {
+ if(control[0]!=state[0] or control[1]!=state[1]+1){state[6]=2;sys.unblock_cmd_stream();return;}
+ if(state[4]>=8){
+  state[5]=4;state[6]=1;state[7]+=1;state[8]=1;
+  for(@range(u16,12))|i|{events[i]=0;}
+  events[0]=1;events[1]=99;events[11]=1;sys.unblock_cmd_stream();return;
+ }
+ for(@range(u16,12))|i|{events[i]=0;}
+ events[0]=1;events[1]=2;state[5]=1;state[8]=0;
+ state[13]=kernel.compute(@ptrcast([*]u16,&cache[1]),@ptrcast([*]u16,&input[1]),
+  @ptrcast([*]f32,&scores[1]),@ptrcast([*]u16,&score_casts[1]),&stats,
+  @ptrcast([*]f32,&stages[1]),@ptrcast([*]u16,&casts[1]),@as(u16,state[4]+1),&events);
+ state[14]=@as(u32,input[0]);state[15]=@as(u32,input[1025]);
+ state[1]=control[1];state[2]+=1;state[4]+=1;state[5]=3;state[6]=0;
+ state[9]+=1;state[10]+=1;events[7]=8;state[8]=1;events[11]=1;
+ sys.unblock_cmd_stream();
+}
+const kp:[*]u16=&cache;const ip:[*]u16=&input;const sp:[*]f32=&scores;const bp:[*]u16=&score_casts;
+const np:[*]f32=&stats;const fp:[*]f32=&stages;const op:[*]u16=&casts;
+const cp:[*]u32=&control;const stp:[*]u32=&state;const ep:[*]u32=&events;
+comptime{
+ @export_symbol(kp,"cache");@export_symbol(ip,"input");@export_symbol(sp,"scores");@export_symbol(bp,"score_casts");
+ @export_symbol(np,"stats");@export_symbol(fp,"stages");@export_symbol(op,"casts");
+ @export_symbol(cp,"control");@export_symbol(stp,"state");@export_symbol(ep,"events");
+ @export_symbol(initialize);@export_symbol(token);
+}

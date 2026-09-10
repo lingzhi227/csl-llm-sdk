@@ -1,6 +1,6 @@
 # Implementation status
 
-WP00–WP08 accepted, 2026-09-10. Continuous development is
+WP00–WP08 and WP10 accepted, 2026-09-10. Continuous development is
 active under bounded control-node packages. Full-model inference remains incomplete.
 
 | Component | Status |
@@ -22,7 +22,8 @@ active under bounded control-node packages. Full-model inference remains incompl
 | BF16 gated RMS128 and recurrence composition | Four standalone calls and four composed tokens accepted; third consumer PE, input/early/product/final BF16 casts, ACK before root completion |
 | Selected-head preprocessing384 | Eight tokens accepted: width4 history, BF16 conv/SiLU, Q/K L2/scaling, beta/g/decay; pending-gates/finalize commands; standalone only |
 | WP09 recurrent-head integration | Not accepted: eight-token numerical observations pass, but final weight readback/runtime lifecycle fails; investigation remains open |
-| WP10 attention core and KV cache | In development: one256-dimensional query/KV head, capacity8; Q/K normalization, RoPE, all-head routing and projections are outside the current package |
+| WP10 attention core and KV cache | Accepted: one256-dimensional query/KV head, capacity8; ten tokens, overflow/reset and normal stop; all2560outputs match official BF16 reference |
+| WP11 Q/K preprocessing | In development: ordinary RMS256 and device partial RoPE64 for text positions0–7; integration with attention, all-head routing and projections remain separate |
 | Full generation, physical WSE-3 | Not implemented/qualified here |
 
 Attempt wp00-001 failed in the installed wrapper's temporary-directory mount before

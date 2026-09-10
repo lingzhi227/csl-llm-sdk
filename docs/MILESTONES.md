@@ -1,6 +1,14 @@
 # Accepted milestones
 
-Only accepted results are listed below. Ongoing WP09 integration and WP10 attention work are tracked in [implementation status](STATUS.md).
+Only accepted results are listed below. Ongoing WP09 integration and WP11 Q/K preprocessing work are tracked in [implementation status](STATUS.md).
+
+## WP10 — Accepted, September 10, 2026
+
+One-PE D256 attention with persistent BF16 cache8 and sigmoid output gating passed
+ten tokens, capacity refusal, reset and normal shutdown. All2560outputs exactly
+match the official BF16 reference. Inputs are already Q/K normalized and rotated;
+all-head routing, projections and complete-layer integration remain separate.
+See [report](WP10-REPORT.md) and [evidence](../evidence/wp10.json).
 
 ## WP08 — Accepted, September 10, 2026
 

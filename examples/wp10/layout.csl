@@ -1,0 +1,9 @@
+const memcpy=@import_module("<memcpy/get_params>",.{.width=1,.height=1});
+layout{
+ @set_rectangle(1,1);@set_tile_code(0,0,"pe.csl",.{.memcpy_params=memcpy.get_params(0)});
+ @export_name("cache",[*]u16,false);@export_name("input",[*]u16,false);
+ @export_name("scores",[*]f32,false);@export_name("score_casts",[*]u16,false);@export_name("stats",[*]f32,false);
+ @export_name("stages",[*]f32,false);@export_name("casts",[*]u16,false);
+ @export_name("control",[*]u32,false);@export_name("state",[*]u32,false);@export_name("events",[*]u32,false);
+ @export_name("initialize",fn()void);@export_name("token",fn()void);
+}

@@ -1,0 +1,78 @@
+{
+  "passed": true,
+  "scope": "deterministic host import refactor; no new SDK execution",
+  "python": "3.14.3 (main, Feb  3 2026, 15:32:20) [Clang 17.0.0 (clang-1700.6.3.2)]",
+  "helper_ast_sha256": {
+    "outward_radius": "6601da4df3338666fc8f02b78913e4c78121e2159487b29e912c84912bd954a9",
+    "rational_bf16": "3de2d7d4267b08023ebfc893b536257d54dcc725566ebad9c3a063f9ff88222b",
+    "quantized_interval": "9595e9b48a34bc1fa88b5ea91d13f1ecc121f841a2046a20714a43ece16e20c4",
+    "quantized_vector": "6fa053f15c8bc188dffe3a6497322593e580af8b543d0f0d8e848cbd856ac360",
+    "check_interval": "6bd872d38a13e54d543a744d0bb4caea65857a823052ad73af1b8444193370a5",
+    "output_bf16_spans": "8795f1fc8953dd6c611bb587dfa22bbbb4ef4437f242dc7853d4815bfc3bfd0b"
+  },
+  "original_whole_chain_unchanged": true,
+  "policy_unchanged": true,
+  "fixtures_unchanged": true,
+  "checks": [
+    {
+      "call": 1,
+      "all_source_fields_exact": true,
+      "all_conditional_fields_exact": true
+    },
+    {
+      "call": 2,
+      "all_source_fields_exact": true,
+      "all_conditional_fields_exact": true
+    },
+    {
+      "call": 3,
+      "all_source_fields_exact": true,
+      "all_conditional_fields_exact": true
+    },
+    {
+      "call": 4,
+      "all_source_fields_exact": true,
+      "all_conditional_fields_exact": true
+    },
+    {
+      "call": 5,
+      "all_source_fields_exact": true,
+      "all_conditional_fields_exact": true
+    },
+    {
+      "call": 6,
+      "all_source_fields_exact": true,
+      "all_conditional_fields_exact": true
+    },
+    {
+      "call": 7,
+      "all_source_fields_exact": true,
+      "all_conditional_fields_exact": true
+    },
+    {
+      "call": 8,
+      "all_source_fields_exact": true,
+      "all_conditional_fields_exact": true
+    },
+    {
+      "call": 9,
+      "all_source_fields_exact": true,
+      "all_conditional_fields_exact": true
+    },
+    {
+      "call": 10,
+      "all_source_fields_exact": true,
+      "all_conditional_fields_exact": true
+    }
+  ],
+  "new_dependency_closure": {
+    "attention_numerics.py": "94e7fdcfb61944fe7dd285d7234b52e39aac7bade7ddfa04772fb9227e1f3c42",
+    "interval_numerics.py": "c4d69ced771f0501e8c0b8a051bf88a614c441ca88df9f07e6688a0285e4aab6",
+    "rms_numerics.py": "3f3b6f5df5a3ccf2af8da27a711501608d44d20cb32c3b6773ec84b68f7d0767",
+    "gated_numerics.py": "a14a8b0412a90523d41026a5a7b4a5e8bb5019f3ebe6bd56d3ccec68cf1e6e4c"
+  },
+  "frozen_candidate": "wp10-001",
+  "frozen_manifest_sha256": "224ae16c4bb946f7b7ff143bd4f155ba1d9d30e33b8a381a20398108ea672393",
+  "isolated_public_host_tests": 52,
+  "public_imports_exclude_wp09": true
+}
