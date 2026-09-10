@@ -1,5 +1,14 @@
 # Accepted milestones
 
+## WP03 — Accepted, September 10, 2026
+
+Original BF16 rows 0:128 span all 5120 input columns using device-owned persistent
+FP32 accumulation across 46 tiles. Four calls passed all boundary/final, state,
+nonzero-tail-padding and guard checks, including exact one-hot at global5119 and
+zero-after-nonzero. Simulation completed in 205.8 seconds with normal stop/exit.
+Scope is 128 outputs, not the entire 17408-row projection or model.
+See [report](WP03-REPORT.md) and [evidence](../evidence/wp03.json).
+
 ## WP02 — Accepted, September 10, 2026
 
 Two adjacent PEs split the original tile into two 56-column contractions, send

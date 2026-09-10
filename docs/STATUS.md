@@ -1,6 +1,6 @@
 # Implementation status
 
-WP00–WP02 accepted, 2026-09-10. Continuous development is
+WP00–WP03 accepted, 2026-09-10. Continuous development is
 active under bounded control-node packages. Full model M0 and inference remain incomplete.
 
 | Component | Status |
@@ -14,6 +14,7 @@ active under bounded control-node packages. Full model M0 and inference remain i
 | Model semantics, full checkpoint, GPU reference | Not qualified; no full-model download/execution |
 | Local 128×112 BF16 GEMV | Four same-runtime SDK calls passed on an original Qwen3.8 weight slice; WP01 accepted |
 | Two-PE GEMV/fabric/SUM/RMS128 | Four SDK calls with both device join orders accepted; reduced unit-gain operator fixture |
+| Persistent 128×5120 contraction | Four full-width same-runtime SDK calls accepted, 46 tiles each; 128 selected output rows |
 | Full generation, physical WSE-3 | Not implemented/qualified here |
 
 Attempt wp00-001 failed in the installed wrapper's temporary-directory mount before

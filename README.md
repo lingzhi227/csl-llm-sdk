@@ -2,7 +2,7 @@
 
 **Handwritten CSL inference for open language models on one to three Cerebras WSE-3 systems.** We are building the numerical kernels, execution schedules and persistent inference state, while reusing Cerebras tooling for layout, compilation, communication and program execution. The first target is text inference for **Qwen3.8-27B**; support for related model architectures is a longer-term goal.
 
-**Current result:** real BF16 weight slices run in the SDK 2.10.1 simulator, including a two-PE projection → fabric transfer → sum → RMS normalization chain. Full-model text generation and physical one/two/three-system inference remain unvalidated. Completed experiments below are simulator results, not hardware performance measurements.
+**Current result:** real BF16 weight slices run in the SDK 2.10.1 simulator, including persistent accumulation across all 5120 input columns for 128 outputs and a two-PE projection → fabric transfer → sum → RMS normalization chain. Full-model text generation and physical one/two/three-system inference remain unvalidated. Completed experiments below are simulator results, not hardware performance measurements.
 
 ## 1. Project design
 
@@ -33,6 +33,16 @@ The device-execution box describes what the compiled program does; it is not an 
 The intended deployment paths are **single-wafer weight streaming** and **two/three-wafer pipeline parallelism**. Host-mediated stage transport is the initial cluster design; direct inter-wafer transport requires separate qualification. A quantized resident path is a separate experiment. Neither these deployment paths nor CS-Torch graph interoperability is established by the current microexperiments.
 
 ## 2. Completed development log — newest first
+
+### WP03 · Persistent full-width contraction · September 10, 2026
+
+One simulated PE accumulates an original BF16 128×5120 slab across 45 full tiles and an 80-column tail. Four calls in one runtime passed independent intermediate and final checks, including exact global-column-5119 one-hot and zero after nonzero.
+
+- All 184 tile accumulations preserved the required generation and valid-column count; nonzero padding was excluded.
+- Finalize-time guard snapshots, input/output guards and the final resident tile passed. Frozen source/input and compiled hashes remained unchanged.
+- Simulation completed normally in 205.8 seconds under a 300-second deadline; observed simulator memory was approximately 213 MiB.
+
+**Scope:** all input columns for 128 selected output rows, not all 17,408 output rows or a full layer/model. [Report](docs/WP03-REPORT.md) · [Design](docs/WP03-DESIGN.md) · [Evidence](evidence/wp03.json) · [Example](examples/wp03)
 
 ### WP02 · Two-PE execution chain · September 10, 2026
 

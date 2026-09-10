@@ -1,0 +1,9 @@
+const memcpy=@import_module("<memcpy/get_params>",.{.width=1,.height=1});
+layout{
+ @set_rectangle(1,1);@set_tile_code(0,0,"pe.csl",.{.memcpy_params=memcpy.get_params(0)});
+ @export_name("weights_storage",[*]u16,false);@export_name("input_storage",[*]f32,false);
+ @export_name("output_storage",[*]f32,false);@export_name("control",[*]u32,false);
+ @export_name("state",[*]u32,false);@export_name("timing",[*]u16,false);
+ @export_name("weight_guard_snapshot",[*]u32,false);
+ @export_name("begin",fn()void);@export_name("accumulate",fn()void);@export_name("finalize",fn()void);
+}
