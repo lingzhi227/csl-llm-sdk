@@ -1,0 +1,29 @@
+const memcpy=@import_module("<memcpy/get_params>",.{.width=1,.height=1});
+layout{
+ @set_rectangle(1,1);@set_tile_code(0,0,"pe.csl",.{.memcpy_params=memcpy.get_params(0)});
+ @export_name("cache",[*]u16,false);
+ @export_name("attention_input",[*]u16,false);
+ @export_name("attention_scores",[*]f32,false);
+ @export_name("attention_score_casts",[*]u16,false);
+ @export_name("attention_stats",[*]f32,false);
+ @export_name("attention_stages",[*]f32,false);
+ @export_name("attention_casts",[*]u16,false);
+ @export_name("state",[*]u32,false);
+ @export_name("attention_events",[*]u32,false);
+ @export_name("control",[*]u32,false);
+ @export_name("original_input",[*]u16,false);
+ @export_name("qk_weights",[*]u16,false);
+ @export_name("qk_frequencies",[*]f32,false);
+ @export_name("qk_probe_inputs",[*]f32,false);
+ @export_name("qk_stats",[*]f32,false);
+ @export_name("qk_rms_stages",[*]f32,false);
+ @export_name("qk_normalized",[*]u16,false);
+ @export_name("qk_trig",[*]f32,false);
+ @export_name("qk_trig_casts",[*]u16,false);
+ @export_name("qk_rotary_stages",[*]f32,false);
+ @export_name("qk_product_casts",[*]u16,false);
+ @export_name("qk_output",[*]u16,false);
+ @export_name("qk_probes",[*]f32,false);
+ @export_name("qk_events",[*]u32,false);
+ @export_name("initialize",fn()void);@export_name("token",fn()void);
+}

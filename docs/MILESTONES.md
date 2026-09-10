@@ -1,6 +1,15 @@
 # Accepted milestones
 
-Only accepted results are listed below. Ongoing WP09 integration and WP12 attention-composition work are tracked in [implementation status](STATUS.md).
+Only accepted results are listed below. Ongoing WP09 integration and WP13 original attention-projection work are tracked in [implementation status](STATUS.md).
+
+## WP12 — Accepted, September 10, 2026
+
+One PE composes original synthetic Q/K through RMS256/deviceRoPE64 into persistent
+D256/cache8 attention and sigmoid gating, with device-only operand handoff. Ten
+successes, overflow-before-preprocessing, reset, full source/stage/cache checks and
+normal stop passed. All2560observed final BF16 values match the official fixture;
+source intervals remain conservative, not a general bitwise guarantee. See
+[report](WP12-REPORT.md) and [evidence](../evidence/wp12.json).
 
 ## WP11 — Accepted, September 10, 2026
 

@@ -1,0 +1,117 @@
+param memcpy_params;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const qk_kernel=@import_module("qk_kernel.csl");
+const attention_kernel=@import_module("attention_kernel.csl");
+var cache=@zeros([4098]u16);
+var attention_input=@zeros([1026]u16);
+var attention_scores=@zeros([42]f32);
+var attention_score_casts=@zeros([26]u16);
+var attention_stats=@zeros([3]f32);
+var attention_stages=@zeros([1282]f32);
+var attention_casts=@zeros([770]u16);
+var state=@zeros([16]u32);
+var attention_events=@zeros([12]u32);
+var control=@zeros([3]u32);
+var original_input=@zeros([1026]u16);
+var qk_weights=@zeros([514]u16);
+var qk_frequencies=@zeros([34]f32);
+var qk_probe_inputs=@zeros([10]f32);
+var qk_stats=@zeros([10]f32);
+var qk_rms_stages=@zeros([1026]f32);
+var qk_normalized=@zeros([514]u16);
+var qk_trig=@zeros([130]f32);
+var qk_trig_casts=@zeros([66]u16);
+var qk_rotary_stages=@zeros([386]f32);
+var qk_product_casts=@zeros([258]u16);
+var qk_output=@zeros([514]u16);
+var qk_probes=@zeros([34]f32);
+var qk_events=@zeros([10]u32);
+fn initialize() void {
+ if(control[0]<=state[0] or control[1]!=0 or control[2]!=0){state[6]=2;sys.unblock_cmd_stream();return;}
+ state[0]=control[0];state[1]=0;state[3]+=1;state[4]=0;state[5]=0;state[6]=0;
+ state[8]=0;state[10]=0;state[11]=8;state[12]=256;state[13]=0;state[14]=0;state[15]=0;
+ for(@range(u16,10))|i|{qk_events[i]=0;}
+ for(@range(u16,12))|i|{attention_events[i]=0;}
+ // Metadata invalidation only; all old cache data remain observable.
+ sys.unblock_cmd_stream();
+}
+fn token() void {
+ if(control[0]!=state[0] or control[1]!=state[4] or control[2]!=state[2]+1){state[6]=2;sys.unblock_cmd_stream();return;}
+ // Capacity precedes preprocessing/position-domain admission and every data write.
+ if(state[4]>=8){
+  state[5]=4;state[6]=1;state[7]+=1;state[8]=1;
+  for(@range(u16,12))|i|{attention_events[i]=0;}
+  attention_events[0]=1;attention_events[1]=99;attention_events[11]=1;
+  sys.unblock_cmd_stream();return;
+ }
+ if(control[1]>7){state[6]=3;sys.unblock_cmd_stream();return;}
+ for(@range(u16,10))|i|{qk_events[i]=0;}
+ for(@range(u16,12))|i|{attention_events[i]=0;}
+ state[5]=1;state[8]=0;qk_events[0]=1;attention_events[8]=1;
+ state[13]=qk_kernel.compute(@ptrcast([*]u16,&original_input[1]),@ptrcast([*]u16,&qk_weights[1]),@ptrcast([*]f32,&qk_frequencies[1]),&control,
+  &qk_stats,@ptrcast([*]f32,&qk_rms_stages[1]),@ptrcast([*]u16,&qk_normalized[1]),@ptrcast([*]f32,&qk_trig[1]),@ptrcast([*]u16,&qk_trig_casts[1]),
+  @ptrcast([*]f32,&qk_rotary_stages[1]),@ptrcast([*]u16,&qk_product_casts[1]),@ptrcast([*]u16,&qk_output[1]),
+  @ptrcast([*]f32,&qk_probe_inputs[1]),@ptrcast([*]f32,&qk_probes[1]),&qk_events);
+ qk_events[7]=8;attention_events[9]=2;
+ // Every consumer operand comes from its owned source on device. Neither buffer aliases original inputs.
+ for(@range(u16,512))|i|{attention_input[1+i]=qk_output[1+i];attention_input[513+i]=original_input[513+i];}
+ attention_events[10]=3;attention_events[0]=1;attention_events[1]=2;
+ state[13]+=attention_kernel.compute(@ptrcast([*]u16,&cache[1]),@ptrcast([*]u16,&attention_input[1]),
+  @ptrcast([*]f32,&attention_scores[1]),@ptrcast([*]u16,&attention_score_casts[1]),&attention_stats,
+  @ptrcast([*]f32,&attention_stages[1]),@ptrcast([*]u16,&attention_casts[1]),@as(u16,state[4]+1),&attention_events);
+ state[14]=@as(u32,original_input[0]);state[15]=@as(u32,original_input[1025]);
+ state[1]=control[1];state[2]+=1;state[4]+=1;state[5]=3;state[6]=0;state[9]+=1;state[10]+=1;
+ attention_events[7]=8;state[8]=1;attention_events[11]=1;
+ sys.unblock_cmd_stream();
+}
+const ptr_cache:[*]u16=&cache;
+const ptr_attention_input:[*]u16=&attention_input;
+const ptr_attention_scores:[*]f32=&attention_scores;
+const ptr_attention_score_casts:[*]u16=&attention_score_casts;
+const ptr_attention_stats:[*]f32=&attention_stats;
+const ptr_attention_stages:[*]f32=&attention_stages;
+const ptr_attention_casts:[*]u16=&attention_casts;
+const ptr_state:[*]u32=&state;
+const ptr_attention_events:[*]u32=&attention_events;
+const ptr_control:[*]u32=&control;
+const ptr_original_input:[*]u16=&original_input;
+const ptr_qk_weights:[*]u16=&qk_weights;
+const ptr_qk_frequencies:[*]f32=&qk_frequencies;
+const ptr_qk_probe_inputs:[*]f32=&qk_probe_inputs;
+const ptr_qk_stats:[*]f32=&qk_stats;
+const ptr_qk_rms_stages:[*]f32=&qk_rms_stages;
+const ptr_qk_normalized:[*]u16=&qk_normalized;
+const ptr_qk_trig:[*]f32=&qk_trig;
+const ptr_qk_trig_casts:[*]u16=&qk_trig_casts;
+const ptr_qk_rotary_stages:[*]f32=&qk_rotary_stages;
+const ptr_qk_product_casts:[*]u16=&qk_product_casts;
+const ptr_qk_output:[*]u16=&qk_output;
+const ptr_qk_probes:[*]f32=&qk_probes;
+const ptr_qk_events:[*]u32=&qk_events;
+comptime{
+ @export_symbol(ptr_cache,"cache");
+ @export_symbol(ptr_attention_input,"attention_input");
+ @export_symbol(ptr_attention_scores,"attention_scores");
+ @export_symbol(ptr_attention_score_casts,"attention_score_casts");
+ @export_symbol(ptr_attention_stats,"attention_stats");
+ @export_symbol(ptr_attention_stages,"attention_stages");
+ @export_symbol(ptr_attention_casts,"attention_casts");
+ @export_symbol(ptr_state,"state");
+ @export_symbol(ptr_attention_events,"attention_events");
+ @export_symbol(ptr_control,"control");
+ @export_symbol(ptr_original_input,"original_input");
+ @export_symbol(ptr_qk_weights,"qk_weights");
+ @export_symbol(ptr_qk_frequencies,"qk_frequencies");
+ @export_symbol(ptr_qk_probe_inputs,"qk_probe_inputs");
+ @export_symbol(ptr_qk_stats,"qk_stats");
+ @export_symbol(ptr_qk_rms_stages,"qk_rms_stages");
+ @export_symbol(ptr_qk_normalized,"qk_normalized");
+ @export_symbol(ptr_qk_trig,"qk_trig");
+ @export_symbol(ptr_qk_trig_casts,"qk_trig_casts");
+ @export_symbol(ptr_qk_rotary_stages,"qk_rotary_stages");
+ @export_symbol(ptr_qk_product_casts,"qk_product_casts");
+ @export_symbol(ptr_qk_output,"qk_output");
+ @export_symbol(ptr_qk_probes,"qk_probes");
+ @export_symbol(ptr_qk_events,"qk_events");
+ @export_symbol(initialize);@export_symbol(token);
+}
