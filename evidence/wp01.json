@@ -1,0 +1,293 @@
+{
+  "milestone": "WP01",
+  "scope": "128x112 slice of original Qwen3.8 layer0 up_proj; four calls in one WSE3 SDK simulator runtime; not full5120 contraction or a complete model",
+  "model": {
+    "model": "Qwen/Qwen3.8-27B",
+    "revision": "1d4bf0f2ff6012fd82039f2fa52739d0dd7c60c0",
+    "shard": "model-00001-of-00018.safetensors",
+    "tensor": "model.language_model.layers.0.mlp.up_proj.weight",
+    "dtype": "BF16",
+    "tensor_shape": [
+      17408,
+      5120
+    ],
+    "tensor_data_offsets": [
+      588278208,
+      766536128
+    ],
+    "header_bytes": 45392,
+    "header_sha256": "7bdeb03df566aa804dca2cb48e420908cb1864e5222858ad04918299883287e0",
+    "tensor_absolute_start": 588323608,
+    "tile_rows": [
+      0,
+      128
+    ],
+    "tile_columns": [
+      0,
+      112
+    ],
+    "tile_row_major_sha256": "b21ed84061e7fb999de7959cbc427175d01f8fe211f3d788bf1e21c232d98585",
+    "tile_column_major_sha256": "d417cda16f8a48ec33b693043d55dc117a8a683452b8214206b370706a72ad7c",
+    "reordering_reversible": true,
+    "whole_shard_hash_verified": false,
+    "payload_bytes_received": 74072
+  },
+  "range_requests": 130,
+  "numeric_policy": {
+    "name": "fp32-fma-dot-gamma112-v1",
+    "unit_roundoff": 5.960464477539063e-08,
+    "terms": 112,
+    "absolute_floor": 1.316553672920962e-36,
+    "bound": "gamma112 * sum(abs(w_j*x_j)) + absolute_floor",
+    "zero_case": "exact numerical zero; signed zero permitted",
+    "one_hot_case": "exact FP32 bits of the selected BF16 column",
+    "weight_domain": "finite BF16; subnormal BF16 forbidden",
+    "input_domain": "finite normal FP32 or zero, absolute value <= 1"
+  },
+  "cases": [
+    {
+      "call": 1,
+      "case": "bounded",
+      "numerical": {
+        "passed": true,
+        "max_absolute_error": 1.862645149230957e-09,
+        "max_error_over_bound": 0.0012625530407307812,
+        "exact_special_case": null
+      },
+      "checks": {
+        "weights_and_guards_unchanged": true,
+        "input_and_guards_unchanged": true,
+        "output_guards_unchanged": true,
+        "call_counter": true,
+        "export_ids_stable": true
+      }
+    },
+    {
+      "call": 2,
+      "case": "changed",
+      "numerical": {
+        "passed": true,
+        "max_absolute_error": 1.862645149230957e-09,
+        "max_error_over_bound": 0.0009968516154718967,
+        "exact_special_case": null
+      },
+      "checks": {
+        "weights_and_guards_unchanged": true,
+        "input_and_guards_unchanged": true,
+        "output_guards_unchanged": true,
+        "call_counter": true,
+        "export_ids_stable": true
+      }
+    },
+    {
+      "call": 3,
+      "case": "last_column",
+      "numerical": {
+        "passed": true,
+        "max_absolute_error": 0.0,
+        "max_error_over_bound": 0.0,
+        "exact_special_case": true
+      },
+      "checks": {
+        "weights_and_guards_unchanged": true,
+        "input_and_guards_unchanged": true,
+        "output_guards_unchanged": true,
+        "call_counter": true,
+        "export_ids_stable": true
+      }
+    },
+    {
+      "call": 4,
+      "case": "zero_after_nonzero",
+      "numerical": {
+        "passed": true,
+        "max_absolute_error": 0.0,
+        "max_error_over_bound": 0.0,
+        "exact_special_case": true
+      },
+      "checks": {
+        "weights_and_guards_unchanged": true,
+        "input_and_guards_unchanged": true,
+        "output_guards_unchanged": true,
+        "call_counter": true,
+        "export_ids_stable": true
+      }
+    }
+  ],
+  "timing_scope": "systemd/container-inclusive outer wall time; not device or hardware performance",
+  "steps": [
+    {
+      "name": "compile",
+      "wall_seconds": 4.082609516102821,
+      "peak_cgroup_bytes": 461520896,
+      "execution": "normal_exit",
+      "cleanup": "unit_stopped"
+    },
+    {
+      "name": "simulate",
+      "wall_seconds": 57.96831257385202,
+      "peak_cgroup_bytes": 188473344,
+      "execution": "normal_exit",
+      "cleanup": "unit_stopped"
+    }
+  ],
+  "memory_scope": "observed live cgroup counters; final lifetime peak unavailable after cgroup removal",
+  "static_elf": {
+    "elf_class_bits": 64,
+    "allocated_sections": [
+      {
+        "name": ".data.lo",
+        "type": 1,
+        "address": 0,
+        "bytes": 64
+      },
+      {
+        "name": ".text",
+        "type": 1,
+        "address": 64,
+        "bytes": 3112
+      },
+      {
+        "name": ".data",
+        "type": 1,
+        "address": 3176,
+        "bytes": 48
+      },
+      {
+        "name": ".bss",
+        "type": 8,
+        "address": 3224,
+        "bytes": 30424
+      },
+      {
+        "name": ".task_table",
+        "type": 1,
+        "address": 33648,
+        "bytes": 1024
+      },
+      {
+        "name": ".entry_ival",
+        "type": 1,
+        "address": 64572,
+        "bytes": 2
+      },
+      {
+        "name": ".fpcw",
+        "type": 1,
+        "address": 64536,
+        "bytes": 2
+      },
+      {
+        "name": ".fscale",
+        "type": 1,
+        "address": 64538,
+        "bytes": 2
+      },
+      {
+        "name": ".blocked_ival",
+        "type": 1,
+        "address": 64520,
+        "bytes": 4
+      },
+      {
+        "name": ".active_ival",
+        "type": 1,
+        "address": 64524,
+        "bytes": 4
+      },
+      {
+        "name": ".blocked_ut_ival",
+        "type": 1,
+        "address": 64516,
+        "bytes": 4
+      },
+      {
+        "name": ".fabric_routes",
+        "type": 1,
+        "address": 63488,
+        "bytes": 48
+      },
+      {
+        "name": ".fabric_switches",
+        "type": 1,
+        "address": 63744,
+        "bytes": 192
+      },
+      {
+        "name": ".ce_in_q",
+        "type": 1,
+        "address": 63360,
+        "bytes": 8
+      },
+      {
+        "name": ".ce_out_q",
+        "type": 1,
+        "address": 63232,
+        "bytes": 2
+      },
+      {
+        "name": ".prng_state",
+        "type": 1,
+        "address": 64416,
+        "bytes": 16
+      },
+      {
+        "name": ".filters",
+        "type": 1,
+        "address": 63104,
+        "bytes": 96
+      },
+      {
+        "name": ".user_cfg_0",
+        "type": 1,
+        "address": 64528,
+        "bytes": 2
+      },
+      {
+        "name": ".user_cfg_1",
+        "type": 1,
+        "address": 64530,
+        "bytes": 2
+      },
+      {
+        "name": ".user_cfg_2",
+        "type": 1,
+        "address": 64548,
+        "bytes": 2
+      },
+      {
+        "name": ".user_cfg_3",
+        "type": 1,
+        "address": 64574,
+        "bytes": 2
+      }
+    ],
+    "static_allocated_section_bytes": 35060,
+    "scope": "ELF SHF_ALLOC sections; excludes unrepresented runtime stack/scratch demand"
+  },
+  "source_sha256": {
+    "compile_entry.py": "1bf40f9bd75e9f5f76b7cef5dab8a5d4e9288a074ec5bf88f6effa802aa3162f",
+    "core/qwen38/__init__.py": "92977aa9088ee68919bc3eff6b0c1a1e2f5162f15b7b0744ca75d02e63e3a01b",
+    "core/qwen38/codecs.py": "ff392fd861c27523fd01f6abdb330bf54f0583e3b8e6081ed6309dd4361ef7fa",
+    "core/qwen38/elf_inventory.py": "5513cec5266140bb9bbbd27e25cf7295147c985dbb8ac27d1c18319c1b98c961",
+    "core/qwen38/locking.py": "a9546705141a7e0e3887a22c036e6695f0852d3825876dfc5f21d7ca27fa3629",
+    "core/qwen38/numerics.py": "fee8e59d860620b4d860b2e1ca773feaf27ba15d800a7cc7744e145391a7898d",
+    "core/qwen38/ranged.py": "f624f91b6fa2c0ab26a70853953ce21e72cff7a004eb4845a3251e04bc93b271",
+    "core/qwen38/resources.py": "67610eddb4c1cb4557f6bba8179a26aa87be2638627315785689ac5ea3724049",
+    "driver.py": "e4790b338b5c653836c37bf8c0971c2c2d07d5657b6bb749b928f1ecfe6534da",
+    "kernel.csl": "3e92175efe12b28065bb77934c54136db3c9287c68c81877781a0e527354304c",
+    "layout.csl": "3e898dad5291c9cb20728334cb29bf3602553189e938dce8ba8bbff6e0b4a932",
+    "pe.csl": "0f837deb0ea731d9d3b71d6b5b95d30e05b0d00ce7431c52c93bc6933aa12402",
+    "tools/guarded_run.py": "ef348694793deca35cdb3efd868382a1ab544da131594eaf9df7ec1fa1450a2f",
+    "tools/sdk_container.py": "f40d7382ad2242b6d99b6e93717adf910738656d2ef2ac6bbd97b4a0d35f0cc9"
+  },
+  "compiled_subset_unchanged_after_run": true,
+  "source_and_inputs_unchanged_after_run": true,
+  "last_column_negative_zeros": 0,
+  "limits": [
+    "No complete Qwen hidden-dimension projection",
+    "No nonlinear activation or attention",
+    "No repeated-request full state reset",
+    "No physical hardware or multi-wafer communication"
+  ]
+}

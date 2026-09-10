@@ -1,0 +1,27 @@
+// WP01: static storage and synchronous DSR3/4 kernel leases, one loaded runtime.
+param memcpy_params;
+const sys = @import_module("<memcpy/memcpy>", memcpy_params);
+const kernel = @import_module("kernel.csl", .{.rows=128, .columns=112});
+var weights_storage = @zeros([14338]u16);
+var input_storage = @zeros([114]f32);
+var output_storage = @zeros([130]f32);
+var calls = @zeros([1]u32);
+const wp: [*]u16 = &weights_storage;
+const xp: [*]f32 = &input_storage;
+const yp: [*]f32 = &output_storage;
+const cp: [*]u32 = &calls;
+fn compute() void {
+  // Each invocation reconstructs descriptors and zeroes expanded/output buffers.
+  kernel.compute(@ptrcast([*]u16, &weights_storage[1]),
+                 @ptrcast([*]f32, &input_storage[1]),
+                 @ptrcast([*]f32, &output_storage[1]));
+  calls[0] += 1;
+  sys.unblock_cmd_stream();
+}
+comptime {
+  @export_symbol(wp, "weights_storage");
+  @export_symbol(xp, "input_storage");
+  @export_symbol(yp, "output_storage");
+  @export_symbol(cp, "calls");
+  @export_symbol(compute);
+}

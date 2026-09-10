@@ -16,3 +16,10 @@ This milestone establishes a tiny transfer control, not BF16 arithmetic, request
 reset, packed-stream SDK support, model generation or physical cluster inference.
 Fourteen lightweight host tests pass. See [WP00 report](WP00-REPORT.md) and
 [compact evidence](../evidence/wp00.json). Future entries require scoped acceptance.
+
+## WP01 — Accepted, September 10, 2026
+
+An original 128×112 BF16 up-projection slice completed four calls in one runtime,
+including changed input, exact last-column one-hot and zero-after-nonzero. All
+weight/guard/counter/handle checks passed; normal SDK stop and process exit were
+recorded. See [report](WP01-REPORT.md). This is a local GEMV tile, not full inference.

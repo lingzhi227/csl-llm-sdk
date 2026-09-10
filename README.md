@@ -4,8 +4,9 @@ Research toward handwritten CSL inference for open LLM architectures on WSE-3
 clusters, starting with an independent Qwen3.8 implementation. Early code provides
 a resource-aware foundation. **Full
 Qwen3.8 inference is not implemented or qualified.** Current code covers Linux
-resource admission, a single-heavy-job lock, a bounded systemd runner, and explicit
-bit-preserving host transfer codecs. These are foundations for handwritten CSL
+resource admission, a single-heavy-job lock, a bounded systemd runner, explicit
+bit-preserving host transfer codecs, and an original-BF16 local GEMV with warm-call
+validation. These are foundations for handwritten CSL
 kernels using Cerebras SDK compilation, layout and runtime.
 
 Planned target: text-only Qwen3.8-27B, a one-WSE-3 BF16 streamed path, a separately
@@ -64,7 +65,8 @@ Inputs are contiguous one-dimensional unsigned bit arrays; floating-point casts,
 empty inputs, incorrect units and mismatched formats are rejected. CPU round trips
 are not evidence of SDK transfer or hardware execution.
 
-See [status](docs/STATUS.md) for qualified scope and outstanding work.
+See [status](docs/STATUS.md) and the [WP01 GEMV report](docs/WP01-REPORT.md) for
+qualified scope, bounded original-weight acquisition and synthetic reproduction.
 
 ## Reproduce the tiny native memcpy example
 

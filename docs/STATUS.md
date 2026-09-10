@@ -1,6 +1,7 @@
 # Implementation status
 
-WP00 candidate, 2026-09-10. Full model M0 and all inference milestones are incomplete.
+WP00 published; WP01 accepted, 2026-09-10. Continuous development is
+active under bounded control-node packages. Full model M0 and inference remain incomplete.
 
 | Component | Status |
 |---|---|
@@ -11,7 +12,8 @@ WP00 candidate, 2026-09-10. Full model M0 and all inference milestones are incom
 | Native memcpy16 SDK bit copy | One WSE-3 PE, seven BF16 bit patterns, SDK 2.10.1 simulator; exact output and normal stop/exit |
 | Packed-u32/raw-u32 SDK transfer | CPU codec tests only; no SDK qualification |
 | Model semantics, full checkpoint, GPU reference | Not qualified; no full-model download/execution |
-| Neural CSL kernels, full generation, physical WSE-3 | Not implemented/qualified here |
+| Local 128×112 BF16 GEMV | Four same-runtime SDK calls passed on an original Qwen3.8 weight slice; WP01 accepted |
+| Full generation, physical WSE-3 | Not implemented/qualified here |
 
 Attempt wp00-001 failed in the installed wrapper's temporary-directory mount before
 cslc ran; simulation did not start. Controller-approved wp00-002 corrected only the
