@@ -1,0 +1,75 @@
+// WP13 uncompiled draft: original-head output sharding, unchanged serial FMA.
+// Output is retained until explicit release; future device transport is not implemented.
+param slab_id: u32;
+param memcpy_params;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const clock=@import_module("<time>");
+const kernel=@import_module("kernel.csl",.{.rows=128,.columns=112});
+var weights_storage=@zeros([14338]u16);
+var input_storage=@zeros([114]f32);
+var output_storage=@zeros([130]f32);
+// control: generation,total_columns,tile_index,column_offset,valid_columns.
+var control=@zeros([5]u32);
+// state: phase,generation,total,tiles,consumed,commit_generation,error,last_valid,
+// cumulative_accumulates,begin_count,finalize_count.
+var state=@zeros([13]u32);
+// state[11]=global output slab; state[12]=release count.
+var bf16_storage=@zeros([130]u16);
+var timing=@zeros([276]u16);
+// finalize snapshot: left, right, generation, snapshot_event, commit_event.
+var weight_guard_snapshot=@zeros([5]u32);
+var started=@zeros([3]u16);var ended=@zeros([3]u16);
+fn reject(code:u32) void {state[0]=3;state[6]=code;sys.unblock_cmd_stream();}
+fn begin() void {
+  if(control[0]<=state[1] or control[1]==0 or control[1]>5120 or (state[0]!=0 and state[0]!=4)){reject(1);return;}
+  state[0]=1;state[1]=control[0];state[2]=control[1];state[3]=0;state[4]=0;
+  state[5]=0;state[6]=0;state[7]=0;state[9]+=1;state[11]=slab_id;
+  const yd=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]f32,&output_storage[1]),.extent=128});
+  @fmovs(yd,0.0);
+  for(@range(u16,276))|i|{timing[i]=0;}
+  sys.unblock_cmd_stream();
+}
+fn accumulate() void {
+  if(state[0]!=1 or control[0]!=state[1] or control[1]!=state[2] or control[2]!=state[3] or control[3]!=state[4] or state[4]>=state[2]){reject(2);return;}
+  const remaining:u32=state[2]-state[4];
+  const expected:u32=if(remaining>112) @as(u32,112) else remaining;
+  if(control[4]!=expected or state[3]>=46){reject(3);return;}
+  clock.enable_tsc();clock.get_timestamp(&started);
+  kernel.compute(@ptrcast([*]u16,&weights_storage[1]),@ptrcast([*]f32,&input_storage[1]),
+                 @ptrcast([*]f32,&output_storage[1]),@as(u16,control[4]));
+  clock.get_timestamp(&ended);clock.disable_tsc();
+  const offset:u16=@as(u16,state[3])*6;
+  for(@range(u16,3))|i|{timing[offset+i]=started[i];timing[offset+i+3]=ended[i];}
+  state[3]+=1;state[4]+=control[4];state[7]=control[4];state[8]+=1;
+  sys.unblock_cmd_stream();
+}
+fn finalize() void {
+  if(state[0]!=1 or control[0]!=state[1] or control[1]!=state[2] or state[4]!=state[2] or state[3]!=(state[2]+111)/112){reject(4);return;}
+  for(@range(u16,128))|i|{
+    const raw:u32=@bitcast(u32,output_storage[i+1]);
+    const odd:u32=(raw>>16)&1;
+    bf16_storage[i+1]=@as(u16,(raw+0x00007fff+odd)>>16);
+  }
+  weight_guard_snapshot[0]=@as(u32,weights_storage[0]);
+  weight_guard_snapshot[1]=@as(u32,weights_storage[14337]);
+  weight_guard_snapshot[2]=state[1];weight_guard_snapshot[3]=1;
+  state[0]=2;state[5]=state[1];state[10]+=1;
+  weight_guard_snapshot[4]=2;sys.unblock_cmd_stream();
+}
+fn release() void {
+  if(state[0]!=2 or control[0]!=state[1]){reject(5);return;}
+  state[0]=4;state[12]+=1;sys.unblock_cmd_stream();
+}
+const bp:[*]u16=&bf16_storage;
+const wp:[*]u16=&weights_storage;const xp:[*]f32=&input_storage;const yp:[*]f32=&output_storage;
+const cp:[*]u32=&control;const sp:[*]u32=&state;const tp:[*]u16=&timing;
+const gp:[*]u32=&weight_guard_snapshot;
+comptime{
+  @export_symbol(wp,"weights_storage");@export_symbol(xp,"input_storage");
+  @export_symbol(yp,"output_storage");@export_symbol(cp,"control");
+  @export_symbol(sp,"state");@export_symbol(tp,"timing");
+  @export_symbol(gp,"weight_guard_snapshot");
+  @export_symbol(bp,"bf16_storage");
+  @export_symbol(release);
+  @export_symbol(begin);@export_symbol(accumulate);@export_symbol(finalize);
+}

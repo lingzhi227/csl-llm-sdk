@@ -1,0 +1,15 @@
+param pe_count:u16;
+param first_slab:u32;
+comptime{@comptime_assert(pe_count==1 or pe_count==4 or pe_count==8);@comptime_assert(first_slab+@as(u32,pe_count)<=8);}
+const memcpy=@import_module("<memcpy/get_params>",.{.width=pe_count,.height=1});
+layout{
+ @set_rectangle(pe_count,1);
+ for(@range(u16,pe_count))|x|{@set_tile_code(x,0,"pe.csl",.{.memcpy_params=memcpy.get_params(x),.slab_id=first_slab+@as(u32,x)});}
+ @export_name("weights_storage",[*]u16,false);@export_name("input_storage",[*]f32,false);
+ @export_name("output_storage",[*]f32,false);@export_name("control",[*]u32,false);
+ @export_name("state",[*]u32,false);@export_name("timing",[*]u16,false);
+ @export_name("weight_guard_snapshot",[*]u32,false);
+ @export_name("bf16_storage",[*]u16,false);
+ @export_name("release",fn()void);
+ @export_name("begin",fn()void);@export_name("accumulate",fn()void);@export_name("finalize",fn()void);
+}

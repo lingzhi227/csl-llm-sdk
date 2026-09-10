@@ -1,0 +1,137 @@
+{
+  "model": "Qwen/Qwen3.8-27B",
+  "revision": "1d4bf0f2ff6012fd82039f2fa52739d0dd7c60c0",
+  "shard": "model-00001-of-00018.safetensors",
+  "url": "https://huggingface.co/Qwen/Qwen3.8-27B/resolve/1d4bf0f2ff6012fd82039f2fa52739d0dd7c60c0/model-00001-of-00018.safetensors",
+  "total_size": 3966730552,
+  "header_bytes": 45392,
+  "header_sha256": "7bdeb03df566aa804dca2cb48e420908cb1864e5222858ad04918299883287e0",
+  "metadata_hashes": {
+    "config.json": "191e0af232104ed8b65258cf3fb2b842e288008baca7633c11b82a1ac7203aab",
+    "tensor-headers.json": "579fff9d80f52a29770ea8a2ebcc5d63796db1400016ad7635a4b67d294f5a62",
+    "model.safetensors.index.json": "77042094076611b69791a610065f28b7013b8c621795fa86ddccc8bac7d1b9df"
+  },
+  "tensors": {
+    "q_proj": {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "dtype": "BF16",
+      "shape": [
+        12288,
+        5120
+      ],
+      "data_offsets": [
+        2907834688,
+        3033663808
+      ],
+      "selected_rows": [
+        0,
+        512
+      ],
+      "absolute_start": 2907880088,
+      "file": "q-with-norm.bf16",
+      "file_offset": 512,
+      "selected_bytes": 5242880
+    },
+    "k_proj": {
+      "name": "model.language_model.layers.3.self_attn.k_proj.weight",
+      "dtype": "BF16",
+      "shape": [
+        1024,
+        5120
+      ],
+      "data_offsets": [
+        2834433856,
+        2844919616
+      ],
+      "selected_rows": [
+        0,
+        256
+      ],
+      "absolute_start": 2834479256,
+      "file": "k-with-norm.bf16",
+      "file_offset": 512,
+      "selected_bytes": 2621440
+    },
+    "v_proj": {
+      "name": "model.language_model.layers.3.self_attn.v_proj.weight",
+      "dtype": "BF16",
+      "shape": [
+        1024,
+        5120
+      ],
+      "data_offsets": [
+        3033663808,
+        3044149568
+      ],
+      "selected_rows": [
+        0,
+        256
+      ],
+      "absolute_start": 3033709208,
+      "file": "v-row-major.bf16",
+      "file_offset": 0,
+      "selected_bytes": 2621440
+    },
+    "q_norm": {
+      "name": "model.language_model.layers.3.self_attn.q_norm.weight",
+      "dtype": "BF16",
+      "shape": [
+        256
+      ],
+      "data_offsets": [
+        2907834176,
+        2907834688
+      ],
+      "selected_rows": [
+        0,
+        256
+      ],
+      "absolute_start": 2907879576,
+      "file": "q-with-norm.bf16",
+      "file_offset": 0,
+      "selected_bytes": 512
+    },
+    "k_norm": {
+      "name": "model.language_model.layers.3.self_attn.k_norm.weight",
+      "dtype": "BF16",
+      "shape": [
+        256
+      ],
+      "data_offsets": [
+        2834433344,
+        2834433856
+      ],
+      "selected_rows": [
+        0,
+        256
+      ],
+      "absolute_start": 2834478744,
+      "file": "k-with-norm.bf16",
+      "file_offset": 0,
+      "selected_bytes": 512
+    }
+  },
+  "ranges": [
+    {
+      "file": "q-with-norm.bf16",
+      "start": 2907879576,
+      "length": 5243392
+    },
+    {
+      "file": "k-with-norm.bf16",
+      "start": 2834478744,
+      "length": 2621952
+    },
+    {
+      "file": "v-row-major.bf16",
+      "start": 3033709208,
+      "length": 2621440
+    }
+  ],
+  "expected_payload_bytes": 10486784,
+  "budget_bytes": 16777216,
+  "chunk_bytes": 1048576,
+  "whole_shard_hash_verified": false,
+  "source_mapping": "q_proj head0 view [1,512], chunk last axis into Q256/rawgate256; k/v head0 rows0:256; all columns0:5120; attention_bias=false",
+  "acquisition_profile": "cpu-reference:2GiB,Swap0,one thread,60seconds; acquisition only, not a numerical reference candidate; no retries"
+}

@@ -2,7 +2,7 @@
 
 **Building inference for open language models with handwritten Cerebras Systems Language (CSL), targeting one to three WSE-3 systems.** We implement the numerical kernels, execution control and persistent model state, and use the Cerebras SDK to compile and run the device programs. The first target is **Qwen3.8-27B text inference**; the longer-term goal is a reusable SDK for related model architectures.
 
-**Working today:** SDK 2.10.1 simulator experiments cover original-weight matrix–vector products, communication between processing elements, full-dimension normalization, a persistent DeltaNet recurrent head, its input/output processing, a full-dimension attention head with persistent KV cache, device-side query/key normalization with bounded rotary encoding, and their on-device single-head attention composition. **Still ahead:** complete-model text generation and execution on physical single- or multiple-wafer systems. The completed log below records the exact scope of each result.
+**Working today:** SDK 2.10.1 simulator experiments cover original-weight matrix–vector products, communication between processing elements, full-dimension normalization, a persistent DeltaNet recurrent head, its input/output processing, a full-dimension attention head with persistent KV cache, device-side query/key normalization with bounded rotary encoding, their on-device single-head attention composition, and all selected-head Q/rawgate/K/V original-weight projections across eight bounded four-case runs. **Still ahead:** complete-model text generation and execution on physical single- or multiple-wafer systems. The completed log below records the exact scope of each result.
 
 ## 1. Project design
 
@@ -59,6 +59,12 @@ These are deployment targets; current simulator results do not establish cluster
 ## 3. Completed development log — newest first
 
 Each **WP** is a scoped development milestone. Device results below come from the SDK simulator; WP04 is a CPU/source audit. **BF16** means bfloat16 data, and **FP32** means 32-bit floating-point arithmetic. Reports contain numerical thresholds, failure history and reproduction details.
+
+### WP13 · Original weights for all selected-head projections · September 10, 2026
+
+Qualified layer3/head0 Q256, rawgate256, K256 and V256 over all 5,120 input columns. Eight independent single-PE runs each exercised four common inputs, including column 5,119 one-hot and zero after nonzero, covering all 1,024 selected rows. Independent source, prefix, rounding, state and shutdown checks passed for all 4,096 final outputs. This is complete selected-row coverage across separate runtimes; simultaneous full-head production and attention integration remain future work.
+
+[Code](examples/wp13) · [Design](docs/WP13-DESIGN.md) · [Report](docs/WP13-REPORT.md) · [Evidence](evidence/wp13.json)
 
 ### WP12 · Original Q/K through persistent attention on one PE · September 10, 2026
 

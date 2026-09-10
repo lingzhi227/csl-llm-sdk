@@ -1,0 +1,23 @@
+{
+  "source_sha256": "762feb6c7426a7f15b5bf830df54c07438bf9e7c27b8cdb23179045920412c3b",
+  "hidden_sha256": "cc11620f3873f982c0f3424d00f5992b0fa03241b6df3b259f9b9cbf9a0b0905",
+  "cases": [
+    "bounded_dyadic",
+    "changed_dyadic",
+    "last_column_onehot",
+    "zero_after_nonzero"
+  ],
+  "input_shape": [
+    4,
+    5120
+  ],
+  "scale_reason": "Audited maximum row L1=94.63631564378738. Choose smallest k with16*2^-k*maxL1<=0.5: k=12. This bounds all dense Q/gate/K/V magnitudes before any device result; onehot returns original last column (all weights abs<=0.2099609375). Trained weights unchanged.",
+  "arithmetic": {
+    "candidate": "1024 independent row accumulators, zero at begin;46 tiles112, last80; column order0..5119; one persistent FP32 FMA per column, no between-tile reset; final BF16 RNE once",
+    "source_bound": "FP64 independent row-major products and sum, abs products; gamma5120(FP32)*abs_sum plus conservative FP64sum uncertainty and subnormal additive5120*2^-149; monotone BF16 RNE interval; exact onehot and zero radius0",
+    "tree_change": "Any changed parallel reduction over columns requires separate proof. Parallel outputs retain same serial dot order.",
+    "nominal": "FP64 dot then BF16 RNE; comparisons do not require equality across legal dot orders"
+  },
+  "expected_work": "4*1024*5120=20971520 products per independent source and selected CPU projection; largest temporary40MiB; outputs<1MiB; no full model or GPU",
+  "resource_profile": "2GiB Swap0 CPU100% one thread60seconds; candidate1of2"
+}

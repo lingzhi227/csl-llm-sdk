@@ -2,6 +2,14 @@
 
 Only accepted results are listed below. Ongoing WP09 integration and WP13 original attention-projection work are tracked in [implementation status](STATUS.md).
 
+## WP13 — Accepted, September 10, 2026
+
+Original selected layer3/head0 Q256/rawgate256/K256/V256 rows span all5120 input
+columns. Eight separate single-PE four-call runs cover all1024rows with the same
+four hidden inputs; independent source/rounding/state/identity/normalstop gates pass.
+This is separate-runtime projection coverage, not a device attention consumer.
+See [report](WP13-REPORT.md) and [evidence](../evidence/wp13.json).
+
 ## WP12 — Accepted, September 10, 2026
 
 One PE composes original synthetic Q/K through RMS256/deviceRoPE64 into persistent
