@@ -1,6 +1,6 @@
 # Accepted milestones
 
-Only accepted results are listed below. Ongoing WP09 integration and WP13 original attention-projection work are tracked in [implementation status](STATUS.md).
+Only accepted results are listed below. Unresolved integration work and the remaining scope are tracked in [implementation status](STATUS.md).
 
 ## WP13 — Accepted, September 10, 2026
 
