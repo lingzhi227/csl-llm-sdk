@@ -1,5 +1,7 @@
 # Accepted milestones
 
+Only accepted results are listed below. Ongoing WP09 integration and WP10 attention work are tracked in [implementation status](STATUS.md).
+
 ## WP08 — Accepted, September 10, 2026
 
 Repaired one-PE selected-head preprocessing passed eight tokens, full width4

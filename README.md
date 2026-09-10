@@ -1,144 +1,129 @@
 # CSL-LLM SDK
 
-**Handwritten CSL inference for open language models on one to three Cerebras WSE-3 systems.** We are building the numerical kernels, execution schedules and persistent inference state, while reusing Cerebras tooling for layout, compilation, communication and program execution. The first target is text inference for **Qwen3.8-27B**; support for related model architectures is a longer-term goal.
+**Building inference for open language models with handwritten Cerebras Systems Language (CSL), targeting one to three WSE-3 systems.** We implement the numerical kernels, execution control and persistent model state, and use the Cerebras SDK to compile and run the device programs. The first target is **Qwen3.8-27B text inference**; the longer-term goal is a reusable SDK for related model architectures.
 
-**Current result:** real BF16 weight slices run in the SDK 2.10.1 simulator, including persistent accumulation across all 5120 input columns for 128 outputs and a two-PE projection → fabric transfer → sum → RMS normalization chain. Synthetic full5120 RMS with BF16 output and a full128×128 persistent DeltaNet head also pass their scoped checks. Full-model text generation and physical one/two/three-system inference remain unvalidated. Completed experiments below are simulator results, not hardware performance measurements.
+**Working today:** SDK 2.10.1 simulator experiments cover original-weight matrix–vector products, communication between processing elements, full-dimension normalization, a persistent DeltaNet recurrent head, and its input/output processing. **Still ahead:** complete-model text generation and execution on physical single- or multiple-wafer systems. The completed log below records the exact scope of each result.
 
 ## 1. Project design
 
+Qwen3.8 combines recurrent DeltaNet layers with full-attention layers. This requires two forms of state that survive between token calls: recurrent matrices and attention key/value (KV) caches. Our research focuses on mapping that computation, state and communication explicitly onto the wafer's processing elements (PEs).
+
 ```mermaid
 flowchart TB
-    Model["Pinned model configuration and original weights"] --> Plan["Our graph, tensor placement and resource plan"]
-    Kernels["Our handwritten CSL numerical kernels"] --> Build
-    Plan --> Control["Our CSL control logic and state layout"]
-    Control --> Build["Cerebras SdkLayout or CSL layout + CSL compiler"]
-    Build --> Program["Compiled device program"]
-    Program --> Runtime["Cerebras SdkRuntime / SdkLauncher"]
-    Host["Our host orchestration and weight transport"] --> Runtime
-    Runtime --> Execution["Device execution: CSL tasks + kernels + persistent state"]
-    Model --> Reference["Independent CPU / GPU reference implementation"]
-    Execution --> Validation["Compare intermediate tensors, state and final outputs"]
-    Reference --> Validation
+    Model["Pinned model configuration and weights"] --> Plan["Our graph and tensor-placement plan"]
+    Plan --> DeviceSource["Our CSL kernels, control logic and state layout"]
+    DeviceSource --> Compiler["Cerebras layout tools and CSL compiler"]
+    Compiler --> Binary["Compiled device program"]
+    Plan --> Host["Our host orchestration and weight streaming"]
+    Binary --> Runtime["Cerebras runtime: load, transfer and launch"]
+    Host --> Runtime
+    Runtime --> Execute["Execute CSL kernels and retain state between tokens"]
+    Model --> Reference["Independent reference: CPU today, GPU planned"]
+    Execute --> Compare["Compare intermediate tensors, state and outputs"]
+    Reference --> Compare
 ```
 
-The device-execution box describes what the compiled program does; it is not an additional post-compilation assembly step. We define data dependencies, buffer ownership and completion events before compilation. The SDK executes those definitions; it does not automatically supply an LLM inference scheduler.
+The execution box is what the compiled program does. We write its scheduling, buffer ownership and completion rules before compilation; there is no separate step that assembles kernels after compilation.
 
-| Component | Responsibility |
+| Part | What this project implements or reuses |
 |---|---|
-| Our CSL kernels | Projections, normalization, attention, DeltaNet recurrence, FFN and vocabulary selection. Only the subsets logged below are qualified. |
-| Our control logic and state | Order operations, join communication and compute completion, manage tile buffers, and eventually retain KV cache, recurrent state and token positions across calls. |
-| Cerebras SDK | Layout/compiler, device task and communication primitives, host transfers, launches and supported appliance execution. |
-| Independent reference | Establish expected numerical results. Current microexperiments use CPU references; official model/GPU references and applicable CS-Torch/Model Zoo tools are planned. |
+| **Our device code** | Matrix products, normalization, attention, recurrence and other model operations; task dependencies, communication and state updates. The completed log identifies the implemented subsets. |
+| **Our host code** | Weight loading, execution schedules, tensor placement, resource limits and validation. General graph orchestration and cluster execution are still being developed. |
+| **Cerebras tooling** | CSL layout/compiler, device tasks and communication primitives, host transfers and runtime launches. |
+| **Reference computation** | CPU numerical references and selected functions extracted from a pinned official implementation. GPU reference execution and applicable CS-Torch / Model Zoo integration remain future work. |
 
-The intended deployment paths are **single-wafer weight streaming** and **two/three-wafer pipeline parallelism**. Host-mediated stage transport is the initial cluster design; direct inter-wafer transport requires separate qualification. A quantized resident path is a separate experiment. Neither these deployment paths nor CS-Torch graph interoperability is established by the current microexperiments.
+The deployment design has two main paths:
+
+| Target | Planned execution |
+|---|---|
+| **One WSE-3** | Stream weight tiles through reusable device buffers while retaining the required inference state. |
+| **Two or three WSE-3 systems** | Partition layers into pipeline stages and transfer activations between systems. Start with host-mediated transport, then qualify direct inter-wafer communication separately. |
+
+These are deployment targets; current simulator results do not establish cluster execution, hardware performance or a CS-Torch interface for inserting our CSL kernels into its compiled graphs.
 
 ## 2. Repository guide
 
-| Path | What to read or use |
+| Path | Purpose |
 |---|---|
-| [`csl/kernels/`](csl/kernels) | Handwritten device arithmetic. |
-| [`examples/`](examples) | Per-milestone CSL layouts, device programs and Python drivers. Start with WP01 for arithmetic or WP02 for composition. |
-| [`core/qwen38/`](core/qwen38) | Host-side contracts, bit codecs, numerical reference/checking utilities and resource accounting. |
-| [`tools/`](tools) | Bounded weight acquisition, reproducible run preparation, SDK container entry and guarded execution. |
-| [`tests/`](tests) | Lightweight host checks; these do not substitute for SDK or hardware execution. |
-| [`docs/`](docs) | Detailed experiment reports, design rationale, status and kernel provenance. |
-| [`evidence/`](evidence) | Sanitized accepted-result summaries; raw model weights and private runtime artifacts are excluded. |
-| [`PUBLIC_MANIFEST.json`](PUBLIC_MANIFEST.json) | Integrity inventory of the published files. |
+| [`csl/kernels/`](csl/kernels) | Reusable handwritten CSL arithmetic kernels. |
+| [`examples/`](examples) | Runnable experiments, grouped by milestone. Layout files place PEs and routes; device programs wire kernels and state; Python drivers load inputs, launch operations and collect results. |
+| [`core/qwen38/`](core/qwen38) | Python numerical references, precision and communication contracts, data encodings and resource accounting. |
+| [`tools/`](tools) | Small weight-slice downloads, experiment preparation, SDK container entry and resource-limited execution. |
+| [`tests/`](tests) | Lightweight host tests for those utilities and contracts. |
+| [`docs/`](docs) | Design explanations, experiment reports, model semantics and development status. |
+| [`evidence/`](evidence) | Published result summaries that record what passed and under which conditions. |
+| [`PUBLIC_MANIFEST.json`](PUBLIC_MANIFEST.json) | File hashes for checking the integrity of this published snapshot. |
+
+**Suggested first read:** follow the two-PE example from its [layout](examples/wp02/layout.csl) to [device program](examples/wp02/pe.csl), [host driver](examples/wp02/driver.py), [report](docs/WP02-REPORT.md) and [result record](evidence/wp02.json). For the model equations and precision rules, read the [semantics contract](docs/WP04-SEMANTICS.md).
 
 ## 3. Completed development log — newest first
 
-### WP08 · Causal input preprocessing and gates · September 10, 2026
+Each **WP** is a scoped development milestone. Device results below come from the SDK simulator; WP04 is a CPU/source audit. **BF16** means bfloat16 data, and **FP32** means 32-bit floating-point arithmetic. Reports contain numerical thresholds, failure history and reproduction details.
 
-One simulated PE preprocesses matching128-channel Q/K/V groups: width4 causal convolution/history, BF16 SiLU, FP32 Q/K L2 normalization/scaling and beta/decay gates. Eight tokens cross the history window and a request reset.
+### WP08 · Stateful input processing for a recurrent head · September 10, 2026
 
-- The repaired candidate passed complete history, all intermediate stages, exact BF16 conversions and parameter-source checks with unchanged numerical thresholds.
-- Two serial device commands separate vector/history work from scalar gate finalization. The earlier numerical failure is retained and excluded.
-- Simulation took68.6 seconds with observed187 MB memory use; actual code/data plus4 KiB stack uses28,272 of49,152 bytes.
+Implemented width-4 causal convolution, activation, query/key normalization and recurrence gates on one PE. Eight synthetic tokens, including a request reset, passed checks of the complete history and all intermediate results. This prepares one head's inputs; integration with the recurrent core is separate.
 
-**Scope:** synthetic selected-head preprocessing; no projections, all-channel layer or recurrence integration. [Report](docs/WP08-REPORT.md) · [Precision/history](docs/WP08-DESIGN.md) · [Repair evidence](docs/WP08-CANDIDATE-REPAIR.md) · [Evidence](evidence/wp08.json) · [Example](examples/wp08)
+[Code](examples/wp08) · [Design](docs/WP08-DESIGN.md) · [Report](docs/WP08-REPORT.md) · [Evidence](evidence/wp08.json)
 
-### WP07 · Gated RMS and device recurrence composition · September 10, 2026
+### WP07 · Recurrent output connected to gated normalization · September 10, 2026
 
-BF16 direct-gain gated RMS128 passed four standalone calls, then consumed the recurrent head's output on a third simulated PE. Device conversions preserve the input, early-normalization, gain-product and final-output dtype boundaries.
+Implemented gated normalization for a 128-element vector, then connected it to the recurrent core on a third PE. Four synthetic tokens across three request generations passed state, output and BF16 rounding checks. The device waits for the consumer's acknowledgment before reporting token completion.
 
-- Four composed tokens across three request generations passed complete recurrent-state, gated-output and exact conversion checks.
-- An explicit consumer preparation barrier and completion ACK precede root token completion. All three PEs fit48 KiB including4 KiB stack allowance.
-- Standalone/composed simulation took10.2/96.1 seconds; the composed run used an observed212 MB of memory and stopped normally.
+[Code](examples/wp07_composed) · [Design](docs/WP07-DESIGN.md) · [Report](docs/WP07-REPORT.md) · [Evidence](evidence/wp07.json)
 
-**Scope:** a synthetic single-head chain; only the observed successful join order is device-qualified. [Report](docs/WP07-REPORT.md) · [Precision and protocol](docs/WP07-DESIGN.md) · [Evidence](evidence/wp07.json) · [Composed example](examples/wp07_composed)
+### WP06 · Persistent 128 × 128 DeltaNet recurrent state · September 10, 2026
 
-### WP06 · Full128×128 persistent DeltaNet head · September 10, 2026
+Implemented a complete single-head recurrence across two PEs: decay, prediction, state update and output reduction. Four synthetic token updates across three request generations passed checks of every state element and intermediate vector. Inputs are already normalized; projections and a complete model layer are outside this milestone.
 
-Two simulated PEs retain a full FP32 recurrent state and compute decay, prediction reduction, delta distribution, state update and output reduction entirely in CSL. Four token updates across three request generations passed independent checks of every full state and intermediate vector.
+[Code](examples/wp06) · [Design](docs/WP06-DESIGN.md) · [Report](docs/WP06-REPORT.md) · [Evidence](evidence/wp06.json)
 
-- Continuous tokens preserve state; resets establish zero state before changed inputs. Packet identities, event order, guards and commit counters passed.
-- Both compiled PEs fit48 KiB including a4 KiB stack allowance. Simulation completed normally in81.7 seconds with observed210 MB memory use.
+### WP05 · Full hidden-size normalization and BF16 output · September 10, 2026
 
-**Scope:** one synthetic full-size recurrent head with normalized/scaled Q/K and explicit beta/decay inputs. [Report](docs/WP06-REPORT.md) · [Arithmetic and ownership](docs/WP06-DESIGN.md) · [Evidence](evidence/wp06.json) · [Example](examples/wp06)
+Implemented RMS normalization for all 5,120 hidden elements, including the model's offset gain and device-side BF16 rounding. Four synthetic calls and dedicated rounding probes passed. Buffer reuse keeps compiled code/data and a 4 KiB stack allowance within the 48 KiB application memory budget per PE.
 
-### WP05 · RMS5120 with device BF16 rounding · September 10, 2026
+[Code](examples/wp05) · [Design](docs/WP05-DESIGN.md) · [Report](docs/WP05-REPORT.md) · [Evidence](evidence/wp05.json)
 
-One simulated PE computes full5120 ordinary RMS with offset gain `(1+w)`, observable FP32 intermediate results and actual BF16 round-to-nearest-even output. Four calls and16 signed rounding probes per call passed all independent numerical, state and guard checks.
+### WP04 · Model equations and independent CPU references · September 10, 2026
 
-- Shared gain/output storage reduces the payload to30 KiB; actual code/data plus a4 KiB stack allowance fits the48 KiB application budget.
-- Simulation completed normally in57.1 seconds. The earlier candidate with an incorrect SRAM admission ceiling was stopped and explicitly excluded.
+Matched 851 text-model tensor metadata entries to a pinned candidate implementation. Twenty-seven CPU checks exercised selected official function bodies for normalization, recurrence, attention, convolution and rotary position encoding. This establishes scoped reference behavior; a complete model checkpoint has not been loaded or executed.
 
-**Scope:** a synthetic full-dimension RMS operator, not a model layer or DeltaNet gated norm. [Report](docs/WP05-REPORT.md) · [Storage and error contract](docs/WP05-DESIGN.md) · [Evidence](evidence/wp05.json) · [Example](examples/wp05)
+[Code](examples/wp04) · [Semantics](docs/WP04-SEMANTICS.md) · [Report](docs/WP04-REPORT.md) · [Evidence](evidence/wp04.json)
 
-### WP04 · Pinned semantics and CPU references · September 10, 2026
+### WP03 · Original-weight projection across all input columns · September 10, 2026
 
-Matched 851 text-backbone/head tensor metadata entries to the pinned candidate implementation and traced operator equations, precision boundaries and persistent state. Primary inference sources confirmed that DeltaNet swish gating and full-attention sigmoid gating belong to different branches.
+Streamed a BF16 weight slice with 128 output rows and all 5,120 input columns through 46 tiles on one PE, retaining the accumulation between tiles. Four calls passed intermediate and final checks, including the last input column and zero after nonzero input. This covers selected output rows, not a complete layer.
 
-- Twenty-seven small CPU checks passed using extracted, unchanged official function bodies and independent references: RMS5120, a128×128 recurrent head, causal attention24Q/4KV/head256, convolution and partial RoPE.
-- The reference process completed in2.1 seconds under a2 GiB/60-second limit, without loading model weights or installing dependencies.
+[Code](examples/wp03) · [Design](docs/WP03-DESIGN.md) · [Report](docs/WP03-REPORT.md) · [Evidence](evidence/wp03.json)
 
-**Scope:** source/metadata audit and selected function-body execution; full Transformers runtime, checkpoint loading and whole-model numerical parity remain unvalidated. [Report](docs/WP04-REPORT.md) · [Equation and dtype contract](docs/WP04-SEMANTICS.md) · [Evidence](evidence/wp04.json) · [CPU fixtures](examples/wp04)
+### WP02 · Projection, on-wafer communication and normalization · September 10, 2026
 
-### WP03 · Persistent full-width contraction · September 10, 2026
+Split an original 128 × 112 weight tile across two PEs, transferred partial results through the wafer fabric, then summed and normalized them in CSL. Four calls passed numerical and state checks, including both compute-first and receive-first completion orders. This is a reduced operator chain within one simulated wafer.
 
-One simulated PE accumulates an original BF16 128×5120 slab across 45 full tiles and an 80-column tail. Four calls in one runtime passed independent intermediate and final checks, including exact global-column-5119 one-hot and zero after nonzero.
+[Code](examples/wp02) · [Design](docs/WP02-DESIGN.md) · [Report](docs/WP02-REPORT.md) · [Evidence](evidence/wp02.json)
 
-- All 184 tile accumulations preserved the required generation and valid-column count; nonzero padding was excluded.
-- Finalize-time guard snapshots, input/output guards and the final resident tile passed. Frozen source/input and compiled hashes remained unchanged.
-- Simulation completed normally in 205.8 seconds under a 300-second deadline; observed simulator memory was approximately 213 MiB.
+### WP01 · First matrix–vector product with original model weights · September 10, 2026
 
-**Scope:** all input columns for 128 selected output rows, not all 17,408 output rows or a full layer/model. [Report](docs/WP03-REPORT.md) · [Design](docs/WP03-DESIGN.md) · [Evidence](evidence/wp03.json) · [Example](examples/wp03)
+Implemented a 128 × 112 matrix–vector product using original BF16 weights and FP32 accumulation. Four calls in one runtime passed numerical, buffer and state checks; the largest absolute error was approximately 1.86 × 10⁻⁹, within the predeclared bound. This is one projection tile on one PE.
 
-### WP02 · Two-PE execution chain · September 10, 2026
+[Code](examples/wp01) · [Kernel](csl/kernels/local_gemv_bf16_f32_colmajor.csl) · [Report](docs/WP01-REPORT.md) · [Evidence](evidence/wp01.json)
 
-Two PEs split an original 128×112 BF16 weight tile into 56-column contractions. Handwritten CSL computes the partials, transfers one through on-wafer fabric, sums them and performs 128-element RMS normalization with unit gain.
+### WP00 · Bounded execution and exact bit transfer · September 10, 2026
 
-- Four calls in one runtime passed independent checks of partials, sum, normalization, square sum, square root and reciprocal.
-- Device event records verified both local-first and receive-first completion, with exactly one receive, commit and unblock per root invocation.
-- Transferred partials were bit-exact; guards, weights, counters and exported handles remained valid. Execution stopped normally.
+Established resource limits, a single-heavy-job lock and host/device data encodings. Seven BF16 bit patterns survived upload, CSL device copy and readback exactly, followed by normal runtime shutdown. This validates the execution and transfer foundation before neural arithmetic.
 
-**Scope:** a reduced operator chain on two simulated PEs; not full hidden-size normalization or multi-wafer inference. [Report](docs/WP02-REPORT.md) · [Design and ownership](docs/WP02-DESIGN.md) · [Evidence](evidence/wp02.json) · [Example](examples/wp02)
-
-### WP01 · Original-weight BF16 GEMV · September 10, 2026
-
-A handwritten 128×112 GEMV uses lossless BF16-to-FP32 expansion and FP32 accumulation. Four calls in one runtime cover changed inputs, a last-column one-hot and zero after nonzero input. The largest absolute error was approximately 1.86×10⁻⁹, within the predeclared forward-error bound; state and guard checks passed.
-
-**Scope:** one real-weight projection tile on one simulated PE. [Report](docs/WP01-REPORT.md) · [Evidence](evidence/wp01.json) · [Kernel](csl/kernels/local_gemv_bf16_f32_colmajor.csl) · [Example](examples/wp01)
-
-### WP00 · Bounded execution and native bit transfer · September 10, 2026
-
-Established resource admission, a single-heavy-job lock, bounded compilation/simulation and explicit host transfer codecs. A single simulated PE preserved seven BF16 bit patterns through native upload, device copy and readback, followed by normal shutdown.
-
-**Scope:** transfer and execution foundations; no neural arithmetic. [Report](docs/WP00-REPORT.md) · [Evidence](evidence/wp00.json) · [Example](examples/wp00)
+[Code](examples/wp00) · [Report](docs/WP00-REPORT.md) · [Evidence](evidence/wp00.json)
 
 ## 4. Reproduce and follow development
 
-Run the lightweight checks with Python 3.10+:
+Run the lightweight host checks with Python 3.10+:
 
 ```sh
 python3 -m unittest discover -s tests -v
 ```
 
-For simulator experiments, follow the linked milestone reports and the
-[development and reproduction guide](docs/DEVELOPMENT.md). They require a separately installed Cerebras SDK 2.10.1 and Singularity; the repository does not distribute the SDK or model checkpoints. Original-weight acquisition and synthetic fixtures are explicitly distinguished.
+For simulator runs, follow the milestone reports and the [development guide](docs/DEVELOPMENT.md). A separately installed Cerebras SDK 2.10.1 and Singularity are required. The repository includes source and sanitized evidence; SDK distributions, model weight payloads and private runtime artifacts are excluded.
 
-The guarded research harness runs one heavy job at a time with a 20 GiB RAM ceiling, zero task swap, an 8 GiB available-memory reserve and bounded deadlines/cache usage. These are local resource controls, not performance requirements for the eventual inference SDK. See the reports and runner implementation for exact limitations.
-
-**Next:** four-PE device composition of preprocessing, recurrent state updates and gated output, checked both stage-by-stage and end-to-end from original synthetic inputs; then remaining model kernels and complete-model integration. Work in progress is not listed above as completed. See [current status](docs/STATUS.md) and [milestone details](docs/MILESTONES.md).
+**In progress:** a 256-dimensional attention head with persistent KV cache. Integration of recurrent input processing, state updates and gated output has passed eight-token numerical checks, but final weight readback still fails; that experiment is not accepted as completed. Complete-model integration and physical one-to-three-system trials follow. See [current status](docs/STATUS.md) and [milestone details](docs/MILESTONES.md).
 
 MIT licensed; see [LICENSE](LICENSE). This is an independent research project, not an official Cerebras inference product.
