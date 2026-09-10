@@ -1,0 +1,1474 @@
+{
+  "package": "WP07",
+  "scope": "synthetic standalone gated RMS128 and three-PE recurrent-output composition",
+  "host_tests": 44,
+  "candidates": [
+    {
+      "candidate": "001",
+      "result": {
+        "passed": true,
+        "calls": 4,
+        "runtime_instances": 1,
+        "scope": "standalone synthetic BF16 direct-gain gated RMS128; not recurrent composition or model layer"
+      },
+      "sram": {
+        "low_section_end": 10224,
+        "low_section_bytes": 10216,
+        "static_allocated_section_bytes": 10604,
+        "stack_allowance_bytes": 4096,
+        "ordinary_address_ceiling": 49152,
+        "passed": true,
+        "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+      },
+      "steps": [
+        {
+          "name": "compile",
+          "wall_seconds": 4.108656917931512,
+          "peak_cgroup_bytes": 461828096,
+          "execution": "normal_exit",
+          "deadline_seconds": 300
+        },
+        {
+          "name": "simulate",
+          "wall_seconds": 10.241343792993575,
+          "peak_cgroup_bytes": 185135104,
+          "execution": "normal_exit",
+          "deadline_seconds": 180
+        }
+      ],
+      "memory_metric_scope": "observed live-cgroup maxima, not guaranteed lifetime peaks",
+      "observations": [
+        {
+          "call": 1,
+          "name": "zero",
+          "numerical": {
+            "passed": true,
+            "stages": {
+              "sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "denominator": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "sqrt": {
+                "passed": true,
+                "max_absolute_error": 4.875982994104189e-11,
+                "max_error_over_bound": 0.05112838750480132
+              },
+              "inverse": {
+                "passed": true,
+                "max_absolute_error": 1.353770721834735e-05,
+                "max_error_over_bound": 0.014195315558427068
+              },
+              "normalized_math": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "normalized_actual_inverse": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "gain_product": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "exp": {
+                "passed": true,
+                "max_absolute_error": 3.04661908812065e-07,
+                "max_error_over_bound": 0.526702419043213
+              },
+              "silu": {
+                "passed": true,
+                "max_absolute_error": 1.1519168019447079e-07,
+                "max_error_over_bound": 0.13339479305527033
+              },
+              "final_product": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              }
+            },
+            "conversions": {
+              "normalized": true,
+              "gain_product": true,
+              "final": true
+            },
+            "annihilation": true,
+            "oracle_output_bf16_mismatches_non_gating": 0,
+            "adversaries": {
+              "late_cast": 0,
+              "offset_gain": 62,
+              "sigmoid_only": 60
+            }
+          },
+          "checks": {
+            "numerical": true,
+            "immutable_inputs": true,
+            "guards": true,
+            "state": true,
+            "probes": true,
+            "stable_ids": true
+          },
+          "state": [
+            1,
+            1,
+            16,
+            0
+          ]
+        },
+        {
+          "call": 2,
+          "name": "direct_gain_zero",
+          "numerical": {
+            "passed": true,
+            "stages": {
+              "sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "denominator": {
+                "passed": true,
+                "max_absolute_error": 4.632568106899271e-08,
+                "max_error_over_bound": 0.00226068109843758
+              },
+              "sqrt": {
+                "passed": true,
+                "max_absolute_error": 1.4821915916840567e-08,
+                "max_error_over_bound": 0.013463750906410889
+              },
+              "inverse": {
+                "passed": true,
+                "max_absolute_error": 2.0683836421397928e-08,
+                "max_error_over_bound": 0.02503624562776835
+              },
+              "normalized_math": {
+                "passed": true,
+                "max_absolute_error": 8.891477509820334e-08,
+                "max_error_over_bound": 0.0068683990048650344
+              },
+              "normalized_actual_inverse": {
+                "passed": true,
+                "max_absolute_error": 5.960464477539063e-08,
+                "max_error_over_bound": 0.9234814864354223
+              },
+              "gain_product": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "exp": {
+                "passed": true,
+                "max_absolute_error": 3.04661908812065e-07,
+                "max_error_over_bound": 0.526702419043213
+              },
+              "silu": {
+                "passed": true,
+                "max_absolute_error": 1.1519168019447079e-07,
+                "max_error_over_bound": 0.13339479305527033
+              },
+              "final_product": {
+                "passed": true,
+                "max_absolute_error": 8.195638656616211e-07,
+                "max_error_over_bound": 0.8937461618499442
+              }
+            },
+            "conversions": {
+              "normalized": true,
+              "gain_product": true,
+              "final": true
+            },
+            "annihilation": true,
+            "oracle_output_bf16_mismatches_non_gating": 0,
+            "adversaries": {
+              "late_cast": 19,
+              "offset_gain": 117,
+              "sigmoid_only": 98
+            }
+          },
+          "checks": {
+            "numerical": true,
+            "immutable_inputs": true,
+            "guards": true,
+            "state": true,
+            "probes": true,
+            "stable_ids": true
+          },
+          "state": [
+            2,
+            2,
+            32,
+            0
+          ]
+        },
+        {
+          "call": 3,
+          "name": "signed_gate",
+          "numerical": {
+            "passed": true,
+            "stages": {
+              "sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "denominator": {
+                "passed": true,
+                "max_absolute_error": 4.632568106899271e-08,
+                "max_error_over_bound": 0.00226068109843758
+              },
+              "sqrt": {
+                "passed": true,
+                "max_absolute_error": 1.4821915916840567e-08,
+                "max_error_over_bound": 0.013463750906410889
+              },
+              "inverse": {
+                "passed": true,
+                "max_absolute_error": 2.0683836421397928e-08,
+                "max_error_over_bound": 0.02503624562776835
+              },
+              "normalized_math": {
+                "passed": true,
+                "max_absolute_error": 8.891477509820334e-08,
+                "max_error_over_bound": 0.0068683990048650344
+              },
+              "normalized_actual_inverse": {
+                "passed": true,
+                "max_absolute_error": 5.960464477539063e-08,
+                "max_error_over_bound": 0.9234814864354223
+              },
+              "gain_product": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "exp": {
+                "passed": true,
+                "max_absolute_error": 3.04661908812065e-07,
+                "max_error_over_bound": 0.526702419043213
+              },
+              "silu": {
+                "passed": true,
+                "max_absolute_error": 1.1519168019447079e-07,
+                "max_error_over_bound": 0.13339479305527033
+              },
+              "final_product": {
+                "passed": true,
+                "max_absolute_error": 2.8312206268310547e-07,
+                "max_error_over_bound": 0.9686278928682927
+              }
+            },
+            "conversions": {
+              "normalized": true,
+              "gain_product": true,
+              "final": true
+            },
+            "annihilation": true,
+            "oracle_output_bf16_mismatches_non_gating": 0,
+            "adversaries": {
+              "late_cast": 28,
+              "offset_gain": 123,
+              "sigmoid_only": 113
+            }
+          },
+          "checks": {
+            "numerical": true,
+            "immutable_inputs": true,
+            "guards": true,
+            "state": true,
+            "probes": true,
+            "stable_ids": true
+          },
+          "state": [
+            3,
+            3,
+            48,
+            0
+          ]
+        },
+        {
+          "call": 4,
+          "name": "early_cast_adversary",
+          "numerical": {
+            "passed": true,
+            "stages": {
+              "sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "denominator": {
+                "passed": true,
+                "max_absolute_error": 4.632568106899271e-08,
+                "max_error_over_bound": 0.00226068109843758
+              },
+              "sqrt": {
+                "passed": true,
+                "max_absolute_error": 1.4821915916840567e-08,
+                "max_error_over_bound": 0.013463750906410889
+              },
+              "inverse": {
+                "passed": true,
+                "max_absolute_error": 2.0683836421397928e-08,
+                "max_error_over_bound": 0.02503624562776835
+              },
+              "normalized_math": {
+                "passed": true,
+                "max_absolute_error": 8.891477509820334e-08,
+                "max_error_over_bound": 0.0068683990048650344
+              },
+              "normalized_actual_inverse": {
+                "passed": true,
+                "max_absolute_error": 5.960464477539063e-08,
+                "max_error_over_bound": 0.9234814864354223
+              },
+              "gain_product": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "exp": {
+                "passed": true,
+                "max_absolute_error": 3.04661908812065e-07,
+                "max_error_over_bound": 0.526702419043213
+              },
+              "silu": {
+                "passed": true,
+                "max_absolute_error": 1.1519168019447079e-07,
+                "max_error_over_bound": 0.13339479305527033
+              },
+              "final_product": {
+                "passed": true,
+                "max_absolute_error": 3.5762786865234375e-07,
+                "max_error_over_bound": 0.8556790545054669
+              }
+            },
+            "conversions": {
+              "normalized": true,
+              "gain_product": true,
+              "final": true
+            },
+            "annihilation": true,
+            "oracle_output_bf16_mismatches_non_gating": 0,
+            "adversaries": {
+              "late_cast": 25,
+              "offset_gain": 123,
+              "sigmoid_only": 113
+            }
+          },
+          "checks": {
+            "numerical": true,
+            "immutable_inputs": true,
+            "guards": true,
+            "state": true,
+            "probes": true,
+            "stable_ids": true
+          },
+          "state": [
+            4,
+            4,
+            64,
+            0
+          ]
+        }
+      ],
+      "verification": {
+        "source_count": 18,
+        "source_unchanged": true,
+        "compiled_count": 11,
+        "compiled_unchanged": true,
+        "normal_stop": true,
+        "allocated_run_bytes": 499712
+      },
+      "owned_units_quiescent": true,
+      "hashes": {
+        "source-manifest.json": "7b06b1e0d7be49efbd9fd1564fae45eb405d9d58c7b1441d3433e929e9383c3a",
+        "compiled-subset-before-run.json": "16ee50f920745fa542fd9a4867fae17e626d68659d1f10ffb2c5cee3047af880",
+        "observations.json": "d93bfcc24758255853ffcfe467c07521895fa07d9994dad09e30760f1cb36494",
+        "post-run-verification.json": "11cf0b9d8b5a6447c8ea60f5e7745d78905f257cfdd7cb7ada66e5b4f1e4bfe9"
+      }
+    },
+    {
+      "candidate": "002",
+      "result": {
+        "passed": true,
+        "tokens": 4,
+        "generations": 3,
+        "runtime_instances": 1,
+        "scope": "synthetic full128x128 recurrent head plus device BF16 boundary and gated RMS128 on third PE; not whole layer",
+        "completion": "host waits for all three PE command completions; local commits are not a distributed atomic transaction; error drain/recovery unqualified"
+      },
+      "sram": {
+        "out_0_0.elf": {
+          "low_section_end": 43120,
+          "low_section_bytes": 43112,
+          "static_allocated_section_bytes": 43520,
+          "stack_allowance_bytes": 4096,
+          "ordinary_address_ceiling": 49152,
+          "passed": true,
+          "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+        },
+        "out_1_0.elf": {
+          "low_section_end": 42336,
+          "low_section_bytes": 42332,
+          "static_allocated_section_bytes": 42732,
+          "stack_allowance_bytes": 4096,
+          "ordinary_address_ceiling": 49152,
+          "passed": true,
+          "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+        },
+        "out_2_0.elf": {
+          "low_section_end": 12224,
+          "low_section_bytes": 12212,
+          "static_allocated_section_bytes": 12620,
+          "stack_allowance_bytes": 4096,
+          "ordinary_address_ceiling": 49152,
+          "passed": true,
+          "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+        }
+      },
+      "steps": [
+        {
+          "name": "compile",
+          "wall_seconds": 5.126166923902929,
+          "peak_cgroup_bytes": 463114240,
+          "execution": "normal_exit",
+          "deadline_seconds": 300
+        },
+        {
+          "name": "simulate",
+          "wall_seconds": 96.11461652605794,
+          "peak_cgroup_bytes": 212348928,
+          "execution": "normal_exit",
+          "deadline_seconds": 300
+        }
+      ],
+      "memory_metric_scope": "observed live-cgroup maxima, not guaranteed lifetime peaks",
+      "observations": [
+        {
+          "call": 1,
+          "generation": 1,
+          "token": 1,
+          "stages": {
+            "prediction": {
+              "passed": true,
+              "max_absolute_error": 4.156390787102282e-10,
+              "max_error_over_bound": 0.006188012275878755
+            },
+            "delta": {
+              "passed": true,
+              "max_absolute_error": 1.2627879186766222e-08,
+              "max_error_over_bound": 0.30143556196455895
+            },
+            "state": {
+              "passed": true,
+              "max_absolute_error": 2.6426524163403187e-09,
+              "max_error_over_bound": 0.3649398652805797
+            },
+            "output": {
+              "passed": true,
+              "max_absolute_error": 4.441547040638476e-10,
+              "max_error_over_bound": 0.009684951915405316
+            }
+          },
+          "checks": {
+            "numerical_stages": true,
+            "protocol_state_events": true,
+            "gated_norm": true,
+            "input_boundary_rne": true,
+            "norm_guards": true,
+            "norm_inputs_immutable": true,
+            "norm_transport_ack": true,
+            "guards": true,
+            "immutable_inputs": true,
+            "output_transport_bits": true,
+            "stable_ids": true,
+            "beta_zero_delta": true
+          },
+          "metadata": [
+            [
+              1,
+              1,
+              1,
+              1,
+              4,
+              0,
+              3,
+              2,
+              1,
+              1,
+              265,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              4,
+              0,
+              1,
+              2,
+              1,
+              1,
+              131,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              4,
+              0,
+              1,
+              1,
+              1,
+              1,
+              131,
+              1
+            ]
+          ],
+          "events": [
+            [
+              11,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              10,
+              11,
+              8,
+              9,
+              0
+            ],
+            [
+              8,
+              1,
+              2,
+              3,
+              0,
+              4,
+              5,
+              6,
+              7,
+              8,
+              0,
+              0,
+              0
+            ],
+            [
+              6,
+              2,
+              3,
+              4,
+              0,
+              0,
+              0,
+              0,
+              5,
+              6,
+              1,
+              0,
+              0
+            ]
+          ],
+          "norm_result": {
+            "passed": true,
+            "stages": {
+              "sum": {
+                "passed": true,
+                "max_absolute_error": 4.1962266994488573e-13,
+                "max_error_over_bound": 0.008799916984888289
+              },
+              "denominator": {
+                "passed": true,
+                "max_absolute_error": 1.9265513663546674e-14,
+                "max_error_over_bound": 0.038947169999894296
+              },
+              "sqrt": {
+                "passed": true,
+                "max_absolute_error": 3.894750906334454e-11,
+                "max_error_over_bound": 0.040349838024471577
+              },
+              "inverse": {
+                "passed": true,
+                "max_absolute_error": 5.446454906632425e-06,
+                "max_error_over_bound": 0.005780316874695102
+              },
+              "normalized_math": {
+                "passed": true,
+                "max_absolute_error": 2.5749643639549902e-08,
+                "max_error_over_bound": 0.03950589878082046
+              },
+              "normalized_actual_inverse": {
+                "passed": true,
+                "max_absolute_error": 1.4668330550193787e-08,
+                "max_error_over_bound": 0.8833956023084376
+              },
+              "gain_product": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "exp": {
+                "passed": true,
+                "max_absolute_error": 3.04661908812065e-07,
+                "max_error_over_bound": 0.526702419043213
+              },
+              "silu": {
+                "passed": true,
+                "max_absolute_error": 1.1519168019447079e-07,
+                "max_error_over_bound": 0.13339479305527033
+              },
+              "final_product": {
+                "passed": true,
+                "max_absolute_error": 2.421438694000244e-08,
+                "max_error_over_bound": 0.9196478110450966
+              }
+            },
+            "conversions": {
+              "normalized": true,
+              "gain_product": true,
+              "final": true
+            },
+            "annihilation": true,
+            "oracle_output_bf16_mismatches_non_gating": 0,
+            "adversaries": {
+              "late_cast": 23,
+              "offset_gain": 123,
+              "sigmoid_only": 116
+            }
+          },
+          "root_receive_scope": "phase5 ACK header plus retained phase3 output body, checked separately",
+          "receive_headers": [
+            [
+              1,
+              1,
+              5
+            ],
+            [
+              1,
+              1,
+              2
+            ]
+          ],
+          "send_buffer_headers": [
+            [
+              1,
+              1,
+              4
+            ],
+            [
+              1,
+              1,
+              3
+            ]
+          ],
+          "ack": [
+            1,
+            1,
+            5
+          ]
+        },
+        {
+          "call": 2,
+          "generation": 1,
+          "token": 2,
+          "stages": {
+            "prediction": {
+              "passed": true,
+              "max_absolute_error": 1.6431076516748577e-09,
+              "max_error_over_bound": 0.009184607652125204
+            },
+            "delta": {
+              "passed": true,
+              "max_absolute_error": 0.0,
+              "max_error_over_bound": 0.0
+            },
+            "state": {
+              "passed": true,
+              "max_absolute_error": 1.3213262081701593e-09,
+              "max_error_over_bound": 0.2717191670361825
+            },
+            "output": {
+              "passed": true,
+              "max_absolute_error": 2.5559197564407193e-10,
+              "max_error_over_bound": 0.01042268829894167
+            }
+          },
+          "checks": {
+            "numerical_stages": true,
+            "protocol_state_events": true,
+            "gated_norm": true,
+            "input_boundary_rne": true,
+            "norm_guards": true,
+            "norm_inputs_immutable": true,
+            "norm_transport_ack": true,
+            "guards": true,
+            "immutable_inputs": true,
+            "output_transport_bits": true,
+            "stable_ids": true,
+            "beta_zero_delta": true
+          },
+          "metadata": [
+            [
+              1,
+              2,
+              2,
+              1,
+              4,
+              0,
+              3,
+              2,
+              2,
+              1,
+              265,
+              1
+            ],
+            [
+              1,
+              2,
+              2,
+              1,
+              4,
+              0,
+              1,
+              2,
+              2,
+              1,
+              131,
+              1
+            ],
+            [
+              1,
+              2,
+              2,
+              1,
+              4,
+              0,
+              1,
+              1,
+              2,
+              1,
+              131,
+              1
+            ]
+          ],
+          "events": [
+            [
+              11,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              10,
+              11,
+              8,
+              9,
+              0
+            ],
+            [
+              8,
+              1,
+              2,
+              3,
+              0,
+              4,
+              5,
+              6,
+              7,
+              8,
+              0,
+              0,
+              0
+            ],
+            [
+              6,
+              2,
+              3,
+              4,
+              0,
+              0,
+              0,
+              0,
+              5,
+              6,
+              1,
+              0,
+              0
+            ]
+          ],
+          "norm_result": {
+            "passed": true,
+            "stages": {
+              "sum": {
+                "passed": true,
+                "max_absolute_error": 1.5143442055887135e-12,
+                "max_error_over_bound": 0.003731835622273812
+              },
+              "denominator": {
+                "passed": true,
+                "max_absolute_error": 2.3800406090401793e-15,
+                "max_error_over_bound": 0.0007181306585202942
+              },
+              "sqrt": {
+                "passed": true,
+                "max_absolute_error": 4.7953889557167395e-11,
+                "max_error_over_bound": 0.045754428031704736
+              },
+              "inverse": {
+                "passed": true,
+                "max_absolute_error": 2.10748218023582e-05,
+                "max_error_over_bound": 0.024285912546566535
+              },
+              "normalized_math": {
+                "passed": true,
+                "max_absolute_error": 7.066592255799975e-08,
+                "max_error_over_bound": 0.03295726364054587
+              },
+              "normalized_actual_inverse": {
+                "passed": true,
+                "max_absolute_error": 2.9802322387695312e-08,
+                "max_error_over_bound": 0.9061320949593972
+              },
+              "gain_product": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "exp": {
+                "passed": true,
+                "max_absolute_error": 3.04661908812065e-07,
+                "max_error_over_bound": 0.526702419043213
+              },
+              "silu": {
+                "passed": true,
+                "max_absolute_error": 1.1519168019447079e-07,
+                "max_error_over_bound": 0.13339479305527033
+              },
+              "final_product": {
+                "passed": true,
+                "max_absolute_error": 3.7997961044311523e-07,
+                "max_error_over_bound": 0.8556790545054669
+              }
+            },
+            "conversions": {
+              "normalized": true,
+              "gain_product": true,
+              "final": true
+            },
+            "annihilation": true,
+            "oracle_output_bf16_mismatches_non_gating": 0,
+            "adversaries": {
+              "late_cast": 16,
+              "offset_gain": 118,
+              "sigmoid_only": 98
+            }
+          },
+          "root_receive_scope": "phase5 ACK header plus retained phase3 output body, checked separately",
+          "receive_headers": [
+            [
+              1,
+              2,
+              5
+            ],
+            [
+              1,
+              2,
+              2
+            ]
+          ],
+          "send_buffer_headers": [
+            [
+              1,
+              2,
+              4
+            ],
+            [
+              1,
+              2,
+              3
+            ]
+          ],
+          "ack": [
+            1,
+            2,
+            5
+          ]
+        },
+        {
+          "call": 3,
+          "generation": 2,
+          "token": 1,
+          "stages": {
+            "prediction": {
+              "passed": true,
+              "max_absolute_error": 0.0,
+              "max_error_over_bound": 0.0
+            },
+            "delta": {
+              "passed": true,
+              "max_absolute_error": 0.0,
+              "max_error_over_bound": 0.0
+            },
+            "state": {
+              "passed": true,
+              "max_absolute_error": 1.7462298274040222e-09,
+              "max_error_over_bound": 0.2877455193730085
+            },
+            "output": {
+              "passed": true,
+              "max_absolute_error": 5.448171557995152e-10,
+              "max_error_over_bound": 0.005906909364883068
+            }
+          },
+          "checks": {
+            "numerical_stages": true,
+            "protocol_state_events": true,
+            "gated_norm": true,
+            "input_boundary_rne": true,
+            "norm_guards": true,
+            "norm_inputs_immutable": true,
+            "norm_transport_ack": true,
+            "guards": true,
+            "immutable_inputs": true,
+            "output_transport_bits": true,
+            "stable_ids": true,
+            "beta_zero_delta": true
+          },
+          "metadata": [
+            [
+              2,
+              1,
+              3,
+              2,
+              4,
+              0,
+              3,
+              2,
+              1,
+              1,
+              265,
+              1
+            ],
+            [
+              2,
+              1,
+              3,
+              2,
+              4,
+              0,
+              1,
+              2,
+              1,
+              1,
+              131,
+              1
+            ],
+            [
+              2,
+              1,
+              3,
+              2,
+              4,
+              0,
+              1,
+              1,
+              1,
+              1,
+              131,
+              1
+            ]
+          ],
+          "events": [
+            [
+              11,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              10,
+              11,
+              8,
+              9,
+              0
+            ],
+            [
+              8,
+              1,
+              2,
+              3,
+              0,
+              4,
+              5,
+              6,
+              7,
+              8,
+              0,
+              0,
+              0
+            ],
+            [
+              6,
+              2,
+              3,
+              4,
+              0,
+              0,
+              0,
+              0,
+              5,
+              6,
+              1,
+              0,
+              0
+            ]
+          ],
+          "norm_result": {
+            "passed": true,
+            "stages": {
+              "sum": {
+                "passed": true,
+                "max_absolute_error": 2.7284841053187847e-11,
+                "max_error_over_bound": 0.018484440417542172
+              },
+              "denominator": {
+                "passed": true,
+                "max_absolute_error": 2.1316282072803006e-13,
+                "max_error_over_bound": 0.018154932915596927
+              },
+              "sqrt": {
+                "passed": true,
+                "max_absolute_error": 5.808959823577764e-11,
+                "max_error_over_bound": 0.04596919619794271
+              },
+              "inverse": {
+                "passed": true,
+                "max_absolute_error": 1.896802643841511e-05,
+                "max_error_over_bound": 0.02635441720164368
+              },
+              "normalized_math": {
+                "passed": true,
+                "max_absolute_error": 7.796430567807988e-08,
+                "max_error_over_bound": 0.022268128432775477
+              },
+              "normalized_actual_inverse": {
+                "passed": true,
+                "max_absolute_error": 4.0046870708465576e-08,
+                "max_error_over_bound": 0.6517612369132744
+              },
+              "gain_product": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "exp": {
+                "passed": true,
+                "max_absolute_error": 3.04661908812065e-07,
+                "max_error_over_bound": 0.526702419043213
+              },
+              "silu": {
+                "passed": true,
+                "max_absolute_error": 1.1519168019447079e-07,
+                "max_error_over_bound": 0.13339479305527033
+              },
+              "final_product": {
+                "passed": true,
+                "max_absolute_error": 1.7881393432617188e-07,
+                "max_error_over_bound": 0.8269439705279384
+              }
+            },
+            "conversions": {
+              "normalized": true,
+              "gain_product": true,
+              "final": true
+            },
+            "annihilation": true,
+            "oracle_output_bf16_mismatches_non_gating": 0,
+            "adversaries": {
+              "late_cast": 41,
+              "offset_gain": 121,
+              "sigmoid_only": 112
+            }
+          },
+          "root_receive_scope": "phase5 ACK header plus retained phase3 output body, checked separately",
+          "receive_headers": [
+            [
+              2,
+              1,
+              5
+            ],
+            [
+              2,
+              1,
+              2
+            ]
+          ],
+          "send_buffer_headers": [
+            [
+              2,
+              1,
+              4
+            ],
+            [
+              2,
+              1,
+              3
+            ]
+          ],
+          "ack": [
+            2,
+            1,
+            5
+          ]
+        },
+        {
+          "call": 4,
+          "generation": 3,
+          "token": 1,
+          "stages": {
+            "prediction": {
+              "passed": true,
+              "max_absolute_error": 0.0,
+              "max_error_over_bound": 0.0
+            },
+            "delta": {
+              "passed": true,
+              "max_absolute_error": 0.0,
+              "max_error_over_bound": 0.0
+            },
+            "state": {
+              "passed": true,
+              "max_absolute_error": 0.0,
+              "max_error_over_bound": 0.0
+            },
+            "output": {
+              "passed": true,
+              "max_absolute_error": 0.0,
+              "max_error_over_bound": 0.0
+            }
+          },
+          "checks": {
+            "numerical_stages": true,
+            "protocol_state_events": true,
+            "gated_norm": true,
+            "input_boundary_rne": true,
+            "norm_guards": true,
+            "norm_inputs_immutable": true,
+            "norm_transport_ack": true,
+            "guards": true,
+            "immutable_inputs": true,
+            "output_transport_bits": true,
+            "stable_ids": true,
+            "beta_zero_delta": true
+          },
+          "metadata": [
+            [
+              3,
+              1,
+              4,
+              3,
+              4,
+              0,
+              3,
+              2,
+              1,
+              1,
+              265,
+              1
+            ],
+            [
+              3,
+              1,
+              4,
+              3,
+              4,
+              0,
+              1,
+              2,
+              1,
+              1,
+              131,
+              1
+            ],
+            [
+              3,
+              1,
+              4,
+              3,
+              4,
+              0,
+              1,
+              1,
+              1,
+              1,
+              131,
+              1
+            ]
+          ],
+          "events": [
+            [
+              11,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              10,
+              11,
+              8,
+              9,
+              0
+            ],
+            [
+              8,
+              1,
+              2,
+              3,
+              0,
+              4,
+              5,
+              6,
+              7,
+              8,
+              0,
+              0,
+              0
+            ],
+            [
+              6,
+              2,
+              3,
+              4,
+              0,
+              0,
+              0,
+              0,
+              5,
+              6,
+              1,
+              0,
+              0
+            ]
+          ],
+          "norm_result": {
+            "passed": true,
+            "stages": {
+              "sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "denominator": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "sqrt": {
+                "passed": true,
+                "max_absolute_error": 4.875982994104189e-11,
+                "max_error_over_bound": 0.05112838750480132
+              },
+              "inverse": {
+                "passed": true,
+                "max_absolute_error": 1.353770721834735e-05,
+                "max_error_over_bound": 0.014195315558427068
+              },
+              "normalized_math": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "normalized_actual_inverse": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "gain_product": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "exp": {
+                "passed": true,
+                "max_absolute_error": 3.04661908812065e-07,
+                "max_error_over_bound": 0.526702419043213
+              },
+              "silu": {
+                "passed": true,
+                "max_absolute_error": 1.1519168019447079e-07,
+                "max_error_over_bound": 0.13339479305527033
+              },
+              "final_product": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              }
+            },
+            "conversions": {
+              "normalized": true,
+              "gain_product": true,
+              "final": true
+            },
+            "annihilation": true,
+            "oracle_output_bf16_mismatches_non_gating": 0,
+            "adversaries": {
+              "late_cast": 0,
+              "offset_gain": 61,
+              "sigmoid_only": 58
+            }
+          },
+          "root_receive_scope": "phase5 ACK header plus retained phase3 output body, checked separately",
+          "receive_headers": [
+            [
+              3,
+              1,
+              5
+            ],
+            [
+              3,
+              1,
+              2
+            ]
+          ],
+          "send_buffer_headers": [
+            [
+              3,
+              1,
+              4
+            ],
+            [
+              3,
+              1,
+              3
+            ]
+          ],
+          "ack": [
+            3,
+            1,
+            5
+          ]
+        }
+      ],
+      "verification": {
+        "source_count": 30,
+        "source_unchanged": true,
+        "compiled_count": 17,
+        "compiled_unchanged": true,
+        "normal_stop": true,
+        "allocated_run_bytes": 8810496
+      },
+      "owned_units_quiescent": true,
+      "hashes": {
+        "source-manifest.json": "86b609b8e4842f20c50dc7296bcb58cf6e0dffa28352b4188d40fc314d8e56ce",
+        "compiled-subset-before-run.json": "404912c5cc328490e6555c9b324b45394bfa53c970ff1416ad1191f0ba8c39b6",
+        "observations.json": "9d79f256148d2f2fd0fe8252d969ddc3f083f5900dea7ec75795af723b2d048a",
+        "post-run-verification.json": "ae1bc812ae4feef3cda833b19b56b454bebd39bfee5540bf0ea2c1532e348362"
+      }
+    }
+  ],
+  "cpu_reference": {
+    "result": {
+      "passed": true,
+      "checks": [
+        {
+          "name": "zero",
+          "passed": true,
+          "official_dtype": "torch.bfloat16",
+          "gain_product_dtype": "torch.bfloat16",
+          "final_precast_dtype": "torch.float32",
+          "max_absolute_error": 0.0,
+          "oracle_bf16_mismatches_non_gating": 0,
+          "adversaries": {
+            "late_cast": 0,
+            "offset_gain": 62,
+            "sigmoid_only": 60
+          }
+        },
+        {
+          "name": "direct_gain_zero",
+          "passed": true,
+          "official_dtype": "torch.bfloat16",
+          "gain_product_dtype": "torch.bfloat16",
+          "final_precast_dtype": "torch.float32",
+          "max_absolute_error": 0.0,
+          "oracle_bf16_mismatches_non_gating": 0,
+          "adversaries": {
+            "late_cast": 19,
+            "offset_gain": 117,
+            "sigmoid_only": 98
+          }
+        },
+        {
+          "name": "signed_gate",
+          "passed": true,
+          "official_dtype": "torch.bfloat16",
+          "gain_product_dtype": "torch.bfloat16",
+          "final_precast_dtype": "torch.float32",
+          "max_absolute_error": 0.0,
+          "oracle_bf16_mismatches_non_gating": 0,
+          "adversaries": {
+            "late_cast": 28,
+            "offset_gain": 123,
+            "sigmoid_only": 113
+          }
+        },
+        {
+          "name": "early_cast_adversary",
+          "passed": true,
+          "official_dtype": "torch.bfloat16",
+          "gain_product_dtype": "torch.bfloat16",
+          "final_precast_dtype": "torch.float32",
+          "max_absolute_error": 0.0,
+          "oracle_bf16_mismatches_non_gating": 0,
+          "adversaries": {
+            "late_cast": 25,
+            "offset_gain": 123,
+            "sigmoid_only": 113
+          }
+        }
+      ],
+      "source_sha256": "762feb6c7426a7f15b5bf830df54c07438bf9e7c27b8cdb23179045920412c3b",
+      "source_lines": [
+        218,
+        234
+      ],
+      "upstream_commit": "4815a0a6a064214f2d8208c094464a5a6b76ca8d",
+      "adaptation": "remove hub decorator only; unchanged class/method bodies; explicit torch/nn/ACT2FN; BF16 parameters; no full runtime",
+      "torch": "2.4.0+cu121",
+      "device": "cpu",
+      "output_hashes": {
+        "fixtures.json": "92711e30599cfc1c6f79de67e632ce4c10608a6dcb7163522351f4e64b17a25f",
+        "numerical-policy.json": "66046153cc169b9ddcef9747330416e61b4018ce2697f3c5f40c5ca6bd1b980c"
+      }
+    },
+    "seconds": 2.0773360959719867,
+    "observed_bytes": 206712832,
+    "verification": {
+      "source_count": 9,
+      "source_unchanged": true,
+      "owned_units_absent": true
+    },
+    "prior_attempt": "001 failed before arithmetic on optional hub decorator dependency;002 removes decorator only and preserves class/method bodies"
+  },
+  "join_scope": "only observed successful arrival order device-qualified; alternate permutation not separately exercised; no error-drain/replay qualification"
+}

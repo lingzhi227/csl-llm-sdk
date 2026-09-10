@@ -47,6 +47,16 @@ The intended deployment paths are **single-wafer weight streaming** and **two/th
 
 ## 3. Completed development log — newest first
 
+### WP07 · Gated RMS and device recurrence composition · September 10, 2026
+
+BF16 direct-gain gated RMS128 passed four standalone calls, then consumed the recurrent head's output on a third simulated PE. Device conversions preserve the input, early-normalization, gain-product and final-output dtype boundaries.
+
+- Four composed tokens across three request generations passed complete recurrent-state, gated-output and exact conversion checks.
+- An explicit consumer preparation barrier and completion ACK precede root token completion. All three PEs fit48 KiB including4 KiB stack allowance.
+- Standalone/composed simulation took10.2/96.1 seconds; the composed run used an observed212 MB of memory and stopped normally.
+
+**Scope:** a synthetic single-head chain; only the observed successful join order is device-qualified. [Report](docs/WP07-REPORT.md) · [Precision and protocol](docs/WP07-DESIGN.md) · [Evidence](evidence/wp07.json) · [Composed example](examples/wp07_composed)
+
 ### WP06 · Full128×128 persistent DeltaNet head · September 10, 2026
 
 Two simulated PEs retain a full FP32 recurrent state and compute decay, prediction reduction, delta distribution, state update and output reduction entirely in CSL. Four token updates across three request generations passed independent checks of every full state and intermediate vector.
@@ -119,6 +129,6 @@ For simulator experiments, follow the linked milestone reports and the
 
 The guarded research harness runs one heavy job at a time with a 20 GiB RAM ceiling, zero task swap, an 8 GiB available-memory reserve and bounded deadlines/cache usage. These are local resource controls, not performance requirements for the eventual inference SDK. See the reports and runner implementation for exact limitations.
 
-**Next:**128-element direct-gain gated RMS with the correct early dtype cast and SiLU(z), then composition with the recurrent head, remaining model kernels and complete-model integration. Work in progress is not listed above as completed. See [current status](docs/STATUS.md) and [milestone details](docs/MILESTONES.md).
+**Next:** selected full-head input preprocessing: convolution/history, SiLU, Q/K normalization and decay/update gates; then device composition, remaining model kernels and complete-model integration. Work in progress is not listed above as completed. See [current status](docs/STATUS.md) and [milestone details](docs/MILESTONES.md).
 
 MIT licensed; see [LICENSE](LICENSE). This is an independent research project, not an official Cerebras inference product.

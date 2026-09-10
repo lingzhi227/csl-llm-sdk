@@ -1,0 +1,24 @@
+param memcpy_params;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const kernel=@import_module("kernel.csl");
+var x=@zeros([130]u16);var w=@zeros([130]u16);var z=@zeros([130]u16);
+var stages=@zeros([642]f32);var casts=@zeros([386]u16);var stats=@zeros([4]f32);
+var probes=@zeros([16]u32);var probe_output=@zeros([16]u16);
+var control=@zeros([1]u32);var state=@zeros([4]u32);
+fn compute() void {
+ if(control[0]!=state[0]+1){state[3]=1;sys.unblock_cmd_stream();return;}
+ kernel.compute(@ptrcast([*]u16,&x[1]),@ptrcast([*]u16,&w[1]),@ptrcast([*]u16,&z[1]),
+                @ptrcast([*]f32,&stages[1]),@ptrcast([*]u16,&casts[1]),&stats);
+ for(@range(u16,16))|i|{probe_output[i]=kernel.round_bf16(probes[i]);}
+ state[0]=control[0];state[1]+=1;state[2]+=16;sys.unblock_cmd_stream();
+}
+const xp:[*]u16=&x;const wp:[*]u16=&w;const zp:[*]u16=&z;
+const fp:[*]f32=&stages;const bp:[*]u16=&casts;const sp:[*]f32=&stats;
+const pp:[*]u32=&probes;const po:[*]u16=&probe_output;
+const cp:[*]u32=&control;const st:[*]u32=&state;
+comptime{
+ @export_symbol(xp,"x");@export_symbol(wp,"w");@export_symbol(zp,"z");
+ @export_symbol(fp,"stages");@export_symbol(bp,"casts");@export_symbol(sp,"stats");
+ @export_symbol(pp,"probes");@export_symbol(po,"probe_output");
+ @export_symbol(cp,"control");@export_symbol(st,"state");@export_symbol(compute);
+}

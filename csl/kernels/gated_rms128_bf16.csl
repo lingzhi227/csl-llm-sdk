@@ -1,0 +1,29 @@
+// Exact audited BF16 boundaries; finite bounded inputs, normal outputs or zero.
+const math=@import_module("<math>");
+fn round_bf16(raw:u32) u16 {
+  const odd:u32=(raw>>16)&1;
+  return @as(u16,(raw+0x00007fff+odd)>>16);
+}
+fn expand(raw:u16) f32 {return @bitcast(f32,@as(u32,raw)<<16);}
+// stage: normalized, gain-product pre-cast, exp, SiLU, final pre-cast.
+// casts: normalized BF16, gain-product BF16, final BF16.
+fn compute(x:[*]u16,w:[*]u16,z:[*]u16,stage:[*]f32,casts:[*]u16,stats:[*]f32) void {
+  var squares:f32=0.0;
+  for(@range(u16,128))|i|{const a=expand(x[i]);squares+=a*a;}
+  const q:f32=squares/128.0+0.000001;
+  const root:f32=math.sqrt_f32(q);const inverse:f32=1.0/root;
+  stats[0]=squares;stats[1]=q;stats[2]=root;stats[3]=inverse;
+  for(@range(u16,128))|i|{
+    const normalized:f32=expand(x[i])*inverse;stage[i]=normalized;
+    const norm_bf16=round_bf16(@bitcast(u32,normalized));casts[i]=norm_bf16;
+    const product:f32=expand(norm_bf16)*expand(w[i]);stage[i+128]=product;
+    const gain_bf16=round_bf16(@bitcast(u32,product));casts[i+128]=gain_bf16;
+    const gate:f32=expand(z[i]);
+    const negative_magnitude:f32=if(gate<0.0) gate else -gate;
+    const exponential:f32=math.exp_f32(negative_magnitude);stage[i+256]=exponential;
+    const sigmoid:f32=if(gate<0.0) exponential/(1.0+exponential) else 1.0/(1.0+exponential);
+    const activation:f32=gate*sigmoid;stage[i+384]=activation;
+    const value:f32=expand(gain_bf16)*activation;stage[i+512]=value;
+    casts[i+256]=round_bf16(@bitcast(u32,value));
+  }
+}

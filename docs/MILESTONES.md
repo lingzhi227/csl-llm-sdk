@@ -1,5 +1,12 @@
 # Accepted milestones
 
+## WP07 — Accepted, September 10, 2026
+
+Standalone BF16 direct-gain gated RMS128 and its third-PE recurrence composition
+passed all declared stage/conversion, state and completion checks. Four calls
+and four composed tokens fit the same SRAM/host limits. Only the observed
+successful join order is device-qualified. See [report](WP07-REPORT.md).
+
 ## WP06 — Accepted, September 10, 2026
 
 One full128×128 synthetic recurrent head passed four token updates across three

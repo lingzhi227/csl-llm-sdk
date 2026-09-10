@@ -1,0 +1,82 @@
+param memcpy_params;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const norm=@import_module("norm_kernel.csl");
+const iq=@get_input_queue(4);const oq=@get_output_queue(4);
+const input_color=@get_color(4);const ack_color=@get_color(5);
+const receive_task=@get_local_task_id(10);const send_task=@get_local_task_id(11);
+const transfer_ut=@get_ut_id(2);
+const transfer_dst=@get_dsr(dsr_dest,5);const transfer_src=@get_dsr(dsr_src1,5);
+var control=@zeros([3]u32);var state=@zeros([12]u32);var events=@zeros([13]u32);
+var receive_packet=@zeros([131]u32);var send_packet=@zeros([3]u32);
+var norm_x=@zeros([130]u16);var norm_w=@zeros([130]u16);var norm_z=@zeros([130]u16);
+var norm_stages=@zeros([642]f32);var norm_casts=@zeros([386]u16);var norm_stats=@zeros([4]f32);
+fn mark(slot:u16) void {events[0]+=1;events[slot]=events[0];}
+fn fail(code:u32) void {state[4]=9;state[5]=code;sys.unblock_cmd_stream();}
+fn initialize() void {
+ if((state[4]>=1 and state[4]<=3) or control[0]<=state[0] or control[1]!=0){fail(1);return;}
+ state[0]=control[0];state[1]=0;state[3]+=1;state[4]=0;state[5]=0;
+ for(@range(u16,6))|i|{state[i+6]=0;}
+ for(@range(u16,13))|i|{events[i]=0;}
+ sys.unblock_cmd_stream();
+}
+var command_arrived:bool=false;var completed:bool=false;var unblocked:bool=false;
+var prepared_generation:u32=0;var prepared_token:u32=0;
+fn finish_command() void {
+ if(command_arrived and completed and !unblocked){unblocked=true;state[9]=1;mark(9);sys.unblock_cmd_stream();}
+}
+fn token() void {
+ if(control[0]!=prepared_generation or control[1]!=prepared_token or command_arrived){fail(5);return;}
+ command_arrived=true;finish_command();
+}
+fn arm_consumer() void {
+ if(control[0]!=state[0] or control[1]!=state[1]+1 or (state[4]!=0 and state[4]!=4)){fail(2);return;}
+ for(@range(u16,13))|i|{events[i]=0;}
+ state[4]=1;state[5]=0;state[6]=0;state[7]=0;state[9]=0;state[10]=0;state[11]=1;
+ command_arrived=false;completed=false;unblocked=false;
+ prepared_generation=control[0];prepared_token=control[1];mark(10);
+ const fabric=@get_dsd(fabin_dsd,.{.input_queue=iq,.extent=131});
+ const memory=@get_dsd(mem1d_dsd,.{.base_address=&receive_packet,.extent=131});
+ @load_to_dsr(transfer_dst,memory);
+ @load_to_dsr(transfer_src,fabric,.{.async=true,.activate=receive_task,.ut_id=transfer_ut});
+ @mov32(transfer_dst,transfer_src,.{.async=true});
+ // Host prepare barrier returns only after the receive is armed. Token completion
+ // remains a separate join of command arrival and ACK send completion.
+ sys.unblock_cmd_stream();
+}
+task received_complete() void {
+ if(state[4]!=1 or receive_packet[0]!=control[0] or receive_packet[1]!=control[1] or receive_packet[2]!=4){fail(3);return;}
+ state[6]=1;state[10]=131;mark(1);state[4]=2;
+ for(@range(u16,128))|i|{norm_x[i+1]=norm.round_bf16(receive_packet[i+3]);}
+ norm.compute(@ptrcast([*]u16,&norm_x[1]),@ptrcast([*]u16,&norm_w[1]),@ptrcast([*]u16,&norm_z[1]),
+              @ptrcast([*]f32,&norm_stages[1]),@ptrcast([*]u16,&norm_casts[1]),&norm_stats);
+ mark(2);state[4]=3;
+ send_packet[0]=control[0];send_packet[1]=control[1];send_packet[2]=5;
+ const fabric=@get_dsd(fabout_dsd,.{.output_queue=oq,.extent=3});
+ const memory=@get_dsd(mem1d_dsd,.{.base_address=&send_packet,.extent=3});
+ @load_to_dsr(transfer_dst,fabric,.{.async=true,.activate=send_task,.ut_id=transfer_ut});
+ @load_to_dsr(transfer_src,memory);@mov32(transfer_dst,transfer_src,.{.async=true});
+}
+task sent_complete() void {
+ if(state[4]!=3){fail(4);return;}
+ state[7]=1;mark(3);state[1]=control[1];state[2]+=1;state[8]+=1;state[4]=4;
+ mark(8);completed=true;finish_command();
+}
+const cp:[*]u32=&control;const sp:[*]u32=&state;const ep:[*]u32=&events;
+const rp:[*]u32=&receive_packet;const tp:[*]u32=&send_packet;
+const xp:[*]u16=&norm_x;const wp:[*]u16=&norm_w;const zp:[*]u16=&norm_z;
+const fp:[*]f32=&norm_stages;const bp:[*]u16=&norm_casts;const ap:[*]f32=&norm_stats;
+// Uniform export IDs; only PE0/PE1 own or use the recurrence arrays.
+var stub=@zeros([1]f32);const stubp:[*]f32=&stub;
+comptime{
+ @bind_local_task(received_complete,receive_task);@bind_local_task(sent_complete,send_task);
+ @initialize_queue(iq,.{.color=input_color});@initialize_queue(oq,.{.color=ack_color});
+ @set_local_color_config(input_color,.{.routes=.{.rx=.{WEST},.tx=.{RAMP}}});
+ @set_local_color_config(ack_color,.{.routes=.{.rx=.{RAMP},.tx=.{WEST}}});
+ @export_symbol(cp,"control");@export_symbol(sp,"state");@export_symbol(ep,"events");
+ @export_symbol(rp,"receive_packet");@export_symbol(tp,"send_packet");
+ @export_symbol(xp,"norm_x");@export_symbol(wp,"norm_w");@export_symbol(zp,"norm_z");
+ @export_symbol(fp,"norm_stages");@export_symbol(bp,"norm_casts");@export_symbol(ap,"norm_stats");
+ @export_symbol(stubp,"recurrent_storage");@export_symbol(stubp,"query_storage");@export_symbol(stubp,"key_storage");
+ @export_symbol(stubp,"value_storage");@export_symbol(stubp,"prediction");@export_symbol(stubp,"final_output");
+ @export_symbol(stubp,"parameters");@export_symbol(initialize);@export_symbol(token);@export_symbol(arm_consumer);
+}
