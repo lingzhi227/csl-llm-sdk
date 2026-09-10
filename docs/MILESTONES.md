@@ -2,6 +2,20 @@
 
 Only accepted results are listed below. Unresolved integration work and the remaining scope are tracked in [implementation status](STATUS.md).
 
+## WP16 partial MLP — Accepted, September 10, 2026
+
+Four original-weight PEs connect full5120-column gate/up projections for128 rows,
+wholeSiLU/BF16product and128×128 partialdown for one dense input. Independent
+source/observedFP32cast/transport/retention/release/normalstop checks passed.
+Full17408-channel MLP, connected reuse/reset and full-model inference remain open.
+See [report](WP16-PARTIAL-MLP-REPORT.md) and [evidence](../evidence/wp16-partial.json).
+
+## WP15 — Accepted, September 10, 2026
+
+Ten PEs connect original selected projections, trained Q/K processing and persistent
+KV attention for two original-hidden tokens in one runtime. See
+[report](WP15-REPORT.md) and [evidence](../evidence/wp15.json) for exact coverage.
+
 ## WP14 — Accepted, September 10, 2026
 
 One dense5120-column original projection input flows through four Q/K projection

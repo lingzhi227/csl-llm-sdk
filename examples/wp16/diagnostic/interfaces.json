@@ -1,0 +1,404 @@
+{
+  "arrays": {
+    "weights_storage": {
+      "bits": 16,
+      "counts": [
+        14338,
+        14338,
+        1,
+        8194
+      ]
+    },
+    "input_storage": {
+      "bits": 32,
+      "counts": [
+        114,
+        114,
+        1,
+        66
+      ]
+    },
+    "output_storage": {
+      "bits": 32,
+      "counts": [
+        130,
+        130,
+        1,
+        130
+      ]
+    },
+    "bf16_storage": {
+      "bits": 16,
+      "counts": [
+        130,
+        130,
+        1,
+        130
+      ]
+    },
+    "control": {
+      "bits": 32,
+      "counts": [
+        8,
+        8,
+        8,
+        8
+      ]
+    },
+    "state": {
+      "bits": 32,
+      "counts": [
+        16,
+        16,
+        16,
+        16
+      ]
+    },
+    "timing": {
+      "bits": 16,
+      "counts": [
+        276,
+        276,
+        6,
+        12
+      ]
+    },
+    "weight_guard_snapshot": {
+      "bits": 32,
+      "counts": [
+        5,
+        5,
+        1,
+        5
+      ]
+    },
+    "tile_guard_snapshot": {
+      "bits": 32,
+      "counts": [
+        12,
+        12,
+        1,
+        12
+      ]
+    },
+    "handoff_control": {
+      "bits": 32,
+      "counts": [
+        10,
+        10,
+        10,
+        10
+      ]
+    },
+    "handoff_latched": {
+      "bits": 32,
+      "counts": [
+        10,
+        10,
+        10,
+        10
+      ]
+    },
+    "handoff_state": {
+      "bits": 32,
+      "counts": [
+        32,
+        32,
+        32,
+        32
+      ]
+    },
+    "wire_data": {
+      "bits": 32,
+      "counts": [
+        142,
+        142,
+        142,
+        142
+      ]
+    },
+    "wire_ack": {
+      "bits": 32,
+      "counts": [
+        15,
+        15,
+        15,
+        15
+      ]
+    },
+    "mlp_gate": {
+      "bits": 16,
+      "counts": [
+        1,
+        1,
+        130,
+        1
+      ]
+    },
+    "mlp_up": {
+      "bits": 16,
+      "counts": [
+        1,
+        1,
+        130,
+        1
+      ]
+    },
+    "mlp_silu": {
+      "bits": 16,
+      "counts": [
+        1,
+        1,
+        130,
+        1
+      ]
+    },
+    "mlp_product": {
+      "bits": 16,
+      "counts": [
+        1,
+        1,
+        130,
+        130
+      ]
+    },
+    "mlp_exp": {
+      "bits": 32,
+      "counts": [
+        1,
+        1,
+        130,
+        1
+      ]
+    },
+    "mlp_sigmoid": {
+      "bits": 32,
+      "counts": [
+        1,
+        1,
+        130,
+        1
+      ]
+    },
+    "mlp_silu_fp32": {
+      "bits": 32,
+      "counts": [
+        1,
+        1,
+        130,
+        1
+      ]
+    },
+    "mlp_product_fp32": {
+      "bits": 32,
+      "counts": [
+        1,
+        1,
+        130,
+        1
+      ]
+    },
+    "mlp_state": {
+      "bits": 32,
+      "counts": [
+        16,
+        16,
+        16,
+        16
+      ]
+    },
+    "release_control": {
+      "bits": 32,
+      "counts": [
+        4,
+        4,
+        4,
+        4
+      ]
+    }
+  },
+  "edges": [
+    {
+      "edge": 0,
+      "sender": 0,
+      "receiver": 2,
+      "tensor": "mlp_gate",
+      "role": 0,
+      "data_color": 2,
+      "ack_color": 6,
+      "sender_queue": 2,
+      "receiver_queue": 2,
+      "forward_route": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "edge": 1,
+      "sender": 1,
+      "receiver": 2,
+      "tensor": "mlp_up",
+      "role": 1,
+      "data_color": 3,
+      "ack_color": 7,
+      "sender_queue": 2,
+      "receiver_queue": 3,
+      "forward_route": [
+        1,
+        2
+      ]
+    },
+    {
+      "edge": 2,
+      "sender": 2,
+      "receiver": 3,
+      "tensor": "mlp_product",
+      "role": 2,
+      "data_color": 4,
+      "ack_color": 8,
+      "sender_queue": 4,
+      "receiver_queue": 2,
+      "forward_route": [
+        2,
+        3
+      ]
+    }
+  ],
+  "field_indices": {
+    "handoff_control": {
+      "generation": 0,
+      "input_index": 1,
+      "contraction_id": 2,
+      "edge_id": 3,
+      "tensor_role": 4,
+      "channel_start": 5,
+      "channel_count": 6,
+      "output_start": 7,
+      "output_count": 8,
+      "payload_words": 9
+    },
+    "handoff_latched": {
+      "generation": 0,
+      "input_index": 1,
+      "contraction_id": 2,
+      "edge_id": 3,
+      "tensor_role": 4,
+      "channel_start": 5,
+      "channel_count": 6,
+      "output_start": 7,
+      "output_count": 8,
+      "payload_words": 9
+    },
+    "control": {
+      "generation": 0,
+      "input_index": 1,
+      "contraction_id": 2,
+      "total_columns": 3,
+      "tile_index": 4,
+      "column_offset": 5,
+      "valid_columns": 6,
+      "output_start": 7
+    },
+    "state": {
+      "phase": 0,
+      "generation": 1,
+      "input_index": 2,
+      "contraction_id": 3,
+      "total_columns": 4,
+      "tile_count": 5,
+      "consumed_columns": 6,
+      "commit_id": 7,
+      "error": 8,
+      "last_valid_columns": 9,
+      "accumulate_count": 10,
+      "begin_count": 11,
+      "finalize_count": 12,
+      "release_count": 13,
+      "pe_role": 14,
+      "output_start": 15
+    },
+    "handoff_state": {
+      "phase": 0,
+      "generation": 1,
+      "input_index": 2,
+      "contraction_id": 3,
+      "edge_id": 4,
+      "committed_payload_mask": 5,
+      "command_seen": 6,
+      "receipt_complete": 7,
+      "ack_sent": 8,
+      "ack_received": 9,
+      "data_send_complete": 10,
+      "command_unblocked": 11,
+      "error": 12,
+      "data_words": 13,
+      "ack_words": 14,
+      "commit_count": 15,
+      "event_counter": 16,
+      "arm_event": 17,
+      "command_event": 18,
+      "receipt_event": 19,
+      "commit_event": 20,
+      "ack_sent_event": 21,
+      "ack_received_event": 22,
+      "unblock_event": 23,
+      "tensor_role": 24,
+      "channel_start": 25,
+      "channel_count": 26,
+      "output_start": 27,
+      "output_count": 28,
+      "release_count": 29,
+      "receipt_before_command": 30,
+      "retained": 31
+    },
+    "mlp_state": {
+      "phase": 0,
+      "generation": 1,
+      "input_index": 2,
+      "contraction_id": 3,
+      "incoming_mask": 4,
+      "silu_count": 5,
+      "product_count": 6,
+      "down_input_count": 7,
+      "down_tile_count": 8,
+      "down_consumed": 9,
+      "output_count": 10,
+      "complete_epoch": 11,
+      "error": 12,
+      "release_count": 13,
+      "pe_role": 14,
+      "reserved_zero": 15
+    },
+    "tile_guard_snapshot": {
+      "head_before": 0,
+      "tail_before": 1,
+      "head_after": 2,
+      "tail_after": 3,
+      "generation": 4,
+      "tile_index": 5,
+      "consumed_before": 6,
+      "valid_columns": 7,
+      "completed_tiles": 8,
+      "consumed_after": 9,
+      "pre_guard_ok": 10,
+      "post_guard_ok": 11
+    }
+  },
+  "numeric_phase_codes": {
+    "idle": 0,
+    "active": 1,
+    "committed": 2,
+    "failed": 3,
+    "released": 4
+  },
+  "handoff_phase_codes": {
+    "idle": 0,
+    "armed": 1,
+    "active": 2,
+    "committed": 3,
+    "complete": 4,
+    "released": 5,
+    "failed": 9
+  }
+}

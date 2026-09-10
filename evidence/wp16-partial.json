@@ -1,0 +1,2491 @@
+{
+  "milestone": "WP16 partial MLP",
+  "accepted_partial_chain": true,
+  "full_WP16_MLP_accepted": false,
+  "acceptance": {
+    "reviewed_at_utc": "2026-09-10T23:21:03.717974+00:00",
+    "decision": "accept_one_original_dense_partial_CSL_MLP_diagnostic",
+    "candidate": "wp16-diagnostic-003",
+    "source_manifest_sha256": "1e7b26b77c78b55fe606e9f9f063c3d4f53a60603f10f72deacf011475020e33",
+    "source_files": 64,
+    "source_bytes": 3504878,
+    "result_sha256": "9f91147a4e7efc5ae018f6128af3d24dd1d03af51f1916c818a056a43544f83b",
+    "supervisor_sha256": "1419cfc998ad6e48b5d0e6956ff5f53f8b1a73eac2c6fc15b05e6a150f27c914",
+    "compiled_admission_sha256": "5480f7251fb44acb5ade80315c1379e5397bde09c6393023c31791fe3df7fee6",
+    "device_journal_sha256": "e514007b6e3a4d7b34f9791360196ff3334a257571540677549f1fe65fdaa5cb",
+    "affinity_journal_sha256": "e2f9abab424a37524119727e1d77281cb1d92bd11f345c22fd0ecf501a7e1ac3",
+    "scope": "Four PEs; one original dense input; gate/up rows0:128 over all5120 columns; whole SiLU then oneBF16 boundary; BF16 product; down rows0:128 over channels0:128 only.",
+    "independent_audit_seconds": 0.588448238093406,
+    "independent_counts": {
+      "actual_operand_scalar_products": 256,
+      "all46_source_prefix_values": 11776,
+      "complete_observation_groups_before_overwrite": 94,
+      "copies": 785,
+      "d2h": 482,
+      "device_down_input_words": 192,
+      "device_timestamp_pairs": 95,
+      "exact_FP32_to_BF16_casts": 640,
+      "exact_device_transferred_values": 384,
+      "exact_wire_frames": 12,
+      "frozen_files_rehashed": 64,
+      "h2d": 303,
+      "host_bytes": 5959676,
+      "launches": 61,
+      "native_bytes": 3061668,
+      "numeric_states": 108,
+      "original_weight_conditional_contractions": 1152,
+      "private_readback_archives": 57,
+      "released_handoffs": 4,
+      "retained_buffers": 29,
+      "source_interval_values": 14080,
+      "weight_readback_words": 110610
+    },
+    "resource_receipts": [
+      {
+        "affinity_polls": 10,
+        "live_task_checks": 170,
+        "owned_quiescence_independently_verified": true,
+        "peak_observed_lower_bound_bytes": 484392960,
+        "seconds": 5.619419607101008,
+        "stage": "compile",
+        "unit": "qwen38-job-3bb947c46b57458481f9343ddb808801.service"
+      },
+      {
+        "affinity_polls": 512,
+        "live_task_checks": 11229,
+        "owned_quiescence_independently_verified": true,
+        "peak_observed_lower_bound_bytes": 195411968,
+        "seconds": 285.32734163012356,
+        "stage": "simulate",
+        "unit": "qwen38-job-3ea1249f7c424f1eb04774f7054cd609.service"
+      }
+    ],
+    "driver_seconds": 284.0792429940775,
+    "simulation_planned_seconds": 240,
+    "simulation_hard_seconds": 300,
+    "exceeded_planning_estimate_without_extension": true,
+    "memory_hard_bytes": 1073741824,
+    "swap_bytes": 0,
+    "cpu_affinity": [
+      0
+    ],
+    "worker_threads": 1,
+    "pids": 128,
+    "actual_ELF_end_plus4096": [
+      44656,
+      44656,
+      18112,
+      32960
+    ],
+    "original_compiled_files_unchanged": 20,
+    "exact_runtime_auxiliaries_verified": 3,
+    "normal_SDK_stop": true,
+    "owned_cleanup_independently_verified": true,
+    "observed_join_orders": [
+      "command_before_receipt",
+      "command_before_receipt",
+      "command_before_receipt"
+    ],
+    "journal_records": 1751,
+    "journal_bytes": 837969,
+    "raw_D2H_arrays": 482,
+    "raw_D2H_bytes": 572012,
+    "raw_archives": 57,
+    "archive_bytes": 730836,
+    "API_costs_seconds": {
+      "H2D_weights": 0.011331070447340608,
+      "H2D_other": 0.012295294785872102,
+      "D2H_weights": 127.30651014018804,
+      "D2H_other": 142.25694450712763,
+      "launch": 0.004968032706528902
+    },
+    "API_timing_scope": "Blocking API return durations, which may include queued simulator computation; not isolated transport bandwidth or kernel throughput.",
+    "limitations": [
+      "Only128 of17408 intermediate channels contribute to128 selected down outputs; no fullMLP output.",
+      "One dense invocation only; no changed input, zero-after-nonzero, reset/reuse, negative device protocol injection or full-model generation.",
+      "All observed joins were command-before-receipt; abstract fixtures do not qualify opposite device arrival order.",
+      "Middle projection tiles1..44 lack full device weight payload bitwise D2H; host hashes, guards and source bounds cannot exclude all cancellation or within-bound corruption.",
+      "640 exact casts compare observed FP32 values to their BF16 rounding, not a claim of official full-model bitwise parity.",
+      "One CPU SDK simulation, no physical WSE or interwafer inference qualification.",
+      "Memory values are observed peak lower bounds; ELF+4096 is a declared stack allowance, not measured dynamic stack maximum."
+    ],
+    "WP16_package_accepted": false,
+    "WP09_resolved": false
+  },
+  "independent_audit": {
+    "actual_ELF_end_plus4096": [
+      44656,
+      44656,
+      18112,
+      32960
+    ],
+    "all46_prefix_source_independently_preaccepted": true,
+    "candidate": "wp16-diagnostic-003",
+    "counts": {
+      "actual_operand_scalar_products": 256,
+      "all46_source_prefix_values": 11776,
+      "complete_observation_groups_before_overwrite": 94,
+      "copies": 785,
+      "d2h": 482,
+      "device_down_input_words": 192,
+      "device_timestamp_pairs": 95,
+      "exact_FP32_to_BF16_casts": 640,
+      "exact_device_transferred_values": 384,
+      "exact_wire_frames": 12,
+      "frozen_files_rehashed": 64,
+      "h2d": 303,
+      "host_bytes": 5959676,
+      "launches": 61,
+      "native_bytes": 3061668,
+      "numeric_states": 108,
+      "original_weight_conditional_contractions": 1152,
+      "private_readback_archives": 57,
+      "released_handoffs": 4,
+      "retained_buffers": 29,
+      "source_interval_values": 14080,
+      "weight_readback_words": 110610
+    },
+    "full_MLP_or_model_qualified": false,
+    "journal_records": 1751,
+    "middle_projection_full_weight_bitwise_D2H_coverage": false,
+    "normal_stop": true,
+    "observed_join_orders": [
+      "command_before_receipt",
+      "command_before_receipt",
+      "command_before_receipt"
+    ],
+    "original_compiled_files_verified": 20,
+    "private_parameters_returned": false,
+    "resource_receipts": [
+      {
+        "affinity_polls": 10,
+        "live_task_checks": 170,
+        "owned_quiescence_independently_verified": true,
+        "peak_observed_lower_bound_bytes": 484392960,
+        "seconds": 5.619419607101008,
+        "stage": "compile",
+        "unit": "qwen38-job-3bb947c46b57458481f9343ddb808801.service"
+      },
+      {
+        "affinity_polls": 512,
+        "live_task_checks": 11229,
+        "owned_quiescence_independently_verified": true,
+        "peak_observed_lower_bound_bytes": 195411968,
+        "seconds": 285.32734163012356,
+        "stage": "simulate",
+        "unit": "qwen38-job-3ea1249f7c424f1eb04774f7054cd609.service"
+      }
+    ],
+    "runtime_auxiliaries_verified": 3,
+    "scope": "one original dense input;128 gate/up rows over5120;SiLU/product;128x128 partial down",
+    "seconds": 0.588448238093406,
+    "source_manifest_sha256": "1e7b26b77c78b55fe606e9f9f063c3d4f53a60603f10f72deacf011475020e33",
+    "status": "independent_numerical_transport_retention_audit_passed",
+    "auditor_sha256": "c0bd0457346763c5ee04b241d8a386c02f9972bc1c41eddc7be2218b03748a4e",
+    "CPU_affinity": [
+      0
+    ],
+    "memory_hard_bytes": 1073741824,
+    "cpu_seconds_limit": 15,
+    "wall_seconds_limit": 30
+  },
+  "device_result": {
+    "status": "diagnostic_passed",
+    "scope": "mlp128-fullinput-silu-down128",
+    "source_manifest_sha256": "1e7b26b77c78b55fe606e9f9f063c3d4f53a60603f10f72deacf011475020e33",
+    "original_dense_input_index": 0,
+    "full17408_down_output": false,
+    "full_model_or_original_MLP_forward": false,
+    "physical_WSE": false,
+    "middle_projection_full_weight_bitwise_D2H_coverage": false,
+    "weight_evidence": "Host upload hashes, per-tile device guards/source checks; full device payload equality at first/last projections, both down tiles and final retention only",
+    "symbols": {
+      "weights_storage": 1,
+      "input_storage": 2,
+      "output_storage": 3,
+      "bf16_storage": 4,
+      "control": 5,
+      "state": 6,
+      "timing": 7,
+      "weight_guard_snapshot": 8,
+      "tile_guard_snapshot": 9,
+      "handoff_control": 10,
+      "handoff_latched": 11,
+      "handoff_state": 12,
+      "wire_data": 13,
+      "wire_ack": 14,
+      "mlp_gate": 15,
+      "mlp_up": 16,
+      "mlp_silu": 17,
+      "mlp_product": 18,
+      "mlp_exp": 19,
+      "mlp_sigmoid": 20,
+      "mlp_silu_fp32": 21,
+      "mlp_product_fp32": 22,
+      "mlp_state": 23,
+      "release_control": 24
+    },
+    "checks": {
+      "handoffs": [
+        {
+          "edge": 0,
+          "payload_count": 128,
+          "exact_frame_words": 142,
+          "observed_receiver_orders": [
+            "command_before_receipt"
+          ],
+          "protocol_passed": true
+        },
+        {
+          "edge": 1,
+          "payload_count": 128,
+          "exact_frame_words": 142,
+          "observed_receiver_orders": [
+            "command_before_receipt"
+          ],
+          "protocol_passed": true
+        },
+        {
+          "edge": 2,
+          "payload_count": 128,
+          "exact_frame_words": 142,
+          "observed_receiver_orders": [
+            "command_before_receipt"
+          ],
+          "protocol_passed": true
+        }
+      ],
+      "nonlinear": {
+        "count": 128,
+        "source_passed": true,
+        "conditional_passed": true,
+        "observed_FP32_stages": 4,
+        "extra_sigmoid_BF16_boundary": false,
+        "cpu_silu_bit_mismatches": 0,
+        "cpu_product_bit_mismatches": 0
+      },
+      "down": [
+        {
+          "phase": "down_tile_readback",
+          "consumed_columns": 64,
+          "source_and_conditional_passed": true,
+          "outputs": 128,
+          "BF16_prefix_boundary": false
+        },
+        {
+          "phase": "down_tile_readback",
+          "consumed_columns": 128,
+          "source_and_conditional_passed": true,
+          "outputs": 128,
+          "BF16_prefix_boundary": null
+        },
+        {
+          "phase": "finalize_down",
+          "consumed_columns": 128,
+          "source_and_conditional_passed": true,
+          "outputs": 128,
+          "BF16_prefix_boundary": null
+        }
+      ],
+      "casts": [
+        {
+          "phase": "finalize_projections",
+          "pe": 0,
+          "source": "output_storage",
+          "destination": "bf16_storage",
+          "count": 128,
+          "bit_mismatches": 0
+        },
+        {
+          "phase": "finalize_projections",
+          "pe": 1,
+          "source": "output_storage",
+          "destination": "bf16_storage",
+          "count": 128,
+          "bit_mismatches": 0
+        },
+        {
+          "phase": "whole_silu_and_product",
+          "pe": 2,
+          "source": "mlp_silu_fp32",
+          "destination": "mlp_silu",
+          "count": 128,
+          "bit_mismatches": 0
+        },
+        {
+          "phase": "whole_silu_and_product",
+          "pe": 2,
+          "source": "mlp_product_fp32",
+          "destination": "mlp_product",
+          "count": 128,
+          "bit_mismatches": 0
+        },
+        {
+          "phase": "finalize_down",
+          "pe": 3,
+          "source": "output_storage",
+          "destination": "bf16_storage",
+          "count": 128,
+          "bit_mismatches": 0
+        }
+      ],
+      "retention": [
+        {
+          "name": "weights_storage",
+          "pe": 0,
+          "words": 14338
+        },
+        {
+          "name": "input_storage",
+          "pe": 0,
+          "words": 114
+        },
+        {
+          "name": "output_storage",
+          "pe": 0,
+          "words": 130
+        },
+        {
+          "name": "bf16_storage",
+          "pe": 0,
+          "words": 130
+        },
+        {
+          "name": "state",
+          "pe": 0,
+          "words": 16
+        },
+        {
+          "name": "handoff_state",
+          "pe": 0,
+          "words": 32
+        },
+        {
+          "name": "weights_storage",
+          "pe": 1,
+          "words": 14338
+        },
+        {
+          "name": "input_storage",
+          "pe": 1,
+          "words": 114
+        },
+        {
+          "name": "output_storage",
+          "pe": 1,
+          "words": 130
+        },
+        {
+          "name": "bf16_storage",
+          "pe": 1,
+          "words": 130
+        },
+        {
+          "name": "state",
+          "pe": 1,
+          "words": 16
+        },
+        {
+          "name": "handoff_state",
+          "pe": 1,
+          "words": 32
+        },
+        {
+          "name": "mlp_gate",
+          "pe": 2,
+          "words": 130
+        },
+        {
+          "name": "mlp_up",
+          "pe": 2,
+          "words": 130
+        },
+        {
+          "name": "mlp_silu",
+          "pe": 2,
+          "words": 130
+        },
+        {
+          "name": "mlp_product",
+          "pe": 2,
+          "words": 130
+        },
+        {
+          "name": "mlp_exp",
+          "pe": 2,
+          "words": 130
+        },
+        {
+          "name": "mlp_sigmoid",
+          "pe": 2,
+          "words": 130
+        },
+        {
+          "name": "mlp_silu_fp32",
+          "pe": 2,
+          "words": 130
+        },
+        {
+          "name": "mlp_product_fp32",
+          "pe": 2,
+          "words": 130
+        },
+        {
+          "name": "mlp_state",
+          "pe": 2,
+          "words": 16
+        },
+        {
+          "name": "handoff_state",
+          "pe": 2,
+          "words": 32
+        },
+        {
+          "name": "mlp_product",
+          "pe": 3,
+          "words": 130
+        },
+        {
+          "name": "weights_storage",
+          "pe": 3,
+          "words": 8194
+        },
+        {
+          "name": "input_storage",
+          "pe": 3,
+          "words": 66
+        },
+        {
+          "name": "output_storage",
+          "pe": 3,
+          "words": 130
+        },
+        {
+          "name": "bf16_storage",
+          "pe": 3,
+          "words": 130
+        },
+        {
+          "name": "state",
+          "pe": 3,
+          "words": 16
+        },
+        {
+          "name": "handoff_state",
+          "pe": 3,
+          "words": 32
+        }
+      ],
+      "timing": [
+        {
+          "pe": 0,
+          "phase": "finalize_projections",
+          "cycles": [
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            24745
+          ]
+        },
+        {
+          "pe": 1,
+          "phase": "finalize_projections",
+          "cycles": [
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            34601,
+            24745
+          ]
+        },
+        {
+          "pe": 2,
+          "phase": "whole_silu_and_product",
+          "cycles": [
+            41386
+          ]
+        },
+        {
+          "pe": 3,
+          "phase": "finalize_down",
+          "cycles": [
+            19881,
+            19881
+          ]
+        }
+      ],
+      "tile_groups": [
+        {
+          "pe": 0,
+          "tile": 0,
+          "consumed_columns": 112,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": true
+        },
+        {
+          "pe": 1,
+          "tile": 0,
+          "consumed_columns": 112,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": true
+        },
+        {
+          "pe": 0,
+          "tile": 1,
+          "consumed_columns": 224,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 1,
+          "tile": 1,
+          "consumed_columns": 224,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 0,
+          "tile": 2,
+          "consumed_columns": 336,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 1,
+          "tile": 2,
+          "consumed_columns": 336,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 0,
+          "tile": 3,
+          "consumed_columns": 448,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 1,
+          "tile": 3,
+          "consumed_columns": 448,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 0,
+          "tile": 4,
+          "consumed_columns": 560,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 1,
+          "tile": 4,
+          "consumed_columns": 560,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 0,
+          "tile": 5,
+          "consumed_columns": 672,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 1,
+          "tile": 5,
+          "consumed_columns": 672,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 0,
+          "tile": 6,
+          "consumed_columns": 784,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 1,
+          "tile": 6,
+          "consumed_columns": 784,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 0,
+          "tile": 7,
+          "consumed_columns": 896,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 1,
+          "tile": 7,
+          "consumed_columns": 896,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 0,
+          "tile": 8,
+          "consumed_columns": 1008,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 1,
+          "tile": 8,
+          "consumed_columns": 1008,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 0,
+          "tile": 9,
+          "consumed_columns": 1120,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 1,
+          "tile": 9,
+          "consumed_columns": 1120,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 0,
+          "tile": 10,
+          "consumed_columns": 1232,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 1,
+          "tile": 10,
+          "consumed_columns": 1232,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 0,
+          "tile": 11,
+          "consumed_columns": 1344,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 1,
+          "tile": 11,
+          "consumed_columns": 1344,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 0,
+          "tile": 12,
+          "consumed_columns": 1456,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 1,
+          "tile": 12,
+          "consumed_columns": 1456,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 0,
+          "tile": 13,
+          "consumed_columns": 1568,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 1,
+          "tile": 13,
+          "consumed_columns": 1568,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 0,
+          "tile": 14,
+          "consumed_columns": 1680,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 1,
+          "tile": 14,
+          "consumed_columns": 1680,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 0,
+          "tile": 15,
+          "consumed_columns": 1792,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 1,
+          "tile": 15,
+          "consumed_columns": 1792,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 0,
+          "tile": 16,
+          "consumed_columns": 1904,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 1,
+          "tile": 16,
+          "consumed_columns": 1904,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 0,
+          "tile": 17,
+          "consumed_columns": 2016,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 1,
+          "tile": 17,
+          "consumed_columns": 2016,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 0,
+          "tile": 18,
+          "consumed_columns": 2128,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 1,
+          "tile": 18,
+          "consumed_columns": 2128,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 0,
+          "tile": 19,
+          "consumed_columns": 2240,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 1,
+          "tile": 19,
+          "consumed_columns": 2240,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 0,
+          "tile": 20,
+          "consumed_columns": 2352,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 1,
+          "tile": 20,
+          "consumed_columns": 2352,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 0,
+          "tile": 21,
+          "consumed_columns": 2464,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 1,
+          "tile": 21,
+          "consumed_columns": 2464,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 0,
+          "tile": 22,
+          "consumed_columns": 2576,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 1,
+          "tile": 22,
+          "consumed_columns": 2576,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 0,
+          "tile": 23,
+          "consumed_columns": 2688,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 1,
+          "tile": 23,
+          "consumed_columns": 2688,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 0,
+          "tile": 24,
+          "consumed_columns": 2800,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 1,
+          "tile": 24,
+          "consumed_columns": 2800,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 0,
+          "tile": 25,
+          "consumed_columns": 2912,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 1,
+          "tile": 25,
+          "consumed_columns": 2912,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 0,
+          "tile": 26,
+          "consumed_columns": 3024,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 1,
+          "tile": 26,
+          "consumed_columns": 3024,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 0,
+          "tile": 27,
+          "consumed_columns": 3136,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 1,
+          "tile": 27,
+          "consumed_columns": 3136,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 0,
+          "tile": 28,
+          "consumed_columns": 3248,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 1,
+          "tile": 28,
+          "consumed_columns": 3248,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 0,
+          "tile": 29,
+          "consumed_columns": 3360,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 1,
+          "tile": 29,
+          "consumed_columns": 3360,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 0,
+          "tile": 30,
+          "consumed_columns": 3472,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 1,
+          "tile": 30,
+          "consumed_columns": 3472,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 0,
+          "tile": 31,
+          "consumed_columns": 3584,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 1,
+          "tile": 31,
+          "consumed_columns": 3584,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 0,
+          "tile": 32,
+          "consumed_columns": 3696,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 1,
+          "tile": 32,
+          "consumed_columns": 3696,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 0,
+          "tile": 33,
+          "consumed_columns": 3808,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 1,
+          "tile": 33,
+          "consumed_columns": 3808,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 0,
+          "tile": 34,
+          "consumed_columns": 3920,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 1,
+          "tile": 34,
+          "consumed_columns": 3920,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 0,
+          "tile": 35,
+          "consumed_columns": 4032,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 1,
+          "tile": 35,
+          "consumed_columns": 4032,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 0,
+          "tile": 36,
+          "consumed_columns": 4144,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 1,
+          "tile": 36,
+          "consumed_columns": 4144,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 0,
+          "tile": 37,
+          "consumed_columns": 4256,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 1,
+          "tile": 37,
+          "consumed_columns": 4256,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 0,
+          "tile": 38,
+          "consumed_columns": 4368,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 1,
+          "tile": 38,
+          "consumed_columns": 4368,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 0,
+          "tile": 39,
+          "consumed_columns": 4480,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 1,
+          "tile": 39,
+          "consumed_columns": 4480,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 0,
+          "tile": 40,
+          "consumed_columns": 4592,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 1,
+          "tile": 40,
+          "consumed_columns": 4592,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 0,
+          "tile": 41,
+          "consumed_columns": 4704,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 1,
+          "tile": 41,
+          "consumed_columns": 4704,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 0,
+          "tile": 42,
+          "consumed_columns": 4816,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 1,
+          "tile": 42,
+          "consumed_columns": 4816,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 0,
+          "tile": 43,
+          "consumed_columns": 4928,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 1,
+          "tile": 43,
+          "consumed_columns": 4928,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 0,
+          "tile": 44,
+          "consumed_columns": 5040,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 1,
+          "tile": 44,
+          "consumed_columns": 5040,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": false
+        },
+        {
+          "pe": 0,
+          "tile": 45,
+          "consumed_columns": 5120,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": true
+        },
+        {
+          "pe": 1,
+          "tile": 45,
+          "consumed_columns": 5120,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": true
+        },
+        {
+          "pe": 3,
+          "tile": 0,
+          "consumed_columns": 64,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": true
+        },
+        {
+          "pe": 3,
+          "tile": 1,
+          "consumed_columns": 128,
+          "source_FP32_and_exact_input_state_guards": true,
+          "full_weight_payload_bitwise_D2H": true
+        }
+      ]
+    },
+    "physical_counts": {
+      "copy_calls": 785,
+      "launch_calls": 61,
+      "h2d": 303,
+      "d2h": 482,
+      "host_bytes": 5959676,
+      "native_bytes": 3061668
+    },
+    "observed_affinity_after_sdk": [
+      0
+    ],
+    "normal_stop": true,
+    "seconds": 284.0792429940775,
+    "evidence_files": {
+      "initialize.npz": {
+        "bytes": 3062,
+        "sha256": "b1726f078b0ca3eda4c415ae36c50270405924078e0b7f439557d9133f539929"
+      },
+      "projection_tile_readback_tile0.npz": {
+        "bytes": 120246,
+        "sha256": "8d9336be50651407f905befa5a535e57e31447494dcca03b2ebc79b2f0bbad74"
+      },
+      "projection_tile_readback_tile1.npz": {
+        "bytes": 4866,
+        "sha256": "95645ba66117b33eb80f4c00a9e28cc7921e0ca40b18dcc5b0adf52da7ab8e3e"
+      },
+      "projection_tile_readback_tile2.npz": {
+        "bytes": 4866,
+        "sha256": "da35ffeb098517702e73aaa3e690f83629898cdac9329375ffbcc27739403df4"
+      },
+      "projection_tile_readback_tile3.npz": {
+        "bytes": 4866,
+        "sha256": "7b2da563ef9a83eb56fd677c3e3ab2ac95d0e531074c4e059d6a448b8531fd23"
+      },
+      "projection_tile_readback_tile4.npz": {
+        "bytes": 4866,
+        "sha256": "5a9077b22c1568984a164a7d662148aebbdff640731325b699e34189d5c6ca8a"
+      },
+      "projection_tile_readback_tile5.npz": {
+        "bytes": 4866,
+        "sha256": "26be11b6a5978ed4334dff588a8339d558e7c3e992acc8374579ce682d39100a"
+      },
+      "projection_tile_readback_tile6.npz": {
+        "bytes": 4866,
+        "sha256": "fcfc2e201029ec2e6e93d16e37b53bf4ea96e119617f0de936a3e23eafb4cadc"
+      },
+      "projection_tile_readback_tile7.npz": {
+        "bytes": 4866,
+        "sha256": "dc5bb5c0bc789c78670d93fd0de6cb5f026f1b5a28f3ade536b215e8ba4e7e32"
+      },
+      "projection_tile_readback_tile8.npz": {
+        "bytes": 4866,
+        "sha256": "0acf05a26dd5251c1994abb6c9eb3215acd68333684f1aaa3d6355cb559894fb"
+      },
+      "projection_tile_readback_tile9.npz": {
+        "bytes": 4866,
+        "sha256": "bbec30e9fe46288f8f43e1d9ac912476ab02fd24ad5ca5c73cbfb4dc25d78e64"
+      },
+      "projection_tile_readback_tile10.npz": {
+        "bytes": 4882,
+        "sha256": "9a8a813b04ddc34c0a78cfcbe8524a35a9c2046806fcf5afefc6a873b1a47227"
+      },
+      "projection_tile_readback_tile11.npz": {
+        "bytes": 4882,
+        "sha256": "90e13fc0be45b7f221edd2c645b947694040d8861a70e924c7770c6007cd2ae2"
+      },
+      "projection_tile_readback_tile12.npz": {
+        "bytes": 4882,
+        "sha256": "9b4d217fafd9cb520e4bc2ec1dd173d2b82647f023f4f379f2b1e97642be9114"
+      },
+      "projection_tile_readback_tile13.npz": {
+        "bytes": 4882,
+        "sha256": "5da71e3f0de3b0bfc0b20389ca25c1c82fad7add814428a45cdf4164b19993c7"
+      },
+      "projection_tile_readback_tile14.npz": {
+        "bytes": 4882,
+        "sha256": "9829ae4a132b83ce91baee42afe4fcfd18be7223785dbd392de4fc1560d15664"
+      },
+      "projection_tile_readback_tile15.npz": {
+        "bytes": 4882,
+        "sha256": "93dbbdfd1f4123268332d7e796f9d4c0a292fceb230231f4b31a00f3b0296cb7"
+      },
+      "projection_tile_readback_tile16.npz": {
+        "bytes": 4882,
+        "sha256": "2dc2a7ec8f1ec23d83f28dc9816d869c512f9688157f71d515f47f789e0fbeec"
+      },
+      "projection_tile_readback_tile17.npz": {
+        "bytes": 4882,
+        "sha256": "af3f241a310fd0172d0f157d5c9473a6f86118ce9cb9d3b795c9562a00e2ae01"
+      },
+      "projection_tile_readback_tile18.npz": {
+        "bytes": 4882,
+        "sha256": "4afe93001367f695459bcee3fc36dc0afa8987ba74aebdb306da00de1089e112"
+      },
+      "projection_tile_readback_tile19.npz": {
+        "bytes": 4882,
+        "sha256": "0d103fef71272f1a9706ce60a9a2642df74c46ef8f20d7f34ef710a486cba492"
+      },
+      "projection_tile_readback_tile20.npz": {
+        "bytes": 4882,
+        "sha256": "777d0e5c8cf0fdf1feaec3320cd4aed44e82bd8aad392def3b2b4e0b7e6889a5"
+      },
+      "projection_tile_readback_tile21.npz": {
+        "bytes": 4882,
+        "sha256": "0cc31d641f1bd9635c693de2b891c2122b1f4838b94cbc40d8eda31874ab1bcd"
+      },
+      "projection_tile_readback_tile22.npz": {
+        "bytes": 4882,
+        "sha256": "d81cbd6dac6db55d13b41a143afbaaf726280ea87e2e22ea2f9f6a12c24a0883"
+      },
+      "projection_tile_readback_tile23.npz": {
+        "bytes": 4882,
+        "sha256": "eb39795d62f5f6b4152b0779fe87faf4561cb64569f0c98d8488a0a713b083f1"
+      },
+      "projection_tile_readback_tile24.npz": {
+        "bytes": 4882,
+        "sha256": "cff2038242fe887706fec3bd5626ce9add0e09bd5e017d52f936443a2ca6b887"
+      },
+      "projection_tile_readback_tile25.npz": {
+        "bytes": 4882,
+        "sha256": "2ae77835d097e06c43e71c0897ef8165dbc57aa4e9cbee1a5bc651a9daf17da0"
+      },
+      "projection_tile_readback_tile26.npz": {
+        "bytes": 4882,
+        "sha256": "ac29c86258a5a6066e41ef1799af6714846a7ab12996bfb355874aafe217a911"
+      },
+      "projection_tile_readback_tile27.npz": {
+        "bytes": 4882,
+        "sha256": "221313c82ef0c96d742c7cc329097642fe2f6975e8c4c52a458acdca28b0b431"
+      },
+      "projection_tile_readback_tile28.npz": {
+        "bytes": 4882,
+        "sha256": "9a55163e70668db301b6ae739fc8833459d035a2f3a0e5ee25e8741e3f853a2f"
+      },
+      "projection_tile_readback_tile29.npz": {
+        "bytes": 4882,
+        "sha256": "4bc979dfb7e8674060210914f4f8daa5aa9a4c582604292e84fbd17e99a889b4"
+      },
+      "projection_tile_readback_tile30.npz": {
+        "bytes": 4882,
+        "sha256": "fc196ee834f1ec0369666ec67eb16dfcd3956960aedb21913d49e1154f1ef547"
+      },
+      "projection_tile_readback_tile31.npz": {
+        "bytes": 4882,
+        "sha256": "ae551a6fefd67d50200b4832af42d6b95cec7353df125eb5830884ebb688a683"
+      },
+      "projection_tile_readback_tile32.npz": {
+        "bytes": 4882,
+        "sha256": "12b6e4b176457d8133a612cb421968f87af3173681bfa9376447df357910335d"
+      },
+      "projection_tile_readback_tile33.npz": {
+        "bytes": 4882,
+        "sha256": "e7c501a6feadd519ee4a1a22acefae4b6e5db53f50f4a912df13ececc46ea349"
+      },
+      "projection_tile_readback_tile34.npz": {
+        "bytes": 4882,
+        "sha256": "02c4eddd4c6e2554f816bd0c8a4b40830141bebe94dbb8d30926d8d200ccbfdc"
+      },
+      "projection_tile_readback_tile35.npz": {
+        "bytes": 4882,
+        "sha256": "ce4ccaf9a5133973377230cecd5cf990f151a0fcb8737b038c726b569ee13174"
+      },
+      "projection_tile_readback_tile36.npz": {
+        "bytes": 4882,
+        "sha256": "25ef568cbed28013d4cb24fd8576b152f46462716820cd25ccebdde0bb660df2"
+      },
+      "projection_tile_readback_tile37.npz": {
+        "bytes": 4882,
+        "sha256": "71c8a0b556092372c213431c09cf1eaf6d7b41dee545d6c401eed6745bb5e7e4"
+      },
+      "projection_tile_readback_tile38.npz": {
+        "bytes": 4882,
+        "sha256": "f6dc0660fa84a40cae47c9d23b7b00f182a42d423753310841d30c42937091de"
+      },
+      "projection_tile_readback_tile39.npz": {
+        "bytes": 4882,
+        "sha256": "69e38d860309e44b3fec09d3c13ea624c983e19c0e6219794eff96b6fc66bf7b"
+      },
+      "projection_tile_readback_tile40.npz": {
+        "bytes": 4882,
+        "sha256": "d86a619f7494e667bf105e46d37512809864d137636b659b7a2ec3579ed19d6b"
+      },
+      "projection_tile_readback_tile41.npz": {
+        "bytes": 4882,
+        "sha256": "f35d785a345725b459cefed45a4369c04b79bb3c0380358894c6dec85d265ae0"
+      },
+      "projection_tile_readback_tile42.npz": {
+        "bytes": 4882,
+        "sha256": "2f0899818d003c686d5a183b109b9a947c8f6a84dd9b1adcdb3c3bf001bd19cb"
+      },
+      "projection_tile_readback_tile43.npz": {
+        "bytes": 4882,
+        "sha256": "e395a595ad374068cf109480a42d997cc13c3a491d0acee4252d3045e6c93e67"
+      },
+      "projection_tile_readback_tile44.npz": {
+        "bytes": 4882,
+        "sha256": "bbcbeb5d471696704734d9a571fbe3be8f3d691c29cfadb2df09ec5a0413efbd"
+      },
+      "projection_tile_readback_tile45.npz": {
+        "bytes": 120266,
+        "sha256": "d9d5cc03aa1fa630f8554c0e62e303d4362eed0f058a4eb5ca7f40c04baf49e8"
+      },
+      "finalize_projections.npz": {
+        "bytes": 7570,
+        "sha256": "1d97dd1ff676ec554c186cdc3b885ff1035405526fa9c1583ecfea995949a108"
+      },
+      "handoff_0.npz": {
+        "bytes": 5052,
+        "sha256": "4ea404667ec7e1b9a7ecc56b6bba6f577ed8be97549ab9ceea4719774a509cb0"
+      },
+      "handoff_1.npz": {
+        "bytes": 5048,
+        "sha256": "0e0c89e67e0a4588af986d6726c2db1202433a322fccad7772cc5eb470611eb4"
+      },
+      "whole_silu_and_product.npz": {
+        "bytes": 7360,
+        "sha256": "e36aac7f568510170b855d19e049a8392630c2e26f1cf32978728948403516eb"
+      },
+      "handoff_2.npz": {
+        "bytes": 5058,
+        "sha256": "16f3a0f75e5312c96ac247933fac6471976791aefef9974ed0b52e2c333eb073"
+      },
+      "down_tile_readback_tile0.npz": {
+        "bytes": 35306,
+        "sha256": "06a5acf291fc85e096be179881bb471319d02fb2c045a51d8354ed3a68a62de2"
+      },
+      "down_tile_readback_tile1.npz": {
+        "bytes": 35306,
+        "sha256": "1aed0e0cddd2e6d4d3f7435c025ea63023af40943296b81db7cc0e9075f6e76c"
+      },
+      "finalize_down.npz": {
+        "bytes": 2670,
+        "sha256": "544c7115f2ad409d8f3b884752fb7c97e895c1654665d2f4547006f9c91ed064"
+      },
+      "retention_after_down.npz": {
+        "bytes": 166198,
+        "sha256": "7be6f4095f1d2aee66dec6dbe18cd0e04eb231e927873c6dcfd42fdc12fbf3af"
+      },
+      "released.npz": {
+        "bytes": 3030,
+        "sha256": "ff685299f2ddae3c429c723e64b854576070e90cac5ffc521bb773f342563372"
+      },
+      "before-stop.json": {
+        "bytes": 35528,
+        "sha256": "012b5d723c66d7eedbfdc708f8c80db859261e09b8c0b1eb386b15103bce7258"
+      }
+    },
+    "journal_records": 1751,
+    "journal_bytes": 837969,
+    "private_observation_archive_bytes": 730836
+  },
+  "source_manifest": {
+    "candidate": "wp16-diagnostic-003",
+    "files": {
+      "README.md": "48758184ab6728583b6c75e2069cebaf658aa872a584f80229c1611ca5d12b63",
+      "admission-template-NOT-VALID.json": "7c896a47420fa15788cb06e33fc236b50b4c756050fc1de4b927c400a08acb42",
+      "checks.py": "60cea2c2dc49cd80f3b07db41825340e9f83c6174b5ae496c29f96f4175ea506",
+      "compile-arguments.json": "61662d0b6568e54bee479fa42f2f6c2607b33eb8584c0cc08a0223be3f436965",
+      "compile_sdk.py": "f7b1bd8b6624c16ab1ea3b9c3e1c070b9fb934ef07214edcc49585ee49a5e153",
+      "container_entry.py": "2bf11400a575db58d43b155f4f9e608b7c069f5598a9bce2d28376971edd3e62",
+      "core/qwen38/__init__.py": "92977aa9088ee68919bc3eff6b0c1a1e2f5162f15b7b0744ca75d02e63e3a01b",
+      "core/qwen38/elf_inventory.py": "625c548eceb21c8ce0eba710887111bd853fb5d77c07cb36922ec47c28a43161",
+      "core/qwen38/gated_numerics.py": "a14a8b0412a90523d41026a5a7b4a5e8bb5019f3ebe6bd56d3ccec68cf1e6e4c",
+      "core/qwen38/interval_numerics.py": "c4d69ced771f0501e8c0b8a051bf88a614c441ca88df9f07e6688a0285e4aab6",
+      "core/qwen38/locking.py": "a9546705141a7e0e3887a22c036e6695f0852d3825876dfc5f21d7ca27fa3629",
+      "core/qwen38/mlp_numerics.py": "1ea55329b6623cda7d0831fc712578dc0289d642f35f51436817531988e9406c",
+      "core/qwen38/mlp_reference_checks.py": "467a2dec4b1a3273e7875e2fb119b3c9e06b148b11f98c8544ea7b30784d6859",
+      "core/qwen38/mlp_streamed_source.py": "e95ac4b2cd8168b5789dd5b42ceefe8ef8ecf487d1ef2c77ecb8608e4ec5f420",
+      "core/qwen38/resources.py": "67610eddb4c1cb4557f6bba8179a26aa87be2638627315785689ac5ea3724049",
+      "core/qwen38/rms_numerics.py": "3f3b6f5df5a3ccf2af8da27a711501608d44d20cb32c3b6773ec84b68f7d0767",
+      "core/qwen38/rotary_trig.py": "c6634ee325333fbea3c40fdf0aa9cbe81b94348e101b3ed69102cc750f62f8ef",
+      "core/qwen38/trained_qk_rope_numerics.py": "045a265fbfabe1360143d6adc3cb05b189508458edfa2ca3ffc8349c68c81d22",
+      "core/qwen38/wp16_affinity.py": "3cb753f370869e3bfe290c1b01f7beba4d4aa36c20c2bdc4209844c1d59f4dc4",
+      "core/qwen38/wp16_diag_layout.py": "8f206c23777aa0da389eaa590973b0c366ace78a82555fc89b26b5fc9506e18e",
+      "core/qwen38/wp16_diag_protocol.py": "53b9eea419771921a29bf8cf00c30345d5b0e1a966127f084594da36c298a53a",
+      "core/qwen38/wp16_sdk_admission.py": "7ae3f83b18f0d2b386512300f1f4829274dc7dd8c4cdb5346c511e10c04e9674",
+      "docs/WP16-CSL-PLAN.md": "5ad3af2770c6c7e9b97f686d846bb203031ff452a27617f322eb710a764541f3",
+      "docs/WP16-DIAGNOSTIC-PROTOCOL.md": "dc0ef60821094b295b3fb0b1625e83907a9493d08510f6f471ee01a71991f25c",
+      "docs/WP16-OBSERVATION-REDESIGN-PROPOSAL.md": "46883285d6d464dd79a7b77dc7064eb6a0c20ea8b57ec251748e3ee2b89abc72",
+      "docs/WP16-TRANSFER-TIMING-REPORT.md": "2fdf995c1b8bf9c36b18e10aaffd062024d9a5dbf007ce327d7f5c7799b2364c",
+      "driver.py": "ae6cb2b8c1d0dcbe682b9063c49c0ade878a29e888558eb0b56be06d5d5d4cc8",
+      "entry_sdk.py": "8269d4a893da594f5099aa25b94f588de3adc90c52ab1a66036310b39e6977a2",
+      "exp_kernel.csl": "1dff6a4550d90bf788f4dd7f167a7240ed6742aefd25e3f7772a3bff58f583f7",
+      "gemv_kernel.csl": "c20f0069db3eefa26136c610ad87cc6e8eff27efe33216023acbf6b91b9c19a6",
+      "guard_sdk.py": "bc57c636c67f274f7e399fea573f5cdc784803d84a3d8bf7f9bcb2d6c0eb87d5",
+      "image-stat-qualification.json": "dddb3e2cbdff9df20489a8e9a7e24ae12c04aef8f03260f3b0e989fe399c3c10",
+      "interfaces.json": "8dfc90ea34f6adeacce06d9b83866892327100c0e221b9fbba20133a42d0d454",
+      "layout.csl": "cf85cc90eeb0239be994ec8961db915c90349a4af059113ef9c3bd94586d5a7f",
+      "nonlinear_kernel.csl": "65313bf5b798ac199f76ddc3fddbbf3de438f9edb0dbd5642763b67bd190a6b0",
+      "physical-sequence.json": "ee7e676b39a683578087143417671bdb08ab7b79666f39393db393105e454dc6",
+      "prefix-source/prefixes.npz": "ffb93bf9923cff46005c4fbc2549778ce8ebe6a30417d17783c31a7f488ee733",
+      "prefix-source/preparation.json": "ac2b5e7e2989795d02be5d05a6b482e3eafa6981a933b0ddade8d1c9d4a1708e",
+      "prepared/hidden.bf16": "cc11620f3873f982c0f3424d00f5992b0fa03241b6df3b259f9b9cbf9a0b0905",
+      "prepared/oracle.npz": "c1ab5b88216e487cad899ec17e86bd3f307570c665b3a85e3658107cfc68c252",
+      "prepared/preparation.json": "7049783b915990a96b74deeb7d1356d6db1f65ae7bf53cc888cfe27d10ef898d",
+      "prepared/weights/down_proj.bf16": "f7604a9da23ed57eceb60571dff046ade5e0e4bf0a701a4e02fe47459343130b",
+      "prepared/weights/gate_proj.bf16": "e2adddcd0ae3eae6910e6897709c5b9063313fab45586b740e13c8fb1204d2ad",
+      "prepared/weights/up_proj.bf16": "7d4dc6bbd324bfea4143f2647d17789a805451e872b8b2545af665911f61a378",
+      "private-prepared-inputs.json": "f62d966a26ddb48ff65209d1827be9eac3e70329c2bd68afafd817f81228453a",
+      "profile.json": "c5b8736570ff9c3b25c9400fcf4ea6f9760f360783900df7f6e7394f01f9cacc",
+      "protocol.csl": "4500483e72685ec07f759227e0dd3a07b750dc18399718d72a0a535b788c5e0c",
+      "provenance/build_sources.py": "f35eaa775f286584e23963a7ee1434d9749bbd59a59fa47d2501e0a03a3842be",
+      "provenance/tile_body.csl.inc": "f035c209fac13d5fa9214a03461175b860ce91b417b2fb0bb9984efbeef28318",
+      "qualification/WP16-DIAGNOSTIC-INPUT-DOMAIN.json": "ad8b2bf24c99474046054fbe5208e8b6dc5030edb3d4eada45526cd7022e53d3",
+      "qualification/WP16-DIAGNOSTIC-TIMING-REVIEW.json": "f05a255a0c029fb97715876b69ae246d372fbf6f55a4e638b468f3619d86e6aa",
+      "qualification/WP16-OBSERVATION-REDESIGN-REVIEW.json": "0543a805d0c58aca43b7651c177a9ae5cb440346a3c0c784ac5dbfa14b670ffd",
+      "qualification/WP16-PARTIAL-SOURCE-REVIEW.json": "0923bdfcced185993a800f8ef35fac79d6d8d284bca30e0b0b8a3fbc9ed1b640",
+      "qualification/WP16-PREFIX-SOURCE-REVIEW.json": "b8b084959140118f3006eb017294aec59a494e3217c2189b10ae0459e167c485",
+      "qualification/WP16-REFERENCE-REVIEW.json": "2eed3d7ce2c7af97acdfe0b50c0618b729e4c0456c8246971cbe721dd49852f3",
+      "qualification/WP16-RUNTIME-GENERATED-FILES-REVIEW.json": "1001128ee07919616eb88f2238e0a2a00ded477f14acfbb292815f19e628a68b",
+      "resource-plan.json": "432d86ecacb8a40191fe9a1c2b50618c3350d7428d220068cc829bc8210d71f3",
+      "source-validation.json": "0324aeab137e5f0e7c4c91b3a838a5533469f72c3d7af95a9b1501646fdd617e",
+      "steps.json": "e68f04e20a801c9d4792cdb96c644e4a369a39086a6dd6a1e0d2f16a6f16b20f",
+      "tests/test_wp16_diag_driver.py": "94912f24a8a6e2c57ab569da4abeec34e95883d6eca951ce9d12d18173a51029",
+      "tests/test_wp16_diag_protocol.py": "e6d69dc79c15322343b82b9f2b85476fbddc2368a2141396e4afe9700b6c434e",
+      "tests/test_wp16_sdk_admission.py": "d3fb7d82d766af3b513f8d891c933a1a8eb035a0bf3a5a30da2d00117e356bee",
+      "tests/test_wp16_tile_observation.py": "e9612c5cba8a786aa597c7e38781d51d0dbf23851912b95ddccb1d791cd24007",
+      "tile.csl": "e934db808b5cc0dfaa7edc2aca7ca7a0ad678de19893feb5e263ce7ac728a0d9"
+    },
+    "package": "WP16"
+  },
+  "compiled_identity_and_SRAM": {
+    "files": {
+      "out/bin/out_0.dsatur.dot": {
+        "bytes": 2720,
+        "sha256": "38ad1d6a9b9d6a2732a4333e7acb235c8a8b7c3d487709ea269f18adaa17eff5"
+      },
+      "out/bin/out_0.greedy.dot": {
+        "bytes": 2801,
+        "sha256": "587b36845a4a6346c8aaedfa567156926eed837f2a7ba96ece56d0013554587f"
+      },
+      "out/bin/out_0_0.elf": {
+        "bytes": 67512,
+        "sha256": "69fe658c2325b287240536269f517c11504e1e04ffeb675f4737324e5cebd682"
+      },
+      "out/bin/out_1.dsatur.dot": {
+        "bytes": 2720,
+        "sha256": "38ad1d6a9b9d6a2732a4333e7acb235c8a8b7c3d487709ea269f18adaa17eff5"
+      },
+      "out/bin/out_1.greedy.dot": {
+        "bytes": 2801,
+        "sha256": "587b36845a4a6346c8aaedfa567156926eed837f2a7ba96ece56d0013554587f"
+      },
+      "out/bin/out_1_0.elf": {
+        "bytes": 67584,
+        "sha256": "1c25568c24e5826b4b08990e0f2b2e263d8554333db743550637959d42c9f6a8"
+      },
+      "out/bin/out_2.greedy.dot": {
+        "bytes": 1766,
+        "sha256": "e66fdf610988b375598b884f050df3ce6b9048c25c20f30afceb3e5a4ca0e5ec"
+      },
+      "out/bin/out_2_0.elf": {
+        "bytes": 43240,
+        "sha256": "41602ebbae7908cd7c89ac4e22db14932874d6f7e872e0b3d15206d5ab6e868f"
+      },
+      "out/bin/out_3.dsatur.dot": {
+        "bytes": 2720,
+        "sha256": "38ad1d6a9b9d6a2732a4333e7acb235c8a8b7c3d487709ea269f18adaa17eff5"
+      },
+      "out/bin/out_3.greedy.dot": {
+        "bytes": 2801,
+        "sha256": "587b36845a4a6346c8aaedfa567156926eed837f2a7ba96ece56d0013554587f"
+      },
+      "out/bin/out_3_0.elf": {
+        "bytes": 57752,
+        "sha256": "a67eb6933c33b92b19ea5d04b1ca0e7596929c670c06719244e0c748cc1140a5"
+      },
+      "out/bin/out_rpc.json": {
+        "bytes": 5432,
+        "sha256": "a26b400584d2daae617097f7669d4cdee54bf85da11097f626f01a3f72a13b6d"
+      },
+      "out/east/bin/out_0_0.elf": {
+        "bytes": 11376,
+        "sha256": "bace603859f9c18b000a318fb90a407cae3b18f4a88660d830f146dd8fc0ed73"
+      },
+      "out/east/bin/out_1_0.elf": {
+        "bytes": 12928,
+        "sha256": "134e321fe827d99bf4a6af6cc9c0f23fc6c3f932730855a8469cf3f3c00d067f"
+      },
+      "out/east/out.json": {
+        "bytes": 265,
+        "sha256": "46ea180801c589023f5daf7351fb473475b50f302d72cf40f86e4ce5f7d320b7"
+      },
+      "out/out.json": {
+        "bytes": 25,
+        "sha256": "b67e94695ca5a56ae9ae1a4a78bc93d3cae5825997109038dd11891f3cab5bb1"
+      },
+      "out/west/bin/out_0_0.elf": {
+        "bytes": 11328,
+        "sha256": "d4c53938e8cad97f5a68c21fc33d16e212f65aad8d31dc35b1f4780d10fde43f"
+      },
+      "out/west/bin/out_1_0.elf": {
+        "bytes": 12040,
+        "sha256": "70a511bbc895afb9857f70ed442e5f3004be6bda73993e4f328317802aa71a5d"
+      },
+      "out/west/bin/out_2_0.elf": {
+        "bytes": 49656,
+        "sha256": "24d047612a4b06793b019da28ef53d4673ecff36492ab1e28ab78abfc0a0ca34"
+      },
+      "out/west/out.json": {
+        "bytes": 251,
+        "sha256": "248ecbf17b2090e46e426ee7b905c25f2b9770e8f6a382868cd2e07ab91e7a3a"
+      }
+    },
+    "compiled_bytes": 357718,
+    "footprints": {
+      "out/bin/out_0_0.elf": {
+        "elf_class_bits": 64,
+        "allocated_sections": [
+          {
+            "name": ".data.lo",
+            "type": 1,
+            "address": 0,
+            "bytes": 80
+          },
+          {
+            "name": ".text",
+            "type": 1,
+            "address": 80,
+            "bytes": 6992
+          },
+          {
+            "name": ".data",
+            "type": 1,
+            "address": 7072,
+            "bytes": 88
+          },
+          {
+            "name": ".bss",
+            "type": 8,
+            "address": 7160,
+            "bytes": 32368
+          },
+          {
+            "name": ".task_table",
+            "type": 1,
+            "address": 39536,
+            "bytes": 1024
+          },
+          {
+            "name": ".entry_ival",
+            "type": 1,
+            "address": 64572,
+            "bytes": 2
+          },
+          {
+            "name": ".fpcw",
+            "type": 1,
+            "address": 64536,
+            "bytes": 2
+          },
+          {
+            "name": ".fscale",
+            "type": 1,
+            "address": 64538,
+            "bytes": 2
+          },
+          {
+            "name": ".blocked_ival",
+            "type": 1,
+            "address": 64520,
+            "bytes": 4
+          },
+          {
+            "name": ".active_ival",
+            "type": 1,
+            "address": 64524,
+            "bytes": 4
+          },
+          {
+            "name": ".blocked_ut_ival",
+            "type": 1,
+            "address": 64516,
+            "bytes": 4
+          },
+          {
+            "name": ".fabric_routes",
+            "type": 1,
+            "address": 63488,
+            "bytes": 48
+          },
+          {
+            "name": ".fabric_switches",
+            "type": 1,
+            "address": 63744,
+            "bytes": 192
+          },
+          {
+            "name": ".ce_in_q",
+            "type": 1,
+            "address": 63360,
+            "bytes": 12
+          },
+          {
+            "name": ".ce_out_q",
+            "type": 1,
+            "address": 63232,
+            "bytes": 6
+          },
+          {
+            "name": ".prng_state",
+            "type": 1,
+            "address": 64416,
+            "bytes": 16
+          },
+          {
+            "name": ".filters",
+            "type": 1,
+            "address": 63104,
+            "bytes": 96
+          },
+          {
+            "name": ".user_cfg_0",
+            "type": 1,
+            "address": 64528,
+            "bytes": 2
+          },
+          {
+            "name": ".user_cfg_1",
+            "type": 1,
+            "address": 64530,
+            "bytes": 2
+          },
+          {
+            "name": ".user_cfg_2",
+            "type": 1,
+            "address": 64548,
+            "bytes": 2
+          },
+          {
+            "name": ".user_cfg_3",
+            "type": 1,
+            "address": 64574,
+            "bytes": 2
+          }
+        ],
+        "static_allocated_section_bytes": 40948,
+        "scope": "ELF SHF_ALLOC sections; excludes unrepresented runtime stack/scratch demand"
+      },
+      "out/bin/out_1_0.elf": {
+        "elf_class_bits": 64,
+        "allocated_sections": [
+          {
+            "name": ".data.lo",
+            "type": 1,
+            "address": 0,
+            "bytes": 80
+          },
+          {
+            "name": ".text",
+            "type": 1,
+            "address": 80,
+            "bytes": 6992
+          },
+          {
+            "name": ".data",
+            "type": 1,
+            "address": 7072,
+            "bytes": 88
+          },
+          {
+            "name": ".bss",
+            "type": 8,
+            "address": 7160,
+            "bytes": 32368
+          },
+          {
+            "name": ".task_table",
+            "type": 1,
+            "address": 39536,
+            "bytes": 1024
+          },
+          {
+            "name": ".entry_ival",
+            "type": 1,
+            "address": 64572,
+            "bytes": 2
+          },
+          {
+            "name": ".fpcw",
+            "type": 1,
+            "address": 64536,
+            "bytes": 2
+          },
+          {
+            "name": ".fscale",
+            "type": 1,
+            "address": 64538,
+            "bytes": 2
+          },
+          {
+            "name": ".blocked_ival",
+            "type": 1,
+            "address": 64520,
+            "bytes": 4
+          },
+          {
+            "name": ".active_ival",
+            "type": 1,
+            "address": 64524,
+            "bytes": 4
+          },
+          {
+            "name": ".blocked_ut_ival",
+            "type": 1,
+            "address": 64516,
+            "bytes": 4
+          },
+          {
+            "name": ".fabric_routes",
+            "type": 1,
+            "address": 63488,
+            "bytes": 48
+          },
+          {
+            "name": ".fabric_switches",
+            "type": 1,
+            "address": 63744,
+            "bytes": 192
+          },
+          {
+            "name": ".ce_in_q",
+            "type": 1,
+            "address": 63360,
+            "bytes": 12
+          },
+          {
+            "name": ".ce_out_q",
+            "type": 1,
+            "address": 63232,
+            "bytes": 6
+          },
+          {
+            "name": ".prng_state",
+            "type": 1,
+            "address": 64416,
+            "bytes": 16
+          },
+          {
+            "name": ".filters",
+            "type": 1,
+            "address": 63104,
+            "bytes": 96
+          },
+          {
+            "name": ".user_cfg_0",
+            "type": 1,
+            "address": 64528,
+            "bytes": 2
+          },
+          {
+            "name": ".user_cfg_1",
+            "type": 1,
+            "address": 64530,
+            "bytes": 2
+          },
+          {
+            "name": ".user_cfg_2",
+            "type": 1,
+            "address": 64548,
+            "bytes": 2
+          },
+          {
+            "name": ".user_cfg_3",
+            "type": 1,
+            "address": 64574,
+            "bytes": 2
+          }
+        ],
+        "static_allocated_section_bytes": 40948,
+        "scope": "ELF SHF_ALLOC sections; excludes unrepresented runtime stack/scratch demand"
+      },
+      "out/bin/out_2_0.elf": {
+        "elf_class_bits": 64,
+        "allocated_sections": [
+          {
+            "name": ".data.lo",
+            "type": 1,
+            "address": 0,
+            "bytes": 104
+          },
+          {
+            "name": ".text",
+            "type": 1,
+            "address": 104,
+            "bytes": 8344
+          },
+          {
+            "name": ".data",
+            "type": 1,
+            "address": 8448,
+            "bytes": 88
+          },
+          {
+            "name": ".bss",
+            "type": 8,
+            "address": 8536,
+            "bytes": 4448
+          },
+          {
+            "name": ".task_table",
+            "type": 1,
+            "address": 12992,
+            "bytes": 1024
+          },
+          {
+            "name": ".entry_ival",
+            "type": 1,
+            "address": 64572,
+            "bytes": 2
+          },
+          {
+            "name": ".fpcw",
+            "type": 1,
+            "address": 64536,
+            "bytes": 2
+          },
+          {
+            "name": ".fscale",
+            "type": 1,
+            "address": 64538,
+            "bytes": 2
+          },
+          {
+            "name": ".blocked_ival",
+            "type": 1,
+            "address": 64520,
+            "bytes": 4
+          },
+          {
+            "name": ".active_ival",
+            "type": 1,
+            "address": 64524,
+            "bytes": 4
+          },
+          {
+            "name": ".blocked_ut_ival",
+            "type": 1,
+            "address": 64516,
+            "bytes": 4
+          },
+          {
+            "name": ".fabric_routes",
+            "type": 1,
+            "address": 63488,
+            "bytes": 48
+          },
+          {
+            "name": ".fabric_switches",
+            "type": 1,
+            "address": 63744,
+            "bytes": 192
+          },
+          {
+            "name": ".ce_in_q",
+            "type": 1,
+            "address": 63360,
+            "bytes": 20
+          },
+          {
+            "name": ".ce_out_q",
+            "type": 1,
+            "address": 63232,
+            "bytes": 10
+          },
+          {
+            "name": ".prng_state",
+            "type": 1,
+            "address": 64416,
+            "bytes": 16
+          },
+          {
+            "name": ".filters",
+            "type": 1,
+            "address": 63104,
+            "bytes": 96
+          },
+          {
+            "name": ".user_cfg_0",
+            "type": 1,
+            "address": 64528,
+            "bytes": 2
+          },
+          {
+            "name": ".user_cfg_1",
+            "type": 1,
+            "address": 64530,
+            "bytes": 2
+          },
+          {
+            "name": ".user_cfg_2",
+            "type": 1,
+            "address": 64548,
+            "bytes": 2
+          },
+          {
+            "name": ".user_cfg_3",
+            "type": 1,
+            "address": 64574,
+            "bytes": 2
+          }
+        ],
+        "static_allocated_section_bytes": 14416,
+        "scope": "ELF SHF_ALLOC sections; excludes unrepresented runtime stack/scratch demand"
+      },
+      "out/bin/out_3_0.elf": {
+        "elf_class_bits": 64,
+        "allocated_sections": [
+          {
+            "name": ".data.lo",
+            "type": 1,
+            "address": 0,
+            "bytes": 88
+          },
+          {
+            "name": ".text",
+            "type": 1,
+            "address": 88,
+            "bytes": 8048
+          },
+          {
+            "name": ".data",
+            "type": 1,
+            "address": 8136,
+            "bytes": 88
+          },
+          {
+            "name": ".bss",
+            "type": 8,
+            "address": 8224,
+            "bytes": 19616
+          },
+          {
+            "name": ".task_table",
+            "type": 1,
+            "address": 27840,
+            "bytes": 1024
+          },
+          {
+            "name": ".entry_ival",
+            "type": 1,
+            "address": 64572,
+            "bytes": 2
+          },
+          {
+            "name": ".fpcw",
+            "type": 1,
+            "address": 64536,
+            "bytes": 2
+          },
+          {
+            "name": ".fscale",
+            "type": 1,
+            "address": 64538,
+            "bytes": 2
+          },
+          {
+            "name": ".blocked_ival",
+            "type": 1,
+            "address": 64520,
+            "bytes": 4
+          },
+          {
+            "name": ".active_ival",
+            "type": 1,
+            "address": 64524,
+            "bytes": 4
+          },
+          {
+            "name": ".blocked_ut_ival",
+            "type": 1,
+            "address": 64516,
+            "bytes": 4
+          },
+          {
+            "name": ".fabric_routes",
+            "type": 1,
+            "address": 63488,
+            "bytes": 48
+          },
+          {
+            "name": ".fabric_switches",
+            "type": 1,
+            "address": 63744,
+            "bytes": 192
+          },
+          {
+            "name": ".ce_in_q",
+            "type": 1,
+            "address": 63360,
+            "bytes": 12
+          },
+          {
+            "name": ".ce_out_q",
+            "type": 1,
+            "address": 63232,
+            "bytes": 6
+          },
+          {
+            "name": ".prng_state",
+            "type": 1,
+            "address": 64416,
+            "bytes": 16
+          },
+          {
+            "name": ".filters",
+            "type": 1,
+            "address": 63104,
+            "bytes": 96
+          },
+          {
+            "name": ".user_cfg_0",
+            "type": 1,
+            "address": 64528,
+            "bytes": 2
+          },
+          {
+            "name": ".user_cfg_1",
+            "type": 1,
+            "address": 64530,
+            "bytes": 2
+          },
+          {
+            "name": ".user_cfg_2",
+            "type": 1,
+            "address": 64548,
+            "bytes": 2
+          },
+          {
+            "name": ".user_cfg_3",
+            "type": 1,
+            "address": 64574,
+            "bytes": 2
+          }
+        ],
+        "static_allocated_section_bytes": 29260,
+        "scope": "ELF SHF_ALLOC sections; excludes unrepresented runtime stack/scratch demand"
+      }
+    },
+    "pes": {
+      "out/bin/out_0_0.elf": {
+        "low_section_end": 40560,
+        "low_section_bytes": 40552,
+        "static_allocated_section_bytes": 40948,
+        "stack_allowance_bytes": 4096,
+        "ordinary_address_ceiling": 49152,
+        "passed": true,
+        "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+      },
+      "out/bin/out_1_0.elf": {
+        "low_section_end": 40560,
+        "low_section_bytes": 40552,
+        "static_allocated_section_bytes": 40948,
+        "stack_allowance_bytes": 4096,
+        "ordinary_address_ceiling": 49152,
+        "passed": true,
+        "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+      },
+      "out/bin/out_2_0.elf": {
+        "low_section_end": 14016,
+        "low_section_bytes": 14008,
+        "static_allocated_section_bytes": 14416,
+        "stack_allowance_bytes": 4096,
+        "ordinary_address_ceiling": 49152,
+        "passed": true,
+        "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+      },
+      "out/bin/out_3_0.elf": {
+        "low_section_end": 28864,
+        "low_section_bytes": 28864,
+        "static_allocated_section_bytes": 29260,
+        "stack_allowance_bytes": 4096,
+        "ordinary_address_ceiling": 49152,
+        "passed": true,
+        "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+      }
+    },
+    "passed": true
+  },
+  "numerical_artifacts": {
+    "wp16-partial-observations-00.json": "ccc2e8e5a9dd5b0e52aba90d74d5f6da3b37cd668349530ace55562ab1c5b5c9",
+    "wp16-partial-observations-01.json": "f4164eebded47adfd2b7f7bc2f103d1f4df6dc2a41b0828c8addbb97a5a3dcb1",
+    "wp16-partial-observations-02.json": "75bbba8b18e9155fc03000f7f66f0f7dd43bef7e2ee71ec397776c32595c8daf",
+    "wp16-partial-observations-03.json": "f78a5d4f2c1da116c6063b89ce5aad3dd89e0848a6188bd3ae28e0fbddc07a50",
+    "wp16-partial-observations-04.json": "3724c5cc695ec4c9921d731bd89ea022a027e753f157c8e1457fd1b51fde1737",
+    "wp16-partial-observations-05.json": "1372f5792d70d82777b8daa8732b03b02d1d928ba58631563ab2070ebf47dbe2",
+    "wp16-partial-observations-06.json": "4849a103708cdcc6d97169a9f646c47e836ddc1e879ce559c86efdd339fba55a",
+    "wp16-partial-observations-07.json": "e20b04dd8a1159d3fa7e1900956c8e4e5c99fac9d92d9eb86ddd012cc36c08bb",
+    "wp16-partial-observations-08.json": "38e7de5381f3cd067316a1ca1f35fbe68a9ab6b5671986ac2b2d62845ab765f4",
+    "wp16-partial-observations-09.json": "a0e7e804ad55305676ef14ce04488a0deead28cba3cb5461bbedd9759729b1f7",
+    "wp16-partial-observations-10.json": "a5885e7ac3500f69ae9c6d1f8f9517bd877dc062cbe87314383810e94305acd2",
+    "wp16-partial-observations-11.json": "07c265132cb79746d6566ccee6cb267a2e7ad35a6762de305049bbc5d6bcea4e",
+    "wp16-partial-observations-12.json": "908623f0f04550eef66fe3c4e69916f28496f807aee253287737fb240327d0d2",
+    "wp16-partial-observations-13.json": "e4eb8f676d791f5e6413a390e7156b5a32bdf3fa24de8d5c9e942d9fb83b4b73",
+    "wp16-partial-observations-14.json": "11258d5275abfaa529e0a27422f52955d53cce2bdacc0c138b85c3a328136979",
+    "wp16-partial-observations-15.json": "c5ddae705743d8763308bc125d59123d6a4c706886803c42203f975d4bd1e00e",
+    "wp16-partial-observations-16.json": "6a23d83a635db83a55cef9e60c082a799e67074c4cc648788fb1e1ff79094208",
+    "wp16-partial-observations-17.json": "f25e59775c6878815ed6112399d70b1dbd08998d3b720b2f7db08672769a1807",
+    "wp16-partial-observations-18.json": "0ddd7f742b6611f897b76abdbe9ffb09952c30e3bcae6e104127823b93ddda35",
+    "wp16-partial-observations-19.json": "c588ee170998b1f5003379a1b53a49832b4de8e0392ba9f5bf53bb9e6787aaa6",
+    "wp16-partial-observations-20.json": "53a6383f372ce82f5e3b8ece5de68da60a74785e8e7cf76a9ed141d12d0da85a",
+    "wp16-partial-observations-21.json": "28e77d30b27533e2bff9797e7cf4eaea97198a3677b16a51dc66f6a326325e37",
+    "wp16-partial-observations-22.json": "a01bc4910033c91d17b9bd0016fda1e8958dcbf18ee24ded9a0a67df0a799d5b",
+    "wp16-partial-observations-23.json": "6fefd45892413356c9ea1a5a6dbaf557be0135e8ab4e0442394d851bb360744a",
+    "wp16-partial-observations-24.json": "d8a362170fe9945ae165ee1d068ba35bc71588644e4438ae9f27011cf6d338ab",
+    "wp16-partial-observations-25.json": "9e056c12e4076ef6805fc4f9f8e7ef0ae8176952872bf076428c1184065cfe93",
+    "wp16-partial-observations-26.json": "cb66f30bc39f37e5302d0fda78024e4d9af08b3bb12b91444b791cbae1240b3e",
+    "wp16-partial-observations-27.json": "13d5ad94d1b9e5f11381cfa0d649e1d528ec68166fe613f0b4b26678a64f3186",
+    "wp16-partial-observations-28.json": "ca784c542a970ce82e59b1f294c04c146c029db3dc55fbae3a79a5ca4415c662",
+    "wp16-partial-observations-29.json": "24e47c5a6c1984808c9499cafb11b731a13be06e9768991a603f400b1720f805",
+    "wp16-partial-observations-30.json": "9892a37a04905c2eee0cb653797fa821bd0fbfe63870f48972fdbb9aa628f29a",
+    "wp16-partial-observations-31.json": "24715b75545c9abc2b5dda4c851799d6a8aa0cab69b976ed44a8518777070aea",
+    "wp16-partial-observations-32.json": "3dd7d3a065c264ea7592d6b0770f93b5beb273c7c69433de2b8172e66b2a9f23",
+    "wp16-partial-observations-33.json": "e94f37b72555f324f9cd217158ed07cab8bae68441ce4614dc6ceb220dcfd1be",
+    "wp16-partial-observations-34.json": "8f65fe4be42a40118292bd353ff03a598b4d04202f1eeca635845662579cebdf",
+    "wp16-partial-observations-35.json": "393a2d0a5444aef2f7d90af26ba0edf6caf8b000e25a002c7ac8ca082b5ea666",
+    "wp16-partial-observations-36.json": "be05704e50913fa2a11841eaa8b9d0d587d16bd0217e6cf5ba23facf88d97a38",
+    "wp16-partial-observations-37.json": "4f89be2fae8d2a08e921c807c359304da864e26158301d6a3a4c8314495c1452",
+    "wp16-partial-observations-38.json": "16003a25f55521ee94c732224f2217bf8cc1018584995eae83a14721dbec1580",
+    "wp16-partial-observations-39.json": "c40fdd23fdb7b8592e44360d7700188da6c93920bb0e1adbe459359dea36e216",
+    "wp16-partial-observations-40.json": "466cc28e137820fadf2637013e2c5ca10d039cd1d25853f52124db935b1ac871",
+    "wp16-partial-observations-41.json": "7224ff335db056de5b4dd8955f629a44718c573400f8c75884439e616a319c83",
+    "wp16-partial-observations-42.json": "875cb4549fa760542cbfd4d0798dfaf23dddd73c112dd1389dd2646184f0cee2",
+    "wp16-partial-observations-43.json": "9a42a6ff9249b58785f0bd5de00744459fdc8221995bc0682155a1ce0f302c77",
+    "wp16-partial-observations-44.json": "6cfa7ccdb1dcd1ab873e0c192a9ea54a7cd4dc06edcb7d8815acb079a1774c92",
+    "wp16-partial-observations-45.json": "4389ad75ec82bbe66bd51eb17429898954fecebe7d1be118a56202c275a7162c",
+    "wp16-partial-observations-46.json": "46a88c5e2802a6a9bfe638c5d9cd5f5e6106468b14127623913b2b6cc8d4d652",
+    "wp16-partial-observations-47.json": "8ef8177d0da5feb293bb365814ae74083d8a0008cd2979930468682b9e986cf0",
+    "wp16-partial-observations-48.json": "2bfa0122f3c6f4d95ccd647affa40c8d470f2dbc46fc997b1b2a0a4955de5592",
+    "wp16-partial-observations-49.json": "8dc1ff376391a34e589cdc7b1d189ac585d0e0ae8a9c04294ecf0e7e75a1d7e5",
+    "wp16-partial-observations-50.json": "0181509db27e596c9c1c2ba2b6ae4bf12997c6e603a79eaabb0778a61d9196f2",
+    "wp16-partial-observations-51.json": "3c5c6c169e6e2cecf772b868fcb6ab967916a4526c1623adbcfda4e1ffba3136",
+    "wp16-partial-observations-52.json": "ebf380f4323e4304ce6e6b4bce2400113747ed940019b9a580936a2384272746",
+    "wp16-partial-observations-53.json": "e2b5d4ce69e3e2879ef4024f5b73ec2e6a843c4b1c560698c4a1d12db9027cc9",
+    "wp16-partial-observations-54.json": "6053afc46bd2ce55cab39a9cfb04f05ee77176e174e9eb103b732e1298e20c4f",
+    "wp16-partial-observations-55.json": "3f0973566a50cc03f0f417215e4f39599758db9f878f474805a21baca818dbbc",
+    "wp16-partial-observations-56.json": "26d6fc99bfa2f7e6b713bbcee274e620d4bf10eeebad1a754bc360e215cf388b"
+  },
+  "source_artifacts": {
+    "wp16-partial-prefix-0.json": "9dd71d937959b70508e432a4c22718f8d6253ad5aea3816a9329ffa6bda59f5c",
+    "wp16-partial-prefix-1.json": "30bf401edd1ddeb0b9f4363c265b145bb5698c4468b6fbe00e39895d077f47f3",
+    "wp16-partial-prefix-2.json": "29b503deedbf7ea61000f8d6147cf3d96580173e70fda8bf2b30ee4398bd53a4",
+    "wp16-partial-oracle-0.json": "8adb805bcd340ec5775da8510b6ede2ff2af44de2639f6e256d97771a359cca7"
+  },
+  "input_artifact": "wp16-partial-inputs.json",
+  "input_artifact_sha256": "881ebd54778a1b4cc5d17a95f04122de343cd064bdb82f662a1c23ac7bcb2ef3",
+  "journal": {
+    "file": "wp16-partial-journal.jsonl",
+    "bytes": 837969,
+    "records": 1751,
+    "sha256": "e514007b6e3a4d7b34f9791360196ff3334a257571540677549f1fe65fdaa5cb",
+    "representation": "Exact original unmodified journal bytes; parameter payload hashes only"
+  },
+  "device_typed_arrays": 473,
+  "source_typed_arrays": 28,
+  "omitted_weight_arrays": [
+    {
+      "operation": {
+        "bits": 16,
+        "count": 14338,
+        "direction": "d2h",
+        "host_dtype": "uint32",
+        "kind": "copy",
+        "learned_parameter_payload": true,
+        "name": "weights_storage",
+        "native_device_bytes": 28676,
+        "pe": 0,
+        "phase": "projection_tile_readback",
+        "physical_host_bytes": 57352,
+        "sequence": 23,
+        "tile": 0
+      },
+      "raw_payload_sha256": "553a48f46af64afa44da4537cb9f1f53b7d464831773ba7e1a84683e0083c05d",
+      "values_omitted": true
+    },
+    {
+      "operation": {
+        "bits": 16,
+        "count": 14338,
+        "direction": "d2h",
+        "host_dtype": "uint32",
+        "kind": "copy",
+        "learned_parameter_payload": true,
+        "name": "weights_storage",
+        "native_device_bytes": 28676,
+        "pe": 1,
+        "phase": "projection_tile_readback",
+        "physical_host_bytes": 57352,
+        "sequence": 28,
+        "tile": 0
+      },
+      "raw_payload_sha256": "a6a1991da203993650f97a0c2b08e7bfb1ca3bb9b424c4ff6de1359aa4c4f655",
+      "values_omitted": true
+    },
+    {
+      "operation": {
+        "bits": 16,
+        "count": 14338,
+        "direction": "d2h",
+        "host_dtype": "uint32",
+        "kind": "copy",
+        "learned_parameter_payload": true,
+        "name": "weights_storage",
+        "native_device_bytes": 28676,
+        "pe": 0,
+        "phase": "projection_tile_readback",
+        "physical_host_bytes": 57352,
+        "sequence": 700,
+        "tile": 45
+      },
+      "raw_payload_sha256": "cee4326d38b3f4821050ae2f06b79cba48a5a92e1a42b7ed3d927ed79741c7d2",
+      "values_omitted": true
+    },
+    {
+      "operation": {
+        "bits": 16,
+        "count": 14338,
+        "direction": "d2h",
+        "host_dtype": "uint32",
+        "kind": "copy",
+        "learned_parameter_payload": true,
+        "name": "weights_storage",
+        "native_device_bytes": 28676,
+        "pe": 1,
+        "phase": "projection_tile_readback",
+        "physical_host_bytes": 57352,
+        "sequence": 705,
+        "tile": 45
+      },
+      "raw_payload_sha256": "a9bc513c16cc3a18eeddaa078b3750dbe7f146aeed6549ccb4c0f97d40eda989",
+      "values_omitted": true
+    },
+    {
+      "operation": {
+        "bits": 16,
+        "count": 8194,
+        "direction": "d2h",
+        "host_dtype": "uint32",
+        "kind": "copy",
+        "learned_parameter_payload": true,
+        "name": "weights_storage",
+        "native_device_bytes": 16388,
+        "pe": 3,
+        "phase": "down_tile_readback",
+        "physical_host_bytes": 32776,
+        "sequence": 785,
+        "tile": 0
+      },
+      "raw_payload_sha256": "6a6ca6eb7f5eb4feace0740f5502ff7fdd8a519b7f862d76a73be6b6f46ece6d",
+      "values_omitted": true
+    },
+    {
+      "operation": {
+        "bits": 16,
+        "count": 8194,
+        "direction": "d2h",
+        "host_dtype": "uint32",
+        "kind": "copy",
+        "learned_parameter_payload": true,
+        "name": "weights_storage",
+        "native_device_bytes": 16388,
+        "pe": 3,
+        "phase": "down_tile_readback",
+        "physical_host_bytes": 32776,
+        "sequence": 793,
+        "tile": 1
+      },
+      "raw_payload_sha256": "74175ada8803e0b3709458ddaa23c63ded7b7b297a4b6ae682b1d4cec4adf80a",
+      "values_omitted": true
+    },
+    {
+      "operation": {
+        "bits": 16,
+        "count": 14338,
+        "direction": "d2h",
+        "host_dtype": "uint32",
+        "kind": "copy",
+        "learned_parameter_payload": true,
+        "name": "weights_storage",
+        "native_device_bytes": 28676,
+        "pe": 0,
+        "phase": "retention_after_down",
+        "physical_host_bytes": 57352,
+        "sequence": 804,
+        "tile": null
+      },
+      "raw_payload_sha256": "cee4326d38b3f4821050ae2f06b79cba48a5a92e1a42b7ed3d927ed79741c7d2",
+      "values_omitted": true
+    },
+    {
+      "operation": {
+        "bits": 16,
+        "count": 14338,
+        "direction": "d2h",
+        "host_dtype": "uint32",
+        "kind": "copy",
+        "learned_parameter_payload": true,
+        "name": "weights_storage",
+        "native_device_bytes": 28676,
+        "pe": 1,
+        "phase": "retention_after_down",
+        "physical_host_bytes": 57352,
+        "sequence": 810,
+        "tile": null
+      },
+      "raw_payload_sha256": "a9bc513c16cc3a18eeddaa078b3750dbe7f146aeed6549ccb4c0f97d40eda989",
+      "values_omitted": true
+    },
+    {
+      "operation": {
+        "bits": 16,
+        "count": 8194,
+        "direction": "d2h",
+        "host_dtype": "uint32",
+        "kind": "copy",
+        "learned_parameter_payload": true,
+        "name": "weights_storage",
+        "native_device_bytes": 16388,
+        "pe": 3,
+        "phase": "retention_after_down",
+        "physical_host_bytes": 32776,
+        "sequence": 827,
+        "tile": null
+      },
+      "raw_payload_sha256": "74175ada8803e0b3709458ddaa23c63ded7b7b297a4b6ae682b1d4cec4adf80a",
+      "values_omitted": true
+    }
+  ],
+  "raw_nonparameter_device_bytes": 129572,
+  "evidence_note": "All public values are input-dependent observations, source bounds or hidden inputs. Nine complete learned-weight arrays are omitted; their copy/hash/shape metadata remains. Device casts are exact against observed FP32, not official full-model parity. Local owner/argv/SDK-installation inventory and binaries are not included."
+}

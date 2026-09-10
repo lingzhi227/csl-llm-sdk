@@ -1,0 +1,57 @@
+{
+  "scope": "mlp128-fullinput-silu-down128",
+  "status": "source_proposal_not_compiled_or_executed",
+  "physical_operations": 846,
+  "copy_calls": 785,
+  "launch_calls": 61,
+  "host_bytes": 5959676,
+  "native_bytes": 3061668,
+  "maximum_host_buffer_bytes": 57352,
+  "copies_by_direction": {
+    "h2d": 303,
+    "d2h": 482
+  },
+  "weight_copies_by_direction": {
+    "h2d": 94,
+    "d2h": 9
+  },
+  "weight_host_bytes_by_direction": {
+    "h2d": 5341936,
+    "d2h": 442440
+  },
+  "source_weight_payload_bytes": 2654208,
+  "new_network_bytes": 0,
+  "data_fabric_words_per_edge": 140,
+  "ack_fabric_words_per_edge": 13,
+  "fabric_edge_words": 459,
+  "fabric_word_hops": 612,
+  "declared_buffer_bytes_per_pe": [
+    31568,
+    31568,
+    4164,
+    18818
+  ],
+  "planned_imported_GEMV_expanded_scratch_bytes_per_pe": [
+    512,
+    512,
+    512,
+    512
+  ],
+  "planned_private_timestamp_bytes_per_pe": [
+    12,
+    12,
+    12,
+    12
+  ],
+  "planned_declared_and_kernel_buffer_bytes_per_pe": [
+    32092,
+    32092,
+    4688,
+    19342
+  ],
+  "buffer_only_not_ELF_SRAM": true,
+  "actual_ELF_plus_stack_limit": 49152,
+  "reserved_stack_bytes": 4096,
+  "actual_ELF_required_before_simulation": true,
+  "observations_not_isolated_transfer_timing": true
+}

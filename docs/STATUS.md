@@ -1,6 +1,6 @@
 # Implementation status
 
-WP00–WP08 and WP10–WP15 accepted, 2026-09-10. Continuous development is
+WP00–WP08 and WP10–WP15 accepted, with a separately accepted partial WP16 MLP milestone, 2026-09-10. Continuous development is
 active under bounded control-node packages. Full-model inference remains incomplete.
 
 | Component | Status |
@@ -8,7 +8,7 @@ active under bounded control-node packages. Full-model inference remains incompl
 | Resource admission, cache/entry checks | CPU unit tests passed, including injected low-resource readings |
 | Single heavy-job lock | Contention/release fixture passed |
 | Three host bit codecs | CPU patterns/odd-offset/dtype/length/negative tests passed |
-| cgroup bounded execution | Actual MemoryMax 20 GiB and MemorySwapMax 0 confirmed; serial execution |
+| cgroup bounded execution | Per-experiment actual limits verified; latest partial MLP uses1GiB/Swap0/CPU0 and300s per stage; serial execution |
 | Native memcpy16 SDK bit copy | One WSE-3 PE, seven BF16 bit patterns, SDK 2.10.1 simulator; exact output and normal stop/exit |
 | Packed-u32 host codec | CPU tests only; no packed BF16 SDK qualification |
 | Raw32 recurrent frames | Generation/token/phase headers and128-value bodies pass two-PE SDK transfer checks |
@@ -28,10 +28,12 @@ active under bounded control-node packages. Full-model inference remains incompl
 | WP13 original attention projections | Accepted: all1024 selected Q/rawgate/K/V rows over5120columns, four common inputs, eight independent single-PE runtimes;4096final outputs and lifecycle/source gates pass for standalone projection coverage |
 | WP14 original hidden Q/K preprocessing | Accepted: four full5120 Q/K projection PEs hand off exact operands to a trained RMS/partialRoPE consumer; one dense call atposition1, all source/stage/retention checks and normalstop; no attention/KV composition |
 | WP15 original projected attention | Accepted: ten PEs, all1024 selected rows/full5120columns, two same-request original-hidden tokens, persistent KV, exact device handoff and all source/stage/cast/cache/retention gates; normal stop in1187.19s |
-| WP16 original full MLP | Source, acquisition, full CPU-reference and CSL resource planning at5120→17408→5120; downloads/CPU/SDK not yet admitted |
+| WP16 original full MLP | Full original CPU reference accepted; four-PE one-input128-channel partial CSL chain independently accepted in285.33s. Full17408-channel CSL MLP and connected reuse/reset remain open; see partial milestone report |
 | Full generation, physical WSE-3 | Not implemented/qualified here |
 
 Attempt wp00-001 failed in the installed wrapper's temporary-directory mount before
 cslc ran; simulation did not start. Controller-approved wp00-002 corrected only the
 container launch and recorded normal compiler and simulator exits. Original failure
 is preserved. See [WP00 report](WP00-REPORT.md) for measurements and scope limits.
+
+See [partial MLP report](WP16-PARTIAL-MLP-REPORT.md) for exact scope, evidence limits and measured resources. WP09 remains unresolved; full-model generation and physical WSE operation are unqualified.
