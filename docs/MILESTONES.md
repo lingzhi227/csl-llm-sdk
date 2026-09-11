@@ -2,6 +2,16 @@
 
 Only accepted results are listed below. Unresolved integration work and the remaining scope are tracked in [implementation status](STATUS.md).
 
+## WP16 eight-PE resident fragment — Accepted after independent review, September11,2026 (UTC)
+
+Three original dense/changed/zero inputs traverse resident192 ->128gate/up,
+SiLU/product and128output MLP on4x2PEs. Independent numerical, placement,
+handoff/state, complete initial/final weight and normal-stop checks passed.
+SDK002's original guardexit1 is preserved: geometry-specific auxiliary identities
+were qualified separately from saved artifacts. No rerun was needed. Scope is a
+resident fragment, not full WP16 or physical three-system inference.
+See [report](RESIDENT-SPATIAL-RUN002.md) and [evidence](../evidence/wp16-resident.json).
+
 ## WP16 connected partial MLP — Accepted, September 11, 2026 (UTC)
 
 Four original-weight PEs execute three dense/changed/zero generations with resident

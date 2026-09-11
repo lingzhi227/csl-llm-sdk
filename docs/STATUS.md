@@ -1,6 +1,6 @@
 # Implementation status
 
-WP00–WP08 and WP10–WP15 accepted, with separately accepted one-input and three-generation partial WP16 MLP profiles, 2026-09-11 UTC. Continuous development is
+WP00–WP08 and WP10–WP15 accepted, with separately accepted one-input, connected three-generation and eight-PE resident spatial WP16 fragments, 2026-09-11 UTC. Continuous development is
 active under bounded control-node packages. Full-model inference remains incomplete.
 
 | Component | Status |
@@ -8,7 +8,7 @@ active under bounded control-node packages. Full-model inference remains incompl
 | Resource admission, cache/entry checks | CPU unit tests passed, including injected low-resource readings |
 | Single heavy-job lock | Contention/release fixture passed |
 | Three host bit codecs | CPU patterns/odd-offset/dtype/length/negative tests passed |
-| cgroup bounded execution | Per-experiment actual limits verified; latest connected partial MLP uses compile1GiB/300s and simulation512MiB/420s, Swap0/CPU0; serial execution |
+| cgroup bounded execution | Per-experiment actual limits verified; latest resident fragment reused existing compiled programs and used simulation512MiB/420s, Swap0/CPU0; serial execution |
 | Native memcpy16 SDK bit copy | One WSE-3 PE, seven BF16 bit patterns, SDK 2.10.1 simulator; exact output and normal stop/exit |
 | Packed-u32 host codec | CPU tests only; no packed BF16 SDK qualification |
 | Raw32 recurrent frames | Generation/token/phase headers and128-value bodies pass two-PE SDK transfer checks |
@@ -29,6 +29,7 @@ active under bounded control-node packages. Full-model inference remains incompl
 | WP14 original hidden Q/K preprocessing | Accepted: four full5120 Q/K projection PEs hand off exact operands to a trained RMS/partialRoPE consumer; one dense call atposition1, all source/stage/retention checks and normalstop; no attention/KV composition |
 | WP15 original projected attention | Accepted: ten PEs, all1024 selected rows/full5120columns, two same-request original-hidden tokens, persistent KV, exact device handoff and all source/stage/cast/cache/retention gates; normal stop in1187.19s |
 | WP16 original full MLP | Full original CPU reference accepted. Separate four-PE profiles accepted: one dense input with5120-column projections; three dense/changed/zero generations with112-column resident projections and connected reset/retention/release. Full5120 connected reuse and whole17408-channel CSL MLP remain open; timings are different workloads |
+| Resident spatial MLP fragment | Accepted after independent saved-file review: eightPEs/threeinputs,125operations, actual4x2placement, FP32 pair reductions and device ownership; original post-stop auxiliary guardexit1 preserved. Full-dimension spatial source integration is next. |
 | Full generation, physical WSE-3 | Not implemented/qualified here |
 
 Attempt wp00-001 failed in the installed wrapper's temporary-directory mount before
@@ -39,3 +40,5 @@ is preserved. See [WP00 report](WP00-REPORT.md) for measurements and scope limit
 See [partial MLP report](WP16-PARTIAL-MLP-REPORT.md) for exact scope, evidence limits and measured resources. WP09 remains unresolved; full-model generation and physical WSE operation are unqualified.
 
 See [connected MLP report](WP16-CONNECTED-MLP-REPORT.md) for the latest accepted generation lifecycle and exact scope. No full-model or physical hardware result is implied.
+
+See [resident spatial report](RESIDENT-SPATIAL-RUN002.md) for the newest result, both preserved failures, independent acceptance and the exact limits of this fragment. The primary target is three systems with spatially resident weights; full-dimensional source integration is active.

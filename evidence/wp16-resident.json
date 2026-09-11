@@ -1,0 +1,3163 @@
+{
+  "milestone": "Eight-PE resident three-generation spatial MLP fragment",
+  "acceptance": {
+    "at_utc": "2026-09-11T05:34:05.914126+00:00",
+    "decision": "accept_exact_eight_PE_resident_three_generation_spatial_MLP_fragment_after_independent_auxiliary_review",
+    "candidate": "wp16-resident-sdk-002",
+    "manifest_sha256": "719b2e63d120159a9d7786ed6d3485f2a4f8ca488785edc050802d98e138ad24",
+    "scope": "Original BF16 weights resident once;192input->128gate/up SiLU/product->128output,2x96 gate/up partials and2x64down partials,device broadcast/pair reductions/handoffs across4x2 PEs,three dense/changed/zero generations.",
+    "source_acceptance": "WP16-RESIDENT-SOURCE-001-ACCEPTANCE.json",
+    "independent_numerical_audit": "WP16-RESIDENT-SDK-002-INDEPENDENT-AUDIT.json",
+    "independent_auditor": "audit_wp16_resident_sdk002.py",
+    "independent_auditor_sha256": "7d927b8db03bd069976a70a628acad56aa43c33ffe944740c18f7f31b02abb31",
+    "independent_numerical_seconds": 0.2171257131267339,
+    "independent_numerical_peak_rss_KiB": 41160,
+    "runtime_auxiliary_acceptance": "WP16-RESIDENT-SDK-002-AUXILIARY-ACCEPTANCE.json",
+    "original_guard_status": "failed",
+    "original_guard_exit": 1,
+    "original_failure": "Post-normal-stop exact runtime auxiliary identity check used old geometry hashes. Separate review qualifies actual3files54944B; original source/admission/log/supervisor remain unchanged.",
+    "guard_failure_not_relabelled": true,
+    "rerun_required": false,
+    "actual_native_SDK_placement": "8unique singleton coordinates(4..7,1..2) in11x4 fabric; eachELF17duplicate same rectangle segments",
+    "actual_SRAM_including4096_stack": [
+      39744,
+      38800,
+      39744,
+      38800,
+      13184,
+      17264,
+      31584,
+      30480
+    ],
+    "simulation_unit": "qwen38-job-a4c51328ee5345d89cbae3b0e7ee6527.service",
+    "simulation_guard_seconds": 167.2460741221439,
+    "maximum_observed_or_reported_memory_bytes": 192991232,
+    "memory_sample_not_necessarily_peak": true,
+    "actual_limits": {
+      "memory.max": "536870912",
+      "memory.swap.max": "0",
+      "pids.max": "128"
+    },
+    "normal_stop": true,
+    "owned_cleanup_and_empty_global_queue_independently_verified": true,
+    "source_files": 67,
+    "reused_compiled_files": 36,
+    "recompiled": false,
+    "operations": 125,
+    "copies": 121,
+    "launches": 4,
+    "H2D": 9,
+    "D2H": 112,
+    "host_bytes": 581280,
+    "native_bytes": 310232,
+    "raw_arrays": 112,
+    "raw_array_bytes": 316760,
+    "independent_dot_rows": 2304,
+    "independent_exact_integer_products": 196608,
+    "independent_pair_rows": 1152,
+    "independent_FP32_BF16_casts": 1920,
+    "independent_Decimal_nonlinear_rows": 384,
+    "original_weights_initial_final_exact": true,
+    "continuous_bitwise_weight_retention_proven": false,
+    "neural_host_feedback_dependencies": 0,
+    "diagnostic_intermediate_D2H_present": true,
+    "full_WP16_accepted": false,
+    "full_model_or_physical_three_wafer_accepted": false,
+    "hardware_latency_measured": false,
+    "next": "Full-dimension resident MLP source integration and parameterized spatial broadcast/reduction, reuse existing three-wafer placement; publish this bounded milestone honestly.",
+    "duration_source": "executor retained sdk-002-completion.json unit.seconds"
+  },
+  "independent_numerical_audit": {
+    "Decimal_exp_sigmoid_and_actual_product_rows": 384,
+    "SDK_imported": false,
+    "actual_arrays": 112,
+    "actual_partial_pair_rows": 1152,
+    "all_source_enclosures_and_handoffs": true,
+    "all_state_and_timestamp_checks": true,
+    "candidate": "wp16-resident-sdk-002",
+    "continuous_bitwise_weight_retention_proven": false,
+    "direct_FP32_BF16_casts": 1920,
+    "exact_integer_conditional_dot_rows": 2304,
+    "exact_integer_products": 196608,
+    "final_full_weights_equal_initial_source": true,
+    "manifest_sha256": "719b2e63d120159a9d7786ed6d3485f2a4f8ca488785edc050802d98e138ad24",
+    "normal_stop": true,
+    "operations": 125,
+    "original_model_inputs_reread": false,
+    "owned_cleanup": true,
+    "peak_rss_KiB": 41160,
+    "preserved_supervisor_status": "failed",
+    "raw_bytes": 316760,
+    "runtime_auxiliary_acceptance_separate": true,
+    "seconds": 0.2171257131267339,
+    "source_files": 67,
+    "status": "independent_resident_saved_output_checks_passed"
+  },
+  "independent_original_source_acceptance": {
+    "at_utc": "2026-09-11T04:34:17.308417+00:00",
+    "decision": "accept_original_source_for_resident_eight_PE_fragment",
+    "candidate": "wp16-resident-source-001",
+    "manifest_sha256": "6fb78fa5d06c6d36fd2be5e32ab5f1979c8d3c80763c803e401480c0c7588485",
+    "scope": "Original dense/changed/zero source intervals for192 input,128 intermediate,128 output; gate/up2x96 and down2x64 partials with explicit FP32 pair reductions. No CSL execution acceptance.",
+    "audit": "coordination/qwen38/WP16-RESIDENT-SOURCE-001-INDEPENDENT-AUDIT.json",
+    "auditor": "coordination/qwen38/audit_wp16_resident_source001.py",
+    "auditor_sha256": "5a81d41eceacf80a1fcb5c497b8e7cf89a9d829c20be7e58364bcf930f974871",
+    "source_unit": "qwen38-job-82dd800695a34f8abfb6c740da5438ba.service",
+    "source_seconds": 0.3572607801761478,
+    "source_preparation_sha256": "1ac5572cfa0938e33af78f2ee6ca58306740eea3478550f5d2a4e0bb594d8ef3",
+    "oracle": {
+      "bytes": 102454,
+      "sha256": "2e109cd55accd83c3a6ac147aa2fae8ee0f27ed2043d5b71ce4a4a23649dd96e"
+    },
+    "actual_limits": {
+      "memory.max": "268435456",
+      "memory.swap.max": "0",
+      "pids.max": "64"
+    },
+    "observed_source_memory_bytes": 3694592,
+    "observed_memory_is_lower_bound_not_peak": true,
+    "owned_cleanup_independently_verified": true,
+    "reference_evidence": {
+      "source_original_input_bytes": 2695168,
+      "selected_weight_bytes": 131072,
+      "hidden_bytes": 1152,
+      "source_arrays": 16,
+      "exact_dyadic_dot_rows": 2304,
+      "exact_weight_products": 196608,
+      "FP32_pair_rows": 1152,
+      "direct_BF16_RNE_rows": 1920,
+      "Decimal70_SiLU_endpoints": 768,
+      "seconds": 0.2953914669342339,
+      "peak_rss_KiB": 41560
+    },
+    "qualification_basis": "Original selected-byte identity, full source hashes/NPZ membership, exact integer contraction endpoints, pair-add and BF16 composition; unchanged accepted local contraction/SiLU/product policies. Ideal SiLU endpoint enclosure is not a new emulation or qualification of device exponential.",
+    "sensitivity": {
+      "passed": true,
+      "dense_changed_disjoint_rows": {
+        "gate_bf16": 128,
+        "up_bf16": 128,
+        "product_bf16": 127,
+        "down_bf16": 127
+      },
+      "changed_down_nonzero_rows": 128,
+      "all_zero_source_arrays": true,
+      "dense_fault_disjoint_rows": {
+        "gate": {
+          "missing_second_shard_disjoint_rows": 127,
+          "early_partial_BF16_disjoint_rows": 22
+        },
+        "up": {
+          "missing_second_shard_disjoint_rows": 128,
+          "early_partial_BF16_disjoint_rows": 24
+        },
+        "down": {
+          "missing_second_shard_disjoint_rows": 128,
+          "early_partial_BF16_disjoint_rows": 0
+        }
+      },
+      "early_cast_counts_are_reported_not_a_new_tolerance": true,
+      "claim": "Whole-vector stale/zero and missing projection branch sensitivity; row counts explicit"
+    },
+    "remaining": [
+      "Exact resident8PE SDK candidate/ELF/resource gate",
+      "Device routes/callback ownership and numerical/state/retention/normal-stop evidence",
+      "Full model spatial placement and physical three-system execution"
+    ],
+    "SDK_execution_admitted": false
+  },
+  "auxiliary_acceptance": {
+    "at_utc": "2026-09-11T05:31:18.647201+00:00",
+    "decision": "accept_exact_observed_geometry_specific_runtime_auxiliary_identities_for_SDK002",
+    "observed_files": {
+      "out/generated/MEMCPY_XY_ROUTES.elf": {
+        "bytes": 824,
+        "sha256": "f4a0045a5e14374c9e658a57b674ee6dba35834620f8ec10b4eab755dc915fce"
+      },
+      "out/generated/coord.elf": {
+        "bytes": 1400,
+        "sha256": "cd4517a60793f3ff253d88145f92a55622b16b2668db94f7057599ce14d53ea3"
+      },
+      "out/generated/default.elf": {
+        "bytes": 52720,
+        "sha256": "2e5d06e7c0c7436e94221f115d84e15b752cbea5afb6452276d90332a03dca6e"
+      }
+    },
+    "total_bytes": 54944,
+    "admitted_byte_cap": 54952,
+    "compiled_parent_and_candidate36_files_unchanged": true,
+    "all_three_Cerebras_notes_describe_11x4": true,
+    "default_PT_LOAD_virtual_address_sizes_flags_payloads_identical_to_accepted_connected003": true,
+    "coordinate_payloads": "11 column IDs0..10 at63628;4 row IDs0..3 at63626; all2bytes",
+    "memcpy_routes_payloads": "5 configuration segments at63488/63498; no ordinary SRAM code/data segment",
+    "opaque_physical_descriptors_not_reinterpreted": true,
+    "section_table_comparison_is_not_sufficient_alone": true,
+    "program_header_comparison": "Stored separately, including actual payload identities; geometry-dependent descriptors retained without undocumented decoding",
+    "qualification_scope": "Exact trusted-SDK outputs generated by the controlled512MiB run with original36compile files intact, actual8PE native placement and independently qualified125-op numerical/lifecycle result. Not a universal allowlist for arbitrary layouts.",
+    "original_supervisor_exit1_and_unknown_aux_failure_preserved": true,
+    "runtime_replayed": false,
+    "source_or_admission_modified_after_run": false,
+    "evidence": [
+      "WP16-RESIDENT-SDK-002-AUXILIARY-OBSERVATION.json",
+      "WP16-RESIDENT-SDK-002-AUXILIARY-SEGMENTS.json",
+      "WP16-RESIDENT-SDK-002-INDEPENDENT-AUDIT.json"
+    ]
+  },
+  "actual_native_placement": {
+    "status": "actual_SDK_ELF_placement_checked",
+    "fabric": [
+      11,
+      4
+    ],
+    "application": [
+      4,
+      2
+    ],
+    "offset": [
+      4,
+      1
+    ],
+    "files": [
+      {
+        "path": "out/bin/out_0_0.elf",
+        "rank": 0,
+        "role": "gate",
+        "application_xy": [
+          0,
+          0
+        ],
+        "fabric_xy": [
+          4,
+          1
+        ],
+        "segment_rectangles": [
+          [
+            4,
+            1,
+            1,
+            1
+          ]
+        ],
+        "segment_rectangle_count": 17
+      },
+      {
+        "path": "out/bin/out_1_0.elf",
+        "rank": 1,
+        "role": "gate",
+        "application_xy": [
+          1,
+          0
+        ],
+        "fabric_xy": [
+          5,
+          1
+        ],
+        "segment_rectangles": [
+          [
+            5,
+            1,
+            1,
+            1
+          ]
+        ],
+        "segment_rectangle_count": 17
+      },
+      {
+        "path": "out/bin/out_2_0.elf",
+        "rank": 2,
+        "role": "up",
+        "application_xy": [
+          2,
+          0
+        ],
+        "fabric_xy": [
+          6,
+          1
+        ],
+        "segment_rectangles": [
+          [
+            6,
+            1,
+            1,
+            1
+          ]
+        ],
+        "segment_rectangle_count": 17
+      },
+      {
+        "path": "out/bin/out_3_0.elf",
+        "rank": 3,
+        "role": "up",
+        "application_xy": [
+          3,
+          0
+        ],
+        "fabric_xy": [
+          7,
+          1
+        ],
+        "segment_rectangles": [
+          [
+            7,
+            1,
+            1,
+            1
+          ]
+        ],
+        "segment_rectangle_count": 17
+      },
+      {
+        "path": "out/bin/out_4_0.elf",
+        "rank": 4,
+        "role": "ingress",
+        "application_xy": [
+          0,
+          1
+        ],
+        "fabric_xy": [
+          4,
+          2
+        ],
+        "segment_rectangles": [
+          [
+            4,
+            2,
+            1,
+            1
+          ]
+        ],
+        "segment_rectangle_count": 17
+      },
+      {
+        "path": "out/bin/out_5_0.elf",
+        "rank": 5,
+        "role": "nonlinear",
+        "application_xy": [
+          1,
+          1
+        ],
+        "fabric_xy": [
+          5,
+          2
+        ],
+        "segment_rectangles": [
+          [
+            5,
+            2,
+            1,
+            1
+          ]
+        ],
+        "segment_rectangle_count": 17
+      },
+      {
+        "path": "out/bin/out_6_0.elf",
+        "rank": 6,
+        "role": "down",
+        "application_xy": [
+          2,
+          1
+        ],
+        "fabric_xy": [
+          6,
+          2
+        ],
+        "segment_rectangles": [
+          [
+            6,
+            2,
+            1,
+            1
+          ]
+        ],
+        "segment_rectangle_count": 17
+      },
+      {
+        "path": "out/bin/out_7_0.elf",
+        "rank": 7,
+        "role": "down",
+        "application_xy": [
+          3,
+          1
+        ],
+        "fabric_xy": [
+          7,
+          2
+        ],
+        "segment_rectangles": [
+          [
+            7,
+            2,
+            1,
+            1
+          ]
+        ],
+        "segment_rectangle_count": 17
+      }
+    ],
+    "reader": "cerebras.elf.cself.ELFMemory.iter_rectangles",
+    "filename_coordinates_assumed": false,
+    "simulator_constructed": false
+  },
+  "device_result": {
+    "status": "passed",
+    "physical_counts": {
+      "copies": 121,
+      "launches": 4,
+      "H2D": 9,
+      "D2H": 112,
+      "host_bytes": 581280,
+      "native_bytes": 310232
+    },
+    "next_operation": 125,
+    "generations": [
+      {
+        "generation": 1,
+        "original_input_index": 0,
+        "source_and_conditional_rows": 768,
+        "exact_FP32_to_BF16_casts": 640,
+        "local_stage_cycles": [
+          133743,
+          135707,
+          133761,
+          135721,
+          149399,
+          123091,
+          134952,
+          136976
+        ],
+        "epochs_release_and_packet_counts_passed": true,
+        "device_handoffs_bit_exact": true,
+        "source_intervals_unchanged": true,
+        "hardware_latency_measured": false
+      },
+      {
+        "generation": 2,
+        "original_input_index": 1,
+        "source_and_conditional_rows": 768,
+        "exact_FP32_to_BF16_casts": 640,
+        "local_stage_cycles": [
+          133743,
+          135707,
+          133761,
+          135721,
+          149399,
+          123091,
+          134952,
+          136976
+        ],
+        "epochs_release_and_packet_counts_passed": true,
+        "device_handoffs_bit_exact": true,
+        "source_intervals_unchanged": true,
+        "hardware_latency_measured": false
+      },
+      {
+        "generation": 3,
+        "original_input_index": 3,
+        "source_and_conditional_rows": 768,
+        "exact_FP32_to_BF16_casts": 640,
+        "local_stage_cycles": [
+          133743,
+          135707,
+          133761,
+          135721,
+          149399,
+          123091,
+          134952,
+          136976
+        ],
+        "epochs_release_and_packet_counts_passed": true,
+        "device_handoffs_bit_exact": true,
+        "source_intervals_unchanged": true,
+        "hardware_latency_measured": false
+      }
+    ],
+    "normal_stop": true,
+    "evidence_files": [
+      {
+        "path": "initial.npz",
+        "bytes": 1296,
+        "sha256": "dff0c7cf6400a783e810620ccca4224c17b382e4f2677d4f147fca1277f2345c",
+        "arrays": {
+          "state@all": {
+            "shape": [
+              256
+            ],
+            "dtype": "uint32",
+            "bytes": 1024,
+            "sha256": "72eb48728a748845270f066645bece604443529106d4adb3244c9d82a847f249"
+          }
+        }
+      },
+      {
+        "path": "generation1.npz",
+        "bytes": 26616,
+        "sha256": "45a6fcda1855bcaafef5b575e5c44975ed26735a25b58dff420e77fc80f96db5",
+        "arrays": {
+          "output@4": {
+            "shape": [
+              130
+            ],
+            "dtype": "uint32",
+            "bytes": 520,
+            "sha256": "9adb39593ed25dbc11f3407a6618353a0f5734de84e802e6d0275ca1db760fd8"
+          },
+          "state@all": {
+            "shape": [
+              256
+            ],
+            "dtype": "uint32",
+            "bytes": 1024,
+            "sha256": "e52941464ade7e6a30ceb990e4fc67f631fce608b9d6122703241cc51f871529"
+          },
+          "timing@all": {
+            "shape": [
+              48
+            ],
+            "dtype": "uint32",
+            "bytes": 192,
+            "sha256": "7a6d9fa8cca7596968baca410c3ce112347a292755010f25f5ff6e96df4c76b1"
+          },
+          "input@0": {
+            "shape": [
+              98
+            ],
+            "dtype": "float32",
+            "bytes": 392,
+            "sha256": "74410e4d80a7e7524df26f0d9b462e810ddfa383d886235863fc36231bb1b6d5"
+          },
+          "input@1": {
+            "shape": [
+              98
+            ],
+            "dtype": "float32",
+            "bytes": 392,
+            "sha256": "f92d9b77ccb40db3fec2a0f1850f522de99b0b7142647ce52e0daac2b20ef348"
+          },
+          "input@2": {
+            "shape": [
+              98
+            ],
+            "dtype": "float32",
+            "bytes": 392,
+            "sha256": "74410e4d80a7e7524df26f0d9b462e810ddfa383d886235863fc36231bb1b6d5"
+          },
+          "input@3": {
+            "shape": [
+              98
+            ],
+            "dtype": "float32",
+            "bytes": 392,
+            "sha256": "f92d9b77ccb40db3fec2a0f1850f522de99b0b7142647ce52e0daac2b20ef348"
+          },
+          "input@6": {
+            "shape": [
+              66
+            ],
+            "dtype": "float32",
+            "bytes": 264,
+            "sha256": "63b26b9756894a61f37ebf900c764c041c39f6a532f220c3e7c45cf712269701"
+          },
+          "input@7": {
+            "shape": [
+              66
+            ],
+            "dtype": "float32",
+            "bytes": 264,
+            "sha256": "6645d59909baf8f3123eb01019f96c7d18020f303a42767d3c4fd8fa7d0b1c7a"
+          },
+          "partial@0": {
+            "shape": [
+              130
+            ],
+            "dtype": "float32",
+            "bytes": 520,
+            "sha256": "25335fe91f0882be014d14f5f13b83cdb9930868fd3398e153c8411873fab809"
+          },
+          "partial@1": {
+            "shape": [
+              130
+            ],
+            "dtype": "float32",
+            "bytes": 520,
+            "sha256": "ce253c73c42ab716aa43851570d52233504982f3d94c639f2ce55fa0ec19c3ed"
+          },
+          "partial@2": {
+            "shape": [
+              130
+            ],
+            "dtype": "float32",
+            "bytes": 520,
+            "sha256": "8e0c56c343d415e952d0bcadc2c523f0bf0bf75bf81f151e816d4173533226e9"
+          },
+          "partial@3": {
+            "shape": [
+              130
+            ],
+            "dtype": "float32",
+            "bytes": 520,
+            "sha256": "77f5adecfe971ee86b9f412a38c460d66e4e6da50dd82e25e021bdf6cdc78e0a"
+          },
+          "partial@6": {
+            "shape": [
+              130
+            ],
+            "dtype": "float32",
+            "bytes": 520,
+            "sha256": "34c84d2cdf07dcba030aea9b1961bdafdcb1be149454e08b5a1c013a4cc3ceba"
+          },
+          "partial@7": {
+            "shape": [
+              130
+            ],
+            "dtype": "float32",
+            "bytes": 520,
+            "sha256": "58cc1f2d3188d1e81f242c40f4723efc51ca4e6b1d12aa83b1e9c186def9726a"
+          },
+          "reduced@0": {
+            "shape": [
+              130
+            ],
+            "dtype": "float32",
+            "bytes": 520,
+            "sha256": "e5f1e5e69bbd0106236582e36cbbc42e6f2a6f6ce180e6a731877c8787eb5244"
+          },
+          "reduced@1": {
+            "shape": [
+              130
+            ],
+            "dtype": "float32",
+            "bytes": 520,
+            "sha256": "e5f1e5e69bbd0106236582e36cbbc42e6f2a6f6ce180e6a731877c8787eb5244"
+          },
+          "reduced@2": {
+            "shape": [
+              130
+            ],
+            "dtype": "float32",
+            "bytes": 520,
+            "sha256": "ff46ba2629fbea64f702fd1c9dac4856057101f0c7504a865b45d5180e6a485c"
+          },
+          "reduced@3": {
+            "shape": [
+              130
+            ],
+            "dtype": "float32",
+            "bytes": 520,
+            "sha256": "ff46ba2629fbea64f702fd1c9dac4856057101f0c7504a865b45d5180e6a485c"
+          },
+          "reduced@6": {
+            "shape": [
+              130
+            ],
+            "dtype": "float32",
+            "bytes": 520,
+            "sha256": "c2bf0e25560785697e60aa92adf4a2d9241f43da9da26d7bb6fb6b3add8ed21e"
+          },
+          "reduced@7": {
+            "shape": [
+              130
+            ],
+            "dtype": "float32",
+            "bytes": 520,
+            "sha256": "c2bf0e25560785697e60aa92adf4a2d9241f43da9da26d7bb6fb6b3add8ed21e"
+          },
+          "rounded@0": {
+            "shape": [
+              130
+            ],
+            "dtype": "uint32",
+            "bytes": 520,
+            "sha256": "86ebd2b915800805fe457ceb20fed76f53755521bc996fbbc23c4d274457a276"
+          },
+          "rounded@2": {
+            "shape": [
+              130
+            ],
+            "dtype": "uint32",
+            "bytes": 520,
+            "sha256": "12efc16be3bef399ef2983f6633d47c7c057dc225e7e18132faf8b29fc48ba6a"
+          },
+          "rounded@6": {
+            "shape": [
+              130
+            ],
+            "dtype": "uint32",
+            "bytes": 520,
+            "sha256": "9adb39593ed25dbc11f3407a6618353a0f5734de84e802e6d0275ca1db760fd8"
+          },
+          "gate@5": {
+            "shape": [
+              130
+            ],
+            "dtype": "uint32",
+            "bytes": 520,
+            "sha256": "86ebd2b915800805fe457ceb20fed76f53755521bc996fbbc23c4d274457a276"
+          },
+          "up@5": {
+            "shape": [
+              130
+            ],
+            "dtype": "uint32",
+            "bytes": 520,
+            "sha256": "12efc16be3bef399ef2983f6633d47c7c057dc225e7e18132faf8b29fc48ba6a"
+          },
+          "silu@5": {
+            "shape": [
+              130
+            ],
+            "dtype": "uint32",
+            "bytes": 520,
+            "sha256": "a3858d1c00673b5aff21c76d55564e172cea5565d85c44ca1439c1220d4d54da"
+          },
+          "product@5": {
+            "shape": [
+              130
+            ],
+            "dtype": "uint32",
+            "bytes": 520,
+            "sha256": "f481caac181c0e397fdd82612478946efc487bd317b6a47b634c5ffbb289c1f2"
+          },
+          "exponential@5": {
+            "shape": [
+              130
+            ],
+            "dtype": "float32",
+            "bytes": 520,
+            "sha256": "07892cbb014d16f0ba53f0e33c080dc3a7b9c829467a4416cfe1319971dae151"
+          },
+          "sigmoid@5": {
+            "shape": [
+              130
+            ],
+            "dtype": "float32",
+            "bytes": 520,
+            "sha256": "807d664fe5266f5323f51a7b75e03a9e26549daabef1b8f55a64563ef06566ca"
+          },
+          "activation_fp32@5": {
+            "shape": [
+              130
+            ],
+            "dtype": "float32",
+            "bytes": 520,
+            "sha256": "89e9b88c5e40c9daf956240f97a3f4654c386a54301c2b2414aec1198d75c497"
+          },
+          "product_fp32@5": {
+            "shape": [
+              130
+            ],
+            "dtype": "float32",
+            "bytes": 520,
+            "sha256": "8b187ffbef99af54d427c47dd5450f9d4ecb2b0b6d20db5396f7e1726323f608"
+          },
+          "broadcast@4": {
+            "shape": [
+              192
+            ],
+            "dtype": "float32",
+            "bytes": 768,
+            "sha256": "6962a1531c2dc7f1120b36b6234fc73e5033ba669b5bb5bfdf2934d16989ec18"
+          },
+          "broadcast@5": {
+            "shape": [
+              128
+            ],
+            "dtype": "float32",
+            "bytes": 512,
+            "sha256": "837a54007cec9e50fbbcee178e1faf5db6cd3c9330b74be5cdcd224e0bf934f9"
+          },
+          "request@4": {
+            "shape": [
+              194
+            ],
+            "dtype": "uint32",
+            "bytes": 776,
+            "sha256": "655f1a9fac787372a672cd7fd411f2edf3ab03ba582f5d385048d259bd7f957c"
+          }
+        }
+      },
+      {
+        "path": "generation2.npz",
+        "bytes": 26616,
+        "sha256": "c4e733f4ded1b4ecc307c13e3df85ee965fc49016e7acbfc3fc6aa93d298a04f",
+        "arrays": {
+          "output@4": {
+            "shape": [
+              130
+            ],
+            "dtype": "uint32",
+            "bytes": 520,
+            "sha256": "7504d236905cb6cb773cbb5291480a7da8cd96297ca6acba08ccb6a00d7f3804"
+          },
+          "state@all": {
+            "shape": [
+              256
+            ],
+            "dtype": "uint32",
+            "bytes": 1024,
+            "sha256": "ed765f409e10e200e2d62c21f332faa37b57dd0d34c9d9f3e04853cd15a0a50f"
+          },
+          "timing@all": {
+            "shape": [
+              48
+            ],
+            "dtype": "uint32",
+            "bytes": 192,
+            "sha256": "7a6d9fa8cca7596968baca410c3ce112347a292755010f25f5ff6e96df4c76b1"
+          },
+          "input@0": {
+            "shape": [
+              98
+            ],
+            "dtype": "float32",
+            "bytes": 392,
+            "sha256": "e70fd11f1ef6d9eb2c5dc4f269f2157efa3a4806e3cf1d1359b263099e9f4b4e"
+          },
+          "input@1": {
+            "shape": [
+              98
+            ],
+            "dtype": "float32",
+            "bytes": 392,
+            "sha256": "4b93095469d14b72a5b74b71ce884eecb42a60c55140f2343f7e91794a620e76"
+          },
+          "input@2": {
+            "shape": [
+              98
+            ],
+            "dtype": "float32",
+            "bytes": 392,
+            "sha256": "e70fd11f1ef6d9eb2c5dc4f269f2157efa3a4806e3cf1d1359b263099e9f4b4e"
+          },
+          "input@3": {
+            "shape": [
+              98
+            ],
+            "dtype": "float32",
+            "bytes": 392,
+            "sha256": "4b93095469d14b72a5b74b71ce884eecb42a60c55140f2343f7e91794a620e76"
+          },
+          "input@6": {
+            "shape": [
+              66
+            ],
+            "dtype": "float32",
+            "bytes": 264,
+            "sha256": "3a7103c0f6c9887e8f4435ab2acb3c318adc97ada08c1aeaaf4902ee9a50931c"
+          },
+          "input@7": {
+            "shape": [
+              66
+            ],
+            "dtype": "float32",
+            "bytes": 264,
+            "sha256": "210b12a02dba4822dd20015621f59c91651d5d50fd0910f2bbd27d1e28c7047b"
+          },
+          "partial@0": {
+            "shape": [
+              130
+            ],
+            "dtype": "float32",
+            "bytes": 520,
+            "sha256": "c680984a1ec83522af81b7f33fec5b53df18c55abafa95475066fe91b601e56f"
+          },
+          "partial@1": {
+            "shape": [
+              130
+            ],
+            "dtype": "float32",
+            "bytes": 520,
+            "sha256": "d2ed6140c2b495c753ba3702225979455e360fcc0774476e6277b7f1f306176d"
+          },
+          "partial@2": {
+            "shape": [
+              130
+            ],
+            "dtype": "float32",
+            "bytes": 520,
+            "sha256": "bb37f3d70cb989deb0b36498da80e31d1408c06e175b705c1957d93414f7350f"
+          },
+          "partial@3": {
+            "shape": [
+              130
+            ],
+            "dtype": "float32",
+            "bytes": 520,
+            "sha256": "1f31797f7dce0edfcfa016eb119e4280624e40ca5a187f8927f5d68c42316078"
+          },
+          "partial@6": {
+            "shape": [
+              130
+            ],
+            "dtype": "float32",
+            "bytes": 520,
+            "sha256": "e6c694cd3985f80ba5ec2d518cc12653012da7d0eff5465e6ba15a77f3710ff8"
+          },
+          "partial@7": {
+            "shape": [
+              130
+            ],
+            "dtype": "float32",
+            "bytes": 520,
+            "sha256": "fe528dcdfc3fa84d181d4dec0f9faecdc72a7729002df43bc07afd6550d68c0e"
+          },
+          "reduced@0": {
+            "shape": [
+              130
+            ],
+            "dtype": "float32",
+            "bytes": 520,
+            "sha256": "19e158f4f115f077dd6f6170e6fbabbe327d65d966b23b5abeedb0c829bdf720"
+          },
+          "reduced@1": {
+            "shape": [
+              130
+            ],
+            "dtype": "float32",
+            "bytes": 520,
+            "sha256": "19e158f4f115f077dd6f6170e6fbabbe327d65d966b23b5abeedb0c829bdf720"
+          },
+          "reduced@2": {
+            "shape": [
+              130
+            ],
+            "dtype": "float32",
+            "bytes": 520,
+            "sha256": "0d2c11dc88324433ed0abc44600ef5d2aff60d902dc6874ba3b0f7d13d0049d0"
+          },
+          "reduced@3": {
+            "shape": [
+              130
+            ],
+            "dtype": "float32",
+            "bytes": 520,
+            "sha256": "0d2c11dc88324433ed0abc44600ef5d2aff60d902dc6874ba3b0f7d13d0049d0"
+          },
+          "reduced@6": {
+            "shape": [
+              130
+            ],
+            "dtype": "float32",
+            "bytes": 520,
+            "sha256": "6d4038637d788e322b4064cca6d7b97afcabcca51145745e05aa498c685e7388"
+          },
+          "reduced@7": {
+            "shape": [
+              130
+            ],
+            "dtype": "float32",
+            "bytes": 520,
+            "sha256": "6d4038637d788e322b4064cca6d7b97afcabcca51145745e05aa498c685e7388"
+          },
+          "rounded@0": {
+            "shape": [
+              130
+            ],
+            "dtype": "uint32",
+            "bytes": 520,
+            "sha256": "ccdb204d3e961d22d3192f3006d33e17273b747c44676c0227218f510efaf20f"
+          },
+          "rounded@2": {
+            "shape": [
+              130
+            ],
+            "dtype": "uint32",
+            "bytes": 520,
+            "sha256": "23383427274d5fd9c0e93d52e296ab514c001085c10649d625fbd63bd3518cd6"
+          },
+          "rounded@6": {
+            "shape": [
+              130
+            ],
+            "dtype": "uint32",
+            "bytes": 520,
+            "sha256": "7504d236905cb6cb773cbb5291480a7da8cd96297ca6acba08ccb6a00d7f3804"
+          },
+          "gate@5": {
+            "shape": [
+              130
+            ],
+            "dtype": "uint32",
+            "bytes": 520,
+            "sha256": "ccdb204d3e961d22d3192f3006d33e17273b747c44676c0227218f510efaf20f"
+          },
+          "up@5": {
+            "shape": [
+              130
+            ],
+            "dtype": "uint32",
+            "bytes": 520,
+            "sha256": "23383427274d5fd9c0e93d52e296ab514c001085c10649d625fbd63bd3518cd6"
+          },
+          "silu@5": {
+            "shape": [
+              130
+            ],
+            "dtype": "uint32",
+            "bytes": 520,
+            "sha256": "64d491b9289493984a83814be1cb847309d68bd958a2278cd8effb89e16f3b64"
+          },
+          "product@5": {
+            "shape": [
+              130
+            ],
+            "dtype": "uint32",
+            "bytes": 520,
+            "sha256": "1364e08570825bff11b92cfa6eb6956ce3250f9205b474e41bfcdc650f4eb333"
+          },
+          "exponential@5": {
+            "shape": [
+              130
+            ],
+            "dtype": "float32",
+            "bytes": 520,
+            "sha256": "558dc2f692da5868bf374ac02f9e265a1d015ec5232aeddf92a6fddb37d9ad57"
+          },
+          "sigmoid@5": {
+            "shape": [
+              130
+            ],
+            "dtype": "float32",
+            "bytes": 520,
+            "sha256": "71f19f5e9be83650efb0821f07710bc47c0456426f8c49e12d19b556bfdd954e"
+          },
+          "activation_fp32@5": {
+            "shape": [
+              130
+            ],
+            "dtype": "float32",
+            "bytes": 520,
+            "sha256": "8f30886fe2fe8b8164742fea13520cd5283302fa341568522ec695c891eaa4cd"
+          },
+          "product_fp32@5": {
+            "shape": [
+              130
+            ],
+            "dtype": "float32",
+            "bytes": 520,
+            "sha256": "b65328c0f0339a44b95799a1fff8fd402912ab9fe5ed90d504217fc5698cf521"
+          },
+          "broadcast@4": {
+            "shape": [
+              192
+            ],
+            "dtype": "float32",
+            "bytes": 768,
+            "sha256": "ee1761ea8a6e67973b63b897a66a8f97c132496ef380a759a31d5d9a8275d3ca"
+          },
+          "broadcast@5": {
+            "shape": [
+              128
+            ],
+            "dtype": "float32",
+            "bytes": 512,
+            "sha256": "d7ff65f3155675462b2ab22ff3442ba7466cabadb7d4a3fd5d7c1c6ce83926b7"
+          },
+          "request@4": {
+            "shape": [
+              194
+            ],
+            "dtype": "uint32",
+            "bytes": 776,
+            "sha256": "b6b527274dc9459a2473aa54f41e6c822656541b0e03019fcd8747583412870a"
+          }
+        }
+      },
+      {
+        "path": "generation3.npz",
+        "bytes": 26616,
+        "sha256": "fdd30e759939ec388f82aae0abacb5d3ce6e8d3575225808aa5445c4565bd06e",
+        "arrays": {
+          "output@4": {
+            "shape": [
+              130
+            ],
+            "dtype": "uint32",
+            "bytes": 520,
+            "sha256": "6e64b5c0f6bd123d8b841c1b3eb32afda7065d9fe4635ba4107115e8720e6cb8"
+          },
+          "state@all": {
+            "shape": [
+              256
+            ],
+            "dtype": "uint32",
+            "bytes": 1024,
+            "sha256": "7dfa1ae52de6fec55c57d5402cf8619c3e51f69a9062445b7b41d226177a8c61"
+          },
+          "timing@all": {
+            "shape": [
+              48
+            ],
+            "dtype": "uint32",
+            "bytes": 192,
+            "sha256": "7a6d9fa8cca7596968baca410c3ce112347a292755010f25f5ff6e96df4c76b1"
+          },
+          "input@0": {
+            "shape": [
+              98
+            ],
+            "dtype": "float32",
+            "bytes": 392,
+            "sha256": "06fa0851c57379fd95fc48657d5489e88b0ac72fc9482d5007bba7e59b8c0718"
+          },
+          "input@1": {
+            "shape": [
+              98
+            ],
+            "dtype": "float32",
+            "bytes": 392,
+            "sha256": "06fa0851c57379fd95fc48657d5489e88b0ac72fc9482d5007bba7e59b8c0718"
+          },
+          "input@2": {
+            "shape": [
+              98
+            ],
+            "dtype": "float32",
+            "bytes": 392,
+            "sha256": "06fa0851c57379fd95fc48657d5489e88b0ac72fc9482d5007bba7e59b8c0718"
+          },
+          "input@3": {
+            "shape": [
+              98
+            ],
+            "dtype": "float32",
+            "bytes": 392,
+            "sha256": "06fa0851c57379fd95fc48657d5489e88b0ac72fc9482d5007bba7e59b8c0718"
+          },
+          "input@6": {
+            "shape": [
+              66
+            ],
+            "dtype": "float32",
+            "bytes": 264,
+            "sha256": "cddee57d70453f78efda7f222956ec7e5c76152b01cbffb7273361c65472582b"
+          },
+          "input@7": {
+            "shape": [
+              66
+            ],
+            "dtype": "float32",
+            "bytes": 264,
+            "sha256": "cddee57d70453f78efda7f222956ec7e5c76152b01cbffb7273361c65472582b"
+          },
+          "partial@0": {
+            "shape": [
+              130
+            ],
+            "dtype": "float32",
+            "bytes": 520,
+            "sha256": "791b154944d0edd28aa6a6315325589a2d4cf4672f686ebe63bfe01692a3f60a"
+          },
+          "partial@1": {
+            "shape": [
+              130
+            ],
+            "dtype": "float32",
+            "bytes": 520,
+            "sha256": "791b154944d0edd28aa6a6315325589a2d4cf4672f686ebe63bfe01692a3f60a"
+          },
+          "partial@2": {
+            "shape": [
+              130
+            ],
+            "dtype": "float32",
+            "bytes": 520,
+            "sha256": "791b154944d0edd28aa6a6315325589a2d4cf4672f686ebe63bfe01692a3f60a"
+          },
+          "partial@3": {
+            "shape": [
+              130
+            ],
+            "dtype": "float32",
+            "bytes": 520,
+            "sha256": "791b154944d0edd28aa6a6315325589a2d4cf4672f686ebe63bfe01692a3f60a"
+          },
+          "partial@6": {
+            "shape": [
+              130
+            ],
+            "dtype": "float32",
+            "bytes": 520,
+            "sha256": "791b154944d0edd28aa6a6315325589a2d4cf4672f686ebe63bfe01692a3f60a"
+          },
+          "partial@7": {
+            "shape": [
+              130
+            ],
+            "dtype": "float32",
+            "bytes": 520,
+            "sha256": "791b154944d0edd28aa6a6315325589a2d4cf4672f686ebe63bfe01692a3f60a"
+          },
+          "reduced@0": {
+            "shape": [
+              130
+            ],
+            "dtype": "float32",
+            "bytes": 520,
+            "sha256": "791b154944d0edd28aa6a6315325589a2d4cf4672f686ebe63bfe01692a3f60a"
+          },
+          "reduced@1": {
+            "shape": [
+              130
+            ],
+            "dtype": "float32",
+            "bytes": 520,
+            "sha256": "791b154944d0edd28aa6a6315325589a2d4cf4672f686ebe63bfe01692a3f60a"
+          },
+          "reduced@2": {
+            "shape": [
+              130
+            ],
+            "dtype": "float32",
+            "bytes": 520,
+            "sha256": "791b154944d0edd28aa6a6315325589a2d4cf4672f686ebe63bfe01692a3f60a"
+          },
+          "reduced@3": {
+            "shape": [
+              130
+            ],
+            "dtype": "float32",
+            "bytes": 520,
+            "sha256": "791b154944d0edd28aa6a6315325589a2d4cf4672f686ebe63bfe01692a3f60a"
+          },
+          "reduced@6": {
+            "shape": [
+              130
+            ],
+            "dtype": "float32",
+            "bytes": 520,
+            "sha256": "791b154944d0edd28aa6a6315325589a2d4cf4672f686ebe63bfe01692a3f60a"
+          },
+          "reduced@7": {
+            "shape": [
+              130
+            ],
+            "dtype": "float32",
+            "bytes": 520,
+            "sha256": "791b154944d0edd28aa6a6315325589a2d4cf4672f686ebe63bfe01692a3f60a"
+          },
+          "rounded@0": {
+            "shape": [
+              130
+            ],
+            "dtype": "uint32",
+            "bytes": 520,
+            "sha256": "6e64b5c0f6bd123d8b841c1b3eb32afda7065d9fe4635ba4107115e8720e6cb8"
+          },
+          "rounded@2": {
+            "shape": [
+              130
+            ],
+            "dtype": "uint32",
+            "bytes": 520,
+            "sha256": "6e64b5c0f6bd123d8b841c1b3eb32afda7065d9fe4635ba4107115e8720e6cb8"
+          },
+          "rounded@6": {
+            "shape": [
+              130
+            ],
+            "dtype": "uint32",
+            "bytes": 520,
+            "sha256": "6e64b5c0f6bd123d8b841c1b3eb32afda7065d9fe4635ba4107115e8720e6cb8"
+          },
+          "gate@5": {
+            "shape": [
+              130
+            ],
+            "dtype": "uint32",
+            "bytes": 520,
+            "sha256": "6e64b5c0f6bd123d8b841c1b3eb32afda7065d9fe4635ba4107115e8720e6cb8"
+          },
+          "up@5": {
+            "shape": [
+              130
+            ],
+            "dtype": "uint32",
+            "bytes": 520,
+            "sha256": "6e64b5c0f6bd123d8b841c1b3eb32afda7065d9fe4635ba4107115e8720e6cb8"
+          },
+          "silu@5": {
+            "shape": [
+              130
+            ],
+            "dtype": "uint32",
+            "bytes": 520,
+            "sha256": "6e64b5c0f6bd123d8b841c1b3eb32afda7065d9fe4635ba4107115e8720e6cb8"
+          },
+          "product@5": {
+            "shape": [
+              130
+            ],
+            "dtype": "uint32",
+            "bytes": 520,
+            "sha256": "6e64b5c0f6bd123d8b841c1b3eb32afda7065d9fe4635ba4107115e8720e6cb8"
+          },
+          "exponential@5": {
+            "shape": [
+              130
+            ],
+            "dtype": "float32",
+            "bytes": 520,
+            "sha256": "e587bfff6360278fe4f4166008e1e606fb5171c347811b61e6cba6279d30af05"
+          },
+          "sigmoid@5": {
+            "shape": [
+              130
+            ],
+            "dtype": "float32",
+            "bytes": 520,
+            "sha256": "ec4e46b868f38605508760279e96bc2077ad3fa9b438ca4e08283de991424bdd"
+          },
+          "activation_fp32@5": {
+            "shape": [
+              130
+            ],
+            "dtype": "float32",
+            "bytes": 520,
+            "sha256": "791b154944d0edd28aa6a6315325589a2d4cf4672f686ebe63bfe01692a3f60a"
+          },
+          "product_fp32@5": {
+            "shape": [
+              130
+            ],
+            "dtype": "float32",
+            "bytes": 520,
+            "sha256": "791b154944d0edd28aa6a6315325589a2d4cf4672f686ebe63bfe01692a3f60a"
+          },
+          "broadcast@4": {
+            "shape": [
+              192
+            ],
+            "dtype": "float32",
+            "bytes": 768,
+            "sha256": "ef115a0e0c15cdc41958ca46b5b14b456115f4baec5e3ca68599d2a8f435e3b8"
+          },
+          "broadcast@5": {
+            "shape": [
+              128
+            ],
+            "dtype": "float32",
+            "bytes": 512,
+            "sha256": "076a27c79e5ace2a3d47f9dd2e83e4ff6ea8872b3c2218f66c92b89b55f36560"
+          },
+          "request@4": {
+            "shape": [
+              194
+            ],
+            "dtype": "uint32",
+            "bytes": 776,
+            "sha256": "564952419590dec44cfb5c2fd62fb36dbc0110dceca2179b64147ad853b0ec59"
+          }
+        }
+      },
+      {
+        "path": "weights.npz",
+        "bytes": 263714,
+        "sha256": "89c2c030733e764c99f8718bf828fd4a77faa6f87d9cb5d76ff134302323f354",
+        "arrays": {
+          "weights@0": {
+            "shape": [
+              12290
+            ],
+            "dtype": "uint32",
+            "bytes": 49160,
+            "sha256": "4bdf016ba6dfdfa9529d96a9237f1842a6aa782a221ede75047a303a1b4d32f8"
+          },
+          "weights@1": {
+            "shape": [
+              12290
+            ],
+            "dtype": "uint32",
+            "bytes": 49160,
+            "sha256": "ceb54c51db1758ce0ece2d7fd371bb529a75b4b9ccd6c3e2a07db1585de1bf08"
+          },
+          "weights@2": {
+            "shape": [
+              12290
+            ],
+            "dtype": "uint32",
+            "bytes": 49160,
+            "sha256": "db9d5d20ad2e93a49bed41cfd61e296e4096ea0e3c123a05184c5cf8359ceb91"
+          },
+          "weights@3": {
+            "shape": [
+              12290
+            ],
+            "dtype": "uint32",
+            "bytes": 49160,
+            "sha256": "c259d5f28c328c8b4b28d8d05670bbc2bf547cddd58df9f7ca4755bde334937b"
+          },
+          "weights@6": {
+            "shape": [
+              8194
+            ],
+            "dtype": "uint32",
+            "bytes": 32776,
+            "sha256": "6a6ca6eb7f5eb4feace0740f5502ff7fdd8a519b7f862d76a73be6b6f46ece6d"
+          },
+          "weights@7": {
+            "shape": [
+              8194
+            ],
+            "dtype": "uint32",
+            "bytes": 32776,
+            "sha256": "74175ada8803e0b3709458ddaa23c63ded7b7b297a4b6ae682b1d4cec4adf80a"
+          }
+        }
+      }
+    ],
+    "source_intervals_modified": false,
+    "weights_loaded_once": true,
+    "error_type": null,
+    "message": null
+  },
+  "source_manifest": {
+    "candidate": "wp16-resident-sdk-002",
+    "files": {
+      "README.md": "840bc9f46c0c9aae067614f14f1493e190fc1255c78a7c83f6f19787ca265401",
+      "admission-template-NOT-VALID.json": "e46a68ef47f8da0e8a2b3c0fbef7d32946c56dc1ff2d3a2693b16113f5ffa0bf",
+      "compile_sdk.py": "84b18e0b0d698440ab01ac88eaaaa5955bb4853b5ba2dc32e47b74f9aae1fa1c",
+      "compiled-admission.json": "65968df3874c250da1d184a866890a95787cd3743ecb1762d668d88130b83392",
+      "container_entry.py": "e955787d6f616825ef184e25efeb085cb87fd8828ae80d2904b8dc21203ba85a",
+      "core/qwen38/__init__.py": "92977aa9088ee68919bc3eff6b0c1a1e2f5162f15b7b0744ca75d02e63e3a01b",
+      "core/qwen38/elf_inventory.py": "625c548eceb21c8ce0eba710887111bd853fb5d77c07cb36922ec47c28a43161",
+      "core/qwen38/gated_numerics.py": "a14a8b0412a90523d41026a5a7b4a5e8bb5019f3ebe6bd56d3ccec68cf1e6e4c",
+      "core/qwen38/interval_numerics.py": "c4d69ced771f0501e8c0b8a051bf88a614c441ca88df9f07e6688a0285e4aab6",
+      "core/qwen38/locking.py": "a9546705141a7e0e3887a22c036e6695f0852d3825876dfc5f21d7ca27fa3629",
+      "core/qwen38/mlp_numerics.py": "1ea55329b6623cda7d0831fc712578dc0289d642f35f51436817531988e9406c",
+      "core/qwen38/mlp_reference_checks.py": "467a2dec4b1a3273e7875e2fb119b3c9e06b148b11f98c8544ea7b30784d6859",
+      "core/qwen38/mlp_streamed_source.py": "e95ac4b2cd8168b5789dd5b42ceefe8ef8ecf487d1ef2c77ecb8608e4ec5f420",
+      "core/qwen38/resident_elf_placement.py": "ea8bf1ddb9710f42ad8b380f3677ea79eefeab8e68bd7b4e510d26d292d6bf53",
+      "core/qwen38/resident_sdk_admission.py": "8728d54c143a44caa142eaeff732f2864ababa11b55914a711dfb3dac7a9ba2c",
+      "core/qwen38/resident_sdk_checks.py": "36af1748ef19502d2463665c94e300a7efc044c7cef2a873878ac1cde9b52521",
+      "core/qwen38/resident_sdk_driver.py": "9abeb9c72f082ac8e0951d2ba1e73d390988b4e596f6d96366ba85bb1a64d894",
+      "core/qwen38/resident_sdk_sequence.py": "fb2d18a643c7de4e8ba0a304b693fb160c920ec0cccf7d536e208753d9d91d42",
+      "core/qwen38/resident_source.py": "a8c842eb304a562f453b9f93cdb2e73d86e519e98a9ce897e861271bba051fcb",
+      "core/qwen38/resident_spatial.py": "77afbf55c28d466cc4ab5a78c399a069e10205e18d835c1fafe1080a0a5c62b6",
+      "core/qwen38/resident_spatial_numerics.py": "805b2036a0eafccd40d07f5bf78763da6382a018712fb5137e6e9c3ae5d87a60",
+      "core/qwen38/resources.py": "67610eddb4c1cb4557f6bba8179a26aa87be2638627315785689ac5ea3724049",
+      "core/qwen38/rms_numerics.py": "3f3b6f5df5a3ccf2af8da27a711501608d44d20cb32c3b6773ec84b68f7d0767",
+      "core/qwen38/rotary_trig.py": "c6634ee325333fbea3c40fdf0aa9cbe81b94348e101b3ed69102cc750f62f8ef",
+      "core/qwen38/trained_qk_rope_numerics.py": "045a265fbfabe1360143d6adc3cb05b189508458edfa2ca3ffc8349c68c81d22",
+      "core/qwen38/wp16_affinity.py": "3cb753f370869e3bfe290c1b01f7beba4d4aa36c20c2bdc4209844c1d59f4dc4",
+      "driver.py": "f0fd6152dfc61921de5dde72819a64ead743ce88cc3ad1636ead60bee1a5bd61",
+      "entry_sdk.py": "d0d26c8f064c1a713b340b6ac4c56154c86d136ca33872c6739b73bc98662bd4",
+      "exp_kernel.csl": "1dff6a4550d90bf788f4dd7f167a7240ed6742aefd25e3f7772a3bff58f583f7",
+      "gemv_kernel.csl": "3e92175efe12b28065bb77934c54136db3c9287c68c81877781a0e527354304c",
+      "guard_sdk.py": "094a87844bcc3912a57f7cdc649e85d50c40b77d684679af360ac2a155846241",
+      "input.csl": "e9b289a13f821df69a08e58e9bf6847f4b542d94d617c60d8df143413d2a61af",
+      "interfaces.json": "25bc80254c81a311ffc5a343a82e979c481a68355576574ad725a6696343c955",
+      "layout.csl": "1b731e9f989494cc5c3c44aa66bc99ec2132664083fc36717737c9616ea60d82",
+      "line.csl": "21f8628d937c6e481c24a45747895fb27caa1bd2a6b18d7338e138d492a4a529",
+      "nonlinear_kernel.csl": "65313bf5b798ac199f76ddc3fddbbf3de438f9edb0dbd5642763b67bd190a6b0",
+      "packets.csl": "151009e07423dc16bb2b2304f29e7e6c52e84e57613c809eb5188470e8bcc6c7",
+      "prepared/hidden.bf16": "b403c56b7a1e6cbefd9f909ea1eb04d0cffc175259df4a2b8b84e148d7a86fee",
+      "prepared/oracle.npz": "2e109cd55accd83c3a6ac147aa2fae8ee0f27ed2043d5b71ce4a4a23649dd96e",
+      "prepared/preparation.json": "1ac5572cfa0938e33af78f2ee6ca58306740eea3478550f5d2a4e0bb594d8ef3",
+      "prepared/weights/down_proj.bf16": "f7604a9da23ed57eceb60571dff046ade5e0e4bf0a701a4e02fe47459343130b",
+      "prepared/weights/gate_proj.bf16": "25a30e63dbf91b477712cc02a59936de65cc03be43b0662ed64e8cfbf55ac17b",
+      "prepared/weights/up_proj.bf16": "13f375a98b5e17ad774715cb44987d53ed782f5fcadb866955d17e394ca3bba3",
+      "private-compiled.json": "6b79dc2fae848b8ed1707b576028736fca3dd044f022587cf76d9e7c49aa927b",
+      "private-inputs.json": "fc78227247742bc22184d6c8a708362e008d8a0c64a272af3300de56a911bcbd",
+      "profile.json": "3c8579be0592649680b66958fa95e60b48c09f160cd7ae8c9fa4ec9b16d4a1e7",
+      "qualification/SDK-ELF-source-identity.json": "3da00b5a72a3ec04205719bf73295f0aabbc9469f96a4ae358e9e3783fb53dcf",
+      "qualification/accepted-source-audit.json": "b1254275abb39433e7837bd25ff17423a18050dc423050735bf2e76422ced010",
+      "qualification/accepted-source-manifest.json": "6fb78fa5d06c6d36fd2be5e32ab5f1979c8d3c80763c803e401480c0c7588485",
+      "qualification/freezer.py": "7bebf0f74e6890397b7b1ce7e96a9a04d90bea2d77a24699620e027e0005947e",
+      "qualification/parent-compile-observation.json": "9b5358eb7cd4d4d122c5e64050c600232184ae20d4b11fc10053f194b3f15175",
+      "qualification/parent-failure-review.json": "51c82b4520feb9acb1e5c8471df019b32c502667143f088dc1070bee3132faa6",
+      "qualification/parent-post-exit-audit.json": "3566575abd7deeaa97ccd380e79f8004708d1085abc684c445d18a02a59fbdb9",
+      "qualification/parent-sdk-manifest.json": "dbc7ada6414d6f0d78bcc702bc3286fab95c35c7103890b6dcab3cf2ed2c6cc5",
+      "qualification/resident-architecture.md": "8aafc4c080ab2325aaef70608ff17d83089aa29e852ead10e046365ede6f9a25",
+      "qualification/resident-priority.md": "4e9ad82698ccb1979efdd050614e7dd474ffc671636d46546456b77a18c48337",
+      "qualification/sdk-ledger.json": "ff9d709f89e2abd57fde104626421691f2865436a3c1f986791d2161bb3663ff",
+      "qualification/source-acceptance.json": "7ae69ff64d01cfe82e4504143ef2879b5acbd9d2f7a675dd28a335f87d4775d4",
+      "qualification/spatial-preliminary-review.json": "8cc02a1a90d60f73ee853da24a63d68ca46425786e4ffd74a22c107e7efc7481",
+      "source-validation.json": "c5b1d4649046a1b1a16fa74e68632311c0c7f148ec751e29e8d9668feec5d8c0",
+      "steps.json": "c57354aea8e94fe731f123b24d1d5de59f7fdf1fee26550ebdda1079ebc28169",
+      "tests/test_resident_elf_placement.py": "aafe16d308d3fcb6e84a193672261f394712613573147561b25985a842b2cee3",
+      "tests/test_resident_sdk_admission.py": "b2bef75a06df248da4a85ad67138579dfd04eb924f2931ccf17f9d9858429c88",
+      "tests/test_resident_sdk_loop.py": "5071ce7a498efd7c3359a74dc6e616379e05a9920ae6c8f9cf4225f9cc6fd56c",
+      "tests/test_resident_spatial.py": "3406ce0e2379f7e8671c24a91c9c977bc0ac53d88efa1eac4e30f605a51bd919",
+      "tests/test_resident_sram_gate.py": "bfac71486c55293bc171945942322cee119be35ae05c90c69538bdd185b80a69",
+      "tile.csl": "775777797703a0d1e8a57a55b3cda6a24fa1f870c657b71130990320392b4a10"
+    },
+    "package": "WP16"
+  },
+  "compiled_identity_and_SRAM": {
+    "compiled_bytes": 777441,
+    "files": {
+      "out/bin/out_0.dsatur.dot": {
+        "bytes": 4814,
+        "sha256": "e754400a0fa40f28eb51599a8ee744ffa8e155b6b892c936a08d83c49018937d"
+      },
+      "out/bin/out_0.greedy.dot": {
+        "bytes": 4937,
+        "sha256": "e2386bb2a7c1470f38d7c38eb7cb364682c5122f67f82c7d85c61164cd8731f4"
+      },
+      "out/bin/out_0_0.elf": {
+        "bytes": 64136,
+        "sha256": "022e6d7584324c5de7f7034fd9c6d8d40eeb8a5b9f281d60cec02d689233cc21"
+      },
+      "out/bin/out_1.dsatur.dot": {
+        "bytes": 4780,
+        "sha256": "71e55bf76d0bd82670de0c6460d760c20ea73806bed05d281a1ebad9c84602da"
+      },
+      "out/bin/out_1.greedy.dot": {
+        "bytes": 4903,
+        "sha256": "3d05ddebc23336d43044f9cd53bc61aacb02cd6555711c8d4a6b2e3ee1d6ddc1"
+      },
+      "out/bin/out_1_0.elf": {
+        "bytes": 62128,
+        "sha256": "35321c5606741f957ded152d5cffe14281980f8eadbee9cf0e8349534fe1a8bf"
+      },
+      "out/bin/out_2.dsatur.dot": {
+        "bytes": 4814,
+        "sha256": "e754400a0fa40f28eb51599a8ee744ffa8e155b6b892c936a08d83c49018937d"
+      },
+      "out/bin/out_2.greedy.dot": {
+        "bytes": 4937,
+        "sha256": "e2386bb2a7c1470f38d7c38eb7cb364682c5122f67f82c7d85c61164cd8731f4"
+      },
+      "out/bin/out_2_0.elf": {
+        "bytes": 64152,
+        "sha256": "728a8b79c85db14dc3fa9d8d20edae171293acd4cf23d281e5a91d51457eaabd"
+      },
+      "out/bin/out_3.dsatur.dot": {
+        "bytes": 4780,
+        "sha256": "71e55bf76d0bd82670de0c6460d760c20ea73806bed05d281a1ebad9c84602da"
+      },
+      "out/bin/out_3.greedy.dot": {
+        "bytes": 4903,
+        "sha256": "3d05ddebc23336d43044f9cd53bc61aacb02cd6555711c8d4a6b2e3ee1d6ddc1"
+      },
+      "out/bin/out_3_0.elf": {
+        "bytes": 62104,
+        "sha256": "29a221262ea37ca2bfd4bf9d0e2d0df5d7237f181270e4847c55cb5ece88e736"
+      },
+      "out/bin/out_4.greedy.dot": {
+        "bytes": 3221,
+        "sha256": "e12f95bbd7edec6a6c271eee92df7698b4781938ad40e29d6f7334ece49f48cd"
+      },
+      "out/bin/out_4_0.elf": {
+        "bytes": 35888,
+        "sha256": "a51a97a76e5a1862a59ed525910266a3e8006fa9049e4fa6c37c23f259d37f63"
+      },
+      "out/bin/out_5.greedy.dot": {
+        "bytes": 3221,
+        "sha256": "e12f95bbd7edec6a6c271eee92df7698b4781938ad40e29d6f7334ece49f48cd"
+      },
+      "out/bin/out_5_0.elf": {
+        "bytes": 42032,
+        "sha256": "c1c71544d00e6a8e869da2187200cc4acdd00f333c28583932fc8e30a89db279"
+      },
+      "out/bin/out_6.dsatur.dot": {
+        "bytes": 4814,
+        "sha256": "e754400a0fa40f28eb51599a8ee744ffa8e155b6b892c936a08d83c49018937d"
+      },
+      "out/bin/out_6.greedy.dot": {
+        "bytes": 4937,
+        "sha256": "e2386bb2a7c1470f38d7c38eb7cb364682c5122f67f82c7d85c61164cd8731f4"
+      },
+      "out/bin/out_6_0.elf": {
+        "bytes": 56088,
+        "sha256": "99bace70421366d437922c07e17721806b223505eb90541812f368a26cd0efde"
+      },
+      "out/bin/out_7.dsatur.dot": {
+        "bytes": 4780,
+        "sha256": "71e55bf76d0bd82670de0c6460d760c20ea73806bed05d281a1ebad9c84602da"
+      },
+      "out/bin/out_7.greedy.dot": {
+        "bytes": 4903,
+        "sha256": "3d05ddebc23336d43044f9cd53bc61aacb02cd6555711c8d4a6b2e3ee1d6ddc1"
+      },
+      "out/bin/out_7_0.elf": {
+        "bytes": 53792,
+        "sha256": "1fc61837da53e2692bb9423bc7eccf685c218356d443d2217a8bf2be8a29d385"
+      },
+      "out/bin/out_rpc.json": {
+        "bytes": 3028,
+        "sha256": "ba32963906bbd59c043b75b53ecd266b3265807bff3444a0f57109fe13bcbf15"
+      },
+      "out/east/bin/out_0_0.elf": {
+        "bytes": 47632,
+        "sha256": "0f51b9d07cf74c7945f11379f1f2b8e3ad8797d1ab075bc897d1d444a12cde13"
+      },
+      "out/east/bin/out_1_0.elf": {
+        "bytes": 47640,
+        "sha256": "892e1e910ca5026e7e393f193d57b8e9969de2eab44cf6065a1c749dec243c09"
+      },
+      "out/east/bin/out_2_0.elf": {
+        "bytes": 10664,
+        "sha256": "27f77685af41bb30b61950910c9e636b5fc5d80daeea7a2d7ca8acdd775b0418"
+      },
+      "out/east/bin/out_3_0.elf": {
+        "bytes": 13248,
+        "sha256": "3c8214021f5556b73d3fba956aef7aeae587baaec6750dcb60060b90f0e646f1"
+      },
+      "out/east/out.json": {
+        "bytes": 265,
+        "sha256": "ab6088266ebc7e6971a30c941d468c9b82b6b6639e78be4e08948146229bc614"
+      },
+      "out/out.json": {
+        "bytes": 25,
+        "sha256": "b67e94695ca5a56ae9ae1a4a78bc93d3cae5825997109038dd11891f3cab5bb1"
+      },
+      "out/west/bin/out_0_0.elf": {
+        "bytes": 14416,
+        "sha256": "4c4529866c38f71e0d3866a4c716bcc1f6fe057bd36efaedef0b8a2432732aaa"
+      },
+      "out/west/bin/out_1_0.elf": {
+        "bytes": 14408,
+        "sha256": "6388344be03c7e79bf3ddd3ab9d7faf94068eec878660d757fd2db8eafe69654"
+      },
+      "out/west/bin/out_2_0.elf": {
+        "bytes": 12840,
+        "sha256": "59bfd4c0529207ad2150f86fb8bb0745c3865e52878e8ba6f262f0f5bfd47df2"
+      },
+      "out/west/bin/out_3_0.elf": {
+        "bytes": 8640,
+        "sha256": "e5e1b8898a46cf59f32c1cfa53a481579d71a69dd95ae2cb9a00bc68299aafe0"
+      },
+      "out/west/bin/out_4_0.elf": {
+        "bytes": 49656,
+        "sha256": "84a7600a4b041d353339697951960cc47ca7d01ba8882d201b776b5bf33039db"
+      },
+      "out/west/bin/out_5_0.elf": {
+        "bytes": 49664,
+        "sha256": "1858ee82289aa09ca34ac1ebd42b2cb6ac4d4bd97066858202d2f3631f5cba7a"
+      },
+      "out/west/out.json": {
+        "bytes": 251,
+        "sha256": "19bd0e84a73de29db3c5306a5d735534408a0d3b3bd4cc814406a85034f88f5a"
+      }
+    },
+    "footprints": {
+      "out/bin/out_0_0.elf": {
+        "allocated_sections": [
+          {
+            "address": 0,
+            "bytes": 72,
+            "name": ".data.lo",
+            "type": 1
+          },
+          {
+            "address": 72,
+            "bytes": 6896,
+            "name": ".text",
+            "type": 1
+          },
+          {
+            "address": 6968,
+            "bytes": 76,
+            "name": ".data",
+            "type": 1
+          },
+          {
+            "address": 7044,
+            "bytes": 27570,
+            "name": ".bss",
+            "type": 8
+          },
+          {
+            "address": 34624,
+            "bytes": 1024,
+            "name": ".task_table",
+            "type": 1
+          },
+          {
+            "address": 64572,
+            "bytes": 2,
+            "name": ".entry_ival",
+            "type": 1
+          },
+          {
+            "address": 64536,
+            "bytes": 2,
+            "name": ".fpcw",
+            "type": 1
+          },
+          {
+            "address": 64538,
+            "bytes": 2,
+            "name": ".fscale",
+            "type": 1
+          },
+          {
+            "address": 64520,
+            "bytes": 4,
+            "name": ".blocked_ival",
+            "type": 1
+          },
+          {
+            "address": 64524,
+            "bytes": 4,
+            "name": ".active_ival",
+            "type": 1
+          },
+          {
+            "address": 64516,
+            "bytes": 4,
+            "name": ".blocked_ut_ival",
+            "type": 1
+          },
+          {
+            "address": 63488,
+            "bytes": 48,
+            "name": ".fabric_routes",
+            "type": 1
+          },
+          {
+            "address": 63744,
+            "bytes": 192,
+            "name": ".fabric_switches",
+            "type": 1
+          },
+          {
+            "address": 63360,
+            "bytes": 28,
+            "name": ".ce_in_q",
+            "type": 1
+          },
+          {
+            "address": 63232,
+            "bytes": 14,
+            "name": ".ce_out_q",
+            "type": 1
+          },
+          {
+            "address": 64416,
+            "bytes": 16,
+            "name": ".prng_state",
+            "type": 1
+          },
+          {
+            "address": 63104,
+            "bytes": 96,
+            "name": ".filters",
+            "type": 1
+          },
+          {
+            "address": 64528,
+            "bytes": 2,
+            "name": ".user_cfg_0",
+            "type": 1
+          },
+          {
+            "address": 64530,
+            "bytes": 2,
+            "name": ".user_cfg_1",
+            "type": 1
+          },
+          {
+            "address": 64548,
+            "bytes": 2,
+            "name": ".user_cfg_2",
+            "type": 1
+          },
+          {
+            "address": 64574,
+            "bytes": 2,
+            "name": ".user_cfg_3",
+            "type": 1
+          }
+        ],
+        "elf_class_bits": 64,
+        "scope": "ELF SHF_ALLOC sections; excludes unrepresented runtime stack/scratch demand",
+        "static_allocated_section_bytes": 36058
+      },
+      "out/bin/out_1_0.elf": {
+        "allocated_sections": [
+          {
+            "address": 0,
+            "bytes": 72,
+            "name": ".data.lo",
+            "type": 1
+          },
+          {
+            "address": 72,
+            "bytes": 6228,
+            "name": ".text",
+            "type": 1
+          },
+          {
+            "address": 6300,
+            "bytes": 76,
+            "name": ".data",
+            "type": 1
+          },
+          {
+            "address": 6376,
+            "bytes": 27302,
+            "name": ".bss",
+            "type": 8
+          },
+          {
+            "address": 33680,
+            "bytes": 1024,
+            "name": ".task_table",
+            "type": 1
+          },
+          {
+            "address": 64572,
+            "bytes": 2,
+            "name": ".entry_ival",
+            "type": 1
+          },
+          {
+            "address": 64536,
+            "bytes": 2,
+            "name": ".fpcw",
+            "type": 1
+          },
+          {
+            "address": 64538,
+            "bytes": 2,
+            "name": ".fscale",
+            "type": 1
+          },
+          {
+            "address": 64520,
+            "bytes": 4,
+            "name": ".blocked_ival",
+            "type": 1
+          },
+          {
+            "address": 64524,
+            "bytes": 4,
+            "name": ".active_ival",
+            "type": 1
+          },
+          {
+            "address": 64516,
+            "bytes": 4,
+            "name": ".blocked_ut_ival",
+            "type": 1
+          },
+          {
+            "address": 63488,
+            "bytes": 48,
+            "name": ".fabric_routes",
+            "type": 1
+          },
+          {
+            "address": 63744,
+            "bytes": 192,
+            "name": ".fabric_switches",
+            "type": 1
+          },
+          {
+            "address": 63360,
+            "bytes": 28,
+            "name": ".ce_in_q",
+            "type": 1
+          },
+          {
+            "address": 63232,
+            "bytes": 14,
+            "name": ".ce_out_q",
+            "type": 1
+          },
+          {
+            "address": 64416,
+            "bytes": 16,
+            "name": ".prng_state",
+            "type": 1
+          },
+          {
+            "address": 63104,
+            "bytes": 96,
+            "name": ".filters",
+            "type": 1
+          },
+          {
+            "address": 64528,
+            "bytes": 2,
+            "name": ".user_cfg_0",
+            "type": 1
+          },
+          {
+            "address": 64530,
+            "bytes": 2,
+            "name": ".user_cfg_1",
+            "type": 1
+          },
+          {
+            "address": 64548,
+            "bytes": 2,
+            "name": ".user_cfg_2",
+            "type": 1
+          },
+          {
+            "address": 64574,
+            "bytes": 2,
+            "name": ".user_cfg_3",
+            "type": 1
+          }
+        ],
+        "elf_class_bits": 64,
+        "scope": "ELF SHF_ALLOC sections; excludes unrepresented runtime stack/scratch demand",
+        "static_allocated_section_bytes": 35122
+      },
+      "out/bin/out_2_0.elf": {
+        "allocated_sections": [
+          {
+            "address": 0,
+            "bytes": 72,
+            "name": ".data.lo",
+            "type": 1
+          },
+          {
+            "address": 72,
+            "bytes": 6900,
+            "name": ".text",
+            "type": 1
+          },
+          {
+            "address": 6972,
+            "bytes": 76,
+            "name": ".data",
+            "type": 1
+          },
+          {
+            "address": 7048,
+            "bytes": 27570,
+            "name": ".bss",
+            "type": 8
+          },
+          {
+            "address": 34624,
+            "bytes": 1024,
+            "name": ".task_table",
+            "type": 1
+          },
+          {
+            "address": 64572,
+            "bytes": 2,
+            "name": ".entry_ival",
+            "type": 1
+          },
+          {
+            "address": 64536,
+            "bytes": 2,
+            "name": ".fpcw",
+            "type": 1
+          },
+          {
+            "address": 64538,
+            "bytes": 2,
+            "name": ".fscale",
+            "type": 1
+          },
+          {
+            "address": 64520,
+            "bytes": 4,
+            "name": ".blocked_ival",
+            "type": 1
+          },
+          {
+            "address": 64524,
+            "bytes": 4,
+            "name": ".active_ival",
+            "type": 1
+          },
+          {
+            "address": 64516,
+            "bytes": 4,
+            "name": ".blocked_ut_ival",
+            "type": 1
+          },
+          {
+            "address": 63488,
+            "bytes": 48,
+            "name": ".fabric_routes",
+            "type": 1
+          },
+          {
+            "address": 63744,
+            "bytes": 192,
+            "name": ".fabric_switches",
+            "type": 1
+          },
+          {
+            "address": 63360,
+            "bytes": 28,
+            "name": ".ce_in_q",
+            "type": 1
+          },
+          {
+            "address": 63232,
+            "bytes": 14,
+            "name": ".ce_out_q",
+            "type": 1
+          },
+          {
+            "address": 64416,
+            "bytes": 16,
+            "name": ".prng_state",
+            "type": 1
+          },
+          {
+            "address": 63104,
+            "bytes": 96,
+            "name": ".filters",
+            "type": 1
+          },
+          {
+            "address": 64528,
+            "bytes": 2,
+            "name": ".user_cfg_0",
+            "type": 1
+          },
+          {
+            "address": 64530,
+            "bytes": 2,
+            "name": ".user_cfg_1",
+            "type": 1
+          },
+          {
+            "address": 64548,
+            "bytes": 2,
+            "name": ".user_cfg_2",
+            "type": 1
+          },
+          {
+            "address": 64574,
+            "bytes": 2,
+            "name": ".user_cfg_3",
+            "type": 1
+          }
+        ],
+        "elf_class_bits": 64,
+        "scope": "ELF SHF_ALLOC sections; excludes unrepresented runtime stack/scratch demand",
+        "static_allocated_section_bytes": 36062
+      },
+      "out/bin/out_3_0.elf": {
+        "allocated_sections": [
+          {
+            "address": 0,
+            "bytes": 72,
+            "name": ".data.lo",
+            "type": 1
+          },
+          {
+            "address": 72,
+            "bytes": 6228,
+            "name": ".text",
+            "type": 1
+          },
+          {
+            "address": 6300,
+            "bytes": 76,
+            "name": ".data",
+            "type": 1
+          },
+          {
+            "address": 6376,
+            "bytes": 27302,
+            "name": ".bss",
+            "type": 8
+          },
+          {
+            "address": 33680,
+            "bytes": 1024,
+            "name": ".task_table",
+            "type": 1
+          },
+          {
+            "address": 64572,
+            "bytes": 2,
+            "name": ".entry_ival",
+            "type": 1
+          },
+          {
+            "address": 64536,
+            "bytes": 2,
+            "name": ".fpcw",
+            "type": 1
+          },
+          {
+            "address": 64538,
+            "bytes": 2,
+            "name": ".fscale",
+            "type": 1
+          },
+          {
+            "address": 64520,
+            "bytes": 4,
+            "name": ".blocked_ival",
+            "type": 1
+          },
+          {
+            "address": 64524,
+            "bytes": 4,
+            "name": ".active_ival",
+            "type": 1
+          },
+          {
+            "address": 64516,
+            "bytes": 4,
+            "name": ".blocked_ut_ival",
+            "type": 1
+          },
+          {
+            "address": 63488,
+            "bytes": 48,
+            "name": ".fabric_routes",
+            "type": 1
+          },
+          {
+            "address": 63744,
+            "bytes": 192,
+            "name": ".fabric_switches",
+            "type": 1
+          },
+          {
+            "address": 63360,
+            "bytes": 28,
+            "name": ".ce_in_q",
+            "type": 1
+          },
+          {
+            "address": 63232,
+            "bytes": 14,
+            "name": ".ce_out_q",
+            "type": 1
+          },
+          {
+            "address": 64416,
+            "bytes": 16,
+            "name": ".prng_state",
+            "type": 1
+          },
+          {
+            "address": 63104,
+            "bytes": 96,
+            "name": ".filters",
+            "type": 1
+          },
+          {
+            "address": 64528,
+            "bytes": 2,
+            "name": ".user_cfg_0",
+            "type": 1
+          },
+          {
+            "address": 64530,
+            "bytes": 2,
+            "name": ".user_cfg_1",
+            "type": 1
+          },
+          {
+            "address": 64548,
+            "bytes": 2,
+            "name": ".user_cfg_2",
+            "type": 1
+          },
+          {
+            "address": 64574,
+            "bytes": 2,
+            "name": ".user_cfg_3",
+            "type": 1
+          }
+        ],
+        "elf_class_bits": 64,
+        "scope": "ELF SHF_ALLOC sections; excludes unrepresented runtime stack/scratch demand",
+        "static_allocated_section_bytes": 35122
+      },
+      "out/bin/out_4_0.elf": {
+        "allocated_sections": [
+          {
+            "address": 0,
+            "bytes": 72,
+            "name": ".data.lo",
+            "type": 1
+          },
+          {
+            "address": 72,
+            "bytes": 5716,
+            "name": ".text",
+            "type": 1
+          },
+          {
+            "address": 5788,
+            "bytes": 76,
+            "name": ".data",
+            "type": 1
+          },
+          {
+            "address": 5864,
+            "bytes": 2186,
+            "name": ".bss",
+            "type": 8
+          },
+          {
+            "address": 8064,
+            "bytes": 1024,
+            "name": ".task_table",
+            "type": 1
+          },
+          {
+            "address": 64572,
+            "bytes": 2,
+            "name": ".entry_ival",
+            "type": 1
+          },
+          {
+            "address": 64536,
+            "bytes": 2,
+            "name": ".fpcw",
+            "type": 1
+          },
+          {
+            "address": 64538,
+            "bytes": 2,
+            "name": ".fscale",
+            "type": 1
+          },
+          {
+            "address": 64520,
+            "bytes": 4,
+            "name": ".blocked_ival",
+            "type": 1
+          },
+          {
+            "address": 64524,
+            "bytes": 4,
+            "name": ".active_ival",
+            "type": 1
+          },
+          {
+            "address": 64516,
+            "bytes": 4,
+            "name": ".blocked_ut_ival",
+            "type": 1
+          },
+          {
+            "address": 63488,
+            "bytes": 48,
+            "name": ".fabric_routes",
+            "type": 1
+          },
+          {
+            "address": 63744,
+            "bytes": 192,
+            "name": ".fabric_switches",
+            "type": 1
+          },
+          {
+            "address": 63360,
+            "bytes": 28,
+            "name": ".ce_in_q",
+            "type": 1
+          },
+          {
+            "address": 63232,
+            "bytes": 14,
+            "name": ".ce_out_q",
+            "type": 1
+          },
+          {
+            "address": 64416,
+            "bytes": 16,
+            "name": ".prng_state",
+            "type": 1
+          },
+          {
+            "address": 63104,
+            "bytes": 96,
+            "name": ".filters",
+            "type": 1
+          },
+          {
+            "address": 64528,
+            "bytes": 2,
+            "name": ".user_cfg_0",
+            "type": 1
+          },
+          {
+            "address": 64530,
+            "bytes": 2,
+            "name": ".user_cfg_1",
+            "type": 1
+          },
+          {
+            "address": 64548,
+            "bytes": 2,
+            "name": ".user_cfg_2",
+            "type": 1
+          },
+          {
+            "address": 64574,
+            "bytes": 2,
+            "name": ".user_cfg_3",
+            "type": 1
+          }
+        ],
+        "elf_class_bits": 64,
+        "scope": "ELF SHF_ALLOC sections; excludes unrepresented runtime stack/scratch demand",
+        "static_allocated_section_bytes": 9494
+      },
+      "out/bin/out_5_0.elf": {
+        "allocated_sections": [
+          {
+            "address": 0,
+            "bytes": 72,
+            "name": ".data.lo",
+            "type": 1
+          },
+          {
+            "address": 72,
+            "bytes": 7596,
+            "name": ".text",
+            "type": 1
+          },
+          {
+            "address": 7668,
+            "bytes": 76,
+            "name": ".data",
+            "type": 1
+          },
+          {
+            "address": 7744,
+            "bytes": 4394,
+            "name": ".bss",
+            "type": 8
+          },
+          {
+            "address": 12144,
+            "bytes": 1024,
+            "name": ".task_table",
+            "type": 1
+          },
+          {
+            "address": 64572,
+            "bytes": 2,
+            "name": ".entry_ival",
+            "type": 1
+          },
+          {
+            "address": 64536,
+            "bytes": 2,
+            "name": ".fpcw",
+            "type": 1
+          },
+          {
+            "address": 64538,
+            "bytes": 2,
+            "name": ".fscale",
+            "type": 1
+          },
+          {
+            "address": 64520,
+            "bytes": 4,
+            "name": ".blocked_ival",
+            "type": 1
+          },
+          {
+            "address": 64524,
+            "bytes": 4,
+            "name": ".active_ival",
+            "type": 1
+          },
+          {
+            "address": 64516,
+            "bytes": 4,
+            "name": ".blocked_ut_ival",
+            "type": 1
+          },
+          {
+            "address": 63488,
+            "bytes": 48,
+            "name": ".fabric_routes",
+            "type": 1
+          },
+          {
+            "address": 63744,
+            "bytes": 192,
+            "name": ".fabric_switches",
+            "type": 1
+          },
+          {
+            "address": 63360,
+            "bytes": 28,
+            "name": ".ce_in_q",
+            "type": 1
+          },
+          {
+            "address": 63232,
+            "bytes": 14,
+            "name": ".ce_out_q",
+            "type": 1
+          },
+          {
+            "address": 64416,
+            "bytes": 16,
+            "name": ".prng_state",
+            "type": 1
+          },
+          {
+            "address": 63104,
+            "bytes": 96,
+            "name": ".filters",
+            "type": 1
+          },
+          {
+            "address": 64528,
+            "bytes": 2,
+            "name": ".user_cfg_0",
+            "type": 1
+          },
+          {
+            "address": 64530,
+            "bytes": 2,
+            "name": ".user_cfg_1",
+            "type": 1
+          },
+          {
+            "address": 64548,
+            "bytes": 2,
+            "name": ".user_cfg_2",
+            "type": 1
+          },
+          {
+            "address": 64574,
+            "bytes": 2,
+            "name": ".user_cfg_3",
+            "type": 1
+          }
+        ],
+        "elf_class_bits": 64,
+        "scope": "ELF SHF_ALLOC sections; excludes unrepresented runtime stack/scratch demand",
+        "static_allocated_section_bytes": 13582
+      },
+      "out/bin/out_6_0.elf": {
+        "allocated_sections": [
+          {
+            "address": 0,
+            "bytes": 72,
+            "name": ".data.lo",
+            "type": 1
+          },
+          {
+            "address": 72,
+            "bytes": 7056,
+            "name": ".text",
+            "type": 1
+          },
+          {
+            "address": 7128,
+            "bytes": 76,
+            "name": ".data",
+            "type": 1
+          },
+          {
+            "address": 7204,
+            "bytes": 19250,
+            "name": ".bss",
+            "type": 8
+          },
+          {
+            "address": 26464,
+            "bytes": 1024,
+            "name": ".task_table",
+            "type": 1
+          },
+          {
+            "address": 64572,
+            "bytes": 2,
+            "name": ".entry_ival",
+            "type": 1
+          },
+          {
+            "address": 64536,
+            "bytes": 2,
+            "name": ".fpcw",
+            "type": 1
+          },
+          {
+            "address": 64538,
+            "bytes": 2,
+            "name": ".fscale",
+            "type": 1
+          },
+          {
+            "address": 64520,
+            "bytes": 4,
+            "name": ".blocked_ival",
+            "type": 1
+          },
+          {
+            "address": 64524,
+            "bytes": 4,
+            "name": ".active_ival",
+            "type": 1
+          },
+          {
+            "address": 64516,
+            "bytes": 4,
+            "name": ".blocked_ut_ival",
+            "type": 1
+          },
+          {
+            "address": 63488,
+            "bytes": 48,
+            "name": ".fabric_routes",
+            "type": 1
+          },
+          {
+            "address": 63744,
+            "bytes": 192,
+            "name": ".fabric_switches",
+            "type": 1
+          },
+          {
+            "address": 63360,
+            "bytes": 28,
+            "name": ".ce_in_q",
+            "type": 1
+          },
+          {
+            "address": 63232,
+            "bytes": 14,
+            "name": ".ce_out_q",
+            "type": 1
+          },
+          {
+            "address": 64416,
+            "bytes": 16,
+            "name": ".prng_state",
+            "type": 1
+          },
+          {
+            "address": 63104,
+            "bytes": 96,
+            "name": ".filters",
+            "type": 1
+          },
+          {
+            "address": 64528,
+            "bytes": 2,
+            "name": ".user_cfg_0",
+            "type": 1
+          },
+          {
+            "address": 64530,
+            "bytes": 2,
+            "name": ".user_cfg_1",
+            "type": 1
+          },
+          {
+            "address": 64548,
+            "bytes": 2,
+            "name": ".user_cfg_2",
+            "type": 1
+          },
+          {
+            "address": 64574,
+            "bytes": 2,
+            "name": ".user_cfg_3",
+            "type": 1
+          }
+        ],
+        "elf_class_bits": 64,
+        "scope": "ELF SHF_ALLOC sections; excludes unrepresented runtime stack/scratch demand",
+        "static_allocated_section_bytes": 27898
+      },
+      "out/bin/out_7_0.elf": {
+        "allocated_sections": [
+          {
+            "address": 0,
+            "bytes": 72,
+            "name": ".data.lo",
+            "type": 1
+          },
+          {
+            "address": 72,
+            "bytes": 6228,
+            "name": ".text",
+            "type": 1
+          },
+          {
+            "address": 6300,
+            "bytes": 76,
+            "name": ".data",
+            "type": 1
+          },
+          {
+            "address": 6376,
+            "bytes": 18982,
+            "name": ".bss",
+            "type": 8
+          },
+          {
+            "address": 25360,
+            "bytes": 1024,
+            "name": ".task_table",
+            "type": 1
+          },
+          {
+            "address": 64572,
+            "bytes": 2,
+            "name": ".entry_ival",
+            "type": 1
+          },
+          {
+            "address": 64536,
+            "bytes": 2,
+            "name": ".fpcw",
+            "type": 1
+          },
+          {
+            "address": 64538,
+            "bytes": 2,
+            "name": ".fscale",
+            "type": 1
+          },
+          {
+            "address": 64520,
+            "bytes": 4,
+            "name": ".blocked_ival",
+            "type": 1
+          },
+          {
+            "address": 64524,
+            "bytes": 4,
+            "name": ".active_ival",
+            "type": 1
+          },
+          {
+            "address": 64516,
+            "bytes": 4,
+            "name": ".blocked_ut_ival",
+            "type": 1
+          },
+          {
+            "address": 63488,
+            "bytes": 48,
+            "name": ".fabric_routes",
+            "type": 1
+          },
+          {
+            "address": 63744,
+            "bytes": 192,
+            "name": ".fabric_switches",
+            "type": 1
+          },
+          {
+            "address": 63360,
+            "bytes": 28,
+            "name": ".ce_in_q",
+            "type": 1
+          },
+          {
+            "address": 63232,
+            "bytes": 14,
+            "name": ".ce_out_q",
+            "type": 1
+          },
+          {
+            "address": 64416,
+            "bytes": 16,
+            "name": ".prng_state",
+            "type": 1
+          },
+          {
+            "address": 63104,
+            "bytes": 96,
+            "name": ".filters",
+            "type": 1
+          },
+          {
+            "address": 64528,
+            "bytes": 2,
+            "name": ".user_cfg_0",
+            "type": 1
+          },
+          {
+            "address": 64530,
+            "bytes": 2,
+            "name": ".user_cfg_1",
+            "type": 1
+          },
+          {
+            "address": 64548,
+            "bytes": 2,
+            "name": ".user_cfg_2",
+            "type": 1
+          },
+          {
+            "address": 64574,
+            "bytes": 2,
+            "name": ".user_cfg_3",
+            "type": 1
+          }
+        ],
+        "elf_class_bits": 64,
+        "scope": "ELF SHF_ALLOC sections; excludes unrepresented runtime stack/scratch demand",
+        "static_allocated_section_bytes": 26802
+      }
+    },
+    "passed": true,
+    "pes": {
+      "out/bin/out_0_0.elf": {
+        "low_section_bytes": 35638,
+        "low_section_end": 35648,
+        "ordinary_address_ceiling": 48128,
+        "passed": true,
+        "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak",
+        "stack_allowance_bytes": 4096,
+        "static_allocated_section_bytes": 36058
+      },
+      "out/bin/out_1_0.elf": {
+        "low_section_bytes": 34702,
+        "low_section_end": 34704,
+        "ordinary_address_ceiling": 48128,
+        "passed": true,
+        "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak",
+        "stack_allowance_bytes": 4096,
+        "static_allocated_section_bytes": 35122
+      },
+      "out/bin/out_2_0.elf": {
+        "low_section_bytes": 35642,
+        "low_section_end": 35648,
+        "ordinary_address_ceiling": 48128,
+        "passed": true,
+        "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak",
+        "stack_allowance_bytes": 4096,
+        "static_allocated_section_bytes": 36062
+      },
+      "out/bin/out_3_0.elf": {
+        "low_section_bytes": 34702,
+        "low_section_end": 34704,
+        "ordinary_address_ceiling": 48128,
+        "passed": true,
+        "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak",
+        "stack_allowance_bytes": 4096,
+        "static_allocated_section_bytes": 35122
+      },
+      "out/bin/out_4_0.elf": {
+        "low_section_bytes": 9074,
+        "low_section_end": 9088,
+        "ordinary_address_ceiling": 48128,
+        "passed": true,
+        "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak",
+        "stack_allowance_bytes": 4096,
+        "static_allocated_section_bytes": 9494
+      },
+      "out/bin/out_5_0.elf": {
+        "low_section_bytes": 13162,
+        "low_section_end": 13168,
+        "ordinary_address_ceiling": 48128,
+        "passed": true,
+        "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak",
+        "stack_allowance_bytes": 4096,
+        "static_allocated_section_bytes": 13582
+      },
+      "out/bin/out_6_0.elf": {
+        "low_section_bytes": 27478,
+        "low_section_end": 27488,
+        "ordinary_address_ceiling": 48128,
+        "passed": true,
+        "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak",
+        "stack_allowance_bytes": 4096,
+        "static_allocated_section_bytes": 27898
+      },
+      "out/bin/out_7_0.elf": {
+        "low_section_bytes": 26382,
+        "low_section_end": 26384,
+        "ordinary_address_ceiling": 48128,
+        "passed": true,
+        "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak",
+        "stack_allowance_bytes": 4096,
+        "static_allocated_section_bytes": 26802
+      }
+    }
+  },
+  "numerical_artifacts": {
+    "wp16-resident-initial.json": "7ba41e2d975ad64cba9aa829e7c9ff922674e835cc0e0695b553fd90d9bd4888",
+    "wp16-resident-generation1.json": "3ac2658025a911b9a5e2f93cdfed8f7906320db31a93140ea10aacf7426d4389",
+    "wp16-resident-generation2.json": "dbbcebd556f68cf5c9b3fee4c597c5fc9baf5d3de6ffe0b48bd3459ac01b9c79",
+    "wp16-resident-generation3.json": "54c9b020d84e07772bd3cf90df1df194027391d7efd41c3c92d8799564514a75"
+  },
+  "source_artifacts": {
+    "wp16-resident-source-gate_partial0_fp32.json": "a4a3773a32d2445c5683dfd8acc1df95e8a70821f6934b82b760ea84685a7e38",
+    "wp16-resident-source-gate_partial1_fp32.json": "f22eb59ae112e6e492ef29dde8660fe1ca968a8aa7a3d7017fd5e0b26ae7120e",
+    "wp16-resident-source-gate_sum_fp32.json": "2bf1ca87a169579d2def68194b7be6e5428698063fc230e45e60b659e29a4f0a",
+    "wp16-resident-source-gate_bf16.json": "4fd8f489cdbb2367db9c0cc16f45e6aeefe10bec538f6347df8350e0e78fbdcb",
+    "wp16-resident-source-up_partial0_fp32.json": "d8515ac2b4216d7e48d003db9af2d7bcde3c484fda6e6a80b763213970334021",
+    "wp16-resident-source-up_partial1_fp32.json": "438a710e8dd58cd65fedbd27b927be8dc9e43483e7d20521b9f96b2e3a1dfa18",
+    "wp16-resident-source-up_sum_fp32.json": "4e215eed607de5744eeba999ae515aaee56ebe055ebd63d38c7b15edc4b53506",
+    "wp16-resident-source-up_bf16.json": "ac2e60077941e5ffce32b3afe15f5e61cd6aa65705d7f005418791307a7ccbab",
+    "wp16-resident-source-silu_fp32.json": "7d042f597f863e4e05dd3bdb83d95b12cd6d73497d8b83cd1e6d8d36f46b5ab8",
+    "wp16-resident-source-silu_bf16.json": "6f5b7181f27820165478fbf3ab35a445bfc65af1bb4ffd2e3c7b9f1eded354d8",
+    "wp16-resident-source-product_fp32.json": "54dbb0404b4cce2707f14b7bbfd6dc31652e8786e9f2c71edf1e8c1711429be9",
+    "wp16-resident-source-product_bf16.json": "4a15efbc0d100d922a338633ab2c3066feaf0226bb386eea5d8bb96018dd4b9e",
+    "wp16-resident-source-down_partial0_fp32.json": "67d15b3149c4f50e009f06716f02321f9e7a2da574b96137f6ddf431863b7b53",
+    "wp16-resident-source-down_partial1_fp32.json": "ba92a6e9d7937d46d55383d332e079ea11d1c9e8f1b48e38ca0ec1f4bd970d94",
+    "wp16-resident-source-down_sum_fp32.json": "b7a145171120895cc9d366bbb3f3f5ad230ee6b74609e3c341541d1175c8178f",
+    "wp16-resident-source-down_bf16.json": "f8a762d5d0376acb31b7654c26a23e6857bf4c4e4c190ddde4e9b0e549f1d870"
+  },
+  "input_artifact": "wp16-resident-inputs.json",
+  "journal": {
+    "file": "wp16-resident-journal.jsonl",
+    "bytes": 69253,
+    "records": 268,
+    "sha256": "c60617d19f9abf77bfe1ac31dd74ed70d26fe5e014f87e661a2d486cd7ed75f7",
+    "exact_original_bytes": true
+  },
+  "source_preparation": {
+    "status": "resident_source_prepared",
+    "source_manifest_sha256": "6fb78fa5d06c6d36fd2be5e32ab5f1979c8d3c80763c803e401480c0c7588485",
+    "input_read_count": 4,
+    "input_read_bytes": 2695168,
+    "helper_sha256": {
+      "mlp_streamed_source.py": "e95ac4b2cd8168b5789dd5b42ceefe8ef8ecf487d1ef2c77ecb8608e4ec5f420",
+      "mlp_numerics.py": "1ea55329b6623cda7d0831fc712578dc0289d642f35f51436817531988e9406c",
+      "mlp_reference_checks.py": "467a2dec4b1a3273e7875e2fb119b3c9e06b148b11f98c8544ea7b30784d6859"
+    },
+    "generation_input_contraction": [
+      [
+        1,
+        0,
+        1
+      ],
+      [
+        2,
+        1,
+        2
+      ],
+      [
+        3,
+        3,
+        3
+      ]
+    ],
+    "projection_input_range": [
+      0,
+      192
+    ],
+    "channel_range": [
+      0,
+      128
+    ],
+    "output_range": [
+      0,
+      128
+    ],
+    "projection_shard_columns": 96,
+    "down_shard_columns": 64,
+    "files": {
+      "hidden.bf16": {
+        "bytes": 1152,
+        "sha256": "b403c56b7a1e6cbefd9f909ea1eb04d0cffc175259df4a2b8b84e148d7a86fee"
+      },
+      "weights/gate_proj.bf16": {
+        "bytes": 49152,
+        "sha256": "25a30e63dbf91b477712cc02a59936de65cc03be43b0662ed64e8cfbf55ac17b"
+      },
+      "weights/up_proj.bf16": {
+        "bytes": 49152,
+        "sha256": "13f375a98b5e17ad774715cb44987d53ed782f5fcadb866955d17e394ca3bba3"
+      },
+      "weights/down_proj.bf16": {
+        "bytes": 32768,
+        "sha256": "f7604a9da23ed57eceb60571dff046ade5e0e4bf0a701a4e02fe47459343130b"
+      },
+      "oracle.npz": {
+        "bytes": 102454,
+        "sha256": "2e109cd55accd83c3a6ac147aa2fae8ee0f27ed2043d5b71ce4a4a23649dd96e"
+      }
+    },
+    "numeric_bytes": 98304,
+    "arrays": {
+      "gate_partial0_fp32": {
+        "shape": [
+          3,
+          128,
+          2
+        ],
+        "dtype": "float64",
+        "bytes": 6144,
+        "sha256": "b045dd1a0e7c6785cb455aa244e5fbf32b047e7c8f61cf402697b5598e583907"
+      },
+      "gate_partial1_fp32": {
+        "shape": [
+          3,
+          128,
+          2
+        ],
+        "dtype": "float64",
+        "bytes": 6144,
+        "sha256": "2fddbf885f2dd2090436e5800a633233fd720b4beb0d5a18d3cda58fc912d151"
+      },
+      "gate_sum_fp32": {
+        "shape": [
+          3,
+          128,
+          2
+        ],
+        "dtype": "float64",
+        "bytes": 6144,
+        "sha256": "d8366f8ff92b9bffc12989774f33dbb5328ef9fedc11102da641b314f1317dc0"
+      },
+      "gate_bf16": {
+        "shape": [
+          3,
+          128,
+          2
+        ],
+        "dtype": "float64",
+        "bytes": 6144,
+        "sha256": "b3bd699b92a335c314f121f0c90356afc38b68b7684e27fb7746349be2feadcb"
+      },
+      "up_partial0_fp32": {
+        "shape": [
+          3,
+          128,
+          2
+        ],
+        "dtype": "float64",
+        "bytes": 6144,
+        "sha256": "d1a4d26ad24f905a7ce020a89fe6d5ef1013bc928cdaa47ee2b9dea7f3a94708"
+      },
+      "up_partial1_fp32": {
+        "shape": [
+          3,
+          128,
+          2
+        ],
+        "dtype": "float64",
+        "bytes": 6144,
+        "sha256": "f68c2f525e6e6958ff55b6446385569aa0017dd9490bd4d3f0026ca1d5590345"
+      },
+      "up_sum_fp32": {
+        "shape": [
+          3,
+          128,
+          2
+        ],
+        "dtype": "float64",
+        "bytes": 6144,
+        "sha256": "3c6c545d24121a761a3e0842c6671709f4687603870284dc8d971bffeceb8f49"
+      },
+      "up_bf16": {
+        "shape": [
+          3,
+          128,
+          2
+        ],
+        "dtype": "float64",
+        "bytes": 6144,
+        "sha256": "1dd0f2ad0074283b7d6b654dca8d9e719f6d9a3bcb5f480a42d8f5219ed9bec9"
+      },
+      "silu_fp32": {
+        "shape": [
+          3,
+          128,
+          2
+        ],
+        "dtype": "float64",
+        "bytes": 6144,
+        "sha256": "2e6ef7eace93ddc3f28b261665088afae39e169ae1f68c072b2322a3341b552e"
+      },
+      "silu_bf16": {
+        "shape": [
+          3,
+          128,
+          2
+        ],
+        "dtype": "float64",
+        "bytes": 6144,
+        "sha256": "210d75178e3af4006c1ecf410aeb17b6bf5a9925dbf7c26d7da297b8ab1087af"
+      },
+      "product_fp32": {
+        "shape": [
+          3,
+          128,
+          2
+        ],
+        "dtype": "float64",
+        "bytes": 6144,
+        "sha256": "36a8004e4eb65be58ffdb8d236e49f2705f4a254a663bcce1edcde1ff330fe37"
+      },
+      "product_bf16": {
+        "shape": [
+          3,
+          128,
+          2
+        ],
+        "dtype": "float64",
+        "bytes": 6144,
+        "sha256": "758132e24c8d0c12e4cdec1fdaf19291c34ce2252c9d94e7fc652fad94955751"
+      },
+      "down_partial0_fp32": {
+        "shape": [
+          3,
+          128,
+          2
+        ],
+        "dtype": "float64",
+        "bytes": 6144,
+        "sha256": "f682c847860530a475f2e7c69b432557ce695fc9051d75027e5578e1b756e7c6"
+      },
+      "down_partial1_fp32": {
+        "shape": [
+          3,
+          128,
+          2
+        ],
+        "dtype": "float64",
+        "bytes": 6144,
+        "sha256": "4c3fe459d91bcede6e36e282aa526bd038db54c93220995e0dc0749d88107425"
+      },
+      "down_sum_fp32": {
+        "shape": [
+          3,
+          128,
+          2
+        ],
+        "dtype": "float64",
+        "bytes": 6144,
+        "sha256": "37e74c7da790351eff7dc37e626ee141488376eb05e3fe00c580c45fe8f0394a"
+      },
+      "down_bf16": {
+        "shape": [
+          3,
+          128,
+          2
+        ],
+        "dtype": "float64",
+        "bytes": 6144,
+        "sha256": "2cd7c034ba883ca0bf36f7172c4c3a8c4561426e8094b5f7c8db5f5efb91f109"
+      }
+    },
+    "linear_bounds_calls": 36,
+    "cumulative_weight_elements": 196608,
+    "scalar_silu_calls": 384,
+    "scalar_product_calls": 384,
+    "FP32_pair_rows": 1152,
+    "counterfactual_pair_rows": 384,
+    "sensitivity": {
+      "passed": true,
+      "dense_changed_disjoint_rows": {
+        "gate_bf16": 128,
+        "up_bf16": 128,
+        "product_bf16": 127,
+        "down_bf16": 127
+      },
+      "changed_down_nonzero_rows": 128,
+      "all_zero_source_arrays": true,
+      "dense_fault_disjoint_rows": {
+        "gate": {
+          "missing_second_shard_disjoint_rows": 127,
+          "early_partial_BF16_disjoint_rows": 22
+        },
+        "up": {
+          "missing_second_shard_disjoint_rows": 128,
+          "early_partial_BF16_disjoint_rows": 24
+        },
+        "down": {
+          "missing_second_shard_disjoint_rows": 128,
+          "early_partial_BF16_disjoint_rows": 0
+        }
+      },
+      "early_cast_counts_are_reported_not_a_new_tolerance": true,
+      "claim": "Whole-vector stale/zero and missing projection branch sensitivity; row counts explicit"
+    },
+    "phase_bytes": 612,
+    "source_uses_CPU_or_SDK_observations": false,
+    "new_weight_acquisition": false,
+    "HDD_reads": false,
+    "original_model_rerun": false,
+    "Torch_imported": false,
+    "SDK_executed": false,
+    "network_payload_bytes": 0,
+    "seconds": 0.1562324669212103
+  },
+  "typed_device_arrays": 106,
+  "raw_nonparameter_device_bytes": 54568,
+  "typed_source_arrays": 16,
+  "raw_source_bytes": 98304,
+  "raw_input_bytes": 1152,
+  "omitted_parameter_arrays": {
+    "weights@0": {
+      "shape": [
+        12290
+      ],
+      "dtype": "uint32",
+      "bytes": 49160,
+      "sha256": "4bdf016ba6dfdfa9529d96a9237f1842a6aa782a221ede75047a303a1b4d32f8"
+    },
+    "weights@1": {
+      "shape": [
+        12290
+      ],
+      "dtype": "uint32",
+      "bytes": 49160,
+      "sha256": "ceb54c51db1758ce0ece2d7fd371bb529a75b4b9ccd6c3e2a07db1585de1bf08"
+    },
+    "weights@2": {
+      "shape": [
+        12290
+      ],
+      "dtype": "uint32",
+      "bytes": 49160,
+      "sha256": "db9d5d20ad2e93a49bed41cfd61e296e4096ea0e3c123a05184c5cf8359ceb91"
+    },
+    "weights@3": {
+      "shape": [
+        12290
+      ],
+      "dtype": "uint32",
+      "bytes": 49160,
+      "sha256": "c259d5f28c328c8b4b28d8d05670bbc2bf547cddd58df9f7ca4755bde334937b"
+    },
+    "weights@6": {
+      "shape": [
+        8194
+      ],
+      "dtype": "uint32",
+      "bytes": 32776,
+      "sha256": "6a6ca6eb7f5eb4feace0740f5502ff7fdd8a519b7f862d76a73be6b6f46ece6d"
+    },
+    "weights@7": {
+      "shape": [
+        8194
+      ],
+      "dtype": "uint32",
+      "bytes": 32776,
+      "sha256": "74175ada8803e0b3709458ddaa23c63ded7b7b297a4b6ae682b1d4cec4adf80a"
+    }
+  },
+  "omitted_parameter_raw_bytes": 262192,
+  "failure_history": [
+    {
+      "candidate": "wp16-resident-sdk-001",
+      "manifest_sha256": "dbc7ada6414d6f0d78bcc702bc3286fab95c35c7103890b6dcab3cf2ed2c6cc5",
+      "guard_exit": 1,
+      "compiler_returncode": 0,
+      "simulator_started": false,
+      "error": "Exactly eight actual compute PE ELFs required",
+      "cause": "Host gate mistook program-ID filenames for XY coordinates",
+      "actual_program_files": [
+        "out_0_0.elf",
+        "out_1_0.elf",
+        "out_2_0.elf",
+        "out_3_0.elf",
+        "out_4_0.elf",
+        "out_5_0.elf",
+        "out_6_0.elf",
+        "out_7_0.elf"
+      ],
+      "original_log_sha256": "6459876450f7c73d0c5ccb1fd7068c6dc0c9e3add053df5e5008366623a2361c"
+    },
+    {
+      "candidate": "wp16-resident-sdk-002",
+      "guard_exit": 1,
+      "normal_stop": true,
+      "error": "Unknown or changed runtime auxiliary artifact",
+      "post_review": "Exact saved auxiliary identities independently qualified; original failure preserved; no rerun"
+    }
+  ],
+  "evidence_note": "Learned parameters, binary ELFs, vendor SDK source, owner/argv and local installation inventory are excluded. Complete initial/final weight identity is independently audited, with only hashes published. Full MLP/model/physical three-wafer inference and hardware latency remain unqualified."
+}

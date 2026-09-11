@@ -1,0 +1,747 @@
+{
+  "status": "source_only_uncompiled",
+  "shape": [
+    192,
+    128,
+    128
+  ],
+  "application": [
+    4,
+    2
+  ],
+  "simulated_fabric": [
+    11,
+    4
+  ],
+  "offset": [
+    4,
+    1
+  ],
+  "tiles": [
+    {
+      "rank": 0,
+      "role": "gate",
+      "x": 0,
+      "y": 0,
+      "columns": 96,
+      "shard": 0,
+      "arrays": {
+        "weights": [
+          12290,
+          "u16"
+        ],
+        "request": [
+          1,
+          "u16"
+        ],
+        "output": [
+          1,
+          "u16"
+        ],
+        "input": [
+          98,
+          "f32"
+        ],
+        "partial": [
+          130,
+          "f32"
+        ],
+        "reduced": [
+          130,
+          "f32"
+        ],
+        "rounded": [
+          130,
+          "u16"
+        ],
+        "broadcast": [
+          1,
+          "f32"
+        ],
+        "gate": [
+          1,
+          "u16"
+        ],
+        "up": [
+          1,
+          "u16"
+        ],
+        "silu": [
+          1,
+          "u16"
+        ],
+        "product": [
+          1,
+          "u16"
+        ],
+        "exponential": [
+          1,
+          "f32"
+        ],
+        "sigmoid": [
+          1,
+          "f32"
+        ],
+        "activation_fp32": [
+          1,
+          "f32"
+        ],
+        "product_fp32": [
+          1,
+          "f32"
+        ],
+        "state": [
+          32,
+          "u32"
+        ],
+        "timing": [
+          6,
+          "u16"
+        ]
+      },
+      "exported_bytes": 26444,
+      "hidden_data_allowance": 1284,
+      "code_SDK_allowance": 14336,
+      "stack_bytes": 4096,
+      "proposed_upper_bytes": 46160,
+      "actual_ELF_measured": false
+    },
+    {
+      "rank": 1,
+      "role": "gate",
+      "x": 1,
+      "y": 0,
+      "columns": 96,
+      "shard": 1,
+      "arrays": {
+        "weights": [
+          12290,
+          "u16"
+        ],
+        "request": [
+          1,
+          "u16"
+        ],
+        "output": [
+          1,
+          "u16"
+        ],
+        "input": [
+          98,
+          "f32"
+        ],
+        "partial": [
+          130,
+          "f32"
+        ],
+        "reduced": [
+          130,
+          "f32"
+        ],
+        "rounded": [
+          1,
+          "u16"
+        ],
+        "broadcast": [
+          1,
+          "f32"
+        ],
+        "gate": [
+          1,
+          "u16"
+        ],
+        "up": [
+          1,
+          "u16"
+        ],
+        "silu": [
+          1,
+          "u16"
+        ],
+        "product": [
+          1,
+          "u16"
+        ],
+        "exponential": [
+          1,
+          "f32"
+        ],
+        "sigmoid": [
+          1,
+          "f32"
+        ],
+        "activation_fp32": [
+          1,
+          "f32"
+        ],
+        "product_fp32": [
+          1,
+          "f32"
+        ],
+        "state": [
+          32,
+          "u32"
+        ],
+        "timing": [
+          6,
+          "u16"
+        ]
+      },
+      "exported_bytes": 26186,
+      "hidden_data_allowance": 1284,
+      "code_SDK_allowance": 14336,
+      "stack_bytes": 4096,
+      "proposed_upper_bytes": 45902,
+      "actual_ELF_measured": false
+    },
+    {
+      "rank": 2,
+      "role": "up",
+      "x": 2,
+      "y": 0,
+      "columns": 96,
+      "shard": 0,
+      "arrays": {
+        "weights": [
+          12290,
+          "u16"
+        ],
+        "request": [
+          1,
+          "u16"
+        ],
+        "output": [
+          1,
+          "u16"
+        ],
+        "input": [
+          98,
+          "f32"
+        ],
+        "partial": [
+          130,
+          "f32"
+        ],
+        "reduced": [
+          130,
+          "f32"
+        ],
+        "rounded": [
+          130,
+          "u16"
+        ],
+        "broadcast": [
+          1,
+          "f32"
+        ],
+        "gate": [
+          1,
+          "u16"
+        ],
+        "up": [
+          1,
+          "u16"
+        ],
+        "silu": [
+          1,
+          "u16"
+        ],
+        "product": [
+          1,
+          "u16"
+        ],
+        "exponential": [
+          1,
+          "f32"
+        ],
+        "sigmoid": [
+          1,
+          "f32"
+        ],
+        "activation_fp32": [
+          1,
+          "f32"
+        ],
+        "product_fp32": [
+          1,
+          "f32"
+        ],
+        "state": [
+          32,
+          "u32"
+        ],
+        "timing": [
+          6,
+          "u16"
+        ]
+      },
+      "exported_bytes": 26444,
+      "hidden_data_allowance": 1284,
+      "code_SDK_allowance": 14336,
+      "stack_bytes": 4096,
+      "proposed_upper_bytes": 46160,
+      "actual_ELF_measured": false
+    },
+    {
+      "rank": 3,
+      "role": "up",
+      "x": 3,
+      "y": 0,
+      "columns": 96,
+      "shard": 1,
+      "arrays": {
+        "weights": [
+          12290,
+          "u16"
+        ],
+        "request": [
+          1,
+          "u16"
+        ],
+        "output": [
+          1,
+          "u16"
+        ],
+        "input": [
+          98,
+          "f32"
+        ],
+        "partial": [
+          130,
+          "f32"
+        ],
+        "reduced": [
+          130,
+          "f32"
+        ],
+        "rounded": [
+          1,
+          "u16"
+        ],
+        "broadcast": [
+          1,
+          "f32"
+        ],
+        "gate": [
+          1,
+          "u16"
+        ],
+        "up": [
+          1,
+          "u16"
+        ],
+        "silu": [
+          1,
+          "u16"
+        ],
+        "product": [
+          1,
+          "u16"
+        ],
+        "exponential": [
+          1,
+          "f32"
+        ],
+        "sigmoid": [
+          1,
+          "f32"
+        ],
+        "activation_fp32": [
+          1,
+          "f32"
+        ],
+        "product_fp32": [
+          1,
+          "f32"
+        ],
+        "state": [
+          32,
+          "u32"
+        ],
+        "timing": [
+          6,
+          "u16"
+        ]
+      },
+      "exported_bytes": 26186,
+      "hidden_data_allowance": 1284,
+      "code_SDK_allowance": 14336,
+      "stack_bytes": 4096,
+      "proposed_upper_bytes": 45902,
+      "actual_ELF_measured": false
+    },
+    {
+      "rank": 4,
+      "role": "ingress",
+      "x": 0,
+      "y": 1,
+      "columns": 0,
+      "shard": 0,
+      "arrays": {
+        "weights": [
+          1,
+          "u16"
+        ],
+        "request": [
+          194,
+          "u16"
+        ],
+        "output": [
+          130,
+          "u16"
+        ],
+        "input": [
+          1,
+          "f32"
+        ],
+        "partial": [
+          1,
+          "f32"
+        ],
+        "reduced": [
+          1,
+          "f32"
+        ],
+        "rounded": [
+          1,
+          "u16"
+        ],
+        "broadcast": [
+          192,
+          "f32"
+        ],
+        "gate": [
+          1,
+          "u16"
+        ],
+        "up": [
+          1,
+          "u16"
+        ],
+        "silu": [
+          1,
+          "u16"
+        ],
+        "product": [
+          1,
+          "u16"
+        ],
+        "exponential": [
+          1,
+          "f32"
+        ],
+        "sigmoid": [
+          1,
+          "f32"
+        ],
+        "activation_fp32": [
+          1,
+          "f32"
+        ],
+        "product_fp32": [
+          1,
+          "f32"
+        ],
+        "state": [
+          32,
+          "u32"
+        ],
+        "timing": [
+          6,
+          "u16"
+        ]
+      },
+      "exported_bytes": 1596,
+      "hidden_data_allowance": 772,
+      "code_SDK_allowance": 14336,
+      "stack_bytes": 4096,
+      "proposed_upper_bytes": 20800,
+      "actual_ELF_measured": false
+    },
+    {
+      "rank": 5,
+      "role": "nonlinear",
+      "x": 1,
+      "y": 1,
+      "columns": 0,
+      "shard": 0,
+      "arrays": {
+        "weights": [
+          1,
+          "u16"
+        ],
+        "request": [
+          1,
+          "u16"
+        ],
+        "output": [
+          1,
+          "u16"
+        ],
+        "input": [
+          1,
+          "f32"
+        ],
+        "partial": [
+          1,
+          "f32"
+        ],
+        "reduced": [
+          1,
+          "f32"
+        ],
+        "rounded": [
+          1,
+          "u16"
+        ],
+        "broadcast": [
+          128,
+          "f32"
+        ],
+        "gate": [
+          130,
+          "u16"
+        ],
+        "up": [
+          130,
+          "u16"
+        ],
+        "silu": [
+          130,
+          "u16"
+        ],
+        "product": [
+          130,
+          "u16"
+        ],
+        "exponential": [
+          130,
+          "f32"
+        ],
+        "sigmoid": [
+          130,
+          "f32"
+        ],
+        "activation_fp32": [
+          130,
+          "f32"
+        ],
+        "product_fp32": [
+          130,
+          "f32"
+        ],
+        "state": [
+          32,
+          "u32"
+        ],
+        "timing": [
+          6,
+          "u16"
+        ]
+      },
+      "exported_bytes": 3792,
+      "hidden_data_allowance": 772,
+      "code_SDK_allowance": 14336,
+      "stack_bytes": 4096,
+      "proposed_upper_bytes": 22996,
+      "actual_ELF_measured": false
+    },
+    {
+      "rank": 6,
+      "role": "down",
+      "x": 2,
+      "y": 1,
+      "columns": 64,
+      "shard": 0,
+      "arrays": {
+        "weights": [
+          8194,
+          "u16"
+        ],
+        "request": [
+          1,
+          "u16"
+        ],
+        "output": [
+          1,
+          "u16"
+        ],
+        "input": [
+          66,
+          "f32"
+        ],
+        "partial": [
+          130,
+          "f32"
+        ],
+        "reduced": [
+          130,
+          "f32"
+        ],
+        "rounded": [
+          130,
+          "u16"
+        ],
+        "broadcast": [
+          1,
+          "f32"
+        ],
+        "gate": [
+          1,
+          "u16"
+        ],
+        "up": [
+          1,
+          "u16"
+        ],
+        "silu": [
+          1,
+          "u16"
+        ],
+        "product": [
+          1,
+          "u16"
+        ],
+        "exponential": [
+          1,
+          "f32"
+        ],
+        "sigmoid": [
+          1,
+          "f32"
+        ],
+        "activation_fp32": [
+          1,
+          "f32"
+        ],
+        "product_fp32": [
+          1,
+          "f32"
+        ],
+        "state": [
+          32,
+          "u32"
+        ],
+        "timing": [
+          6,
+          "u16"
+        ]
+      },
+      "exported_bytes": 18124,
+      "hidden_data_allowance": 1284,
+      "code_SDK_allowance": 14336,
+      "stack_bytes": 4096,
+      "proposed_upper_bytes": 37840,
+      "actual_ELF_measured": false
+    },
+    {
+      "rank": 7,
+      "role": "down",
+      "x": 3,
+      "y": 1,
+      "columns": 64,
+      "shard": 1,
+      "arrays": {
+        "weights": [
+          8194,
+          "u16"
+        ],
+        "request": [
+          1,
+          "u16"
+        ],
+        "output": [
+          1,
+          "u16"
+        ],
+        "input": [
+          66,
+          "f32"
+        ],
+        "partial": [
+          130,
+          "f32"
+        ],
+        "reduced": [
+          130,
+          "f32"
+        ],
+        "rounded": [
+          1,
+          "u16"
+        ],
+        "broadcast": [
+          1,
+          "f32"
+        ],
+        "gate": [
+          1,
+          "u16"
+        ],
+        "up": [
+          1,
+          "u16"
+        ],
+        "silu": [
+          1,
+          "u16"
+        ],
+        "product": [
+          1,
+          "u16"
+        ],
+        "exponential": [
+          1,
+          "f32"
+        ],
+        "sigmoid": [
+          1,
+          "f32"
+        ],
+        "activation_fp32": [
+          1,
+          "f32"
+        ],
+        "product_fp32": [
+          1,
+          "f32"
+        ],
+        "state": [
+          32,
+          "u32"
+        ],
+        "timing": [
+          6,
+          "u16"
+        ]
+      },
+      "exported_bytes": 17866,
+      "hidden_data_allowance": 1284,
+      "code_SDK_allowance": 14336,
+      "stack_bytes": 4096,
+      "proposed_upper_bytes": 37582,
+      "actual_ELF_measured": false
+    }
+  ],
+  "initial_weight_bytes": 131072,
+  "steady_token_weight_H2D_bytes": 0,
+  "host_stage_launches_per_input": 1,
+  "host_neural_intermediate_copies": 0,
+  "stage_input_BF16_bytes": 384,
+  "stage_output_BF16_bytes": 256,
+  "native16_host_input_output_bytes": 1280,
+  "device_broadcast_FP32_words": 320,
+  "device_pair_reduction_FP32_words": 384,
+  "device_pair_result_multicast_FP32_words": 384,
+  "device_BF16_payload_words": 192,
+  "device_data_packets": 9,
+  "device_control_packets": 35,
+  "device_application_packet_words": 368,
+  "packet_network_headers_excluded": true,
+  "per_projection_local_FMA_depth": 96,
+  "per_down_local_FMA_depth": 64,
+  "FP32_pair_add_levels": 1,
+  "three_pair_collectives": true,
+  "full_model_tree_routing_qualified": false,
+  "resident_assumption": "parallel resident shards, device joins and consumer ownership across repeated inputs"
+}
