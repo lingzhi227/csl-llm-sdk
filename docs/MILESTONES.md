@@ -2,6 +2,16 @@
 
 Only accepted results are listed below. Unresolved integration work and the remaining scope are tracked in [implementation status](STATUS.md).
 
+## WP16 connected partial MLP — Accepted, September 11, 2026 (UTC)
+
+Four original-weight PEs execute three dense/changed/zero generations with resident
+128×112 gate/up weights, device SiLU/product, 128×128 partial down and explicit
+reset/retention/release barriers. Independent numerical, transport, generation
+sensitivity and normal shutdown checks passed in221.818s under512MiB/Swap0/CPU0.
+Full5120 connected reuse and whole17408-channel MLP remain open. This is a separate
+profile from the full-width one-input result below.
+See [report](WP16-CONNECTED-MLP-REPORT.md) and [evidence](../evidence/wp16-connected.json).
+
 ## WP16 partial MLP — Accepted, September 10, 2026
 
 Four original-weight PEs connect full5120-column gate/up projections for128 rows,

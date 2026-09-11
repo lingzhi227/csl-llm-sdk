@@ -1,0 +1,48 @@
+{
+  "scope": "connected-fourPE-resident128x112-three-generations-partial-down128",
+  "status": "source_implementation_not_compiled_or_executed",
+  "physical_operations": 696,
+  "copy_calls": 647,
+  "launch_calls": 49,
+  "copies_by_direction": {
+    "h2d": 99,
+    "d2h": 548
+  },
+  "host_bytes": 978168,
+  "native_bytes": 539652,
+  "raw_D2H_bytes": 660392,
+  "maximum_host_buffer_bytes": 57352,
+  "declared_buffer_bytes_per_PE": [
+    31368,
+    31368,
+    4444,
+    19158
+  ],
+  "actual_ELF_plus_stack_limit": 49152,
+  "reserved_stack_bytes": 4096,
+  "actual_ELF_required_before_simulation": true,
+  "generation_input_contraction": [
+    [
+      1,
+      0,
+      1
+    ],
+    [
+      2,
+      1,
+      2
+    ],
+    [
+      3,
+      3,
+      3
+    ]
+  ],
+  "data_fabric_words_per_edge": 142,
+  "ack_fabric_words_per_edge": 15,
+  "fabric_words": 1413,
+  "fabric_word_hops": 1884,
+  "planned_simulator_seconds": 400,
+  "hard_simulator_seconds": 420,
+  "observations_include_queued_work": true
+}

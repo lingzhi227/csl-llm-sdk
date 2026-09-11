@@ -1,0 +1,37 @@
+// Connected generation descriptor and version2 data/ACK framing.
+const data_magic:u32=0x4d4c5044;const ack_magic:u32=0x4d4c5041;
+const left_guard:u32=0xa55aa55a;const right_guard:u32=0x5aa55aa5;
+fn valid_descriptor(value:[*]u32,edge:u32,generation:u32,input:u32) bool {
+ return edge<=2 and generation>=1 and generation<=3 and value[0]==generation and
+  value[1]==input and value[2]==generation and value[3]==edge and value[4]==edge and
+  value[5]==0 and value[6]==128 and value[7]==0 and value[8]==128 and value[9]==128 and
+  value[10]==0 and value[11]==112;
+}
+fn latch(destination:[*]u32,source:[*]u32) void {
+ for(@range(u16,12))|i|{destination[i]=source[i];}
+}
+fn data_error(frame:[*]u32,identity:[*]u32) u32 {
+ if(frame[0]!=left_guard or frame[143]!=right_guard){return 1;}
+ if(frame[1]!=data_magic or frame[2]!=2){return 2;}
+ for(@range(u16,12))|i|{if(frame[3+i]!=identity[i]){return 3;}}
+ for(@range(u16,128))|i|{
+  const word:u32=frame[15+i];
+  if((word&0xffff0000)!=0 or (word&0x00007f80)==0x00007f80){return 4;}
+ }
+ return 0;
+}
+fn make_data(frame:[*]u32,identity:[*]u32,payload:[*]u16) void {
+ frame[0]=left_guard;frame[143]=right_guard;frame[1]=data_magic;frame[2]=2;
+ for(@range(u16,12))|i|{frame[3+i]=identity[i];}
+ for(@range(u16,128))|i|{frame[15+i]=@as(u32,payload[i]);}
+}
+fn make_ack(frame:[*]u32,identity:[*]u32,error:u32) void {
+ frame[0]=left_guard;frame[16]=right_guard;frame[1]=ack_magic;frame[2]=2;
+ for(@range(u16,12))|i|{frame[3+i]=identity[i];}
+ frame[15]=error;
+}
+fn valid_ack(frame:[*]u32,identity:[*]u32) bool {
+ if(frame[0]!=left_guard or frame[16]!=right_guard or frame[1]!=ack_magic or frame[2]!=2 or frame[15]!=0){return false;}
+ for(@range(u16,12))|i|{if(frame[3+i]!=identity[i]){return false;}}
+ return true;
+}

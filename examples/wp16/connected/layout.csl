@@ -1,0 +1,46 @@
+// Source-only four-PE partial MLP diagnostic.
+const memcpy=@import_module("<memcpy/get_params>",.{.width=4,.height=1});
+layout{
+ @set_rectangle(4,1);
+ for(@range(i16,4))|x|{
+  @set_tile_code(x,0,"tile.csl",.{.memcpy_params=memcpy.get_params(x),.rank=@as(u16,x)});
+ }
+ @export_name("weights_storage",[*]u16,false);
+ @export_name("input_storage",[*]f32,false);
+ @export_name("output_storage",[*]f32,false);
+ @export_name("bf16_storage",[*]u16,false);
+ @export_name("control",[*]u32,false);
+ @export_name("state",[*]u32,false);
+ @export_name("timing",[*]u16,false);
+ @export_name("weight_guard_snapshot",[*]u32,false);
+ @export_name("tile_guard_snapshot",[*]u32,false);
+ @export_name("handoff_control",[*]u32,false);
+ @export_name("handoff_latched",[*]u32,false);
+ @export_name("handoff_state",[*]u32,false);
+ @export_name("wire_data",[*]u32,false);
+ @export_name("wire_ack",[*]u32,false);
+ @export_name("mlp_gate",[*]u16,false);
+ @export_name("mlp_up",[*]u16,false);
+ @export_name("mlp_silu",[*]u16,false);
+ @export_name("mlp_product",[*]u16,false);
+ @export_name("mlp_exp",[*]f32,false);
+ @export_name("mlp_sigmoid",[*]f32,false);
+ @export_name("mlp_silu_fp32",[*]f32,false);
+ @export_name("mlp_product_fp32",[*]f32,false);
+ @export_name("mlp_state",[*]u32,false);
+ @export_name("release_control",[*]u32,false);
+ @export_name("generation_control",[*]u32,false);
+ @export_name("lifecycle_state",[*]u32,false);
+ @export_name("initialize",fn()void);
+ @export_name("begin_generation",fn()void);
+ @export_name("begin_projections",fn()void);
+ @export_name("accumulate_projections",fn()void);
+ @export_name("finalize_projections",fn()void);
+ @export_name("arm_handoff",fn()void);
+ @export_name("handoff",fn()void);
+ @export_name("evaluate_mlp",fn()void);
+ @export_name("begin_down",fn()void);
+ @export_name("accumulate_down",fn()void);
+ @export_name("finalize_down",fn()void);
+ @export_name("release_all",fn()void);
+}

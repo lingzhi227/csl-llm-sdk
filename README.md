@@ -2,7 +2,7 @@
 
 **Building inference for open language models with handwritten Cerebras Systems Language (CSL), targeting one to three WSE-3 systems.** We implement the numerical kernels, execution control and persistent model state, and use the Cerebras SDK to compile and run the device programs. The first target is **Qwen3.8-27B text inference**; the longer-term goal is a reusable SDK for related model architectures.
 
-**Working today:** SDK 2.10.1 simulator experiments cover original-weight matrix–vector products, communication between processing elements, full-dimension normalization, a persistent DeltaNet recurrent head, its input/output processing, a full-dimension attention head with persistent KV cache, device-side query/key normalization with bounded rotary encoding, their on-device single-head attention composition, all selected-head Q/rawgate/K/V original-weight projections across eight bounded four-case runs, and a connected ten-PE path for two original-hidden tokens through all selected Q/rawgate/K/V projections, trained Q/K normalization/rotary encoding and attention with persistent KV, plus an original-weight four-PE partial MLP chain for one dense input. **Still ahead:** complete-model text generation and execution on physical single- or multiple-wafer systems. The completed log below records the exact scope of each result.
+**Working today:** SDK 2.10.1 simulator experiments cover original-weight matrix–vector products, communication between processing elements, full-dimension normalization, a persistent DeltaNet recurrent head, its input/output processing, a full-dimension attention head with persistent KV cache, device-side query/key normalization with bounded rotary encoding, their on-device single-head attention composition, all selected-head Q/rawgate/K/V original-weight projections across eight bounded four-case runs, and a connected ten-PE path for two original-hidden tokens through all selected Q/rawgate/K/V projections, trained Q/K normalization/rotary encoding and attention with persistent KV, plus two original-weight four-PE partial MLP profiles: a full-width projection chain for one dense input, and resident 112-column gate/up projections connected through SiLU/product/down with reset, retention and release across dense, changed and zero generations. **Current work:** extend the connected MLP schedule across input tiles, intermediate channel blocks and output blocks under explicit SRAM and host budgets. **Still ahead:** complete-model text generation and execution on physical single- or multiple-wafer systems. The completed log below records the exact scope of each result.
 
 ## 1. Project design
 
@@ -59,6 +59,22 @@ These are deployment targets; current simulator results do not establish cluster
 ## 3. Completed development log — newest first
 
 Each **WP** is a scoped development milestone. Device results below come from the SDK simulator; WP04 is a CPU/source audit. **BF16** means bfloat16 data, and **FP32** means 32-bit floating-point arithmetic. Reports contain numerical thresholds, failure history and reproduction details.
+
+### WP16 connected partial · Three generations with reset and release · September 11, 2026 (UTC)
+
+Four PEs execute original dense, changed and zero inputs through resident 128×112
+gate/up projections, device SiLU/product and 128×128 partial down. Independent
+checks verified 6,144 source interval values, 2,688 original-weight conditional
+contractions, 1,920 exact casts, generation sensitivity and normal shutdown.
+Simulation took 221.82 seconds under a 512 MiB / zero-swap / CPU 0 limit and a
+420-second hard deadline; maximum sampled memory was 178.89 MiB, a lower bound.
+The complete weight payload is observed before the first and after the last
+generation, with guards between them. All nine device joins were command-first.
+Full 5,120-column connected reuse and the whole 17,408-channel MLP remain open.
+The older one-input profile below has a different workload; its timing is not a
+speedup baseline for this result.
+
+[Code and scope](examples/wp16/connected) · [Report](docs/WP16-CONNECTED-MLP-REPORT.md) · [Evidence](evidence/wp16-connected.json) · [Source provenance](evidence/wp16-connected-source-map.json)
 
 ### WP16 partial · Original-weight four-PE MLP chain · September 10, 2026
 

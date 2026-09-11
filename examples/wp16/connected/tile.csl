@@ -1,0 +1,585 @@
+// Generated source proposal. No SDK compile/simulation has run.
+param rank:u16;param memcpy_params;
+comptime{@comptime_assert(rank<4);}
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const clock=@import_module("<time>");
+const gemv=@import_module("gemv_kernel.csl",.{.rows=128,.columns=if(rank==3) @as(u16,64) else @as(u16,112)});
+const nonlinear=@import_module("nonlinear_kernel.csl");
+const protocol=@import_module("protocol.csl");
+const weights_storage_count:u16=if(rank==0) @as(u16,14338) else if(rank==1) @as(u16,14338) else if(rank==2) @as(u16,1) else @as(u16,8194);
+var weights_storage=@zeros([weights_storage_count]u16);
+const ptr_weights_storage:[*]u16=&weights_storage;
+const input_storage_count:u16=if(rank==0) @as(u16,114) else if(rank==1) @as(u16,114) else if(rank==2) @as(u16,1) else @as(u16,66);
+var input_storage=@zeros([input_storage_count]f32);
+const ptr_input_storage:[*]f32=&input_storage;
+const output_storage_count:u16=if(rank==0) @as(u16,130) else if(rank==1) @as(u16,130) else if(rank==2) @as(u16,1) else @as(u16,130);
+var output_storage=@zeros([output_storage_count]f32);
+const ptr_output_storage:[*]f32=&output_storage;
+const bf16_storage_count:u16=if(rank==0) @as(u16,130) else if(rank==1) @as(u16,130) else if(rank==2) @as(u16,1) else @as(u16,130);
+var bf16_storage=@zeros([bf16_storage_count]u16);
+const ptr_bf16_storage:[*]u16=&bf16_storage;
+const control_count:u16=8;
+var control=@zeros([control_count]u32);
+const ptr_control:[*]u32=&control;
+const state_count:u16=20;
+var state=@zeros([state_count]u32);
+const ptr_state:[*]u32=&state;
+const timing_count:u16=if(rank==0) @as(u16,6) else if(rank==1) @as(u16,6) else if(rank==2) @as(u16,6) else @as(u16,12);
+var timing=@zeros([timing_count]u16);
+const ptr_timing:[*]u16=&timing;
+const weight_guard_snapshot_count:u16=if(rank==0) @as(u16,16) else if(rank==1) @as(u16,16) else if(rank==2) @as(u16,1) else @as(u16,16);
+var weight_guard_snapshot=@zeros([weight_guard_snapshot_count]u32);
+const ptr_weight_guard_snapshot:[*]u32=&weight_guard_snapshot;
+const tile_guard_snapshot_count:u16=if(rank==0) @as(u16,16) else if(rank==1) @as(u16,16) else if(rank==2) @as(u16,1) else @as(u16,16);
+var tile_guard_snapshot=@zeros([tile_guard_snapshot_count]u32);
+const ptr_tile_guard_snapshot:[*]u32=&tile_guard_snapshot;
+const handoff_control_count:u16=12;
+var handoff_control=@zeros([handoff_control_count]u32);
+const ptr_handoff_control:[*]u32=&handoff_control;
+const handoff_latched_count:u16=12;
+var handoff_latched=@zeros([handoff_latched_count]u32);
+const ptr_handoff_latched:[*]u32=&handoff_latched;
+const handoff_state_count:u16=34;
+var handoff_state=@zeros([handoff_state_count]u32);
+const ptr_handoff_state:[*]u32=&handoff_state;
+const wire_data_count:u16=144;
+var wire_data=@zeros([wire_data_count]u32);
+const ptr_wire_data:[*]u32=&wire_data;
+const wire_ack_count:u16=17;
+var wire_ack=@zeros([wire_ack_count]u32);
+const ptr_wire_ack:[*]u32=&wire_ack;
+const mlp_gate_count:u16=if(rank==0) @as(u16,1) else if(rank==1) @as(u16,1) else if(rank==2) @as(u16,130) else @as(u16,1);
+var mlp_gate=@zeros([mlp_gate_count]u16);
+const ptr_mlp_gate:[*]u16=&mlp_gate;
+const mlp_up_count:u16=if(rank==0) @as(u16,1) else if(rank==1) @as(u16,1) else if(rank==2) @as(u16,130) else @as(u16,1);
+var mlp_up=@zeros([mlp_up_count]u16);
+const ptr_mlp_up:[*]u16=&mlp_up;
+const mlp_silu_count:u16=if(rank==0) @as(u16,1) else if(rank==1) @as(u16,1) else if(rank==2) @as(u16,130) else @as(u16,1);
+var mlp_silu=@zeros([mlp_silu_count]u16);
+const ptr_mlp_silu:[*]u16=&mlp_silu;
+const mlp_product_count:u16=if(rank==0) @as(u16,1) else if(rank==1) @as(u16,1) else if(rank==2) @as(u16,130) else @as(u16,130);
+var mlp_product=@zeros([mlp_product_count]u16);
+const ptr_mlp_product:[*]u16=&mlp_product;
+const mlp_exp_count:u16=if(rank==0) @as(u16,1) else if(rank==1) @as(u16,1) else if(rank==2) @as(u16,130) else @as(u16,1);
+var mlp_exp=@zeros([mlp_exp_count]f32);
+const ptr_mlp_exp:[*]f32=&mlp_exp;
+const mlp_sigmoid_count:u16=if(rank==0) @as(u16,1) else if(rank==1) @as(u16,1) else if(rank==2) @as(u16,130) else @as(u16,1);
+var mlp_sigmoid=@zeros([mlp_sigmoid_count]f32);
+const ptr_mlp_sigmoid:[*]f32=&mlp_sigmoid;
+const mlp_silu_fp32_count:u16=if(rank==0) @as(u16,1) else if(rank==1) @as(u16,1) else if(rank==2) @as(u16,130) else @as(u16,1);
+var mlp_silu_fp32=@zeros([mlp_silu_fp32_count]f32);
+const ptr_mlp_silu_fp32:[*]f32=&mlp_silu_fp32;
+const mlp_product_fp32_count:u16=if(rank==0) @as(u16,1) else if(rank==1) @as(u16,1) else if(rank==2) @as(u16,130) else @as(u16,1);
+var mlp_product_fp32=@zeros([mlp_product_fp32_count]f32);
+const ptr_mlp_product_fp32:[*]f32=&mlp_product_fp32;
+const mlp_state_count:u16=20;
+var mlp_state=@zeros([mlp_state_count]u32);
+const ptr_mlp_state:[*]u32=&mlp_state;
+const release_control_count:u16=12;
+var release_control=@zeros([release_control_count]u32);
+const ptr_release_control:[*]u32=&release_control;
+const generation_control_count:u16=12;
+var generation_control=@zeros([generation_control_count]u32);
+const ptr_generation_control:[*]u32=&generation_control;
+const lifecycle_state_count:u16=32;
+var lifecycle_state=@zeros([lifecycle_state_count]u32);
+const ptr_lifecycle_state:[*]u32=&lifecycle_state;
+const weight_words:u16=weights_storage_count;
+const input_words:u16=input_storage_count;
+const timing_words:u16=timing_count;
+// Source proposal. Indices and exported lengths are defined in interfaces.json.
+const receive_task=@get_local_task_id(10);const send_task=@get_local_task_id(11);
+const transfer_ut=@get_ut_id(2);
+const transfer_dst=@get_dsr(dsr_dest,5);const transfer_src=@get_dsr(dsr_src1,5);
+var started=@zeros([3]u16);var ended=@zeros([3]u16);
+
+fn fail(code:u32) void {
+ if(state[8]!=0){return;}
+ state[0]=3;state[8]=code;handoff_state[0]=9;handoff_state[12]=code;
+ lifecycle_state[0]=9;lifecycle_state[19]=code;
+ mlp_state[12]=code;sys.unblock_cmd_stream();
+}
+fn mark(slot:u16) void {handoff_state[16]+=1;handoff_state[slot]=handoff_state[16];}
+fn identity() bool {return state[1]>=1 and state[1]<=3 and state[8]==0 and control[0]==state[1] and control[1]==state[2] and control[2]==state[3] and control[7]==0;}
+fn round_bf16(raw:u32) u16 {const odd:u32=(raw>>16)&1;return @as(u16,(raw+0x00007fff+odd)>>16);}
+fn expand(raw:u16) f32 {return @bitcast(f32,@as(u32,raw)<<16);}
+fn source(edge:u32) u16 {return @as(u16,edge);}
+fn destination(edge:u32) u16 {return if(edge<2) @as(u16,2) else @as(u16,3);}
+fn clear_generation_buffers() void {
+ for(@range(u16,input_storage_count))|i|{ptr_input_storage[i]=0.0;}
+ for(@range(u16,output_storage_count))|i|{ptr_output_storage[i]=0.0;}
+ for(@range(u16,bf16_storage_count))|i|{ptr_bf16_storage[i]=0;}
+ for(@range(u16,control_count))|i|{ptr_control[i]=0;}
+ for(@range(u16,state_count))|i|{ptr_state[i]=0;}
+ for(@range(u16,timing_count))|i|{ptr_timing[i]=0;}
+ for(@range(u16,weight_guard_snapshot_count))|i|{ptr_weight_guard_snapshot[i]=0;}
+ for(@range(u16,tile_guard_snapshot_count))|i|{ptr_tile_guard_snapshot[i]=0;}
+ for(@range(u16,handoff_control_count))|i|{ptr_handoff_control[i]=0;}
+ for(@range(u16,handoff_latched_count))|i|{ptr_handoff_latched[i]=0;}
+ for(@range(u16,handoff_state_count))|i|{ptr_handoff_state[i]=0;}
+ for(@range(u16,wire_data_count))|i|{ptr_wire_data[i]=0;}
+ for(@range(u16,wire_ack_count))|i|{ptr_wire_ack[i]=0;}
+ for(@range(u16,mlp_gate_count))|i|{ptr_mlp_gate[i]=0;}
+ for(@range(u16,mlp_up_count))|i|{ptr_mlp_up[i]=0;}
+ for(@range(u16,mlp_silu_count))|i|{ptr_mlp_silu[i]=0;}
+ for(@range(u16,mlp_product_count))|i|{ptr_mlp_product[i]=0;}
+ for(@range(u16,mlp_exp_count))|i|{ptr_mlp_exp[i]=0.0;}
+ for(@range(u16,mlp_sigmoid_count))|i|{ptr_mlp_sigmoid[i]=0.0;}
+ for(@range(u16,mlp_silu_fp32_count))|i|{ptr_mlp_silu_fp32[i]=0.0;}
+ for(@range(u16,mlp_product_fp32_count))|i|{ptr_mlp_product_fp32[i]=0.0;}
+ for(@range(u16,mlp_state_count))|i|{ptr_mlp_state[i]=0;}
+ for(@range(u16,release_control_count))|i|{ptr_release_control[i]=0;}
+ for(@range(u16,3))|i|{started[i]=0;ended[i]=0;}
+ if(bf16_storage_count>1){ptr_bf16_storage[0]=0xa55a;ptr_bf16_storage[bf16_storage_count-1]=0x5aa5;}
+ if(mlp_gate_count>1){ptr_mlp_gate[0]=0xa55a;ptr_mlp_gate[mlp_gate_count-1]=0x5aa5;}
+ if(mlp_up_count>1){ptr_mlp_up[0]=0xa55a;ptr_mlp_up[mlp_up_count-1]=0x5aa5;}
+ if(mlp_silu_count>1){ptr_mlp_silu[0]=0xa55a;ptr_mlp_silu[mlp_silu_count-1]=0x5aa5;}
+ if(mlp_product_count>1){ptr_mlp_product[0]=0xa55a;ptr_mlp_product[mlp_product_count-1]=0x5aa5;}
+ if(mlp_silu_fp32_count>1){ptr_mlp_silu_fp32[0]=1234.5;ptr_mlp_silu_fp32[mlp_silu_fp32_count-1]=-4321.25;}
+ if(mlp_sigmoid_count>1){ptr_mlp_sigmoid[0]=1234.5;ptr_mlp_sigmoid[mlp_sigmoid_count-1]=-4321.25;}
+ if(input_storage_count>1){ptr_input_storage[0]=77.5;ptr_input_storage[input_storage_count-1]=-88.25;}
+ if(mlp_exp_count>1){ptr_mlp_exp[0]=1234.5;ptr_mlp_exp[mlp_exp_count-1]=-4321.25;}
+ if(mlp_product_fp32_count>1){ptr_mlp_product_fp32[0]=1234.5;ptr_mlp_product_fp32[mlp_product_fp32_count-1]=-4321.25;}
+ if(output_storage_count>1){ptr_output_storage[0]=1234.5;ptr_output_storage[output_storage_count-1]=-4321.25;}
+ wire_data[0]=0xa55aa55a;wire_data[143]=0x5aa55aa5;wire_ack[0]=0xa55aa55a;wire_ack[16]=0x5aa55aa5;
+}
+// Included in the role-specialized tile after the common utility functions.
+fn first_edge() u32 {return if(rank==1) @as(u32,1) else if(rank==3) @as(u32,2) else @as(u32,0);}
+fn required_mask() u32 {return if(rank<2) @as(u32,7) else if(rank==2) @as(u32,31) else @as(u32,25);}
+fn expected_input(generation:u32) u32 {return if(generation==1) @as(u32,0) else if(generation==2) @as(u32,1) else @as(u32,3);}
+fn scope_valid(value:[*]u32,generation:u32) bool {
+ return generation>=1 and generation<=3 and value[0]==generation and value[1]==expected_input(generation) and
+  value[2]==generation and value[3]==0 and value[4]==112 and value[5]==0 and value[6]==128 and value[7]==0 and value[8]==128;
+}
+fn zero16(base:[*]u16,n:u16) bool {var i:u16=0;while(i<n){if(base[i]!=0){return false;}i+=1;}return true;}
+fn zero32(base:[*]u32,n:u16) bool {var i:u16=0;while(i<n){if(base[i]!=0){return false;}i+=1;}return true;}
+fn zerof32(base:[*]f32,n:u16) bool {var i:u16=0;while(i<n){if(@bitcast(u32,base[i])!=0){return false;}i+=1;}return true;}
+fn payload16zero(base:[*]u16,n:u16) bool {return if(n==1) zero16(base,1) else zero16(@ptrcast([*]u16,&base[1]),n-2);}
+fn payloadf32zero(base:[*]f32,n:u16) bool {return if(n==1) zerof32(base,1) else zerof32(@ptrcast([*]f32,&base[1]),n-2);}
+fn guarded16(base:[*]u16,n:u16) bool {return if(n==1) base[0]==0 else base[0]==0xa55a and base[n-1]==0x5aa5;}
+fn guardedf32(base:[*]f32,n:u16,left:f32,right:f32) bool {return if(n==1) @bitcast(u32,base[0])==0 else base[0]==left and base[n-1]==right;}
+fn no_error() bool {return state[8]==0 and handoff_state[12]==0 and mlp_state[12]==0 and lifecycle_state[19]==0;}
+fn completion_ok() bool {
+ const g:u32=state[1];const receives:u32=if(rank==2) @as(u32,2) else if(rank==3) @as(u32,1) else @as(u32,0);
+ const sends:u32=if(rank<3) @as(u32,1) else @as(u32,0);
+ return no_error() and lifecycle_state[20]==0 and lifecycle_state[21]==0 and lifecycle_state[15]==3 and
+  lifecycle_state[28]==required_mask() and lifecycle_state[22]==sends*g and lifecycle_state[23]==sends*g and
+  lifecycle_state[24]==receives*g and lifecycle_state[25]==receives*g;
+}
+fn bind_empty_states(g:u32,input:u32,contraction:u32) void {
+ state[1]=g;state[2]=input;state[3]=contraction;state[4]=if(rank<2) @as(u32,112) else @as(u32,128);
+ state[14]=@as(u32,rank);state[16]=0;state[17]=112;state[18]=128;
+ handoff_state[1]=g;handoff_state[2]=input;handoff_state[3]=contraction;
+ handoff_state[25]=0;handoff_state[26]=128;handoff_state[27]=0;handoff_state[28]=128;
+ handoff_state[32]=0;handoff_state[33]=112;
+ mlp_state[1]=g;mlp_state[2]=input;mlp_state[3]=contraction;mlp_state[14]=@as(u32,rank);
+ mlp_state[16]=0;mlp_state[17]=112;mlp_state[18]=0;mlp_state[19]=128;
+}
+fn weight_snapshot(reset:bool) void {
+ ptr_weight_guard_snapshot[0]=@as(u32,ptr_weights_storage[0]);
+ ptr_weight_guard_snapshot[1]=@as(u32,ptr_weights_storage[weight_words-1]);
+ ptr_weight_guard_snapshot[2]=state[1];ptr_weight_guard_snapshot[3]=state[2];ptr_weight_guard_snapshot[4]=state[3];
+ ptr_weight_guard_snapshot[5]=state[4];ptr_weight_guard_snapshot[6]=0;ptr_weight_guard_snapshot[7]=128;
+ ptr_weight_guard_snapshot[8]=state[0];ptr_weight_guard_snapshot[9]=state[5];ptr_weight_guard_snapshot[10]=state[6];
+ ptr_weight_guard_snapshot[11]=state[7];ptr_weight_guard_snapshot[12]=2*state[1]-(if(reset) @as(u32,1) else @as(u32,0));
+ ptr_weight_guard_snapshot[13]=1;ptr_weight_guard_snapshot[14]=@as(u32,rank);ptr_weight_guard_snapshot[15]=0;
+}
+fn reset_check_mask() u32 {
+ var mask:u32=0;
+ if(payloadf32zero(ptr_output_storage,output_storage_count)){mask|=1;}
+ if(payload16zero(ptr_bf16_storage,bf16_storage_count)){mask|=2;}
+ if(payloadf32zero(ptr_input_storage,input_storage_count)){mask|=4;}
+ if(payload16zero(ptr_mlp_gate,mlp_gate_count) and payload16zero(ptr_mlp_up,mlp_up_count)){mask|=8;}
+ if(payload16zero(ptr_mlp_silu,mlp_silu_count) and payload16zero(ptr_mlp_product,mlp_product_count)){mask|=16;}
+ if(payloadf32zero(ptr_mlp_exp,mlp_exp_count) and payloadf32zero(ptr_mlp_sigmoid,mlp_sigmoid_count) and
+    payloadf32zero(ptr_mlp_silu_fp32,mlp_silu_fp32_count) and payloadf32zero(ptr_mlp_product_fp32,mlp_product_fp32_count)){mask|=32;}
+ if(zero32(@ptrcast([*]u32,&state[5]),9) and zero32(@ptrcast([*]u32,&mlp_state[4]),10)){mask|=64;}
+ if(zero32(@ptrcast([*]u32,&handoff_state[5]),19) and lifecycle_state[20]==0 and lifecycle_state[21]==0){mask|=128;}
+ if(zero32(@ptrcast([*]u32,&wire_data[1]),142) and zero32(@ptrcast([*]u32,&wire_ack[1]),15) and
+    zero32(ptr_handoff_latched,12) and zero32(ptr_handoff_control,12) and zero32(ptr_release_control,12)){mask|=256;}
+ if(zero16(&timing,timing_count) and zero16(&started,3) and zero16(&ended,3)){mask|=512;}
+ if(zero32(ptr_tile_guard_snapshot,tile_guard_snapshot_count)){mask|=1024;}
+ if(state[7]==0 and mlp_state[11]==0 and handoff_state[15]==0 and handoff_state[29]==0 and mlp_state[13]==0){mask|=2048;}
+ if(guarded16(ptr_bf16_storage,bf16_storage_count) and guarded16(ptr_mlp_gate,mlp_gate_count) and
+    guarded16(ptr_mlp_up,mlp_up_count) and guarded16(ptr_mlp_silu,mlp_silu_count) and guarded16(ptr_mlp_product,mlp_product_count) and
+    guardedf32(ptr_input_storage,input_storage_count,77.5,-88.25) and guardedf32(ptr_output_storage,output_storage_count,1234.5,-4321.25) and
+    guardedf32(ptr_mlp_exp,mlp_exp_count,1234.5,-4321.25) and guardedf32(ptr_mlp_sigmoid,mlp_sigmoid_count,1234.5,-4321.25) and
+    guardedf32(ptr_mlp_silu_fp32,mlp_silu_fp32_count,1234.5,-4321.25) and guardedf32(ptr_mlp_product_fp32,mlp_product_fp32_count,1234.5,-4321.25) and
+    guarded16(ptr_weights_storage,weights_storage_count) and wire_data[0]==0xa55aa55a and wire_data[143]==0x5aa55aa5 and
+    wire_ack[0]==0xa55aa55a and wire_ack[16]==0x5aa55aa5){mask|=4096;}
+ return mask;
+}
+fn initialize() void {
+ const total:u32=if(rank<2) @as(u32,112) else @as(u32,128);
+ if(lifecycle_state[11]!=0 or control[0]!=0 or control[1]!=0xffffffff or control[2]!=0 or control[3]!=total or
+    control[4]!=0 or control[5]!=0 or control[6]!=0 or control[7]!=0){fail(1);return;}
+ clear_generation_buffers();
+ if(rank!=2){ptr_weights_storage[0]=0xa55a;ptr_weights_storage[weight_words-1]=0x5aa5;}
+ bind_empty_states(0,0xffffffff,0);
+ lifecycle_state[1]=0;lifecycle_state[2]=0xffffffff;lifecycle_state[3]=0;
+ lifecycle_state[4]=0;lifecycle_state[5]=112;lifecycle_state[6]=0;lifecycle_state[7]=128;
+ lifecycle_state[8]=0;lifecycle_state[9]=128;lifecycle_state[11]=1;
+ lifecycle_state[15]=first_edge();lifecycle_state[31]=@as(u32,rank);sys.unblock_cmd_stream();
+}
+fn begin_generation() void {
+ const g:u32=generation_control[0];
+ if(g<1 or g>3){fail(63);return;}
+ if(!scope_valid(ptr_generation_control,g) or g!=lifecycle_state[11] or generation_control[9]!=g-1 or
+    generation_control[10]!=1 or generation_control[11]!=0 or !no_error() or lifecycle_state[20]!=0 or lifecycle_state[21]!=0){fail(63);return;}
+ if(g==1){
+  if(lifecycle_state[0]!=0 or lifecycle_state[12]!=0 or lifecycle_state[14]!=0 or state[1]!=0){fail(64);return;}
+ }else{
+  if(lifecycle_state[0]!=3 or lifecycle_state[27]!=g-1 or lifecycle_state[14]!=g-1 or
+     state[0]!=4 or state[13]!=1 or handoff_state[0]!=5 or handoff_state[29]!=1 or mlp_state[13]!=1 or !completion_ok()){fail(65);return;}
+ }
+ if(!guarded16(ptr_weights_storage,weights_storage_count)){fail(66);return;}
+ clear_generation_buffers();bind_empty_states(g,generation_control[1],g);
+ lifecycle_state[0]=1;
+ for(@range(u16,9))|i|{lifecycle_state[1+i]=generation_control[i];}
+ lifecycle_state[10]=g-1;lifecycle_state[11]=g+1;lifecycle_state[12]+=1;lifecycle_state[13]+=1;
+ lifecycle_state[15]=first_edge();lifecycle_state[16]=0;lifecycle_state[26]=0;lifecycle_state[28]=0;
+ lifecycle_state[29]=lifecycle_state[30]+1;
+ if(rank<2){lifecycle_state[18]+=1;}
+ if(rank!=2){weight_snapshot(true);}
+ const mask:u32=reset_check_mask();lifecycle_state[16]=mask;lifecycle_state[17]+=1;
+ if(mask!=8191){fail(67);return;}sys.unblock_cmd_stream();
+}
+fn release_all() void {
+ const g:u32=state[1];
+ if(!scope_valid(ptr_release_control,g) or release_control[9]!=required_mask() or release_control[10]!=g or release_control[11]!=0 or
+    state[0]!=2 or state[7]!=g or state[13]!=0 or handoff_state[0]!=4 or lifecycle_state[0]!=2 or
+    lifecycle_state[14]!=g-1 or lifecycle_state[27]!=g-1 or !completion_ok()){fail(50);return;}
+ if(rank<2){if(handoff_state[9]!=1 or handoff_state[10]!=1){fail(51);return;}}
+ else if(rank==2){if(handoff_state[5]!=3 or handoff_state[9]!=1 or handoff_state[10]!=1 or mlp_state[11]!=g){fail(52);return;}}
+ else{if(handoff_state[5]!=4 or handoff_state[7]!=1 or handoff_state[8]!=1 or mlp_state[11]!=g or state[6]!=128){fail(53);return;}}
+ state[0]=4;state[13]+=1;handoff_state[0]=5;handoff_state[29]+=1;mlp_state[13]+=1;
+ lifecycle_state[0]=3;lifecycle_state[14]+=1;lifecycle_state[27]=g;lifecycle_state[30]=lifecycle_state[29]+1;
+ sys.unblock_cmd_stream();
+}
+fn reset_sum(total:u32) void {
+ state[0]=1;state[4]=total;state[5]=0;state[6]=0;state[7]=0;state[8]=0;
+ state[9]=0;state[11]+=1;
+ const yd=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]f32,&ptr_output_storage[1]),.extent=128});
+ @fmovs(yd,0.0);
+ for(@range(u16,timing_words))|i|{timing[i]=0;}
+}
+fn begin_projections() void {
+ if(rank>=2){sys.unblock_cmd_stream();return;}
+ if(!identity() or state[0]!=0 or state[11]!=0 or control[3]!=112 or control[4]!=0 or control[5]!=0 or control[6]!=0){fail(2);return;}
+ reset_sum(112);sys.unblock_cmd_stream();
+}
+fn validate_tile(total:u32,columns:u32,tiles:u32) bool {
+ if(!identity() or state[0]!=1 or control[3]!=total or state[4]!=total or
+    control[4]!=state[5] or control[5]!=state[6] or state[5]>=tiles or state[6]>=total){return false;}
+ const remain:u32=total-state[6];const valid:u32=if(remain>columns) columns else remain;
+ return control[6]==valid;
+}
+fn apply_tile() bool {
+ for(@range(u16,16))|i|{ptr_tile_guard_snapshot[i]=0;}
+ ptr_tile_guard_snapshot[0]=@as(u32,ptr_weights_storage[0]);
+ ptr_tile_guard_snapshot[1]=@as(u32,ptr_weights_storage[weight_words-1]);
+ ptr_tile_guard_snapshot[12]=state[2];ptr_tile_guard_snapshot[13]=state[3];
+ ptr_tile_guard_snapshot[14]=state[4];ptr_tile_guard_snapshot[15]=0;
+ ptr_tile_guard_snapshot[4]=state[1];ptr_tile_guard_snapshot[5]=state[5];
+ ptr_tile_guard_snapshot[6]=state[6];ptr_tile_guard_snapshot[7]=control[6];
+ if(ptr_tile_guard_snapshot[0]!=0xa55a or ptr_tile_guard_snapshot[1]!=0x5aa5){fail(60);return false;}
+ ptr_tile_guard_snapshot[10]=1;if(rank<2){lifecycle_state[18]+=1;}
+ clock.enable_tsc();clock.get_timestamp(&started);
+ gemv.compute(@ptrcast([*]u16,&ptr_weights_storage[1]),@ptrcast([*]f32,&ptr_input_storage[1]),
+              @ptrcast([*]f32,&ptr_output_storage[1]),@as(u16,control[6]));
+ clock.get_timestamp(&ended);clock.disable_tsc();
+ const offset:u16=@as(u16,state[5])*6;
+ for(@range(u16,3))|i|{timing[offset+i]=started[i];timing[offset+i+3]=ended[i];}
+ ptr_tile_guard_snapshot[2]=@as(u32,ptr_weights_storage[0]);
+ ptr_tile_guard_snapshot[3]=@as(u32,ptr_weights_storage[weight_words-1]);
+ if(ptr_tile_guard_snapshot[2]!=0xa55a or ptr_tile_guard_snapshot[3]!=0x5aa5){fail(61);return false;}
+ if(rank<2){lifecycle_state[18]+=1;}
+ state[5]+=1;state[6]+=control[6];state[9]=control[6];state[10]+=1;
+ ptr_tile_guard_snapshot[8]=state[5];ptr_tile_guard_snapshot[9]=state[6];
+ ptr_tile_guard_snapshot[11]=1;return true;
+}
+fn accumulate_projections() void {
+ if(rank>=2){sys.unblock_cmd_stream();return;}
+ if(!validate_tile(112,112,1)){fail(3);return;}
+ if(!apply_tile()){return;}sys.unblock_cmd_stream();
+}
+fn commit_sum() bool {
+ if(!guarded16(ptr_weights_storage,weights_storage_count)){fail(68);return false;}
+ if(rank<2){lifecycle_state[18]+=1;}
+ for(@range(u16,128))|i|{ptr_bf16_storage[1+i]=round_bf16(@bitcast(u32,ptr_output_storage[1+i]));}
+ state[0]=2;state[7]=state[3];state[12]+=1;handoff_state[31]=1;
+ lifecycle_state[0]=2;lifecycle_state[28]|=1;
+ lifecycle_state[26]|=if(rank<2) @as(u32,1)<<rank else @as(u32,16);
+ weight_snapshot(false);return true;
+}
+fn finalize_projections() void {
+ if(rank>=2){sys.unblock_cmd_stream();return;}
+ if(!identity() or state[0]!=1 or state[4]!=112 or state[5]!=1 or state[6]!=112 or control[3]!=112){fail(4);return;}
+ if(!commit_sum()){return;}sys.unblock_cmd_stream();
+}
+fn reset_transfer() void {
+ for(@range(u16,9))|i|{handoff_state[6+i]=0;}
+ for(@range(u16,7))|i|{handoff_state[17+i]=0;}
+ handoff_state[30]=0;handoff_state[4]=handoff_latched[3];
+ handoff_state[32]=handoff_latched[10];handoff_state[33]=handoff_latched[11];
+ for(@range(u16,5))|i|{handoff_state[24+i]=handoff_latched[4+i];}
+}
+fn receive_data() void {
+ lifecycle_state[20]=1;
+ if(rank==2 and handoff_latched[3]==1){
+  const fabric=@get_dsd(fabin_dsd,.{.input_queue=@get_input_queue(3),.extent=142});
+  const memory=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]u32,&wire_data[1]),.extent=142});
+  @load_to_dsr(transfer_dst,memory);
+  @load_to_dsr(transfer_src,fabric,.{.async=true,.activate=receive_task,.ut_id=transfer_ut});
+  @mov32(transfer_dst,transfer_src,.{.async=true});
+ }else{
+  const fabric=@get_dsd(fabin_dsd,.{.input_queue=@get_input_queue(2),.extent=142});
+  const memory=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]u32,&wire_data[1]),.extent=142});
+  @load_to_dsr(transfer_dst,memory);
+  @load_to_dsr(transfer_src,fabric,.{.async=true,.activate=receive_task,.ut_id=transfer_ut});
+  @mov32(transfer_dst,transfer_src,.{.async=true});
+ }
+}
+fn arm_handoff() void {
+ const edge:u32=handoff_control[3];
+ if(!protocol.valid_descriptor(ptr_handoff_control,edge,state[1],state[2]) or !no_error()){fail(10);return;}
+ if(rank!=source(edge) and rank!=destination(edge)){sys.unblock_cmd_stream();return;}
+ if(lifecycle_state[15]!=edge or lifecycle_state[20]!=0 or lifecycle_state[21]!=0 or
+    (handoff_state[0]!=0 and handoff_state[0]!=4)){fail(11);return;}
+ if(rank==destination(edge)){
+  const mask:u32=if(edge==1) @as(u32,1) else @as(u32,0);
+  if(handoff_state[5]!=mask){fail(12);return;}
+ }else{
+  if(rank<2){if(state[0]!=2 or state[7]!=state[3]){fail(13);return;}}
+  else{if(mlp_state[0]!=2 or mlp_state[4]!=3 or mlp_state[11]!=state[3]){fail(14);return;}}
+ }
+ protocol.latch(ptr_handoff_latched,ptr_handoff_control);reset_transfer();
+ handoff_state[0]=1;mark(17);
+ if(rank==destination(edge)){receive_data();}
+ sys.unblock_cmd_stream();
+}
+fn finish_receiver() void {
+ if(handoff_state[6]==1 and handoff_state[7]==1 and handoff_state[8]==1 and handoff_state[11]==0){
+  handoff_state[11]=1;handoff_state[0]=if(handoff_state[12]==0) @as(u32,4) else @as(u32,9);
+  mark(23);
+  if(handoff_state[12]==0){lifecycle_state[15]=if(rank==2) handoff_latched[3]+1 else @as(u32,3);}
+  sys.unblock_cmd_stream();
+ }
+}
+fn send_data() void {
+ lifecycle_state[20]=1;
+ const memory=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]u32,&wire_data[1]),.extent=142});
+ if(rank==2){
+  const fabric=@get_dsd(fabout_dsd,.{.output_queue=@get_output_queue(4),.extent=142});
+  @load_to_dsr(transfer_dst,fabric,.{.async=true,.activate=send_task,.ut_id=transfer_ut});
+  @load_to_dsr(transfer_src,memory);@mov32(transfer_dst,transfer_src,.{.async=true});
+ }else{
+  const fabric=@get_dsd(fabout_dsd,.{.output_queue=@get_output_queue(2),.extent=142});
+  @load_to_dsr(transfer_dst,fabric,.{.async=true,.activate=send_task,.ut_id=transfer_ut});
+  @load_to_dsr(transfer_src,memory);@mov32(transfer_dst,transfer_src,.{.async=true});
+ }
+}
+fn handoff() void {
+ const edge:u32=handoff_control[3];
+ if(!protocol.valid_descriptor(ptr_handoff_control,edge,state[1],state[2])){fail(69);return;}
+ if(rank!=source(edge) and rank!=destination(edge)){sys.unblock_cmd_stream();return;}
+ for(@range(u16,12))|i|{if(handoff_control[i]!=handoff_latched[i]){fail(69);return;}}
+ if(handoff_state[6]!=0 or handoff_state[4]!=edge){fail(15);return;}
+ if(rank==destination(edge)){
+  if(handoff_state[0]!=1 and handoff_state[0]!=3 and handoff_state[0]!=9){fail(16);return;}
+  handoff_state[6]=1;mark(18);finish_receiver();return;
+ }
+ if(handoff_state[0]!=1){fail(17);return;}
+ handoff_state[0]=2;handoff_state[6]=1;mark(18);
+ if(rank<2){protocol.make_data(ptr_wire_data,ptr_handoff_latched,@ptrcast([*]u16,&ptr_bf16_storage[1]));}
+ else{protocol.make_data(ptr_wire_data,ptr_handoff_latched,@ptrcast([*]u16,&ptr_mlp_product[1]));}
+ send_data();
+}
+fn receive_ack() void {
+ lifecycle_state[21]=1;
+ const memory=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]u32,&wire_ack[1]),.extent=15});
+ if(rank==2){
+  const fabric=@get_dsd(fabin_dsd,.{.input_queue=@get_input_queue(4),.extent=15});
+  @load_to_dsr(transfer_dst,memory);
+  @load_to_dsr(transfer_src,fabric,.{.async=true,.activate=receive_task,.ut_id=transfer_ut});
+  @mov32(transfer_dst,transfer_src,.{.async=true});
+ }else{
+  const fabric=@get_dsd(fabin_dsd,.{.input_queue=@get_input_queue(2),.extent=15});
+  @load_to_dsr(transfer_dst,memory);
+  @load_to_dsr(transfer_src,fabric,.{.async=true,.activate=receive_task,.ut_id=transfer_ut});
+  @mov32(transfer_dst,transfer_src,.{.async=true});
+ }
+}
+fn send_ack() void {
+ lifecycle_state[21]=1;
+ const memory=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]u32,&wire_ack[1]),.extent=15});
+ if(rank==2 and handoff_latched[3]==1){
+  const fabric=@get_dsd(fabout_dsd,.{.output_queue=@get_output_queue(3),.extent=15});
+  @load_to_dsr(transfer_dst,fabric,.{.async=true,.activate=send_task,.ut_id=transfer_ut});
+  @load_to_dsr(transfer_src,memory);@mov32(transfer_dst,transfer_src,.{.async=true});
+ }else{
+  const fabric=@get_dsd(fabout_dsd,.{.output_queue=@get_output_queue(2),.extent=15});
+  @load_to_dsr(transfer_dst,fabric,.{.async=true,.activate=send_task,.ut_id=transfer_ut});
+  @load_to_dsr(transfer_src,memory);@mov32(transfer_dst,transfer_src,.{.async=true});
+ }
+}
+task sent_complete() void {
+ const edge:u32=handoff_latched[3];
+ if(rank==source(edge)){
+  if(handoff_state[0]!=2 or handoff_state[10]!=0 or lifecycle_state[20]!=1){fail(18);return;}
+  lifecycle_state[20]=0;lifecycle_state[22]+=1;lifecycle_state[28]|=2;
+  handoff_state[10]=1;handoff_state[13]=142;receive_ack();
+ }else{
+  if(rank!=destination(edge) or handoff_state[7]!=1 or handoff_state[8]!=0 or lifecycle_state[21]!=1){fail(19);return;}
+  lifecycle_state[21]=0;
+  if(handoff_state[12]==0){
+   lifecycle_state[25]+=1;
+   const needed:u32=(if(rank==2) @as(u32,2) else @as(u32,1))*state[1];
+   if(lifecycle_state[25]==needed){lifecycle_state[28]|=16;}
+  }
+  handoff_state[8]=1;handoff_state[14]=15;mark(21);finish_receiver();
+ }
+}
+task received_complete() void {
+ const edge:u32=handoff_latched[3];
+ if(rank==source(edge)){
+  if(lifecycle_state[21]!=1){fail(20);return;}lifecycle_state[21]=0;
+  if(handoff_state[0]!=2 or handoff_state[10]!=1 or !protocol.valid_ack(ptr_wire_ack,ptr_handoff_latched)){fail(20);return;}
+  lifecycle_state[23]+=1;lifecycle_state[28]|=4;lifecycle_state[15]=3;
+  handoff_state[9]=1;handoff_state[14]=15;mark(22);
+  handoff_state[0]=4;handoff_state[11]=1;mark(23);sys.unblock_cmd_stream();return;
+ }
+ if(rank!=destination(edge) or handoff_state[0]!=1 or handoff_state[7]!=0 or lifecycle_state[20]!=1){fail(21);return;}
+ lifecycle_state[20]=0;
+ const error:u32=protocol.data_error(ptr_wire_data,ptr_handoff_latched);
+ handoff_state[7]=1;handoff_state[13]=142;
+ handoff_state[30]=if(handoff_state[6]==0) @as(u32,1) else @as(u32,0);mark(19);
+ if(error==0){
+  for(@range(u16,128))|i|{
+   const value:u16=@as(u16,wire_data[15+i]);
+   if(edge==0){ptr_mlp_gate[1+i]=value;}
+   else if(edge==1){ptr_mlp_up[1+i]=value;}
+   else{ptr_mlp_product[1+i]=value;}
+  }
+  lifecycle_state[24]+=1;
+  const needed:u32=(if(rank==2) @as(u32,2) else @as(u32,1))*state[1];
+  if(lifecycle_state[24]==needed){lifecycle_state[28]|=8;}
+  lifecycle_state[26]|=if(edge==2) @as(u32,8) else @as(u32,1)<<@as(u16,edge);
+  handoff_state[5]|=@as(u32,1)<<@as(u16,edge);handoff_state[15]+=1;
+  handoff_state[31]=1;mark(20);handoff_state[0]=3;
+  mlp_state[4]=handoff_state[5];mlp_state[0]=1;
+  if(rank==3){mlp_state[7]=128;}
+ }else{handoff_state[12]=error;handoff_state[0]=9;mlp_state[12]=error;lifecycle_state[19]=error;lifecycle_state[0]=9;}
+ protocol.make_ack(ptr_wire_ack,ptr_handoff_latched,error);send_ack();
+}
+fn evaluate_mlp() void {
+ if(rank!=2){sys.unblock_cmd_stream();return;}
+ if(handoff_state[0]!=4 or handoff_state[5]!=3 or handoff_state[12]!=0 or mlp_state[0]!=1 or mlp_state[11]!=0){fail(30);return;}
+ state[0]=1;state[11]+=1;clock.enable_tsc();clock.get_timestamp(&started);
+ const error:u32=nonlinear.compute(@ptrcast([*]u16,&ptr_mlp_gate[1]),@ptrcast([*]u16,&ptr_mlp_up[1]),
+  @ptrcast([*]f32,&ptr_mlp_exp[1]),@ptrcast([*]f32,&ptr_mlp_sigmoid[1]),
+  @ptrcast([*]f32,&ptr_mlp_silu_fp32[1]),@ptrcast([*]f32,&ptr_mlp_product_fp32[1]),
+  @ptrcast([*]u16,&ptr_mlp_silu[1]),@ptrcast([*]u16,&ptr_mlp_product[1]));
+ clock.get_timestamp(&ended);clock.disable_tsc();
+ for(@range(u16,3))|i|{timing[i]=started[i];timing[i+3]=ended[i];}
+ if(error!=0){fail(30+error);return;}
+ lifecycle_state[0]=2;lifecycle_state[28]|=1;lifecycle_state[26]|=12;
+ state[0]=2;state[5]=1;state[6]=128;state[7]=state[3];state[9]=128;state[10]+=1;state[12]+=1;
+ mlp_state[0]=2;mlp_state[5]=128;mlp_state[6]=128;mlp_state[10]=128;mlp_state[11]=state[3];
+ sys.unblock_cmd_stream();
+}
+fn begin_down() void {
+ if(rank!=3){sys.unblock_cmd_stream();return;}
+ if(!identity() or state[0]!=0 or state[11]!=0 or control[3]!=128 or control[4]!=0 or control[5]!=0 or control[6]!=0 or
+    handoff_state[0]!=4 or handoff_state[5]!=4 or handoff_state[12]!=0 or mlp_state[7]!=128){fail(40);return;}
+ reset_sum(128);sys.unblock_cmd_stream();
+}
+fn accumulate_down() void {
+ if(rank!=3){sys.unblock_cmd_stream();return;}
+ if(!validate_tile(128,64,2) or mlp_state[7]!=128 or handoff_state[5]!=4){fail(41);return;}
+ const offset:u16=@as(u16,state[6]);
+ for(@range(u16,64))|i|{ptr_input_storage[1+i]=expand(ptr_mlp_product[1+offset+i]);}
+ if(!apply_tile()){return;}mlp_state[8]=state[5];mlp_state[9]=state[6];sys.unblock_cmd_stream();
+}
+fn finalize_down() void {
+ if(rank!=3){sys.unblock_cmd_stream();return;}
+ if(!identity() or state[0]!=1 or state[4]!=128 or state[5]!=2 or state[6]!=128 or control[3]!=128){fail(42);return;}
+ if(!commit_sum()){return;}mlp_state[0]=2;mlp_state[10]=128;mlp_state[11]=state[3];sys.unblock_cmd_stream();
+}
+
+comptime{
+ @bind_local_task(received_complete,receive_task);
+ @bind_local_task(sent_complete,send_task);
+ @export_symbol(ptr_weights_storage,"weights_storage");
+ @export_symbol(ptr_input_storage,"input_storage");
+ @export_symbol(ptr_output_storage,"output_storage");
+ @export_symbol(ptr_bf16_storage,"bf16_storage");
+ @export_symbol(ptr_control,"control");
+ @export_symbol(ptr_state,"state");
+ @export_symbol(ptr_timing,"timing");
+ @export_symbol(ptr_weight_guard_snapshot,"weight_guard_snapshot");
+ @export_symbol(ptr_tile_guard_snapshot,"tile_guard_snapshot");
+ @export_symbol(ptr_handoff_control,"handoff_control");
+ @export_symbol(ptr_handoff_latched,"handoff_latched");
+ @export_symbol(ptr_handoff_state,"handoff_state");
+ @export_symbol(ptr_wire_data,"wire_data");
+ @export_symbol(ptr_wire_ack,"wire_ack");
+ @export_symbol(ptr_mlp_gate,"mlp_gate");
+ @export_symbol(ptr_mlp_up,"mlp_up");
+ @export_symbol(ptr_mlp_silu,"mlp_silu");
+ @export_symbol(ptr_mlp_product,"mlp_product");
+ @export_symbol(ptr_mlp_exp,"mlp_exp");
+ @export_symbol(ptr_mlp_sigmoid,"mlp_sigmoid");
+ @export_symbol(ptr_mlp_silu_fp32,"mlp_silu_fp32");
+ @export_symbol(ptr_mlp_product_fp32,"mlp_product_fp32");
+ @export_symbol(ptr_mlp_state,"mlp_state");
+ @export_symbol(ptr_release_control,"release_control");
+ @export_symbol(ptr_generation_control,"generation_control");
+ @export_symbol(ptr_lifecycle_state,"lifecycle_state");
+ @export_symbol(initialize);
+ @export_symbol(begin_generation);
+ @export_symbol(begin_projections);
+ @export_symbol(accumulate_projections);
+ @export_symbol(finalize_projections);
+ @export_symbol(arm_handoff);
+ @export_symbol(handoff);
+ @export_symbol(evaluate_mlp);
+ @export_symbol(begin_down);
+ @export_symbol(accumulate_down);
+ @export_symbol(finalize_down);
+ @export_symbol(release_all);
+ if(rank==0){
+  @set_local_color_config(@get_color(2),.{.routes=.{.rx=.{RAMP},.tx=.{EAST}}});
+  @set_local_color_config(@get_color(6),.{.routes=.{.rx=.{EAST},.tx=.{RAMP}}});
+  @initialize_queue(@get_input_queue(2),.{.color=@get_color(6)});
+  @initialize_queue(@get_output_queue(2),.{.color=@get_color(2)});
+ }
+ if(rank==1){
+  @set_local_color_config(@get_color(2),.{.routes=.{.rx=.{WEST},.tx=.{EAST}}});
+  @set_local_color_config(@get_color(6),.{.routes=.{.rx=.{EAST},.tx=.{WEST}}});
+  @set_local_color_config(@get_color(3),.{.routes=.{.rx=.{RAMP},.tx=.{EAST}}});
+  @set_local_color_config(@get_color(7),.{.routes=.{.rx=.{EAST},.tx=.{RAMP}}});
+  @initialize_queue(@get_input_queue(2),.{.color=@get_color(7)});
+  @initialize_queue(@get_output_queue(2),.{.color=@get_color(3)});
+ }
+ if(rank==2){
+  @set_local_color_config(@get_color(2),.{.routes=.{.rx=.{WEST},.tx=.{RAMP}}});
+  @set_local_color_config(@get_color(6),.{.routes=.{.rx=.{RAMP},.tx=.{WEST}}});
+  @set_local_color_config(@get_color(3),.{.routes=.{.rx=.{WEST},.tx=.{RAMP}}});
+  @set_local_color_config(@get_color(7),.{.routes=.{.rx=.{RAMP},.tx=.{WEST}}});
+  @set_local_color_config(@get_color(4),.{.routes=.{.rx=.{RAMP},.tx=.{EAST}}});
+  @set_local_color_config(@get_color(8),.{.routes=.{.rx=.{EAST},.tx=.{RAMP}}});
+  @initialize_queue(@get_input_queue(2),.{.color=@get_color(2)});
+  @initialize_queue(@get_input_queue(3),.{.color=@get_color(3)});
+  @initialize_queue(@get_input_queue(4),.{.color=@get_color(8)});
+  @initialize_queue(@get_output_queue(2),.{.color=@get_color(6)});
+  @initialize_queue(@get_output_queue(3),.{.color=@get_color(7)});
+  @initialize_queue(@get_output_queue(4),.{.color=@get_color(4)});
+ }
+ if(rank==3){
+  @set_local_color_config(@get_color(4),.{.routes=.{.rx=.{WEST},.tx=.{RAMP}}});
+  @set_local_color_config(@get_color(8),.{.routes=.{.rx=.{RAMP},.tx=.{WEST}}});
+  @initialize_queue(@get_input_queue(2),.{.color=@get_color(4)});
+  @initialize_queue(@get_output_queue(2),.{.color=@get_color(8)});
+ }
+}
