@@ -1,0 +1,48 @@
+const memcpy=@import_module("<memcpy/get_params>",.{.width=184,.height=314});
+layout{@set_rectangle(184,314);
+for(@range(u16,314))|y|{for(@range(u16,184))|x|{
+const proj=y<272 and x<54;
+const down=y>=274 and y<314 and x<182;
+const non=x==182 and y<272 and y%2==0;
+const role:u16=if(proj) (if(y%2==0) @as(u16,1) else @as(u16,2)) else if(down) @as(u16,3) else if(non) @as(u16,4) else if(x==183 and y==0) @as(u16,5) else if(x==183 and y==274) @as(u16,6) else if(x==183 and y==275) @as(u16,7) else @as(u16,0);
+const group:u16=if(proj or non) y/2 else if(down) y-274 else @as(u16,0);
+const matrix=proj or down;
+@set_tile_code(x,y,"pe.csl",.{.memcpy_params=memcpy.get_params(x),.role=role,.group=if((matrix and x==0) or non) group else @as(u16,0),.ordinal=if(matrix) x else @as(u16,0),.participants=if(down) @as(u16,182) else @as(u16,54),.hidden=5120,.intermediate=17408,.width=184,.down_y=274,.diagnostic_padding=true and x==182 and y<272 and y%2==1});
+if(y==0){
+if(x==183){@set_color_config(x,y,@get_color(3),.{.routes=.{.rx=.{RAMP},.tx=.{WEST}}});}
+else if(x>=54){@set_color_config(x,y,@get_color(3),.{.routes=.{.rx=.{EAST},.tx=.{WEST}}});}
+else{
+@set_color_config(x,y,@get_color(3),.{.routes=.{.rx=.{EAST},.tx=if(x==0) .{RAMP,SOUTH} else .{RAMP,WEST,SOUTH}},.filter=.{.kind=.{.counter=true},.count_data=true,.init_counter=(5184-x*96)%5184,.max_counter=95,.limit1=5183}});
+}
+}else if(y>0 and y<272 and x<54){
+@set_color_config(x,y,@get_color(3),.{.routes=.{.rx=.{NORTH},.tx=if(y==271) .{RAMP} else .{RAMP,SOUTH}},.filter=.{.kind=.{.counter=true},.count_data=true,.init_counter=(5184-x*96)%5184,.max_counter=95,.limit1=5183}});
+}
+if(y==274){
+if(x==183){@set_color_config(x,y,@get_color(4),.{.routes=.{.rx=.{RAMP},.tx=.{WEST}}});}
+else if(x>=182){@set_color_config(x,y,@get_color(4),.{.routes=.{.rx=.{EAST},.tx=.{WEST}}});}
+else{
+@set_color_config(x,y,@get_color(4),.{.routes=.{.rx=.{EAST},.tx=if(x==0) .{RAMP,SOUTH} else .{RAMP,WEST,SOUTH}},.filter=.{.kind=.{.counter=true},.count_data=true,.init_counter=(17472-x*96)%17472,.max_counter=95,.limit1=17471}});
+}
+}else if(y>274 and y<314 and x<182){
+@set_color_config(x,y,@get_color(4),.{.routes=.{.rx=.{NORTH},.tx=if(y==313) .{RAMP} else .{RAMP,SOUTH}},.filter=.{.kind=.{.counter=true},.count_data=true,.init_counter=(17472-x*96)%17472,.max_counter=95,.limit1=17471}});
+}
+}}
+@export_name("weights",[*]u16,false);
+@export_name("input",[*]f32,false);
+@export_name("result",[*]f32,false);
+@export_name("gate",[*]u16,false);
+@export_name("up",[*]u16,false);
+@export_name("product",[*]u16,false);
+@export_name("output",[*]u16,false);
+@export_name("state",[*]u32,false);
+@export_name("partial",[*]f32,false);
+@export_name("rounded",[*]u16,false);
+@export_name("silu",[*]u16,false);
+@export_name("exponential",[*]f32,false);
+@export_name("sigmoid",[*]f32,false);
+@export_name("activation_fp32",[*]f32,false);
+@export_name("product_fp32",[*]f32,false);
+@export_name("initialize",fn()void);
+@export_name("prepare",fn()void);
+@export_name("compute",fn()void);
+}

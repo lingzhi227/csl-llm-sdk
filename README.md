@@ -2,7 +2,7 @@
 
 **Building inference for open language models with handwritten Cerebras Systems Language (CSL), targeting sequential execution of three model stages on WSE-3.** We implement the numerical kernels, execution control and persistent model state, and use the Cerebras SDK to compile and run the device programs. The first target is **Qwen3.8-27B text inference**; the longer-term goal is a reusable SDK for related model architectures.
 
-**Working today:** bounded SDK 2.10.1 simulator milestones cover original-weight contractions, normalization, persistent recurrence and attention, selected-head compositions, and partial MLP chains. The newest result is an **original-weight eight-PE MLP fragment on physical WSE-3**, with three inputs, independent numerical checks, complete final weight readback and verified device release. **Current work:** implement the full 5120 → 17408 → 5120 resident MLP and sequential stage checkpoints. **Still ahead:** complete 64-layer text generation, validated stage state restoration and measured token latency. The completed log records each result's exact scope.
+**Working today:** the complete original-weight **5120 → 17408 → 5120 layer-3 MLP runs on physical WSE-3** with four inputs, resident weights, independent numerical checks and verified release. Earlier bounded SDK milestones cover normalization, recurrent state and selected attention heads. **Current work:** complete attention/recurrent layers and dense integration into three sequential stages with state checkpoints. **Still ahead:** complete 64-layer text generation, validated stage state restoration and measured token latency. The completed log records each result's exact scope.
 
 ## 1. Project design
 
@@ -28,7 +28,7 @@ The execution box is what the compiled program does. We write its scheduling, bu
 | Part | What this project implements or reuses |
 |---|---|
 | **Our device code** | Matrix products, normalization, attention, recurrence and other model operations; task dependencies, communication and state updates. The completed log identifies the implemented subsets. |
-| **Our host code** | Stage weight/state loading, checkpoint coordination, tensor placement, resource limits and validation. Physical execution is qualified for the eight-PE fragment; the full model remains open. |
+| **Our host code** | Stage weight/state loading, checkpoint coordination, tensor placement, resource limits and validation. Physical execution is qualified for the full layer-3 MLP at four module inputs; the full model remains open. |
 | **Cerebras tooling** | CSL layout/compiler, device tasks and communication primitives, host transfers and runtime launches. |
 | **Reference computation** | CPU numerical references and selected functions extracted from a pinned official implementation. GPU reference execution and applicable CS-Torch / Model Zoo integration remain future work. |
 
@@ -42,26 +42,25 @@ weights, code, state and route capacity still require actual compiled-fit checks
 
 ```mermaid
 flowchart LR
-    Host["Host: initialize weights and submit input"] --> In["Ingress / output PE"]
-    In --> G["2 resident gate shards · FP32 reduction"]
-    In --> U["2 resident up shards · FP32 reduction"]
-    G --> N["BF16 completed projections · SiLU/product PE"]
+    Host["Host: load resident weights and submit input"] --> In["5120-value device broadcast"]
+    In --> G["Full gate projection · 54 shards per row group"]
+    In --> U["Full up projection · 54 shards per row group"]
+    G --> N["BF16 completed projections · 17408 SiLU/product values"]
     U --> N
-    N --> D["2 resident down shards · FP32 reduction"]
-    D --> In
-    In --> Check["Diagnostic readback and ownership checks"]
+    N --> D["Full down projection · 182 shards per row group"]
+    D --> Out["5120-value output · diagnostic readback"]
 ```
 
-This diagram shows the accepted eight-PE fragment, not the full three-stage
-model deployment. Intermediate diagnostic copies are present; neural computation has
-no host feedback dependency. Earlier temporal probes remain useful evidence,
-while a few-PE full-model temporal engine is not a prerequisite for this target.
+This diagram shows the accepted full layer-3 MLP. FP32 local accumulation and
+right-to-left reductions, BF16 casts and neural handoffs execute on device.
+Full attention/recurrent layers and the three-stage model remain integration work.
 
 ## 2. Repository guide
 
 | Path | Purpose |
 |---|---|
 | [`csl/kernels/`](csl/kernels) | Reusable handwritten CSL arithmetic kernels. |
+| [`examples/hw01/`](examples/hw01) | Full original layer-3 MLP device graph, physical capture and post-release numerical checks. |
 | [`examples/hw00/`](examples/hw00) | Physical eight-PE qualification, appliance lifecycle, SRAM/placement gates and bounded release watchdog. |
 | [`examples/wp16/resident/`](examples/wp16/resident) | Earlier resident simulator graph and preserved qualification history. |
 | [`examples/`](examples) | Runnable experiments, grouped by milestone. Layout files place PEs and routes; device programs wire kernels and state; Python drivers load inputs, launch operations and collect results. |
@@ -76,7 +75,22 @@ while a few-PE full-model temporal engine is not a prerequisite for this target.
 
 ## 3. Completed development log — newest first
 
-Each **WP** is a scoped development milestone. Device results below come from the SDK simulator; WP04 is a CPU/source audit. **BF16** means bfloat16 data, and **FP32** means 32-bit floating-point arithmetic. Reports contain numerical thresholds, failure history and reproduction details.
+Each **WP** or **HW** is a scoped development milestone. HW00/HW01 use physical WSE-3; earlier WP device results use the SDK simulator, and WP04 is a CPU/source audit. **BF16** means bfloat16 data, and **FP32** means 32-bit floating-point arithmetic. Reports contain numerical thresholds, failure history and reproduction details.
+
+### HW01 · Complete original layer-3 MLP on physical WSE-3 · September 18, 2026
+
+The full 5120→17408→5120 MLP completed four dense/changed/last-column/zero inputs
+with all 534773760 original BF16 weight bytes resident. Independent review checked
+87872 exact FMA sample rows covering every matrix PE/input, all 159744 reduction
+rows and 69632 nonlinear rows, casts, handoffs, state and complete final weights.
+The predeclared audit checked all 11247616 local row enclosures. Nominal official
+BF16 output differences were 39/43/1/0; all frozen numerical gates passed, without
+a bitwise parity claim. All 253 copies, nine launches and normal shutdown passed,
+with independently verified device release before numerical audits. Maximum static
+storage plus 4 KiB stack was 38032 bytes. The 272.269-second host stage is not
+kernel timing, token latency or a charge. Complete layers and model inference remain open.
+
+[Source and reproduction scope](examples/hw01) · [Report](docs/HW01-FULL-MLP.md) · [Independent acceptance](evidence/hw01-full-mlp.json)
 
 ### HW00 · Original-weight eight-PE fragment on physical WSE-3 · September 18, 2026
 

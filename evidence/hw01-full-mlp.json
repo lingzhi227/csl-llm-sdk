@@ -1,0 +1,74 @@
+{
+  "status": "independently_accepted",
+  "accepted_utc": "2026-09-18T14:22:27.511407+00:00",
+  "scope": "Full original layer-3 MLP, 5120 -> 17408 -> 5120, four frozen module inputs, physical CS-3",
+  "full_model": false,
+  "token_acceptance": false,
+  "candidate": "hw01-full-run-002",
+  "manifest_sha256": "1b3a5113d36a278007e17f8b9c3289f3ceb324973d90c8e71f629a1cdfd0be36",
+  "model": "Qwen/Qwen3.8-27B",
+  "revision": "1d4bf0f2ff6012fd82039f2fa52739d0dd7c60c0",
+  "geometry": {
+    "application": [
+      184,
+      314
+    ],
+    "fabric": [
+      762,
+      1172
+    ],
+    "offset": [
+      4,
+      1
+    ],
+    "matrix_PEs": 21968,
+    "nonlinear_PEs": 136,
+    "total_application_PEs": 57776,
+    "max_static_plus_stack_bytes": 38032
+  },
+  "inputs": [
+    "dense_dyadic",
+    "changed_dyadic",
+    "last_column_onehot",
+    "zero_after_nonzero"
+  ],
+  "capture": {
+    "copies": 253,
+    "launches": 9,
+    "normal_stop": true,
+    "four_complete_epochs": true,
+    "all_final_weights_and_padding_retained": true,
+    "host_stage_seconds": 272.2689345460385,
+    "capture_seconds": 25.48374975984916,
+    "timing_scope": "Includes initialization/loading/transfers/checks/release; neither kernel benchmark nor token latency nor official charge"
+  },
+  "numerical": {
+    "predeclared_all_local_row_enclosures": 11247616,
+    "independent_exact_FMA_sample_rows": 87872,
+    "independent_sample_covers_every_matrix_PE_each_input": true,
+    "all_exact_chain_rows": 159744,
+    "all_nonlinear_rows": 69632,
+    "all_inputs_tails_casts_handoffs_states": true,
+    "zero_after_nonzero": true,
+    "official_BF16_mismatches": [
+      39,
+      43,
+      1,
+      0
+    ],
+    "qualification": "All frozen source and actual-operand bounds passed. Different FP32 reduction order permits these nominal BF16 differences; not bitwise official parity."
+  },
+  "resources": {
+    "fresh_release_verified": true,
+    "owned_system_assignments": [],
+    "account_active_jobs": [],
+    "all_client_supervisor_audit_groups_quiescent": true,
+    "candidate_bytes": 685697347,
+    "math_audits_after_device_release": true
+  },
+  "evidence": {
+    "capture_sha256": "ea213cae1997954d0848087e3fe4f989e647bdd8f7ed9422e44e18919c58c5d1",
+    "numerics_sha256": "9f1dcb504dc98db2ac3ec11f9bf1f087a37dd492acc5fe6cbc39e2cced931976",
+    "independent_audit_sha256": "9d68c874bd46a5330c1b6ec49507a8f3bf486e89f3ebfb93f338e5865d0c0983"
+  }
+}
