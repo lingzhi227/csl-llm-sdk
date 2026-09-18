@@ -1,0 +1,84 @@
+{
+  "status": "uncompiled_connected_transport_fixture",
+  "width": 200,
+  "height": 3,
+  "frame_words": 17472,
+  "phase_inputs": [
+    5120,
+    6144,
+    5120,
+    17408
+  ],
+  "stripes": [
+    {
+      "x": 16,
+      "y": 0,
+      "columns": 54,
+      "phase": 0,
+      "group": 0,
+      "input_words": 5120,
+      "rows": 128
+    },
+    {
+      "x": 71,
+      "y": 0,
+      "columns": 54,
+      "phase": 0,
+      "group": 1,
+      "input_words": 5120,
+      "rows": 37
+    },
+    {
+      "x": 126,
+      "y": 0,
+      "columns": 64,
+      "phase": 1,
+      "group": 2,
+      "input_words": 6144,
+      "rows": 128
+    },
+    {
+      "x": 16,
+      "y": 1,
+      "columns": 54,
+      "phase": 2,
+      "group": 3,
+      "input_words": 5120,
+      "rows": 128
+    },
+    {
+      "x": 16,
+      "y": 2,
+      "columns": 182,
+      "phase": 3,
+      "group": 4,
+      "input_words": 17408,
+      "rows": 128
+    }
+  ],
+  "matrix_PEs": 408,
+  "epochs": 2,
+  "source": "synthetic_BF16_dyadic_values_generated_on_device",
+  "weight_policy": "one_unit_weight_per_valid_output_row_at_row_mod_valid_columns;zero_elsewhere",
+  "weight_storage_bytes_per_PE": 24576,
+  "weight_backing_dtype": "u32",
+  "BF16_kernel_alias_same_bank": true,
+  "packed_weight_H2D_bytes": 10027008,
+  "legacy_unpacked_host_slots_bytes": 20054016,
+  "neural_model": false,
+  "host_neural_feedback": false,
+  "all_PE_compute_barrier_before_next_prepare": true,
+  "diagnostic_hold_tail_until_ready": true,
+  "hold_after_complete_last_active_96_word_slot": true,
+  "cases": [
+    "adjacent_independent_stripes",
+    "ordinal181",
+    "input_tail_zero",
+    "37_valid_output_rows",
+    "inactive_to_active_phase",
+    "early_ready_during_padding",
+    "two_tokens_changed_input",
+    "source_release_separate_from_consumer_accounting",
+    "unchanged_resident_weights"
+  ]
+}

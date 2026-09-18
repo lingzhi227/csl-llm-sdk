@@ -1,0 +1,29 @@
+{
+  "status": "independent_original_arithmetic_AST_equivalence_passed",
+  "observed_utc": "2026-09-18T14:52:14.306632+00:00",
+  "pinned_adapter_sha256": "f955e693d276a474110b57a8146ff2ab2a548a6a24c1d10ed37102124af17720",
+  "definitions": 24,
+  "text_model_forward_body_unchanged": true,
+  "callbacks": {
+    "modeling_qwen3_5.py:causal_conv1d_update": [
+      "conv_preactivation"
+    ],
+    "modeling_qwen3_5.py:causal_conv1d_fn": [
+      "conv_preactivation"
+    ],
+    "modeling_qwen3_5.py:Qwen3_5GatedDeltaNet": [
+      "_observe_delta_gate(a, self.dt_bias, self.A_log, g)"
+    ],
+    "modeling_qwen3_5.py:eager_attention_forward": [
+      "_observe_attention(attn_weights, attention_mask)"
+    ]
+  },
+  "buffer_API_adaptations": [
+    "inv_freq",
+    "original_inv_freq"
+  ],
+  "SDK_imported": false,
+  "Torch_imported": false,
+  "source_only": true,
+  "historical_remaining_at_source_review": "Bounded Torch2.4 API qualification and whole original-model reference run are still required."
+}

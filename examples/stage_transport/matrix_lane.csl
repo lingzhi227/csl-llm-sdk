@@ -1,0 +1,100 @@
+// Dense-stage matrix lane. Source only; compiled transport/fit is not accepted.
+// The importing PE owns packet delivery and request admission. All matrix lanes
+// consume the same 182-slot period, including inactive phases and input padding.
+param ordinal:u16;
+param participants:u16;
+param phase_count:u16;
+param input_task:local_task_id;
+param line_task:local_task_id;
+param on_output:fn([*]u16,u16,u16)void;
+param on_token_complete:fn()void;
+
+comptime {
+ @comptime_assert(participants>=2 and participants<=182 and ordinal<participants);
+ @comptime_assert(phase_count>0);
+}
+const root=ordinal==0;
+const kernel=@import_module("gemv_kernel.csl",.{.rows=128,.columns=96});
+const line=@import_module("line.csl",.{.ordinal=ordinal,.participants=participants,
+ .length=128,.negative=WEST,.positive=EAST,
+ .colors=[3]color{@get_color(0),@get_color(1),@get_color(2)},
+ .task_id=line_task,.on_complete=own_line_complete});
+const receiver=@import_module("input.csl",.{.length=96,.input_color=@get_color(4),
+ .queue_id=4,.completion_task=input_task});
+
+// Exactly one24576-byte bank. The u32 backing provides native32-bit alignment;
+// the accepted GEMV still reads the same BF16 halfwords through this alias.
+// The connected fixture must qualify packing/aliases and actual ELF alignment.
+var weight_storage=@zeros([6144]u32);
+var input=@zeros([96]f32);
+var partial=@zeros([128]f32);
+var result=@zeros([128]f32);
+var rounded=@zeros([if(root) 128 else 1]u16);
+// Loaded once with resident weights: phase, output group, consumer x/y,
+// valid output rows, valid input columns. Embedding lanes use phase=0xffff.
+var descriptor=@zeros([6]u16);
+// request, reset generation, token position, stage. Packet envelopes copy these.
+var identity=@zeros([4]u32);
+// completed tokens, GEMVs, own line completions, consumed periods.
+var counters=@zeros([4]u32);
+var phase:u16=0;
+var running:bool=false;
+var armed:bool=false;
+var line_busy:bool=false;
+var root_output_owned:bool=false;
+
+fn round_bf16(value:f32) u16 {
+ const raw=@bitcast(u32,value);@assert((raw&0x7f800000)!=0x7f800000);
+ const answer=@as(u16,(raw+0x7fff+((raw>>16)&1))>>16);
+ @assert((answer&0x7f80)!=0x7f80);return answer;
+}
+fn arm() void {
+ @assert(running and !armed and !line_busy and !root_output_owned);
+ armed=true;receiver.arm(&input);
+}
+fn begin(request:u32,reset:u32,position:u32,stage:u32) void {
+ @assert(!running and !armed and !line_busy and !root_output_owned);
+ @assert(descriptor[0]<phase_count or descriptor[0]==0xffff);
+ @assert(descriptor[4]>0 and descriptor[4]<=128 and descriptor[5]>0 and descriptor[5]<=96);
+ identity[0]=request;identity[1]=reset;identity[2]=position;identity[3]=stage;
+ phase=0;running=true;arm();
+}
+fn advance_phase() void {
+ @assert(running and !armed and !line_busy and !root_output_owned);
+ counters[3]+=1;phase+=1;
+ if(phase==phase_count){running=false;counters[0]+=1;on_token_complete();}
+ else{arm();}
+}
+task input_complete() void {
+ @assert(running and armed and !line_busy and !root_output_owned);armed=false;
+ if(phase!=descriptor[0]){advance_phase();return;}
+ // Inactive lanes must not require zero data in their ordinal: another active
+ // projection may use it. Only the active matrix's genuine tail is checked.
+ for(@range(u16,96))|i|{
+  @assert((@bitcast(u32,input[i])&0x7f800000)!=0x7f800000);
+  if(i>=descriptor[5]){@assert(input[i]==0.0);}
+ }
+ // CSL rejects a comptime/global pointer cast. The accepted GEMV uses this
+ // same runtime cast pattern for its global FP32-to-halfword scratch view.
+ kernel.compute(@ptrcast([*]u16,&weight_storage),&input,&partial);counters[1]+=1;
+ line_busy=true;line.start(&partial,&result);
+}
+fn own_line_complete() void {
+ @assert(running and !armed and line_busy and phase==descriptor[0]);
+ line_busy=false;counters[2]+=1;
+ if(comptime root){
+  for(@range(u16,128))|i|{
+   rounded[i]=round_bf16(result[i]);
+   if(i>=descriptor[4]){@assert(rounded[i]==0);}
+  }
+  root_output_owned=true;on_output(&rounded,phase,descriptor[1]);
+ }else{advance_phase();}
+}
+// Called only after the final output packet's source-buffer release. Consumer
+// accounting is separate and gates the origin's next phase. A root's callback
+// never releases another lane's collective buffers or DSR1 lease.
+fn release_output(completed_phase:u16) void {
+ @assert(root and running and root_output_owned and !line_busy and !armed);
+ @assert(completed_phase==phase);root_output_owned=false;advance_phase();
+}
+comptime {@bind_local_task(input_complete,input_task);}

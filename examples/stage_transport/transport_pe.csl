@@ -1,0 +1,140 @@
+// Connected transport fixture using the final dense-stage modules unchanged.
+// Synthetic on-device input provider; no claim of a complete neural layer.
+param memcpy_params;
+param role:u16; // 0 forwarding-only,1 matrix,2 row consumer,3 frame origin
+param ordinal:u16=0;
+param participants:u16=54;
+const matrix=role==1;const root=matrix and ordinal==0;
+const consumer=role==2;const origin=role==3;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const lane=@import_module(if(matrix) "matrix_lane.csl" else "<empty>",if(matrix) .{
+ .ordinal=ordinal,.participants=participants,.phase_count=4,
+ .input_task=@get_local_task_id(11),.line_task=@get_local_task_id(10),
+ .on_output=matrix_output,.on_token_complete=matrix_complete} else .{});
+const frame=@import_module(if(origin) "frame_origin.csl" else "<empty>",if(origin) .{
+ .phase_count=4,.completion_task=@get_local_task_id(11),
+ .diagnostic_hold_tail_until_ready=true,
+ .on_need_chunk=provide,.on_frame_injected=injected} else .{});
+const packets=@import_module("packets.csl",.{.sent_task_id=@get_local_task_id(12),
+ .received_task_id=@get_local_task_id(13),.on_sent=sent,.on_received=received});
+const row=@import_module(if(root or consumer) "row_packet.csl" else "<empty>",if(root or consumer) .{
+ .source_role=root,.send=send_row,.on_source_released=row_released,.on_row_received=row_received} else .{});
+var descriptor=@zeros([6]u16);
+var state=@zeros([8]u32);
+var acknowledgements=@zeros([if(origin) 5 else 1]u16);
+var counts=@zeros([if(origin) 4 else 1]u16);
+var chunk=@zeros([if(origin) 128 else 1]u16);
+var ack=@zeros([8]u32);
+var unused_u16=@zeros([1]u16);var unused_f32=@zeros([1]f32);
+var unused_u32=@zeros([1]u32);
+var epoch:u32=0;var initialized:bool=false;var command_waiting:bool=false;
+var done:bool=false;var all_injected:bool=false;var ack_pending:bool=false;
+const VALUES:u32=1;const READY:u32=2;
+
+fn round_bf16(value:f32) u16 {
+ const bits=@bitcast(u32,value);return @as(u16,(bits+0x7fff+((bits>>16)&1))>>16);
+}
+fn finish() void {
+ if(command_waiting and done and !packets.sending){
+  state[0]=2*epoch;command_waiting=false;sys.unblock_cmd_stream();
+ }
+}
+fn initialize() void {@assert(!initialized);packets.init();initialized=true;sys.unblock_cmd_stream();}
+fn prepare() void {
+ @assert(initialized and state[0]==2*epoch and !command_waiting and !packets.sending and !packets.receiving);
+ // Host invokes prepare only after the previous all-PE compute command has
+ // completed. That barrier includes every lane and every consumer ACK source.
+ if(comptime origin){if(epoch>0){frame.retire(1,1,epoch-1,0);}}
+ epoch+=1;state[0]=2*epoch-1;state[1]=epoch;
+ done=false;all_injected=false;ack_pending=false;
+ if(comptime matrix){lane.begin(1,1,epoch-1,0);}
+ if(comptime consumer){row.begin(1,1,epoch-1,0,VALUES,descriptor[0],descriptor[1],descriptor[4]);}
+ if(comptime origin){
+  for(@range(u16,5))|i|{acknowledgements[i]=0;}
+  for(@range(u16,4))|i|{counts[i]=0;}
+ }
+ sys.unblock_cmd_stream();
+}
+fn compute() void {
+ @assert(initialized and state[0]==2*epoch-1 and !command_waiting);command_waiting=true;
+ if(comptime origin){frame.begin(1,1,epoch-1,0);frame.ready(1,1,epoch-1,0,0,5120);}
+ if(comptime role==0){done=true;}
+ finish();
+}
+fn matrix_output(data:[*]u16,phase:u16,group:u16) void {
+ if(comptime root){
+  row.begin(1,1,epoch-1,0,VALUES,phase,group,lane.descriptor[4]);
+  row.transmit(lane.descriptor[2],lane.descriptor[3],data);
+ }
+}
+fn matrix_complete() void {if(comptime matrix){done=true;finish();}}
+fn send_row(x:u16,y:u16,data:[*]u32,length:u16) void {packets.send(x,y,data,length);}
+fn row_released(phase:u16) void {if(comptime root){lane.release_output(phase);}}
+fn row_received(data:[*]u16,phase:u16,group:u16) void {
+ if(comptime consumer){
+  // The fixture retains the row for post-run inspection. Its ACK deliberately
+  // can precede completion of the sender's long zero tail.
+  ack[0]=READY;ack[1]=1;ack[2]=1;ack[3]=epoch-1;ack[4]=0;
+  ack[5]=@as(u32,phase);ack[6]=@as(u32,group);ack[7]=64;
+  @assert(!ack_pending and !packets.sending);ack_pending=true;
+  packets.send(0,0,&ack,8);
+ }
+}
+fn sent() void {
+ if(comptime root){row.sent();}
+ else if(comptime consumer){
+  @assert(ack_pending);ack_pending=false;row.release_row(descriptor[0]);done=true;finish();
+ }else{@assert(false);}
+}
+fn received(data:[*]u32,length:u16) void {
+ if(comptime consumer){row.receive(data,length);}
+ else if(comptime origin){
+  @assert(length==8 and data[0]==READY and data[1]==1 and data[2]==1 and data[3]==epoch-1 and data[4]==0 and data[7]==64);
+  @assert(data[5]<4 and data[6]<5);
+  const p=@as(u16,data[5]);const g=@as(u16,data[6]);
+  @assert(p==(if(g<2) @as(u16,0) else g-1) and acknowledgements[g]==0);
+  acknowledgements[g]=1;counts[p]+=1;state[3]+=1;
+  const expected:u16=if(p==0) 2 else 1;
+  @assert(counts[p]<=expected);
+  if(counts[p]==expected){
+   if(p<3){const next=p+1;frame.ready(1,1,epoch-1,0,next,if(next==3) @as(u16,17408) else if(next==1) @as(u16,6144) else @as(u16,5120));}
+   else if(all_injected){done=true;finish();}
+  }
+ }else{@assert(false);}
+}
+fn provide(begin:u16,count:u16) void {
+ if(comptime origin){
+  for(@range(u16,128))|i|{if(i<count){
+   const n:u16=@as(u16,((epoch-1)*7+@as(u32,frame.phase)*3+@as(u32,(begin+i)%17))%23);
+   chunk[i]=round_bf16((@as(f32,n)-11.0)/16.0);
+  }}
+  frame.supply(begin,&chunk,count);
+ }
+}
+fn injected(phase:u16) void {
+ if(comptime origin){
+  // Notification only: frame_origin itself owns/replays an early READY.
+  state[2]+=1;
+  if(phase==3){all_injected=true;if(counts[3]==1){done=true;finish();}}
+ }
+}
+const dp:[*]u16=if(matrix) &lane.descriptor else &descriptor;
+// Both names export the actual bank address as u32. Host transfer width is an
+// independent MEMCPY_16BIT/32BIT option; the fixture must qualify both on device.
+const wp:[*]u32=if(matrix) &lane.weight_storage else &unused_u32;
+const packed_wp:[*]u32=if(matrix) &lane.weight_storage else &unused_u32;
+const ip:[*]f32=if(matrix) &lane.input else &unused_f32;
+const pp:[*]f32=if(matrix) &lane.partial else &unused_f32;
+const rp:[*]f32=if(matrix) &lane.result else &unused_f32;
+const output:[*]u16=if(consumer) &row.row else if(root) &lane.rounded else &unused_u16;
+const counters:[*]u32=if(matrix) &lane.counters else &state;
+const state_ptr:[*]u32=&state;
+const frame_ptr:[*]u32=if(origin) &frame.counters else &state;
+comptime {
+ @export_symbol(dp,"descriptor");@export_symbol(wp,"weights");@export_symbol(ip,"input");
+ @export_symbol(packed_wp,"packed_weights");
+ @export_symbol(pp,"partial");@export_symbol(rp,"result");@export_symbol(output,"output");
+ @export_symbol(counters,"counters");@export_symbol(state_ptr,"state");
+ @export_symbol(frame_ptr,"frame_counters");
+ @export_symbol(initialize);@export_symbol(prepare);@export_symbol(compute);
+}

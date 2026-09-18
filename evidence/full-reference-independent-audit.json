@@ -1,0 +1,58 @@
+{
+  "status": "passed",
+  "scope": "saved_original_CPU_reference_continuity_state_and_tokens",
+  "reference_sha256": "aa3c62e136e3746958a13847ed9c24877e3a957f4f7871d3e23ad414da0613b8",
+  "manifest_sha256": "482a5fa99d541020c45cabb4183e8d287be52faae8a70cd3f4dd1ae9ddde9632",
+  "evidence_files": 932,
+  "evidence_bytes": 800445000,
+  "arrays_checked": 1476,
+  "checks": {
+    "layer_hidden_pairs": 252,
+    "stage_boundaries": 12,
+    "KV_prefixes": 96,
+    "convolution_shifts": 144,
+    "state_buffers": 512,
+    "scan_state_comparisons": 48
+  },
+  "generated_ids": [
+    11751,
+    13,
+    198,
+    760
+  ],
+  "generated_text": " Paris.\nThe",
+  "tokens": [
+    {
+      "step": 0,
+      "token": 11751,
+      "gap": 2.75,
+      "ties": 1
+    },
+    {
+      "step": 1,
+      "token": 13,
+      "gap": 1.5,
+      "ties": 1
+    },
+    {
+      "step": 2,
+      "token": 198,
+      "gap": 0.625,
+      "ties": 1
+    },
+    {
+      "step": 3,
+      "token": 760,
+      "gap": 1.5,
+      "ties": 1
+    }
+  ],
+  "final_rss": 169222144,
+  "seconds": 7.2824657070450485,
+  "independent_full_model_recomputation": false,
+  "device_acceptance": false,
+  "limitations": [
+    "Live-versus-restored cache equality is witnessed by the frozen reference worker; this audit validates saved coverage, shapes, continuity and subsequent tokens.",
+    "Original chunk-versus-scan state differences are independently recalculated; chunk output differences remain frozen-worker observations."
+  ]
+}

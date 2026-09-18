@@ -1,0 +1,39 @@
+// Connected dense-stage transport fixture; not a neural model claim.
+const memcpy=@import_module("<memcpy/get_params>",.{.width=200,.height=3});
+const starts: [5]u16=[5]u16{16,71,126,16,16};
+const ys: [5]u16=[5]u16{0,0,0,1,2};
+const columns: [5]u16=[5]u16{54,54,64,54,182};
+const ends:[3]u16=[3]u16{189,69,197};
+layout {
+ @set_rectangle(200,3);
+ for(@range(u16,3))|y|{for(@range(u16,200))|x|{
+  var role:u16=if(x==0 and y==0) 3 else 0;
+  var ordinal:u16=0;var participants:u16=54;
+  for(@range(u16,5))|s|{
+   if(y==ys[s] and x>=starts[s] and x<starts[s]+columns[s]){
+    role=1;ordinal=x-starts[s];participants=columns[s];
+   }else if(y==ys[s] and x==starts[s]+columns[s]){role=2;}
+  }
+  @set_tile_code(x,y,"transport_pe.csl",.{.memcpy_params=memcpy.get_params(x),
+   .role=role,.ordinal=ordinal,.participants=participants});
+  if(x==0){
+   @set_color_config(x,y,@get_color(4),.{.routes=.{
+    .rx=if(y==0) .{RAMP} else .{NORTH},
+    .tx=if(y==2) .{EAST} else .{EAST,SOUTH}}});
+  }else if(x<=ends[y]){
+   if(role==1){
+    @set_color_config(x,y,@get_color(4),.{.routes=.{.rx=.{WEST},
+     .tx=if(x==ends[y]) .{RAMP} else .{RAMP,EAST}},
+     .filter=.{.kind=.{.counter=true},.count_data=true,
+       .init_counter=(17472-ordinal*96)%17472,.max_counter=95,.limit1=17471}});
+   }else{@set_color_config(x,y,@get_color(4),.{.routes=.{.rx=.{WEST},.tx=.{EAST}}});}
+  }
+ }}
+ @export_name("descriptor",[*]u16,false);@export_name("weights",[*]u32,false);
+ @export_name("packed_weights",[*]u32,false);
+ @export_name("input",[*]f32,false);@export_name("partial",[*]f32,false);
+ @export_name("result",[*]f32,false);@export_name("output",[*]u16,false);
+ @export_name("counters",[*]u32,false);@export_name("state",[*]u32,false);
+ @export_name("frame_counters",[*]u32,false);
+ @export_name("initialize",fn()void);@export_name("prepare",fn()void);@export_name("compute",fn()void);
+}

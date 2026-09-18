@@ -2,7 +2,7 @@
 
 **Building inference for open language models with handwritten Cerebras Systems Language (CSL), targeting sequential execution of three model stages on WSE-3.** We implement the numerical kernels, execution control and persistent model state, and use the Cerebras SDK to compile and run the device programs. The first target is **Qwen3.8-27B text inference**; the longer-term goal is a reusable SDK for related model architectures.
 
-**Working today:** the complete original-weight **5120 → 17408 → 5120 layer-3 MLP runs on physical WSE-3** with four inputs, resident weights, independent numerical checks and verified release. Earlier bounded SDK milestones cover normalization, recurrent state and selected attention heads. **Current work:** complete attention/recurrent layers and dense integration into three sequential stages with state checkpoints. **Still ahead:** complete 64-layer text generation, validated stage state restoration and measured token latency. The completed log records each result's exact scope.
+**Working today:** the complete original-weight **5120 → 17408 → 5120 layer-3 MLP runs on physical WSE-3** with four inputs, resident weights, independent numerical checks and verified release. A separate **full 64-layer CPU reference** generates four tokens with original cache restoration and independently checked saved evidence. Earlier bounded SDK milestones cover normalization, recurrent state and selected attention heads. **Current work:** complete attention/recurrent layers and dense integration into three sequential stages with state checkpoints. **Still ahead:** complete 64-layer CSL text generation, device stage state restoration and measured token latency. The completed log records each result's exact scope.
 
 ## 1. Project design
 
@@ -61,6 +61,8 @@ Full attention/recurrent layers and the three-stage model remain integration wor
 |---|---|
 | [`csl/kernels/`](csl/kernels) | Reusable handwritten CSL arithmetic kernels. |
 | [`examples/hw01/`](examples/hw01) | Full original layer-3 MLP device graph, physical capture and post-release numerical checks. |
+| [`examples/full_reference/`](examples/full_reference) | Full original 64-layer CPU reference, source extraction and cache restoration. |
+| [`examples/stage_transport/`](examples/stage_transport) | Physical dense-stage transport, phase ownership and packed BF16 bank qualification. |
 | [`examples/hw00/`](examples/hw00) | Physical eight-PE qualification, appliance lifecycle, SRAM/placement gates and bounded release watchdog. |
 | [`examples/wp16/resident/`](examples/wp16/resident) | Earlier resident simulator graph and preserved qualification history. |
 | [`examples/`](examples) | Runnable experiments, grouped by milestone. Layout files place PEs and routes; device programs wire kernels and state; Python drivers load inputs, launch operations and collect results. |
@@ -76,6 +78,34 @@ Full attention/recurrent layers and the three-stage model remain integration wor
 ## 3. Completed development log — newest first
 
 Each **WP** or **HW** is a scoped development milestone. HW00/HW01 use physical WSE-3; earlier WP device results use the SDK simulator, and WP04 is a CPU/source audit. **BF16** means bfloat16 data, and **FP32** means 32-bit floating-point arithmetic. Reports contain numerical thresholds, failure history and reproduction details.
+
+### Dense-stage transport · Two synthetic epochs on physical WSE-3 · September 18, 2026
+
+The final-stage input-frame, matrix-lane and row-packet modules completed two
+changed synthetic inputs across 600 PEs, including 408 matrix PEs in adjacent
+54/64/182-column stripes. Independent checks covered all inputs, exact local and
+broadcast results, root/consumer BF16 values, six early READY events and complete
+resident weight retention. Native32 packed upload and native16 readback share
+one aligned bank per matrix PE. All 89 copies, five launches and normal shutdown
+passed; device release preceded both offline audits. This qualifies connected
+transport and ownership for this fixture, not an original neural layer or model.
+
+[Source](examples/stage_transport) · [Report](docs/STAGE-TRANSPORT.md) · [Independent acceptance](evidence/stage-transport.json)
+
+### Full-model reference · Original 64-layer CPU baseline and restored caches · September 18, 2026
+
+The full original text model generated four greedy tokens from the five-token
+raw prompt `The capital of France is`, producing ` Paris.\nThe`. All 851 text
+tensors and the full 248320-token head were used. Before each dependent input,
+all 128 cache buffers were restored into fresh original cache objects and
+compared bitwise. Independent saved-evidence review checked 932 archives,
+1476 arrays, layer/stage continuity, KV prefixes, convolution shifts and unique
+full-vocabulary maxima. The 800445000 bytes of arrays remain outside Git;
+published code, receipts and hash ledgers describe the exact result.
+This is CPU reference acceptance; complete CSL generation and device state
+restoration remain open. Observed nonlinear ranges guide new device contracts.
+
+[Worker source](examples/full_reference) · [Report](docs/FULL-REFERENCE.md) · [Independent acceptance](evidence/full-reference.json)
 
 ### HW01 · Complete original layer-3 MLP on physical WSE-3 · September 18, 2026
 
