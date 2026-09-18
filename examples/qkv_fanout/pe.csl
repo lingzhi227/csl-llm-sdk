@@ -1,0 +1,130 @@
+// Packet-only phase0 graph; no matrix, normalization, or neural arithmetic.
+param memcpy_params;
+param role:u16; //0idle,1row root,2head collector,3origin
+const root=role==1;const head=role==2;const origin=role==3;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const packets=@import_module("packets.csl",.{.sent_task_id=@get_local_task_id(12),
+ .received_task_id=@get_local_task_id(13),.on_sent=sent,.on_received=received});
+const rows=@import_module(if(root) "row_packet.csl" else "<empty>",if(root) .{
+ .source_role=true,.send=send_row,.on_source_released=row_released,.on_row_received=unused_row} else .{});
+const queries=@import_module(if(head) "vector_collect.csl" else "<empty>",if(head) .{
+ .groups=4,.on_complete=query_complete} else .{});
+const keys=@import_module(if(head) "vector_collect.csl" else "<empty>",if(head) .{
+ .groups=2,.on_complete=key_complete} else .{});
+const values=@import_module(if(head) "vector_collect.csl" else "<empty>",if(head) .{
+ .groups=2,.on_complete=value_complete} else .{});
+var metadata=@zeros([6]u16);var state=@zeros([16]u32);
+var data=@zeros([if(head) 1024 else if(root) 128 else 1]u16);
+var tx=@zeros([8]u32);var unused16=@zeros([1]u16);var unused32=@zeros([1]u32);
+var entered:bool=false;var waiting:bool=false;var done:bool=false;
+var ack_pending:bool=false;var root_pending:bool=false;var fanout_index:u16=0;
+
+fn marker(kind:u16,group:u16,channel:u16) u16 {
+ const base:u16=if(kind==1) 0x1000 else if(kind==2) 0x4000 else 0x4400;
+ return base+group*128+channel;
+}
+fn finish() void {
+ if(waiting and done and !packets.sending and !ack_pending){
+  waiting=false;state[0]=3;sys.unblock_cmd_stream();
+ }
+}
+fn initialize() void {
+ @assert(state[0]==0 and metadata[0]==role);state[0]=1;state[1]=@as(u32,role);
+ packets.init();
+ if(comptime root){
+  @assert(metadata[1]>=1 and metadata[1]<=3);
+  @assert(metadata[2]<(if(metadata[1]==1) @as(u16,96) else @as(u16,8)));
+  @assert(metadata[3]==(if(metadata[1]==1) @as(u16,1) else @as(u16,6)));
+  @assert(metadata[4]==(if(metadata[1]==1) 1+metadata[2]/4 else 1+6*(metadata[2]/2)));
+  for(@range(u16,128))|i|{data[i]=marker(metadata[1],metadata[2],i);}
+ }
+ if(comptime head){
+  @assert(metadata[5]<24);
+  queries.begin(&data,1,1,0,0,1,0,4*metadata[5]);
+  keys.begin(@ptrcast([*]u16,&data[512]),1,1,0,0,2,0,2*(metadata[5]/6));
+  values.begin(@ptrcast([*]u16,&data[768]),1,1,0,0,3,0,2*(metadata[5]/6));
+ }
+ sys.unblock_cmd_stream();
+}
+fn compute() void {
+ @assert(state[0]==1 and !entered);entered=true;waiting=true;state[0]=2;
+ if(comptime root){root_pending=true;}
+ if(comptime role==0){done=true;}
+ pump();finish();
+}
+fn send_row(x:u16,y:u16,source:[*]u32,length:u16) void {packets.send(x,y,source,length);}
+fn unused_row(source:[*]u16,phase:u16,group:u16) void {@assert(false);}
+fn row_released(phase:u16) void {
+ @assert(root and root_pending and phase==0);fanout_index+=1;state[4]=@as(u32,fanout_index);
+ if(fanout_index==metadata[3]){root_pending=false;done=true;}
+ pump();finish();
+}
+fn pump() void {
+ if(packets.sending){return;}
+ if(ack_pending){
+  ack_pending=false;tx[0]=10;tx[1]=1;tx[2]=1;tx[3]=0;tx[4]=0;
+  tx[5]=1;tx[6]=@as(u32,metadata[5]);tx[7]=0;
+  packets.send(0,0,&tx,8);return;
+ }
+ if(comptime root){if(root_pending){
+  rows.begin(1,1,0,0,@as(u32,metadata[1]),0,metadata[2],128);
+  rows.transmit(metadata[4]+fanout_index,0,&data);
+ }}
+}
+fn sent() void {
+ state[3]+=1;
+ if(comptime root){rows.sent();}
+ else if(comptime head){pump();finish();}
+ else{@assert(false);}
+}
+fn head_ready() void {
+ if(state[5]==7){
+  @assert(!done and !ack_pending);done=true;ack_pending=true;
+  // Preserve the production path: synchronous MP header send starts inside
+  // the final receive callback, before packets.received unblocks its header.
+  pump();finish();
+ }
+}
+fn query_complete() void {
+ if(comptime head){
+  for(@range(u16,512))|i|{@assert(data[i]==marker(1,4*metadata[5]+i/128,i%128));}
+  @assert((state[5]&1)==0);state[5]|=1;head_ready();
+ }
+}
+fn key_complete() void {
+ if(comptime head){
+  for(@range(u16,256))|i|{@assert(data[512+i]==marker(2,2*(metadata[5]/6)+i/128,i%128));}
+  @assert((state[5]&2)==0);state[5]|=2;head_ready();
+ }
+}
+fn value_complete() void {
+ if(comptime head){
+  for(@range(u16,256))|i|{@assert(data[768+i]==marker(3,2*(metadata[5]/6)+i/128,i%128));}
+  @assert((state[5]&4)==0);state[5]|=4;head_ready();
+ }
+}
+fn received(source:[*]u32,length:u16) void {
+ state[2]+=1;
+ if(comptime head){
+  @assert(length>=9);
+  if(source[0]==1){queries.receive(source,length);}
+  else if(source[0]==2){keys.receive(source,length);}
+  else{@assert(source[0]==3);values.receive(source,length);}
+ }else if(comptime origin){
+  @assert(length==8 and source[0]==10 and source[1]==1 and source[2]==1 and source[3]==0 and source[4]==0);
+  @assert(source[5]==1 and source[6]<24 and source[7]==0);
+  const bit:u32=@as(u32,1)<<source[6];@assert((state[6]&bit)==0);state[6]|=bit;
+  if(state[6]==0xffffff){done=true;finish();}
+ }else{@assert(false);}
+}
+const metadata_ptr:[*]u16=&metadata;const state_ptr:[*]u32=&state;
+const data_ptr:[*]u16=&data;
+const query_ptr:[*]u16=if(head) &queries.counts else &unused16;
+const key_ptr:[*]u16=if(head) &keys.counts else &unused16;
+const value_ptr:[*]u16=if(head) &values.counts else &unused16;
+comptime {
+ @export_symbol(metadata_ptr,"metadata");@export_symbol(state_ptr,"state");
+ @export_symbol(data_ptr,"received_values");
+ @export_symbol(query_ptr,"query_counts");@export_symbol(key_ptr,"key_counts");@export_symbol(value_ptr,"value_counts");
+ @export_symbol(initialize);@export_symbol(compute);
+}

@@ -2,7 +2,7 @@
 
 **Building inference for open language models with handwritten Cerebras Systems Language (CSL), targeting sequential execution of three model stages on WSE-3.** We implement the numerical kernels, execution control and persistent model state, and use the Cerebras SDK to compile and run the device programs. The first target is **Qwen3.8-27B text inference**; the longer-term goal is a reusable SDK for related model architectures.
 
-**Working today:** the complete original-weight **5120 → 17408 → 5120 layer-3 MLP runs on physical WSE-3** with four inputs, resident weights, independent numerical checks and verified release. A separate **full 64-layer CPU reference** generates four tokens with original cache restoration and independently checked saved evidence. Earlier bounded SDK milestones cover normalization, recurrent state and selected attention heads. **Current work:** complete attention/recurrent layers and dense integration into three sequential stages with state checkpoints. **Still ahead:** complete 64-layer CSL text generation, device stage state restoration and measured token latency. The completed log records each result's exact scope.
+**Working today:** the complete original-weight **5120 → 17408 → 5120 layer-3 MLP runs on physical WSE-3** with four inputs, resident weights, independent numerical checks and verified release. A separate **full 64-layer CPU reference** generates four tokens with original cache restoration and independently checked saved evidence. Earlier bounded SDK milestones cover normalization, recurrent state and selected attention heads. **Current integration:** the complete layer-3 graph compiles, and its synthetic Q/K/V fanout completes in the SDK simulator. A physical observer reached 15 of 24 attention READY heads; a complete layer-3 epoch remains open. **Current work:** diagnose that boundary, complete attention/recurrent layers and integrate three sequential stages with state checkpoints. **Still ahead:** complete 64-layer CSL text generation, device stage state restoration and measured token latency. The completed log records each result's exact scope.
 
 ## 1. Project design
 
@@ -60,6 +60,8 @@ Full attention/recurrent layers and the three-stage model remain integration wor
 | Path | Purpose |
 |---|---|
 | [`csl/kernels/`](csl/kernels) | Reusable handwritten CSL arithmetic kernels. |
+| [`examples/layer3/`](examples/layer3) | Original complete layer-3 source and placement; compiled fit is accepted, neural epoch completion remains open. |
+| [`examples/qkv_fanout/`](examples/qkv_fanout) | Accepted synthetic 112-root, 24-head fanout and offline core checks. |
 | [`examples/hw01/`](examples/hw01) | Full original layer-3 MLP device graph, physical capture and post-release numerical checks. |
 | [`examples/full_reference/`](examples/full_reference) | Full original 64-layer CPU reference, source extraction and cache restoration. |
 | [`examples/stage_transport/`](examples/stage_transport) | Physical dense-stage transport, phase ownership and packed BF16 bank qualification. |
@@ -78,6 +80,21 @@ Full attention/recurrent layers and the three-stage model remain integration wor
 ## 3. Completed development log — newest first
 
 Each **WP** or **HW** is a scoped development milestone. HW00/HW01 use physical WSE-3; earlier WP device results use the SDK simulator, and WP04 is a CPU/source audit. **BF16** means bfloat16 data, and **FP32** means 32-bit floating-point arithmetic. Reports contain numerical thresholds, failure history and reproduction details.
+
+### Layer-3 integration · Compiled graph and complete synthetic Q/K/V fanout · September 18, 2026
+
+The complete original layer-3 graph compiled across 33,750 PEs, including 30,576
+matrix PEs; original parameter preparation and bit/padding checks passed. A
+physical diagnostic retained 15 of 24 attention READY notifications and stopped
+normally. No complete original layer-3 neural epoch has been accepted.
+
+A separate synthetic SDK fixture completed all 370 PEs, 112 roots and 24 heads.
+Independent offline checks matched all 576 packets, 192 row fanouts and 24,576
+received markers. The 85-second sampling wait is not a latency result. This
+qualifies the simplified communication graph; real arithmetic, distances and
+matrix concurrency remain part of the integration work.
+
+[Layer source](examples/layer3) · [Fanout source](examples/qkv_fanout) · [Report](docs/LAYER3-INTEGRATION.md) · [Result record](evidence/layer3-integration.json)
 
 ### Dense-stage transport · Two synthetic epochs on physical WSE-3 · September 18, 2026
 

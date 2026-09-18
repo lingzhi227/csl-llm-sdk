@@ -1,0 +1,43 @@
+// Assemble independently interleaved 128-channel rows into one retained vector.
+// Uses the same eight-word identity header as row_packet.csl. A matrix root may
+// interleave with other roots, but its own row fragments must remain ordered.
+param groups:u16;
+param on_complete:fn()void;
+var counts=@zeros([groups]u16);
+var identity=@zeros([4]u32);
+var target:[*]u16;
+var packet_kind:u32=0;
+var phase:u16=0;
+var group_base:u16=0;
+var finished:u16=0;
+var active:bool=false;
+comptime {@comptime_assert(groups>0 and groups<=40);}
+
+fn begin(destination:[*]u16,request:u32,reset:u32,position:u32,stage:u32,
+         kind:u32,expected_phase:u16,first_group:u16) void {
+ @assert(!active);target=destination;
+ identity[0]=request;identity[1]=reset;identity[2]=position;identity[3]=stage;
+ packet_kind=kind;phase=expected_phase;group_base=first_group;finished=0;
+ for(@range(u16,groups))|i|{counts[i]=0;}
+ active=true;
+}
+
+fn receive(data:[*]u32,length:u16) void {
+ @assert(active and length>=9 and length<=31);
+ @assert(data[0]==packet_kind and data[1]==identity[0] and data[2]==identity[1]
+         and data[3]==identity[2] and data[4]==identity[3] and data[5]==@as(u32,phase));
+ @assert(data[6]>=@as(u32,group_base) and data[6]<@as(u32,group_base)+@as(u32,groups));
+ const group=@as(u16,data[6])-group_base;
+ @assert(data[7]==@as(u32,counts[group]) and counts[group]<64);
+ const offset=counts[group];const count=length-8;
+ @assert(offset+count<=64);
+ for(@range(u16,23))|i|{if(i<count){
+  const lo=@as(u16,data[8+i]&0xffff);const hi=@as(u16,data[8+i]>>16);
+  @assert((lo&0x7f80)!=0x7f80 and (hi&0x7f80)!=0x7f80);
+  const index:u16=group*128+2*(offset+i);
+  target[index]=lo;target[index+1]=hi;
+ }}
+ counts[group]+=count;
+ if(counts[group]==64){finished+=1;}
+ if(finished==groups){active=false;on_complete();}
+}

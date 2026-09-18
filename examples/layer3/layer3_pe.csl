@@ -1,0 +1,320 @@
+// Complete original layer3 graph. Source-only; no compile or numerical claim.
+// Roles: idle0, matrix1, input norm/residual2, post norm/residual3,
+// query head4, MLP product5, fixed-frame origin6.
+param memcpy_params;
+param role:u16;
+param ordinal:u16=0;
+param participants:u16=54;
+const matrix=role==1;const root=matrix and ordinal==0;
+const pre=role==2;const post=role==3;const attention=role==4;const mlp=role==5;
+const origin=role==6;const peer=pre or post or attention or mlp;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const lane=@import_module(if(matrix) "matrix_lane.csl" else "<empty>",if(matrix) .{
+ .ordinal=ordinal,.participants=participants,.phase_count=4,
+ .input_task=@get_local_task_id(11),.line_task=@get_local_task_id(10),
+ .on_output=matrix_output,.on_token_complete=matrix_complete} else .{});
+const frame=@import_module(if(origin) "frame_origin.csl" else "<empty>",if(origin) .{
+ .phase_count=4,.completion_task=@get_local_task_id(11),
+ .on_need_chunk=need_chunk,.on_frame_injected=injected} else .{});
+const norm=@import_module(if(pre or post) "norm_owner.csl" else "<empty>",if(pre or post) .{
+ .on_normalized=normalized,.on_residual=residual_ready} else .{});
+const attn=@import_module(if(attention) "attention_owner8.csl" else "<empty>",if(attention) .{
+ .on_output_ready=attention_ready} else .{});
+const product=@import_module(if(mlp) "mlp_owner.csl" else "<empty>",if(mlp) .{
+ .on_product_ready=product_ready} else .{});
+const packets=@import_module("packets.csl",.{.sent_task_id=@get_local_task_id(12),
+ .received_task_id=@get_local_task_id(13),.on_sent=sent,.on_received=received});
+const rows=@import_module(if(root or peer or origin) "row_packet.csl" else "<empty>",if(root or peer or origin) .{
+ .source_role=!origin,.send=send_row,.on_source_released=row_released,.on_row_received=chunk_received} else .{});
+
+const QUERY:u32=1;const KEY:u32=2;const VALUE:u32=3;const MIX_OUT:u32=4;
+const GATE:u32=5;const UP:u32=6;const DOWN:u32=7;const HIDDEN:u32=8;
+const CHUNK:u32=9;const READY:u32=10;const REQUEST:u32=11;
+// Immutable wrapper metadata complements the unchanged six-word lane descriptor:
+// packet kind, fanout count, support-owner index, reserved. Gate/up and Q/K/V
+// therefore remain distinct even when phase and group numbers coincide.
+var route=@zeros([4]u16);
+var unused16=@zeros([1]u16);var unused32=@zeros([1]u32);var unusedf=@zeros([1]f32);
+var state=@zeros([12]u32);
+var tx=@zeros([10]u32);
+var retained_chunk=@zeros([if(peer) 128 else 1]u16);
+var ready_seen=@zeros([if(origin) 163 else 1]u16);
+var ready_counts=@zeros([if(origin) 5 else 1]u16);
+var request_identity=@zeros([4]u32);
+var initialized:bool=false;var command_waiting:bool=false;var done:bool=false;
+var epoch:u32=0;
+var ack_pending:bool=false;var ack_phase:u16=0;var ack_owner:u16=0;
+var request_pending:bool=false;var request_phase:u16=0;var request_group:u16=0;
+var requested_offset:u16=0;var request_x:u16=0;var request_y:u16=0;
+var request_waiting:bool=false;
+var tx_mode:u16=0; //1 READY,2 REQUEST,3 row payload
+var root_values:[*]u16;var root_phase:u16=0;var root_group:u16=0;
+var root_pending:bool=false;var fanout_index:u16=0;
+var forward_hidden:bool=false;var hidden_group:u16=0;
+var row_purpose:u16=0; //1 matrix output,2 response chunk,3 norm-to-norm hidden
+var frame_finished:bool=false;
+
+fn finish() void {
+ if(command_waiting and done and !packets.sending and !ack_pending and !request_pending){
+  state[0]=2*epoch;command_waiting=false;sys.unblock_cmd_stream();
+ }
+}
+fn initialize() void {
+ @assert(!initialized and route[3]==0);
+ if(comptime matrix){
+  @assert(route[0]>=1 and route[0]<=7);
+  const kind=route[0];const group=lane.descriptor[1];
+  @assert(lane.descriptor[0]==(if(kind<=3) @as(u16,0) else if(kind==4) @as(u16,1) else if(kind<=6) @as(u16,2) else @as(u16,3)));
+  @assert(route[1]==(if(kind==2 or kind==3) @as(u16,6) else @as(u16,1)) and lane.descriptor[3]==0);
+  if(kind==1){@assert(group<96 and lane.descriptor[2]==16+group/4);}
+  else if(kind==2 or kind==3){@assert(group<8 and lane.descriptor[2]==16+6*(group/2));}
+  else if(kind==4){@assert(group<40 and lane.descriptor[2]==1);}
+  else if(kind==5 or kind==6){@assert(group<136 and lane.descriptor[2]==40+group);}
+  else{@assert(group<40 and lane.descriptor[2]==2);}
+ }
+ if(comptime attention){@assert(route[2]<24);}
+ if(comptime mlp){@assert(route[2]<136);}
+ packets.init();initialized=true;
+ if(comptime attention){attn.restore_position(0);}
+ sys.unblock_cmd_stream();
+}
+fn prepare() void {
+ @assert(initialized and epoch<8 and state[0]==2*epoch and !command_waiting and !packets.sending);
+ @assert(!ack_pending and !request_pending and !root_pending and !forward_hidden and !request_waiting);
+ if(comptime origin){if(epoch>0){frame.retire(1,1,epoch-1,0);}}
+ if(comptime post){if(epoch>0){norm.retire_host_output();}}
+ epoch+=1;state[0]=2*epoch-1;state[1]=epoch;done=false;frame_finished=false;
+ request_identity[0]=1;request_identity[1]=1;request_identity[2]=epoch-1;request_identity[3]=0;
+ if(comptime matrix){lane.begin(1,1,epoch-1,0);}
+ if(comptime pre){norm.prepare_loaded(1,1,epoch-1,0,MIX_OUT,1,0);}
+ if(comptime post){norm.begin(1,1,epoch-1,0,HIDDEN,2,DOWN,3,0);}
+ if(comptime attention){attn.begin(1,1,epoch-1,0,0,route[2],QUERY,KEY,VALUE);}
+ if(comptime mlp){product.begin(1,1,epoch-1,0,2,route[2],GATE,UP);}
+ if(comptime origin){
+  for(@range(u16,163))|i|{ready_seen[i]=0;}
+  for(@range(u16,5))|i|{ready_counts[i]=0;}
+  frame.begin(1,1,epoch-1,0);
+ }
+ sys.unblock_cmd_stream();
+}
+fn compute() void {
+ @assert(initialized and !command_waiting and state[0]==2*epoch-1);
+ command_waiting=true;
+ if(comptime pre){norm.normalize_loaded();}
+ if(comptime role==0){done=true;}
+ pump();finish();
+}
+fn signal_ready(phase:u16,owner:u16) void {
+ @assert(!ack_pending);ack_pending=true;ack_phase=phase;ack_owner=owner;pump();
+}
+fn normalized() void {if(comptime pre){signal_ready(0,0);}else if(comptime post){signal_ready(2,0);}}
+fn residual_ready() void {
+ if(comptime pre){@assert(!forward_hidden);forward_hidden=true;hidden_group=0;pump();}
+ else if(comptime post){signal_ready(4,0);}
+}
+fn attention_ready() void {if(comptime attention){state[3]=@as(u32,attn.position);signal_ready(1,route[2]);}}
+fn product_ready() void {if(comptime mlp){signal_ready(3,route[2]);}}
+fn matrix_complete() void {if(comptime matrix){done=true;finish();}}
+fn matrix_output(data:[*]u16,phase:u16,group:u16) void {
+ if(comptime root){
+  @assert(!root_pending and (route[1]==1 or route[1]==6));
+  root_values=data;root_phase=phase;root_group=group;fanout_index=0;root_pending=true;pump();
+ }
+}
+fn send_row(x:u16,y:u16,data:[*]u32,length:u16) void {tx_mode=3;packets.send(x,y,data,length);}
+fn row_released(phase:u16) void {
+ if(comptime root){
+  @assert(row_purpose==1 and root_pending);fanout_index+=1;
+  if(fanout_index==route[1]){root_pending=false;lane.release_output(phase);}
+ }else if(comptime peer){
+  if(row_purpose==3){
+   @assert(pre and forward_hidden);hidden_group+=1;
+   if(hidden_group==40){forward_hidden=false;done=true;}
+  }else{
+   @assert(row_purpose==2);
+   if(comptime attention){if(!attn.active){done=true;}}
+   if(comptime mlp){@assert(!product.active);done=true;}
+  }
+ }
+ pump();finish();
+}
+fn sent() void {
+ if(comptime root or peer){
+  if(tx_mode==3){rows.sent();}
+  else{
+   @assert(tx_mode==1);
+   if(comptime post){if(ack_phase==4){done=true;}}
+   pump();finish();
+  }
+ }else if(comptime origin){@assert(tx_mode==2);pump();finish();}
+ else{@assert(false);}
+}
+fn header(kind:u32,phase:u16,group:u16) void {
+ tx[0]=kind;tx[1]=1;tx[2]=1;tx[3]=epoch-1;tx[4]=0;
+ tx[5]=@as(u32,phase);tx[6]=@as(u32,group);tx[7]=0;
+}
+fn pump() void {
+ if(packets.sending){return;}
+ if(ack_pending){
+  ack_pending=false;tx_mode=1;header(READY,ack_phase,ack_owner);packets.send(0,0,&tx,8);return;
+ }
+ if(comptime root){if(root_pending){
+  row_purpose=1;rows.begin(1,1,epoch-1,0,@as(u32,route[0]),root_phase,root_group,lane.descriptor[4]);
+  // The first layer's24 query owners form one row. Later dense layouts can
+  // replace this wrapper mapping while retaining the lane/packet implementation.
+  rows.transmit(lane.descriptor[2]+fanout_index,lane.descriptor[3],root_values);return;
+ }}
+ if(comptime origin){if(request_pending){
+  request_pending=false;tx_mode=2;header(REQUEST,request_phase,request_group);
+  tx[7]=@as(u32,requested_offset);packets.send(request_x,request_y,&tx,8);return;
+ }}
+ if(comptime peer){
+  if(request_pending){
+   request_pending=false;
+   if(comptime pre or post){norm.copy_chunk(1,1,epoch-1,0,requested_offset,&retained_chunk);}
+   if(comptime attention){attn.copy_chunk(1,1,epoch-1,0,requested_offset,&retained_chunk);}
+   if(comptime mlp){product.copy_chunk(1,1,epoch-1,0,route[2],&retained_chunk);}
+   row_purpose=2;rows.begin(1,1,epoch-1,0,CHUNK,request_phase,request_group,128);
+   rows.transmit(0,0,&retained_chunk);return;
+  }
+  if(comptime pre){if(forward_hidden){
+   norm.copy_chunk(1,1,epoch-1,0,128*hidden_group,&retained_chunk);
+   row_purpose=3;rows.begin(1,1,epoch-1,0,HIDDEN,2,hidden_group,128);
+   rows.transmit(2,0,&retained_chunk);return;
+  }}
+ }
+}
+fn need_chunk(offset:u16,count:u16) void {
+ if(comptime origin){
+  @assert(!request_pending and !request_waiting and count==128 and offset%128==0);
+  request_waiting=true;request_pending=true;request_phase=frame.phase;request_group=offset/128;
+  requested_offset=offset;request_y=0;
+  if(frame.phase==0){request_x=1;}
+  else if(frame.phase==1){request_x=16+request_group/2;requested_offset=(request_group%2)*128;}
+  else if(frame.phase==2){request_x=2;}
+  else{@assert(frame.phase==3);request_x=40+request_group;requested_offset=0;}
+  rows.begin(1,1,epoch-1,0,CHUNK,request_phase,request_group,128);pump();
+ }
+}
+fn chunk_received(data:[*]u16,phase:u16,group:u16) void {
+ if(comptime origin){
+  @assert(request_waiting and phase==request_phase and group==request_group);
+  request_waiting=false;frame.supply(group*128,data,128);rows.release_row(phase);
+ }
+}
+fn received(data:[*]u32,length:u16) void {
+ @assert(length>=8 and data[1]==1 and data[2]==1 and data[3]==epoch-1 and data[4]==0);
+ if(comptime origin){
+  if(data[0]==CHUNK){rows.receive(data,length);return;}
+  @assert(data[0]==READY and length==8 and data[5]<=4 and data[7]==0);
+  const phase=@as(u16,data[5]);const owner=@as(u16,data[6]);
+  const expected:u16=if(phase==1) 24 else if(phase==3) 136 else 1;
+  @assert(owner<expected);
+  const index:u16=if(phase==0) 0 else if(phase==1) 1+owner else if(phase==2) 25 else if(phase==3) 26+owner else 162;
+  @assert(ready_seen[index]==0);ready_seen[index]=1;ready_counts[phase]+=1;
+  if(ready_counts[phase]==expected){
+   if(phase<4){frame.ready(1,1,epoch-1,0,phase,if(phase==1) @as(u16,6144) else if(phase==3) @as(u16,17408) else @as(u16,5120));}
+   else if(frame_finished){done=true;finish();}
+  }
+ }else if(comptime peer){
+  if(data[0]==REQUEST){
+   @assert(length==8 and !request_pending and data[5]<4 and data[6]<136 and data[7]<5120);
+   request_phase=@as(u16,data[5]);request_group=@as(u16,data[6]);requested_offset=@as(u16,data[7]);
+   if(comptime pre){@assert(request_phase==0 and requested_offset==128*request_group);}
+   if(comptime post){@assert(request_phase==2 and requested_offset==128*request_group);}
+   if(comptime attention){@assert(request_phase==1 and request_group/2==route[2] and requested_offset==(request_group%2)*128);}
+   if(comptime mlp){@assert(request_phase==3 and request_group==route[2] and requested_offset==0);}
+   request_pending=true;pump();
+  }else{
+   if(comptime pre or post){norm.receive(data,length);}
+   if(comptime attention){attn.receive(data,length);}
+   if(comptime mlp){product.receive(data,length);}
+  }
+ }else{@assert(false);}
+}
+fn injected(phase:u16) void {
+ if(comptime origin){state[2]+=1;if(phase==3){frame_finished=true;if(ready_counts[4]==1){done=true;finish();}}}
+}
+
+const weight_ptr:[*]u32=if(matrix) &lane.weight_storage else &unused32;
+const descriptor_ptr:[*]u16=if(matrix) &lane.descriptor else &unused16;
+const route_ptr:[*]u16=&route;const state_ptr:[*]u32=&state;
+const hidden_ptr:[*]u16=if(pre or post) &norm.inout else &unused16;
+const norm_gain_ptr:[*]u16=if(pre or post) &norm.gains else &unused16;
+const qk_gain_ptr:[*]u16=if(attention) &attn.qk_weights else &unused16;
+const frequency_ptr:[*]f32=if(attention) &attn.frequencies else &unusedf;
+const cache_ptr:[*]u16=if(attention) &attn.cache else &unused16;
+const input_ptr:[*]f32=if(matrix) &lane.input else &unusedf;
+const active_input_ptr:[*]f32=if(matrix) &lane.active_input else &unusedf;
+const partial_ptr:[*]f32=if(matrix) &lane.partial else &unusedf;
+const result_ptr:[*]f32=if(matrix) &lane.result else &unusedf;
+comptime {
+ @export_symbol(weight_ptr,"weights");@export_symbol(descriptor_ptr,"descriptor");
+ @export_symbol(route_ptr,"route");@export_symbol(state_ptr,"state");
+ @export_symbol(hidden_ptr,"hidden");@export_symbol(norm_gain_ptr,"norm_gains");
+ @export_symbol(qk_gain_ptr,"qk_gains");@export_symbol(frequency_ptr,"frequencies");
+ @export_symbol(cache_ptr,"cache");@export_symbol(input_ptr,"input");
+ @export_symbol(active_input_ptr,"active_input");
+ @export_symbol(partial_ptr,"partial");@export_symbol(result_ptr,"result");
+ @export_symbol(initialize);@export_symbol(prepare);@export_symbol(compute);
+}
+
+// Retained actual operands/intermediates for the original-layer numerical audit.
+const diagnostic_norm_saved:[*]u16=if(pre or post) &norm.saved else &unused16;
+const diagnostic_norm_stats:[*]f32=if(pre or post) &norm.stats else &unusedf;
+const diagnostic_qk_input:[*]u16=if(attention) &attn.qk_input else &unused16;
+const diagnostic_qk_output:[*]u16=if(attention) &attn.input else &unused16;
+const diagnostic_qk_normalized:[*]u16=if(attention) &attn.normalized else &unused16;
+const diagnostic_qk_stats:[*]f32=if(attention) &attn.qk_stats else &unusedf;
+const diagnostic_qk_rms_stages:[*]f32=if(attention) &attn.rms_stages else &unusedf;
+const diagnostic_qk_trig:[*]f32=if(attention) &attn.trig else &unusedf;
+const diagnostic_qk_trig_casts:[*]u16=if(attention) &attn.trig_casts else &unused16;
+const diagnostic_qk_rotary_stages:[*]f32=if(attention) &attn.rotary_stages else &unusedf;
+const diagnostic_qk_product_casts:[*]u16=if(attention) &attn.product_casts else &unused16;
+const diagnostic_attention_input:[*]u16=if(attention) &attn.input else &unused16;
+const diagnostic_attention_scores:[*]f32=if(attention) &attn.scores else &unusedf;
+const diagnostic_attention_score_casts:[*]u16=if(attention) &attn.score_casts else &unused16;
+const diagnostic_attention_stats:[*]f32=if(attention) &attn.stats else &unusedf;
+const diagnostic_attention_stages:[*]f32=if(attention) &attn.stages else &unusedf;
+const diagnostic_attention_casts:[*]u16=if(attention) &attn.casts else &unused16;
+const diagnostic_mlp_gate:[*]u16=if(mlp) &product.gate else &unused16;
+const diagnostic_mlp_up:[*]u16=if(mlp) &product.up else &unused16;
+const diagnostic_mlp_product:[*]u16=if(mlp) &product.product else &unused16;
+const diagnostic_mlp_silu:[*]u16=if(mlp) &product.silu else &unused16;
+const diagnostic_mlp_exponential:[*]f32=if(mlp) &product.exponential else &unusedf;
+const diagnostic_mlp_sigmoid:[*]f32=if(mlp) &product.sigmoid else &unusedf;
+const diagnostic_mlp_activation:[*]f32=if(mlp) &product.activation_fp32 else &unusedf;
+const diagnostic_mlp_product_fp32:[*]f32=if(mlp) &product.product_fp32 else &unusedf;
+const diagnostic_lane_counters:[*]u32=if(matrix) &lane.counters else &unused32;
+const diagnostic_frame_counters:[*]u32=if(origin) &frame.counters else &unused32;
+const diagnostic_rounded:[*]u16=if(root) &lane.rounded else &unused16;
+comptime {
+ @export_symbol(diagnostic_norm_saved,"norm_saved");
+ @export_symbol(diagnostic_norm_stats,"norm_stats");
+ @export_symbol(diagnostic_qk_input,"qk_input");
+ @export_symbol(diagnostic_qk_output,"qk_output");
+ @export_symbol(diagnostic_qk_normalized,"qk_normalized");
+ @export_symbol(diagnostic_qk_stats,"qk_stats");
+ @export_symbol(diagnostic_qk_rms_stages,"qk_rms_stages");
+ @export_symbol(diagnostic_qk_trig,"qk_trig");
+ @export_symbol(diagnostic_qk_trig_casts,"qk_trig_casts");
+ @export_symbol(diagnostic_qk_rotary_stages,"qk_rotary_stages");
+ @export_symbol(diagnostic_qk_product_casts,"qk_product_casts");
+ @export_symbol(diagnostic_attention_input,"attention_input");
+ @export_symbol(diagnostic_attention_scores,"attention_scores");
+ @export_symbol(diagnostic_attention_score_casts,"attention_score_casts");
+ @export_symbol(diagnostic_attention_stats,"attention_stats");
+ @export_symbol(diagnostic_attention_stages,"attention_stages");
+ @export_symbol(diagnostic_attention_casts,"attention_casts");
+ @export_symbol(diagnostic_mlp_gate,"mlp_gate");
+ @export_symbol(diagnostic_mlp_up,"mlp_up");
+ @export_symbol(diagnostic_mlp_product,"mlp_product");
+ @export_symbol(diagnostic_mlp_silu,"mlp_silu");
+ @export_symbol(diagnostic_mlp_exponential,"mlp_exponential");
+ @export_symbol(diagnostic_mlp_sigmoid,"mlp_sigmoid");
+ @export_symbol(diagnostic_mlp_activation,"mlp_activation");
+ @export_symbol(diagnostic_mlp_product_fp32,"mlp_product_fp32");
+ @export_symbol(diagnostic_lane_counters,"lane_counters");
+ @export_symbol(diagnostic_frame_counters,"frame_counters");
+ @export_symbol(diagnostic_rounded,"rounded");
+}

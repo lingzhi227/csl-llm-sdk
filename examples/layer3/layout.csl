@@ -1,0 +1,90 @@
+// Complete original layer3 geometry; compilation/fit is not yet qualified.
+const memcpy=@import_module("<memcpy/get_params>",.{.width=750,.height=45});
+const sx:[7]u16=[7]u16{16,456,16,456,211,566,181};
+const sy:[7]u16=[7]u16{1,1,9,9,13,23,34};
+const first:[7]u16=[7]u16{13,5,13,4,9,3,3};
+const per:[7]u16=[7]u16{13,13,13,11,13,13,4};
+const groups:[7]u16=[7]u16{8,96,8,40,136,136,40};
+const columns:[7]u16=[7]u16{54,54,54,64,54,54,182};
+const ends:[45]u16=[45]u16{0,729,729,729,729,729,729,729,729,714,729,729,729,704,729,729,729,729,729,729,729,729,729,729,729,729,729,729,729,729,729,729,729,729,728,746,746,746,746,746,746,746,746,746,197};
+layout {
+ @set_rectangle(750,45);
+ for(@range(u16,45))|y|{for(@range(u16,750))|x|{
+  var role:u16=0;var ordinal:u16=0;var participants:u16=54;
+  if(y==0){
+   if(x==0){role=6;}else if(x==1){role=2;}else if(x==2){role=3;}
+   else if(x>=16 and x<40){role=4;}else if(x>=40 and x<176){role=5;}
+  }
+  for(@range(u16,7))|r|{
+   if(y>=sy[r]){
+    const base:u16=if(y==sy[r]) sx[r] else 16;
+    if(x>=base){
+     const stride:u16=columns[r]+1;const slot:u16=(x-base)/stride;
+     const group:u16=if(y==sy[r]) slot else first[r]+(y-sy[r]-1)*per[r]+slot;
+     const limit:u16=if(y==sy[r]) first[r] else per[r];
+     if(slot<limit and group<groups[r] and (x-base)%stride<columns[r]){
+      role=1;ordinal=(x-base)%stride;participants=columns[r];
+     }
+    }
+   }
+  }
+  @set_tile_code(x,y,"layer3_pe.csl",.{.memcpy_params=memcpy.get_params(x),
+   .role=role,.ordinal=ordinal,.participants=participants});
+  if(x==0){
+   @set_color_config(x,y,@get_color(4),.{.routes=.{
+    .rx=if(y==0) .{RAMP} else .{NORTH},
+    .tx=if(y==0) .{SOUTH} else if(y==44) .{EAST} else .{EAST,SOUTH}}});
+  }else if(y>0 and x<=ends[y]){
+   if(role==1){
+    @set_color_config(x,y,@get_color(4),.{.routes=.{.rx=.{WEST},
+     .tx=if(x==ends[y]) .{RAMP} else .{RAMP,EAST}},
+     .filter=.{.kind=.{.counter=true},.count_data=true,
+      .init_counter=(17472-ordinal*96)%17472,.max_counter=95,.limit1=17471}});
+   }else{@set_color_config(x,y,@get_color(4),.{.routes=.{.rx=.{WEST},.tx=.{EAST}}});}
+  }
+ }}
+ @export_name("weights",[*]u32,false);
+ @export_name("descriptor",[*]u16,false);
+ @export_name("route",[*]u16,false);
+ @export_name("state",[*]u32,false);
+ @export_name("hidden",[*]u16,false);
+ @export_name("norm_gains",[*]u16,false);
+ @export_name("qk_gains",[*]u16,false);
+ @export_name("frequencies",[*]f32,false);
+ @export_name("cache",[*]u16,false);
+ @export_name("input",[*]f32,false);
+ @export_name("active_input",[*]f32,false);
+ @export_name("partial",[*]f32,false);
+ @export_name("result",[*]f32,false);
+ @export_name("norm_saved",[*]u16,false);
+ @export_name("norm_stats",[*]f32,false);
+ @export_name("qk_input",[*]u16,false);
+ @export_name("qk_output",[*]u16,false);
+ @export_name("qk_normalized",[*]u16,false);
+ @export_name("qk_stats",[*]f32,false);
+ @export_name("qk_rms_stages",[*]f32,false);
+ @export_name("qk_trig",[*]f32,false);
+ @export_name("qk_trig_casts",[*]u16,false);
+ @export_name("qk_rotary_stages",[*]f32,false);
+ @export_name("qk_product_casts",[*]u16,false);
+ @export_name("attention_input",[*]u16,false);
+ @export_name("attention_scores",[*]f32,false);
+ @export_name("attention_score_casts",[*]u16,false);
+ @export_name("attention_stats",[*]f32,false);
+ @export_name("attention_stages",[*]f32,false);
+ @export_name("attention_casts",[*]u16,false);
+ @export_name("mlp_gate",[*]u16,false);
+ @export_name("mlp_up",[*]u16,false);
+ @export_name("mlp_product",[*]u16,false);
+ @export_name("mlp_silu",[*]u16,false);
+ @export_name("mlp_exponential",[*]f32,false);
+ @export_name("mlp_sigmoid",[*]f32,false);
+ @export_name("mlp_activation",[*]f32,false);
+ @export_name("mlp_product_fp32",[*]f32,false);
+ @export_name("lane_counters",[*]u32,false);
+ @export_name("frame_counters",[*]u32,false);
+ @export_name("rounded",[*]u16,false);
+ @export_name("initialize",fn()void);
+ @export_name("prepare",fn()void);
+ @export_name("compute",fn()void);
+}

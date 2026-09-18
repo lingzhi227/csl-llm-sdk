@@ -1,0 +1,107 @@
+{
+  "date": "2026-09-18",
+  "model": {
+    "repository": "Qwen/Qwen3.8-27B",
+    "revision": "1d4bf0f2ff6012fd82039f2fa52739d0dd7c60c0"
+  },
+  "full_layer3": {
+    "prepared": {
+      "original_matrix_bytes": 744488960,
+      "packed_matrix_bytes": 751435776,
+      "prepared_files": 103,
+      "prepared_bytes": 752335928,
+      "source_and_padding_independently_checked": true
+    },
+    "compiled": {
+      "application": [
+        750,
+        45
+      ],
+      "PEs": 33750,
+      "matrix_PEs": 30576,
+      "programs": 313,
+      "max_static_plus_stack_bytes": 47984,
+      "stack_allowance_bytes": 4096,
+      "strict_ceiling_bytes": 48128
+    },
+    "physical_observer": {
+      "variant_programs": 315,
+      "original_parameters_bit_checked": true,
+      "position": 0,
+      "coherent_sequence": 137,
+      "ready_heads": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        18
+      ],
+      "missing_heads": [
+        14,
+        15,
+        16,
+        17,
+        19,
+        20,
+        21,
+        22,
+        23
+      ],
+      "normal_stop": true,
+      "resources_released": true,
+      "neural_epoch_completed": false,
+      "host_logging_failure_preserved": "Duplicate sequence keyword after retained snapshot"
+    }
+  },
+  "packet_only": {
+    "application": [
+      37,
+      10
+    ],
+    "PEs": 370,
+    "root_senders": 112,
+    "head_collectors": 24,
+    "idle_PEs": 233,
+    "coordinator_PEs": 1,
+    "compiled_programs": 7,
+    "max_static_plus_stack_bytes": 14752,
+    "completed_PEs": 370,
+    "completed_heads": 24,
+    "completed_roots": 112,
+    "source_packets": 576,
+    "received_packets": 576,
+    "row_fanout_completions": 192,
+    "compared_u16_channels": 24576,
+    "mismatches": 0,
+    "origin_ready_mask": 16777215,
+    "precompute_copies": 3,
+    "launches": 2,
+    "post_compute_memcpy_calls": 0,
+    "capture_wait_seconds": 85,
+    "normal_stop": true,
+    "resources_released": true,
+    "core_files": 9,
+    "core_bytes": 1294633,
+    "scope": "Synthetic protocol graph in SDK simulator; no neural arithmetic or model payload. The fixed capture wait is not performance."
+  },
+  "preserved_history": [
+    "First packet compile failed CSL multidimensional table syntax; no simulation.",
+    "Ten-second capture used an incorrect host core-format gate; retained core independently checked with only partial progress.",
+    "A new runtime reused unchanged compiled artifacts and captured at85seconds; full protocol state passed."
+  ],
+  "not_completed": [
+    "A full original layer3 neural epoch",
+    "Full64-layer CSL text generation",
+    "Measured token latency"
+  ]
+}
