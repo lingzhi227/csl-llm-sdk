@@ -1,0 +1,68 @@
+{
+  "decision": "accept_HW00_B_001_original_weight_8PE_physical_backend_qualification",
+  "at_utc": "2026-09-18T12:56:11.959315+00:00",
+  "scope": "Original layer3 192->128->128 resident MLP fragment, three dense/changed/zero inputs, physical CS-3",
+  "model": "Qwen/Qwen3.8-27B",
+  "revision": "1d4bf0f2ff6012fd82039f2fa52739d0dd7c60c0",
+  "manifest_sha256": "4920ee83d514c861141d08b07189409be7f113bd621655e904654f53d9a137c5",
+  "numerical": {
+    "Decimal_exp_sigmoid_and_actual_product_rows": 384,
+    "SDK_imported": false,
+    "actual_arrays": 112,
+    "actual_partial_pair_rows": 1152,
+    "all_source_enclosures_and_handoffs": true,
+    "all_state_and_timestamp_checks": true,
+    "candidate": "hw00-b-001",
+    "continuous_bitwise_weight_retention_proven": false,
+    "direct_FP32_BF16_casts": 1920,
+    "driver_reports_normal_stop": true,
+    "exact_integer_conditional_dot_rows": 2304,
+    "exact_integer_products": 196608,
+    "final_full_weights_equal_initial_source": true,
+    "hardware_identity_and_release_acceptance_separate": true,
+    "model_reference_not_recomputed": true,
+    "operations": 125,
+    "peak_rss_KiB": 39092,
+    "raw_bytes": 316760,
+    "result_sha256": "5a5cf57be9956c4c183a64a2bb1fc12d77c0d3fedf98ee00e18ac618e95ad4a0",
+    "seconds": 0.1992031871341169,
+    "status": "independent_HW00_saved_output_numerics_passed"
+  },
+  "static_audit": {
+    "at_utc": "2026-09-18T12:56:11.959315+00:00",
+    "all_source_files": 49,
+    "all_sources_unchanged": true,
+    "artifact_sha256": "b44fd116e89f7034ccd75debf1c4b65ab5bdf801f0da9370e5681249f6702ac4",
+    "artifact_bytes": 162915,
+    "compiled_CSL_sources": 8,
+    "actual_PE_count": 8,
+    "max_static_plus_stack_bytes": 39744,
+    "placement_correct": true,
+    "receipt_hashes": {
+      "COMPLETE.json": "4d43f6b0e557831e4f7fee326f0b359756caf980955c30f58bb01e2561c91ef6",
+      "result.json": "5a5cf57be9956c4c183a64a2bb1fc12d77c0d3fedf98ee00e18ac618e95ad4a0",
+      "hardware-result.json": "549a923cade27b1feaa35e84059ae617d64fbb946e5157ceaf3310d927339bca",
+      "sram.json": "3c934509c47fe9209b79d48d3d030e94978ca54b388da5d4260502400e0a7602",
+      "placement.json": "4688d0854b8d53c9c1fae85b037ff4e117f1c292211e2ba78a33034ab6e3df8e",
+      "compile-audit.json": "b506ddd67a2f50fe534170b963be85e53b646a4b4558ed2a67918121021f08a1",
+      "run-audit.json": "a7bff175ef1ad2e63b4357870c7d7eeb7e84c0e0882631f29de5bfe07a8ed81a"
+    }
+  },
+  "lifecycle": {
+    "compile_and_runtime_succeeded": true,
+    "normal_runtime_context_exit": true,
+    "independent_release_checked": true,
+    "active_owned_jobs_after": 0,
+    "compile_host_seconds": 72.36760910507292,
+    "run_host_seconds": 190.62465554988012,
+    "accounting": "Stage times include provisioning and shutdown, not token latency or charged node-hours."
+  },
+  "backend": {
+    "architecture": "WSE-3",
+    "simulator": false,
+    "appliance_sdk": "2.10.0",
+    "ELF_metadata_reader": "SDK 2.10.1",
+    "full_model": false,
+    "full_MLP": false
+  }
+}

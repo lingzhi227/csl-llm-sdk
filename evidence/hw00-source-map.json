@@ -1,0 +1,147 @@
+{
+  "scope": "HW00 portable appliance reproduction source mapping",
+  "frozen_manifest_sha256": "4920ee83d514c861141d08b07189409be7f113bd621655e904654f53d9a137c5",
+  "portability_changes": [
+    "compile_hw.py reads CSL_SDK_PYTHON instead of a private installed path",
+    "accepted-profile.json retains only the three numerical source identity keys",
+    "test_hw00.py adjusts its import directory",
+    "prepare.py is a new deployment preparation helper; not itself a hardware acceptance claim",
+    "Two public Python files omit a trailing blank line; statements unchanged"
+  ],
+  "files": {
+    "examples/hw00/input.csl": {
+      "sha256": "e9b289a13f821df69a08e58e9bf6847f4b542d94d617c60d8df143413d2a61af",
+      "relation": "exact accepted source",
+      "executed_public_reproduction": false
+    },
+    "examples/hw00/nonlinear_kernel.csl": {
+      "sha256": "65313bf5b798ac199f76ddc3fddbbf3de438f9edb0dbd5642763b67bd190a6b0",
+      "relation": "exact accepted source",
+      "executed_public_reproduction": false
+    },
+    "examples/hw00/line.csl": {
+      "sha256": "21f8628d937c6e481c24a45747895fb27caa1bd2a6b18d7338e138d492a4a529",
+      "relation": "exact accepted source",
+      "executed_public_reproduction": false
+    },
+    "examples/hw00/gemv_kernel.csl": {
+      "sha256": "3e92175efe12b28065bb77934c54136db3c9287c68c81877781a0e527354304c",
+      "relation": "exact accepted source",
+      "executed_public_reproduction": false
+    },
+    "examples/hw00/exp_kernel.csl": {
+      "sha256": "1dff6a4550d90bf788f4dd7f167a7240ed6742aefd25e3f7772a3bff58f583f7",
+      "relation": "exact accepted source",
+      "executed_public_reproduction": false
+    },
+    "examples/hw00/test_hw00.py": {
+      "sha256": "41abecdbc18924f1fc27c5e8460d48d0ffa3ed72eab0f678c60d5b8581750a41",
+      "relation": "public documentation or explicit portability adaptation",
+      "executed_public_reproduction": false
+    },
+    "examples/hw00/layout.csl": {
+      "sha256": "1b731e9f989494cc5c3c44aa66bc99ec2132664083fc36717737c9616ea60d82",
+      "relation": "exact accepted source",
+      "executed_public_reproduction": false
+    },
+    "examples/hw00/accepted-profile.json": {
+      "sha256": "ea133addd46f7c1c43ee5b8e7330becd830f8309e39d7b2615bc9548069ea751",
+      "relation": "public documentation or explicit portability adaptation",
+      "executed_public_reproduction": false
+    },
+    "examples/hw00/README.md": {
+      "sha256": "4cbf9a6d1868a197324853bdefc51a915dace43979bf1e5f6e1b2d842b93bb81",
+      "relation": "public documentation or explicit portability adaptation",
+      "executed_public_reproduction": false
+    },
+    "examples/hw00/packets.csl": {
+      "sha256": "151009e07423dc16bb2b2304f29e7e6c52e84e57613c809eb5188470e8bcc6c7",
+      "relation": "exact accepted source",
+      "executed_public_reproduction": false
+    },
+    "examples/hw00/source_gate.py": {
+      "sha256": "a9be74aaef968c323fe83d7b81c09be361e8e60104bd951b80cb3c463a6ecbc4",
+      "relation": "accepted source with trailing blank-line normalization only",
+      "executed_public_reproduction": false
+    },
+    "examples/hw00/run_hw.py": {
+      "sha256": "e0c2b87ef66b75e4b4d5656afc3d81e30f43c66d3bc80cffdb5cb0468d6d55b7",
+      "relation": "exact accepted source",
+      "executed_public_reproduction": false
+    },
+    "examples/hw00/inspect_hw_elf.py": {
+      "sha256": "3da61eceb21763be644fa5cda24d88e36c217a923e3dba1d7e404c958bf16fea",
+      "relation": "exact accepted source",
+      "executed_public_reproduction": false
+    },
+    "examples/hw00/tile.csl": {
+      "sha256": "775777797703a0d1e8a57a55b3cda6a24fa1f870c657b71130990320392b4a10",
+      "relation": "exact accepted source",
+      "executed_public_reproduction": false
+    },
+    "examples/hw00/compile_hw.py": {
+      "sha256": "1fdadcff42603097d2f6a815cc0170fc04b90594c4c027452fe07d53dc0c8fa0",
+      "relation": "public documentation or explicit portability adaptation",
+      "executed_public_reproduction": false
+    },
+    "examples/hw00/prepare.py": {
+      "sha256": "6cd2ece3ba815e32098e16d5994f786d48efd6c46f7cf4070b1ae7ffc10941a8",
+      "relation": "public documentation or explicit portability adaptation",
+      "executed_public_reproduction": false
+    },
+    "examples/hw00/accepted_inputs.py": {
+      "sha256": "95b5d00d8a438865655d938b1dab1e85051332c45d692d9f9d76708ac6ec639c",
+      "relation": "exact accepted source",
+      "executed_public_reproduction": false
+    },
+    "examples/hw00/hw00/job_capture.py": {
+      "sha256": "ae99f3c6225458b6c171bfe4d66cd949571fe83891e72539a6376d2784523390",
+      "relation": "accepted source with trailing blank-line normalization only",
+      "executed_public_reproduction": false
+    },
+    "examples/hw00/hw00/store.py": {
+      "sha256": "d499e04e756091cb6ae690cbbc2b2932bb4323dd4e2a874436821cf00d7b5dce",
+      "relation": "exact accepted source",
+      "executed_public_reproduction": false
+    },
+    "examples/hw00/hw00/watchdog.py": {
+      "sha256": "c6d92a6d975472f727160ae3562051e3e010c2db2657f5d77ea13df2b6d90970",
+      "relation": "exact accepted source",
+      "executed_public_reproduction": false
+    },
+    "examples/hw00/hw00/__init__.py": {
+      "sha256": "db47c5e2c4bec34d6a920d89c08b2fa813a07ec8a619166eda349991267396b4",
+      "relation": "exact accepted source",
+      "executed_public_reproduction": false
+    },
+    "examples/hw00/hw00/contract.py": {
+      "sha256": "eebae793fa60769cda1c8042983f29d8479e6ee868ff14e0775dab85be269622",
+      "relation": "exact accepted source",
+      "executed_public_reproduction": false
+    },
+    "core/qwen38/resident_sdk_driver.py": {
+      "sha256": "9abeb9c72f082ac8e0951d2ba1e73d390988b4e596f6d96366ba85bb1a64d894",
+      "relation": "exact accepted existing source"
+    },
+    "core/qwen38/resident_sdk_checks.py": {
+      "sha256": "36af1748ef19502d2463665c94e300a7efc044c7cef2a873878ac1cde9b52521",
+      "relation": "exact accepted existing source"
+    },
+    "core/qwen38/resident_sdk_sequence.py": {
+      "sha256": "fb2d18a643c7de4e8ba0a304b693fb160c920ec0cccf7d536e208753d9d91d42",
+      "relation": "exact accepted existing source"
+    },
+    "core/qwen38/resident_spatial.py": {
+      "sha256": "77afbf55c28d466cc4ab5a78c399a069e10205e18d835c1fafe1080a0a5c62b6",
+      "relation": "exact accepted existing source"
+    },
+    "core/qwen38/resident_spatial_numerics.py": {
+      "sha256": "805b2036a0eafccd40d07f5bf78763da6382a018712fb5137e6e9c3ae5d87a60",
+      "relation": "exact accepted existing source"
+    },
+    "core/qwen38/elf_inventory.py": {
+      "sha256": "625c548eceb21c8ce0eba710887111bd853fb5d77c07cb36922ec47c28a43161",
+      "relation": "exact accepted existing source"
+    }
+  }
+}

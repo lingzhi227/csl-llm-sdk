@@ -2,6 +2,10 @@
 
 Only accepted results are listed below. Unresolved integration work and the remaining scope are tracked in [implementation status](STATUS.md).
 
+## HW00 physical fragment — Accepted, September 18, 2026
+
+Original layer3 resident 8PE MLP, three inputs, all125operations and112arrays passed independent numerical audit on physical WSE-3. New physical compilation/SRAM/placement, normal stop and device release were independently verified. Full MLP/model remain open. See [report](HW00-PHYSICAL.md).
+
 ## WP16 eight-PE resident fragment — Accepted after independent review, September11,2026 (UTC)
 
 Three original dense/changed/zero inputs traverse resident192 ->128gate/up,

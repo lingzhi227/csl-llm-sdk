@@ -1,8 +1,8 @@
 # CSL-LLM SDK
 
-**Building inference for open language models with handwritten Cerebras Systems Language (CSL), targeting three WSE-3 systems with resident weights.** We implement the numerical kernels, execution control and persistent model state, and use the Cerebras SDK to compile and run the device programs. The first target is **Qwen3.8-27B text inference**; the longer-term goal is a reusable SDK for related model architectures.
+**Building inference for open language models with handwritten Cerebras Systems Language (CSL), targeting sequential execution of three model stages on WSE-3.** We implement the numerical kernels, execution control and persistent model state, and use the Cerebras SDK to compile and run the device programs. The first target is **Qwen3.8-27B text inference**; the longer-term goal is a reusable SDK for related model architectures.
 
-**Working today:** bounded SDK2.10.1 simulator milestones cover original-weight contractions, normalization, persistent recurrence and attention, selected-head compositions, and partial MLP chains. The newest result is an **eight-PE resident spatial MLP fragment across three inputs**: device broadcast, FP32 reductions, nonlinear consumption, release ownership and original-weight retention. **Current work:** implement the full5120 ->17408 ->5120 MLP with spatially resident shards inside the three-wafer placement. **Still ahead:** complete-model text generation, qualified physical three-system transport and measured hardware token latency. The completed log records each result's exact scope.
+**Working today:** bounded SDK 2.10.1 simulator milestones cover original-weight contractions, normalization, persistent recurrence and attention, selected-head compositions, and partial MLP chains. The newest result is an **original-weight eight-PE MLP fragment on physical WSE-3**, with three inputs, independent numerical checks, complete final weight readback and verified device release. **Current work:** implement the full 5120 → 17408 → 5120 resident MLP and sequential stage checkpoints. **Still ahead:** complete 64-layer text generation, validated stage state restoration and measured token latency. The completed log records each result's exact scope.
 
 ## 1. Project design
 
@@ -14,10 +14,10 @@ flowchart TB
     Plan --> DeviceSource["Our CSL kernels, control logic and state layout"]
     DeviceSource --> Compiler["Cerebras layout tools and CSL compiler"]
     Compiler --> Binary["Compiled device program"]
-    Plan --> Host["Host initial weight loading and stage-boundary coordination"]
+    Plan --> Host["Host stage weight/state loading and boundary checkpoints"]
     Binary --> Runtime["Cerebras runtime: load, transfer and launch"]
     Host --> Runtime
-    Runtime --> Execute["Execute CSL kernels and retain state between tokens"]
+    Runtime --> Execute["Execute CSL kernels and export stage state"]
     Model --> Reference["Independent reference: CPU today, GPU planned"]
     Execute --> Compare["Compare intermediate tensors, state and outputs"]
     Reference --> Compare
@@ -28,16 +28,17 @@ The execution box is what the compiled program does. We write its scheduling, bu
 | Part | What this project implements or reuses |
 |---|---|
 | **Our device code** | Matrix products, normalization, attention, recurrence and other model operations; task dependencies, communication and state updates. The completed log identifies the implemented subsets. |
-| **Our host code** | Initial resident weight loading, request/stage coordination, tensor placement, resource limits and validation. Diagnostic readback is measured separately; physical cluster execution remains unqualified. |
+| **Our host code** | Stage weight/state loading, checkpoint coordination, tensor placement, resource limits and validation. Physical execution is qualified for the eight-PE fragment; the full model remains open. |
 | **Cerebras tooling** | CSL layout/compiler, device tasks and communication primitives, host transfers and runtime launches. |
 | **Reference computation** | CPU numerical references and selected functions extracted from a pinned official implementation. GPU reference execution and applicable CS-Torch / Model Zoo integration remain future work. |
 
-The primary deployment target is **three CS3/WSE-3 systems with resident weights**,
-spatial execution and state retained across tokens. The metadata placement starts
-from a20/24/20 layer partition, with embedding on stage0 and final norm/head on
-stage2. Per-PE capacity, code/state/buffers and actual routes matter in addition
-to aggregate SRAM. A host relay of stage-boundary activations is the explicit
-fallback; direct physical inter-wafer CSL support remains unverified.
+The current deployment target uses **three sequential logical stages**: layers
+0–19 with embedding, 20–43, and 44–63 with final norm and the full vocabulary head.
+Each active stage holds its weights on the wafer. Between stages, the host saves
+and restores hidden activations, attention KV, DeltaNet recurrent state and
+convolution history. One physical system can be reused; simultaneous reservation
+of three systems and direct inter-wafer links are not prerequisites. Per-PE
+weights, code, state and route capacity still require actual compiled-fit checks.
 
 ```mermaid
 flowchart LR
@@ -51,8 +52,8 @@ flowchart LR
     In --> Check["Diagnostic readback and ownership checks"]
 ```
 
-This diagram shows the accepted eight-PE fragment, not the physical three-system
-deployment. Intermediate diagnostic copies are present; neural computation has
+This diagram shows the accepted eight-PE fragment, not the full three-stage
+model deployment. Intermediate diagnostic copies are present; neural computation has
 no host feedback dependency. Earlier temporal probes remain useful evidence,
 while a few-PE full-model temporal engine is not a prerequisite for this target.
 
@@ -61,7 +62,8 @@ while a few-PE full-model temporal engine is not a prerequisite for this target.
 | Path | Purpose |
 |---|---|
 | [`csl/kernels/`](csl/kernels) | Reusable handwritten CSL arithmetic kernels. |
-| [`examples/wp16/resident/`](examples/wp16/resident) | Latest resident graph, actual SDK placement gate and reproduction path. |
+| [`examples/hw00/`](examples/hw00) | Physical eight-PE qualification, appliance lifecycle, SRAM/placement gates and bounded release watchdog. |
+| [`examples/wp16/resident/`](examples/wp16/resident) | Earlier resident simulator graph and preserved qualification history. |
 | [`examples/`](examples) | Runnable experiments, grouped by milestone. Layout files place PEs and routes; device programs wire kernels and state; Python drivers load inputs, launch operations and collect results. |
 | [`core/qwen38/`](core/qwen38) | Python numerical references, precision and communication contracts, data encodings and resource accounting. |
 | [`tools/`](tools) | Small weight-slice downloads, experiment preparation, SDK container entry and resource-limited execution. |
@@ -75,6 +77,19 @@ while a few-PE full-model temporal engine is not a prerequisite for this target.
 ## 3. Completed development log — newest first
 
 Each **WP** is a scoped development milestone. Device results below come from the SDK simulator; WP04 is a CPU/source audit. **BF16** means bfloat16 data, and **FP32** means 32-bit floating-point arithmetic. Reports contain numerical thresholds, failure history and reproduction details.
+
+### HW00 · Original-weight eight-PE fragment on physical WSE-3 · September 18, 2026
+
+One physical runtime completed the original layer-3 192→128→128 resident graph
+for three dense/changed/zero inputs. Independent review checked all 112 arrays,
+2304 conditional dot rows, 1152 pair sums, 1920 casts, 384 nonlinear rows, state,
+handoffs and complete final weights. All 125 operations and normal shutdown
+passed; fresh scheduler/system queries confirmed resource release. The largest
+static application footprint plus 4 KiB stack was 39744 bytes. The 190.62-second
+host stage includes initialization and cleanup; it is not token latency or an
+accounting charge. Full MLP and full-model inference remain open.
+
+[Code and reproduction](examples/hw00) · [Report](docs/HW00-PHYSICAL.md) · [Independent acceptance](evidence/hw00-physical.json)
 
 ### WP16 resident fragment · Eight PEs, three generations · September 11, 2026 (UTC)
 

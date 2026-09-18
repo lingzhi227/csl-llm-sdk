@@ -1,5 +1,7 @@
 # Implementation status
 
+September 18, 2026: HW00 accepted the original-weight 8PE fragment on physical WSE-3. Full MLP and full-model generation remain incomplete. See [physical report](HW00-PHYSICAL.md).
+
 WP00–WP08 and WP10–WP15 accepted, with separately accepted one-input, connected three-generation and eight-PE resident spatial WP16 fragments, 2026-09-11 UTC. Continuous development is
 active under bounded control-node packages. Full-model inference remains incomplete.
 
@@ -30,15 +32,16 @@ active under bounded control-node packages. Full-model inference remains incompl
 | WP15 original projected attention | Accepted: ten PEs, all1024 selected rows/full5120columns, two same-request original-hidden tokens, persistent KV, exact device handoff and all source/stage/cast/cache/retention gates; normal stop in1187.19s |
 | WP16 original full MLP | Full original CPU reference accepted. Separate four-PE profiles accepted: one dense input with5120-column projections; three dense/changed/zero generations with112-column resident projections and connected reset/retention/release. Full5120 connected reuse and whole17408-channel CSL MLP remain open; timings are different workloads |
 | Resident spatial MLP fragment | Accepted after independent saved-file review: eightPEs/threeinputs,125operations, actual4x2placement, FP32 pair reductions and device ownership; original post-stop auxiliary guardexit1 preserved. Full-dimension spatial source integration is next. |
-| Full generation, physical WSE-3 | Not implemented/qualified here |
+| Physical WSE-3 fragment | HW00 accepted: original layer3 8PE MLP, three inputs, 112 arrays, retained weights, normal stop and independently verified device release |
+| Full generation | Not implemented/qualified |
 
 Attempt wp00-001 failed in the installed wrapper's temporary-directory mount before
 cslc ran; simulation did not start. Controller-approved wp00-002 corrected only the
 container launch and recorded normal compiler and simulator exits. Original failure
 is preserved. See [WP00 report](WP00-REPORT.md) for measurements and scope limits.
 
-See [partial MLP report](WP16-PARTIAL-MLP-REPORT.md) for exact scope, evidence limits and measured resources. WP09 remains unresolved; full-model generation and physical WSE operation are unqualified.
+See [partial MLP report](WP16-PARTIAL-MLP-REPORT.md) for exact scope, evidence limits and measured resources. WP09 remains unresolved; full-model generation remains unqualified; physical scope is limited to HW00.
 
 See [connected MLP report](WP16-CONNECTED-MLP-REPORT.md) for the latest accepted generation lifecycle and exact scope. No full-model or physical hardware result is implied.
 
-See [resident spatial report](RESIDENT-SPATIAL-RUN002.md) for the newest result, both preserved failures, independent acceptance and the exact limits of this fragment. The primary target is three systems with spatially resident weights; full-dimensional source integration is active.
+See [resident spatial report](RESIDENT-SPATIAL-RUN002.md) for the newest result, both preserved failures, independent acceptance and the exact limits of this fragment. The current target is three sequential stages with host checkpoints and stage-scoped resident weights; full-dimensional integration is active.
