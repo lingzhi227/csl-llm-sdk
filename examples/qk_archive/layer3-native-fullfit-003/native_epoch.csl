@@ -1,0 +1,45 @@
+// Shared finite ownership state. No transport, fabricated completion or spin.
+param expected_mask:u16;
+param owner_limit:u16;
+comptime {@comptime_assert(expected_mask>0 and expected_mask<=15 and owner_limit>0);}
+var identity=@zeros([4]u32);var operation:u16=0;var owner:u16=0;
+var initialized:bool=false;var retired:bool=false;
+var started:u16=0;var live:u16=0;var completed:u16=0;
+var errors:u32=0;var rejected:u32=0;var completions:u16=0;
+fn reject(flag:u32) bool {errors|=flag;rejected+=1;return false;}
+fn quiescent() bool {
+ return initialized and retired and live==0 and started==expected_mask and completed==expected_mask and errors==0;
+}
+fn matches(request:u32,reset:u32,position:u32,stage:u32,phase:u16) bool {
+ return initialized and identity[0]==request and identity[1]==reset and identity[2]==position and
+        identity[3]==stage and operation==phase;
+}
+fn begin(request:u32,reset:u32,position:u32,stage:u32,phase:u16,tag:u16) bool {
+ if(initialized and !quiescent()){return reject(64);}
+ if(phase==0xffff){return reject(128);}
+ if(tag>=owner_limit){return reject(16);}
+ if(matches(request,reset,position,stage,phase)){return reject(8);}
+ identity[0]=request;identity[1]=reset;identity[2]=position;identity[3]=stage;
+ operation=phase;owner=tag;initialized=true;retired=false;
+ started=0;live=0;completed=0;completions=0;errors=0;rejected=0;return true;
+}
+fn start(mask:u16) bool {
+ if(!initialized or retired or errors!=0){return reject(4);}
+ if(mask==0 or (mask&expected_mask)!=mask){return reject(16);}
+ if((started&mask)!=0){return reject(8);}
+ started|=mask;live|=mask;return true;
+}
+fn complete(slot:u16) bool {
+ if(slot>=4){return reject(16);}
+ const bit=@as(u16,1)<<slot;
+ if(!initialized or retired or (expected_mask&bit)==0){return reject(4);}
+ if((completed&bit)!=0){return reject(8);}
+ if((live&bit)==0){return reject(64);}
+ live&=~bit;completed|=bit;completions+=1;return true;
+}
+fn retained() bool {return initialized and !retired and errors==0 and completed==expected_mask and live==0;}
+fn retire(request:u32,reset:u32,position:u32,stage:u32,phase:u16) bool {
+ if(!matches(request,reset,position,stage,phase)){return reject(1);}
+ if(!retained()){return reject(4);}
+ retired=true;return true;
+}

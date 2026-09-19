@@ -1,0 +1,83 @@
+// Finite two-block archive ownership. Transport lives in head_observer.csl.
+param sender:bool;
+param expected_head:u16;
+param stream_limit:u32=65;
+comptime {@comptime_assert(expected_head<24);}
+const MAGIC:u32=0x514b4131;
+const VERSION:u32=1;
+const FIRST_WORDS:u16=704;
+const SECOND_WORDS:u16=256;
+const TOTAL_WORDS:u16=960;
+var identity=@zeros([5]u32);
+var generation:u32=0;
+// 0 unconfigured,1 prepared,2 first block,3 second block,4 received,5 committed.
+// For senders,2 owns both source spans and5 means source release only.
+var phase:u16=0;
+var blocks:u16=0;
+var marker_sequence:u32=0;
+var errors:u32=0;
+var rejected:u32=0;
+var status=@zeros([if(sender) 1 else 16]u32);
+noinline fn reject(flag:u32) bool {
+ errors|=flag;rejected+=1;
+ if(comptime !sender){status[14]=errors;}
+ return false;
+}
+fn quiescent() bool {return phase==5 and errors==0;}
+fn begin(request:u32,reset:u32,position:u32,stage:u32,operation:u16,serial:u32) bool {
+ if(errors!=0 or (phase!=0 and phase!=5)){return reject(1);}
+ if(serial!=generation+1 or operation==0xffff){return reject(2);}
+ if(phase!=0 and identity[0]==request and identity[1]==reset and identity[2]==position and
+    identity[3]==stage and identity[4]==@as(u32,operation)){return reject(4);}
+ identity[0]=request;identity[1]=reset;identity[2]=position;identity[3]=stage;identity[4]=@as(u32,operation);
+ generation=serial;phase=1;blocks=0;marker_sequence=0;
+ if(comptime !sender){
+  status[0]=2*generation-1;status[15]=2*generation-1;
+  status[1]=MAGIC;status[2]=VERSION|(@as(u32,expected_head)<<16);status[3]=generation;
+  for(@range(u16,5))|i|{status[4+i]=identity[i];}
+  status[9]=@as(u32,TOTAL_WORDS);status[10]=@as(u32,FIRST_WORDS);status[11]=@as(u32,SECOND_WORDS);
+  status[12]=0;status[13]=0;status[14]=0;
+ }
+ return true;
+}
+fn source_marker(target:[*]u32,sequence:u32) bool {
+ if(!sender or phase!=1 or errors!=0 or sequence==0 or sequence>stream_limit){return reject(8);}
+ for(@range(u16,32))|i|{target[i]=0;}
+ target[0]=2*sequence;target[31]=2*sequence;
+ target[1]=MAGIC;target[2]=VERSION|(@as(u32,expected_head)<<16);target[3]=generation;
+ for(@range(u16,5))|i|{target[4+i]=identity[i];}
+ target[9]=@as(u32,TOTAL_WORDS);target[10]=@as(u32,FIRST_WORDS);target[11]=@as(u32,SECOND_WORDS);
+ target[12]=63;marker_sequence=sequence;phase=2;return true;
+}
+fn source_released() bool {
+ if(!sender or phase!=2 or errors!=0){return reject(16);}
+ blocks=2;phase=5;return true;
+}
+fn receive_marker(data:[*]u32,sequence:u32) bool {
+ if(sender or phase!=1 or errors!=0 or sequence==0 or sequence>stream_limit){return reject(32);}
+ if(data[0]!=2*sequence or data[31]!=data[0] or data[1]!=MAGIC or
+    data[2]!=(VERSION|(@as(u32,expected_head)<<16)) or data[3]!=generation){return reject(64);}
+ for(@range(u16,5))|i|{if(data[4+i]!=identity[i]){return reject(128);}}
+ if(data[9]!=@as(u32,TOTAL_WORDS) or data[10]!=@as(u32,FIRST_WORDS) or
+    data[11]!=@as(u32,SECOND_WORDS) or data[12]!=63){return reject(256);}
+ for(@range(u16,18))|i|{if(data[13+i]!=0){return reject(512);}}
+ marker_sequence=sequence;status[13]=sequence;phase=2;return true;
+}
+// Called only from the actual DSR completion callback, never from the sender.
+fn block_received() bool {
+ if(sender or errors!=0 or (phase!=2 and phase!=3)){return reject(1024);}
+ if((phase==2 and blocks!=0) or (phase==3 and blocks!=1)){return reject(2048);}
+ blocks+=1;phase+=1;status[12]=@as(u32,blocks);return true;
+}
+fn commit_received() bool {
+ if(sender or phase!=4 or blocks!=2 or errors!=0){return reject(4096);}
+ phase=5;status[15]=2*generation;status[0]=2*generation;return true;
+}
+// Shared sink completion predicate, also exercised by the finite SDK fixture.
+fn final_metadata(data:[*]u32,serial:u32,sequence:u32,metadata_count:u32,archive_count:u16) bool {
+ return !sender and quiescent() and serial==generation and data[0]==data[31] and data[0]==2*sequence and
+  data[0]>0 and data[0]%2==0 and data[0]<=2*stream_limit and data[1]==0x48445031 and
+  data[2]==(4|(@as(u32,expected_head)<<16)) and data[3]==serial and data[4]==11 and
+  data[5]==metadata_count and sequence==metadata_count+@as(u32,archive_count) and metadata_count<=64 and
+  data[26]==2*serial and (data[25]&0x04000000)==0 and (data[30]&0xc0000000)==0;
+}

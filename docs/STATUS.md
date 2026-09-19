@@ -1,15 +1,16 @@
 # Implementation status
 
-September 19, 2026 UTC: the 45-PE native KV/Q SDK fixture independently passed
-three operations, reset, all raw payload/canary checks and 525 invalid API calls.
-Its accepted binaries were reused; all thirteen captures survived as immutable
-files and the run stopped and released normally. The latest original layer-3
-physical diagnostic still records 20 of 24 READY heads and 549 of 576 Q/K/V
-packet observations. Complete original neural epochs and CSL model generations
-remain zero.
+September 19, 2026 UTC: physical synthetic QK archive/alias equivalence passed
+two resets, exact raw diagnostics and final output, actual source overwrite,
+61 invalid API calls and normal stop. Separately, all 24 complete native heads
+passed the selected 89-position SRAM/storage check with 576 bytes minimum headroom.
+The accepted native KV/Q SDK transport and older FIFO physical observations remain
+preserved. Complete original neural-layer epochs and CSL model generations remain zero.
 
 | Component | Current accepted scope |
 |---|---|
+| Physical QK archive/alias | Four PEs, two synthetic resets, exact960archive/256output/1280source-poison each; normal stop/release |
+| Selected complete native programs | 89 original positions, all24heads/24sinks, max47552 including4096stack; other programs demoted, never executable |
 | Native KV/Q ownership | 45-PE SDK fixture, three operations/reset, 29,184 exact payload halfwords, 192 canaries, 525 actual API rejects, normal stop and release |
 | Original layer 3 MLP | HW01: complete 5120→17408→5120 MLP, four original/changed/zero inputs, full resident weight retention and independent numerical audit on physical WSE-3 |
 | Full text CPU reference | Original 64 layers, 851 text tensors, full vocabulary, four generated tokens and complete original cache restoration; CPU acceptance only |
@@ -24,13 +25,13 @@ remain zero.
 | Three sequential logical stages | Target layers 0–19, 20–43, 44–63 with host hidden/KV/DeltaNet/convolution checkpoints; complete device execution not yet qualified |
 | Complete CSL text generation | Not yet accepted |
 
-The current native path uses four independent KV streams per receiver and a
-bounded Q packet window. The synthetic transport fixture is accepted; complete
-original head/root SRAM fit, a full graph compile and original-layer numerical
-acceptance remain separate requirements. The overwritten QK RMS intermediates
-need an applicable enclosure gate or retained-evidence design; reconstructed
-intermediates must not be labeled observations.
+The complete native graph still needs its own compiled-fit acceptance before
+original-layer runtime and numerical checks. QK diagnostics are now archived
+before source-workspace reuse; the four-PE fixture establishes that lifetime with
+synthetic data. Selected fit and physical alias equivalence do not establish
+fullgraph execution, original-weight numerical correctness or model generation.
 
-[Native SDK milestone](NATIVE-KV-SDK.md) · [Physical diagnostic](LAYER3-FIFO-TRACE.md) ·
+[Physical archive and selected fit](QK-ARCHIVE-PHYSICAL.md) ·
+[Native SDK milestone](NATIVE-KV-SDK.md) · [Physical FIFO diagnostic](LAYER3-FIFO-TRACE.md) ·
 [Full MLP](HW01-FULL-MLP.md) · [CPU reference](FULL-REFERENCE.md) ·
 [Earlier milestones](MILESTONES.md)

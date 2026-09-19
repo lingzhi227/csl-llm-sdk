@@ -1,0 +1,33 @@
+// Four PEs: aliased original owner, archive sink, release join, original owner.
+const memcpy=@import_module("<memcpy/get_params>",.{.width=4,.height=1});
+layout {
+ @set_rectangle(4,1);
+ for(@range(u16,4))|x|{
+  @set_tile_code(x,0,"pe.csl",.{.memcpy_params=memcpy.get_params(x),.role=x});
+ }
+ @set_color_config(0,0,@get_color(6),.{.routes=.{.rx=.{RAMP},.tx=.{EAST}}});
+ @set_color_config(1,0,@get_color(6),.{.routes=.{.rx=.{WEST},.tx=.{RAMP}}});
+ for(@range(u16,3))|x|{
+  @set_color_config(x,0,@get_color(7),.{.routes=.{.rx=if(x==0) .{RAMP} else .{WEST},
+   .tx=if(x==2) .{RAMP} else .{EAST}}});
+ }
+ @set_color_config(1,0,@get_color(8),.{.routes=.{.rx=.{RAMP},.tx=.{EAST}}});
+ @set_color_config(2,0,@get_color(8),.{.routes=.{.rx=.{WEST},.tx=.{RAMP}}});
+ @set_color_config(2,0,@get_color(9),.{.routes=.{.rx=.{RAMP},.tx=.{WEST}}});
+ @set_color_config(1,0,@get_color(9),.{.routes=.{.rx=.{EAST},.tx=.{RAMP}}});
+ @export_name("evidence",[*]u32,false);
+ @export_name("archive",[*]u32,false);
+ @export_name("reference",[*]u32,false);
+ @export_name("workspace",[*]f32,false);
+ @export_name("output",[*]u16,false);
+ @export_name("qk_input",[*]u16,false);
+ @export_name("qk_gains",[*]u16,false);
+ @export_name("qk_stats",[*]f32,false);
+ @export_name("cache",[*]u16,false);
+ @export_name("input",[*]u16,false);
+ @export_name("casts",[*]u16,false);
+ @export_name("initialize",fn()void);
+ @export_name("prepare",fn()void);
+ @export_name("compute",fn()void);
+ @export_name("negative_checks",fn()void);
+}

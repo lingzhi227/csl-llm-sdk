@@ -2,6 +2,18 @@
 
 Only accepted results are listed below. Unresolved integration work and the remaining scope are tracked in [implementation status](STATUS.md).
 
+## Physical QK archive and selected-program fit — Accepted, September 19, 2026 UTC
+
+The synthetic four-PE original-kernel fixture passed two resets, exact960-word
+archive and256-BF16-output equivalence per reset, actual1280-word source overwrite,
+61 rejected API calls and172 successful assertions. Thirteen durable captures
+and43 journal events include normal stop; all owned resources were released.
+A separate89-position complete-role compile accepted all24heads/24sinks, maximum
+47552 bytes including4096stack, margin576. Its unselected programs are demoted;
+it is not an executable full graph. The prior51424-byte fit failure and five
+fixture failures remain documented. No original-weight neural-layer acceptance
+or dependent decode is claimed. See [report](QK-ARCHIVE-PHYSICAL.md).
+
 ## Native KV/Q SDK transport — Accepted, September 19, 2026 UTC
 
 The 45-PE synthetic fixture passed three normal operations including a reset,

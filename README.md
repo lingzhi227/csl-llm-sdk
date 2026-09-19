@@ -2,7 +2,7 @@
 
 **Building inference for open language models with handwritten Cerebras Systems Language (CSL), targeting sequential execution of three model stages on WSE-3.** We implement the numerical kernels, execution control and persistent model state, and use the Cerebras SDK to compile and run the device programs. The first target is **Qwen3.8-27B text inference**; the longer-term goal is a reusable SDK for related model architectures.
 
-**Working today:** the complete original-weight **5120 → 17408 → 5120 layer-3 MLP runs on physical WSE-3** with four inputs, resident weights, independent numerical checks and verified release. A separate **full 64-layer CPU reference** generates four tokens with original cache restoration and independently checked saved evidence. Earlier bounded SDK milestones cover normalization, recurrent state and selected attention heads. **Current integration:** the complete layer-3 graph compiles, and its synthetic Q/K/V fanout completes in the SDK simulator. The latest physical FIFO diagnostic recorded 20 of 24 attention READY heads and 549 of 576 Q/K/V packet observations; complete neural epochs remain zero. **New transport milestone:** a 45-PE native KV/Q SDK fixture passed three operations, reset, exact raw-data checks and 525 invalid API calls. **Current work:** qualify the complete native head/root programs and original-layer numerics, then integrate three sequential stages with state checkpoints. **Still ahead:** complete 64-layer CSL text generation, device stage state restoration and measured token latency. The completed log records each result's exact scope.
+**Working today:** the complete original-weight **5120 → 17408 → 5120 layer-3 MLP runs on physical WSE-3** with four inputs, resident weights, independent numerical checks and verified release. A separate **full 64-layer CPU reference** generates four tokens with original cache restoration and independently checked saved evidence. Earlier bounded SDK milestones cover normalization, recurrent state and selected attention heads. **Current integration:** the complete layer-3 graph compiles, and its synthetic Q/K/V fanout completes in the SDK simulator. The latest physical FIFO diagnostic recorded 20 of 24 attention READY heads and 549 of 576 Q/K/V packet observations; complete neural epochs remain zero. **New transport milestone:** a 45-PE native KV/Q SDK fixture passed three operations, reset, exact raw-data checks and 525 invalid API calls. **New physical milestone:** a four-PE original-kernel fixture passed two resets with exact diagnostic archive/output equivalence after source overwrite. Separately, all 24 complete native heads passed a selected-program SRAM check, with 576 bytes of minimum headroom. **Current work:** compile the complete native graph and qualify original-layer numerics, then integrate three sequential stages with state checkpoints. **Still ahead:** complete 64-layer CSL text generation, device stage state restoration and measured token latency. The completed log records each result's exact scope.
 
 ## 1. Project design
 
@@ -60,6 +60,7 @@ Full attention/recurrent layers and the three-stage model remain integration wor
 | Path | Purpose |
 |---|---|
 | [`csl/kernels/`](csl/kernels) | Reusable handwritten CSL arithmetic kernels. |
+| [`examples/qk_archive/`](examples/qk_archive) | Physical original-kernel archive/alias equivalence, durable raw evidence and selected complete-program fit. |
 | [`examples/native_kv_sdk/`](examples/native_kv_sdk) | Accepted three-operation native KV/Q transport, durable raw captures and preserved failure history. |
 | [`examples/layer3_fifo_trace/`](examples/layer3_fifo_trace) | Accepted full-layout FIFO diagnostics, finite physical capture and independent raw-word decoders. |
 | [`examples/fifo_trace_sdk/`](examples/fifo_trace_sdk) | Qualified FIFO capacity, device-gated drain and packet/sideband coexistence fixture. |
@@ -83,6 +84,24 @@ Full attention/recurrent layers and the three-stage model remain integration wor
 ## 3. Completed development log — newest first
 
 Each **WP** or **HW** is a scoped development milestone. HW00/HW01 use physical WSE-3; earlier WP device results use the SDK simulator, and WP04 is a CPU/source audit. **BF16** means bfloat16 data, and **FP32** means 32-bit floating-point arithmetic. Reports contain numerical thresholds, failure history and reproduction details.
+
+### QK diagnostic archive · Physical equivalence and selected-program fit · September 19, 2026 (UTC)
+
+A four-PE physical fixture passed two reset generations: 960 diagnostic archive
+words and 256 BF16 outputs matched an independent original-kernel baseline per
+reset, after all 1,280 source workspace words were overwritten. Thirteen durable
+captures, 61 rejected API calls, 172 successful assertions and normal stop were
+independently checked. These are synthetic resets, not dependent decoding.
+
+A separate selected-program compile checked 89 original positions, including
+all 24 complete attention heads and 24 archive sinks. Maximum storage plus
+4 KiB stack fell from the prior failed 51,424 bytes to 47,552, below the 48,128
+ceiling. Other tile programs were demoted: this accepts selected fit, not an
+executable full graph or a complete original-weight neural layer. Earlier
+simulator failures and the first physical run's context-exit deadline remain
+documented. Complete neural epochs remain zero.
+
+[Source](examples/qk_archive) · [Report](docs/QK-ARCHIVE-PHYSICAL.md) · [Physical evidence](evidence/qk-archive/acceptance-summary.json) · [Selected-fit evidence](evidence/qk-archive/selected-fit-summary.json)
 
 ### Native KV/Q transport · Three SDK operations and reset · September 19, 2026 (UTC)
 

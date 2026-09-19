@@ -1,0 +1,115 @@
+{
+  "epochs": [
+    {
+      "status": "passed",
+      "epoch": 1,
+      "request": 7,
+      "reset": 11,
+      "position": 0,
+      "head": 17,
+      "archive_u32_equal": 960,
+      "output_BF16_equal": 256,
+      "source_workspace_poisoned_u32": 1280,
+      "actual_sink_callback_order": 132,
+      "actual_sink_committed": true,
+      "scope": "Synthetic alias/archive and original-kernel equivalence only"
+    },
+    {
+      "status": "passed",
+      "epoch": 2,
+      "request": 7,
+      "reset": 12,
+      "position": 0,
+      "head": 17,
+      "archive_u32_equal": 960,
+      "output_BF16_equal": 256,
+      "source_workspace_poisoned_u32": 1280,
+      "actual_sink_callback_order": 132,
+      "actual_sink_committed": true,
+      "scope": "Synthetic alias/archive and original-kernel equivalence only"
+    }
+  ],
+  "scope": "Physical CS3 synthetic two-reset alias/archive fixture; no original model inference",
+  "negative": {
+    "status": "passed",
+    "actual_rejected_calls": 61,
+    "actual_positive_calls": 172,
+    "late_error_invalidates_existing_commit": true,
+    "final_before_commit_and_commit_before_final": "Shared device predicate with isolated actual lifecycle API calls"
+  },
+  "status": "passed",
+  "normal_stop": true,
+  "seconds": 180.2656591949053,
+  "journal_events": 43,
+  "copies": 13,
+  "launches": 6,
+  "host_slot_bytes": 32768,
+  "message": null,
+  "capture_files": {
+    "epoch1_evidence": {
+      "path": "captures/epoch1_evidence.json",
+      "bytes": 607,
+      "sha256": "005f2de928234a9e0d25a254693a26a8baa7c3d06315df451d9c60c92a3e5c92"
+    },
+    "epoch1_archive": {
+      "path": "captures/epoch1_archive.json",
+      "bytes": 8781,
+      "sha256": "23b1f6da869f5f84fbbb79314ca6932aaea8f190c63f180b4938a1439a509aea"
+    },
+    "epoch1_reference": {
+      "path": "captures/epoch1_reference.json",
+      "bytes": 8783,
+      "sha256": "c3cde736d23b83571da4979752a1973353cfcf0beb2077860ec5b3d7a8cc2e0d"
+    },
+    "epoch1_workspace": {
+      "path": "captures/epoch1_workspace.json",
+      "bytes": 14139,
+      "sha256": "4fa94e69ce4c87ba072dada92008789a6fd80a3ff9f0925cd7e8bfa142d812d7"
+    },
+    "epoch1_output": {
+      "path": "captures/epoch1_output.json",
+      "bytes": 1591,
+      "sha256": "9c88e1493662aa65e39b9f63f97ddcc997cedceb8b18aaf56ebca956b68bb039"
+    },
+    "epoch1_baseline_output": {
+      "path": "captures/epoch1_baseline_output.json",
+      "bytes": 1600,
+      "sha256": "6d92120da62885f2a3fd8af3ad1aa2c04ef32ce62d0b6207e2eaf987eee7e3ad"
+    },
+    "epoch2_evidence": {
+      "path": "captures/epoch2_evidence.json",
+      "bytes": 612,
+      "sha256": "cad468a17693062ac38e6a5e2ffe4eb8a1cdde80eadddabac9f90d474814240a"
+    },
+    "epoch2_archive": {
+      "path": "captures/epoch2_archive.json",
+      "bytes": 8781,
+      "sha256": "cf71f2b75dce590f5a7680a153983c5d4e800e6d0f3106d4088d4e1eaff298b2"
+    },
+    "epoch2_reference": {
+      "path": "captures/epoch2_reference.json",
+      "bytes": 8783,
+      "sha256": "de4743092a25c1d1064d1986125f0fa1f3c30666bf3f984c2ce980457153bc37"
+    },
+    "epoch2_workspace": {
+      "path": "captures/epoch2_workspace.json",
+      "bytes": 14139,
+      "sha256": "4c1332dcfc3450d8379e192674c96b7a4572e2aadd50569172f7aca07146da4e"
+    },
+    "epoch2_output": {
+      "path": "captures/epoch2_output.json",
+      "bytes": 1591,
+      "sha256": "5877aa8f99c2db062ee3f61826cf506d787aaf1782eb55ad26c32fafc9d86141"
+    },
+    "epoch2_baseline_output": {
+      "path": "captures/epoch2_baseline_output.json",
+      "bytes": 1600,
+      "sha256": "f04a426ae9bee1acb2c1360234b9c84de45fc3748f23a14e0a26965704397af8"
+    },
+    "negative_evidence": {
+      "path": "captures/negative_evidence.json",
+      "bytes": 625,
+      "sha256": "2e96143c9e2ce9e2811393c0d4b6118c550e7dedc83e6e4e38df221c4e391414"
+    }
+  }
+}

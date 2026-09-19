@@ -1,0 +1,41 @@
+{
+  "status": "accepted_selected_complete_program_SRAM_storage_placement",
+  "manifest_sha256": "bc5e4532d574d84f52b84967467176b6d660f5ab8f338766aae8a95feb460544",
+  "artifact_sha256": "1100e58e7c947e3c39bb675a7c5aae5ff05868a18d14e0711aff5677799359f8",
+  "independent_audit_sha256": "a4343c6e9572fef8d4ecb208ddf459c561d70707a5cf9c8aff18db1593e4e092",
+  "application_ELFs": 1142,
+  "selected_PEs": 89,
+  "heads": 24,
+  "max_including_4096_stack": 47552,
+  "ceiling": 48128,
+  "margin": 576,
+  "role_maximum": {
+    "6": 21264,
+    "4": 47552,
+    "2": 46384,
+    "5": 18864,
+    "7": 10736,
+    "3": 46016,
+    "0": 9936,
+    "1": 44240,
+    "8": 17248
+  },
+  "scope": "Archive-based compile-only selected complete programs at original coordinates; unselected PEs demoted. Actual head workspace5120 and sink archive3840 required; six views require pinned source offsets and separately qualified physical raw evidence. Not executable, fullgraph fit, dynamic-stack, neural or model acceptance.",
+  "application_PEs": 33750,
+  "selected_matrix_PEs": 35,
+  "native_sources": 16,
+  "archive_sinks": 24,
+  "embedded_CSL_files": 33,
+  "guarded_seconds": 257.73963513365015,
+  "normal_guard_exit": 0,
+  "independent_terminal_unassigned_PIDs_absent": true,
+  "fullgraph": false,
+  "neural_layer_accepted": false,
+  "prior_attempt": {
+    "candidate": "layer3-native-fullfit-002",
+    "maximum_including_stack": 51424,
+    "ceiling": 48128,
+    "status": "preserved_SRAM_failure",
+    "all_24_heads_failed": true
+  }
+}

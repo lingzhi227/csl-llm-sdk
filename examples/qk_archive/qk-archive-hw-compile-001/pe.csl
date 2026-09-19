@@ -1,0 +1,343 @@
+// Synthetic original-math alias/archive equivalence, not native Q/KV transport.
+param memcpy_params;param role:u16;
+const aliased=role==0;const sink=role==1;const join=role==2;const baseline=role==3;
+const owner=aliased or baseline;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const attn=@import_module(if(owner) "attention_owner8.csl" else "<empty>",if(owner) .{
+ .on_output_ready=math_ready,.on_error=math_failed,.observed=true,.on_probe=math_probe,
+ .archive_workspace=aliased,.on_archive=archive_qk} else .{});
+const observer=@import_module(if(aliased or sink) "head_observer.csl" else "<empty>",if(aliased or sink) .{
+ .sender=aliased,.expected_head=17,.archive_enabled=true,.archive_limit=2,
+ .finite_records=14,.fill=fill_observer,.on_published=published,
+ .defer_archive_commit=sink,.on_archive_pending=archive_pending,.on_archive_committed=published} else .{});
+const negative=@import_module(if(join) "diagnostic_archive.csl" else "<empty>",
+ if(join) .{.sender=false,.expected_head=17} else .{});
+const negative_source=@import_module(if(join) "diagnostic_archive.csl" else "<empty>",
+ if(join) .{.sender=true,.expected_head=17} else .{});
+const notice_dest=@get_dsr(dsr_dest,2);const notice_source=@get_dsr(dsr_src1,2);
+const other_dest=@get_dsr(dsr_dest,3);const other_source=@get_dsr(dsr_src1,3);
+const release_dest=@get_dsr(dsr_dest,4);const release_source=@get_dsr(dsr_src1,4);
+const notice_output=@get_output_queue(2);const first_input=@get_input_queue(2);
+const second_input=@get_input_queue(3);const release_output=@get_output_queue(4);
+const first_task=@get_local_task_id(8);const second_task=@get_local_task_id(9);
+var evidence=@zeros([64]u32);
+var reference=@zeros([if(baseline) 960 else 1]u32);
+var output=@zeros([if(owner) 256 else 1]u16);
+var unused_float=@zeros([1]f32);
+var fragment=@zeros([if(owner) 31 else 1]u32);
+var negative_marker=@zeros([if(join) 32 else 1]u32);
+var tx_word=@zeros([1]u32);var first_word=@zeros([1]u32);var second_word=@zeros([1]u32);
+var epoch:u32=0;var event_code:u32=0;var initialized:bool=false;
+var waiting:bool=false;var done:bool=false;var failed:bool=false;var ready:bool=false;
+var first_live:bool=false;var second_live:bool=false;var source_seen:bool=false;var sink_seen:bool=false;
+var negative_count:u32=0;var negative_failures:u32=0;
+var positive_count:u32=0;
+var callback_order:u32=0;var final_seen:bool=false;var commit_seen:bool=false;
+fn fail(code:u32) void {failed=true;evidence[0]|=code;}
+fn fill_observer(target:[*]u32) void {
+ if(comptime aliased){
+  for(@range(u16,30))|i|{target[i+1]=0;}
+  target[1]=0x48445031;target[2]=4|(17<<16);target[3]=epoch;target[4]=event_code;
+  target[5]=observer.metadata_count;target[6]=observer.archive.generation;
+  target[7]=@as(u32,observer.archive.phase);target[8]=evidence[0];
+  target[25]=if(failed) @as(u32,0x04000000) else @as(u32,0);
+  target[26]=if(event_code==11) 2*epoch else 2*epoch-1;target[30]=@as(u32,1)<<event_code;
+ }
+}
+fn notify(code:u32) void {if(comptime aliased){event_code=code;observer.changed();}}
+fn capture() void {
+ evidence[1]=@as(u32,role);evidence[2]=epoch;evidence[3]=10+epoch;
+ evidence[4]=if(done) @as(u32,1) else @as(u32,0);
+ evidence[5]=if(ready) @as(u32,1) else @as(u32,0);
+ evidence[6]=if(first_live) @as(u32,1) else @as(u32,0);
+ evidence[7]=if(second_live) @as(u32,1) else @as(u32,0);
+ if(comptime aliased or sink){
+  evidence[8]=observer.sequence;evidence[9]=observer.metadata_count;
+  evidence[10]=@as(u32,observer.archive_count);evidence[11]=@as(u32,observer.archive.phase);
+  evidence[12]=@as(u32,observer.archive.blocks);evidence[13]=observer.archive.errors;
+  evidence[14]=if(observer.protocol_error) @as(u32,1) else @as(u32,0);
+ }
+ if(comptime sink){
+  for(@range(u16,16))|i|{evidence[16+i]=observer.archive.status[i];}
+  evidence[32]=observer.snapshot[0];evidence[33]=observer.snapshot[4];
+  evidence[34]=observer.snapshot[30];
+  evidence[37]=callback_order;
+ }
+ if(comptime owner){
+  evidence[16]=attn.failure;evidence[17]=@as(u32,attn.position);
+  evidence[18]=@as(u32,attn.served);evidence[19]=attn.qk_events[6];
+  evidence[20]=attn.attention_events[6];
+ }
+ if(comptime join){
+  evidence[16]=if(source_seen) @as(u32,1) else @as(u32,0);
+  evidence[17]=if(sink_seen) @as(u32,1) else @as(u32,0);
+ }
+ evidence[48]=negative_count;evidence[49]=negative_failures;evidence[50]=positive_count;
+}
+fn finish() void {
+ if(waiting and done and !failed and !first_live and !second_live){
+  capture();waiting=false;sys.unblock_cmd_stream();
+ }
+}
+fn published() void {
+ if(comptime sink){
+  if(observer.protocol_error){fail(1);return;}
+  if(observer.archive.phase==5 and !commit_seen){commit_seen=true;callback_order=callback_order*10+3;}
+  if(observer.snapshot[3]==epoch and observer.snapshot[4]==11 and !final_seen){final_seen=true;callback_order=callback_order*10+2;}
+  done=observer.retained_final(epoch) and observer.metadata_count==7*epoch;
+  finish();
+ }
+}
+fn send_notice(value:u32) void {
+ tx_word[0]=value;
+ const mem=@get_dsd(mem1d_dsd,.{.base_address=&tx_word,.extent=1});
+ const out=@get_dsd(fabout_dsd,.{.output_queue=notice_output,.extent=1});
+ @load_to_dsr(notice_dest,out);@load_to_dsr(notice_source,mem);@mov32(notice_dest,notice_source);
+}
+fn archive_pending() void {
+ if(comptime sink){
+  if(observer.archive.phase!=4 or observer.archive.blocks!=2 or observer.archive.status[0]%2!=1){fail(2);return;}
+  evidence[35]+=1;callback_order=callback_order*10+1;send_notice(0xb0000000|epoch);
+ }
+}
+fn arm_first() void {
+ if(comptime join){
+  first_live=true;
+  const mem=@get_dsd(mem1d_dsd,.{.base_address=&first_word,.extent=1});
+  const input=@get_dsd(fabin_dsd,.{.input_queue=first_input,.extent=1});
+  @load_to_dsr(notice_dest,mem);@load_to_dsr(notice_source,input,.{.async=true,.activate=first_task,.ut_id=@get_ut_id(2)});
+  @mov32(notice_dest,notice_source,.{.async=true});
+ }
+}
+fn arm_second() void {
+ second_live=true;
+ const mem=@get_dsd(mem1d_dsd,.{.base_address=&second_word,.extent=1});
+ const input=@get_dsd(fabin_dsd,.{.input_queue=second_input,.extent=1});
+ @load_to_dsr(other_dest,mem);@load_to_dsr(other_source,input,.{.async=true,.activate=second_task,.ut_id=@get_ut_id(3)});
+ @mov32(other_dest,other_source,.{.async=true});
+}
+fn release_joined() void {
+ if(comptime join){if(source_seen and sink_seen and !done){
+  tx_word[0]=0xc0000000|epoch;
+  const mem=@get_dsd(mem1d_dsd,.{.base_address=&tx_word,.extent=1});
+  const out=@get_dsd(fabout_dsd,.{.output_queue=release_output,.extent=1});
+  @load_to_dsr(release_dest,out);@load_to_dsr(release_source,mem);@mov32(release_dest,release_source);
+  done=true;finish();
+ }}
+}
+task first_received() void {
+ if(!first_live or source_seen or first_word[0]!=(0xa0000000|epoch)){fail(4);return;}
+ first_live=false;source_seen=true;release_joined();
+}
+task second_received() void {
+ if(!second_live){fail(8);return;}second_live=false;
+ if(comptime sink){
+  if(second_word[0]!=(0xc0000000|epoch) or observer.archive.phase!=4){fail(16);return;}
+  evidence[36]+=1;const committed=observer.commit_archive();if(!committed){fail(32);return;}
+  published();
+ }else if(comptime join){
+  if(sink_seen or second_word[0]!=(0xb0000000|epoch)){fail(64);return;}
+  sink_seen=true;release_joined();
+ }
+}
+fn raw_pattern(index:u16) u16 {
+ const base:u16=if(index<256) 0x3e00 else 0x3d00;
+ return (base+@as(u16,(@as(u32,index)+epoch*7)%64))|(if(index%2==0) @as(u16,0) else @as(u16,0x8000));
+}
+fn load_owner() void {
+ if(comptime owner){
+  attn.restore_position(0);attn.begin(7,10+epoch,0,2,0,17,1,2,3);
+  for(@range(u16,512))|i|{attn.qk_weights[i]=if(epoch==1) @as(u16,0) else @as(u16,0x3c00);}
+  for(@range(u16,256))|i|{
+   attn.qk_input[256+i]=0x3f00+(i%64);
+   attn.input[512+i]=(0x3e00+(i%32))|(if(i%2==0) @as(u16,0) else @as(u16,0x8000));
+  }
+  for(@range(u16,32))|i|{attn.frequencies[i]=@as(f32,i+1)/64.0;}
+  for(@range(u16,8))|i|{attn.probe_inputs[i]=@as(f32,i)/2.0;}
+  // Exercise the original local collector; no network Q/KV claim is made.
+  for(@range(u16,4))|group|{for(@range(u16,3))|piece|{
+   const offset:u16=23*piece;const words:u16=if(piece==2) 18 else 23;
+   fragment[0]=1;fragment[1]=7;fragment[2]=10+epoch;fragment[3]=0;fragment[4]=2;
+   fragment[5]=0;fragment[6]=@as(u32,68+group);fragment[7]=@as(u32,offset);
+   for(@range(u16,23))|i|{if(i<words){
+    const index:u16=group*128+2*(offset+i);
+    fragment[8+i]=@as(u32,raw_pattern(index))|(@as(u32,raw_pattern(index+1))<<16);
+   }}
+   attn.receive(&fragment,words+8);
+  }}
+  for(@range(u16,4))|slot|{const retained=attn.native_retained(7,10+epoch,0,2,0,slot);if(!retained){fail(128);}}
+ }
+}
+fn retain_reference() void {
+ if(comptime baseline){
+  const trig:[*]u32=@ptrcast([*]u32,attn.trig_view());
+  const rotary:[*]u32=@ptrcast([*]u32,attn.rotary_view());
+  const probes:[*]u32=@ptrcast([*]u32,attn.probes_view());
+  const products:[*]u16=attn.product_casts_view();
+  const trig_casts:[*]u16=attn.trig_casts_view();
+  const normalized:[*]u16=attn.normalized_view();
+  for(@range(u16,128))|i|{
+   reference[i]=trig[i];
+   reference[512+i]=@as(u32,products[2*i])|(@as(u32,products[2*i+1])<<16);
+  }
+  for(@range(u16,384))|i|{reference[128+i]=rotary[i];}
+  for(@range(u16,32))|i|{
+   reference[640+i]=@as(u32,trig_casts[2*i])|(@as(u32,trig_casts[2*i+1])<<16);
+   reference[672+i]=probes[i];
+  }
+  for(@range(u16,256))|i|{
+   reference[704+i]=@as(u32,normalized[2*i])|(@as(u32,normalized[2*i+1])<<16);
+  }
+ }
+}
+fn math_probe(code:u16,error:u32) void {
+ if(code==6){retain_reference();}
+ notify(@as(u32,code));
+}
+fn archive_qk() bool {
+ if(comptime aliased){return observer.spill(&attn.stages);}
+ return true;
+}
+fn math_ready() void {ready=true;}
+fn math_failed(error:u32) void {evidence[40]=error;fail(256);}
+fn initialize() void {
+ if(initialized){fail(512);return;}initialized=true;
+ if(comptime aliased or sink){observer.init();}
+ sys.unblock_cmd_stream();
+}
+fn prepare() void {
+ if(!initialized or failed or waiting or first_live or second_live or epoch>=2 or (epoch>0 and !done)){fail(1024);return;}
+ if(comptime aliased or sink){if(epoch>0 and !observer.archive_quiescent()){fail(2048);return;}}
+ epoch+=1;done=false;ready=false;source_seen=false;sink_seen=false;
+ callback_order=0;final_seen=false;commit_seen=false;
+ for(@range(u16,64))|i|{evidence[i]=0;}
+ if(comptime aliased or sink){
+  const begun=observer.begin_archive(7,10+epoch,0,2,0,epoch);if(!begun){fail(4096);return;}
+ }
+ if(comptime sink or join){arm_second();}
+ if(comptime join){arm_first();}
+ load_owner();notify(1);sys.unblock_cmd_stream();
+}
+fn compute() void {
+ if(!initialized or failed or waiting or epoch==0){fail(8192);return;}
+ waiting=true;notify(2);
+ if(comptime owner){
+  attn.compute_if_ready();if(failed or !ready){fail(16384);return;}
+  attn.copy_chunk(7,10+epoch,0,2,0,&output);
+  attn.copy_chunk(7,10+epoch,0,2,128,@ptrcast([*]u16,&output[128]));
+  if(comptime aliased){
+   if(!observer.archive_quiescent()){fail(32768);return;}
+   // Every aliased byte is destroyed before the independent sink may commit.
+   for(@range(u16,1280))|i|{attn.stages[i]=@bitcast(f32,0xdead0000|epoch);}
+   evidence[41]=1;send_notice(0xa0000000|epoch);notify(11);
+  }
+  done=true;
+ }
+ if(comptime sink){published();}
+ if(comptime join){release_joined();}
+ finish();
+}
+fn reject_expected(value:bool) void {negative_count+=1;if(value){negative_failures+=1;}}
+fn accept_expected(value:bool) void {positive_count+=1;if(!value){negative_failures+=1;}}
+fn fresh_source() void {
+ if(comptime join){
+  negative_source.phase=0;negative_source.generation=0;negative_source.errors=0;negative_source.rejected=0;
+  accept_expected(negative_source.begin(7,11,0,2,0,1));
+ }
+}
+fn fresh_marker() void {
+ if(comptime join){
+  negative.phase=0;negative.generation=0;negative.errors=0;negative.rejected=0;
+  accept_expected(negative.begin(7,11,0,2,0,1));fresh_source();
+  accept_expected(negative_source.source_marker(&negative_marker,1));
+ }
+}
+fn accepted_marker() void {
+ if(comptime join){fresh_marker();accept_expected(negative.receive_marker(&negative_marker,1));}
+}
+fn received_blocks() void {
+ if(comptime join){accepted_marker();accept_expected(negative.block_received());accept_expected(negative.block_received());}
+}
+fn final_marker() void {
+ if(comptime join){
+  for(@range(u16,32))|i|{negative_marker[i]=0;}
+  negative_marker[0]=16;negative_marker[31]=16;negative_marker[1]=0x48445031;
+  negative_marker[2]=4|(17<<16);negative_marker[3]=1;negative_marker[4]=11;
+  negative_marker[5]=7;negative_marker[26]=2;negative_marker[30]=1<<11;
+ }
+}
+fn final_valid() bool {
+ if(comptime join){return negative.final_metadata(&negative_marker,1,8,7,1);}
+ return false;
+}
+fn negative_checks() void {
+ if(epoch!=2 or !done or failed or waiting or first_live or second_live){fail(65536);return;}
+ if(comptime join){
+  // Isolated module instances are explicitly reset between rejected cases.
+  // The real archived generations and their already-persisted data are untouched.
+  for(@range(u16,32))|i|{fresh_marker();negative_marker[i]^=1;reject_expected(negative.receive_marker(&negative_marker,1));}
+  fresh_marker();reject_expected(negative.block_received());
+  fresh_marker();reject_expected(negative.commit_received());
+  fresh_marker();reject_expected(negative.begin(7,12,0,2,0,2));
+  accepted_marker();reject_expected(negative.commit_received());
+  accepted_marker();reject_expected(negative.receive_marker(&negative_marker,1));
+  accepted_marker();accept_expected(negative.block_received());reject_expected(negative.commit_received());
+  received_blocks();accept_expected(negative.commit_received());reject_expected(negative.commit_received());
+  received_blocks();accept_expected(negative.commit_received());reject_expected(negative.begin(7,11,0,2,0,2));
+  accepted_marker();reject_expected(negative.begin(7,12,0,2,0,2));
+  received_blocks();accept_expected(negative.commit_received());reject_expected(negative.begin(7,12,0,2,0,3));
+  fresh_source();reject_expected(negative_source.source_released());
+  fresh_source();accept_expected(negative_source.source_marker(&negative_marker,1));reject_expected(negative_source.source_marker(&negative_marker,2));
+  fresh_source();accept_expected(negative_source.source_marker(&negative_marker,1));accept_expected(negative_source.source_released());reject_expected(negative_source.source_released());
+  fresh_source();accept_expected(negative_source.source_marker(&negative_marker,1));reject_expected(negative_source.begin(7,12,0,2,0,2));
+  fresh_source();reject_expected(negative_source.source_marker(&negative_marker,66));
+  // Both actual gate orders: final before commit and commit before final.
+  received_blocks();final_marker();reject_expected(final_valid());
+  accept_expected(negative.commit_received());accept_expected(final_valid());
+  received_blocks();accept_expected(negative.commit_received());reject_expected(final_valid());
+  final_marker();accept_expected(final_valid());
+  const fields:[11]u16=[11]u16{0,31,1,2,3,4,5,25,26,30,30};
+  const masks:[11]u32=[11]u32{1,1,1,1,1,1,1,0x04000000,1,0x40000000,0x80000000};
+  for(@range(u16,11))|i|{
+   const previous=negative_marker[fields[i]];negative_marker[fields[i]]^=masks[i];
+   reject_expected(final_valid());negative_marker[fields[i]]=previous;
+  }
+  accept_expected(final_valid());
+  // A new identity is allowed only after commit; host consumption is external.
+  accept_expected(negative.begin(7,12,0,2,0,2));
+ }
+ if(comptime sink){
+  accept_expected(observer.retained_final(epoch));
+  observer.observer_fail();
+  reject_expected(observer.retained_final(epoch));
+  accept_expected(observer.archive.status[0]==4 and observer.archive.status[15]==4 and observer.archive.status[14]==32768);
+ }
+ capture();sys.unblock_cmd_stream();
+}
+const evidence_ptr:[*]u32=&evidence;
+const archive_ptr:[*]u32=if(sink) &observer.archive_storage else &evidence;
+const reference_ptr:[*]u32=&reference;
+const workspace_ptr:[*]f32=if(aliased) &attn.stages else &unused_float;
+const output_ptr:[*]u16=&output;
+const qk_input_ptr:[*]u16=if(owner) &attn.qk_input else &output;
+const gains_ptr:[*]u16=if(owner) &attn.qk_weights else &output;
+const stats_ptr:[*]f32=if(owner) &attn.qk_stats else &unused_float;
+const cache_ptr:[*]u16=if(owner) &attn.cache else &output;
+const input_ptr:[*]u16=if(owner) &attn.input else &output;
+const casts_ptr:[*]u16=if(owner) &attn.casts else &output;
+comptime {
+ if(aliased or sink){@initialize_queue(notice_output,.{.color=if(aliased) @get_color(7) else @get_color(8)});}
+ if(join){
+  @initialize_queue(first_input,.{.color=@get_color(7)});@bind_local_task(first_received,first_task);
+  @initialize_queue(release_output,.{.color=@get_color(9)});
+ }
+ if(sink or join){
+  @initialize_queue(second_input,.{.color=if(sink) @get_color(9) else @get_color(8)});
+  @bind_local_task(second_received,second_task);
+ }
+ @export_symbol(evidence_ptr,"evidence");@export_symbol(archive_ptr,"archive");
+ @export_symbol(reference_ptr,"reference");@export_symbol(workspace_ptr,"workspace");@export_symbol(output_ptr,"output");
+ @export_symbol(qk_input_ptr,"qk_input");@export_symbol(gains_ptr,"qk_gains");@export_symbol(stats_ptr,"qk_stats");
+ @export_symbol(cache_ptr,"cache");@export_symbol(input_ptr,"input");@export_symbol(casts_ptr,"casts");
+ @export_symbol(initialize);@export_symbol(prepare);@export_symbol(compute);@export_symbol(negative_checks);
+}

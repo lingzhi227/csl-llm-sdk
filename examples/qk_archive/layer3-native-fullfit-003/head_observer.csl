@@ -1,0 +1,148 @@
+// Independent one-source path. Synchronous source ownership, bounded output.
+param sender:bool;
+// Optional bounded fixture stream. Zero preserves the full-layer diagnostic.
+param finite_records:u16=0;
+comptime {@comptime_assert(finite_records<=64);}
+param snapshot_words:u16=32;
+comptime {@comptime_assert(snapshot_words==32 or snapshot_words==160);}
+param stream_color:color=@get_color(6);
+param fill:fn([*]u32)void;
+param on_published:fn()void=published_noop;
+param archive_enabled:bool=false;
+param expected_head:u16=0;
+param archive_limit:u16=1;
+param defer_archive_commit:bool=false;
+param on_archive_pending:fn()void=published_noop;
+param on_archive_committed:fn()void=published_noop;
+comptime {@comptime_assert(archive_limit>0 and archive_limit<=3);}
+const archive=@import_module(if(archive_enabled) "diagnostic_archive.csl" else "<empty>",
+ if(archive_enabled) .{.sender=sender,.expected_head=expected_head,.stream_limit=64+@as(u32,archive_limit)} else .{});
+fn published_noop() void {}
+const queue_out=@get_output_queue(5);const queue_in=@get_input_queue(5);
+const dest=@get_dsr(dsr_dest,7);const source=@get_dsr(dsr_src1,7);
+const completion=@get_local_task_id(14);
+var buffer=@zeros([32]u32);
+var snapshot=@zeros([if(sender) 1 else snapshot_words]u32);
+var archive_storage=@zeros([if(archive_enabled and !sender) 960 else 1]u32);
+var active:bool=false;var initialized:bool=false;
+var sequence:u32=0;var protocol_error:bool=false;
+// Metadata and archive records have separate budgets and one ordered stream.
+var metadata_count:u32=0;var archive_count:u16=0;var receive_kind:u16=0;
+noinline fn observer_fail() void {
+ protocol_error=true;
+ if(comptime archive_enabled){const rejected=archive.reject(32768);}
+}
+fn init() void {
+ @assert(!initialized);initialized=true;
+ if(comptime !sender){arm();}
+}
+fn arm() void {
+ @assert(!sender and initialized and !active);active=true;receive_kind=0;
+ const input=@get_dsd(fabin_dsd,.{.input_queue=queue_in,.extent=32});
+ const mem=@get_dsd(mem1d_dsd,.{.base_address=&buffer,.extent=32});
+ @load_to_dsr(dest,mem);
+ @load_to_dsr(source,input,.{.async=true,.activate=completion,.ut_id=@get_ut_id(5)});
+ @mov32(dest,source,.{.async=true});
+}
+noinline fn send_words(data:[*]u32,words:u16) void {
+ const mem=@get_dsd(mem1d_dsd,.{.base_address=data,.extent=words});
+ const base=@get_dsd(fabout_dsd,.{.output_queue=queue_out,.extent=1});
+ const out=@set_dsd_length(base,words);
+ @load_to_dsr(dest,out);@load_to_dsr(source,mem);@mov32(dest,source);
+}
+fn begin_archive(request:u32,reset:u32,position:u32,stage:u32,operation:u16,serial:u32) bool {
+ if(comptime archive_enabled){
+  if(!initialized or protocol_error or archive_count>=archive_limit){return archive.reject(8192);}
+  return archive.begin(request,reset,position,stage,operation,serial);
+ }
+ return false;
+}
+noinline fn spill(workspace:[*]f32) bool {
+ if(comptime archive_enabled and sender){
+  if(!initialized or protocol_error or archive_count>=archive_limit){return archive.reject(8192);}
+  const ok=archive.source_marker(&buffer,sequence+1);if(!ok){observer_fail();return false;}
+  sequence+=1;archive_count+=1;
+  send_words(&buffer,32);
+  send_words(@ptrcast([*]u32,workspace),archive.FIRST_WORDS);
+  send_words(@ptrcast([*]u32,&workspace[1024]),archive.SECOND_WORDS);
+  return archive.source_released();
+ }
+ return false;
+}
+fn arm_archive(part:u16) void {
+ if(comptime archive_enabled and !sender){
+  @assert(initialized and !active and (part==1 or part==2));active=true;receive_kind=part;
+  const words=if(part==1) archive.FIRST_WORDS else archive.SECOND_WORDS;
+  const offset:u16=if(part==1) 0 else archive.FIRST_WORDS;
+  const mem=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]u32,&archive_storage[offset]),.extent=words});
+  const base=@get_dsd(fabin_dsd,.{.input_queue=queue_in,.extent=1});
+  const input=@set_dsd_length(base,words);
+  @load_to_dsr(dest,mem);
+  @load_to_dsr(source,input,.{.async=true,.activate=completion,.ut_id=@get_ut_id(5)});
+  @mov32(dest,source,.{.async=true});
+ }
+}
+fn commit_archive() bool {
+ if(comptime archive_enabled and !sender){
+  if(protocol_error){return archive.reject(16384);}
+  const ok=archive.commit_received();if(!ok){observer_fail();return false;}
+  on_archive_committed();return true;
+ }
+ return false;
+}
+fn archive_quiescent() bool {
+ if(comptime archive_enabled){return !protocol_error and archive.quiescent();}
+ return true;
+}
+fn retained_final(serial:u32) bool {
+ if(comptime archive_enabled and !sender){
+  return !protocol_error and archive.final_metadata(&snapshot,serial,sequence,metadata_count,archive_count);
+ }
+ return false;
+}
+fn changed() void {
+ @assert(sender and initialized);
+ // Record64 is an explicit terminal overflow marker; no later call sends.
+ // The admitted original head protocol has at most61 normal notifications.
+ if(metadata_count>=64 or (finite_records>0 and metadata_count>=@as(u32,finite_records))){return;}
+ metadata_count+=1;sequence+=1;fill(&buffer);buffer[0]=2*sequence;buffer[31]=2*sequence;
+ if(metadata_count==64){buffer[30]|=0x80000000;}
+ send_words(&buffer,32);
+}
+task complete() void {
+ @assert(initialized and active);active=false;
+ if(comptime !sender){
+  if(comptime archive_enabled){
+   if(receive_kind!=0){
+    const received=archive.block_received();if(!received){observer_fail();return;}
+    if(receive_kind==1){arm_archive(2);return;}
+    // Rearm normal metadata separately from the archive commit barrier.
+    arm();
+    if(comptime defer_archive_commit){on_archive_pending();}
+    else{const committed=commit_archive();}
+    return;
+   }
+   if(buffer[1]==archive.MAGIC){
+    if(archive_count>=archive_limit){const rejected=archive.reject(8192);observer_fail();return;}
+    const accepted=archive.receive_marker(&buffer,sequence+1);if(!accepted){observer_fail();return;}
+    sequence+=1;archive_count+=1;arm_archive(1);return;
+   }
+  }
+  if(buffer[0]!=buffer[31] or buffer[0]!=2*(sequence+1) or metadata_count>=64){observer_fail();}
+  sequence+=1;metadata_count+=1;
+  const first=@get_dsd(mem1d_dsd,.{.base_address=&snapshot,.extent=1});
+  const last=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]u32,&snapshot[31]),.extent=1});
+  const body_in=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]u32,&buffer[1]),.extent=30});
+  const body_out=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]u32,&snapshot[1]),.extent=30});
+  @mov32(first,2*sequence-1);@mov32(last,2*sequence-1);
+  @mov32(body_out,body_in);
+  if(protocol_error){snapshot[30]|=0x40000000;}
+  @mov32(last,2*sequence);@mov32(first,2*sequence);
+  if(finite_records==0 or metadata_count<@as(u32,finite_records)){arm();}
+  on_published();
+ }
+}
+comptime {
+ if(sender){@initialize_queue(queue_out,.{.color=stream_color});}
+ else{@initialize_queue(queue_in,.{.color=stream_color});@bind_local_task(complete,completion);}
+}

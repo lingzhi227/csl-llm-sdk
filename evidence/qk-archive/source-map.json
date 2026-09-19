@@ -1,0 +1,618 @@
+{
+  "sources": {
+    "examples/qk_archive/qk-archive-hw-compile-001/archive_decode.py": {
+      "source": "hardware/qk-archive-hw-compile-001/archive_decode.py",
+      "source_sha256": "d6a7ea3931522f578f51bc75511e5b50e35ec10233b80c24c8796b42dd1bac78",
+      "published_sha256": "d6a7ea3931522f578f51bc75511e5b50e35ec10233b80c24c8796b42dd1bac78",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/qk-archive-hw-compile-001/attention_kernel.csl": {
+      "source": "hardware/qk-archive-hw-compile-001/attention_kernel.csl",
+      "source_sha256": "7a0331e973fd62a8e70d6eed5de4ae7699874708dd8183b48a85e920ea39f888",
+      "published_sha256": "7a0331e973fd62a8e70d6eed5de4ae7699874708dd8183b48a85e920ea39f888",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/qk-archive-hw-compile-001/attention_owner8.csl": {
+      "source": "hardware/qk-archive-hw-compile-001/attention_owner8.csl",
+      "source_sha256": "4e1647c555179017d722d1f5102def5be481bcd5dd6d01ece7f94edbabe03fa9",
+      "published_sha256": "4e1647c555179017d722d1f5102def5be481bcd5dd6d01ece7f94edbabe03fa9",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/qk-archive-hw-compile-001/capture_store.py": {
+      "source": "hardware/qk-archive-hw-compile-001/capture_store.py",
+      "source_sha256": "1d2fc6340636aa2174211bfab4450df1ae2c802cdc70c3b76eb35c59f26efa28",
+      "published_sha256": "1d2fc6340636aa2174211bfab4450df1ae2c802cdc70c3b76eb35c59f26efa28",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/qk-archive-hw-compile-001/check_capture.py": {
+      "source": "hardware/qk-archive-hw-compile-001/check_capture.py",
+      "source_sha256": "8cf38ddd1660629305c14348b7b3cd98e623b871679a828f31c3f1369ec04307",
+      "published_sha256": "8cf38ddd1660629305c14348b7b3cd98e623b871679a828f31c3f1369ec04307",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/qk-archive-hw-compile-001/compile_hw.py": {
+      "source": "hardware/qk-archive-hw-compile-001/compile_hw.py",
+      "source_sha256": "5b4a1da66d3f329beaeb9527d2d67707f3c794ce3cbd098d0099091b165181fe",
+      "published_sha256": "c4bd21c69c7112dc8c11f4ca4568b0ac0d3e06244fa78917ce8ba13f33cc85fe",
+      "byte_identical": false,
+      "portability_change": "The installed SDK ELF inspector interpreter is selected through CSL_INSPECT_PYTHON."
+    },
+    "examples/qk_archive/qk-archive-hw-compile-001/core/qwen38/__init__.py": {
+      "source": "hardware/qk-archive-hw-compile-001/core/qwen38/__init__.py",
+      "source_sha256": "92977aa9088ee68919bc3eff6b0c1a1e2f5162f15b7b0744ca75d02e63e3a01b",
+      "published_sha256": "92977aa9088ee68919bc3eff6b0c1a1e2f5162f15b7b0744ca75d02e63e3a01b",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/qk-archive-hw-compile-001/core/qwen38/elf_inventory.py": {
+      "source": "hardware/qk-archive-hw-compile-001/core/qwen38/elf_inventory.py",
+      "source_sha256": "7cf549358cfd409d6896fffec1611fa065104a5b2efb2855649e37218328b779",
+      "published_sha256": "7cf549358cfd409d6896fffec1611fa065104a5b2efb2855649e37218328b779",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/qk-archive-hw-compile-001/diagnostic_archive.csl": {
+      "source": "hardware/qk-archive-hw-compile-001/diagnostic_archive.csl",
+      "source_sha256": "07dd7fcf70d2faaccaca951f6364ca30df44882eb09e8d873e3f8dee0bb8ab34",
+      "published_sha256": "07dd7fcf70d2faaccaca951f6364ca30df44882eb09e8d873e3f8dee0bb8ab34",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/qk-archive-hw-compile-001/elf_symbols.py": {
+      "source": "hardware/qk-archive-hw-compile-001/elf_symbols.py",
+      "source_sha256": "3c0e39170507d31479b81813f40cbe37ce66959d820cf48dec7a9a2a195da4b6",
+      "published_sha256": "3c0e39170507d31479b81813f40cbe37ce66959d820cf48dec7a9a2a195da4b6",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/qk-archive-hw-compile-001/exp_kernel.csl": {
+      "source": "hardware/qk-archive-hw-compile-001/exp_kernel.csl",
+      "source_sha256": "1dff6a4550d90bf788f4dd7f167a7240ed6742aefd25e3f7772a3bff58f583f7",
+      "published_sha256": "1dff6a4550d90bf788f4dd7f167a7240ed6742aefd25e3f7772a3bff58f583f7",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/qk-archive-hw-compile-001/head_observer.csl": {
+      "source": "hardware/qk-archive-hw-compile-001/head_observer.csl",
+      "source_sha256": "b68b9cdb2282d20b6e20a69c0193b99fbeeadc211478672cdcb08b82507364bc",
+      "published_sha256": "b68b9cdb2282d20b6e20a69c0193b99fbeeadc211478672cdcb08b82507364bc",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/qk-archive-hw-compile-001/hw00/__init__.py": {
+      "source": "hardware/qk-archive-hw-compile-001/hw00/__init__.py",
+      "source_sha256": "db47c5e2c4bec34d6a920d89c08b2fa813a07ec8a619166eda349991267396b4",
+      "published_sha256": "db47c5e2c4bec34d6a920d89c08b2fa813a07ec8a619166eda349991267396b4",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/qk-archive-hw-compile-001/hw00/job_capture.py": {
+      "source": "hardware/qk-archive-hw-compile-001/hw00/job_capture.py",
+      "source_sha256": "753b2f091de6a7181e8eeb9b9d350d7c647071e427d3acad6c4ef332000367f2",
+      "published_sha256": "753b2f091de6a7181e8eeb9b9d350d7c647071e427d3acad6c4ef332000367f2",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/qk-archive-hw-compile-001/hw00/store.py": {
+      "source": "hardware/qk-archive-hw-compile-001/hw00/store.py",
+      "source_sha256": "d499e04e756091cb6ae690cbbc2b2932bb4323dd4e2a874436821cf00d7b5dce",
+      "published_sha256": "d499e04e756091cb6ae690cbbc2b2932bb4323dd4e2a874436821cf00d7b5dce",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/qk-archive-hw-compile-001/hw00/watchdog.py": {
+      "source": "hardware/qk-archive-hw-compile-001/hw00/watchdog.py",
+      "source_sha256": "8ad3a853d4dfacd1ed8bd289cee8ca63448d9842b2dd3a87834d79f175686940",
+      "published_sha256": "8ad3a853d4dfacd1ed8bd289cee8ca63448d9842b2dd3a87834d79f175686940",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/qk-archive-hw-compile-001/inspect_hw_elf.py": {
+      "source": "hardware/qk-archive-hw-compile-001/inspect_hw_elf.py",
+      "source_sha256": "e9da356360d89a12296d789f45c1674eeb1323da3cf38888c7d0814e890e25cd",
+      "published_sha256": "e9da356360d89a12296d789f45c1674eeb1323da3cf38888c7d0814e890e25cd",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/qk-archive-hw-compile-001/layout.csl": {
+      "source": "hardware/qk-archive-hw-compile-001/layout.csl",
+      "source_sha256": "3a2680836c623b721d6141000f60988157be704d1e7eed95de58f4026a97e1af",
+      "published_sha256": "3a2680836c623b721d6141000f60988157be704d1e7eed95de58f4026a97e1af",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/qk-archive-hw-compile-001/pe.csl": {
+      "source": "hardware/qk-archive-hw-compile-001/pe.csl",
+      "source_sha256": "3749720b18311993d504c8c4923d619cd00cc4ab25067a3de7f02826b1fc2f7e",
+      "published_sha256": "3749720b18311993d504c8c4923d619cd00cc4ab25067a3de7f02826b1fc2f7e",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/qk-archive-hw-compile-001/qk_kernel.csl": {
+      "source": "hardware/qk-archive-hw-compile-001/qk_kernel.csl",
+      "source_sha256": "0670a82b1ccff5188dd964572fd99b56a0151a2db687518f87890f0d2996edb0",
+      "published_sha256": "0670a82b1ccff5188dd964572fd99b56a0151a2db687518f87890f0d2996edb0",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/qk-archive-hw-compile-001/source_gate.py": {
+      "source": "hardware/qk-archive-hw-compile-001/source_gate.py",
+      "source_sha256": "424dd2ad714dc7abaa0ec25edc8812228780d935fa8b5f72293ced06095efdf6",
+      "published_sha256": "424dd2ad714dc7abaa0ec25edc8812228780d935fa8b5f72293ced06095efdf6",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/qk-archive-hw-compile-001/supervisor.py": {
+      "source": "hardware/qk-archive-hw-compile-001/supervisor.py",
+      "source_sha256": "1db94a292bc2129c9187b60c75d4c6d638e69a90ff047e1cb7cf8621e599d5a5",
+      "published_sha256": "1db94a292bc2129c9187b60c75d4c6d638e69a90ff047e1cb7cf8621e599d5a5",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/qk-archive-hw-compile-001/trig_kernel.csl": {
+      "source": "hardware/qk-archive-hw-compile-001/trig_kernel.csl",
+      "source_sha256": "1bef20bacbb075df00559e3b5b77c56a22066681a9a0db49ee96bc384a023b15",
+      "published_sha256": "1bef20bacbb075df00559e3b5b77c56a22066681a9a0db49ee96bc384a023b15",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/qk-archive-hw-compile-001/vector_collect.csl": {
+      "source": "hardware/qk-archive-hw-compile-001/vector_collect.csl",
+      "source_sha256": "0fc9c90dbfae6851d5c77d68e03deff173bd08d1ec2c5f69c506d547ac0b0b94",
+      "published_sha256": "0fc9c90dbfae6851d5c77d68e03deff173bd08d1ec2c5f69c506d547ac0b0b94",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "evidence/qk-archive/qk-archive-hw-compile-001-manifest.json": {
+      "source": "hardware/qk-archive-hw-compile-001/manifest.json",
+      "source_sha256": "175c3bdebb9a8027c55f044f822b8e8be88ea0b0c5bfbf89e768361cf8d13965",
+      "published_sha256": "175c3bdebb9a8027c55f044f822b8e8be88ea0b0c5bfbf89e768361cf8d13965",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/qk-archive-hw-run-002/archive_decode.py": {
+      "source": "hardware/qk-archive-hw-run-002/archive_decode.py",
+      "source_sha256": "d6a7ea3931522f578f51bc75511e5b50e35ec10233b80c24c8796b42dd1bac78",
+      "published_sha256": "d6a7ea3931522f578f51bc75511e5b50e35ec10233b80c24c8796b42dd1bac78",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/qk-archive-hw-run-002/capture_store.py": {
+      "source": "hardware/qk-archive-hw-run-002/capture_store.py",
+      "source_sha256": "1d2fc6340636aa2174211bfab4450df1ae2c802cdc70c3b76eb35c59f26efa28",
+      "published_sha256": "1d2fc6340636aa2174211bfab4450df1ae2c802cdc70c3b76eb35c59f26efa28",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/qk-archive-hw-run-002/check_capture.py": {
+      "source": "hardware/qk-archive-hw-run-002/check_capture.py",
+      "source_sha256": "8cf38ddd1660629305c14348b7b3cd98e623b871679a828f31c3f1369ec04307",
+      "published_sha256": "8cf38ddd1660629305c14348b7b3cd98e623b871679a828f31c3f1369ec04307",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/qk-archive-hw-run-002/compiled_binding.py": {
+      "source": "hardware/qk-archive-hw-run-002/compiled_binding.py",
+      "source_sha256": "05671d28e87964737c2857d685cbe13331c7b2f00baa4e59f86bea8178568690",
+      "published_sha256": "05671d28e87964737c2857d685cbe13331c7b2f00baa4e59f86bea8178568690",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/qk-archive-hw-run-002/hw00/__init__.py": {
+      "source": "hardware/qk-archive-hw-run-002/hw00/__init__.py",
+      "source_sha256": "db47c5e2c4bec34d6a920d89c08b2fa813a07ec8a619166eda349991267396b4",
+      "published_sha256": "db47c5e2c4bec34d6a920d89c08b2fa813a07ec8a619166eda349991267396b4",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/qk-archive-hw-run-002/hw00/job_capture.py": {
+      "source": "hardware/qk-archive-hw-run-002/hw00/job_capture.py",
+      "source_sha256": "753b2f091de6a7181e8eeb9b9d350d7c647071e427d3acad6c4ef332000367f2",
+      "published_sha256": "753b2f091de6a7181e8eeb9b9d350d7c647071e427d3acad6c4ef332000367f2",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/qk-archive-hw-run-002/hw00/store.py": {
+      "source": "hardware/qk-archive-hw-run-002/hw00/store.py",
+      "source_sha256": "d499e04e756091cb6ae690cbbc2b2932bb4323dd4e2a874436821cf00d7b5dce",
+      "published_sha256": "d499e04e756091cb6ae690cbbc2b2932bb4323dd4e2a874436821cf00d7b5dce",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/qk-archive-hw-run-002/hw00/watchdog.py": {
+      "source": "hardware/qk-archive-hw-run-002/hw00/watchdog.py",
+      "source_sha256": "8ad3a853d4dfacd1ed8bd289cee8ca63448d9842b2dd3a87834d79f175686940",
+      "published_sha256": "8ad3a853d4dfacd1ed8bd289cee8ca63448d9842b2dd3a87834d79f175686940",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/qk-archive-hw-run-002/run_hw.py": {
+      "source": "hardware/qk-archive-hw-run-002/run_hw.py",
+      "source_sha256": "c14a3f639fb1f0ee96bc599f67dd95f72528125b5fed1e2deb37d2cac0442c07",
+      "published_sha256": "c14a3f639fb1f0ee96bc599f67dd95f72528125b5fed1e2deb37d2cac0442c07",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/qk-archive-hw-run-002/source_gate.py": {
+      "source": "hardware/qk-archive-hw-run-002/source_gate.py",
+      "source_sha256": "1e2ec6c070181587e8d6271ac488072abc6c9fc442ab513fa0b6bfb7cc9d8fd2",
+      "published_sha256": "1e2ec6c070181587e8d6271ac488072abc6c9fc442ab513fa0b6bfb7cc9d8fd2",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/qk-archive-hw-run-002/supervisor.py": {
+      "source": "hardware/qk-archive-hw-run-002/supervisor.py",
+      "source_sha256": "04b0228839017ec4b6948c84707ca300f7c2ed70747bcf0f9939d234d0658bd5",
+      "published_sha256": "04b0228839017ec4b6948c84707ca300f7c2ed70747bcf0f9939d234d0658bd5",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "evidence/qk-archive/qk-archive-hw-run-002-manifest.json": {
+      "source": "hardware/qk-archive-hw-run-002/manifest.json",
+      "source_sha256": "270ec69304a7d565e10e44ab16377e6a36390d44159e3ff4b425b86b55330ccd",
+      "published_sha256": "270ec69304a7d565e10e44ab16377e6a36390d44159e3ff4b425b86b55330ccd",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "evidence/qk-archive/result.json": {
+      "source": "local/deferred-packets/qk-archive-hw-run-002/result.json",
+      "source_sha256": "1a9d7f248918345af60852d11070c60dd0497101f31cff614ffa68159d8efd14",
+      "published_sha256": "1a9d7f248918345af60852d11070c60dd0497101f31cff614ffa68159d8efd14",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "evidence/qk-archive/progress.json": {
+      "source": "local/deferred-packets/qk-archive-hw-run-002/progress.json",
+      "source_sha256": "422656c97ed8db36f7c121c986991ba93eea11b9eb64e2116c971758c0eb6ad4",
+      "published_sha256": "422656c97ed8db36f7c121c986991ba93eea11b9eb64e2116c971758c0eb6ad4",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "evidence/qk-archive/journal.jsonl": {
+      "source": "local/deferred-packets/qk-archive-hw-run-002/journal.jsonl",
+      "source_sha256": "f29ca3e777b5c90a17bc0ed65cbbc2d87e970d0884ee2cc8c4b74c5f95d48f87",
+      "published_sha256": "f29ca3e777b5c90a17bc0ed65cbbc2d87e970d0884ee2cc8c4b74c5f95d48f87",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "evidence/qk-archive/physical.json": {
+      "source": "local/deferred-packets/qk-archive-hw-run-002/physical.json",
+      "source_sha256": "a9728cea75ab02c4a8dd2ebe2fadbd2b18442e08b2e5c2357a2fac40d57410cd",
+      "published_sha256": "a9728cea75ab02c4a8dd2ebe2fadbd2b18442e08b2e5c2357a2fac40d57410cd",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/layer3-native-fullfit-003/attention_kernel.csl": {
+      "source": "hardware/layer3-native-fullfit-003/attention_kernel.csl",
+      "source_sha256": "7a0331e973fd62a8e70d6eed5de4ae7699874708dd8183b48a85e920ea39f888",
+      "published_sha256": "7a0331e973fd62a8e70d6eed5de4ae7699874708dd8183b48a85e920ea39f888",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/layer3-native-fullfit-003/attention_owner8.csl": {
+      "source": "hardware/layer3-native-fullfit-003/attention_owner8.csl",
+      "source_sha256": "4e1647c555179017d722d1f5102def5be481bcd5dd6d01ece7f94edbabe03fa9",
+      "published_sha256": "4e1647c555179017d722d1f5102def5be481bcd5dd6d01ece7f94edbabe03fa9",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/layer3-native-fullfit-003/compile_hw.py": {
+      "source": "hardware/layer3-native-fullfit-003/compile_hw.py",
+      "source_sha256": "3f573d1ca9e91035a74b8a68518b80dacdf2b296a5923a14ab97d15954cc43f9",
+      "published_sha256": "8b67200211f97ffa59c2c1ca0d33aa95b1a057b60bb2a2d77d002509a4bc9243",
+      "byte_identical": false,
+      "portability_change": "SDK ELF inspector interpreter selected through CSL_INSPECT_PYTHON."
+    },
+    "examples/qk_archive/layer3-native-fullfit-003/core/qwen38/__init__.py": {
+      "source": "hardware/layer3-native-fullfit-003/core/qwen38/__init__.py",
+      "source_sha256": "92977aa9088ee68919bc3eff6b0c1a1e2f5162f15b7b0744ca75d02e63e3a01b",
+      "published_sha256": "92977aa9088ee68919bc3eff6b0c1a1e2f5162f15b7b0744ca75d02e63e3a01b",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/layer3-native-fullfit-003/core/qwen38/elf_inventory.py": {
+      "source": "hardware/layer3-native-fullfit-003/core/qwen38/elf_inventory.py",
+      "source_sha256": "7cf549358cfd409d6896fffec1611fa065104a5b2efb2855649e37218328b779",
+      "published_sha256": "7cf549358cfd409d6896fffec1611fa065104a5b2efb2855649e37218328b779",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/layer3-native-fullfit-003/credit_coordinates.csl": {
+      "source": "hardware/layer3-native-fullfit-003/credit_coordinates.csl",
+      "source_sha256": "3c99564045420bc1462589d66d91fe176b07506b4044ff152e33240112290e08",
+      "published_sha256": "3c99564045420bc1462589d66d91fe176b07506b4044ff152e33240112290e08",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/layer3-native-fullfit-003/credit_head.csl": {
+      "source": "hardware/layer3-native-fullfit-003/credit_head.csl",
+      "source_sha256": "8024ed7838daba2d9ea290565dd3cd338fdbc083dcd38d9d34f8c78f94292177",
+      "published_sha256": "8024ed7838daba2d9ea290565dd3cd338fdbc083dcd38d9d34f8c78f94292177",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/layer3-native-fullfit-003/credit_head_coordinates.csl": {
+      "source": "hardware/layer3-native-fullfit-003/credit_head_coordinates.csl",
+      "source_sha256": "971d3a46843b010d9881c319c17d8c4e7602a8422336cb8cb7c27a736a308183",
+      "published_sha256": "971d3a46843b010d9881c319c17d8c4e7602a8422336cb8cb7c27a736a308183",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/layer3-native-fullfit-003/credit_origin.csl": {
+      "source": "hardware/layer3-native-fullfit-003/credit_origin.csl",
+      "source_sha256": "6f5504be01e20bf12f4b97a7c5bf46306b3460eadc28cdfddd9e6abb9f6a5678",
+      "published_sha256": "6f5504be01e20bf12f4b97a7c5bf46306b3460eadc28cdfddd9e6abb9f6a5678",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/layer3-native-fullfit-003/credit_protocol.csl": {
+      "source": "hardware/layer3-native-fullfit-003/credit_protocol.csl",
+      "source_sha256": "71847ed6092b1dc79e459a9f75e4665ccdcde397498bfd5e270f576775f136c1",
+      "published_sha256": "71847ed6092b1dc79e459a9f75e4665ccdcde397498bfd5e270f576775f136c1",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/layer3-native-fullfit-003/credit_root.csl": {
+      "source": "hardware/layer3-native-fullfit-003/credit_root.csl",
+      "source_sha256": "14f2223f6bd91f6f9da4bda3a26626931457f08c8e0d6ac84acf74f37113e6b6",
+      "published_sha256": "14f2223f6bd91f6f9da4bda3a26626931457f08c8e0d6ac84acf74f37113e6b6",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/layer3-native-fullfit-003/diagnostic_archive.csl": {
+      "source": "hardware/layer3-native-fullfit-003/diagnostic_archive.csl",
+      "source_sha256": "07dd7fcf70d2faaccaca951f6364ca30df44882eb09e8d873e3f8dee0bb8ab34",
+      "published_sha256": "07dd7fcf70d2faaccaca951f6364ca30df44882eb09e8d873e3f8dee0bb8ab34",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/layer3-native-fullfit-003/elf_symbols.py": {
+      "source": "hardware/layer3-native-fullfit-003/elf_symbols.py",
+      "source_sha256": "3c0e39170507d31479b81813f40cbe37ce66959d820cf48dec7a9a2a195da4b6",
+      "published_sha256": "3c0e39170507d31479b81813f40cbe37ce66959d820cf48dec7a9a2a195da4b6",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/layer3-native-fullfit-003/exp_kernel.csl": {
+      "source": "hardware/layer3-native-fullfit-003/exp_kernel.csl",
+      "source_sha256": "1dff6a4550d90bf788f4dd7f167a7240ed6742aefd25e3f7772a3bff58f583f7",
+      "published_sha256": "1dff6a4550d90bf788f4dd7f167a7240ed6742aefd25e3f7772a3bff58f583f7",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/layer3-native-fullfit-003/frame_origin.csl": {
+      "source": "hardware/layer3-native-fullfit-003/frame_origin.csl",
+      "source_sha256": "fef4d3836b27344c4683f923ab3b8ed278996b580de5a9f27374c2770a484c89",
+      "published_sha256": "fef4d3836b27344c4683f923ab3b8ed278996b580de5a9f27374c2770a484c89",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/layer3-native-fullfit-003/gemv_kernel.csl": {
+      "source": "hardware/layer3-native-fullfit-003/gemv_kernel.csl",
+      "source_sha256": "3e92175efe12b28065bb77934c54136db3c9287c68c81877781a0e527354304c",
+      "published_sha256": "3e92175efe12b28065bb77934c54136db3c9287c68c81877781a0e527354304c",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/layer3-native-fullfit-003/head_observer.csl": {
+      "source": "hardware/layer3-native-fullfit-003/head_observer.csl",
+      "source_sha256": "b68b9cdb2282d20b6e20a69c0193b99fbeeadc211478672cdcb08b82507364bc",
+      "published_sha256": "b68b9cdb2282d20b6e20a69c0193b99fbeeadc211478672cdcb08b82507364bc",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/layer3-native-fullfit-003/hw00/__init__.py": {
+      "source": "hardware/layer3-native-fullfit-003/hw00/__init__.py",
+      "source_sha256": "db47c5e2c4bec34d6a920d89c08b2fa813a07ec8a619166eda349991267396b4",
+      "published_sha256": "db47c5e2c4bec34d6a920d89c08b2fa813a07ec8a619166eda349991267396b4",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/layer3-native-fullfit-003/hw00/job_capture.py": {
+      "source": "hardware/layer3-native-fullfit-003/hw00/job_capture.py",
+      "source_sha256": "753b2f091de6a7181e8eeb9b9d350d7c647071e427d3acad6c4ef332000367f2",
+      "published_sha256": "753b2f091de6a7181e8eeb9b9d350d7c647071e427d3acad6c4ef332000367f2",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/layer3-native-fullfit-003/hw00/store.py": {
+      "source": "hardware/layer3-native-fullfit-003/hw00/store.py",
+      "source_sha256": "d499e04e756091cb6ae690cbbc2b2932bb4323dd4e2a874436821cf00d7b5dce",
+      "published_sha256": "d499e04e756091cb6ae690cbbc2b2932bb4323dd4e2a874436821cf00d7b5dce",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/layer3-native-fullfit-003/hw00/watchdog.py": {
+      "source": "hardware/layer3-native-fullfit-003/hw00/watchdog.py",
+      "source_sha256": "8ad3a853d4dfacd1ed8bd289cee8ca63448d9842b2dd3a87834d79f175686940",
+      "published_sha256": "8ad3a853d4dfacd1ed8bd289cee8ca63448d9842b2dd3a87834d79f175686940",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/layer3-native-fullfit-003/input.csl": {
+      "source": "hardware/layer3-native-fullfit-003/input.csl",
+      "source_sha256": "e9b289a13f821df69a08e58e9bf6847f4b542d94d617c60d8df143413d2a61af",
+      "published_sha256": "e9b289a13f821df69a08e58e9bf6847f4b542d94d617c60d8df143413d2a61af",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/layer3-native-fullfit-003/inspect_full_elf.py": {
+      "source": "hardware/layer3-native-fullfit-003/inspect_full_elf.py",
+      "source_sha256": "dcc7c8a03c84770dc52d5ecf3ec8aa3c23bebe594a81a9ca85087c5d8824fbb2",
+      "published_sha256": "dcc7c8a03c84770dc52d5ecf3ec8aa3c23bebe594a81a9ca85087c5d8824fbb2",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/layer3-native-fullfit-003/layer3_pe.csl": {
+      "source": "hardware/layer3-native-fullfit-003/layer3_pe.csl",
+      "source_sha256": "ef2ab0e7fc4de5c8b04c3b851cd2286e1607263de81e9aa6f8f4e1decf43bbb8",
+      "published_sha256": "ef2ab0e7fc4de5c8b04c3b851cd2286e1607263de81e9aa6f8f4e1decf43bbb8",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/layer3-native-fullfit-003/layout.csl": {
+      "source": "hardware/layer3-native-fullfit-003/layout.csl",
+      "source_sha256": "29e8c4d9ead9f6ed855378f189080ac96736836923f05163f31662003c4bfe58",
+      "published_sha256": "29e8c4d9ead9f6ed855378f189080ac96736836923f05163f31662003c4bfe58",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/layer3-native-fullfit-003/line.csl": {
+      "source": "hardware/layer3-native-fullfit-003/line.csl",
+      "source_sha256": "21f8628d937c6e481c24a45747895fb27caa1bd2a6b18d7338e138d492a4a529",
+      "published_sha256": "21f8628d937c6e481c24a45747895fb27caa1bd2a6b18d7338e138d492a4a529",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/layer3-native-fullfit-003/matrix_lane.csl": {
+      "source": "hardware/layer3-native-fullfit-003/matrix_lane.csl",
+      "source_sha256": "58e650bbebf49cd63118b4a281ad1c7affc7ea02521752be634792c687c15eb3",
+      "published_sha256": "58e650bbebf49cd63118b4a281ad1c7affc7ea02521752be634792c687c15eb3",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/layer3-native-fullfit-003/mlp_owner.csl": {
+      "source": "hardware/layer3-native-fullfit-003/mlp_owner.csl",
+      "source_sha256": "9dbaf2f0b456eda22e423c35a294f78ded1d1a24cd1a2cf6150c4c5d0d777bbd",
+      "published_sha256": "9dbaf2f0b456eda22e423c35a294f78ded1d1a24cd1a2cf6150c4c5d0d777bbd",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/layer3-native-fullfit-003/native_colors.csl": {
+      "source": "hardware/layer3-native-fullfit-003/native_colors.csl",
+      "source_sha256": "3868bb5645f6701411aa01cd3da1bdff17000cc7b9c9b2c4ddc1b578941447a4",
+      "published_sha256": "3868bb5645f6701411aa01cd3da1bdff17000cc7b9c9b2c4ddc1b578941447a4",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/layer3-native-fullfit-003/native_epoch.csl": {
+      "source": "hardware/layer3-native-fullfit-003/native_epoch.csl",
+      "source_sha256": "154b198bacd09fd6d989baf53b22bf881e194270b8ccde5fc6bd963e7b6061d5",
+      "published_sha256": "154b198bacd09fd6d989baf53b22bf881e194270b8ccde5fc6bd963e7b6061d5",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/layer3-native-fullfit-003/native_kv_head.csl": {
+      "source": "hardware/layer3-native-fullfit-003/native_kv_head.csl",
+      "source_sha256": "1c149f211e400295968154a6cde60dc35cc3fc6ec31bc10c7e15ce6275e60b57",
+      "published_sha256": "1c149f211e400295968154a6cde60dc35cc3fc6ec31bc10c7e15ce6275e60b57",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/layer3-native-fullfit-003/native_kv_source.csl": {
+      "source": "hardware/layer3-native-fullfit-003/native_kv_source.csl",
+      "source_sha256": "22ad3da4d7da6f837d4c59eb2d6d6438fedf2edbf32efbe6ae921e4dd2024379",
+      "published_sha256": "22ad3da4d7da6f837d4c59eb2d6d6438fedf2edbf32efbe6ae921e4dd2024379",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/layer3-native-fullfit-003/native_receive.csl": {
+      "source": "hardware/layer3-native-fullfit-003/native_receive.csl",
+      "source_sha256": "d7defb8d67cf2630d3cea2c03287c291e7c2b861d0782b887375f3578a1ffe65",
+      "published_sha256": "d7defb8d67cf2630d3cea2c03287c291e7c2b861d0782b887375f3578a1ffe65",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/layer3-native-fullfit-003/nonlinear_kernel.csl": {
+      "source": "hardware/layer3-native-fullfit-003/nonlinear_kernel.csl",
+      "source_sha256": "65313bf5b798ac199f76ddc3fddbbf3de438f9edb0dbd5642763b67bd190a6b0",
+      "published_sha256": "65313bf5b798ac199f76ddc3fddbbf3de438f9edb0dbd5642763b67bd190a6b0",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/layer3-native-fullfit-003/norm_owner.csl": {
+      "source": "hardware/layer3-native-fullfit-003/norm_owner.csl",
+      "source_sha256": "81426362c7911ae4245ce82ad72ec4e21ea5f9b6da1a270c9449e5501c6c106d",
+      "published_sha256": "81426362c7911ae4245ce82ad72ec4e21ea5f9b6da1a270c9449e5501c6c106d",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/layer3-native-fullfit-003/observer.csl": {
+      "source": "hardware/layer3-native-fullfit-003/observer.csl",
+      "source_sha256": "9ea75a76263700344a3a67ad2f04409e87ecb7055c7b60f043231fbd5351da02",
+      "published_sha256": "9ea75a76263700344a3a67ad2f04409e87ecb7055c7b60f043231fbd5351da02",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/layer3-native-fullfit-003/packets.csl": {
+      "source": "hardware/layer3-native-fullfit-003/packets.csl",
+      "source_sha256": "50842405712c5c09fd791adcec25b2d481005efeea3d8c480679c574f0936fbd",
+      "published_sha256": "50842405712c5c09fd791adcec25b2d481005efeea3d8c480679c574f0936fbd",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/layer3-native-fullfit-003/partition-estimate.json": {
+      "source": "hardware/layer3-native-fullfit-003/partition-estimate.json",
+      "source_sha256": "35fdaa1a8283291e80a853d097c5a0a81db6a74de7b93b491b62e105d67d5af1",
+      "published_sha256": "35fdaa1a8283291e80a853d097c5a0a81db6a74de7b93b491b62e105d67d5af1",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/layer3-native-fullfit-003/qk_kernel.csl": {
+      "source": "hardware/layer3-native-fullfit-003/qk_kernel.csl",
+      "source_sha256": "0670a82b1ccff5188dd964572fd99b56a0151a2db687518f87890f0d2996edb0",
+      "published_sha256": "0670a82b1ccff5188dd964572fd99b56a0151a2db687518f87890f0d2996edb0",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/layer3-native-fullfit-003/rms_retained.csl": {
+      "source": "hardware/layer3-native-fullfit-003/rms_retained.csl",
+      "source_sha256": "2df2017a0f38ec65f8f05ad98f12f55162ed996d43ea3388241d975e3052298b",
+      "published_sha256": "2df2017a0f38ec65f8f05ad98f12f55162ed996d43ea3388241d975e3052298b",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/layer3-native-fullfit-003/row_packet.csl": {
+      "source": "hardware/layer3-native-fullfit-003/row_packet.csl",
+      "source_sha256": "a30bfaa6089c261ec971234ac7fdd9bb761d4f3ac1a91da64147a89cdc1b80ba",
+      "published_sha256": "a30bfaa6089c261ec971234ac7fdd9bb761d4f3ac1a91da64147a89cdc1b80ba",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/layer3-native-fullfit-003/selected-programs.json": {
+      "source": "hardware/layer3-native-fullfit-003/selected-programs.json",
+      "source_sha256": "85943ef5b6ffd4d56e2921841215c36d9d84a339c158fe91d939150b1c945837",
+      "published_sha256": "85943ef5b6ffd4d56e2921841215c36d9d84a339c158fe91d939150b1c945837",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/layer3-native-fullfit-003/source_gate.py": {
+      "source": "hardware/layer3-native-fullfit-003/source_gate.py",
+      "source_sha256": "248ca167bd5fa686c66aab9c96aad346d2099724606194d9c0ae7d13aaa6b109",
+      "published_sha256": "248ca167bd5fa686c66aab9c96aad346d2099724606194d9c0ae7d13aaa6b109",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/layer3-native-fullfit-003/supervisor.py": {
+      "source": "hardware/layer3-native-fullfit-003/supervisor.py",
+      "source_sha256": "a3c51143ddd026da97433e169d98ffb1e67467d4a86d7001070447cc25b175f5",
+      "published_sha256": "a3c51143ddd026da97433e169d98ffb1e67467d4a86d7001070447cc25b175f5",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/layer3-native-fullfit-003/trig_kernel.csl": {
+      "source": "hardware/layer3-native-fullfit-003/trig_kernel.csl",
+      "source_sha256": "1bef20bacbb075df00559e3b5b77c56a22066681a9a0db49ee96bc384a023b15",
+      "published_sha256": "1bef20bacbb075df00559e3b5b77c56a22066681a9a0db49ee96bc384a023b15",
+      "byte_identical": true,
+      "portability_change": null
+    },
+    "examples/qk_archive/layer3-native-fullfit-003/vector_collect.csl": {
+      "source": "hardware/layer3-native-fullfit-003/vector_collect.csl",
+      "source_sha256": "0fc9c90dbfae6851d5c77d68e03deff173bd08d1ec2c5f69c506d547ac0b0b94",
+      "published_sha256": "0fc9c90dbfae6851d5c77d68e03deff173bd08d1ec2c5f69c506d547ac0b0b94",
+      "byte_identical": true,
+      "portability_change": null
+    }
+  },
+  "compiled_binary_included": false,
+  "model_payload_included": false,
+  "SDK_distribution_included": false,
+  "portability_edits": 2,
+  "raw_capture_storage": "Mass1 release directory; Mac retains only hash receipts"
+}

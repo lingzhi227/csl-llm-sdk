@@ -1,0 +1,220 @@
+{
+  "status": "accepted_physical_synthetic_archive_alias_fixture",
+  "date_utc": "2026-09-19",
+  "scope": "Physical synthetic four-PE original-kernel alias/archive equivalence; no original-weight neural-layer acceptance",
+  "compile": {
+    "manifest_sha256": "175c3bdebb9a8027c55f044f822b8e8be88ea0b0c5bfbf89e768361cf8d13965",
+    "artifact_sha256": "583e2ef059eb6c04bdadfa31546868417f5f686b44bc9da08364bc455cd95c6c",
+    "application": [
+      4,
+      1
+    ],
+    "fabric": [
+      762,
+      1172
+    ],
+    "offset": [
+      4,
+      1
+    ],
+    "programs": 4,
+    "ordinary_plus_stack_by_role": [
+      42688,
+      18528,
+      19712,
+      41488
+    ],
+    "stack_bytes": 4096,
+    "ceiling": 48128
+  },
+  "runtime": {
+    "manifest_sha256": "270ec69304a7d565e10e44ab16377e6a36390d44159e3ff4b425b86b55330ccd",
+    "normal_stop": true,
+    "simulator": false,
+    "reset_generations": 2,
+    "dependent_decode": false,
+    "driver_seconds": 180.2656591949053,
+    "guarded_seconds": 203.01426234375685,
+    "runtime_limit_seconds": 300,
+    "copies": 13,
+    "H2D": 0,
+    "launches": 6,
+    "host_bytes": 32768,
+    "journal_events": 43,
+    "raw_files": 13,
+    "raw_bytes": 71632,
+    "negative_rejections": 61,
+    "positive_API_assertions": 172,
+    "epochs": [
+      {
+        "status": "passed",
+        "epoch": 1,
+        "request": 7,
+        "reset": 11,
+        "position": 0,
+        "head": 17,
+        "archive_u32_equal": 960,
+        "output_BF16_equal": 256,
+        "source_workspace_poisoned_u32": 1280,
+        "actual_sink_callback_order": 132,
+        "actual_sink_committed": true,
+        "scope": "Synthetic alias/archive and original-kernel equivalence only"
+      },
+      {
+        "status": "passed",
+        "epoch": 2,
+        "request": 7,
+        "reset": 12,
+        "position": 0,
+        "head": 17,
+        "archive_u32_equal": 960,
+        "output_BF16_equal": 256,
+        "source_workspace_poisoned_u32": 1280,
+        "actual_sink_callback_order": 132,
+        "actual_sink_committed": true,
+        "scope": "Synthetic alias/archive and original-kernel equivalence only"
+      }
+    ],
+    "independent_terminal_unassigned_and_PIDs_absent": true,
+    "official_billing_ledger_verified": false
+  },
+  "independent_audit_sha256": "36cf085b1377f41c6d0f90ac7cd6c6de1e4f6ff915ef57c69af0875007dda6d7",
+  "acceptance_record_sha256": "ad08348bfd254278d131971de3ea8d80467cd41489bcc2c622465c7c7037905e",
+  "public_receipt_hashes": {
+    "result.json": "1a9d7f248918345af60852d11070c60dd0497101f31cff614ffa68159d8efd14",
+    "progress.json": "422656c97ed8db36f7c121c986991ba93eea11b9eb64e2116c971758c0eb6ad4",
+    "journal.jsonl": "f29ca3e777b5c90a17bc0ed65cbbc2d87e970d0884ee2cc8c4b74c5f95d48f87",
+    "physical.json": "a9728cea75ab02c4a8dd2ebe2fadbd2b18442e08b2e5c2357a2fac40d57410cd"
+  },
+  "raw_capture_hashes": {
+    "evidence/qk-archive/captures/epoch1_evidence.json": {
+      "path": "captures/epoch1_evidence.json",
+      "bytes": 607,
+      "sha256": "005f2de928234a9e0d25a254693a26a8baa7c3d06315df451d9c60c92a3e5c92"
+    },
+    "evidence/qk-archive/captures/epoch1_archive.json": {
+      "path": "captures/epoch1_archive.json",
+      "bytes": 8781,
+      "sha256": "23b1f6da869f5f84fbbb79314ca6932aaea8f190c63f180b4938a1439a509aea"
+    },
+    "evidence/qk-archive/captures/epoch1_reference.json": {
+      "path": "captures/epoch1_reference.json",
+      "bytes": 8783,
+      "sha256": "c3cde736d23b83571da4979752a1973353cfcf0beb2077860ec5b3d7a8cc2e0d"
+    },
+    "evidence/qk-archive/captures/epoch1_workspace.json": {
+      "path": "captures/epoch1_workspace.json",
+      "bytes": 14139,
+      "sha256": "4fa94e69ce4c87ba072dada92008789a6fd80a3ff9f0925cd7e8bfa142d812d7"
+    },
+    "evidence/qk-archive/captures/epoch1_output.json": {
+      "path": "captures/epoch1_output.json",
+      "bytes": 1591,
+      "sha256": "9c88e1493662aa65e39b9f63f97ddcc997cedceb8b18aaf56ebca956b68bb039"
+    },
+    "evidence/qk-archive/captures/epoch1_baseline_output.json": {
+      "path": "captures/epoch1_baseline_output.json",
+      "bytes": 1600,
+      "sha256": "6d92120da62885f2a3fd8af3ad1aa2c04ef32ce62d0b6207e2eaf987eee7e3ad"
+    },
+    "evidence/qk-archive/captures/epoch2_evidence.json": {
+      "path": "captures/epoch2_evidence.json",
+      "bytes": 612,
+      "sha256": "cad468a17693062ac38e6a5e2ffe4eb8a1cdde80eadddabac9f90d474814240a"
+    },
+    "evidence/qk-archive/captures/epoch2_archive.json": {
+      "path": "captures/epoch2_archive.json",
+      "bytes": 8781,
+      "sha256": "cf71f2b75dce590f5a7680a153983c5d4e800e6d0f3106d4088d4e1eaff298b2"
+    },
+    "evidence/qk-archive/captures/epoch2_reference.json": {
+      "path": "captures/epoch2_reference.json",
+      "bytes": 8783,
+      "sha256": "de4743092a25c1d1064d1986125f0fa1f3c30666bf3f984c2ce980457153bc37"
+    },
+    "evidence/qk-archive/captures/epoch2_workspace.json": {
+      "path": "captures/epoch2_workspace.json",
+      "bytes": 14139,
+      "sha256": "4c1332dcfc3450d8379e192674c96b7a4572e2aadd50569172f7aca07146da4e"
+    },
+    "evidence/qk-archive/captures/epoch2_output.json": {
+      "path": "captures/epoch2_output.json",
+      "bytes": 1591,
+      "sha256": "5877aa8f99c2db062ee3f61826cf506d787aaf1782eb55ad26c32fafc9d86141"
+    },
+    "evidence/qk-archive/captures/epoch2_baseline_output.json": {
+      "path": "captures/epoch2_baseline_output.json",
+      "bytes": 1600,
+      "sha256": "f04a426ae9bee1acb2c1360234b9c84de45fc3748f23a14e0a26965704397af8"
+    },
+    "evidence/qk-archive/captures/negative_evidence.json": {
+      "path": "captures/negative_evidence.json",
+      "bytes": 625,
+      "sha256": "2e96143c9e2ce9e2811393c0d4b6118c550e7dedc83e6e4e38df221c4e391414"
+    }
+  },
+  "preserved_failures": [
+    {
+      "candidate": "qk-archive-sdk-001",
+      "manifest_sha256": "527151fa00695cfd3033cf454c76c557c1848c181348dc4fd30362e17d32e177",
+      "status": "failed_preserved",
+      "phase": "frontend_parse_failure",
+      "reason": "Global comptime pointer cast was unsupported. No ELF or runtime.",
+      "next_change": "Runtime accessors replaced the global cast.",
+      "resources_released": true,
+      "owned_processes_reaped": true,
+      "automatic_retry": false
+    },
+    {
+      "candidate": "qk-archive-sdk-002",
+      "manifest_sha256": "854fdca3d947f5370bca9e96fece5d0049be5400232ebb553f55e7581d042514",
+      "status": "failed_preserved",
+      "phase": "post_compile_inspector_failure",
+      "reason": "Four programs compiled, but the inspector required an optimized-away write-only baseline workspace. No runtime.",
+      "next_change": "The workspace became optional only for the unaliased baseline; all live arrays remained mandatory.",
+      "resources_released": true,
+      "owned_processes_reaped": true,
+      "automatic_retry": false
+    },
+    {
+      "candidate": "qk-archive-sim-001",
+      "manifest_sha256": "91e5d799f27b3dd531444ff2fba341ea10907f77344fb282b3bf1bfd8578bd3d",
+      "status": "failed_preserved",
+      "phase": "native_readback_abort",
+      "reason": "Two raw captures persisted; baseline reference read returned zero bytes and the SDK aborted. No complete epoch or normal stop.",
+      "next_change": "A separately admitted same-value scratch transfer control reused the binaries.",
+      "resources_released": true,
+      "owned_processes_reaped": true,
+      "automatic_retry": false
+    },
+    {
+      "candidate": "qk-archive-sim-002",
+      "manifest_sha256": "b5f38bf25c73424fc808b812d0e15f927d1fcb04aa982794f563bc537fd07de9",
+      "status": "failed_preserved",
+      "phase": "native_readback_abort",
+      "reason": "The activity control failed during the second read pair; one raw capture persisted. No complete epoch or normal stop.",
+      "next_change": "No further simulator retry; an unchanged-CSL four-PE physical compilation was separately admitted.",
+      "resources_released": true,
+      "owned_processes_reaped": true,
+      "automatic_retry": false
+    },
+    {
+      "candidate": "qk-archive-hw-run-001",
+      "manifest_sha256": "d8607921be631a0be4e20fdf92f434d6bd0a09b1359cdb221e0547048b315f17",
+      "status": "failed_preserved",
+      "phase": "host_exit_deadline",
+      "reason": "All thirteen raw captures passed independently, but the 180-second deadline interrupted context exit. The 42-event journal lacks stop_exit.",
+      "next_change": "Only the runtime limit changed to 300 seconds. Fourteen prior files, the driver, all capture checks and the compiled artifact remained unchanged.",
+      "resources_released": true,
+      "owned_processes_reaped": true,
+      "automatic_retry": false
+    }
+  ],
+  "limitations": [
+    "Synthetic inputs, preloaded local KV and two resets at position zero; not dependent token decoding",
+    "No complete original-weight neural layer, full native graph, model generation or inference-latency acceptance",
+    "Source completion only releases its source lease; actual sink receipt and commit are checked separately",
+    "Capture-before-next-prepare is a host contract; there is no automatic host-consumption acknowledgement",
+    "Observed wire callback order is 132 in both resets; both predicate orders are separately tested by actual isolated API calls"
+  ]
+}
