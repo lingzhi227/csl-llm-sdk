@@ -2,7 +2,7 @@
 
 **Building inference for open language models with handwritten Cerebras Systems Language (CSL), targeting sequential execution of three model stages on WSE-3.** We implement the numerical kernels, execution control and persistent model state, and use the Cerebras SDK to compile and run the device programs. The first target is **Qwen3.8-27B text inference**; the longer-term goal is a reusable SDK for related model architectures.
 
-**Working today:** the complete original-weight **5120 → 17408 → 5120 layer-3 MLP runs on physical WSE-3** for four inputs with independent numerical checks. A separate full 64-layer CPU reference generates four tokens with cache restoration. **Current integration:** the complete native layer-3 graph fits across all 33,750 PEs, but execution stops on malformed READY messages. A 136-producer physical fixture now reproduces the corruption: all 408 sender snapshots are correct, while a received payload contains a network-header value. Its strict check fails and its runtime exits normally. Combined-frame transmission and managed receive descriptor comparisons also failed; the cause remains unresolved and **complete neural-layer epochs remain zero**. **Current work:** native control termination passed focused two-PE simulator checks and full fixture compilation, but its physical136-producer comparison also failed at a control-tail boundary. We are investigating concurrent packet handling before original-layer numerics and three sequential stages with state checkpoints. Complete CSL text generation and measured token latency remain ahead.
+**Working today:** the complete original-weight **5120 → 17408 → 5120 layer-3 MLP runs on physical WSE-3** for four inputs with independent numerical checks. A separate full 64-layer CPU reference generates four tokens with cache restoration. **Current integration:** the complete native layer-3 graph fits across all 33,750 PEs, but execution stops on malformed READY messages. A 136-producer physical fixture now reproduces the corruption: all 408 sender snapshots are correct, while a received payload contains a network-header value. Its strict check fails and its runtime exits normally. Combined-frame transmission and managed receive descriptor comparisons also failed; the cause remains unresolved and **complete neural-layer epochs remain zero**. **Current work:** native control now passes a matched three-PE, two-source simulator and physical comparison: all 73 words, complete buffers, first-packet overlap witnesses and final stability are independently checked. The physical 136-producer fixture still fails at a control-tail boundary. We are comparing its request/fan-in lifecycle and scale before original-layer numerics and three sequential stages with state checkpoints. Complete CSL text generation and measured token latency remain ahead.
 
 ## 1. Project design
 
@@ -86,6 +86,18 @@ Full attention/recurrent layers and the three-stage model remain integration wor
 ## 3. Completed development log — newest first
 
 Each **WP** or **HW** is a scoped development milestone. HW00/HW01 use physical WSE-3; earlier WP device results use the SDK simulator, and WP04 is a CPU/source audit. **BF16** means bfloat16 data, and **FP32** means 32-bit floating-point arithmetic. Reports contain numerical thresholds, failure history and reproduction details.
+
+### Native control from two sources · Matched simulator and physical pass · September 19, 2026 (UTC)
+
+The same three-PE short-route program passes on both backends: four packets,
+73 exact words, complete source/frame/RX banks and retained suffixes, strict
+source order, two first-packet lease-overlap witnesses and stable final states.
+The physical job saved seven captures, stopped normally and released its system.
+Actual physical executable sections/task tables and DSR operations match the
+simulator compile. This small qualification leaves the136-producer failure and
+original full-layer execution open; parser018 and all prior failures are retained.
+
+[Source](examples/ready_fanin/native_control/multisource) · [Report](docs/NATIVE-CONTROL-MULTISOURCE.md) · [Evidence](evidence/ready-fanin/native-control/multisource-attempts.json)
 
 ### Native control on physical WSE-3 · Full compile accepted, concurrent protocol failed · September 19, 2026 (UTC)
 

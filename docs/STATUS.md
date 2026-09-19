@@ -17,10 +17,14 @@ now passes focused two-PE simulator checks, including actual message routing.
 The [qualification report](NATIVE-CONTROL-QUALIFICATION.md) preserves the failed
 suites and separates that result from physical fixture repair. The subsequent
 [native-control physical comparison](NATIVE-CONTROL-PHYSICAL.md) also failed,
-with ordinary value3 at the expected control-tail position.
+with ordinary value3 at the expected control-tail position. A smaller matched
+[three-PE two-source comparison](NATIVE-CONTROL-MULTISOURCE.md) now passes on the
+simulator and physical WSE-3, including both causal first-packet overlap witnesses.
+It does not repair or explain the larger failure.
 
 | Component | Current accepted scope |
 |---|---|
+| Native control two-source comparison | Same three-PE program, four packets and73 exact words pass independent simulator and physical checks; complete banks/suffixes, both first-lease witnesses and stable state; normal exit/release, larger fixture still open |
 | Native control physical comparison | Full356-program compile accepted at27,872 bytes including stack; physical004 fails at a control-tail boundary,408 source records exact,13 captures saved, normal stop/release verified; no repair |
 | Native control termination | Separately accepted isolated static-route cases and consecutive 31→8 packets, then actual SDK message routing with both bankA=4; complete buffers/leases/order/suffixes/counts pass; simulator only, physical136 remains open |
 | Managed receive descriptor comparison | Complete 356-PE compile passes at 25,600 bytes including stack; all 13 physical captures byte-identical to combined TX on the same system; strict protocol still fails, normal exit and release verified |

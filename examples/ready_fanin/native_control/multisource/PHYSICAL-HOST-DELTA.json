@@ -1,0 +1,67 @@
+{
+  "scope": "Unbound physical host adapter; no SDK or runtime admission",
+  "parent_sha256": "1f98eab0ee6efde440340a23349a3838a386d3121980ba9242b62959579c39c6",
+  "candidate_sha256": "b320c1a7d14bf562a5a6bbf03c44ab88320e8047c333bf300853eebc6e613538",
+  "replacements": [
+    {
+      "old": "\"\"\"One bounded three-PE simulator run; requires separate exact runtime admission.\"\"\"",
+      "new": "\"\"\"Same accepted capture order and checks, using an entered physical context.\"\"\""
+    },
+    {
+      "old": "import argparse,hashlib,json,os,time",
+      "new": "import json,os,time"
+    },
+    {
+      "old": "from cerebras.sdk.runtime.sdkruntimepybind import SdkRuntime,MemcpyDataType,MemcpyOrder,SimfabConfig,SdkTarget,get_platform",
+      "new": "from capture_store import save,progress\nfrom hw00.store import atomic_json"
+    },
+    {
+      "old": "ROOT=Path(__file__).resolve().parent\n\ndef main(case):",
+      "new": "def capture(root,runner,MemcpyDataType,MemcpyOrder):\n    ROOT=Path(root);case=0"
+    },
+    {
+      "old": "out=ROOT/'cases'/'two-source';out.mkdir(parents=True,exist_ok=False)",
+      "new": "out=ROOT/'evidence';out.mkdir(parents=True,exist_ok=False)"
+    },
+    {
+      "old": "launches=0;runner=None",
+      "new": "launches=0"
+    },
+    {
+      "old": "started=time.monotonic()",
+      "new": "started=time.monotonic()\n    atomic_json(ROOT/'monitor-deadline.json',dict(active=True,deadline_monotonic=started+90,scope='capture and normal context exit after entry'))"
+    },
+    {
+      "old": "        q=out/(label+'.npz')\n        with q.open('xb') as f:np.savez(f,words=words);f.flush();os.fsync(f.fileno())\n        fd=os.open(out,os.O_RDONLY)\n        try:os.fsync(fd)\n        finally:os.close(fd)\n        raw=q.read_bytes();assert len(raw)<=4096 and len(captures)<16\n        receipt=dict(path=str(q.relative_to(ROOT)),bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest(),shape=[width,count])\n        captures.append(receipt);assert sum(r['bytes'] for r in captures)<=1048576\n        copies+=1;host_bytes+=size;event('copy_exit',label=label,receipt=receipt)\n",
+      "new": "        receipt=save(ROOT,label,words);captures.append(receipt)\n        copies+=1;host_bytes+=size;event('copy_exit',label=label,receipt=receipt)\n        progress(ROOT,captures,dict(copies=copies,launches=launches,host_bytes=host_bytes,journal_events=len(journal)))\n"
+    },
+    {
+      "old": "host_bytes+size<=12288",
+      "new": "host_bytes+size<=7748"
+    },
+    {
+      "old": "        event('create_enter');platform=get_platform(None,SimfabConfig(suppress_trace=True,num_threads=1,dump_core=False),SdkTarget.WSE3)\n        runner=SdkRuntime(str(ROOT/'out'),platform);event('create_exit')",
+      "new": "        event('capture_start')"
+    },
+    {
+      "old": "        event('load_enter');runner.load();event('load_exit');event('run_enter');runner.run();event('run_exit')\n",
+      "new": ""
+    },
+    {
+      "old": "            try:runner.stop();normal_stop=True;event('stop_exit')",
+      "new": "            try:\n                runner.stop();normal_stop=runner.closed\n                if not normal_stop:raise ValueError('Actual physical context exit not returned')\n                event('stop_exit');atomic_json(ROOT/'monitor-deadline.json',dict(active=False,reason='normal_exit_returned'))"
+    },
+    {
+      "old": "case=case,hardware=False",
+      "new": "case=case,hardware=True"
+    },
+    {
+      "old": "    with (out/'result.json').open('x') as f:json.dump(result,f,indent=2);f.write('\\n');f.flush();os.fsync(f.fileno())",
+      "new": "    atomic_json(ROOT/'result.json',result)"
+    },
+    {
+      "old": "    if error:raise error\n\nif __name__=='__main__':\n    p=argparse.ArgumentParser();p.add_argument('--case',type=int,required=True);main(p.parse_args().case)",
+      "new": "    if error:raise error\n    return result\n"
+    }
+  ]
+}

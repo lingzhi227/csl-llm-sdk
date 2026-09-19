@@ -78,3 +78,13 @@ in the [two-PE qualification report](NATIVE-CONTROL-QUALIFICATION.md) and
 [Exact own source](../examples/ready_fanin/native_control/physical) |
 [Compact accepted evidence](../evidence/ready-fanin/native-control/physical-attempts.json) |
 [Source hashes](../evidence/ready-fanin/native-control/physical-source-map.json)
+
+
+## Subsequent matched two-source comparison
+
+The same small three-PE program now passes simulator and physical checks for
+four packets and73 words, complete buffers and suffixes, both first-packet lease
+overlap witnesses and a stable final cache. The actual physical job stopped and
+released normally. This leaves the136-producer physical failure above unresolved.
+See the [matched comparison](NATIVE-CONTROL-MULTISOURCE.md) for exact source,
+original acceptance receipts and preserved failure history.

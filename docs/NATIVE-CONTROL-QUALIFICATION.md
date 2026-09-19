@@ -82,3 +82,13 @@ The accepted simulator scope above was followed by full356-program compilation
 and physicalrun004. Compilation passed; the physical protocol failed on ordinary
 value3 at a control-tail boundary. This does not revoke the focused simulator
 results or extend them to136 concurrent producers. See the [physical comparison](NATIVE-CONTROL-PHYSICAL.md).
+
+
+## Subsequent matched two-source comparison
+
+The same small three-PE program now passes simulator and physical checks for
+four packets and73 words, complete buffers and suffixes, both first-packet lease
+overlap witnesses and a stable final cache. The actual physical job stopped and
+released normally. This leaves the136-producer physical failure above unresolved.
+See the [matched comparison](NATIVE-CONTROL-MULTISOURCE.md) for exact source,
+original acceptance receipts and preserved failure history.

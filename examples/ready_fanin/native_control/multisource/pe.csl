@@ -1,0 +1,155 @@
+// Two independently identified senders share the real westward MP route.
+param memcpy_params;param column:u16;
+const sender=column!=0;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const packets=@import_module("packets.csl",.{
+ .sent_task_id=@get_local_task_id(12),.received_task_id=@get_local_task_id(13),
+ .before_sdk=before_sdk,.on_sent=sent,.on_received=received,
+ .before_control=control_started,.on_protocol_error=failed,
+ .diagnostics=sender,.on_sdk_started=frame_started,.initialize_message_routing=true});
+const tc=packets.mp.internal.tc;
+const go_iq=@get_input_queue(3);const go_oq=@get_output_queue(3);
+const notice_iq=@get_input_queue(4);const notice_oq=@get_output_queue(4);
+var state=@zeros([48]u32);var routing=@zeros([8]u32);
+var observed=@zeros([if(sender) 1 else 124]u32);
+var tx_proof=@zeros([if(sender) 128 else 1]u32);
+var payload=@zeros([if(sender) 31 else 1]u32);
+// completions, deliveries, harness errors, protocol error, first-started,
+// first-completed, peer-first-start seen inside own first lease, notice count.
+var book=@zeros([8]u32);
+// source index, GO seen, bad notices, receiver source1/2 next sequence,
+// first-start notice sent, receive order, spare.
+var small=@zeros([8]u16);
+
+fn length_for(owner:u16,index:u16) u16 {
+ return if(owner==1) 8 else if(index==0) 31 else 26;
+}
+fn word_for(owner:u16,index:u16,i:u16) u32 {
+ const tag=(@as(u32,owner)<<16)|(@as(u32,index)<<8);
+ return if(i==0) 0xa1000000|tag else if(i==1) 0xb2000000|tag|@as(u32,length_for(owner,index))
+  else if(i==2) 0 else if(i==3) 0xffffffff else if(i==4) 0x80000000
+  else if(i==5) 0x7fffffff else if(i==6) 0x00290000 else if(i==7) 0x00400128
+  else 0x5a000000|tag|@as(u32,i);
+}
+fn before_sdk(data:[*]u32,length:u16) void {
+ @assert(sender and small[0]<2);var valid=length==length_for(column,small[0]);
+ for(@range(u16,31))|i|{if(data[i]!=word_for(column,small[0],i)){valid=false;}}
+ if(valid){tx_proof[126+small[0]]|=1;}else{book[2]+=1;}
+}
+fn frame_started() void {
+ @assert(sender and small[0]<2 and packets.sending and packets.tx_phase==1);
+ if(small[0]==0){
+  @assert(book[4]==0 and small[5]==0);book[4]=1;small[5]=1;
+  // This callback runs after the accepted asynchronous frame was issued.
+  // Synchronous notification adds no async UT, ACK wait or completion gate.
+  const out=@get_dsd(fabout_dsd,.{.output_queue=notice_oq,.extent=1});
+  @mov32(out,0x53540000|(@as(u32,column)<<8));
+ }
+}
+task peer_started(data:u32) void {
+ @assert(sender);book[7]+=1;
+ const other=if(column==1) @as(u32,2) else @as(u32,1);
+ if(book[7]!=1 or data!=(0x53540000|(other<<8))){small[2]+=1;return;}
+ // Retain the actual first-notice observation, not merely a derived flag.
+ // bits: qualified0, started1, sending2, completed3, index4, completions5:6,
+ // notice count8:15, peer identity16:23. Valid first overlap is peer<<16|0x107.
+ book[6]=(other<<16)|(book[7]<<8)|(book[0]<<5)|(@as(u32,small[0])<<4)
+  |(book[5]<<3)|(@as(u32,packets.sending)<<2)|(book[4]<<1);
+ // Never count a late notification during packet1 as packet0 overlap.
+ if(book[4]==1 and book[5]==0 and book[0]==0 and small[0]==0 and packets.sending){book[6]|=1;}
+}
+fn control_started() void {
+ @assert(sender and small[0]<2);
+ if(packets.sending and packets.tx_phase==2 and book[0]==@as(u32,small[0])){tx_proof[126+small[0]]|=2;}
+ else{book[2]+=1;}
+}
+fn sent() void {
+ @assert(sender and small[0]<2);const index=small[0];const base=index*63;
+ book[0]+=1;if(index==0){book[5]=1;}
+ var valid=!packets.sending and !packets.pending and packets.tx_phase==0;
+ if(valid){tx_proof[126+index]|=4;}
+ for(@range(u16,31))|i|{
+  tx_proof[base+i]=payload[i];
+  if(payload[i]!=word_for(column,index,i)){valid=false;}
+ }
+ for(@range(u16,32))|i|{
+  tx_proof[base+31+i]=packets.transmit_frame[i];
+  const expected=if(i==0) packets.mp.encode_header(0,0,0)|@as(u32,length_for(column,index))
+   else if(i<=length_for(column,index)) word_for(column,index,i-1)
+   else if(index==1 and i<=length_for(column,0)) word_for(column,0,i-1) else @as(u32,0);
+  if(packets.transmit_frame[i]!=expected){valid=false;}
+ }
+ if(!valid){book[2]+=1;return;}
+ if(index==0){
+  // Whole banks above are retained before immediate source reuse.
+  small[0]=1;for(@range(u16,31))|i|{payload[i]=word_for(column,1,i);}
+  packets.send(0,0,&payload,length_for(column,1));
+ }
+}
+fn received(data:[*]u32,length:u16) void {
+ const arrival=@as(u16,book[1]);book[1]+=1;
+ if(sender or arrival>=4){book[2]+=1;return;}
+ // Preserve all31 words, including the retained suffix, in actual arrival order.
+ for(@range(u16,31))|i|{observed[arrival*31+i]=data[i];}
+ const owner=@as(u16,(data[0]>>16)&255);const index=@as(u16,(data[0]>>8)&255);
+ if(owner<1 or owner>2 or index>=2){book[2]+=1;return;}
+ var valid=data[0]==word_for(owner,index,0) and length==length_for(owner,index)
+  and small[owner+2]==index and packets.receiving and packets.rx_phase==3;
+ for(@range(u16,31))|i|{if(i<length and data[i]!=word_for(owner,index,i)){valid=false;}}
+ if(!valid){book[2]+=1;return;}
+ small[owner+2]+=1;small[6]|=((owner-1)*2+index+1)<<(arrival*4);
+}
+fn failed(code:u16) void {if(book[3]==0){book[3]=@as(u32,code);}}
+fn maybe_start() void {
+ if(comptime sender){if(state[0]==2 and small[1]==1 and !packets.sending and book[0]==0 and small[5]==0){
+  packets.send(0,0,&payload,length_for(column,0));
+ }}
+}
+task go(data:u32) void {
+ @assert(sender and data==0x474f3031 and small[1]==0);small[1]=1;maybe_start();
+}
+fn initialize() void {
+ @assert(state[0]==0);
+ if(comptime sender){for(@range(u16,31))|i|{payload[i]=word_for(column,0,i);}}
+ @assert((@get_config(@get_int(tc.addresses.MISC_FABRIC_CFG)/tc.word_size)&4)==0);
+ packets.init();
+ inline for(@range(u16,5))|i|{routing[i]=@as(u32,@get_config(@get_int(tc.addresses.COLOR_CONFIG)/tc.word_size+14+i));}
+ routing[5]=@as(u32,@get_config(@get_int(tc.addresses.SWITCH_CONFIG)/tc.word_size+16*4));
+ routing[6]=@as(u32,@get_config(@get_int(tc.addresses.SWITCH_CONFIG)/tc.word_size+17*4));
+ routing[7]=@as(u32,@get_config(@get_int(tc.addresses.MISC_FABRIC_CFG)/tc.word_size));
+ @assert((routing[7]&4)==4);state[0]=1;state[1]=@as(u32,column);sys.unblock_cmd_stream();
+}
+fn compute() void {
+ @assert(state[0]==1);state[0]=2;
+ if(comptime sender){maybe_start();}else{
+  const out=@get_dsd(fabout_dsd,.{.output_queue=go_oq,.extent=1});@mov32(out,0x474f3031);
+ }
+ sys.unblock_cmd_stream();
+}
+fn snapshot() void {
+ state[2]=book[0];state[3]=book[1];state[4]=book[3];state[5]=book[2];
+ state[6]=@as(u32,small[0]);state[7]=book[4];state[8]=book[5];state[9]=book[6];
+ state[10]=book[7];state[11]=@as(u32,small[2]);state[12]=@as(u32,packets.rx_phase);
+ state[13]=@as(u32,packets.tx_phase);state[14]=@as(u32,packets.sending);
+ state[15]=@as(u32,packets.pending);state[16]=@as(u32,packets.receiving);
+ state[17]=@as(u32,packets.header_waiting);state[18]=@as(u32,packets.protocol_error);
+ state[19]=packets.control_buffer[0];state[20]=packets.header_buffer[0];state[21]=@as(u32,packets.receive_length);
+ state[22]=packets.tail_normal_events[0];state[23]=packets.consumption_events[0];state[24]=packets.consumption_events[1];
+ for(@range(u16,6))|i|{state[25+i]=packets.protocol_events[i];}
+ if(comptime sender){for(@range(u16,16))|i|{state[31+i]=packets.stats[i];}}
+ else{state[31]=@as(u32,small[6]);}
+ state[47]=@as(u32,small[1]);sys.unblock_cmd_stream();
+}
+const state_ptr:[*]u32=&state;const routing_ptr:[*]u32=&routing;const observed_ptr:[*]u32=&observed;
+const proof_ptr:[*]u32=&tx_proof;const buffer_ptr:[*]u32=&packets.receive_buffer;
+comptime {
+ if(sender){
+  @initialize_queue(go_iq,.{.color=@get_color(3)});@bind_data_task(go,@get_data_task_id(go_iq));
+  @initialize_queue(notice_oq,.{.color=if(column==1) @get_color(7) else @get_color(4)});
+  @initialize_queue(notice_iq,.{.color=if(column==1) @get_color(4) else @get_color(7)});
+  @bind_data_task(peer_started,@get_data_task_id(notice_iq));
+ }else{@initialize_queue(go_oq,.{.color=@get_color(3)});}
+ @export_symbol(state_ptr,"state");@export_symbol(routing_ptr,"routing");@export_symbol(observed_ptr,"observed");
+ @export_symbol(proof_ptr,"tx_proof");@export_symbol(buffer_ptr,"received_buffer");
+ @export_symbol(initialize);@export_symbol(compute);@export_symbol(snapshot);
+}

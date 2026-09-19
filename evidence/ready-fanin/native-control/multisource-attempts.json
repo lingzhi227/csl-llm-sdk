@@ -1,0 +1,494 @@
+{
+  "scope": "Independently accepted matched three-PE simulator and physical73-word transport; not formal136 repair or original inference",
+  "attempts": {
+    "syntax018_failure": {
+      "original_file": "CONTROL-SYNTAX-018-FAILURE-ACCEPTANCE.json",
+      "sha256": "30e4f17e5f8302659e9b9e6e8b671a62f0be9460b932bca77c0b115e40f8ffe3",
+      "acceptance": {
+        "candidate": "ready-fanin-control-syntax-018",
+        "manifest_sha256": "3ef6f8b6b80d0b502d0c7ca587d2181af5b8c8f25599a123c637254c12f8c9c8",
+        "accepted_at": "2026-09-19T15:18:27.436423+00:00",
+        "scope": "Accepted compile failure and release evidence only: CSL parser pe.csl108:54 Unexpected character; zero ELF, no simulation/hardware/model qualification.",
+        "executor_reaped": true,
+        "executor_exit": 1,
+        "executor_session": 60465,
+        "executor_reap_chunk": "8d23b9",
+        "independent_release": "CONTROL-SYNTAX-018-RELEASE.json",
+        "unit": "qwen38-job-1fdfe8ef0b584d499abbe4d402b26e93.service",
+        "guard_seconds": 2.132316580042243,
+        "peak_bytes": 215687168,
+        "ELFs": 0,
+        "next": "Source-only minimal CSL syntax correction and full-file scan, fresh019manifest for exactcompile review"
+      }
+    },
+    "syntax019_compile": {
+      "original_file": "CONTROL-SYNTAX-019-ACCEPTANCE.json",
+      "sha256": "65e753ad99b3fdf715433821f97501df5adc61b08a018229351ac570af964e64",
+      "acceptance": {
+        "candidate": "ready-fanin-control-syntax-019",
+        "manifest_sha256": "997b451ff3d9276ec92b308c99a74b91ca2a63f6857d17b39fd9e95e95b5b307",
+        "accepted_at": "2026-09-19T15:25:13.902750+00:00",
+        "scope": "Compiled three-PE realMP two-source73word harness; exact banks/task tables/actual all-functionDSR and source ownership reviewed. Compile only; no runtime,physical136repair or model inference qualification.",
+        "actual_programs": [
+          {
+            "file": "out/bin/out_0_0.elf",
+            "bytes": 41296,
+            "sha256": "e68df47665d357d5687bf05c7f956b526602e38be5f10d46e43304545cc70a26",
+            "ordinary_plus_4096_stack": 15696
+          },
+          {
+            "file": "out/bin/out_1_0.elf",
+            "bytes": 42536,
+            "sha256": "4d42a652ed800082a496f497835b89a7e12ff19b0799aa1568c7747fd58e0b38",
+            "ordinary_plus_4096_stack": 16016
+          },
+          {
+            "file": "out/bin/out_2_0.elf",
+            "bytes": 43336,
+            "sha256": "9121f35c791d2f02c3c35f8c1917421e1a52b28d5344eb8fd6bcb6fde3b82185",
+            "ordinary_plus_4096_stack": 16320
+          }
+        ],
+        "executor_reaped": true,
+        "executor_exit": 0,
+        "executor_session": 31668,
+        "executor_reap_chunk": "a34a8a",
+        "independent_release": "CONTROL-SYNTAX-019-RELEASE.json",
+        "unit": "qwen38-job-951a04f6f9bf4d41a40eb37f204685ff.service",
+        "guard_seconds": 5.287572578992695,
+        "peak_bytes": 487944192,
+        "static_DSR_evidence": "CONTROL-SYNTAX-019-DSR-STATIC.json",
+        "ownership_review": "CONTROL-SYNTAX-019-OWNERSHIP-REVIEW.json",
+        "structural_audit": "CONTROL-SYNTAX-019-INDEPENDENT-AUDIT.json",
+        "next": "Freeze one bounded30/20s simulatorcandidate with exactaccepted3PE files and approvedfirst-observationgeneratedpolicy; no runtimeadmission yet."
+      }
+    },
+    "sim011": {
+      "original_file": "CONTROL-SIM-011-ACCEPTANCE.json",
+      "sha256": "0971b67de7bedce472ba992e59596b4c8968d3b49be423966ed5e2ee5badf515",
+      "acceptance": {
+        "candidate": "ready-fanin-control-sim-011",
+        "manifest_sha256": "1455a3a6b78f3691922f2ad3e2fcd6ef3280f55682d6d00bf7833a0441c2a2ad",
+        "accepted_at": "2026-09-19T15:33:55.237355+00:00",
+        "scope": "Three-PE actual SDK MP sharedtransit two-source4packets73fullu32words; fullsource/frame/RXbank/suffix/per-sourceorder/completecachedstability and bothfirstissued-to-releaseleaseoverlap witnesses passed. No simultaneousDMA/router-cycle proof,physical136repair or modelinference claim.",
+        "executor_session": 29087,
+        "executor_reaped": true,
+        "executor_exit": 0,
+        "executor_reap_chunk": "e8868e",
+        "unit": "qwen38-job-2376b039b98b42328c70eb3a0e9df560.service",
+        "guard_seconds": 4.758996184915304,
+        "peak_bytes": 191991808,
+        "raw_files": 8,
+        "raw_bytes": 6404,
+        "D2H_copies": 8,
+        "host_D2H_bytes": 4292,
+        "launches": 5,
+        "H2D": 0,
+        "normal_stop": true,
+        "arrival_order": [
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            1
+          ]
+        ],
+        "both_first_witnesses": [
+          131335,
+          65799
+        ],
+        "poll_native_counts": [
+          2,
+          4
+        ],
+        "baseline_final_byteequal": true,
+        "raw_audit": "CONTROL-SIM-011-INDEPENDENT-RAW-AUDIT.json",
+        "independent_release": "CONTROL-SIM-011-RELEASE.json",
+        "generated_provenance": "CONTROL-SIM-011-GENERATED-PROVENANCE-ACCEPTANCE.json",
+        "generated_files": {
+          "out/generated/MEMCPY_XY_ROUTES.elf": {
+            "bytes": 888,
+            "sha256": "b1c18955ece4f27a10c629bd02004dfe183b0868231e74904fb56f97170dc443"
+          },
+          "out/generated/coord.elf": {
+            "bytes": 1288,
+            "sha256": "64b269be3d3e820b6d358f607c04afd8eee954c02a59f88e8968eadfb1fa2274"
+          },
+          "out/generated/default.elf": {
+            "bytes": 52720,
+            "sha256": "8dbb1ed3e9b37fa43415ca7305dae3ddc1aad21446d055c23883f721078f2da2"
+          }
+        },
+        "next": "One identical3PEphysicaldeploymentcomparison source-onlycompile preparation; full762x1172 versusSDK10x3 explicitdeploymentconfounder; independentactualfullartifactrequired beforehardware runtime."
+      }
+    },
+    "physical007_compile": {
+      "original_file": "READY-FANIN-HW-COMPILE-007-ACCEPTANCE.json",
+      "sha256": "29236612333e0c4d0c654c5c67ca190f0f7077d54b426698291b0b4261f28319",
+      "acceptance": {
+        "candidate": "ready-fanin-hw-compile-007",
+        "manifest_sha256": "b1a7b273a05169b37f5818ba3b71c063b3674e0b51c6b1fae9867df164c2fb52",
+        "accepted_at": "2026-09-19T15:39:20.035014+00:00",
+        "scope": "Same acceptedSDK019 three-PE two-source73word application compiled for physical762x1172 deployment; actual3ELF/fullbanks/tasktable/all-functionDSR/sourceownership independentlyaccepted. No physicalruntime,full136repair or modelinference qualification.",
+        "artifact_sha256": "fba8f29e54f938d3a85a39dcfe04f431e65c62d7b94cf1826e1257b1653d3cca",
+        "artifact_bytes": 72733,
+        "application_programs": 3,
+        "PEs": 3,
+        "embedded_CSL": 3,
+        "max_ordinary_plus4096": 16320,
+        "ceiling": 48128,
+        "margin": 31808,
+        "actual_programs": [
+          {
+            "file": "compiled/out/bin/out_0_0.elf",
+            "column": 0,
+            "bytes": 41352,
+            "sha256": "57b06b07b1a2b287bc89d3a03fabccf47952cd28d38879c0563c020b610a1ed1",
+            "ordinary_plus_4096_stack": 15696
+          },
+          {
+            "file": "compiled/out/bin/out_1_0.elf",
+            "column": 1,
+            "bytes": 42600,
+            "sha256": "a1b835f47d1c16d219dfb14637e231e13b9ae18b2600c0af299bfead9426a270",
+            "ordinary_plus_4096_stack": 16016
+          },
+          {
+            "file": "compiled/out/bin/out_2_0.elf",
+            "column": 2,
+            "bytes": 43400,
+            "sha256": "4e2e51f38d841a2181cc07ecd654af5e883a5cba84fcb7ade339432e140ec36a",
+            "ordinary_plus_4096_stack": 16320
+          }
+        ],
+        "actual_task_bindings": {
+          "all": [
+            0,
+            6,
+            10,
+            11,
+            12,
+            13,
+            15,
+            16,
+            19,
+            20,
+            21,
+            27,
+            28,
+            29,
+            30,
+            33,
+            34,
+            35,
+            36,
+            37,
+            41
+          ],
+          "senders_add": [
+            3,
+            4
+          ]
+        },
+        "control_payload": "0x00290000",
+        "actual_DSR_mapping": {
+          "receiver": {
+            "RX": [
+              3,
+              4
+            ],
+            "GO_dest": 4,
+            "uninvoked_frame": [
+              2,
+              3
+            ],
+            "uninvoked_copy": [
+              4,
+              2
+            ],
+            "uninvoked_tail": [
+              1,
+              1
+            ],
+            "SDK": [
+              0,
+              0
+            ]
+          },
+          "bothsenders": {
+            "RX": [
+              4,
+              4
+            ],
+            "frame": [
+              2,
+              3
+            ],
+            "copy": [
+              3,
+              2
+            ],
+            "start_notice_dest": 3,
+            "tail": [
+              1,
+              1
+            ],
+            "SDK": [
+              0,
+              0
+            ]
+          }
+        },
+        "source_lifetime_review": "Every actual DSR instruction/name/address matches SDK019. Receiver armedRX DDS3 distinct GO DDS4; senders armedRX DDS4 and activeframeDDS2 distinct synchronousnoticeDDS3 (differentfamily fromframeS1DS3). Copy completesbeforeframeissue. Tail OQ6/defaultUT6 followsframecompletion; source/frame release onlyontailcompletion. RXUT7/IQ6 staysleaseduntilcontrol41consumption. SingledeviceGO/startnotice cannotgate secondsend. Samequalified019 source ordering, not universal dynamic exclusion.",
+        "SDK_code_comparison": "All three text/tasktable and every SHF_EXECINSTR-marked configuration section byte-identical/address-identical toSDK019; ELF files and fabricgeometry differ, completefileequality notclaimed.",
+        "executor_session": 88050,
+        "executor_reaped": true,
+        "executor_exit": 0,
+        "executor_reap_chunk": "9af47f",
+        "job_id": "wsjob-egliwm9pznjjykb9vwk8se",
+        "compile_seconds": 42.502256411,
+        "independent_release": "READY-FANIN-HW-COMPILE-007-RELEASE.json",
+        "structural_audit": "READY-FANIN-HW-COMPILE-007-INDEPENDENT-AUDIT.json",
+        "DSR_audit": "READY-FANIN-HW-COMPILE-007-DSR-STATIC.json",
+        "code_comparison": "READY-FANIN-HW-COMPILE-007-CODE-COMPARISON.json",
+        "backup_verified": true,
+        "placement_sha256": "02cfa17b68405ef8250549b7eb9eca45441224a740737c279fa588a47ad492e9",
+        "runtime_admitted": false,
+        "complete_neural_epochs": 0,
+        "billing_ledger_verified": false
+      }
+    }
+  },
+  "physical005": {
+    "acceptance_sha256": "108b0ece805242041cdde1d31213eb5d8dc641f5d3ecae9e225240559e9480ac",
+    "acceptance": {
+      "candidate": "ready-fanin-hw-run-005",
+      "scope": "One three-PE two-source physical shared-transit four-packet73-word transport qualification; no formal136repair/fullmodel",
+      "manifest_sha256": "4488e8f0c0776912b33cc4d910ed44925591474db924d464a9b09999f8e4b938",
+      "status": "independently_accepted",
+      "simulator": false,
+      "PEs": 3,
+      "concurrent_senders": 2,
+      "packets": 4,
+      "payload_u32_words": 73,
+      "rounds": 1,
+      "reset": false,
+      "complete_original_neural_epochs": 0,
+      "executor_session": 26490,
+      "executor_reaped": true,
+      "executor_exit": 0,
+      "executor_reap_chunk": "468284",
+      "job_id": "wsjob-mueyvunhmwszutd4yzet3n",
+      "independent_release": "READY-FANIN-HW-RUN-005-RELEASE.json",
+      "independent_release_sha256": "f3379bc6ec8da3f398bf1af5c8c4dbe76da2af28ce19dec8de41e9aea41bfb80",
+      "independent_raw_audit": "READY-FANIN-HW-RUN-005-INDEPENDENT-RAW-AUDIT.json",
+      "independent_raw_audit_sha256": "0a390a4f6391e0bec2a376b4dabb5ea9289a74f17da6bbf3615931b7dcb87b9b",
+      "SDK_comparison": "READY-FANIN-HW-RUN-005-SDK-COMPARISON.json",
+      "SDK_comparison_sha256": "e6fbe68843f9b3f1fcbec05cccafb609710b6b437154c9a24e911493bfd40f3c",
+      "raw_files": 7,
+      "raw_bytes": 5564,
+      "host_D2H_bytes": 3716,
+      "launches": 4,
+      "H2D": 0,
+      "normal_stop": true,
+      "journal_records": 27,
+      "wall_seconds": 61.49590025516227,
+      "capture_including_exit_seconds": 8.26049185404554,
+      "first_lease_witnesses": [
+        131335,
+        65799
+      ],
+      "overlap_scope": "Issued-to-software-release intervals only; no simultaneous DMA/router cycle claim",
+      "full_banks_payload_order_suffix_stability": true,
+      "arrival_order": [
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ]
+      ],
+      "six_common_named_raw_byte_equal_SIM011": true,
+      "first_physical_snapshot_equals_SIM011_second_and_final": true,
+      "billing_ledger_verified": false,
+      "at": "2026-09-19T15:47:35.921260+00:00"
+    },
+    "captures": [
+      {
+        "bytes": 840,
+        "path": "evidence/initial-state.npz",
+        "sha256": "aa8a65932d063eb1ae18e24c4a5a48ce6634c3fcba9c5817120216b01227899d",
+        "shape": [
+          3,
+          48
+        ]
+      },
+      {
+        "bytes": 360,
+        "path": "evidence/routing.npz",
+        "sha256": "3fbea959bc82d5eee4e2488ce657f2e2b61bfd7ce69164c97fa58e5e95c42b92",
+        "shape": [
+          3,
+          8
+        ]
+      },
+      {
+        "bytes": 840,
+        "path": "evidence/state-0.npz",
+        "sha256": "5af4e67cc23a6d0f487a3d6175c6c97066ab2218897a66d685617f4f6ad077bf",
+        "shape": [
+          3,
+          48
+        ]
+      },
+      {
+        "bytes": 760,
+        "path": "evidence/observed.npz",
+        "sha256": "65347ae3a32a9d7feedc35667fb9b5aed8169d7bc6ea05ce33beeef0c6d09cda",
+        "shape": [
+          1,
+          124
+        ]
+      },
+      {
+        "bytes": 1288,
+        "path": "evidence/tx-proof.npz",
+        "sha256": "443149ad094d1cb34e2f0c4272cf917db74b72010068554387ee58feb77cc5a3",
+        "shape": [
+          2,
+          128
+        ]
+      },
+      {
+        "bytes": 636,
+        "path": "evidence/rx-banks.npz",
+        "sha256": "1211146220566acfc6a1cc2c40f40259274e17e8b5cf55acd59a938e7a5898b5",
+        "shape": [
+          3,
+          31
+        ]
+      },
+      {
+        "bytes": 840,
+        "path": "evidence/final-state.npz",
+        "sha256": "5af4e67cc23a6d0f487a3d6175c6c97066ab2218897a66d685617f4f6ad077bf",
+        "shape": [
+          3,
+          48
+        ]
+      }
+    ]
+  },
+  "raw_arrays_published": false,
+  "formal136_repair": false,
+  "complete_neural_epochs": 0,
+  "sim011_captures": [
+    {
+      "path": "cases/two-source/initial-state.npz",
+      "bytes": 840,
+      "sha256": "aa8a65932d063eb1ae18e24c4a5a48ce6634c3fcba9c5817120216b01227899d",
+      "shape": [
+        3,
+        48
+      ]
+    },
+    {
+      "path": "cases/two-source/routing.npz",
+      "bytes": 360,
+      "sha256": "3fbea959bc82d5eee4e2488ce657f2e2b61bfd7ce69164c97fa58e5e95c42b92",
+      "shape": [
+        3,
+        8
+      ]
+    },
+    {
+      "path": "cases/two-source/state-0.npz",
+      "bytes": 840,
+      "sha256": "833a699562d84aa1d30cc8f14e645d54709e7897217741bddf4b5af442b917cd",
+      "shape": [
+        3,
+        48
+      ]
+    },
+    {
+      "path": "cases/two-source/state-1.npz",
+      "bytes": 840,
+      "sha256": "5af4e67cc23a6d0f487a3d6175c6c97066ab2218897a66d685617f4f6ad077bf",
+      "shape": [
+        3,
+        48
+      ]
+    },
+    {
+      "path": "cases/two-source/observed.npz",
+      "bytes": 760,
+      "sha256": "65347ae3a32a9d7feedc35667fb9b5aed8169d7bc6ea05ce33beeef0c6d09cda",
+      "shape": [
+        1,
+        124
+      ]
+    },
+    {
+      "path": "cases/two-source/tx-proof.npz",
+      "bytes": 1288,
+      "sha256": "443149ad094d1cb34e2f0c4272cf917db74b72010068554387ee58feb77cc5a3",
+      "shape": [
+        2,
+        128
+      ]
+    },
+    {
+      "path": "cases/two-source/rx-banks.npz",
+      "bytes": 636,
+      "sha256": "1211146220566acfc6a1cc2c40f40259274e17e8b5cf55acd59a938e7a5898b5",
+      "shape": [
+        3,
+        31
+      ]
+    },
+    {
+      "path": "cases/two-source/final-state.npz",
+      "bytes": 840,
+      "sha256": "5af4e67cc23a6d0f487a3d6175c6c97066ab2218897a66d685617f4f6ad077bf",
+      "shape": [
+        3,
+        48
+      ]
+    }
+  ],
+  "comparison": {
+    "six_common_same_name_byte_identical": [
+      "initial-state.npz",
+      "routing.npz",
+      "observed.npz",
+      "tx-proof.npz",
+      "rx-banks.npz",
+      "final-state.npz"
+    ],
+    "physical_first_snapshot_equals_simulator_second_and_final": true,
+    "physical_raw_files": 7,
+    "simulator_raw_files": 8,
+    "complete_suite_file_equality": false,
+    "timing_equality": false
+  }
+}

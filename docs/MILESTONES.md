@@ -2,6 +2,17 @@
 
 Only accepted results are listed below. Unresolved integration work and the remaining scope are tracked in [implementation status](STATUS.md).
 
+## Native control two-source comparison · Matched simulator and physical pass · September 19, 2026 UTC
+
+Three PEs, two independent senders and one shared short route pass the same
+four-packet73-word check on both backends. Full banks and retained suffixes,
+per-source ordering, complete stable state and both first-packet overlap
+witnesses are independently verified. Physical005 saves seven captures and
+exits normally with actual owner reap and independent release. All actual
+physical executable sections/task tables and DSR operations match019. The
+018 parser failure and larger physical136 failure remain preserved. This is
+transport qualification, not a neural epoch. See the [report](NATIVE-CONTROL-MULTISOURCE.md).
+
 ## Native control physical comparison - Accepted compile, failed runtime, September 19, 2026 UTC
 
 All356 programs compiled and passed independent fit/allocation checks at27,872
