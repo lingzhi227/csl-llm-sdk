@@ -60,8 +60,10 @@ to exercise the actual host predicate; it is not another device run.
 A fresh site-authorized build uses SDK2.10.1, WSE3, a9x3 fabric with offset4,1,
 memcpy, one channel and one compile worker. Drivers require CPU affinity0 and a
 fresh output directory per case, one simulator thread and normal stop. Our
-accepted runs used an external30-second guard,20-second child deadline,4GiB
-address/cgroup limit and zero swap. These published drivers alone do not enforce
+accepted single-case runs used a 30-second outer guard; the five-case006 suite
+used 120 seconds and the earlier seven-case004 suite used 160 seconds. Every
+child had a 20-second deadline, CPU0 affinity, a 4GiB address/cgroup limit and
+zero swap. These published drivers alone do not enforce
 the complete site supervisor contract. Historical binaries, admissions, vendor
 source, credentials and raw arrays are not distributed.
 

@@ -48,7 +48,7 @@ and fit evidence, not an all-task dynamic exclusivity or stack high-water proof.
 |009 | Source binding rejects a stale verification contract before SDK execution. The frozen candidate is preserved; no runtime was attempted. |
 |010 | Actual SDK message routing passes the same complete consecutive checks, actual bankA=[4,4],11 raw files, 5,328 bytes and normal stop. |
 
-All attempts were actually waited for, reaped and independently checked for
+All executed attempts were actually waited for, reaped and independently checked for
 resource release. Later runtime candidates pin the three generated SDK files by
 exact path, size and hash in addition to all 11 original compiled files. The
 inventory correction does not retroactively turn003 into a successful suite.
