@@ -1,0 +1,44 @@
+// Shared native/Q transport fixture only; no model inference.
+const memcpy=@import_module("<memcpy/get_params>",.{.width=9,.height=5});
+const coordinates=@import_module("coordinates.csl",.{});
+layout {
+ @set_rectangle(9,5);
+ for(@range(u16,5))|y|{for(@range(u16,9))|x|{
+  var role:u16=0;var id:u16=0;
+  if(y==0 and x<6){role=1;id=x;}
+  if(y==0 and x==8){role=2;}
+  if(y==4 and x<6){role=5;id=x;}
+  for(@range(u16,24))|g|{if(coordinates.q_x[g]==x and coordinates.q_y[g]==y){role=3;id=g;}}
+  for(@range(u16,4))|k|{if(coordinates.kv_x[k]==x and coordinates.kv_y[k]==y){role=4;id=k;}}
+  @set_tile_code(x,y,"pe.csl",.{.memcpy_params=memcpy.get_params(x),.role=role,.id=id,.x=x,.y=y});
+  if(x<6){@set_color_config(x,y,@get_color(6),.{.routes=.{
+   .rx=if(y==0) .{RAMP} else .{NORTH},.tx=if(y==4) .{RAMP} else .{SOUTH}}});}
+ }}
+ for(@range(u16,4))|k|{
+  const sx=coordinates.kv_x[k];const sy=coordinates.kv_y[k];const c=coordinates.colors[k];
+  for(@range(u16,8))|x|{if(x>0 and x<=sx){
+   @set_color_config(x,sy,c,.{.routes=.{.rx=if(x==sx) .{RAMP} else .{EAST},.tx=.{WEST}}});
+  }}
+  for(@range(u16,3))|y|{if(y<=sy){
+   @set_color_config(0,y,c,.{.routes=.{.rx=if(y==sy) .{EAST} else .{SOUTH},
+    .tx=if(y==0) .{RAMP,EAST} else .{NORTH}}});
+  }}
+  for(@range(u16,6))|x|{if(x>0){
+   @set_color_config(x,0,c,.{.routes=.{.rx=.{WEST},.tx=if(x==5) .{RAMP} else .{RAMP,EAST}}});
+  }}
+ }
+ // Fixture-only raw notice: (7,2) -> (8,2) -> (8,0).
+ @set_color_config(7,2,@get_color(10),.{.routes=.{.rx=.{RAMP},.tx=.{EAST}}});
+ for(@range(u16,3))|y|{
+  @set_color_config(8,y,@get_color(10),.{.routes=.{.rx=if(y==2) .{WEST} else .{SOUTH},
+   .tx=if(y==0) .{RAMP} else .{NORTH}}});
+ }
+ @export_name("evidence",[*]u32,false);
+ @export_name("qk",[*]u16,false);
+ @export_name("input",[*]u16,false);
+ @export_name("source",[*]u16,false);
+ @export_name("initialize",fn()void);
+ @export_name("prepare",fn()void);
+ @export_name("compute",fn()void);
+ @export_name("negative_checks",fn()void);
+}

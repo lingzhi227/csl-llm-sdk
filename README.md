@@ -2,7 +2,7 @@
 
 **Building inference for open language models with handwritten Cerebras Systems Language (CSL), targeting sequential execution of three model stages on WSE-3.** We implement the numerical kernels, execution control and persistent model state, and use the Cerebras SDK to compile and run the device programs. The first target is **Qwen3.8-27B text inference**; the longer-term goal is a reusable SDK for related model architectures.
 
-**Working today:** the complete original-weight **5120 → 17408 → 5120 layer-3 MLP runs on physical WSE-3** with four inputs, resident weights, independent numerical checks and verified release. A separate **full 64-layer CPU reference** generates four tokens with original cache restoration and independently checked saved evidence. Earlier bounded SDK milestones cover normalization, recurrent state and selected attention heads. **Current integration:** the complete layer-3 graph compiles, and its synthetic Q/K/V fanout completes in the SDK simulator. The latest physical FIFO diagnostic recorded 20 of 24 attention READY heads and 549 of 576 Q/K/V packet observations; complete neural epochs remain zero. **Current work:** complete K/V fanout to heads 17, 21, 22 and 23, establish the applicable numerical audit, and integrate three sequential stages with state checkpoints. **Still ahead:** complete 64-layer CSL text generation, device stage state restoration and measured token latency. The completed log records each result's exact scope.
+**Working today:** the complete original-weight **5120 → 17408 → 5120 layer-3 MLP runs on physical WSE-3** with four inputs, resident weights, independent numerical checks and verified release. A separate **full 64-layer CPU reference** generates four tokens with original cache restoration and independently checked saved evidence. Earlier bounded SDK milestones cover normalization, recurrent state and selected attention heads. **Current integration:** the complete layer-3 graph compiles, and its synthetic Q/K/V fanout completes in the SDK simulator. The latest physical FIFO diagnostic recorded 20 of 24 attention READY heads and 549 of 576 Q/K/V packet observations; complete neural epochs remain zero. **New transport milestone:** a 45-PE native KV/Q SDK fixture passed three operations, reset, exact raw-data checks and 525 invalid API calls. **Current work:** qualify the complete native head/root programs and original-layer numerics, then integrate three sequential stages with state checkpoints. **Still ahead:** complete 64-layer CSL text generation, device stage state restoration and measured token latency. The completed log records each result's exact scope.
 
 ## 1. Project design
 
@@ -60,6 +60,7 @@ Full attention/recurrent layers and the three-stage model remain integration wor
 | Path | Purpose |
 |---|---|
 | [`csl/kernels/`](csl/kernels) | Reusable handwritten CSL arithmetic kernels. |
+| [`examples/native_kv_sdk/`](examples/native_kv_sdk) | Accepted three-operation native KV/Q transport, durable raw captures and preserved failure history. |
 | [`examples/layer3_fifo_trace/`](examples/layer3_fifo_trace) | Accepted full-layout FIFO diagnostics, finite physical capture and independent raw-word decoders. |
 | [`examples/fifo_trace_sdk/`](examples/fifo_trace_sdk) | Qualified FIFO capacity, device-gated drain and packet/sideband coexistence fixture. |
 | [`examples/layer3/`](examples/layer3) | Original complete layer-3 source and placement; compiled fit is accepted, neural epoch completion remains open. |
@@ -83,6 +84,22 @@ Full attention/recurrent layers and the three-stage model remain integration wor
 
 Each **WP** or **HW** is a scoped development milestone. HW00/HW01 use physical WSE-3; earlier WP device results use the SDK simulator, and WP04 is a CPU/source audit. **BF16** means bfloat16 data, and **FP32** means 32-bit floating-point arithmetic. Reports contain numerical thresholds, failure history and reproduction details.
 
+### Native KV/Q transport · Three SDK operations and reset · September 19, 2026 (UTC)
+
+A 45-PE fixture completed three operations with four independent native KV
+streams, retained Q packets, deliberately delayed receivers and actual source
+leases. Independent review checked 29,184 payload halfwords, 192 canary words,
+525 rejected API calls and thirteen durable raw captures. All 45 compiled
+programs fit within 25,376 bytes including the 4 KiB stack allowance.
+
+The final run reused its accepted binaries, stopped normally in about 197
+seconds and released every owned process. Three earlier failures are preserved:
+a reserved identifier, insufficient readback time, and an overly strict SDK
+auxiliary-file check. This is synthetic transport qualification; complete
+original neural epochs remain zero, and no inference-speed claim is made.
+
+[Source](examples/native_kv_sdk) · [Report](docs/NATIVE-KV-SDK.md) · [Evidence](evidence/native-kv-sdk/acceptance-summary.json)
+
 ### Layer-3 FIFO diagnostics · 20 attention heads ready on physical WSE-3 · September 19, 2026 (UTC)
 
 The full original layer compiled into 563 programs across 33,750 PEs. Actual
@@ -95,8 +112,8 @@ Independent review checked all 50 read locations, 799 journal entries, 380 FIFO
 events and 549 of 576 Q/K/V packet observations. Twenty heads reported READY;
 heads 17, 21, 22 and 23 still lacked K/V data. Complete neural epochs remain zero,
 and the aliased RMS intermediate record prevents the old retained-RMS audit.
-The next source proposal uses receiver-confirmed device credits to advance that
-boundary; it is not yet implemented or qualified. All owned resources were released.
+This diagnostic preceded the native KV/Q SDK fixture described above; its own
+physical progress boundary remains incomplete. All owned resources were released.
 
 [Source](examples/layer3_fifo_trace) · [SDK fixture](examples/fifo_trace_sdk) · [Report](docs/LAYER3-FIFO-TRACE.md) · [Evidence](evidence/layer3-fifo-trace.json)
 

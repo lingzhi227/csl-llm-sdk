@@ -2,6 +2,17 @@
 
 Only accepted results are listed below. Unresolved integration work and the remaining scope are tracked in [implementation status](STATUS.md).
 
+## Native KV/Q SDK transport — Accepted, September 19, 2026 UTC
+
+The 45-PE synthetic fixture passed three normal operations including a reset,
+29,184 exact payload halfwords, 192 canaries, deliberately held streams and actual
+source/receiver ownership. It rejected 525 invalid lifecycle API calls. Thirteen
+immutable captures, 47 journal events and normal stop were independently checked.
+The runtime reused 63 accepted compilation files; peak memory was 220,430,336
+bytes and guarded time 197.475793 seconds. All owned resources were released.
+Three failed attempts remain documented. This is transport qualification, not
+a complete original neural layer or performance result. See [report](NATIVE-KV-SDK.md).
+
 ## Original layer 3 FIFO diagnostics — Accepted diagnostic, September 19, 2026 UTC
 
 A 16-PE SDK fixture qualified finite FIFO capacity/device-gated drain and packet

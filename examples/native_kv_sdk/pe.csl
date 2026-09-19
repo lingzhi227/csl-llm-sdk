@@ -1,0 +1,402 @@
+// Uncompiled shared native/Q fixture. Three normal epochs, then isolated negatives.
+param memcpy_params;param role:u16;param id:u16;param x:u16;param y:u16;
+param window:u16=6;
+const head=role==1;const origin=role==2;const query=role==3;
+const native=role==4;const sink=role==5;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const clock=@import_module("<time>");
+const coordinates=@import_module("coordinates.csl",.{});
+const protocol=@import_module("credit_protocol.csl",.{});
+const hc=@import_module(if(head) "credit_head.csl" else "<empty>",if(head) .{.expected_slots=15} else .{});
+const rc=@import_module(if(query) "credit_root.csl" else "<empty>",.{});
+const oc=@import_module(if(origin) "credit_origin.csl" else "<empty>",if(origin) .{
+ .root_count=24,.root_ids=coordinates.ids,.expected_heads=63} else .{});
+const nh=@import_module(if(head) "native_kv_head.csl" else "<empty>",if(head) .{
+ .stream_colors=coordinates.colors,.on_retained=native_retained,.on_error=native_failure} else .{});
+const ns=@import_module(if(native) "native_kv_source.csl" else "<empty>",if(native) .{
+ .stream_color=coordinates.colors[id],.on_released=native_released,.on_error=native_failure} else .{});
+const observer=@import_module(if(head or sink) "head_observer.csl" else "<empty>",if(head or sink) .{
+ .sender=head,.finite_records=24,.fill=fill_observer,.on_published=published} else .{});
+const packets=@import_module("packets.csl",.{.sent_task_id=@get_local_task_id(12),
+ .received_task_id=@get_local_task_id(13),.on_sent=sent,.on_received=received,.diagnostics=true});
+const rows=@import_module(if(query) "row_packet.csl" else "<empty>",if(query) .{
+ .source_role=true,.send=send_row,.on_source_released=row_released,.on_row_received=unused_row} else .{});
+// Deliberately separate pure state instance for device API rejection checks.
+const negative=@import_module("native_epoch.csl",.{.expected_mask=3,.owner_limit=2});
+const service_id=@get_local_task_id(17);
+const RELEASE_SOURCE:u32=19;
+// Fixture-only independent notice proves native UT6 was armed while blocked.
+const raw_dest=@get_dsr(dsr_dest,2);const raw_source=@get_dsr(dsr_src1,2);
+const raw_iq=@get_input_queue(4);const raw_oq=@get_output_queue(4);
+const raw_task=@get_local_task_id(19);
+var raw_word=@zeros([1]u32);var raw_live:bool=false;var notice_received:bool=false;
+var evidence=@zeros([128]u32);
+var qk_storage=@zeros([if(head) 516 else 1]u16);
+var input_storage=@zeros([if(head) 1028 else 1]u16);
+var source_storage=@zeros([if(query or native) 132 else 1]u16);
+var timestamp=@zeros([3]u16);
+var tx=@zeros([8]u32);
+var epoch:u16=0;var reset:u32=11;var position:u32=0;var operation:u16=0;
+var waiting:bool=false;var done:bool=false;var failed:bool=false;var initialized:bool=false;
+var tx_kind:u32=0;var ready_pending:bool=false;var ready_released:bool=false;
+var query_copied:bool=false;var native_held:bool=false;var native_hold_slot:u16=0;
+var source_held:bool=false;var release_sent:bool=false;
+var event_code:u32=0;var native_order:u32=0;var native_count:u16=0;
+var negative_count:u32=0;
+fn wake() void {@activate(service_id);}
+fn fail(code:u32) void {failed=true;evidence[0]|=code;}
+fn native_failure() void {fail(1);}
+fn unused_row(data:[*]u16,phase:u16,group:u16) void {fail(2);}
+fn stamp(slot:u16) void {
+ clock.get_timestamp(&timestamp);
+ evidence[96+2*slot]=@as(u32,timestamp[0])|(@as(u32,timestamp[1])<<16);
+ evidence[97+2*slot]=@as(u32,timestamp[2]);
+}
+fn pattern(stream:u16,index:u16) u16 {
+ // Bit movement includes signed zero and subnormals, without FP conversion.
+ if(index==0){return 0;}if(index==1){return 0x8000;}
+ if(index==2){return 1;}if(index==3){return 0x8001;}
+ const magnitude:u16=0x3e00+@as(u16,(@as(u32,stream)*131+@as(u32,epoch)*37+@as(u32,index))%512);
+ return magnitude|(if(index%2==0) @as(u16,0) else @as(u16,0x8000));
+}
+fn notify(code:u32) void {
+ if(comptime head){event_code=code;observer.changed();}
+}
+fn fill_observer(target:[*]u32) void {
+ if(comptime head){
+  for(@range(u16,30))|i|{target[i+1]=0;}
+  target[1]=0x4e4b5631;target[2]=1;target[3]=@as(u32,epoch);target[4]=@as(u32,id);
+  target[5]=event_code;target[6]=@as(u32,nh.lifecycle.started);target[7]=@as(u32,nh.lifecycle.live);
+  target[8]=@as(u32,nh.lifecycle.completed);target[9]=@as(u32,nh.retained_mask);
+  target[10]=@as(u32,hc.retained_slots);target[11]=evidence[0];
+ }
+}
+fn published() void {
+ if(comptime sink){
+  if(observer.protocol_error){fail(4);return;}
+  if(observer.sequence%8==0){
+   if(observer.snapshot[3]!=@as(u32,epoch) or observer.snapshot[4]!=@as(u32,id) or
+      observer.snapshot[5]!=8 or observer.snapshot[7]!=0 or observer.snapshot[9]!=15 or observer.snapshot[11]!=0){fail(4);return;}
+   done=true;wake();
+  }
+ }
+}
+fn capture() void {
+ for(@range(u16,16))|i|{evidence[64+i]=packets.stats[i];}
+ evidence[8]=if(done) @as(u32,1) else @as(u32,0);
+ if(comptime head){
+  evidence[16]=@as(u32,nh.lifecycle.started);evidence[17]=@as(u32,nh.lifecycle.live);
+  evidence[18]=@as(u32,nh.lifecycle.completed);evidence[19]=@as(u32,nh.lifecycle.completions);
+  evidence[20]=@as(u32,nh.retained_mask);evidence[21]=if(nh.lifecycle.retired) @as(u32,1) else @as(u32,0);
+  evidence[22]=nh.lifecycle.errors;evidence[23]=nh.lifecycle.rejected;
+  evidence[24]=@as(u32,hc.retained_rows);evidence[25]=@as(u32,hc.receipt_sends);
+  evidence[26]=@as(u32,hc.receipt_releases);evidence[27]=@as(u32,hc.retained_slots);
+  evidence[28]=hc.errors;evidence[29]=@as(u32,hc.pending_while_inflight);
+  evidence[30]=native_order;evidence[31]=@as(u32,native_count);evidence[32]=observer.sequence;
+ }else if(comptime native){
+  evidence[16]=@as(u32,ns.lifecycle.started);evidence[17]=@as(u32,ns.lifecycle.live);
+  evidence[18]=@as(u32,ns.lifecycle.completed);evidence[19]=@as(u32,ns.lifecycle.completions);
+  evidence[21]=if(ns.lifecycle.retired) @as(u32,1) else @as(u32,0);
+  evidence[22]=ns.lifecycle.errors;evidence[23]=ns.lifecycle.rejected;
+ }else if(comptime query){
+  evidence[24]=@as(u32,rc.grants);evidence[25]=@as(u32,rc.source_completions);
+  evidence[26]=@as(u32,rc.receipts);evidence[27]=@as(u32,rc.rows_retired);
+  evidence[28]=rc.errors;evidence[29]=if(rc.done_sent) @as(u32,1) else @as(u32,0);
+ }else if(comptime origin){
+  evidence[24]=@as(u32,oc.granted_count);evidence[25]=@as(u32,oc.done_count);
+  evidence[26]=oc.ready_mask;evidence[27]=@as(u32,oc.maximum_active);
+  evidence[28]=oc.errors;evidence[29]=@as(u32,oc.grant_source_completions);
+  evidence[30]=oc.active_mask;evidence[31]=@as(u32,oc.active_count);
+ }else if(comptime sink){
+  evidence[32]=observer.sequence;evidence[33]=if(observer.active) @as(u32,1) else @as(u32,0);
+  evidence[34]=if(observer.protocol_error) @as(u32,1) else @as(u32,0);
+ }
+}
+fn quiescent() bool {
+ if(comptime head){return hc.quiescent() and nh.quiescent() and ready_released and !native_held;}
+ if(comptime native){return ns.quiescent() and !source_held;}
+ if(comptime query){return rc.quiescent();}
+ if(comptime origin){return oc.quiescent();}
+ if(comptime sink){return observer.sequence==@as(u32,8*epoch) and (epoch<3 or !observer.active);}
+ return true;
+}
+fn finish() void {
+ if(waiting and done and !failed and !packets.sending and !packets.receiving and
+    !ready_pending and !raw_live and quiescent()){
+  capture();stamp(9);waiting=false;sys.unblock_cmd_stream();
+ }
+}
+fn initialize() void {
+ if(initialized){fail(8);return;}
+ packets.init();clock.enable_tsc();initialized=true;
+ if(comptime head or sink){observer.init();}
+ sys.unblock_cmd_stream();
+}
+fn prepare() void {
+ if(!initialized or failed or waiting or packets.sending or packets.receiving or epoch>=3 or
+    raw_live or (epoch>0 and (!done or !quiescent()))){fail(16);return;}
+ epoch+=1;reset=if(epoch==3) @as(u32,12) else @as(u32,11);
+ position=if(epoch==2) @as(u32,1) else @as(u32,0);operation=0;
+ for(@range(u16,128))|i|{evidence[i]=0;}
+ evidence[1]=@as(u32,role);evidence[2]=@as(u32,id);evidence[3]=@as(u32,epoch);
+ evidence[4]=reset;evidence[5]=position;evidence[6]=@as(u32,operation);evidence[7]=@as(u32,window);
+ done=false;ready_pending=false;ready_released=false;query_copied=false;raw_live=false;notice_received=false;stamp(0);
+ native_held=false;source_held=false;release_sent=false;native_order=0;native_count=0;
+ if(comptime head){
+  for(@range(u16,516))|i|{qk_storage[i]=0x5aa5;}
+  for(@range(u16,1028))|i|{input_storage[i]=0x5aa5;}
+  const qok=hc.begin(7,reset,position,2,operation,id);if(!qok){fail(32);return;}
+  const nok=nh.begin(7,reset,position,2,operation,id);if(!nok){fail(32);return;}
+  native_held=(epoch==1 and id==5) or (epoch==2 and id==0) or (epoch==3 and id==3);
+  native_hold_slot=if(epoch==1) @as(u16,0) else if(epoch==2) @as(u16,3) else @as(u16,1);
+  if(native_held){
+   if(native_hold_slot==0){@block(@get_ut_id(2));}
+   else if(native_hold_slot==1){@block(@get_ut_id(3));}
+   else{@block(@get_ut_id(5));}
+  }
+  const armed=nh.arm(@ptrcast([*]u16,&qk_storage[258]),@ptrcast([*]u16,&input_storage[514]));
+  if(!armed){fail(32);return;}notify(1);
+ }
+ if(comptime query or native){
+  source_storage[0]=0x5aa5;source_storage[1]=0x5aa5;source_storage[130]=0x5aa5;source_storage[131]=0x5aa5;
+  const stream:u16=if(query) id else @as(u16,96)+id;
+  for(@range(u16,128))|i|{source_storage[2+i]=pattern(stream,i);}
+ }
+ if(comptime query){const ok=rc.begin(7,reset,position,2,operation,1,id);if(!ok){fail(32);return;}}
+ if(comptime native){const ok=ns.begin(7,reset,position,2,operation,id);if(!ok){fail(32);return;}}
+ if(comptime origin){
+  const ok=oc.begin(7,reset,position,2,operation,window);if(!ok){fail(32);return;}
+  if(epoch==2){
+   raw_live=true;const mem=@get_dsd(mem1d_dsd,.{.base_address=&raw_word,.extent=1});
+   const incoming=@get_dsd(fabin_dsd,.{.input_queue=raw_iq,.extent=1,.simd_mode=.{.simd_off=true}});
+   @load_to_dsr(raw_dest,mem);@load_to_dsr(raw_source,incoming,.{.async=true,.activate=raw_task,.ut_id=@get_ut_id(4)});
+   @mov32(raw_dest,raw_source,.{.async=true});
+  }
+ }
+ sys.unblock_cmd_stream();
+}
+fn compute() void {
+ if(waiting or failed or epoch==0 or epoch>3){fail(64);return;}
+ waiting=true;stamp(10);
+ if(comptime origin){const ok=oc.mark_injected();if(!ok){fail(64);return;}}
+ if(comptime query){const ok=rc.mark_output_ready();if(!ok){fail(64);return;}}
+ if(comptime native){
+  source_held=epoch==2 and id==3;if(source_held){@block(@get_ut_id(6));}
+  stamp(3);const ok=ns.send(@ptrcast([*]u16,&source_storage[2]));if(!ok){fail(64);return;}
+  if(source_held){
+   raw_word[0]=0xcafe0002;raw_live=true;
+   const mem=@get_dsd(mem1d_dsd,.{.base_address=&raw_word,.extent=1});
+   const out=@get_dsd(fabout_dsd,.{.output_queue=raw_oq,.extent=1,.simd_mode=.{.simd_off=true}});
+   @load_to_dsr(raw_dest,out,.{.async=true,.activate=raw_task,.ut_id=@get_ut_id(4)});
+   @load_to_dsr(raw_source,mem);@mov32(raw_dest,raw_source,.{.async=true});
+  }
+ }
+ if(comptime role==0){done=true;}
+ wake();
+}
+task raw_complete() void {
+ if(!raw_live or epoch!=2 or raw_word[0]!=0xcafe0002){fail(128);return;}
+ raw_live=false;evidence[40]+=1;
+ if(comptime origin){notice_received=true;}
+ else if(comptime native){if(id!=3){fail(128);return;}}
+ else{fail(128);return;}
+ wake();
+}
+fn release_head_if_ready() void {
+ if(comptime head){if(native_held and query_copied){
+  const others:u16=15^(@as(u16,1)<<native_hold_slot);
+  if((nh.retained_mask&others)==others){
+   evidence[36]+=1;native_held=false;
+   if(native_hold_slot==0){@unblock(@get_ut_id(2));}
+   else if(native_hold_slot==1){@unblock(@get_ut_id(3));}
+   else{@unblock(@get_ut_id(5));}
+  }
+ }}
+}
+fn native_retained(slot:u16) void {
+ if(comptime head){
+  if(native_count>=4){fail(128);return;}
+  native_order|=@as(u32,slot)<<(2*native_count);native_count+=1;stamp(3+slot);
+  notify(3+@as(u32,slot));release_head_if_ready();wake();
+ }
+}
+fn source_intact() bool {
+ if(comptime query or native){
+  const stream:u16=if(query) id else @as(u16,96)+id;
+  for(@range(u16,128))|i|{if(source_storage[2+i]!=pattern(stream,i)){return false;}}
+  return source_storage[0]==0x5aa5 and source_storage[1]==0x5aa5 and source_storage[130]==0x5aa5 and source_storage[131]==0x5aa5;
+ }
+ return false;
+}
+fn native_released() void {
+ if(comptime native){
+  if(source_held){fail(128);return;}
+  if(!source_intact()){fail(256);return;}
+  stamp(4);const ok=ns.retire(7,reset,position,2,operation);if(!ok){fail(128);return;}
+  evidence[35]=1;done=true;wake();
+ }
+}
+fn copy_query() void {
+ if(comptime head){
+  if(query_copied or hc.retained_slots!=15){fail(256);return;}
+  if(nh.lifecycle.live!=0){evidence[35]+=1;}
+  // Same256-iteration Q/raw-gate preservation copies as the full head owner.
+  for(@range(u16,256))|i|{qk_storage[2+i]=input_storage[2+i];input_storage[770+i]=input_storage[258+i];}
+  query_copied=true;evidence[37]+=1;stamp(2);notify(2);release_head_if_ready();
+ }
+}
+fn consume() bool {
+ if(comptime head){
+  if(!query_copied or native_count!=4 or packets.receiving){return false;}
+  for(@range(u16,512))|i|{
+   if(input_storage[2+i]!=pattern(4*id+i/128,i%128)){return false;}
+   if(i<256 and qk_storage[2+i]!=pattern(4*id+i/128,i%128)){return false;}
+  }
+  for(@range(u16,256))|i|{
+   if(qk_storage[258+i]!=pattern(96+i/128,i%128) or
+      input_storage[514+i]!=pattern(98+i/128,i%128) or
+      input_storage[770+i]!=pattern(4*id+2+i/128,i%128)){return false;}
+  }
+  if(qk_storage[0]!=0x5aa5 or qk_storage[1]!=0x5aa5 or qk_storage[514]!=0x5aa5 or qk_storage[515]!=0x5aa5 or
+     input_storage[0]!=0x5aa5 or input_storage[1]!=0x5aa5 or input_storage[1026]!=0x5aa5 or input_storage[1027]!=0x5aa5){return false;}
+  evidence[9]+=1;return true;
+ }
+ return false;
+}
+fn header(kind:u32) void {
+ tx[0]=kind;tx[1]=7;tx[2]=reset;tx[3]=position;tx[4]=2;tx[5]=@as(u32,operation);tx[6]=@as(u32,id);tx[7]=0;
+}
+fn send_row(dx:u16,dy:u16,data:[*]u32,length:u16) void {tx_kind=1;packets.send(dx,dy,data,length);}
+fn row_released(phase:u16) void {
+ if(comptime query){const ok=rc.mark_source_complete();if(!ok){fail(512);return;}wake();}
+}
+fn sent() void {
+ if(comptime origin){
+  if(tx_kind==protocol.GRANT){const ok=oc.grant_source_complete();if(!ok){fail(512);return;}}
+  else if(tx_kind!=RELEASE_SOURCE){fail(512);return;}
+ }else if(comptime query){
+  if(tx_kind==1){rows.sent();}
+  else if(tx_kind==protocol.ROOT_DONE){const ok=rc.done_source_complete();if(!ok){fail(512);return;}done=true;}
+  else{fail(512);return;}
+ }else if(comptime head){
+  if(tx_kind==protocol.ROW_CONSUMED){const ok=hc.receipt_source_complete();if(!ok){fail(512);return;}}
+  else if(tx_kind==10){ready_released=true;done=true;stamp(8);notify(8);}
+  else{fail(512);return;}
+ }else{fail(512);return;}
+ wake();
+}
+fn received(data:[*]u32,length:u16) void {
+ if(failed){return;}
+ if(length<8 or data[1]!=7 or data[2]!=reset or data[3]!=position or data[4]!=2){fail(1024);return;}
+ if(comptime origin){
+  const ok=if(data[0]==protocol.ROOT_DONE) oc.receive_done(data,length)
+           else if(data[0]==10) oc.receive_ready(data,length) else false;
+  if(!ok){fail(1024);return;}
+  if(oc.done_count==1){stamp(1);}
+ }else if(comptime query){
+  const ok=if(data[0]==protocol.GRANT) rc.receive_grant(data,length)
+           else if(data[0]==protocol.ROW_CONSUMED) rc.receive_receipt(data,length) else false;
+  if(!ok){fail(1024);return;}
+ }else if(comptime head){
+  const checked=hc.validate_fragment(data,length);if(!checked){fail(1024);return;}
+  if(nh.lifecycle.live!=0){evidence[38]+=1;}
+  const offset:u16=@as(u16,data[6]%4)*128+2*@as(u16,data[7]);
+  for(@range(u16,23))|i|{if(i<length-8){
+   input_storage[2+offset+2*i]=@as(u16,data[8+i]&0xffff);
+   input_storage[3+offset+2*i]=@as(u16,data[8+i]>>16);
+  }}
+  const committed=hc.commit_fragment();if(!committed){fail(1024);return;}
+  if(hc.retained_slots==15 and !query_copied){copy_query();}
+ }else if(comptime native){
+  if(length!=8 or data[0]!=RELEASE_SOURCE or data[5]!=@as(u32,operation) or data[6]!=3 or data[7]!=0 or
+     epoch!=2 or id!=3 or !source_held or ns.lifecycle.live!=1 or !packets.receiving){fail(1024);return;}
+  evidence[36]+=1;source_held=false;@unblock(@get_ut_id(6));
+ }else{fail(1024);return;}
+ wake();
+}
+fn pump() void {
+ if(failed or packets.sending){return;}
+ if(comptime head){
+  if(hc.take_receipt(&tx)){
+   const group=hc.receipt_group;tx_kind=protocol.ROW_CONSUMED;
+   packets.send(coordinates.q_x[group],coordinates.q_y[group],&tx,8);return;
+  }
+  if(ready_pending){ready_pending=false;header(10);tx[5]=@as(u32,operation)+1;tx_kind=10;packets.send(8,0,&tx,8);return;}
+ }else if(comptime origin){
+  if(epoch==2 and notice_received and oc.done_count>=12 and !release_sent){
+   header(RELEASE_SOURCE);tx[6]=3;tx_kind=RELEASE_SOURCE;release_sent=true;packets.send(7,2,&tx,8);return;
+  }
+  if(oc.take_grant(&tx)){
+   const group=oc.grant_tx_id;tx_kind=protocol.GRANT;packets.send(coordinates.q_x[group],coordinates.q_y[group],&tx,8);return;
+  }
+ }else if(comptime query){
+  if(rc.done_pending){const ok=rc.take_done(&tx);if(!ok){fail(2048);return;}
+   tx_kind=protocol.ROOT_DONE;packets.send(8,0,&tx,8);return;}
+  if(rc.can_start_row()){
+   const ok=rc.start_row();if(!ok){fail(2048);return;}
+   rows.begin(7,reset,position,2,1,operation,id,128);
+   rows.transmit(id/4,0,@ptrcast([*]u16,&source_storage[2]));return;
+  }
+ }
+}
+task service() void {
+ if(failed or packets.receiving or !waiting){return;}
+ if(comptime query){if(rc.joined()){
+  if(!source_intact()){fail(4096);return;}evidence[35]=1;
+  const ok=rc.retire_row();if(!ok){fail(4096);return;}
+ }}
+ if(comptime head){if(hc.can_compute() and nh.ready()){
+  const started=hc.start_compute();if(!started or !consume()){fail(4096);return;}
+  const retired=nh.retire(7,reset,position,2,operation);if(!retired){fail(4096);return;}
+  const completed=hc.complete_compute();if(!completed){fail(4096);return;}
+  ready_pending=true;stamp(7);notify(7);
+ }}
+ if(comptime origin){if(oc.take_next_phase()){done=true;stamp(7);}}
+ pump();finish();
+}
+fn expect_rejected(result:bool) void {if(result){fail(8192);}else{negative_count+=1;}}
+fn negative_checks() void {
+ if(epoch!=3 or waiting or failed or !done or !quiescent() or packets.sending or packets.receiving){fail(8192);return;}
+ negative_count=0;
+ expect_rejected(negative.start(1));expect_rejected(negative.complete(0));
+ expect_rejected(negative.retire(7,12,0,2,0));
+ expect_rejected(negative.begin(7,12,0,2,0xffff,0));
+ expect_rejected(negative.begin(7,12,0,2,0,2));
+ const begun=negative.begin(7,12,0,2,0,0);if(!begun){fail(8192);return;}
+ const started=negative.start(3);if(!started){fail(8192);return;}
+ expect_rejected(negative.start(1));expect_rejected(negative.complete(4));
+ expect_rejected(negative.retire(8,12,0,2,0));expect_rejected(negative.begin(7,13,0,2,0,0));
+ const first=negative.complete(0);if(!first){fail(8192);return;}
+ expect_rejected(negative.complete(0));
+ const second=negative.complete(1);if(!second){fail(8192);return;}
+ expect_rejected(negative.retire(7,12,0,2,0));
+ if(comptime head){
+  expect_rejected(nh.begin(7,12,0,2,0,id));
+  expect_rejected(nh.arm(@ptrcast([*]u16,&qk_storage[258]),@ptrcast([*]u16,&input_storage[514])));
+  expect_rejected(nh.retire(8,12,0,2,0));
+ }else if(comptime native){
+  expect_rejected(ns.begin(7,12,0,2,0,id));
+  expect_rejected(ns.send(@ptrcast([*]u16,&source_storage[2])));
+  expect_rejected(ns.retire(8,12,0,2,0));
+ }
+ if(comptime head){
+  evidence[52]=nh.lifecycle.errors;evidence[53]=nh.lifecycle.rejected;evidence[54]=@as(u32,nh.lifecycle.live);
+  evidence[55]=@as(u32,nh.lifecycle.started);evidence[56]=@as(u32,nh.lifecycle.completed);
+ }else if(comptime native){
+  evidence[52]=ns.lifecycle.errors;evidence[53]=ns.lifecycle.rejected;evidence[54]=@as(u32,ns.lifecycle.live);
+  evidence[55]=@as(u32,ns.lifecycle.started);evidence[56]=@as(u32,ns.lifecycle.completed);
+ }
+ evidence[48]=negative_count;evidence[49]=negative.errors;evidence[50]=negative.rejected;
+ evidence[51]=if(!failed) @as(u32,1) else @as(u32,0);
+ clock.disable_tsc();sys.unblock_cmd_stream();
+}
+const evidence_ptr:[*]u32=&evidence;
+const qk_ptr:[*]u16=&qk_storage;const input_ptr:[*]u16=&input_storage;const source_ptr:[*]u16=&source_storage;
+comptime {
+ @bind_local_task(service,service_id);
+ if(origin){@initialize_queue(raw_iq,.{.color=@get_color(10)});@bind_local_task(raw_complete,raw_task);}
+ if(native){@initialize_queue(raw_oq,.{.color=@get_color(10)});@bind_local_task(raw_complete,raw_task);}
+ @export_symbol(evidence_ptr,"evidence");@export_symbol(qk_ptr,"qk");
+ @export_symbol(input_ptr,"input");@export_symbol(source_ptr,"source");
+ @export_symbol(initialize);@export_symbol(prepare);@export_symbol(compute);@export_symbol(negative_checks);
+}

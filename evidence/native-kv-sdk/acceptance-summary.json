@@ -1,0 +1,113 @@
+{
+  "date_utc": "2026-09-19",
+  "scope": "Independently accepted SDK transport fixture only",
+  "fixture": {
+    "application": [
+      9,
+      5
+    ],
+    "PEs": 45,
+    "active_PEs": 41,
+    "heads": 6,
+    "native_sources": 4,
+    "Q_roots": 24,
+    "epochs": 3,
+    "reset_epochs": [
+      3
+    ],
+    "exact_payload_halfwords": 29184,
+    "canary_halfwords": 192,
+    "actual_negative_calls": 525,
+    "application_messages": 451,
+    "observer_records": 144,
+    "copies": 13,
+    "launches": 8,
+    "host_bytes": 209664,
+    "journal_events": 47,
+    "persisted_captures": 13,
+    "persisted_raw_bytes": 226723,
+    "normal_stop": true
+  },
+  "compilation": {
+    "programs": 45,
+    "PEs": 45,
+    "files": 63,
+    "bytes": 2590378,
+    "max_ordinary_plus_stack": 25376,
+    "stack_allowance": 4096,
+    "ceiling": 48128,
+    "compiled_receipt_sha256": "59724c672b010969bef9c794df46202988c57cc57659ea4a6345cd3413c26da0",
+    "compiler_reused": true
+  },
+  "runtime": {
+    "seconds": 197.47579329600558,
+    "peak_cgroup_bytes": 220430336,
+    "CPU": [
+      0
+    ],
+    "memory_max": 1073741824,
+    "swap_max": 0,
+    "pids_max": 128,
+    "child_seconds": 300,
+    "outer_seconds": 330,
+    "independent_fresh_release_verified": true
+  },
+  "acceptance_record_sha256": "267c3a7ff9cc5004235b45a68ab81b459c71f641f9be9d11e57923365c0e69b1",
+  "hashes": {
+    "manifest.json": "b7a3c0c9430d74771f2887a4d08fc5ea49d374f4548839072214304dc4808d6d",
+    "compiled.json": "59724c672b010969bef9c794df46202988c57cc57659ea4a6345cd3413c26da0",
+    "parent-manifest.json": "6acaac3a80cde49c1f7ad46319b1f4af3f0aea3b4f5d761b54edd986cfbd935d",
+    "result.json": "96dc76a7efeec79ff9637dde5d4f12cbd9ad22b41d533298c64dccee8a860649",
+    "progress.json": "9a21f5503bcd15ad7e38ce529a3c9c50d959211cb02b63062cb2f425fea0a9b7",
+    "journal.jsonl": "749c1843a155f984f5822790c35df48ae9473be66ac38e1491271a3640e3ec7f",
+    "supervisor.json": "8010cfec3194a99aefaed2dd9852dd39dd23e6fbae8a70c05d79f5b4d3274c67"
+  },
+  "preserved_failures": [
+    {
+      "candidate": "native-kv-sdk-001",
+      "manifest_sha256": "0e9d64f35d73d3dce37e6fde7661fb4ba64476554c143eaf3b38d8f1983efbf8",
+      "status": "failed_preserved",
+      "phase": "frontend_parse_failure",
+      "reason": "credit_root.csl used the reserved identifier packed; no ELF or runtime was produced.",
+      "next_change": "SDK002 changed packed to pack_ok in three shared credit modules; other device behavior was unchanged.",
+      "seconds": 3.1647146730683744,
+      "peak_cgroup_bytes": 362237952,
+      "owned_processes_reaped": true,
+      "resources_released": true,
+      "automatic_retry": false
+    },
+    {
+      "candidate": "native-kv-sdk-002",
+      "manifest_sha256": "6acaac3a80cde49c1f7ad46319b1f4af3f0aea3b4f5d761b54edd986cfbd935d",
+      "status": "failed_preserved",
+      "phase": "runtime_90_second_deadline",
+      "reason": "Compilation passed. Four epoch1 copies finished at64.407s and epoch2 compute returned at64.593s, but the child timed out during the next read. In-memory raw captures were lost.",
+      "next_change": "Runtime-only continuation reused all63 compiled files and added incremental capture persistence with300s child/330s outer limits.",
+      "seconds": 122.06925076711923,
+      "peak_cgroup_bytes": 533495808,
+      "owned_processes_reaped": true,
+      "resources_released": true,
+      "automatic_retry": false
+    },
+    {
+      "candidate": "native-kv-sim-001",
+      "manifest_sha256": "c649daeeebb62fdaefd424a0f41c2148cda9b53688fe019d5758b0fe8aac6cbd",
+      "status": "failed_preserved",
+      "phase": "runtime_auxiliary_inventory_gate",
+      "reason": "A strict inventory gate rejected three normal SDK-generated auxiliary files. All63 immutable compiled files remained unchanged.",
+      "next_change": "SIM002 separated absent/live/exact auxiliary lifetimes, allowing only three known files with exact hashes required after normal stop.",
+      "seconds": 4.73256774386391,
+      "peak_cgroup_bytes": 218767360,
+      "owned_processes_reaped": true,
+      "resources_released": true,
+      "automatic_retry": false
+    }
+  ],
+  "limitations": [
+    "Synthetic transport; no model weights or neural arithmetic in this fixture",
+    "No complete original neural layer or full-model CSL generation accepted",
+    "No selected full-head/root fit or complete fullgraph acceptance from this fixture",
+    "Native source callback releases its source lease; it does not prove global fabric drainage",
+    "Local timestamps include fixture setup and observers; no synchronized cross-PE or inference-latency comparison"
+  ]
+}

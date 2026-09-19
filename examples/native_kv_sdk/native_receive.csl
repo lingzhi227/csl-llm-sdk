@@ -1,0 +1,18 @@
+// One prearmed native128-value stream. Explicit WSE3 resources, no buffer copy.
+param stream_color:color;
+param resource:u16;
+param completion_task:local_task_id;
+param on_complete:fn()void;
+comptime {@comptime_assert(resource>=2 and resource<=5);}
+const iq=@get_input_queue(resource);
+const dest=@get_dsr(dsr_dest,resource);const source=@get_dsr(dsr_src1,resource);
+const incoming=@get_dsd(fabin_dsd,.{.input_queue=iq,.extent=128,.simd_mode=.{.simd_off=true}});
+// Parent owns validation and one-arm/one-completion state for this descriptor.
+fn arm(target:[*]u16) void {
+ const mem=@get_dsd(mem1d_dsd,.{.base_address=target,.extent=128});
+ @load_to_dsr(dest,mem);
+ @load_to_dsr(source,incoming,.{.async=true,.activate=completion_task,.ut_id=@get_ut_id(resource)});
+ @mov16(dest,source,.{.async=true});
+}
+task received() void {on_complete();}
+comptime {@initialize_queue(iq,.{.color=stream_color});@bind_local_task(received,completion_task);}
