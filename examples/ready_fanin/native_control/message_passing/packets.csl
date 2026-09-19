@@ -1,0 +1,198 @@
+// Event-driven control-terminated transport with advertised application length.
+// A packet contains1..31 u32 wavelets, including application metadata.
+// Routing bank14 occupies the SDK-defined message-passing colors, not DSR14.
+param input_queue_id:u16=6;
+param output_queue_id:u16=6;
+param sent_task_id:local_task_id;
+param received_task_id:local_task_id;
+// One application-owned local task; existing callers reserve task15 by default.
+param deferred_task_id:local_task_id=@get_local_task_id(15);
+param diagnostics:bool=false;
+param on_sdk_started:fn()void=diagnostic_noop;
+fn diagnostic_noop() void {}
+param before_sdk:fn([*]u32,u16)void;
+param on_sent:fn()void;
+param on_received:fn([*]u32,u16)void;
+const control=@import_module("<control>");
+const native_control_task_id=@get_control_task_id(41);
+const tail_control_payload=control.encode_control_task_payload(native_control_task_id);
+const mp=@import_module("<message_passing>",.{.enable_asserts=true,.bank_id=14,.input_queue_id=input_queue_id,.output_queue_id=output_queue_id});
+const guarded_data_task_id=@get_data_task_id(mp.mp_input_queue);
+param header_task_id:local_task_id=@get_local_task_id(16);
+param error_task_id:local_task_id=@get_local_task_id(19);
+param tail_received_task_id:local_task_id=@get_local_task_id(20);
+param tail_sent_task_id:local_task_id=@get_local_task_id(11);
+// Diagnostic-only: separately attribute ordinary tail completion.
+param tail_normal_task_id:local_task_id=@get_local_task_id(10);
+// False only in the static-route callback qualification harness.
+param initialize_message_routing:bool=true;
+param on_protocol_error:fn(u16)void=protocol_error_noop;
+param before_control:fn()void=diagnostic_noop;
+fn protocol_error_noop(code:u16) void {}
+// RX:0 idle,1 header,2 body,3 control tail,4 failed,5 native consumption.
+// TX:0 idle,1 frame,2 tail.
+var rx_phase:u16=0;var tx_phase:u16=0;var protocol_error:u16=0;
+var control_buffer=@zeros([1]u32);
+// Immutable source storage for the asynchronous control wavelet.
+var transmit_control=[1]u32{tail_control_payload};
+// Actual callback counts: header,body,control-tail,error,TX-frame,TX-tail.
+var protocol_events=@zeros([6]u32);
+var tail_normal_events=@zeros([1]u32);
+// Actual native control entries and unexpected ordinary data entries.
+var consumption_events=@zeros([2]u32);
+fn fail_protocol(code:u16) void {
+ if(protocol_error!=0){return;}
+ protocol_error=code;rx_phase=4;receiving=true;header_waiting=false;
+ on_protocol_error(code);
+}
+var header_buffer=@zeros([1]u32);var header_waiting:bool=false;
+var receive_buffer=@zeros([31]u32);var receive_length:u16=0;
+var sending:bool=false;var receiving:bool=false;var initialized:bool=false;
+// The caller keeps the source immutable while sending is true. One request
+// can be pending because send acquires that same lease before returning.
+var pending:bool=false;
+var pending_x:u16=0;var pending_y:u16=0;var pending_length:u16=0;
+var pending_source:[*]u32;
+// The entire injected frame stays leased through control-tail completion.
+var transmit_frame=@zeros([32]u32);
+// Fixture-only: all queued requests, receive-held deferrals, SDK starts, source completions, illegal
+// SDK starts, receive-reacquired retries, stale tasks, completion violations.
+// Added diagnostics: SDK returns, RX headers, RX during returned unfinished TX,
+// and the TX starts/completions/returns observed at the latest RX start.
+// Diagnostics14: successful header arms;15: SDK starts while header waiting.
+var stats=@zeros([if(diagnostics) 16 else 1]u32);
+fn init() void {@assert(!initialized);if(comptime initialize_message_routing){mp.init();}initialized=true;arm_header();}
+// A waiting header owns IQ6/UT7 and compiler-assigned DSRs, not the application payload lease.
+// IQ6 task picking remains blocked during every asynchronous receive.
+// Native task picking is enabled only after the tail receive has terminated.
+fn arm_header() void {
+ @assert(initialized and !receiving and !header_waiting and protocol_error==0);header_waiting=true;rx_phase=1;
+ const dst=@get_dsd(mem1d_dsd,.{.base_address=&header_buffer,.extent=1});
+ const src=@get_dsd(fabin_dsd,.{.input_queue=mp.mp_input_queue,.extent=1,.simd_mode=.{.simd_off=true}});
+ @mov32(dst,src,.{.async=true,.activate=header_task_id,.on_control=.{.activate=error_task_id},.ut_id=@get_ut_id(7)});
+ if(comptime diagnostics){stats[14]+=1;}
+}
+// Source remains owned until on_sent. That callback is not a delivery ACK.
+noinline fn send(x:u16,y:u16,source:[*]u32,length:u16) void {
+ @assert(initialized and !sending and !pending and length>0 and length<=31);sending=true;
+ pending_x=x;pending_y=y;pending_source=source;pending_length=length;pending=true;
+ if(comptime diagnostics){stats[0]+=1;}
+ if(receiving){if(comptime diagnostics){stats[1]+=1;}return;}
+ @activate(deferred_task_id);
+}
+task deferred() void {
+ if(!pending){if(comptime diagnostics){stats[6]+=1;}return;}
+ @assert(sending);
+ // A header may reacquire the receive lease before this task is scheduled.
+ // Leave the request intact: that receive's release activates us again.
+ if(receiving){if(comptime diagnostics){stats[5]+=1;}return;}
+ pending=false;
+ if(comptime diagnostics){stats[2]+=1;if(header_waiting){stats[15]+=1;}if(receiving){stats[4]+=1;}}
+ @assert(sending and !receiving);
+ // All requests stage one immutable frame. Its data completion starts the
+ // control tail; only tail completion releases the source and frame.
+ before_sdk(pending_source,pending_length);
+ // One operation injects the SDK-format header and all application words.
+ // Bit5 selects control termination; queues and routing bank are retained.
+ // Bit5 selects control termination; low five bits retain advertised app length.
+ transmit_frame[0]=mp.encode_header(pending_x,pending_y,0)|@as(u32,pending_length);
+ copy_words(pending_source,@ptrcast([*]u32,&transmit_frame[1]),pending_length);
+ const frame_length=pending_length+1;
+ const frame_src=@get_dsd(mem1d_dsd,.{.base_address=&transmit_frame,.extent=frame_length});
+ const frame_base=@get_dsd(fabout_dsd,.{.output_queue=mp.mp_output_queue,.extent=1,.simd_mode=.{.simd_off=true}});
+ const frame_out=@set_dsd_length(frame_base,frame_length);
+ tx_phase=1;
+ @mov32(frame_out,frame_src,.{.async=true,.activate=sent_task_id});
+ if(comptime diagnostics){stats[8]+=1;on_sdk_started();}
+}
+// Bit-preserving synchronous copy for application payload assembly/retention.
+// Callers supply valid disjoint ranges; count is a packet-sized runtime extent.
+fn copy_words(source:[*]u32,destination:[*]u32,count:u16) void {
+ @assert(count>0 and count<=31);
+ const src=@get_dsd(mem1d_dsd,.{.base_address=source,.extent=count});
+ const dst=@get_dsd(mem1d_dsd,.{.base_address=destination,.extent=count});
+ @mov32(dst,src);
+}
+task sent() void {
+ protocol_events[4]+=1;
+ if(tx_phase!=1 or !sending or pending){fail_protocol(20);return;}
+ tx_phase=2;before_control();
+ const tail=@get_dsd(fabout_dsd,.{.output_queue=mp.mp_output_queue,.extent=1,.control=true,.simd_mode=.{.simd_off=true}});
+ const tail_src=@get_dsd(mem1d_dsd,.{.base_address=&transmit_control,.extent=1});
+ @mov32(tail,tail_src,.{.async=true,.activate=tail_sent_task_id});
+}
+task tail_sent() void {
+ protocol_events[5]+=1;
+ if(tx_phase!=2 or !sending or pending){fail_protocol(21);return;}
+ tx_phase=0;
+ if(comptime diagnostics){
+  if(!sending or pending or stats[2]!=stats[3]+1){stats[7]+=1;}
+  stats[3]+=1;
+ }
+ @assert(sending and !pending);sending=false;on_sent();
+}
+task header() void {
+ protocol_events[0]+=1;
+ if(protocol_error!=0){return;}
+ if(!initialized or !header_waiting or receiving or rx_phase!=1){fail_protocol(13);return;}
+ header_waiting=false;receiving=true;rx_phase=2;
+ const word=header_buffer[0];
+ receive_length=@as(u16,word&31);
+ if((word&32)==0 or receive_length==0){fail_protocol(14);return;}
+ const dst=@get_dsd(mem1d_dsd,.{.base_address=&receive_buffer,.extent=receive_length});
+ const base=@get_dsd(fabin_dsd,.{.input_queue=mp.mp_input_queue,.extent=1,.simd_mode=.{.simd_off=true}});
+ const src=@set_dsd_length(base,receive_length);
+ if(comptime diagnostics){
+  stats[9]+=1;stats[11]=stats[2];stats[12]=stats[3];stats[13]=stats[8];
+  if(sending and stats[2]>stats[3] and stats[8]>stats[3]){stats[10]+=1;}
+ }
+ @mov32(dst,src,.{.async=true,.activate=received_task_id,.on_control=.{.activate=error_task_id},.ut_id=@get_ut_id(7)});
+}
+task received() void {
+ protocol_events[1]+=1;
+ if(protocol_error!=0){return;}
+ if(!receiving or rx_phase!=2){fail_protocol(15);return;}
+ rx_phase=3;
+ const dst=@get_dsd(mem1d_dsd,.{.base_address=&control_buffer,.extent=1});
+ const src=@get_dsd(fabin_dsd,.{.input_queue=mp.mp_input_queue,.extent=1,.simd_mode=.{.simd_off=true}});
+ // Ordinary data here is an error; only an actual control tail commits payload.
+ @mov32(dst,src,.{.async=true,.activate=tail_normal_task_id,.on_control=.{.activate=tail_received_task_id},.ut_id=@get_ut_id(7)});
+}
+task tail_received() void {
+ protocol_events[2]+=1;
+ if(protocol_error!=0){return;}
+ if(!receiving or rx_phase!=3){fail_protocol(16);return;}
+ // The terminated tail operation no longer owns IQ6/UT7. Keep the RX lease.
+ rx_phase=5;@unblock(guarded_data_task_id);
+}
+task consume_control(data:u16) void {
+ @block(guarded_data_task_id);
+ consumption_events[0]+=1;
+ if(protocol_error!=0){return;}
+ // Task identity is fixed by binding41; its expected low16 payload is zero.
+ if(data!=0 or !receiving or rx_phase!=5){protocol_events[3]+=1;fail_protocol(18);return;}
+ rx_phase=3;
+ on_received(&receive_buffer,receive_length);receiving=false;rx_phase=0;arm_header();
+ if(pending){@activate(deferred_task_id);}
+}
+task unexpected_data(data:u32) void {
+ @block(guarded_data_task_id);
+ consumption_events[1]+=1;control_buffer[0]=data;
+ protocol_events[3]+=1;fail_protocol(19);
+}
+task tail_normal_error() void {
+ tail_normal_events[0]+=1;
+ protocol_events[3]+=1;
+ fail_protocol(if(rx_phase==1) @as(u16,10) else if(rx_phase==2) @as(u16,11) else @as(u16,12));
+}
+task receive_error() void {
+ protocol_events[3]+=1;
+ fail_protocol(if(rx_phase==1) @as(u16,10) else if(rx_phase==2) @as(u16,11) else @as(u16,12));
+}
+comptime {
+ @comptime_assert(input_queue_id==6 and @get_int(native_control_task_id)==41);
+ @comptime_assert(tail_control_payload==0x00290000);
+ @bind_data_task(unexpected_data,guarded_data_task_id);
+ @bind_control_task(consume_control,native_control_task_id);
+ @block(guarded_data_task_id);
+ @bind_local_task(header,header_task_id);@bind_local_task(sent,sent_task_id);@bind_local_task(received,received_task_id);@bind_local_task(deferred,deferred_task_id);@bind_local_task(receive_error,error_task_id);@bind_local_task(tail_received,tail_received_task_id);@bind_local_task(tail_sent,tail_sent_task_id);@bind_local_task(tail_normal_error,tail_normal_task_id);}

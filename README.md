@@ -2,7 +2,7 @@
 
 **Building inference for open language models with handwritten Cerebras Systems Language (CSL), targeting sequential execution of three model stages on WSE-3.** We implement the numerical kernels, execution control and persistent model state, and use the Cerebras SDK to compile and run the device programs. The first target is **Qwen3.8-27B text inference**; the longer-term goal is a reusable SDK for related model architectures.
 
-**Working today:** the complete original-weight **5120 → 17408 → 5120 layer-3 MLP runs on physical WSE-3** for four inputs with independent numerical checks. A separate full 64-layer CPU reference generates four tokens with cache restoration. **Current integration:** the complete native layer-3 graph fits across all 33,750 PEs, but execution stops on malformed READY messages. A 136-producer physical fixture now reproduces the corruption: all 408 sender snapshots are correct, while a received payload contains a network-header value. Its strict check fails and its runtime exits normally. Combined-frame transmission and managed receive descriptor comparisons also failed; the cause remains unresolved and **complete neural-layer epochs remain zero**. **Current work:** qualify a focused transport change, original-layer numerics, then three sequential stages with state checkpoints. Complete CSL text generation and measured token latency remain ahead.
+**Working today:** the complete original-weight **5120 → 17408 → 5120 layer-3 MLP runs on physical WSE-3** for four inputs with independent numerical checks. A separate full 64-layer CPU reference generates four tokens with cache restoration. **Current integration:** the complete native layer-3 graph fits across all 33,750 PEs, but execution stops on malformed READY messages. A 136-producer physical fixture now reproduces the corruption: all 408 sender snapshots are correct, while a received payload contains a network-header value. Its strict check fails and its runtime exits normally. Combined-frame transmission and managed receive descriptor comparisons also failed; the cause remains unresolved and **complete neural-layer epochs remain zero**. **Current work:** native control termination has passed focused two-PE simulator checks, including actual message routing. Next are the 136-producer physical fixture, original-layer numerics, then three sequential stages with state checkpoints. Complete CSL text generation and measured token latency remain ahead.
 
 ## 1. Project design
 
@@ -60,7 +60,7 @@ Full attention/recurrent layers and the three-stage model remain integration wor
 | Path | Purpose |
 |---|---|
 | [`csl/kernels/`](csl/kernels) | Reusable handwritten CSL arithmetic kernels. |
-| [`examples/ready_fanin/`](examples/ready_fanin) | Physical concurrent READY corruption reproduction, source observations and strict capture checks. |
+| [`examples/ready_fanin/`](examples/ready_fanin) | Physical concurrent READY corruption reproduction, strict capture checks, and scoped native-control simulator qualification. |
 | [`examples/native_layer3/`](examples/native_layer3) | Complete native graph compile, exact source provenance and first-error diagnostics. |
 | [`examples/qk_archive/`](examples/qk_archive) | Physical original-kernel archive/alias equivalence, durable raw evidence and selected complete-program fit. |
 | [`examples/native_kv_sdk/`](examples/native_kv_sdk) | Accepted three-operation native KV/Q transport, durable raw captures and preserved failure history. |
@@ -86,6 +86,19 @@ Full attention/recurrent layers and the three-stage model remain integration wor
 ## 3. Completed development log — newest first
 
 Each **WP** or **HW** is a scoped development milestone. HW00/HW01 use physical WSE-3; earlier WP device results use the SDK simulator, and WP04 is a CPU/source audit. **BF16** means bfloat16 data, and **FP32** means 32-bit floating-point arithmetic. Reports contain numerical thresholds, failure history and reproduction details.
+
+### Native control termination · Two-PE protocol and message routing qualified · September 19, 2026 (UTC)
+
+Native control consumption now passes separately recorded valid and malformed
+packet cases, immediate consecutive 31-word and 8-word packets, and the same
+sequence with SDK message routing enabled. Both PEs report routing enabled;
+all 39 delivered words, complete buffers, leases, order, suffixes and final
+counters pass strict checks. The host completion gate was corrected after a
+preserved failed attempt. Original suite failures and the rejected source-only
+candidate remain documented. These are bounded simulator results; the physical
+136-producer fixture and complete neural layers remain unqualified.
+
+[Source](examples/ready_fanin/native_control) · [Report](docs/NATIVE-CONTROL-QUALIFICATION.md) · [Evidence](evidence/ready-fanin/native-control/attempts.json)
 
 ### Managed receive descriptors · Identical physical failure · September 19, 2026 (UTC)
 

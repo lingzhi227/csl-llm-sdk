@@ -1,0 +1,96 @@
+// Same packet implementation; static routes isolate local control semantics.
+param memcpy_params;param column:u16;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const sender=column==1;
+const packets=@import_module("packets.csl",.{
+ .sent_task_id=@get_local_task_id(12),.received_task_id=@get_local_task_id(13),
+ .on_sent=sent,.on_received=received,.before_sdk=before_sdk,
+ .on_protocol_error=failed,.before_control=control_started,.initialize_message_routing=false});
+const raw_task=@get_local_task_id(22);
+const tc=packets.mp.internal.tc;
+var case_id=@zeros([1]u32);var state=@zeros([33]u32);
+var payload=@zeros([31]u32);var observed=@zeros([31]u32);
+var injection=@zeros([10]u32);var raw_phase:u16=0;
+var raw_control=[1]u32{packets.tail_control_payload};
+fn expected_length() u16 {
+ return if(case_id[0]==0) 1 else if(case_id[0]==2) 26 else if(case_id[0]==3) 31 else 8;
+}
+fn before_sdk(data:[*]u32,length:u16) void {
+ @assert(sender and length==expected_length());
+ for(@range(u16,31))|i|{if(i<length and data[i]!=0x11000000+@as(u32,i)){state[15]+=1;}}
+}
+fn control_started() void {
+ state[24]+=1;state[25]=@as(u32,packets.sending);state[26]=@as(u32,packets.tx_phase);state[27]=state[1];
+}
+fn sent() void {
+ state[1]+=1;state[9]=@as(u32,packets.sending);state[10]=@as(u32,packets.tx_phase);
+ var valid=true;
+ for(@range(u16,31))|i|{if(i<expected_length() and packets.transmit_frame[i+1]!=payload[i]){valid=false;}}
+ state[11]=@as(u32,valid);
+}
+fn received(data:[*]u32,length:u16) void {
+ state[2]+=1;state[4]=@as(u32,length);state[5]=1;state[28]=packets.header_buffer[0];
+ state[12]=@as(u32,packets.receiving);state[13]=@as(u32,packets.rx_phase);
+ if(sender or state[2]!=1 or length!=expected_length()){state[15]+=1;}
+ for(@range(u16,31))|i|{
+  if(i<length){observed[i]=data[i];if(data[i]!=0x11000000+@as(u32,i)){state[5]=0;state[15]+=1;}}
+ }
+}
+fn failed(code:u16) void {state[3]=@as(u32,code);}
+fn initialize() void {
+ @assert(case_id[0]<8 and state[0]==0);
+ for(@range(u16,31))|i|{payload[i]=0x11000000+@as(u32,i);}
+ // Refuse to silently inherit enabled message-passing routing in this harness.
+ state[14]=@as(u32,@get_config(@get_int(tc.addresses.MISC_FABRIC_CFG)/tc.word_size)&4);
+ @assert(state[14]==0);packets.init();state[0]=1;sys.unblock_cmd_stream();
+}
+fn exercise() void {
+ @assert(state[0]==1);state[0]=2;
+ if(comptime sender){
+  if(case_id[0]<4){
+   packets.send(0,0,&payload,expected_length());
+   state[7]=@as(u32,packets.sending);state[8]=@as(u32,packets.pending);
+  }else{
+   injection[0]=packets.mp.encode_header(0,0,0)|8;
+   const count:u16=if(case_id[0]==4) 2 else if(case_id[0]==5) 9 else 8;
+   for(@range(u16,9))|i|{if(i<count){injection[i+1]=payload[i];}}
+   const src=@get_dsd(mem1d_dsd,.{.base_address=&injection,.extent=count+1});
+   const base=@get_dsd(fabout_dsd,.{.output_queue=packets.mp.mp_output_queue,.extent=1,.simd_mode=.{.simd_off=true}});
+   const dst=@set_dsd_length(base,count+1);raw_phase=1;
+   @mov32(dst,src,.{.async=true,.activate=raw_task,.ut_id=@get_ut_id(6)});
+  }
+ }
+ sys.unblock_cmd_stream();
+}
+task raw_sent() void {
+ @assert(sender and raw_phase>0);
+ if(case_id[0]==7 or raw_phase==3 or (raw_phase==2 and case_id[0]!=6)){
+  raw_phase=0;state[6]+=1;return;
+ }
+ raw_phase+=1;
+ const out=@get_dsd(fabout_dsd,.{.output_queue=packets.mp.mp_output_queue,.extent=1,.control=true,.simd_mode=.{.simd_off=true}});
+ const src=@get_dsd(mem1d_dsd,.{.base_address=&raw_control,.extent=1});
+ @mov32(out,src,.{.async=true,.activate=raw_task,.ut_id=@get_ut_id(6)});
+}
+fn snapshot() void {
+ state[30]=packets.tail_normal_events[0];state[31]=packets.consumption_events[0];state[32]=packets.consumption_events[1];
+ state[16]=@as(u32,packets.sending);state[17]=@as(u32,packets.pending);
+ state[18]=@as(u32,packets.rx_phase);state[19]=@as(u32,packets.tx_phase);
+ state[20]=packets.control_buffer[0];state[21]=@as(u32,packets.protocol_error);
+ state[22]=@as(u32,raw_phase);state[23]=@as(u32,packets.header_waiting);
+ if(state[2]==0){state[28]=packets.header_buffer[0];}state[29]=if(case_id[0]<4) packets.transmit_frame[0] else injection[0];
+ sys.unblock_cmd_stream();
+}
+const tail_normal_ptr:[*]u32=&packets.tail_normal_events;
+const consumption_ptr:[*]u32=&packets.consumption_events;
+const case_ptr:[*]u32=&case_id;const state_ptr:[*]u32=&state;
+const received_buffer_ptr:[*]u32=&packets.receive_buffer;
+const observed_ptr:[*]u32=&observed;const events_ptr:[*]u32=&packets.protocol_events;
+comptime {
+ @bind_local_task(raw_sent,raw_task);
+ @export_symbol(tail_normal_ptr,"tail_normal_events");
+ @export_symbol(consumption_ptr,"consumption_events");
+ @export_symbol(case_ptr,"case_id");@export_symbol(state_ptr,"state");
+ @export_symbol(received_buffer_ptr,"received_buffer");@export_symbol(observed_ptr,"observed");@export_symbol(events_ptr,"events");
+ @export_symbol(initialize);@export_symbol(exercise);@export_symbol(snapshot);
+}

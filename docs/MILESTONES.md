@@ -2,6 +2,16 @@
 
 Only accepted results are listed below. Unresolved integration work and the remaining scope are tracked in [implementation status](STATUS.md).
 
+## Native control termination — Scoped SDK qualification, September 19, 2026 UTC
+
+Separately recorded isolated positive/negative cases, consecutive 31→8 packets,
+and the same sequence with actual SDK message routing pass strict data, lease,
+order, suffix and finite stability checks. Routing-enable readback is exact on
+both PEs. Original failed suites003/004/007 and source-rejected009 remain failed
+or unexecuted; all actual owners were reaped and resources independently released.
+This does not qualify the physical136-producer fixture or a complete neural layer.
+See the [report](NATIVE-CONTROL-QUALIFICATION.md) and exact source provenance.
+
 ## Managed RX comparison — Same-system identical failure, September 19, 2026 UTC
 
 The managed receive descriptor variant passed minimal syntax and complete

@@ -120,11 +120,12 @@ An initial audit incorrectly requested success-only physical.json; correcting th
 failed-run file comparison required no source change or repeated device run.
 
 These results show that this receive-descriptor change **did not repair the
-fixture**. The next source investigation examines control-terminated message
-boundaries. Its planned static-route two-PE positive and negative cases must
-first qualify callback, error and lease behavior; they cannot establish actual
-message-passing fabric correctness. No unqualified control-protocol source or
-runtime success is included in this milestone. Full inference remains unfinished.
+fixture**. The subsequent native-control protocol now passes focused two-PE
+simulator tests: isolated valid and malformed cases, immediate consecutive
+31→8 packets, and the same sequence with actual SDK message routing enabled.
+These are distinct accepted scopes; earlier failed suites remain documented.
+See the [native-control report](NATIVE-CONTROL-QUALIFICATION.md). Physical
+136-producer repair and complete neural-layer inference remain unqualified.
 
 Any selected transport must subsequently pass complete-graph fit, resource
 ownership review and original-layer physical numerics. The full graph currently

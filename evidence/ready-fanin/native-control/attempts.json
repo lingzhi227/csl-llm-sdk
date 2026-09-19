@@ -1,0 +1,541 @@
+{
+  "scope": "Two-PE SDK simulation: isolated static-route cases, immediate consecutive packets on static route, and the same two packets with actual SDK message routing. No136fanin, physical transport repair, neural epoch or model inference claim.",
+  "packet_sha256": "06083863a5c55d92bc79c4ba3aad07400617c6faa6e4bd9246fe8abe35c7fd85",
+  "sdk_version": "2.10.1",
+  "sdk_build": "202606181328-8faf87a26e",
+  "accepted_isolated_cases": [
+    {
+      "case": 0,
+      "length": 1,
+      "attempt": "003",
+      "qualification": "protocol passed; suite failed artifact inventory"
+    },
+    {
+      "case": 1,
+      "length": 8,
+      "attempt": "004",
+      "qualification": "case passed; later case2 crashed"
+    },
+    {
+      "case": 2,
+      "length": 26,
+      "attempt": "005",
+      "qualification": "passed after aggregate snapshot observation change"
+    },
+    {
+      "case": 3,
+      "length": 31,
+      "attempt": "006",
+      "qualification": "passed"
+    },
+    {
+      "case": 4,
+      "kind": "early control",
+      "attempt": "006",
+      "error": 11,
+      "deliveries": 0
+    },
+    {
+      "case": 5,
+      "kind": "extra data",
+      "attempt": "006",
+      "error": 12,
+      "deliveries": 0,
+      "ordinary_tail_events": 1
+    },
+    {
+      "case": 6,
+      "kind": "duplicate control",
+      "attempt": "006",
+      "error": 10,
+      "deliveries": 1,
+      "native_consumptions": 1
+    },
+    {
+      "case": 7,
+      "kind": "missing control",
+      "attempt": "006",
+      "phase": 3,
+      "error": 0,
+      "deliveries": 0,
+      "normal_stop": true
+    }
+  ],
+  "attempts": {
+    "CONTROL-SYNTAX-014-ACCEPTANCE.json": {
+      "candidate": "ready-fanin-control-syntax-014",
+      "manifest_sha256": "0d11ab5b180d33640fe6375055fe85f6742fa106c21caa6f391e782a613523da",
+      "original_independent_acceptance_sha256": "923fb5ade1c6d6bedd3a49e71892fc7c2cf70890eafe176abb42398307370f00",
+      "scope": "Compiled two-PE nativecontrol41 and IQ6 data guard only; no dynamic protocol, MPfabric,136way ormodel qualification.",
+      "executor_reaped": true,
+      "executor_exit": 0,
+      "guard_seconds": 4.198246857151389,
+      "peak_bytes": 448688128
+    },
+    "CONTROL-SYNTAX-015-ACCEPTANCE.json": {
+      "candidate": "ready-fanin-control-syntax-015",
+      "manifest_sha256": "93c6975e8610b2df990c371815e9eecf081ddb223c4a0d3a57682558e7485c54",
+      "original_independent_acceptance_sha256": "b43196644fa4e2432f93b9fd28604c2cb5828172f4dee8ecfbe43b6b17cd6754",
+      "scope": "Compiled two-PE unchanged014nativepacket with132B observation state only; no runtime,SDKrootcause,MPfabric,136way ormodelqualification.",
+      "executor_reaped": true,
+      "executor_exit": 0,
+      "guard_seconds": 4.747902388684452,
+      "peak_bytes": 448692224
+    },
+    "CONTROL-SYNTAX-016-ACCEPTANCE.json": {
+      "candidate": "ready-fanin-control-syntax-016",
+      "manifest_sha256": "1260adf408107a2d008984aa148a24df365b7779694fbe421e7646b137ed881d",
+      "original_independent_acceptance_sha256": "7ab2c678c9bf3e87fa37e8f840a9c189320153535a9c862c459c722f75d0cc34",
+      "scope": "Compiled two-PE consecutive31then8 full32bit harness with unchanged014nativepacket,132B aggregate snapshots and14 disjointbanks. Compile-only: no consecutive runtime/MPfabric/136way/model qualification.",
+      "executor_reaped": true,
+      "executor_exit": 0,
+      "guard_seconds": 4.787104350049049,
+      "peak_bytes": 487661568
+    },
+    "CONTROL-SIM-003-PARTIAL-ACCEPTANCE.json": {
+      "candidate": "ready-fanin-control-sim-003",
+      "manifest_sha256": "74da0be89422b7d3bb17441248c6ef2f6afbdb13c239fd7700dc6cabca47de08",
+      "original_independent_acceptance_sha256": "0a2236bda7b1700df9ef6378a48de548e4b791c42883006824af41e0247c7225",
+      "scope": "Partial acceptance: isolated native-control valid1 protocol/raw checks pass; suite and guard remainFAILED on post-runtime artifact inventory. No allnegative, consecutivepacket,MPfabric,136way ormodelqualification.",
+      "executor_reaped": true,
+      "executor_exit": 1,
+      "suite_passed": false,
+      "protocol_case0_passed": true,
+      "raw_files": 8,
+      "raw_bytes": 2960,
+      "normal_stop": true,
+      "suite_failure": {
+        "type": "ValueError",
+        "message": "Complete compiled artifact inventory"
+      },
+      "receiver_events": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0
+      ],
+      "sender_events": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        1
+      ],
+      "native_consumption_counts": [
+        [
+          1,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ],
+      "tail_normal_counts": [
+        [
+          0
+        ],
+        [
+          0
+        ]
+      ]
+    },
+    "CONTROL-SIM-004-PARTIAL-ACCEPTANCE.json": {
+      "candidate": "ready-fanin-control-sim-004",
+      "manifest_sha256": "cba8d4afb78efba1dd8996d1ffc63b7c95622184e8bd6cf1945f931ad30578d1",
+      "original_independent_acceptance_sha256": "171fb54286994e3c43f49d8e94f102113f9e007787441d65d356553efb426291",
+      "scope": "Partialacceptance valid8case1 protocolpass andcase2 partialrawfailureevidence only; notfullsuite/controlprotocolqualification.",
+      "executor_reaped": true,
+      "executor_exit": 1,
+      "suite_passed": false,
+      "all14artifactfiles_exact": true,
+      "guard_seconds": 5.837006450165063,
+      "peak_bytes": 191881216
+    },
+    "CONTROL-SIM-005-ACCEPTANCE.json": {
+      "candidate": "ready-fanin-control-sim-005",
+      "manifest_sha256": "3db3f1af1662e6c59661dd3b55bf81f09d44e15a271654581ea37a5a5bcf5e6c",
+      "original_independent_acceptance_sha256": "73912e801babdaa041d9caf3bfcf0733e08fadfc3ebbbe1ef16ace1c3fbcfa95",
+      "scope": "Onlyvalid26 case2 withunchangednative014packet and015aggregate33wordobservation. Allstrict/raw/count/artifactchecks andnormalstop pass. NotuniqueSDKrootcause orcompleteprotocol/MPfabric/136way/modelqualification.",
+      "executor_reaped": true,
+      "executor_exit": 0,
+      "suite_passed": true,
+      "raw_files": 6,
+      "raw_bytes": 2456,
+      "normal_stop": true,
+      "all14artifactfiles_exact": true,
+      "receiver_events": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0
+      ],
+      "sender_events": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        1
+      ],
+      "native_consumption_counts": [
+        [
+          1,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ],
+      "tail_normal_counts": [
+        0,
+        0
+      ],
+      "guard_seconds": 3.1861247806809843,
+      "peak_bytes": 188645376
+    },
+    "CONTROL-SIM-006-ACCEPTANCE.json": {
+      "candidate": "ready-fanin-control-sim-006",
+      "manifest_sha256": "c4eb878756f42b261765a010cb4e9f66ee7d9da91413b6db7141664420cfc462",
+      "original_independent_acceptance_sha256": "a0f123ff00995909bf0b4f81645ab15635a629020b0d7f9bc4e3d358769926cd",
+      "scope": "Only cases3..7 with unchanged native014packet and015aggregate33word observation: full raw payload/state/events/lease/count/artifact checks, normal stop and independent release. Prior isolated0/1 in003/004 and2 in005 remain separate accepted evidence; no consecutive/MPfabric/136way/model qualification.",
+      "executor_reaped": true,
+      "executor_exit": 0,
+      "suite_passed": true,
+      "raw_files": 30,
+      "raw_bytes": 12280,
+      "normal_stop": true,
+      "all14artifactfiles_exact": true,
+      "guard_seconds": 12.561642994172871,
+      "peak_bytes": 192208896
+    },
+    "CONTROL-SIM-007-FAILURE-ACCEPTANCE.json": {
+      "candidate": "ready-fanin-control-sim-007",
+      "manifest_sha256": "e0f06dc43b865981528f8102a98218360b97624c7dbbe014cf52f74e045dc5e8",
+      "original_independent_acceptance_sha256": "5a1d04ba9fdb2eae4e2c72d36527dcf841490ee1d3be5f45c3653b48da0e652b",
+      "scope": "Accepted failure evidence and resource release only. Consecutive strict case remains FAILED: initial/final cached native counter differs, although final payload/order/lease/suffix/count observations are correct. No consecutive protocol qualification or MPfabric/full136/model qualification.",
+      "executor_reaped": true,
+      "executor_exit": 1,
+      "suite_passed": false,
+      "raw_files": 10,
+      "raw_bytes": 4800,
+      "normal_stop": true,
+      "all14artifactfiles_exact": true,
+      "guard_seconds": 4.197223762981594,
+      "peak_bytes": 188387328
+    },
+    "CONTROL-SIM-008-ACCEPTANCE.json": {
+      "candidate": "ready-fanin-control-sim-008",
+      "manifest_sha256": "20dcf075fa3e7b027f5e5f40a559b7658187bea2c251aa93324310ab7918c290",
+      "original_independent_acceptance_sha256": "258e3df4c81d8a4a983e0032c2f4041e326d8f17d5e6edee18dad74c063c7359",
+      "scope": "Two distinct complete32bit packets31then8 immediately chained in device firstsourcecompletion, statictwoPE route. All fullpayload/bothPEsource-frame-RXbank/suffix/perpacketlease-order/nativecounts2/finalstability checks pass with complete cached-trailer baseline. Finite observation only; no actualMPfabric/full136/model qualification. Original007 strictfailure preserved.",
+      "executor_reaped": true,
+      "executor_exit": 0,
+      "suite_passed": true,
+      "consecutive_passed": true,
+      "raw_files": 11,
+      "raw_bytes": 5328,
+      "host_D2H_bytes": 2424,
+      "copies": 11,
+      "launches": 5,
+      "H2D": 1,
+      "normal_stop": true,
+      "all14artifactfiles_exact": true,
+      "actual_all10original007_raw_byte_equal": true,
+      "poll_baselines": [
+        {
+          "label": "state-0",
+          "RX_delivery": 2,
+          "TX_completion": 2,
+          "trailers": [
+            [
+              0,
+              1,
+              0
+            ],
+            [
+              0,
+              0,
+              0
+            ]
+          ]
+        },
+        {
+          "label": "state-1",
+          "RX_delivery": 2,
+          "TX_completion": 2,
+          "trailers": [
+            [
+              0,
+              2,
+              0
+            ],
+            [
+              0,
+              0,
+              0
+            ]
+          ]
+        }
+      ],
+      "guard_seconds": 4.204740473069251,
+      "peak_bytes": 188366848
+    },
+    "CONTROL-SYNTAX-017-ACCEPTANCE.json": {
+      "candidate": "ready-fanin-control-syntax-017",
+      "manifest_sha256": "2eb5ec2bc43c377ee90652fde8bab30e439d8945ed08e34e1707f1a3e6e0bab9",
+      "scope": "Compiled two-PE realMP-enabled consecutive31then8 full32bit harness with unchanged014nativepacket and qualified008hostgate,132B snapshots/14 disjointbanks. Compile-only: actual MP runtime/full136/model not qualified.",
+      "executor_reaped": true,
+      "executor_exit": 0,
+      "guard_seconds": 4.76014896761626,
+      "peak_bytes": 486096896,
+      "static_DSR_review": "Actual both017PEs function-wise DSR operations same as016: RX1/frameTX2/syncsourcecopy3/controltailTX4/SDKmemcpy0; f_rpc1 is reviewed initial armheader. SDKmp.init changes routing config, no new harnessDSD/UT. Static source/instruction closure, not measured universal dynamic exclusion or stack highwatermark.",
+      "original_independent_acceptance_sha256": "2f0392baf7b86ee47219212514c8661f342ba4001a4ffb464727ea1e27a2ec26",
+      "application_programs": [
+        {
+          "file": "out/bin/out_0_0.elf",
+          "bytes": 39528,
+          "sha256": "54751006004e47dc8cec39a318f72ed12b0a0bab5840dcc4e3f17d0ff758339c",
+          "ordinary_plus_4096_stack": 14912
+        },
+        {
+          "file": "out/bin/out_1_0.elf",
+          "bytes": 38176,
+          "sha256": "b0cd3f1b9e702b8f2cbc735d0325657f18fb5c8c388c241bf3db59e39c4fb718",
+          "ordinary_plus_4096_stack": 14336
+        }
+      ]
+    },
+    "CONTROL-SIM-010-ACCEPTANCE.json": {
+      "candidate": "ready-fanin-control-sim-010",
+      "manifest_sha256": "233138e934d7c6ae028a48647f41e297e9a939723332511378542e86efbcbdcd",
+      "scope": "SDK simulator two-PE actualMP routing with bankA=4 readback, distinct complete32bit31then8 packets immediately chained in device completion. Fullpayload/bothPEsource-frame-RXbank/suffix/perpacketlease-order/native2/finalstability and whole release pass. Finite SDK qualification only; not physical136fixture repair, complete neural layer or model inference.",
+      "suite_passed": true,
+      "consecutive_passed": true,
+      "message_passing_fabric_test": true,
+      "actual_bankA": [
+        4,
+        4
+      ],
+      "raw_files": 11,
+      "raw_bytes": 5328,
+      "host_D2H_bytes": 2424,
+      "copies": 11,
+      "launches": 5,
+      "H2D": 1,
+      "poll_baselines": [
+        {
+          "label": "state-0",
+          "RX_delivery": 2,
+          "TX_completion": 2,
+          "trailers": [
+            [
+              0,
+              1,
+              0
+            ],
+            [
+              0,
+              0,
+              0
+            ]
+          ]
+        },
+        {
+          "label": "state-1",
+          "RX_delivery": 2,
+          "TX_completion": 2,
+          "trailers": [
+            [
+              0,
+              2,
+              0
+            ],
+            [
+              0,
+              0,
+              0
+            ]
+          ]
+        }
+      ],
+      "normal_stop": true,
+      "all14artifactfiles_exact": true,
+      "executor_reaped": true,
+      "executor_exit": 0,
+      "guard_seconds": 4.768514525145292,
+      "peak_bytes": 191229952,
+      "original_independent_acceptance_sha256": "e4cf02d3ac4300649c0bd4ec68057f44f0032f21894cd3f3c1dc4de86b80686a"
+    }
+  },
+  "compiler_storage_with_4096B_stack_allowance": {
+    "native014": [
+      11104,
+      12928
+    ],
+    "snapshot015": [
+      11136,
+      12960
+    ],
+    "consecutive016": [
+      14768,
+      14192
+    ],
+    "message_passing017": [
+      14912,
+      14336
+    ]
+  },
+  "static_DSR_mapping": {
+    "actual_builds": [
+      "016",
+      "017"
+    ],
+    "mapping": {
+      "SDK_memcpy": 0,
+      "RX": 1,
+      "frame_TX": 2,
+      "synchronous_source_copy": 3,
+      "control_tail_TX": 4
+    },
+    "scope": "Independently decoded actual016 and017 application programs; not attributed to014 or015. Static allocation only, not all-task dynamic exclusivity."
+  },
+  "task_table": {
+    "data_task": 6,
+    "control_task": 41,
+    "control_payload": "0x00290000"
+  },
+  "runtime_failures_preserved": {
+    "SIM003": "Valid1 protocol passes; whole suite fails because exact pre-run artifact inventory rejected three SDK-generated files. Later candidates separately pin those three identities; original failure remains.",
+    "SIM004": "Valid8 passes; valid26 child exits signal11 during final8B counter D2H with no normal stop. Final data are insufficient for case acceptance. Root cause remains unproven; no unchanged retry.",
+    "SIM007": "Both packets deliver; strict stability fails because first selected snapshot native count1 changes to2. SIM008 strengthens the host settled baseline without changing device code or strict checks. All ten original007 raw files are byte-identical in008; an additional completed snapshot becomes the baseline."
+  },
+  "raw_files_published": false,
+  "SDK_vendor_source_published": false,
+  "ELFs_published": false,
+  "source_preflight_failure009": {
+    "status": "source_binding_rejected",
+    "runtime_executed": false,
+    "SDK_invocations": 0,
+    "reason": "Old016 qualification contract was inconsistent with compiled017 source; real pre-runtime binding rejected it.010 restores the exact017 contract and adds a tamper test.009 frozen evidence remains unchanged."
+  },
+  "real_MP_comparison_to_static008": {
+    "states": {
+      "final-state": {
+        "bankA": [
+          4,
+          4
+        ],
+        "delivery": 2,
+        "completion": 2,
+        "trailers": [
+          [
+            0,
+            2,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ]
+        ]
+      },
+      "state-0": {
+        "bankA": [
+          4,
+          4
+        ],
+        "delivery": 2,
+        "completion": 2,
+        "trailers": [
+          [
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ]
+        ]
+      },
+      "state-1": {
+        "bankA": [
+          4,
+          4
+        ],
+        "delivery": 2,
+        "completion": 2,
+        "trailers": [
+          [
+            0,
+            2,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ]
+        ]
+      }
+    },
+    "byte_equal_nonstate": [
+      "events.npz",
+      "final-events.npz",
+      "observed.npz",
+      "received-buffer.npz",
+      "rx-evidence.npz",
+      "source-payload.npz",
+      "transmitted-frame.npz",
+      "tx-evidence.npz"
+    ],
+    "raw_differences": {
+      "final-state.npz": [
+        {
+          "index": 14,
+          "static": 0,
+          "MP": 4
+        },
+        {
+          "index": 47,
+          "static": 0,
+          "MP": 4
+        }
+      ],
+      "state-0.npz": [
+        {
+          "index": 14,
+          "static": 0,
+          "MP": 4
+        },
+        {
+          "index": 47,
+          "static": 0,
+          "MP": 4
+        }
+      ],
+      "state-1.npz": [
+        {
+          "index": 14,
+          "static": 0,
+          "MP": 4
+        },
+        {
+          "index": 47,
+          "static": 0,
+          "MP": 4
+        }
+      ]
+    },
+    "SDK_invocations": 0
+  }
+}

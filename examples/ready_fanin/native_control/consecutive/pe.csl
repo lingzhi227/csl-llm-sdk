@@ -1,0 +1,100 @@
+// Two distinct complete-u32 packets, immediately chained at source completion.
+param memcpy_params;param column:u16;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const sender=column==1;
+const packets=@import_module("packets.csl",.{
+ .sent_task_id=@get_local_task_id(12),.received_task_id=@get_local_task_id(13),
+ .on_sent=sent,.on_received=received,.before_sdk=before_sdk,
+ .on_protocol_error=failed,.before_control=control_started,.initialize_message_routing=false});
+const tc=packets.mp.internal.tc;
+var case_id=@zeros([1]u32);var state=@zeros([33]u32);
+var payload=@zeros([31]u32);var observed=@zeros([62]u32);
+var tx_evidence=@zeros([24]u32);var rx_evidence=@zeros([12]u32);
+var source_index:u16=0;
+fn length_for(index:u16) u16 {return if(index==0) 31 else 8;}
+fn word_for(index:u16,i:u16) u32 {
+ if(index==0){
+  return if(i==0) 0x00000000 else if(i==1) 0xffffffff else if(i==2) 0x80000000 else if(i==3) 0x7fffffff else 0xa5a50000|@as(u32,i);
+ }
+ return if(i==0) 0xffffffff else if(i==1) 0x00000000 else if(i==2) 0x55555555 else if(i==3) 0xaaaaaaaa else if(i==4) 0x80000001 else if(i==5) 0x7ffffffe else if(i==6) 0x00008000 else if(i==7) 0xffff7fff else 0x5a5a0000|@as(u32,i);
+}
+fn before_sdk(data:[*]u32,length:u16) void {
+ @assert(sender and source_index<2 and length==length_for(source_index));
+ const base=source_index*12;tx_evidence[base]=@as(u32,length);tx_evidence[base+1]+=1;
+ var valid=true;
+ for(@range(u16,31))|i|{if(data[i]!=word_for(source_index,i)){valid=false;}}
+ tx_evidence[base+2]=@as(u32,valid);if(!valid){state[15]+=1;}
+}
+fn control_started() void {
+ @assert(sender and source_index<2);const base=source_index*12;
+ tx_evidence[base+3]+=1;tx_evidence[base+4]=@as(u32,packets.sending);
+ tx_evidence[base+5]=@as(u32,packets.tx_phase);tx_evidence[base+6]=state[1];
+ state[24]+=1;state[25]=@as(u32,packets.sending);state[26]=@as(u32,packets.tx_phase);state[27]=state[1];
+}
+fn sent() void {
+ @assert(sender and source_index<2);const base=source_index*12;
+ state[1]+=1;state[9]=@as(u32,packets.sending);state[10]=@as(u32,packets.tx_phase);
+ tx_evidence[base+7]+=1;tx_evidence[base+8]=@as(u32,packets.sending);
+ tx_evidence[base+9]=@as(u32,packets.tx_phase);tx_evidence[base+11]=@as(u32,packets.pending);
+ var valid=packets.transmit_frame[0]==(packets.mp.encode_header(0,0,0)|@as(u32,length_for(source_index)));
+ for(@range(u16,31))|i|{
+  const want=if(i<length_for(source_index)) word_for(source_index,i) else word_for(0,i);
+  if(packets.transmit_frame[i+1]!=want or payload[i]!=word_for(source_index,i)){valid=false;}
+ }
+ tx_evidence[base+10]=@as(u32,valid);state[11]+=@as(u32,valid);
+ if(!valid or packets.sending or packets.pending or packets.tx_phase!=0){state[15]+=1;return;}
+ if(source_index==0){
+  // Reuse source/frame only after verifying the first completion lease.
+  // No host command or timing gap initiates the second packet.
+  source_index=1;
+  for(@range(u16,31))|i|{payload[i]=word_for(1,i);}
+  packets.send(0,0,&payload,8);
+ }
+}
+fn received(data:[*]u32,length:u16) void {
+ const index=@as(u16,state[2]);state[2]+=1;
+ if(sender or index>=2){state[15]+=1;return;}
+ const base=index*6;rx_evidence[base]=@as(u32,length);
+ rx_evidence[base+1]=@as(u32,packets.receiving);rx_evidence[base+2]=@as(u32,packets.rx_phase);
+ rx_evidence[base+3]=packets.header_buffer[0];rx_evidence[base+5]=@as(u32,index);
+ var valid=length==length_for(index);
+ for(@range(u16,31))|i|{
+  if(i<length){observed[index*31+i]=data[i];if(data[i]!=word_for(index,i)){valid=false;}}
+ }
+ rx_evidence[base+4]=@as(u32,valid);if(!valid){state[15]+=1;}
+ state[4]=@as(u32,length);state[5]=@as(u32,valid);state[28]=packets.header_buffer[0];
+ state[12]=@as(u32,packets.receiving);state[13]=@as(u32,packets.rx_phase);
+}
+fn failed(code:u16) void {state[3]=@as(u32,code);}
+fn initialize() void {
+ @assert(case_id[0]==0 and state[0]==0);
+ for(@range(u16,31))|i|{payload[i]=word_for(0,i);}
+ state[14]=@as(u32,@get_config(@get_int(tc.addresses.MISC_FABRIC_CFG)/tc.word_size)&4);
+ @assert(state[14]==0);packets.init();state[0]=1;sys.unblock_cmd_stream();
+}
+fn exercise() void {
+ @assert(state[0]==1);state[0]=2;
+ if(comptime sender){packets.send(0,0,&payload,31);state[7]=@as(u32,packets.sending);state[8]=@as(u32,packets.pending);}
+ sys.unblock_cmd_stream();
+}
+fn snapshot() void {
+ state[30]=packets.tail_normal_events[0];state[31]=packets.consumption_events[0];state[32]=packets.consumption_events[1];
+ state[16]=@as(u32,packets.sending);state[17]=@as(u32,packets.pending);
+ state[18]=@as(u32,packets.rx_phase);state[19]=@as(u32,packets.tx_phase);
+ state[20]=packets.control_buffer[0];state[21]=@as(u32,packets.protocol_error);
+ state[22]=@as(u32,source_index);state[23]=@as(u32,packets.header_waiting);
+ state[29]=packets.transmit_frame[0];sys.unblock_cmd_stream();
+}
+const case_ptr:[*]u32=&case_id;const state_ptr:[*]u32=&state;
+const observed_ptr:[*]u32=&observed;const tx_ptr:[*]u32=&tx_evidence;const rx_ptr:[*]u32=&rx_evidence;
+const frame_ptr:[*]u32=&packets.transmit_frame;const source_ptr:[*]u32=&payload;
+const buffer_ptr:[*]u32=&packets.receive_buffer;const events_ptr:[*]u32=&packets.protocol_events;
+const tail_ptr:[*]u32=&packets.tail_normal_events;const consumption_ptr:[*]u32=&packets.consumption_events;
+comptime {
+ @export_symbol(case_ptr,"case_id");@export_symbol(state_ptr,"state");@export_symbol(observed_ptr,"observed");
+ @export_symbol(tx_ptr,"tx_evidence");@export_symbol(rx_ptr,"rx_evidence");
+ @export_symbol(frame_ptr,"transmitted_frame");@export_symbol(source_ptr,"source_payload");
+ @export_symbol(buffer_ptr,"received_buffer");@export_symbol(events_ptr,"events");
+ @export_symbol(tail_ptr,"tail_normal_events");@export_symbol(consumption_ptr,"consumption_events");
+ @export_symbol(initialize);@export_symbol(exercise);@export_symbol(snapshot);
+}

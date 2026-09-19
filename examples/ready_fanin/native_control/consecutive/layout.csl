@@ -1,0 +1,16 @@
+const memcpy=@import_module("<memcpy/get_params>",.{.width=2,.height=1});
+layout {
+ @set_rectangle(2,1);
+ for(@range(u16,2))|x|{
+  @set_tile_code(x,0,"pe.csl",.{.memcpy_params=memcpy.get_params(x),.column=x});
+  @set_color_config(x,0,@get_color(16),.{.routes=.{.rx=if(x==0) .{EAST} else .{RAMP},.tx=if(x==0) .{RAMP} else .{WEST}}});
+ }
+ @export_name("tail_normal_events",[*]u32,false);
+ @export_name("consumption_events",[*]u32,false);
+ @export_name("case_id",[*]u32,false);@export_name("state",[*]u32,false);
+ @export_name("received_buffer",[*]u32,false);
+ @export_name("tx_evidence",[*]u32,false);@export_name("rx_evidence",[*]u32,false);
+ @export_name("transmitted_frame",[*]u32,false);@export_name("source_payload",[*]u32,false);
+ @export_name("observed",[*]u32,false);@export_name("events",[*]u32,false);
+ @export_name("initialize",fn()void);@export_name("exercise",fn()void);@export_name("snapshot",fn()void);
+}

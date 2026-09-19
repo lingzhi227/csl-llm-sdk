@@ -12,10 +12,14 @@ A separate physical 136-producer fixture now reproduces the READY corruption
 without neural math. All 408 source snapshots are correct; a received payload
 contains a network-header value. Strict validation failed despite a normal
 runtime exit. This narrows the investigation but proves no root cause or repair.
-See [reproduction report](READY-FANIN-REPRODUCTION.md).
+See [reproduction report](READY-FANIN-REPRODUCTION.md). A native-control transport
+now passes focused two-PE simulator checks, including actual message routing.
+The [qualification report](NATIVE-CONTROL-QUALIFICATION.md) preserves the failed
+suites and separates that result from physical fixture repair.
 
 | Component | Current accepted scope |
 |---|---|
+| Native control termination | Separately accepted isolated static-route cases and consecutive 31→8 packets, then actual SDK message routing with both bankA=4; complete buffers/leases/order/suffixes/counts pass; simulator only, physical136 remains open |
 | Managed receive descriptor comparison | Complete 356-PE compile passes at 25,600 bytes including stack; all 13 physical captures byte-identical to combined TX on the same system; strict protocol still fails, normal exit and release verified |
 | Combined-frame transmission comparison | Complete356PE compile passes at 25,600 bytes including stack; physical run still fails on the same malformed payload despite408 exact source records and normal exit; different assigned system |
 | Concurrent READY physical reproduction | 442 coherent records; all 408 producer snapshots exact; malformed receive at record 21; strict check failed, normal context exit and release verified |
