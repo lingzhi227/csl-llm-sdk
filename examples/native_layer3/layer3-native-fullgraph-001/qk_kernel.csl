@@ -1,0 +1,51 @@
+// Original BF16 Q/K and offset gains. Runtime angles/trigonometry are device work.
+const math=@import_module("<math>");
+const trig_kernel=@import_module("trig_kernel.csl");
+fn expand(raw:u16) f32 {return @bitcast(f32,@as(u32,raw)<<16);}
+fn round_bf16(raw:u32) u16 {const odd:u32=(raw>>16)&1;return @as(u16,(raw+0x00007fff+odd)>>16);}
+fn compute(input:[*]u16,weights:[*]u16,frequencies:[*]f32,control:[*]u32,
+ stats:[*]f32,rms_stages:[*]f32,normalized:[*]u16,trig:[*]f32,trig_casts:[*]u16,
+ rotary_stages:[*]f32,product_casts:[*]u16,output:[*]u16,
+ probe_inputs:[*]f32,probes:[*]f32,events:[*]u32) u32 {
+ var errors:u32=0;
+ for(@range(u16,2))|head|{
+  const base:u16=head*256;const sb:u16=head*5;var square:f32=0.0;
+  for(@range(u16,256))|c|{const x=expand(input[base+c]);square+=x*x;}
+  stats[sb]=square;stats[sb+1]=square/256.0;stats[sb+2]=stats[sb+1]+0.000001;
+  stats[sb+3]=math.sqrt_f32(stats[sb+2]);stats[sb+4]=1.0/stats[sb+3];
+  for(@range(u16,256))|c|{
+   const y:f32=expand(input[base+c])*stats[sb+4];rms_stages[head*512+c]=y;
+   const gained:f32=y*(1.0+expand(weights[base+c]));rms_stages[head*512+256+c]=gained;
+   normalized[base+c]=round_bf16(@bitcast(u32,gained));
+  }
+  events[head+1]=@as(u32,head+2);
+ }
+ for(@range(u16,32))|i|{
+  const angle:f32=@as(f32,control[1])*frequencies[i];
+  if(angle<0.0 or angle>7.0){errors+=1;}
+  trig_kernel.sincos(angle,@ptrcast([*]f32,&trig[i*4]));
+  trig_casts[i]=round_bf16(@bitcast(u32,trig[i*4+2]));
+  trig_casts[i+32]=round_bf16(@bitcast(u32,trig[i*4+3]));
+ }
+ events[3]=4;
+ for(@range(u16,2))|head|{
+  const base:u16=head*256;
+  for(@range(u16,64))|c|{
+   const j:u16=c%32;const other:u16=if(c<32) c+32 else c-32;
+   const rotated:f32=if(c<32) -expand(normalized[base+other]) else expand(normalized[base+other]);
+   const p0:f32=expand(normalized[base+c])*expand(trig_casts[32+j]);
+   const p1:f32=rotated*expand(trig_casts[j]);
+   rotary_stages[head*192+c]=p0;rotary_stages[head*192+64+c]=p1;
+   product_casts[head*128+c]=round_bf16(@bitcast(u32,p0));product_casts[head*128+64+c]=round_bf16(@bitcast(u32,p1));
+   const sum:f32=expand(product_casts[head*128+c])+expand(product_casts[head*128+64+c]);
+   rotary_stages[head*192+128+c]=sum;output[base+c]=round_bf16(@bitcast(u32,sum));
+  }
+  for(@range(u16,192))|c|{output[base+64+c]=normalized[base+64+c];}
+  events[head+4]=@as(u32,head+5);
+ }
+ for(@range(u16,8))|i|{
+  if(probe_inputs[i]<0.0 or probe_inputs[i]>7.0){errors+=1;}
+  trig_kernel.sincos(probe_inputs[i],@ptrcast([*]f32,&probes[i*4]));
+ }
+ events[6]=7;return errors;
+}

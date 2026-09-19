@@ -2,6 +2,18 @@
 
 Only accepted results are listed below. Unresolved integration work and the remaining scope are tracked in [implementation status](STATUS.md).
 
+## Complete native graph and first-error evidence — Accepted scope, September 19, 2026 UTC
+
+Both fullgraph001/002 pass actual placement, original storage and SRAM review:
+1,254 programs cover all 33,750 PEs with no demotion; 47,552 bytes including the
+4 KiB stack allowance leaves 576 bytes. Fullgraph002 adds a 44-byte first-error
+record without changing mathematical kernels or packet transport. Two failed
+physical prefixes independently verify 195 original parameter readbacks and all
+24 head-finished metadata. Runtime003 captures READY_FORMAT with reserved word
+0x00400108. The upstream cause, archive payload and full-layer numerics remain
+unaccepted. Both attempts timed out during later diagnostic reads and were
+released; no normal stop or complete neural epoch is claimed. See [report](NATIVE-LAYER3-GRAPH.md).
+
 ## Physical QK archive and selected-program fit — Accepted, September 19, 2026 UTC
 
 The synthetic four-PE original-kernel fixture passed two resets, exact960-word

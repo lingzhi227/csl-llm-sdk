@@ -1,11 +1,12 @@
 # Implementation status
 
-September 19, 2026 UTC: physical synthetic QK archive/alias equivalence passed
-two resets, exact raw diagnostics and final output, actual source overwrite,
-61 invalid API calls and normal stop. Separately, all 24 complete native heads
-passed the selected 89-position SRAM/storage check with 576 bytes minimum headroom.
-The accepted native KV/Q SDK transport and older FIFO physical observations remain
-preserved. Complete original neural-layer epochs and CSL model generations remain zero.
+September 19, 2026 UTC: the complete native layer3 graph passed independent
+actual placement, original storage and SRAM checks: all 33,750 PEs, 24 heads and
+1,254 application ELFs, with 576 bytes minimum static headroom. Two physical
+attempts verified initial parameters and report all 24 head metadata finished,
+but the original layer remains incomplete. The latest first-error record rejects
+a malformed MLP READY message. Both failed jobs were released. Complete original
+neural-layer epochs and CSL model generations remain zero.
 
 | Component | Current accepted scope |
 |---|---|
@@ -14,8 +15,9 @@ preserved. Complete original neural-layer epochs and CSL model generations remai
 | Native KV/Q ownership | 45-PE SDK fixture, three operations/reset, 29,184 exact payload halfwords, 192 canaries, 525 actual API rejects, normal stop and release |
 | Original layer 3 MLP | HW01: complete 5120→17408→5120 MLP, four original/changed/zero inputs, full resident weight retention and independent numerical audit on physical WSE-3 |
 | Full text CPU reference | Original 64 layers, 851 text tensors, full vocabulary, four generated tokens and complete original cache restoration; CPU acceptance only |
-| Full layer 3 compiled graph | Latest diagnostic 563 programs, 33750 PEs, 30576 matrix PEs; maximum ordinary storage plus 4096 stack 47920 under 48128 |
-| Full layer 3 physical diagnostic | Twenty READY heads; incomplete heads 17, 21, 22 and 23 lack K/V fanout data; no complete neural epoch or reference numerical acceptance |
+| Full native layer 3 compiled graph | 1,254 programs, 33,750 PEs, 30,576 matrix PEs; no demotion; max 47,552 including 4,096 stack under 48,128 |
+| Full native layer 3 physical prefix | Initial 195 original parameter readbacks exact; all 24 heads finished metadata; origin rejects READY word 7 = 0x00400108; no archive payload, normal stop or full-layer numerical acceptance |
+| Earlier FIFO physical diagnostic | Twenty READY heads and four incomplete heads retained as historical evidence |
 | Finite FIFO observation | SDK16-PE capacity 64/128 and device-gated drain fixture; physical six-source finite-prefix capture through 50 idle locations |
 | Q/K/V synthetic fanout |112 roots, 24 heads, 576 packets, 192 rows and 24576 exact markers completed in the compressed SDK graph |
 | Dense-stage transport | Physical 600-PE two-epoch ownership, packed BF16 bank and connected transport qualification |
@@ -25,12 +27,13 @@ preserved. Complete original neural-layer epochs and CSL model generations remai
 | Three sequential logical stages | Target layers 0–19, 20–43, 44–63 with host hidden/KV/DeltaNet/convolution checkpoints; complete device execution not yet qualified |
 | Complete CSL text generation | Not yet accepted |
 
-The complete native graph still needs its own compiled-fit acceptance before
-original-layer runtime and numerical checks. QK diagnostics are now archived
-before source-workspace reuse; the four-PE fixture establishes that lifetime with
-synthetic data. Selected fit and physical alias equivalence do not establish
-fullgraph execution, original-weight numerical correctness or model generation.
+The complete graph now fits, while execution remains blocked by an observed
+protocol-format error. Strict READY checks stay in place; bounded source and
+transport diagnostics will distinguish buffer corruption from packet framing.
+Compiled fit, completed head metadata and physical archive-fixture equivalence
+do not establish original full-layer numerics or model generation.
 
+[Complete native graph and failed runtime prefixes](NATIVE-LAYER3-GRAPH.md) ·
 [Physical archive and selected fit](QK-ARCHIVE-PHYSICAL.md) ·
 [Native SDK milestone](NATIVE-KV-SDK.md) · [Physical FIFO diagnostic](LAYER3-FIFO-TRACE.md) ·
 [Full MLP](HW01-FULL-MLP.md) · [CPU reference](FULL-REFERENCE.md) ·

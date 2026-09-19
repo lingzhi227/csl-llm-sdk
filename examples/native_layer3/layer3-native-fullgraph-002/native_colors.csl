@@ -1,0 +1,6 @@
+// Accepted controller single-source/disjoint-tree coloring, pending compilation.
+const key:[8]color=[8]color{@get_color(7),@get_color(3),@get_color(9),@get_color(10),@get_color(13),@get_color(19),@get_color(11),@get_color(12)};
+const value:[8]color=[8]color{@get_color(8),@get_color(9),@get_color(13),@get_color(19),@get_color(11),@get_color(12),@get_color(7),@get_color(8)};
+fn head_streams(head:u16) [4]color {
+ const g:u16=2*(head/6);return [4]color{key[g],key[g+1],value[g],value[g+1]};
+}

@@ -1,0 +1,109 @@
+// Validate before the original collector writes; commit only after retention.
+// One pending receipt and one immutable transport-owned receipt are distinct.
+param expected_slots:u16=255;
+const protocol=@import_module("credit_protocol.csl",.{});
+comptime {@comptime_assert(expected_slots>0 and expected_slots<=255);}
+var identity=@zeros([4]u32);var operation:u16=0;var head:u16=0;
+var counts=@zeros([8]u16);var retained_slots:u16=0;
+var initialized:bool=false;var fragment_pending:bool=false;
+var fragment_slot:u16=0;var fragment_count:u16=0;
+var fragment_kind:u16=0;var fragment_group:u16=0;
+var receipt_pending:bool=false;var pending_kind:u16=0;var pending_group:u16=0;
+var pending_final:bool=false;
+var receipt_inflight:bool=false;var receipt_kind:u16=0;var receipt_group:u16=0;
+var receipt_final:bool=false;var final_receipt_released:bool=false;
+var compute_started:bool=false;var compute_done:bool=false;
+var retained_rows:u16=0;var receipt_sends:u16=0;var receipt_releases:u16=0;
+var pending_while_inflight:u16=0;var errors:u32=0;var rejected:u32=0;
+fn reject(flag:u32) bool {errors|=flag;rejected+=1;return false;}
+fn quiescent() bool {
+ return initialized and retained_slots==expected_slots and compute_done and !fragment_pending and
+        !receipt_pending and !receipt_inflight;
+}
+fn begin(request:u32,reset:u32,position:u32,stage:u32,new_operation:u16,new_head:u16) bool {
+ if(initialized and !quiescent()){return reject(protocol.ERR_LEASE);}
+ if(new_operation==0xffff){return reject(protocol.ERR_PHASE);}
+ if(new_head>=24){return reject(protocol.ERR_RECIPIENT);}
+ if(initialized and identity[0]==request and identity[1]==reset and identity[2]==position and
+    identity[3]==stage and operation==new_operation){return reject(protocol.ERR_DUPLICATE);}
+ identity[0]=request;identity[1]=reset;identity[2]=position;identity[3]=stage;
+ operation=new_operation;head=new_head;
+ for(@range(u16,8))|i|{counts[i]=0;}
+ retained_slots=0;fragment_pending=false;receipt_pending=false;receipt_inflight=false;
+ pending_final=false;receipt_final=false;final_receipt_released=false;
+ compute_started=false;compute_done=false;retained_rows=0;receipt_sends=0;receipt_releases=0;
+ pending_while_inflight=0;errors=0;rejected=0;initialized=true;return true;
+}
+noinline fn validate_fragment(data:[*]u32,length:u16) bool {
+ if(length!=31 and length!=26){return reject(protocol.ERR_LENGTH);}
+ if(!initialized or !protocol.matches(data,&identity)){return reject(protocol.ERR_IDENTITY);}
+ if(fragment_pending or compute_started){return reject(protocol.ERR_ORDER);}
+ if(data[5]!=@as(u32,operation)){return reject(protocol.ERR_PHASE);}
+ if(data[0]<1 or data[0]>3 or data[6]>=96){return reject(protocol.ERR_KIND_GROUP);}
+ const kind=@as(u16,data[0]);const group=@as(u16,data[6]);
+ if(!protocol.valid_group(kind,group)){return reject(protocol.ERR_KIND_GROUP);}
+ var slot:u16=0;
+ if(kind==protocol.QUERY){
+  if(group/4!=head){return reject(protocol.ERR_RECIPIENT);}
+  slot=group%4;
+ }else{
+  if(group/2!=head/6){return reject(protocol.ERR_RECIPIENT);}
+  slot=(if(kind==protocol.KEY) @as(u16,4) else @as(u16,6))+group%2;
+ }
+ const bit=@as(u16,1)<<slot;
+ if((expected_slots&bit)==0){return reject(protocol.ERR_KIND_GROUP);}
+ if((retained_slots&bit)!=0){return reject(protocol.ERR_DUPLICATE);}
+ const offset=counts[slot];
+ if(data[7]!=@as(u32,offset) or (offset!=0 and offset!=23 and offset!=46)){
+  return reject(protocol.ERR_ORDER);
+ }
+ const words:u16=if(offset==46) @as(u16,18) else @as(u16,23);
+ if(length!=words+8){return reject(protocol.ERR_LENGTH);}
+ if(offset==46 and receipt_pending){return reject(protocol.ERR_CAPACITY);}
+ for(@range(u16,23))|i|{if(i<words){
+  const low=@as(u16,data[8+i]&0xffff);const high=@as(u16,data[8+i]>>16);
+  if((low&0x7f80)==0x7f80 or (high&0x7f80)==0x7f80){return reject(protocol.ERR_PAYLOAD);}
+ }}
+ fragment_slot=slot;fragment_count=words;fragment_kind=kind;fragment_group=group;
+ fragment_pending=true;return true;
+}
+// Original collector call is between validate_fragment and commit_fragment.
+// It copies Q/raw-gate/K/V into their unchanged retained, disjoint ranges.
+fn commit_fragment() bool {
+ if(!fragment_pending){return reject(protocol.ERR_ORDER);}
+ fragment_pending=false;counts[fragment_slot]+=fragment_count;
+ if(counts[fragment_slot]==64){
+  if(receipt_pending){return reject(protocol.ERR_CAPACITY);}
+  retained_slots|=@as(u16,1)<<fragment_slot;retained_rows+=1;
+  receipt_pending=true;pending_kind=fragment_kind;pending_group=fragment_group;
+  pending_final=retained_slots==expected_slots;
+  if(receipt_inflight){pending_while_inflight+=1;}
+ }
+ return true;
+}
+fn take_receipt(target:[*]u32) bool {
+ if(!receipt_pending or receipt_inflight){return false;}
+ receipt_kind=pending_kind;receipt_group=pending_group;receipt_final=pending_final;
+ const pack_ok=protocol.pack(target,protocol.ROW_CONSUMED,&identity,operation,receipt_kind,receipt_group,head);
+ if(!pack_ok){return reject(protocol.ERR_IDENTITY);}
+ receipt_pending=false;pending_final=false;receipt_inflight=true;receipt_sends+=1;return true;
+}
+fn receipt_source_complete() bool {
+ if(!receipt_inflight){return reject(protocol.ERR_LEASE);}
+ receipt_inflight=false;receipt_releases+=1;
+ if(receipt_final){final_receipt_released=true;}
+ receipt_final=false;return true;
+}
+fn can_compute() bool {
+ return initialized and retained_slots==expected_slots and final_receipt_released and
+        !compute_started and !fragment_pending and !receipt_pending and !receipt_inflight;
+}
+// Caller also requires !packets.receiving, outside the RX callback.
+fn start_compute() bool {
+ if(!can_compute()){return reject(protocol.ERR_ORDER);}
+ compute_started=true;return true;
+}
+fn complete_compute() bool {
+ if(!compute_started or compute_done){return reject(protocol.ERR_ORDER);}
+ compute_done=true;return true;
+}

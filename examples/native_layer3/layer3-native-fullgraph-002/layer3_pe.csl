@@ -1,0 +1,687 @@
+// Complete original layer3 graph. Source-only; no compile or numerical claim.
+// Roles: idle0, matrix1, input norm/residual2, post norm/residual3,
+// query head4, MLP product5, fixed-frame origin6, idle observer sink7.
+param memcpy_params;
+param role:u16;
+param ordinal:u16=0;
+param participants:u16=54;
+param credit_window:u16=4;
+param head_id:u16=0;
+param matrix_kind:u16=0;
+param matrix_group:u16=0;
+const matrix=role==1;const root=matrix and ordinal==0;
+const q_root=root and matrix_kind==1;
+const kv_root=root and (matrix_kind==2 or matrix_kind==3);
+const pre=role==2;const post=role==3;const attention=role==4;const mlp=role==5;
+const origin=role==6;const sink=role==7;const head_sink=role==8;const peer=pre or post or attention or mlp;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const observer=@import_module(if(origin or sink) "observer.csl" else "<empty>",
+ if(origin or sink) .{.sender=origin,.fill=fill_observer} else .{});
+const head_observer=@import_module(if(attention or head_sink) "head_observer.csl" else "<empty>",
+ if(attention or head_sink) .{.sender=attention,.fill=fill_head_observer,.archive_enabled=true,
+  .expected_head=head_id,.on_archive_committed=archive_committed,.on_published=archive_committed} else .{});
+const lane=@import_module(if(matrix) "matrix_lane.csl" else "<empty>",if(matrix) .{
+ .ordinal=ordinal,.participants=participants,.phase_count=4,
+ .input_task=@get_local_task_id(11),.line_task=@get_local_task_id(10),
+ .on_output=matrix_output,.on_token_complete=matrix_complete} else .{});
+const frame=@import_module(if(origin) "frame_origin.csl" else "<empty>",if(origin) .{
+ .phase_count=4,.completion_task=@get_local_task_id(11),
+ .on_need_chunk=need_chunk,.on_frame_injected=injected} else .{});
+const norm=@import_module(if(pre or post) "norm_owner.csl" else "<empty>",if(pre or post) .{
+ .on_normalized=normalized,.on_residual=residual_ready} else .{});
+const attn=@import_module(if(attention) "attention_owner8.csl" else "<empty>",if(attention) .{
+ .on_output_ready=attention_ready,.on_error=math_failure,.observed=attention,.on_probe=math_probe,
+ .archive_workspace=true,.on_archive=archive_qk} else .{});
+const product=@import_module(if(mlp) "mlp_owner.csl" else "<empty>",if(mlp) .{
+ .on_product_ready=product_ready,.on_error=math_failure} else .{});
+const packets=@import_module("packets.csl",.{.sent_task_id=@get_local_task_id(12),
+ .received_task_id=@get_local_task_id(13),.on_sent=sent,.on_received=received});
+const rows=@import_module(if(root or peer or origin) "row_packet.csl" else "<empty>",if(root or peer or origin) .{
+ .source_role=!origin,.send=send_row,.on_source_released=row_released,.on_row_received=chunk_received} else .{});
+
+const QUERY:u32=1;const KEY:u32=2;const VALUE:u32=3;const MIX_OUT:u32=4;
+const credit_protocol=@import_module("credit_protocol.csl",.{});
+const root_credit=@import_module(if(q_root) "credit_root.csl" else "<empty>",.{});
+const head_credit=@import_module(if(attention) "credit_head.csl" else "<empty>",if(attention) .{.expected_slots=15} else .{});
+const credit_coordinates=@import_module(if(origin) "credit_coordinates.csl" else "<empty>",.{});
+const head_coordinates=@import_module(if(attention) "credit_head_coordinates.csl" else "<empty>",
+ if(attention) .{.head=head_id} else .{});
+const origin_credit=@import_module(if(origin) "credit_origin.csl" else "<empty>",
+ if(origin) .{.root_count=96,.root_ids=credit_coordinates.root_ids,.expected_heads=0x00ffffff} else .{});
+const native_colors=@import_module("native_colors.csl",.{});
+const native_head=@import_module(if(attention) "native_kv_head.csl" else "<empty>",if(attention) .{
+ .stream_colors=native_colors.head_streams(head_id),.on_retained=native_retained,.on_error=protocol_fail} else .{});
+const native_source=@import_module(if(kv_root) "native_kv_source.csl" else "<empty>",if(kv_root) .{
+ .stream_color=if(matrix_kind==2) native_colors.key[matrix_group] else native_colors.value[matrix_group],
+ .on_released=native_released,.on_error=protocol_fail} else .{});
+const service_task=@get_local_task_id(17);
+var native_status=@zeros([16]u32);
+var credit_status=@zeros([16]u32);
+var credit_error:u32=0;
+const origin_fault=@import_module(if(origin) "origin_fault.csl" else "<empty>",.{});
+noinline fn protocol_fail() void {
+ const first=credit_error==0;
+ if(comptime origin){if(first){origin_fault.callback(1);}}
+ credit_error|=1;credit_status[0]=credit_error;
+ if(first and initialized){
+  if(comptime origin){observer.changed();}
+  if(comptime attention){observe(12);}
+ }
+}
+// Distinguish packet failures from callbacks without inventing a current header.
+noinline fn origin_packet_fail(reason:u32,data:[*]u32,length:u16) void {
+ if(comptime origin){origin_fault.latch(reason,length,data,true);}
+ protocol_fail();
+}
+noinline fn origin_callback_fail(reason:u32) void {
+ if(comptime origin){origin_fault.callback(reason);}
+ protocol_fail();
+}
+fn math_failure(error:u32) void {
+ native_status[0]|=error;protocol_fail();
+}
+fn archive_qk() bool {
+ if(comptime attention){return head_observer.spill(&attn.stages);}
+ return false;
+}
+fn archive_committed() void {
+ if(comptime head_sink){
+  if(head_observer.protocol_error){protocol_fail();return;}
+  done=sink_archive_finished();finish();
+ }
+}
+fn sink_archive_finished() bool {
+ if(comptime head_sink){
+  return head_observer.retained_final(epoch);
+ }
+ return false;
+}
+fn wake_service() void {@activate(service_task);}
+fn native_retained(slot:u16) void {
+ if(comptime attention){
+  const ok=attn.native_retained(1,1,epoch-1,0,0,slot);
+  if(!ok){protocol_fail();return;}
+  observe(13+slot);wake_service();
+ }
+}
+fn native_released() void {
+ if(comptime kv_root){
+  if(!root_pending or packets.sending or !lane.root_output_owned){protocol_fail();return;}
+  const ok=native_source.retire(1,1,epoch-1,0,0);if(!ok){protocol_fail();return;}
+  root_pending=false;lane.release_output(root_phase);wake_service();
+ }
+}
+fn credit_quiescent() bool {
+ if(credit_error!=0){return false;}
+ if(comptime origin){return origin_credit.quiescent();}
+ if(comptime attention){return head_credit.quiescent() and native_head.quiescent() and head_observer.archive_quiescent();}
+ if(comptime head_sink){return head_observer.archive_quiescent();}
+ if(comptime q_root){return root_credit.quiescent();}
+ if(comptime kv_root){return native_source.quiescent();}
+ return true;
+}
+const GATE:u32=5;const UP:u32=6;const DOWN:u32=7;const HIDDEN:u32=8;
+const CHUNK:u32=9;const READY:u32=10;const REQUEST:u32=11;
+// Immutable wrapper metadata complements the unchanged six-word lane descriptor:
+// packet kind, fanout count, support-owner index, reserved. Gate/up and Q/K/V
+// therefore remain distinct even when phase and group numbers coincide.
+var route=@zeros([4]u16);
+var unused16=@zeros([1]u16);var unused32=@zeros([1]u32);var unusedf=@zeros([1]f32);
+var state=@zeros([12]u32);
+var tx=@zeros([10]u32);
+var retained_chunk=@zeros([if(peer) 128 else 1]u16);
+var ready_seen=@zeros([if(origin) 163 else 1]u16);
+var ready_counts=@zeros([if(origin) 5 else 1]u16);
+var request_identity=@zeros([4]u32);
+var initialized:bool=false;var command_waiting:bool=false;var done:bool=false;
+var epoch:u32=0;
+// event,packet count,last kind/group/offset/length,QK/attention error,event count,
+// sticky event mask and seven cached actual-value summaries/validity fields.
+var probe_record=@zeros([if(attention) 17 else 1]u32);
+var ack_pending:bool=false;var ack_phase:u16=0;var ack_owner:u16=0;
+var request_pending:bool=false;var request_phase:u16=0;var request_group:u16=0;
+var requested_offset:u16=0;var request_x:u16=0;var request_y:u16=0;
+var request_waiting:bool=false;
+var tx_mode:u16=0; //1 READY,2 REQUEST,3 row payload,4 credit control
+var root_values:[*]u16;var root_phase:u16=0;var root_group:u16=0;
+var root_pending:bool=false;var fanout_index:u16=0;
+var forward_hidden:bool=false;var hidden_group:u16=0;
+var row_purpose:u16=0; //1 matrix output,2 response chunk,3 norm-to-norm hidden
+var frame_finished:bool=false;
+
+noinline fn finish() void {
+ if(command_waiting and done and !packets.sending and !packets.receiving and !ack_pending and !request_pending and credit_quiescent()){
+  fill_native_status();state[0]=2*epoch;command_waiting=false;sys.unblock_cmd_stream();observe(11);
+  if(comptime origin){observer.changed();}
+ }
+}
+fn initialize() void {
+ if(initialized or route[3]!=0){protocol_fail();return;}
+ if(comptime matrix){
+  @assert(route[0]>=1 and route[0]<=7);
+  const kind=route[0];const group=lane.descriptor[1];
+  if(comptime root){if(kind!=matrix_kind){protocol_fail();return;}}
+  if(comptime kv_root){if(group!=matrix_group){protocol_fail();return;}}
+  @assert(lane.descriptor[0]==(if(kind<=3) @as(u16,0) else if(kind==4) @as(u16,1) else if(kind<=6) @as(u16,2) else @as(u16,3)));
+  @assert(route[1]==(if(kind==2 or kind==3) @as(u16,6) else @as(u16,1)) and lane.descriptor[3]==0);
+  if(kind==1){@assert(group<96 and lane.descriptor[2]==16+group/4);}
+  else if(kind==2 or kind==3){@assert(group<8 and lane.descriptor[2]==16+6*(group/2));}
+  else if(kind==4){@assert(group<40 and lane.descriptor[2]==1);}
+  else if(kind==5 or kind==6){@assert(group<136 and lane.descriptor[2]==40+group);}
+  else{@assert(group<40 and lane.descriptor[2]==2);}
+ }
+ if(comptime attention){if(route[2]!=head_id or head_id>=24){protocol_fail();return;}}
+ if(comptime mlp){@assert(route[2]<136);}
+ if(comptime origin){origin_fault.init();}
+ packets.init();initialized=true;
+ if(comptime origin or sink){observer.init();}
+ if(comptime attention or head_sink){head_observer.init();}
+ if(comptime attention){probe_record[6]=0xffffffff;probe_record[7]=0xffffffff;}
+ if(comptime attention){attn.restore_position(0);}
+ sys.unblock_cmd_stream();
+}
+fn prepare() void {
+ // This diagnostic has one admitted position; reuse requires a later explicit candidate.
+ if(!initialized or epoch!=0 or command_waiting or packets.sending or ack_pending or
+    request_pending or root_pending or forward_hidden or request_waiting){protocol_fail();return;}
+ @assert(initialized and epoch<8 and state[0]==2*epoch and !command_waiting and !packets.sending);
+ @assert(!ack_pending and !request_pending and !root_pending and !forward_hidden and !request_waiting);
+ if(comptime origin){if(epoch>0){frame.retire(1,1,epoch-1,0);}}
+ if(comptime post){if(epoch>0){norm.retire_host_output();}}
+ epoch+=1;state[0]=2*epoch-1;state[1]=epoch;done=false;frame_finished=false;
+ request_identity[0]=1;request_identity[1]=1;request_identity[2]=epoch-1;request_identity[3]=0;
+ if(comptime attention or head_sink){
+  const archive_begun=head_observer.begin_archive(1,1,epoch-1,0,0,epoch);
+  if(!archive_begun){protocol_fail();return;}
+ }
+ if(comptime q_root or kv_root){
+  if(!credit_protocol.valid_group(route[0],lane.descriptor[1]) or lane.descriptor[0]!=0 or
+     lane.descriptor[2]!=16+credit_protocol.first_head(route[0],lane.descriptor[1]) or
+     lane.descriptor[3]!=0 or lane.descriptor[4]!=128 or
+     route[1]!=credit_protocol.recipient_count(route[0])){protocol_fail();return;}
+  if(comptime q_root){
+   const ok=root_credit.begin(1,1,epoch-1,0,0,route[0],lane.descriptor[1]);
+   if(!ok){protocol_fail();return;}
+  }else{
+   const stream:u16=(if(matrix_kind==2) @as(u16,0) else @as(u16,8))+matrix_group;
+   const ok=native_source.begin(1,1,epoch-1,0,0,stream);if(!ok){protocol_fail();return;}
+  }
+ }
+ if(comptime attention){
+  if(route[2]!=head_id or head_id>=24){protocol_fail();return;}
+  const ok=head_credit.begin(1,1,epoch-1,0,0,head_id);if(!ok){protocol_fail();return;}
+ }
+ if(comptime origin){const ok=origin_credit.begin(1,1,epoch-1,0,0,credit_window);if(!ok){origin_callback_fail(9);return;}}
+ if(comptime matrix){lane.begin(1,1,epoch-1,0);}
+ if(comptime pre){norm.prepare_loaded(1,1,epoch-1,0,MIX_OUT,1,0);}
+ if(comptime post){norm.begin(1,1,epoch-1,0,HIDDEN,2,DOWN,3,0);}
+ if(comptime attention){
+  attn.begin(1,1,epoch-1,0,0,route[2],QUERY,KEY,VALUE);
+  const begun=native_head.begin(1,1,epoch-1,0,0,head_id);if(!begun){protocol_fail();return;}
+  const armed=native_head.arm(@ptrcast([*]u16,&attn.qk_input[256]),@ptrcast([*]u16,&attn.input[512]));
+  if(!armed){protocol_fail();return;}
+ }
+ if(comptime mlp){product.begin(1,1,epoch-1,0,2,route[2],GATE,UP);}
+ if(comptime origin){
+  for(@range(u16,163))|i|{ready_seen[i]=0;}
+  for(@range(u16,5))|i|{ready_counts[i]=0;}
+  frame.begin(1,1,epoch-1,0);
+ }
+ observe(1);sys.unblock_cmd_stream();
+}
+fn compute() void {
+ @assert(initialized and !command_waiting and state[0]==2*epoch-1);
+ command_waiting=true;observe(2);
+ if(comptime pre){norm.normalize_loaded();}
+ if(comptime role==0 or sink){done=true;}
+ if(comptime head_sink){done=sink_archive_finished();}
+ if(comptime origin){observer.changed();}
+ pump();finish();
+}
+fn signal_ready(phase:u16,owner:u16) void {
+ @assert(!ack_pending);ack_pending=true;ack_phase=phase;ack_owner=owner;pump();
+}
+fn normalized() void {if(comptime pre){signal_ready(0,0);}else if(comptime post){signal_ready(2,0);}}
+fn residual_ready() void {
+ if(comptime pre){@assert(!forward_hidden);forward_hidden=true;hidden_group=0;pump();}
+ else if(comptime post){signal_ready(4,0);}
+}
+fn attention_ready() void {if(comptime attention){state[3]=@as(u32,attn.position);signal_ready(1,route[2]);}}
+fn product_ready() void {if(comptime mlp){signal_ready(3,route[2]);}}
+fn matrix_complete() void {if(comptime matrix){done=true;finish();}}
+fn matrix_output(data:[*]u16,phase:u16,group:u16) void {
+ if(comptime root){
+  @assert(!root_pending and (route[1]==1 or route[1]==6));
+  root_values=data;root_phase=phase;root_group=group;fanout_index=0;root_pending=true;
+  if(comptime q_root){const ok=root_credit.mark_output_ready();if(!ok){protocol_fail();return;}wake_service();return;}
+  if(comptime kv_root){
+   if(packets.sending or lane.line_busy or !lane.root_output_owned){protocol_fail();return;}
+   const ok=native_source.send(data);if(!ok){protocol_fail();return;}return;
+  }
+  pump();
+ }
+}
+fn send_row(x:u16,y:u16,data:[*]u32,length:u16) void {tx_mode=3;packets.send(x,y,data,length);}
+fn row_released(phase:u16) void {
+ if(comptime root){
+  if(comptime q_root){const ok=root_credit.mark_source_complete();if(!ok){protocol_fail();return;}wake_service();return;}
+  if(comptime kv_root){protocol_fail();return;}
+  @assert(row_purpose==1 and root_pending);fanout_index+=1;
+  if(fanout_index==route[1]){root_pending=false;lane.release_output(phase);}
+ }else if(comptime peer){
+  if(row_purpose==3){
+   @assert(pre and forward_hidden);hidden_group+=1;
+   if(hidden_group==40){forward_hidden=false;done=true;}
+  }else{
+   @assert(row_purpose==2);
+   if(comptime attention){if(!attn.active){done=true;}}
+   if(comptime mlp){@assert(!product.active);done=true;}
+  }
+ }
+ pump();finish();
+}
+fn sent() void {
+ if(tx_mode==4){
+  if(comptime origin){const ok=origin_credit.grant_source_complete();if(!ok){origin_callback_fail(8);return;}}
+  else if(comptime q_root){const ok=root_credit.done_source_complete();if(!ok){protocol_fail();return;}}
+  else if(comptime attention){const ok=head_credit.receipt_source_complete();if(!ok){protocol_fail();return;}}
+  else{protocol_fail();return;}
+  wake_service();return;
+ }
+ if(comptime attention){if(tx_mode==1 and ack_phase==1){observe(10);}}
+ if(comptime root or peer){
+  if(tx_mode==3){rows.sent();}
+  else{
+   @assert(tx_mode==1);
+   if(comptime post){if(ack_phase==4){done=true;}}
+   pump();finish();
+  }
+ }else if(comptime origin){@assert(tx_mode==2);pump();finish();observer.changed();}
+ else{@assert(false);}
+}
+fn header(kind:u32,phase:u16,group:u16) void {
+ tx[0]=kind;tx[1]=1;tx[2]=1;tx[3]=epoch-1;tx[4]=0;
+ tx[5]=@as(u32,phase);tx[6]=@as(u32,group);tx[7]=0;
+}
+fn pump() void {
+ if(packets.sending or credit_error!=0){return;}
+ if(comptime attention){if(head_credit.take_receipt(&tx)){
+  const group=head_credit.receipt_group;const slot:u16=group%4;
+  tx_mode=4;packets.send(head_coordinates.source_x[slot],head_coordinates.source_y[slot],&tx,8);return;
+ }}
+ if(comptime q_root){if(root_credit.done_pending){
+  const ok=root_credit.take_done(&tx);if(!ok){protocol_fail();return;}
+  tx_mode=4;packets.send(0,0,&tx,8);return;
+ }}
+ if(comptime origin){if(origin_credit.take_grant(&tx)){
+  const id=origin_credit.grant_tx_id;tx_mode=4;
+  packets.send(credit_coordinates.root_x[id],credit_coordinates.root_y[id],&tx,8);return;
+ }}
+ if(ack_pending){
+  ack_pending=false;tx_mode=1;header(READY,ack_phase,ack_owner);
+  if(comptime attention){observe(9);}
+  packets.send(0,0,&tx,8);return;
+ }
+ if(comptime root and !kv_root){if(root_pending){
+  if(comptime q_root){
+   if(!root_credit.can_start_row()){return;}
+   const ok=root_credit.start_row();if(!ok){protocol_fail();return;}
+  }
+  row_purpose=1;rows.begin(1,1,epoch-1,0,@as(u32,route[0]),root_phase,root_group,lane.descriptor[4]);
+  // The first layer's24 query owners form one row. Later dense layouts can
+  // replace this wrapper mapping while retaining the lane/packet implementation.
+  rows.transmit(lane.descriptor[2]+fanout_index,lane.descriptor[3],root_values);return;
+ }}
+ if(comptime origin){if(request_pending){
+  request_pending=false;tx_mode=2;header(REQUEST,request_phase,request_group);
+  tx[7]=@as(u32,requested_offset);packets.send(request_x,request_y,&tx,8);return;
+ }}
+ if(comptime peer){
+  if(request_pending){
+   request_pending=false;
+   if(comptime pre or post){norm.copy_chunk(1,1,epoch-1,0,requested_offset,&retained_chunk);}
+   if(comptime attention){attn.copy_chunk(1,1,epoch-1,0,requested_offset,&retained_chunk);}
+   if(comptime mlp){product.copy_chunk(1,1,epoch-1,0,route[2],&retained_chunk);}
+   row_purpose=2;rows.begin(1,1,epoch-1,0,CHUNK,request_phase,request_group,128);
+   rows.transmit(0,0,&retained_chunk);return;
+  }
+  if(comptime pre){if(forward_hidden){
+   norm.copy_chunk(1,1,epoch-1,0,128*hidden_group,&retained_chunk);
+   row_purpose=3;rows.begin(1,1,epoch-1,0,HIDDEN,2,hidden_group,128);
+   rows.transmit(2,0,&retained_chunk);return;
+  }}
+ }
+}
+fn need_chunk(offset:u16,count:u16) void {
+ if(comptime origin){
+  @assert(!request_pending and !request_waiting and count==128 and offset%128==0);
+  request_waiting=true;request_pending=true;request_phase=frame.phase;request_group=offset/128;
+  requested_offset=offset;request_y=0;
+  if(frame.phase==0){request_x=1;}
+  else if(frame.phase==1){request_x=16+request_group/2;requested_offset=(request_group%2)*128;}
+  else if(frame.phase==2){request_x=2;}
+  else{@assert(frame.phase==3);request_x=40+request_group;requested_offset=0;}
+  rows.begin(1,1,epoch-1,0,CHUNK,request_phase,request_group,128);pump();observer.changed();
+ }
+}
+fn chunk_received(data:[*]u16,phase:u16,group:u16) void {
+ if(comptime origin){
+  @assert(request_waiting and phase==request_phase and group==request_group);
+  request_waiting=false;frame.supply(group*128,data,128);rows.release_row(phase);observer.changed();
+ }
+}
+fn received(data:[*]u32,length:u16) void {
+ if(credit_error!=0){return;}
+ if(length<8 or data[1]!=1 or data[2]!=1 or data[3]!=epoch-1 or data[4]!=0){
+  if(comptime origin){origin_packet_fail(2,data,length);}else{protocol_fail();}return;
+ }
+ if(comptime root and !q_root){protocol_fail();return;}
+ if(comptime q_root){
+  const ok=if(data[0]==credit_protocol.GRANT) root_credit.receive_grant(data,length)
+    else if(data[0]==credit_protocol.ROW_CONSUMED) root_credit.receive_receipt(data,length) else false;
+  if(!ok){protocol_fail();return;}wake_service();return;
+ }
+ if(comptime origin){if(data[0]==credit_protocol.ROOT_DONE){
+  const ok=origin_credit.receive_done(data,length);if(!ok){origin_packet_fail(3,data,length);return;}
+  observer.changed();wake_service();return;
+ }}
+ if(comptime attention){
+  if(data[0]!=REQUEST){const ok=head_credit.validate_fragment(data,length);if(!ok){protocol_fail();return;}}
+  else if(length!=8 or request_pending or data[5]!=1 or data[6]/2!=@as(u32,head_id) or
+          data[7]!=(data[6]%2)*128 or data[7]!=@as(u32,attn.served)*128 or
+          !head_credit.compute_done or !attn.ready){protocol_fail();return;}
+  probe_record[1]+=1;probe_record[2]=data[0];probe_record[3]=data[6];
+  probe_record[4]=data[7];probe_record[5]=@as(u32,length);
+  if(data[0]>255 or data[6]>255 or data[7]>255 or length>255){probe_record[16]|=0x00010000;}
+  observe(3);
+ }
+ if(comptime origin){
+  if(data[0]==CHUNK){rows.receive(data,length);wake_service();return;}
+  if(data[0]!=READY or length!=8 or data[5]>4 or data[7]!=0){origin_packet_fail(4,data,length);return;}
+  const phase=@as(u16,data[5]);const owner=@as(u16,data[6]);
+  const expected:u16=if(phase==1) 24 else if(phase==3) 136 else 1;
+  if(owner>=expected){origin_packet_fail(5,data,length);return;}
+  const index:u16=if(phase==0) 0 else if(phase==1) 1+owner else if(phase==2) 25 else if(phase==3) 26+owner else 162;
+  if(ready_seen[index]!=0){origin_packet_fail(6,data,length);return;}
+  if(phase==1){const ok=origin_credit.receive_ready(data,length);if(!ok){origin_packet_fail(7,data,length);return;}}
+  ready_seen[index]=1;ready_counts[phase]+=1;
+  if(ready_counts[phase]==expected){
+   if(phase==1){wake_service();}
+   else if(phase<4){frame.ready(1,1,epoch-1,0,phase,if(phase==3) @as(u16,17408) else @as(u16,5120));}
+   else if(frame_finished){done=true;finish();}
+  }
+  observer.changed();
+ }else if(comptime peer){
+  if(data[0]==REQUEST){
+   @assert(length==8 and !request_pending and data[5]<4 and data[6]<136 and data[7]<5120);
+   request_phase=@as(u16,data[5]);request_group=@as(u16,data[6]);requested_offset=@as(u16,data[7]);
+   if(comptime pre){@assert(request_phase==0 and requested_offset==128*request_group);}
+   if(comptime post){@assert(request_phase==2 and requested_offset==128*request_group);}
+   if(comptime attention){@assert(request_phase==1 and request_group/2==route[2] and requested_offset==(request_group%2)*128);}
+   if(comptime mlp){@assert(request_phase==3 and request_group==route[2] and requested_offset==0);}
+   request_pending=true;pump();
+  }else{
+   if(comptime pre or post){norm.receive(data,length);}
+   if(comptime attention){
+    attn.receive(data,length);const ok=head_credit.commit_fragment();if(!ok){protocol_fail();return;}
+   }
+   if(comptime mlp){product.receive(data,length);}
+  }
+ }else{protocol_fail();return;}
+ observe(4);
+ wake_service();
+}
+fn injected(phase:u16) void {
+ if(comptime origin){if(phase==0){const ok=origin_credit.mark_injected();if(!ok){origin_callback_fail(10);return;}wake_service();}}
+ if(comptime origin){state[2]+=1;if(phase==3){frame_finished=true;if(ready_counts[4]==1){done=true;finish();}}observer.changed();}
+}
+
+// Both RX callbacks and ACK source callbacks activate this finite local task.
+// If a header has reacquired receiving before it runs, return without spinning;
+// that payload's eventual callback activates this task again before returning
+// to the unchanged adapter, which then clears receiving and rearms the header.
+task service_credit() void {
+ if(credit_error!=0 or packets.receiving){return;}
+ if(comptime q_root){
+  if(root_credit.joined()){
+   const ok=root_credit.retire_row();if(!ok){protocol_fail();return;}
+   fanout_index=root_credit.fanout;
+   if(fanout_index==route[1]){root_pending=false;lane.release_output(root_phase);}
+  }
+  credit_status[1]=root_credit.errors;credit_status[2]=@as(u32,root_credit.grants);
+  credit_status[3]=@as(u32,root_credit.source_completions);
+  credit_status[4]=@as(u32,root_credit.receipts);credit_status[5]=@as(u32,root_credit.rows_retired);
+  credit_status[6]=@as(u32,root_credit.fanout);
+ }
+ if(comptime attention){
+  if(head_credit.can_compute() and native_head.ready()){
+   const started=head_credit.start_compute();if(!started){protocol_fail();return;}
+   attn.compute_if_ready();
+   if(credit_error!=0 or !attn.ready or @as(u32,attn.position)!=epoch){protocol_fail();return;}
+   const retired=native_head.retire(1,1,epoch-1,0,0);if(!retired){protocol_fail();return;}
+   const completed=head_credit.complete_compute();if(!completed){protocol_fail();return;}
+  }
+  credit_status[1]=head_credit.errors;credit_status[2]=@as(u32,head_credit.retained_rows);
+  credit_status[3]=@as(u32,head_credit.receipt_sends);credit_status[4]=@as(u32,head_credit.receipt_releases);
+  credit_status[5]=@as(u32,head_credit.pending_while_inflight);credit_status[6]=@as(u32,head_credit.retained_slots);
+ }
+ if(comptime origin){
+  if(origin_credit.take_next_phase()){frame.ready(1,1,epoch-1,0,1,6144);}
+  credit_status[1]=origin_credit.errors;credit_status[2]=@as(u32,origin_credit.granted_count);
+  credit_status[3]=@as(u32,origin_credit.done_count);credit_status[4]=@as(u32,origin_credit.active_count);
+  credit_status[5]=@as(u32,origin_credit.maximum_active);credit_status[6]=origin_credit.active_mask;
+  credit_status[7]=origin_credit.ready_mask;credit_status[8]=@as(u32,origin_credit.grant_source_completions);
+  credit_status[9]=@as(u32,origin_credit.done_before_grant_release);
+ }
+ fill_native_status();
+ pump();finish();
+}
+noinline fn fill_native_status() void {
+ if(comptime kv_root){
+  native_status[1]=native_source.lifecycle.errors;native_status[2]=@as(u32,native_source.lifecycle.started);
+  native_status[3]=@as(u32,native_source.lifecycle.live);native_status[4]=@as(u32,native_source.lifecycle.completed);
+  native_status[5]=@as(u32,native_source.lifecycle.completions);
+ }
+ if(comptime attention){
+  native_status[1]=native_head.lifecycle.errors;native_status[2]=@as(u32,native_head.lifecycle.started);
+  native_status[3]=@as(u32,native_head.lifecycle.live);native_status[4]=@as(u32,native_head.lifecycle.completed);
+  native_status[5]=@as(u32,native_head.lifecycle.completions);native_status[6]=@as(u32,native_head.retained_mask);
+ }
+}
+const native_status_ptr:[*]u32=&native_status;
+comptime {@export_symbol(native_status_ptr,"native_status");}
+const credit_status_ptr:[*]u32=&credit_status;
+comptime {@bind_local_task(service_credit,service_task);@export_symbol(credit_status_ptr,"credit_status");}
+
+// Diagnostic-only source state. No field feeds any neural/control decision.
+fn fill_observer(target:[*]u32) void {
+ if(comptime origin){
+  target[1]=0x4f425331;target[2]=4;target[3]=epoch;
+  target[4]=state[0];target[5]=state[1];target[6]=state[2];
+  target[7]=@as(u32,frame.phase);target[8]=@as(u32,frame.offset);
+  target[9]=@as(u32,frame.words);
+  target[10]=0;target[11]=0;
+  if(frame.token_open){target[10]|=1;}if(frame.frame_open){target[10]|=2;}
+  if(frame.awaiting_chunk){target[10]|=4;}if(frame.sending){target[10]|=8;}
+  if(frame.pending_ready){target[10]|=16;}if(frame_finished){target[10]|=32;}
+  if(command_waiting){target[11]|=1;}if(done){target[11]|=2;}
+  if(packets.sending){target[11]|=4;}if(packets.receiving){target[11]|=8;}
+  if(request_pending){target[11]|=16;}if(request_waiting){target[11]|=32;}
+  if(ack_pending){target[11]|=64;}
+  for(@range(u16,5))|i|{target[12+i]=@as(u32,ready_counts[i]);}
+  target[17]=0;
+  for(@range(u16,24))|i|{if(ready_seen[1+i]!=0){target[17]|=@as(u32,1)<<i;}}
+  for(@range(u16,5))|i|{target[18+i]=0;}
+  for(@range(u16,136))|i|{if(ready_seen[26+i]!=0){target[18+i/32]|=@as(u32,1)<<(i%32);}}
+  target[23]=@as(u32,ready_seen[0])|(@as(u32,ready_seen[25])<<1)|(@as(u32,ready_seen[162])<<2);
+  target[23]|=(@as(u32,origin_credit.granted_count)<<3)|(@as(u32,origin_credit.done_count)<<10)|
+    (@as(u32,origin_credit.active_count)<<17)|(@as(u32,credit_window)<<22);
+  if(credit_error!=0){target[23]|=0x80000000;}
+  for(@range(u16,5))|i|{target[24+i]=frame.counters[i];}
+  target[29]=@as(u32,request_phase);
+  target[30]=@as(u32,request_group)|(@as(u32,requested_offset)<<16);
+  // Schema5 replaces only17..28 on error. Identity, state, frame position,
+  // READY counts and request coordinates remain in their schema4 positions.
+  if(credit_error!=0){origin_fault.fill(target);}
+ }
+}
+
+// Telemetry never supplies a model operand or neural/control decision.
+fn observe(code:u16) void {
+ if(comptime attention){
+  if(head_observer.metadata_count>=64){return;}
+  probe_record[0]=@as(u32,code);probe_record[8]+=1;
+  probe_record[9]|=@as(u32,1)<<code;head_observer.changed();
+ }
+}
+noinline fn bf16_summary(data:[*]u16,count:u16) u32 {
+ var bad:u16=0;var largest:u16=0;
+ for(@range(u16,512))|i|{if(i<count){
+  const raw:u16=data[i]&0x7fff;
+  if((raw&0x7f80)==0x7f80){bad+=1;}else if(raw>largest){largest=raw;}
+ }}
+ return @as(u32,bad)|(@as(u32,largest)<<16);
+}
+fn f32_domain(data:[*]f32,count:u16,limit:u32) u16 {
+ var nonfinite:u16=0;var outside:u16=0;
+ for(@range(u16,32))|i|{if(i<count){
+  const raw:u32=@bitcast(u32,data[i]);const mag:u32=raw&0x7fffffff;
+  if(mag>=0x7f800000){nonfinite+=1;}
+  else if(mag>limit or ((raw&0x80000000)!=0 and mag!=0)){outside+=1;}
+ }}
+ return nonfinite|(outside<<8);
+}
+fn scan_before_qk() void {
+ if(comptime attention){
+  probe_record[10]=bf16_summary(&attn.qk_input,512);
+  probe_record[11]=bf16_summary(&attn.qk_weights,512);
+  // Word25 bits17..25 retain the actual V nonfinite count (0..256).
+  probe_record[16]|=(bf16_summary(@ptrcast([*]u16,&attn.input[512]),256)&0xffff)<<17;
+  var nonfinite:u16=0;var outside:u16=0;var largest:u16=0;var index:u16=0;
+  for(@range(u16,256))|i|{
+   const raw:u16=attn.input[768+i]&0x7fff;
+   if((raw&0x7f80)==0x7f80){nonfinite+=1;}
+   else{if(raw>0x41c0){outside+=1;}if(raw>largest){largest=raw;index=i;}}
+  }
+  // The original attention exp argument is -abs(gate), domain[-24,0].
+  probe_record[12]=@as(u32,nonfinite)|(@as(u32,outside)<<16);
+  probe_record[13]=@as(u32,largest)|(@as(u32,index)<<16);
+  probe_record[14]=@as(u32,f32_domain(&attn.frequencies,32,0x3f800000))|
+    (@as(u32,f32_domain(&attn.probe_inputs,8,0x40e00000))<<16);
+  probe_record[16]|=1;
+ }
+}
+fn math_probe(code:u16,failure_count:u32) void {
+ if(comptime attention){
+  if(code==5){scan_before_qk();}
+  if(code==6){probe_record[6]=failure_count;probe_record[15]=bf16_summary(&attn.input,512);probe_record[16]|=2;}
+  if(code==8){probe_record[7]=failure_count;}
+  observe(code);
+ }
+}
+fn head_pair(lo:u16,hi:u16) u32 {return @as(u32,lo)|(@as(u32,hi)<<16);}
+fn fill_head_observer(target:[*]u32) void {
+ if(comptime attention){
+  target[1]=0x48445031;target[2]=4|(@as(u32,route[2])<<16);target[3]=epoch;
+  target[4]=probe_record[0];target[5]=probe_record[8];target[6]=probe_record[1];
+  target[7]=(probe_record[2]&255)|((probe_record[3]&255)<<8)|((probe_record[4]&255)<<16)|((probe_record[5]&255)<<24);
+  target[8]=head_pair(attn.queries.counts[0],attn.queries.counts[1]);
+  target[9]=head_pair(attn.queries.counts[2],attn.queries.counts[3]);
+  // Schema3: actual native started/live and completed/retained stream masks.
+  target[10]=head_pair(native_head.lifecycle.started,native_head.lifecycle.live);
+  target[11]=head_pair(native_head.lifecycle.completed,native_head.retained_mask);target[12]=0;
+  if(attn.have_query){target[12]|=1;}if(attn.have_key){target[12]|=2;}if(attn.have_value){target[12]|=4;}
+  if(attn.active){target[12]|=8;}if(attn.ready){target[12]|=16;}
+  target[13]=probe_record[6];target[14]=probe_record[7];target[15]=@as(u32,tx_mode)<<16;
+  if(packets.sending){target[15]|=1;}if(packets.receiving){target[15]|=2;}
+  if(command_waiting){target[15]|=4;}if(ack_pending){target[15]|=8;}
+  if(request_pending){target[15]|=16;}if(done){target[15]|=32;}
+  target[16]=head_pair(attn.position,attn.served);target[17]=attn.qk_control[1];target[18]=0;
+  for(@range(u16,7))|i|{if(attn.qk_events[i]!=0){target[18]|=@as(u32,1)<<i;}}
+  for(@range(u16,12))|i|{if(attn.attention_events[i]!=0){target[18]|=@as(u32,1)<<(8+i);}}
+  target[19]=probe_record[10];target[20]=probe_record[11];target[21]=probe_record[12];target[22]=probe_record[13];
+  target[23]=probe_record[14];target[24]=probe_record[15];target[25]=probe_record[16];
+  if(credit_error!=0){target[25]|=0x04000000;}
+  target[26]=state[0];target[27]=attn.qk_control[0];target[28]=attn.qk_events[6];target[29]=attn.attention_events[6];
+  target[30]=probe_record[9];
+ }
+}
+
+const observer_ptr:[*]u32=if(sink) &observer.snapshot else if(head_sink) &head_observer.snapshot else &unused32;
+const archive_ptr:[*]u32=if(head_sink) &head_observer.archive_storage else &unused32;
+const archive_status_ptr:[*]u32=if(head_sink) &head_observer.archive.status else &unused32;
+comptime {@export_symbol(archive_ptr,"qk_archive");@export_symbol(archive_status_ptr,"qk_archive_status");}
+const weight_ptr:[*]u32=if(matrix) &lane.weight_storage else &unused32;
+const descriptor_ptr:[*]u16=if(matrix) &lane.descriptor else &unused16;
+const route_ptr:[*]u16=&route;const state_ptr:[*]u32=&state;
+const hidden_ptr:[*]u16=if(pre or post) &norm.inout else &unused16;
+const norm_gain_ptr:[*]u16=if(pre or post) &norm.gains else &unused16;
+const qk_gain_ptr:[*]u16=if(attention) &attn.qk_weights else &unused16;
+const frequency_ptr:[*]f32=if(attention) &attn.frequencies else &unusedf;
+const cache_ptr:[*]u16=if(attention) &attn.cache else &unused16;
+const input_ptr:[*]f32=if(matrix) &lane.input else &unusedf;
+const active_input_ptr:[*]f32=if(matrix) &lane.active_input else &unusedf;
+const partial_ptr:[*]f32=if(matrix) &lane.partial else &unusedf;
+const result_ptr:[*]f32=if(matrix) &lane.result else &unusedf;
+comptime {
+ @export_symbol(observer_ptr,"observer");
+ @export_symbol(weight_ptr,"weights");@export_symbol(descriptor_ptr,"descriptor");
+ @export_symbol(route_ptr,"route");@export_symbol(state_ptr,"state");
+ @export_symbol(hidden_ptr,"hidden");@export_symbol(norm_gain_ptr,"norm_gains");
+ @export_symbol(qk_gain_ptr,"qk_gains");@export_symbol(frequency_ptr,"frequencies");
+ @export_symbol(cache_ptr,"cache");@export_symbol(input_ptr,"input");
+ @export_symbol(active_input_ptr,"active_input");
+ @export_symbol(partial_ptr,"partial");@export_symbol(result_ptr,"result");
+ @export_symbol(initialize);@export_symbol(prepare);@export_symbol(compute);
+}
+
+// Retained actual operands/intermediates for the original-layer numerical audit.
+const diagnostic_norm_saved:[*]u16=if(pre or post) &norm.saved else &unused16;
+const diagnostic_norm_stats:[*]f32=if(pre or post) &norm.stats else &unusedf;
+const diagnostic_qk_input:[*]u16=if(attention) &attn.qk_input else &unused16;
+const diagnostic_qk_output:[*]u16=if(attention) &attn.input else &unused16;
+// The six archived QK diagnostics are read from the sink after attention.
+const diagnostic_qk_stats:[*]f32=if(attention) &attn.qk_stats else &unusedf;
+const diagnostic_qk_rms_stages:[*]f32=if(attention) attn.rms_record else &unusedf;
+const diagnostic_attention_input:[*]u16=if(attention) &attn.input else &unused16;
+const diagnostic_attention_scores:[*]f32=if(attention) &attn.scores else &unusedf;
+const diagnostic_attention_score_casts:[*]u16=if(attention) &attn.score_casts else &unused16;
+const diagnostic_attention_stats:[*]f32=if(attention) &attn.stats else &unusedf;
+const diagnostic_attention_stages:[*]f32=if(attention) &attn.stages else &unusedf;
+const diagnostic_attention_casts:[*]u16=if(attention) &attn.casts else &unused16;
+const diagnostic_mlp_gate:[*]u16=if(mlp) &product.gate else &unused16;
+const diagnostic_mlp_up:[*]u16=if(mlp) &product.up else &unused16;
+const diagnostic_mlp_product:[*]u16=if(mlp) &product.product else &unused16;
+const diagnostic_mlp_silu:[*]u16=if(mlp) &product.silu else &unused16;
+const diagnostic_mlp_exponential:[*]f32=if(mlp) &product.exponential else &unusedf;
+const diagnostic_mlp_sigmoid:[*]f32=if(mlp) &product.sigmoid else &unusedf;
+const diagnostic_mlp_activation:[*]f32=if(mlp) &product.activation_fp32 else &unusedf;
+const diagnostic_mlp_product_fp32:[*]f32=if(mlp) &product.product_fp32 else &unusedf;
+const diagnostic_lane_counters:[*]u32=if(matrix) &lane.counters else &unused32;
+const diagnostic_frame_counters:[*]u32=if(origin) &frame.counters else &unused32;
+const diagnostic_rounded:[*]u16=if(root) &lane.rounded else &unused16;
+comptime {
+ @export_symbol(diagnostic_norm_saved,"norm_saved");
+ @export_symbol(diagnostic_norm_stats,"norm_stats");
+ @export_symbol(diagnostic_qk_input,"qk_input");
+ @export_symbol(diagnostic_qk_output,"qk_output");
+ @export_symbol(diagnostic_qk_stats,"qk_stats");
+ @export_symbol(diagnostic_qk_rms_stages,"qk_rms_stages");
+ @export_symbol(diagnostic_attention_input,"attention_input");
+ @export_symbol(diagnostic_attention_scores,"attention_scores");
+ @export_symbol(diagnostic_attention_score_casts,"attention_score_casts");
+ @export_symbol(diagnostic_attention_stats,"attention_stats");
+ @export_symbol(diagnostic_attention_stages,"attention_stages");
+ @export_symbol(diagnostic_attention_casts,"attention_casts");
+ @export_symbol(diagnostic_mlp_gate,"mlp_gate");
+ @export_symbol(diagnostic_mlp_up,"mlp_up");
+ @export_symbol(diagnostic_mlp_product,"mlp_product");
+ @export_symbol(diagnostic_mlp_silu,"mlp_silu");
+ @export_symbol(diagnostic_mlp_exponential,"mlp_exponential");
+ @export_symbol(diagnostic_mlp_sigmoid,"mlp_sigmoid");
+ @export_symbol(diagnostic_mlp_activation,"mlp_activation");
+ @export_symbol(diagnostic_mlp_product_fp32,"mlp_product_fp32");
+ @export_symbol(diagnostic_lane_counters,"lane_counters");
+ @export_symbol(diagnostic_frame_counters,"frame_counters");
+ @export_symbol(diagnostic_rounded,"rounded");
+}

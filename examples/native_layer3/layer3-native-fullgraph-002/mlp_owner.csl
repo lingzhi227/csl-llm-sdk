@@ -1,0 +1,54 @@
+// Complete-layer gate/up owner, reusing the accepted SiLU/product unchanged.
+// Its qualified +/-24 operand guard covers the saved original layer0/layer3
+// request. Later full-model layers require a separately qualified wider domain.
+param on_product_ready:fn()void;
+param on_error:fn(u32)void;
+const nonlinear=@import_module("nonlinear_kernel.csl");
+const gate_rows=@import_module("vector_collect.csl",.{.groups=1,.on_complete=gate_complete});
+const up_rows=@import_module("vector_collect.csl",.{.groups=1,.on_complete=up_complete});
+var gate=@zeros([128]u16);var up=@zeros([128]u16);
+var product=@zeros([128]u16);var silu=@zeros([128]u16);
+var exponential=@zeros([128]f32);var sigmoid=@zeros([128]f32);
+var activation_fp32=@zeros([128]f32);var product_fp32=@zeros([128]f32);
+var identity=@zeros([4]u32);
+var group:u16=0;var gate_kind:u32=0;var up_kind:u32=0;
+var have_gate:bool=false;var have_up:bool=false;
+var active:bool=false;var ready:bool=false;
+var completed:u32=0;var failure:u32=0;
+
+fn begin(request:u32,reset:u32,position:u32,stage:u32,phase:u16,
+         row_group:u16,gate_packet_kind:u32,up_packet_kind:u32) void {
+ @assert(!active and !ready and gate_packet_kind!=up_packet_kind);
+ identity[0]=request;identity[1]=reset;identity[2]=position;identity[3]=stage;
+ group=row_group;gate_kind=gate_packet_kind;up_kind=up_packet_kind;
+ active=true;have_gate=false;have_up=false;failure=0;
+ gate_rows.begin(&gate,request,reset,position,stage,gate_kind,phase,group);
+ up_rows.begin(&up,request,reset,position,stage,up_kind,phase,group);
+}
+
+fn receive(data:[*]u32,length:u16) void {
+ @assert(active and !ready and length>=9);
+ if(data[0]==gate_kind){gate_rows.receive(data,length);}
+ else{@assert(data[0]==up_kind);up_rows.receive(data,length);}
+}
+
+fn compute_if_ready() void {
+ if(have_gate and have_up and failure==0){
+  @assert(active and !ready);
+  const error=nonlinear.compute(&gate,&up,&exponential,&sigmoid,
+                               &activation_fp32,&product_fp32,&silu,&product);
+  if(error!=0){failure=error;on_error(error);return;}
+  ready=true;completed+=1;on_product_ready();
+ }
+}
+fn gate_complete() void {@assert(!have_gate);have_gate=true;compute_if_ready();}
+fn up_complete() void {@assert(!have_up);have_up=true;compute_if_ready();}
+
+// The caller owns this copied chunk until its packet sender reports release.
+fn copy_chunk(request:u32,reset:u32,position:u32,stage:u32,
+              row_group:u16,destination:[*]u16) void {
+ @assert(active and ready and row_group==group);
+ @assert(request==identity[0] and reset==identity[1] and position==identity[2] and stage==identity[3]);
+ for(@range(u16,128))|i|{destination[i]=product[i];}
+ ready=false;active=false;
+}

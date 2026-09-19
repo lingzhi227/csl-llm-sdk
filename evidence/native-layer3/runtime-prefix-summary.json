@@ -1,0 +1,122 @@
+{
+  "attempts": [
+    {
+      "candidate": "layer3-native-run-001",
+      "manifest_sha256": "0e979522ab248d1a67f267ca1a6d10652572b26875875c2f66262ebba97c25f5",
+      "independent_acceptance_sha256": "a5f5d7794457afcd31e593fa895790d9229b6759c08068cdff148ee81930a34a",
+      "status": "failed_physical_attempt_durable_prefix_independently_verified",
+      "raw_files": 3,
+      "raw_bytes": 3243992,
+      "returned_copies": 394,
+      "returned_launches": 3,
+      "journal_entries": 996,
+      "initial_original_parameter_readbacks": 195,
+      "all24_heads_finished_metadata": true,
+      "head_native_masks": [
+        15,
+        0,
+        15,
+        15
+      ],
+      "head_protocol_errors": 0,
+      "normal_stop": false,
+      "complete_original_neural_epochs": 0,
+      "actual_sink_archive_status_returned": false,
+      "actual_sink_archive_payload_returned": false,
+      "all_owned_resources_independently_released": true,
+      "waiter_reaped_exit1": true,
+      "global_phase": 2,
+      "global_offset": 14080,
+      "MLP_ready": 46,
+      "origin_protocol_error": true,
+      "first_unreturned_copy": "all-PE native_status",
+      "guarded_seconds": 294.3370178407058,
+      "first_error_branch_known": false
+    },
+    {
+      "candidate": "layer3-native-run-003",
+      "manifest_sha256": "d82f6db5bd0db51638331009a0e0367f3ba73e77904f23766aa4af0ffa7c2673",
+      "independent_acceptance_sha256": "b8c97b6d8c336db851f5ae907580bc44bdf5fa33d4c176c9e56c8a948f4a50d3",
+      "status": "failed_physical_attempt_durable_prefix_independently_verified",
+      "raw_files": 3,
+      "raw_bytes": 3243992,
+      "returned_copies": 394,
+      "returned_launches": 3,
+      "journal_entries": 996,
+      "initial_original_parameter_readbacks": 195,
+      "all24_heads_finished_metadata": true,
+      "head_native_masks": [
+        15,
+        0,
+        15,
+        15
+      ],
+      "head_protocol_errors": 0,
+      "normal_stop": false,
+      "complete_original_neural_epochs": 0,
+      "actual_sink_archive_status_returned": false,
+      "actual_sink_archive_payload_returned": false,
+      "all_owned_resources_independently_released": true,
+      "waiter_reaped_exit1": true,
+      "first_error": {
+        "schema": 5,
+        "coherent": true,
+        "final_origin_snapshot": false,
+        "first_error": {
+          "reason": 4,
+          "name": "ready_format",
+          "has_packet": true,
+          "actual_length": 8,
+          "valid_header_mask": 255,
+          "header": [
+            10,
+            1,
+            1,
+            0,
+            0,
+            3,
+            122,
+            4194568
+          ],
+          "immutable_first_error": true
+        },
+        "observed_origin": {
+          "state": [
+            1,
+            1,
+            2
+          ],
+          "phase": 2,
+          "offset": 13184,
+          "input_words": 5120,
+          "frame_flags": 11,
+          "wrapper_flags": 9,
+          "ready_counts": [
+            1,
+            24,
+            1,
+            40,
+            0
+          ],
+          "request_phase": 2,
+          "request_group": 39,
+          "requested_offset": 4992
+        },
+        "origin_context_is_later_live_snapshot": true,
+        "unavailable": [
+          "READY bitmaps",
+          "Q-credit counters",
+          "frame counters"
+        ],
+        "upstream_root_cause_proven": false,
+        "complete_neural_epoch": false
+      },
+      "first_unreturned_copy": "24-sink qk_archive_status",
+      "guarded_seconds": 283.02207547286525,
+      "maximum_journal_idle_seconds": 30.111917639151216,
+      "upstream_cause_proven": false
+    }
+  ],
+  "runtime002": "Unadmitted source draft; never staged or executed. A loader acceptance-status mismatch was corrected before runtime003.",
+  "scope": "Initial original-parameter identity and coherent metadata only. No actual archive payload, complete neural layer, final parameter retention or normal stop accepted."
+}

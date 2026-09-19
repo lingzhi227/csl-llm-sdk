@@ -2,7 +2,7 @@
 
 **Building inference for open language models with handwritten Cerebras Systems Language (CSL), targeting sequential execution of three model stages on WSE-3.** We implement the numerical kernels, execution control and persistent model state, and use the Cerebras SDK to compile and run the device programs. The first target is **Qwen3.8-27B text inference**; the longer-term goal is a reusable SDK for related model architectures.
 
-**Working today:** the complete original-weight **5120 → 17408 → 5120 layer-3 MLP runs on physical WSE-3** with four inputs, resident weights, independent numerical checks and verified release. A separate **full 64-layer CPU reference** generates four tokens with original cache restoration and independently checked saved evidence. Earlier bounded SDK milestones cover normalization, recurrent state and selected attention heads. **Current integration:** the complete layer-3 graph compiles, and its synthetic Q/K/V fanout completes in the SDK simulator. The latest physical FIFO diagnostic recorded 20 of 24 attention READY heads and 549 of 576 Q/K/V packet observations; complete neural epochs remain zero. **New transport milestone:** a 45-PE native KV/Q SDK fixture passed three operations, reset, exact raw-data checks and 525 invalid API calls. **New physical milestone:** a four-PE original-kernel fixture passed two resets with exact diagnostic archive/output equivalence after source overwrite. Separately, all 24 complete native heads passed a selected-program SRAM check, with 576 bytes of minimum headroom. **Current work:** compile the complete native graph and qualify original-layer numerics, then integrate three sequential stages with state checkpoints. **Still ahead:** complete 64-layer CSL text generation, device stage state restoration and measured token latency. The completed log records each result's exact scope.
+**Working today:** the complete original-weight **5120 → 17408 → 5120 layer-3 MLP runs on physical WSE-3** for four inputs with independent numerical checks. A separate full 64-layer CPU reference generates four tokens with cache restoration. **Current integration:** the complete native layer-3 graph passes independent placement, storage and SRAM checks across all 33,750 PEs and 24 attention heads. Physical execution now reports all 24 heads finished, but the layer stops on a malformed MLP READY message. Its exact first-error packet and failed lifecycle are preserved; **complete neural-layer epochs remain zero**. Bounded native transport and physical diagnostic-archive fixtures are accepted separately. **Current work:** resolve the message corruption, qualify original-layer numerics, then integrate three sequential stages with state checkpoints. Complete 64-layer CSL text generation and measured token latency remain ahead.
 
 ## 1. Project design
 
@@ -60,6 +60,7 @@ Full attention/recurrent layers and the three-stage model remain integration wor
 | Path | Purpose |
 |---|---|
 | [`csl/kernels/`](csl/kernels) | Reusable handwritten CSL arithmetic kernels. |
+| [`examples/native_layer3/`](examples/native_layer3) | Complete native graph compile, exact source provenance and first-error diagnostics. |
 | [`examples/qk_archive/`](examples/qk_archive) | Physical original-kernel archive/alias equivalence, durable raw evidence and selected complete-program fit. |
 | [`examples/native_kv_sdk/`](examples/native_kv_sdk) | Accepted three-operation native KV/Q transport, durable raw captures and preserved failure history. |
 | [`examples/layer3_fifo_trace/`](examples/layer3_fifo_trace) | Accepted full-layout FIFO diagnostics, finite physical capture and independent raw-word decoders. |
@@ -84,6 +85,22 @@ Full attention/recurrent layers and the three-stage model remain integration wor
 ## 3. Completed development log — newest first
 
 Each **WP** or **HW** is a scoped development milestone. HW00/HW01 use physical WSE-3; earlier WP device results use the SDK simulator, and WP04 is a CPU/source audit. **BF16** means bfloat16 data, and **FP32** means 32-bit floating-point arithmetic. Reports contain numerical thresholds, failure history and reproduction details.
+
+### Complete native layer3 · Full-graph fit and first-error capture · September 19, 2026 (UTC)
+
+Two complete graphs retain all 33,750 PEs, 30,576 matrix PEs, 24 attention heads,
+24 archive sinks and 136 MLP owners. All 1,254 actual program files passed
+independent placement and storage checks; maximum storage plus 4 KiB stack is
+47,552 bytes, leaving 576 bytes. No program is demoted.
+
+Two failed physical attempts independently verified all 195 initial parameter
+readbacks and saved metadata showing all 24 heads finished. The second records
+a malformed MLP READY: its reserved word is `0x00400108` instead of zero. This
+matches an SDK network-header value, but the upstream cause is not yet proven.
+Subsequent diagnostic reads timed out, resources were released, and no normal
+stop, archive payload or complete neural-layer numerics were accepted.
+
+[Source](examples/native_layer3) · [Report](docs/NATIVE-LAYER3-GRAPH.md) · [Compile evidence](evidence/native-layer3/compile-summary.json) · [Failed runtime prefixes](evidence/native-layer3/runtime-prefix-summary.json)
 
 ### QK diagnostic archive · Physical equivalence and selected-program fit · September 19, 2026 (UTC)
 

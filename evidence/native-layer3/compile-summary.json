@@ -1,0 +1,90 @@
+{
+  "compilations": [
+    {
+      "status": "accepted_complete_native_layer3_graph_compile_storage_SRAM",
+      "manifest_sha256": "dc77d3c0c57b1fb373af6b287bbc1b5c672eacd0b81eea9a277b77a6a4f77c95",
+      "artifact_sha256": "d166a4fcefceee2c2a8619a85cfc07497a76b1d0fa0c94bad1cf9ea7f5de8601",
+      "artifact_bytes": 20300523,
+      "independent_audit_summary_sha256": "c6d44726a74eee4268657aa5c08c8420e9618edc385550f82f76d17b9b5b2141",
+      "PEs": 33750,
+      "matrix_PEs": 30576,
+      "application_ELFs": 1254,
+      "embedded_CSL": 33,
+      "max_ordinary_plus4096": 47552,
+      "ceiling": 48128,
+      "margin": 576,
+      "scope": "Complete native layer3 graph compile placement/original storage/SRAM only. Independently parsed raw sections/symbols with frozen SDK placement receipt and independently evaluated layout roles; no runtime, dynamic-stack, numerical, neural or model acceptance.",
+      "candidate": "layer3-native-fullgraph-001",
+      "acceptance_sha256": "bd4710f86d953e63bd8cc8726abfb2a6246aeb058968af92ae1ba5e6e550399a",
+      "application": [
+        750,
+        45
+      ],
+      "fabric": [
+        762,
+        1172
+      ],
+      "offset": [
+        4,
+        1
+      ],
+      "heads": 24,
+      "archive_sinks": 24,
+      "MLP_owners": 136,
+      "native_sources": 16,
+      "demoted_PEs": 0,
+      "guarded_seconds": 229.96710552694276,
+      "all_owned_resources_independently_released": true,
+      "waiter_reaped_exit0": true,
+      "complete_original_neural_epochs": 0
+    },
+    {
+      "status": "accepted_complete_native_layer3_origin_fault_compile_storage_SRAM",
+      "manifest_sha256": "a0be104d6f80e1223a9dad164936eca4c238f4275e5ca89f181ea8d8360842af",
+      "artifact_sha256": "116b3c4c655eb5128e1b3698073dc9d750da07325e5a00ca816bf8d5ad652492",
+      "artifact_bytes": 20298203,
+      "independent_audit_summary_sha256": "1006d00247fdd4b9b3fbcc5a1868e4453f5967ab0a03b4c83a2e5e5f013cc68b",
+      "PEs": 33750,
+      "matrix_PEs": 30576,
+      "application_ELFs": 1254,
+      "embedded_CSL": 34,
+      "max_ordinary_plus4096": 47552,
+      "ceiling": 48128,
+      "margin": 576,
+      "scope": "Complete native layer3 graph compile placement/original storage/SRAM only. Independently parsed raw sections/symbols with frozen SDK placement receipt and independently evaluated layout roles; no runtime, dynamic-stack, numerical, neural or model acceptance.",
+      "candidate": "layer3-native-fullgraph-002",
+      "acceptance_sha256": "6ff7821a01edd334b9fd14b1e84afded253f01192160b68a70217121dadd131a",
+      "application": [
+        750,
+        45
+      ],
+      "fabric": [
+        762,
+        1172
+      ],
+      "offset": [
+        4,
+        1
+      ],
+      "heads": 24,
+      "archive_sinks": 24,
+      "MLP_owners": 136,
+      "native_sources": 16,
+      "demoted_PEs": 0,
+      "guarded_seconds": 239.97334167407826,
+      "all_owned_resources_independently_released": true,
+      "waiter_reaped_exit0": true,
+      "complete_original_neural_epochs": 0,
+      "origin_first_error_storage_bytes": 44,
+      "origin_including4096_stack": 22000,
+      "unchanged_parent_CSL": 32,
+      "changed_parent_CSL": [
+        "layer3_pe.csl"
+      ],
+      "added_CSL": [
+        "origin_fault.csl"
+      ]
+    }
+  ],
+  "physical_runtime_or_numerics_accepted": false
+}

@@ -1,0 +1,9804 @@
+{
+  "scope": "source_only_complete_original_layer3_context_at_most8",
+  "profile": {
+    "app_width": 750,
+    "rail_columns": 16,
+    "app_height": 45
+  },
+  "application": [
+    750,
+    45
+  ],
+  "matrix_PEs": 30576,
+  "matrix_regions": [
+    {
+      "name": "model.language_model.layers.3.self_attn.k_proj.weight",
+      "shape": [
+        1024,
+        5120
+      ],
+      "dtype": "BF16",
+      "bytes": 10485760,
+      "shard": "model-00001-of-00018.safetensors",
+      "start": [
+        0,
+        1
+      ],
+      "row_groups": 8,
+      "column_tiles": 54,
+      "stripe_width": 55,
+      "tile_shape": [
+        128,
+        96
+      ],
+      "last_valid_rows": 128,
+      "last_valid_columns": 32,
+      "matrix_PEs": 432,
+      "row_consumer_PEs": 8,
+      "padded_weight_bytes": 10616832,
+      "operator": "forward96FMA_right_to_left_FP32_chain_BF16_RNE",
+      "frame_phase": 0,
+      "operation": "mixer_input",
+      "runtime_descriptor": [
+        "phase",
+        "output_group",
+        "consumer_x",
+        "consumer_y",
+        "valid_rows",
+        "valid_columns"
+      ],
+      "inactive_behavior": "receive96selected_words_then_rearm_without_GEMV",
+      "root_consumer_location": "row_position.x + column_tiles, row_position.y",
+      "packet_kind": 2,
+      "fanout": 6,
+      "first_row_groups": 13,
+      "groups_per_row": 13
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "shape": [
+        12288,
+        5120
+      ],
+      "dtype": "BF16",
+      "bytes": 125829120,
+      "shard": "model-00001-of-00018.safetensors",
+      "start": [
+        440,
+        1
+      ],
+      "row_groups": 96,
+      "column_tiles": 54,
+      "stripe_width": 55,
+      "tile_shape": [
+        128,
+        96
+      ],
+      "last_valid_rows": 128,
+      "last_valid_columns": 32,
+      "matrix_PEs": 5184,
+      "row_consumer_PEs": 96,
+      "padded_weight_bytes": 127401984,
+      "operator": "forward96FMA_right_to_left_FP32_chain_BF16_RNE",
+      "frame_phase": 0,
+      "operation": "mixer_input",
+      "runtime_descriptor": [
+        "phase",
+        "output_group",
+        "consumer_x",
+        "consumer_y",
+        "valid_rows",
+        "valid_columns"
+      ],
+      "inactive_behavior": "receive96selected_words_then_rearm_without_GEMV",
+      "root_consumer_location": "row_position.x + column_tiles, row_position.y",
+      "packet_kind": 1,
+      "fanout": 1,
+      "first_row_groups": 5,
+      "groups_per_row": 13
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.v_proj.weight",
+      "shape": [
+        1024,
+        5120
+      ],
+      "dtype": "BF16",
+      "bytes": 10485760,
+      "shard": "model-00001-of-00018.safetensors",
+      "start": [
+        0,
+        9
+      ],
+      "row_groups": 8,
+      "column_tiles": 54,
+      "stripe_width": 55,
+      "tile_shape": [
+        128,
+        96
+      ],
+      "last_valid_rows": 128,
+      "last_valid_columns": 32,
+      "matrix_PEs": 432,
+      "row_consumer_PEs": 8,
+      "padded_weight_bytes": 10616832,
+      "operator": "forward96FMA_right_to_left_FP32_chain_BF16_RNE",
+      "frame_phase": 0,
+      "operation": "mixer_input",
+      "runtime_descriptor": [
+        "phase",
+        "output_group",
+        "consumer_x",
+        "consumer_y",
+        "valid_rows",
+        "valid_columns"
+      ],
+      "inactive_behavior": "receive96selected_words_then_rearm_without_GEMV",
+      "root_consumer_location": "row_position.x + column_tiles, row_position.y",
+      "packet_kind": 3,
+      "fanout": 6,
+      "first_row_groups": 13,
+      "groups_per_row": 13
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+      "shape": [
+        5120,
+        6144
+      ],
+      "dtype": "BF16",
+      "bytes": 62914560,
+      "shard": "model-00001-of-00018.safetensors",
+      "start": [
+        440,
+        9
+      ],
+      "row_groups": 40,
+      "column_tiles": 64,
+      "stripe_width": 65,
+      "tile_shape": [
+        128,
+        96
+      ],
+      "last_valid_rows": 128,
+      "last_valid_columns": 96,
+      "matrix_PEs": 2560,
+      "row_consumer_PEs": 40,
+      "padded_weight_bytes": 62914560,
+      "operator": "forward96FMA_right_to_left_FP32_chain_BF16_RNE",
+      "frame_phase": 1,
+      "operation": "mixer_output",
+      "runtime_descriptor": [
+        "phase",
+        "output_group",
+        "consumer_x",
+        "consumer_y",
+        "valid_rows",
+        "valid_columns"
+      ],
+      "inactive_behavior": "receive96selected_words_then_rearm_without_GEMV",
+      "root_consumer_location": "row_position.x + column_tiles, row_position.y",
+      "packet_kind": 4,
+      "fanout": 1,
+      "first_row_groups": 4,
+      "groups_per_row": 11
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "shape": [
+        17408,
+        5120
+      ],
+      "dtype": "BF16",
+      "bytes": 178257920,
+      "shard": "model-00001-of-00018.safetensors",
+      "start": [
+        195,
+        13
+      ],
+      "row_groups": 136,
+      "column_tiles": 54,
+      "stripe_width": 55,
+      "tile_shape": [
+        128,
+        96
+      ],
+      "last_valid_rows": 128,
+      "last_valid_columns": 32,
+      "matrix_PEs": 7344,
+      "row_consumer_PEs": 136,
+      "padded_weight_bytes": 180486144,
+      "operator": "forward96FMA_right_to_left_FP32_chain_BF16_RNE",
+      "frame_phase": 2,
+      "operation": "mlp_gate_up",
+      "runtime_descriptor": [
+        "phase",
+        "output_group",
+        "consumer_x",
+        "consumer_y",
+        "valid_rows",
+        "valid_columns"
+      ],
+      "inactive_behavior": "receive96selected_words_then_rearm_without_GEMV",
+      "root_consumer_location": "row_position.x + column_tiles, row_position.y",
+      "packet_kind": 5,
+      "fanout": 1,
+      "first_row_groups": 9,
+      "groups_per_row": 13
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "shape": [
+        17408,
+        5120
+      ],
+      "dtype": "BF16",
+      "bytes": 178257920,
+      "shard": "model-00001-of-00018.safetensors",
+      "start": [
+        550,
+        23
+      ],
+      "row_groups": 136,
+      "column_tiles": 54,
+      "stripe_width": 55,
+      "tile_shape": [
+        128,
+        96
+      ],
+      "last_valid_rows": 128,
+      "last_valid_columns": 32,
+      "matrix_PEs": 7344,
+      "row_consumer_PEs": 136,
+      "padded_weight_bytes": 180486144,
+      "operator": "forward96FMA_right_to_left_FP32_chain_BF16_RNE",
+      "frame_phase": 2,
+      "operation": "mlp_gate_up",
+      "runtime_descriptor": [
+        "phase",
+        "output_group",
+        "consumer_x",
+        "consumer_y",
+        "valid_rows",
+        "valid_columns"
+      ],
+      "inactive_behavior": "receive96selected_words_then_rearm_without_GEMV",
+      "root_consumer_location": "row_position.x + column_tiles, row_position.y",
+      "packet_kind": 6,
+      "fanout": 1,
+      "first_row_groups": 3,
+      "groups_per_row": 13
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.down_proj.weight",
+      "shape": [
+        5120,
+        17408
+      ],
+      "dtype": "BF16",
+      "bytes": 178257920,
+      "shard": "model-00001-of-00018.safetensors",
+      "start": [
+        165,
+        34
+      ],
+      "row_groups": 40,
+      "column_tiles": 182,
+      "stripe_width": 183,
+      "tile_shape": [
+        128,
+        96
+      ],
+      "last_valid_rows": 128,
+      "last_valid_columns": 32,
+      "matrix_PEs": 7280,
+      "row_consumer_PEs": 40,
+      "padded_weight_bytes": 178913280,
+      "operator": "forward96FMA_right_to_left_FP32_chain_BF16_RNE",
+      "frame_phase": 3,
+      "operation": "mlp_down",
+      "runtime_descriptor": [
+        "phase",
+        "output_group",
+        "consumer_x",
+        "consumer_y",
+        "valid_rows",
+        "valid_columns"
+      ],
+      "inactive_behavior": "receive96selected_words_then_rearm_without_GEMV",
+      "root_consumer_location": "row_position.x + column_tiles, row_position.y",
+      "packet_kind": 7,
+      "fanout": 1,
+      "first_row_groups": 3,
+      "groups_per_row": 4
+    }
+  ],
+  "stripes": [
+    {
+      "name": "model.language_model.layers.3.self_attn.k_proj.weight",
+      "x": 16,
+      "y": 1,
+      "columns": 54,
+      "phase": 0,
+      "group": 0,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        16,
+        0
+      ],
+      "packet_kind": 2,
+      "fanout": 6
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.k_proj.weight",
+      "x": 71,
+      "y": 1,
+      "columns": 54,
+      "phase": 0,
+      "group": 1,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        16,
+        0
+      ],
+      "packet_kind": 2,
+      "fanout": 6
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.k_proj.weight",
+      "x": 126,
+      "y": 1,
+      "columns": 54,
+      "phase": 0,
+      "group": 2,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        22,
+        0
+      ],
+      "packet_kind": 2,
+      "fanout": 6
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.k_proj.weight",
+      "x": 181,
+      "y": 1,
+      "columns": 54,
+      "phase": 0,
+      "group": 3,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        22,
+        0
+      ],
+      "packet_kind": 2,
+      "fanout": 6
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.k_proj.weight",
+      "x": 236,
+      "y": 1,
+      "columns": 54,
+      "phase": 0,
+      "group": 4,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        28,
+        0
+      ],
+      "packet_kind": 2,
+      "fanout": 6
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.k_proj.weight",
+      "x": 291,
+      "y": 1,
+      "columns": 54,
+      "phase": 0,
+      "group": 5,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        28,
+        0
+      ],
+      "packet_kind": 2,
+      "fanout": 6
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.k_proj.weight",
+      "x": 346,
+      "y": 1,
+      "columns": 54,
+      "phase": 0,
+      "group": 6,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        34,
+        0
+      ],
+      "packet_kind": 2,
+      "fanout": 6
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.k_proj.weight",
+      "x": 401,
+      "y": 1,
+      "columns": 54,
+      "phase": 0,
+      "group": 7,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        34,
+        0
+      ],
+      "packet_kind": 2,
+      "fanout": 6
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 456,
+      "y": 1,
+      "columns": 54,
+      "phase": 0,
+      "group": 0,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        16,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 511,
+      "y": 1,
+      "columns": 54,
+      "phase": 0,
+      "group": 1,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        16,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 566,
+      "y": 1,
+      "columns": 54,
+      "phase": 0,
+      "group": 2,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        16,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 621,
+      "y": 1,
+      "columns": 54,
+      "phase": 0,
+      "group": 3,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        16,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 676,
+      "y": 1,
+      "columns": 54,
+      "phase": 0,
+      "group": 4,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        17,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 16,
+      "y": 2,
+      "columns": 54,
+      "phase": 0,
+      "group": 5,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        17,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 71,
+      "y": 2,
+      "columns": 54,
+      "phase": 0,
+      "group": 6,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        17,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 126,
+      "y": 2,
+      "columns": 54,
+      "phase": 0,
+      "group": 7,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        17,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 181,
+      "y": 2,
+      "columns": 54,
+      "phase": 0,
+      "group": 8,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        18,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 236,
+      "y": 2,
+      "columns": 54,
+      "phase": 0,
+      "group": 9,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        18,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 291,
+      "y": 2,
+      "columns": 54,
+      "phase": 0,
+      "group": 10,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        18,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 346,
+      "y": 2,
+      "columns": 54,
+      "phase": 0,
+      "group": 11,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        18,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 401,
+      "y": 2,
+      "columns": 54,
+      "phase": 0,
+      "group": 12,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        19,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 456,
+      "y": 2,
+      "columns": 54,
+      "phase": 0,
+      "group": 13,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        19,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 511,
+      "y": 2,
+      "columns": 54,
+      "phase": 0,
+      "group": 14,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        19,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 566,
+      "y": 2,
+      "columns": 54,
+      "phase": 0,
+      "group": 15,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        19,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 621,
+      "y": 2,
+      "columns": 54,
+      "phase": 0,
+      "group": 16,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        20,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 676,
+      "y": 2,
+      "columns": 54,
+      "phase": 0,
+      "group": 17,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        20,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 16,
+      "y": 3,
+      "columns": 54,
+      "phase": 0,
+      "group": 18,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        20,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 71,
+      "y": 3,
+      "columns": 54,
+      "phase": 0,
+      "group": 19,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        20,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 126,
+      "y": 3,
+      "columns": 54,
+      "phase": 0,
+      "group": 20,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        21,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 181,
+      "y": 3,
+      "columns": 54,
+      "phase": 0,
+      "group": 21,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        21,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 236,
+      "y": 3,
+      "columns": 54,
+      "phase": 0,
+      "group": 22,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        21,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 291,
+      "y": 3,
+      "columns": 54,
+      "phase": 0,
+      "group": 23,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        21,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 346,
+      "y": 3,
+      "columns": 54,
+      "phase": 0,
+      "group": 24,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        22,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 401,
+      "y": 3,
+      "columns": 54,
+      "phase": 0,
+      "group": 25,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        22,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 456,
+      "y": 3,
+      "columns": 54,
+      "phase": 0,
+      "group": 26,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        22,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 511,
+      "y": 3,
+      "columns": 54,
+      "phase": 0,
+      "group": 27,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        22,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 566,
+      "y": 3,
+      "columns": 54,
+      "phase": 0,
+      "group": 28,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        23,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 621,
+      "y": 3,
+      "columns": 54,
+      "phase": 0,
+      "group": 29,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        23,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 676,
+      "y": 3,
+      "columns": 54,
+      "phase": 0,
+      "group": 30,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        23,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 16,
+      "y": 4,
+      "columns": 54,
+      "phase": 0,
+      "group": 31,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        23,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 71,
+      "y": 4,
+      "columns": 54,
+      "phase": 0,
+      "group": 32,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        24,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 126,
+      "y": 4,
+      "columns": 54,
+      "phase": 0,
+      "group": 33,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        24,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 181,
+      "y": 4,
+      "columns": 54,
+      "phase": 0,
+      "group": 34,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        24,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 236,
+      "y": 4,
+      "columns": 54,
+      "phase": 0,
+      "group": 35,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        24,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 291,
+      "y": 4,
+      "columns": 54,
+      "phase": 0,
+      "group": 36,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        25,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 346,
+      "y": 4,
+      "columns": 54,
+      "phase": 0,
+      "group": 37,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        25,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 401,
+      "y": 4,
+      "columns": 54,
+      "phase": 0,
+      "group": 38,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        25,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 456,
+      "y": 4,
+      "columns": 54,
+      "phase": 0,
+      "group": 39,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        25,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 511,
+      "y": 4,
+      "columns": 54,
+      "phase": 0,
+      "group": 40,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        26,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 566,
+      "y": 4,
+      "columns": 54,
+      "phase": 0,
+      "group": 41,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        26,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 621,
+      "y": 4,
+      "columns": 54,
+      "phase": 0,
+      "group": 42,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        26,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 676,
+      "y": 4,
+      "columns": 54,
+      "phase": 0,
+      "group": 43,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        26,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 16,
+      "y": 5,
+      "columns": 54,
+      "phase": 0,
+      "group": 44,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        27,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 71,
+      "y": 5,
+      "columns": 54,
+      "phase": 0,
+      "group": 45,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        27,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 126,
+      "y": 5,
+      "columns": 54,
+      "phase": 0,
+      "group": 46,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        27,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 181,
+      "y": 5,
+      "columns": 54,
+      "phase": 0,
+      "group": 47,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        27,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 236,
+      "y": 5,
+      "columns": 54,
+      "phase": 0,
+      "group": 48,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        28,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 291,
+      "y": 5,
+      "columns": 54,
+      "phase": 0,
+      "group": 49,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        28,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 346,
+      "y": 5,
+      "columns": 54,
+      "phase": 0,
+      "group": 50,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        28,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 401,
+      "y": 5,
+      "columns": 54,
+      "phase": 0,
+      "group": 51,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        28,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 456,
+      "y": 5,
+      "columns": 54,
+      "phase": 0,
+      "group": 52,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        29,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 511,
+      "y": 5,
+      "columns": 54,
+      "phase": 0,
+      "group": 53,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        29,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 566,
+      "y": 5,
+      "columns": 54,
+      "phase": 0,
+      "group": 54,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        29,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 621,
+      "y": 5,
+      "columns": 54,
+      "phase": 0,
+      "group": 55,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        29,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 676,
+      "y": 5,
+      "columns": 54,
+      "phase": 0,
+      "group": 56,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        30,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 16,
+      "y": 6,
+      "columns": 54,
+      "phase": 0,
+      "group": 57,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        30,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 71,
+      "y": 6,
+      "columns": 54,
+      "phase": 0,
+      "group": 58,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        30,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 126,
+      "y": 6,
+      "columns": 54,
+      "phase": 0,
+      "group": 59,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        30,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 181,
+      "y": 6,
+      "columns": 54,
+      "phase": 0,
+      "group": 60,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        31,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 236,
+      "y": 6,
+      "columns": 54,
+      "phase": 0,
+      "group": 61,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        31,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 291,
+      "y": 6,
+      "columns": 54,
+      "phase": 0,
+      "group": 62,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        31,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 346,
+      "y": 6,
+      "columns": 54,
+      "phase": 0,
+      "group": 63,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        31,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 401,
+      "y": 6,
+      "columns": 54,
+      "phase": 0,
+      "group": 64,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        32,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 456,
+      "y": 6,
+      "columns": 54,
+      "phase": 0,
+      "group": 65,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        32,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 511,
+      "y": 6,
+      "columns": 54,
+      "phase": 0,
+      "group": 66,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        32,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 566,
+      "y": 6,
+      "columns": 54,
+      "phase": 0,
+      "group": 67,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        32,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 621,
+      "y": 6,
+      "columns": 54,
+      "phase": 0,
+      "group": 68,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        33,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 676,
+      "y": 6,
+      "columns": 54,
+      "phase": 0,
+      "group": 69,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        33,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 16,
+      "y": 7,
+      "columns": 54,
+      "phase": 0,
+      "group": 70,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        33,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 71,
+      "y": 7,
+      "columns": 54,
+      "phase": 0,
+      "group": 71,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        33,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 126,
+      "y": 7,
+      "columns": 54,
+      "phase": 0,
+      "group": 72,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        34,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 181,
+      "y": 7,
+      "columns": 54,
+      "phase": 0,
+      "group": 73,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        34,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 236,
+      "y": 7,
+      "columns": 54,
+      "phase": 0,
+      "group": 74,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        34,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 291,
+      "y": 7,
+      "columns": 54,
+      "phase": 0,
+      "group": 75,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        34,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 346,
+      "y": 7,
+      "columns": 54,
+      "phase": 0,
+      "group": 76,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        35,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 401,
+      "y": 7,
+      "columns": 54,
+      "phase": 0,
+      "group": 77,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        35,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 456,
+      "y": 7,
+      "columns": 54,
+      "phase": 0,
+      "group": 78,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        35,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 511,
+      "y": 7,
+      "columns": 54,
+      "phase": 0,
+      "group": 79,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        35,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 566,
+      "y": 7,
+      "columns": 54,
+      "phase": 0,
+      "group": 80,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        36,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 621,
+      "y": 7,
+      "columns": 54,
+      "phase": 0,
+      "group": 81,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        36,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 676,
+      "y": 7,
+      "columns": 54,
+      "phase": 0,
+      "group": 82,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        36,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 16,
+      "y": 8,
+      "columns": 54,
+      "phase": 0,
+      "group": 83,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        36,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 71,
+      "y": 8,
+      "columns": 54,
+      "phase": 0,
+      "group": 84,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        37,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 126,
+      "y": 8,
+      "columns": 54,
+      "phase": 0,
+      "group": 85,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        37,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 181,
+      "y": 8,
+      "columns": 54,
+      "phase": 0,
+      "group": 86,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        37,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 236,
+      "y": 8,
+      "columns": 54,
+      "phase": 0,
+      "group": 87,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        37,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 291,
+      "y": 8,
+      "columns": 54,
+      "phase": 0,
+      "group": 88,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        38,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 346,
+      "y": 8,
+      "columns": 54,
+      "phase": 0,
+      "group": 89,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        38,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 401,
+      "y": 8,
+      "columns": 54,
+      "phase": 0,
+      "group": 90,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        38,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 456,
+      "y": 8,
+      "columns": 54,
+      "phase": 0,
+      "group": 91,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        38,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 511,
+      "y": 8,
+      "columns": 54,
+      "phase": 0,
+      "group": 92,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        39,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 566,
+      "y": 8,
+      "columns": 54,
+      "phase": 0,
+      "group": 93,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        39,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 621,
+      "y": 8,
+      "columns": 54,
+      "phase": 0,
+      "group": 94,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        39,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 676,
+      "y": 8,
+      "columns": 54,
+      "phase": 0,
+      "group": 95,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        39,
+        0
+      ],
+      "packet_kind": 1,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.v_proj.weight",
+      "x": 16,
+      "y": 9,
+      "columns": 54,
+      "phase": 0,
+      "group": 0,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        16,
+        0
+      ],
+      "packet_kind": 3,
+      "fanout": 6
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.v_proj.weight",
+      "x": 71,
+      "y": 9,
+      "columns": 54,
+      "phase": 0,
+      "group": 1,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        16,
+        0
+      ],
+      "packet_kind": 3,
+      "fanout": 6
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.v_proj.weight",
+      "x": 126,
+      "y": 9,
+      "columns": 54,
+      "phase": 0,
+      "group": 2,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        22,
+        0
+      ],
+      "packet_kind": 3,
+      "fanout": 6
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.v_proj.weight",
+      "x": 181,
+      "y": 9,
+      "columns": 54,
+      "phase": 0,
+      "group": 3,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        22,
+        0
+      ],
+      "packet_kind": 3,
+      "fanout": 6
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.v_proj.weight",
+      "x": 236,
+      "y": 9,
+      "columns": 54,
+      "phase": 0,
+      "group": 4,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        28,
+        0
+      ],
+      "packet_kind": 3,
+      "fanout": 6
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.v_proj.weight",
+      "x": 291,
+      "y": 9,
+      "columns": 54,
+      "phase": 0,
+      "group": 5,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        28,
+        0
+      ],
+      "packet_kind": 3,
+      "fanout": 6
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.v_proj.weight",
+      "x": 346,
+      "y": 9,
+      "columns": 54,
+      "phase": 0,
+      "group": 6,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        34,
+        0
+      ],
+      "packet_kind": 3,
+      "fanout": 6
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.v_proj.weight",
+      "x": 401,
+      "y": 9,
+      "columns": 54,
+      "phase": 0,
+      "group": 7,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        34,
+        0
+      ],
+      "packet_kind": 3,
+      "fanout": 6
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+      "x": 456,
+      "y": 9,
+      "columns": 64,
+      "phase": 1,
+      "group": 0,
+      "rows": 128,
+      "last_columns": 96,
+      "consumer": [
+        1,
+        0
+      ],
+      "packet_kind": 4,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+      "x": 521,
+      "y": 9,
+      "columns": 64,
+      "phase": 1,
+      "group": 1,
+      "rows": 128,
+      "last_columns": 96,
+      "consumer": [
+        1,
+        0
+      ],
+      "packet_kind": 4,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+      "x": 586,
+      "y": 9,
+      "columns": 64,
+      "phase": 1,
+      "group": 2,
+      "rows": 128,
+      "last_columns": 96,
+      "consumer": [
+        1,
+        0
+      ],
+      "packet_kind": 4,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+      "x": 651,
+      "y": 9,
+      "columns": 64,
+      "phase": 1,
+      "group": 3,
+      "rows": 128,
+      "last_columns": 96,
+      "consumer": [
+        1,
+        0
+      ],
+      "packet_kind": 4,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+      "x": 16,
+      "y": 10,
+      "columns": 64,
+      "phase": 1,
+      "group": 4,
+      "rows": 128,
+      "last_columns": 96,
+      "consumer": [
+        1,
+        0
+      ],
+      "packet_kind": 4,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+      "x": 81,
+      "y": 10,
+      "columns": 64,
+      "phase": 1,
+      "group": 5,
+      "rows": 128,
+      "last_columns": 96,
+      "consumer": [
+        1,
+        0
+      ],
+      "packet_kind": 4,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+      "x": 146,
+      "y": 10,
+      "columns": 64,
+      "phase": 1,
+      "group": 6,
+      "rows": 128,
+      "last_columns": 96,
+      "consumer": [
+        1,
+        0
+      ],
+      "packet_kind": 4,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+      "x": 211,
+      "y": 10,
+      "columns": 64,
+      "phase": 1,
+      "group": 7,
+      "rows": 128,
+      "last_columns": 96,
+      "consumer": [
+        1,
+        0
+      ],
+      "packet_kind": 4,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+      "x": 276,
+      "y": 10,
+      "columns": 64,
+      "phase": 1,
+      "group": 8,
+      "rows": 128,
+      "last_columns": 96,
+      "consumer": [
+        1,
+        0
+      ],
+      "packet_kind": 4,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+      "x": 341,
+      "y": 10,
+      "columns": 64,
+      "phase": 1,
+      "group": 9,
+      "rows": 128,
+      "last_columns": 96,
+      "consumer": [
+        1,
+        0
+      ],
+      "packet_kind": 4,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+      "x": 406,
+      "y": 10,
+      "columns": 64,
+      "phase": 1,
+      "group": 10,
+      "rows": 128,
+      "last_columns": 96,
+      "consumer": [
+        1,
+        0
+      ],
+      "packet_kind": 4,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+      "x": 471,
+      "y": 10,
+      "columns": 64,
+      "phase": 1,
+      "group": 11,
+      "rows": 128,
+      "last_columns": 96,
+      "consumer": [
+        1,
+        0
+      ],
+      "packet_kind": 4,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+      "x": 536,
+      "y": 10,
+      "columns": 64,
+      "phase": 1,
+      "group": 12,
+      "rows": 128,
+      "last_columns": 96,
+      "consumer": [
+        1,
+        0
+      ],
+      "packet_kind": 4,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+      "x": 601,
+      "y": 10,
+      "columns": 64,
+      "phase": 1,
+      "group": 13,
+      "rows": 128,
+      "last_columns": 96,
+      "consumer": [
+        1,
+        0
+      ],
+      "packet_kind": 4,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+      "x": 666,
+      "y": 10,
+      "columns": 64,
+      "phase": 1,
+      "group": 14,
+      "rows": 128,
+      "last_columns": 96,
+      "consumer": [
+        1,
+        0
+      ],
+      "packet_kind": 4,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+      "x": 16,
+      "y": 11,
+      "columns": 64,
+      "phase": 1,
+      "group": 15,
+      "rows": 128,
+      "last_columns": 96,
+      "consumer": [
+        1,
+        0
+      ],
+      "packet_kind": 4,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+      "x": 81,
+      "y": 11,
+      "columns": 64,
+      "phase": 1,
+      "group": 16,
+      "rows": 128,
+      "last_columns": 96,
+      "consumer": [
+        1,
+        0
+      ],
+      "packet_kind": 4,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+      "x": 146,
+      "y": 11,
+      "columns": 64,
+      "phase": 1,
+      "group": 17,
+      "rows": 128,
+      "last_columns": 96,
+      "consumer": [
+        1,
+        0
+      ],
+      "packet_kind": 4,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+      "x": 211,
+      "y": 11,
+      "columns": 64,
+      "phase": 1,
+      "group": 18,
+      "rows": 128,
+      "last_columns": 96,
+      "consumer": [
+        1,
+        0
+      ],
+      "packet_kind": 4,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+      "x": 276,
+      "y": 11,
+      "columns": 64,
+      "phase": 1,
+      "group": 19,
+      "rows": 128,
+      "last_columns": 96,
+      "consumer": [
+        1,
+        0
+      ],
+      "packet_kind": 4,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+      "x": 341,
+      "y": 11,
+      "columns": 64,
+      "phase": 1,
+      "group": 20,
+      "rows": 128,
+      "last_columns": 96,
+      "consumer": [
+        1,
+        0
+      ],
+      "packet_kind": 4,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+      "x": 406,
+      "y": 11,
+      "columns": 64,
+      "phase": 1,
+      "group": 21,
+      "rows": 128,
+      "last_columns": 96,
+      "consumer": [
+        1,
+        0
+      ],
+      "packet_kind": 4,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+      "x": 471,
+      "y": 11,
+      "columns": 64,
+      "phase": 1,
+      "group": 22,
+      "rows": 128,
+      "last_columns": 96,
+      "consumer": [
+        1,
+        0
+      ],
+      "packet_kind": 4,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+      "x": 536,
+      "y": 11,
+      "columns": 64,
+      "phase": 1,
+      "group": 23,
+      "rows": 128,
+      "last_columns": 96,
+      "consumer": [
+        1,
+        0
+      ],
+      "packet_kind": 4,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+      "x": 601,
+      "y": 11,
+      "columns": 64,
+      "phase": 1,
+      "group": 24,
+      "rows": 128,
+      "last_columns": 96,
+      "consumer": [
+        1,
+        0
+      ],
+      "packet_kind": 4,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+      "x": 666,
+      "y": 11,
+      "columns": 64,
+      "phase": 1,
+      "group": 25,
+      "rows": 128,
+      "last_columns": 96,
+      "consumer": [
+        1,
+        0
+      ],
+      "packet_kind": 4,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+      "x": 16,
+      "y": 12,
+      "columns": 64,
+      "phase": 1,
+      "group": 26,
+      "rows": 128,
+      "last_columns": 96,
+      "consumer": [
+        1,
+        0
+      ],
+      "packet_kind": 4,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+      "x": 81,
+      "y": 12,
+      "columns": 64,
+      "phase": 1,
+      "group": 27,
+      "rows": 128,
+      "last_columns": 96,
+      "consumer": [
+        1,
+        0
+      ],
+      "packet_kind": 4,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+      "x": 146,
+      "y": 12,
+      "columns": 64,
+      "phase": 1,
+      "group": 28,
+      "rows": 128,
+      "last_columns": 96,
+      "consumer": [
+        1,
+        0
+      ],
+      "packet_kind": 4,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+      "x": 211,
+      "y": 12,
+      "columns": 64,
+      "phase": 1,
+      "group": 29,
+      "rows": 128,
+      "last_columns": 96,
+      "consumer": [
+        1,
+        0
+      ],
+      "packet_kind": 4,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+      "x": 276,
+      "y": 12,
+      "columns": 64,
+      "phase": 1,
+      "group": 30,
+      "rows": 128,
+      "last_columns": 96,
+      "consumer": [
+        1,
+        0
+      ],
+      "packet_kind": 4,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+      "x": 341,
+      "y": 12,
+      "columns": 64,
+      "phase": 1,
+      "group": 31,
+      "rows": 128,
+      "last_columns": 96,
+      "consumer": [
+        1,
+        0
+      ],
+      "packet_kind": 4,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+      "x": 406,
+      "y": 12,
+      "columns": 64,
+      "phase": 1,
+      "group": 32,
+      "rows": 128,
+      "last_columns": 96,
+      "consumer": [
+        1,
+        0
+      ],
+      "packet_kind": 4,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+      "x": 471,
+      "y": 12,
+      "columns": 64,
+      "phase": 1,
+      "group": 33,
+      "rows": 128,
+      "last_columns": 96,
+      "consumer": [
+        1,
+        0
+      ],
+      "packet_kind": 4,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+      "x": 536,
+      "y": 12,
+      "columns": 64,
+      "phase": 1,
+      "group": 34,
+      "rows": 128,
+      "last_columns": 96,
+      "consumer": [
+        1,
+        0
+      ],
+      "packet_kind": 4,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+      "x": 601,
+      "y": 12,
+      "columns": 64,
+      "phase": 1,
+      "group": 35,
+      "rows": 128,
+      "last_columns": 96,
+      "consumer": [
+        1,
+        0
+      ],
+      "packet_kind": 4,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+      "x": 666,
+      "y": 12,
+      "columns": 64,
+      "phase": 1,
+      "group": 36,
+      "rows": 128,
+      "last_columns": 96,
+      "consumer": [
+        1,
+        0
+      ],
+      "packet_kind": 4,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+      "x": 16,
+      "y": 13,
+      "columns": 64,
+      "phase": 1,
+      "group": 37,
+      "rows": 128,
+      "last_columns": 96,
+      "consumer": [
+        1,
+        0
+      ],
+      "packet_kind": 4,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+      "x": 81,
+      "y": 13,
+      "columns": 64,
+      "phase": 1,
+      "group": 38,
+      "rows": 128,
+      "last_columns": 96,
+      "consumer": [
+        1,
+        0
+      ],
+      "packet_kind": 4,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+      "x": 146,
+      "y": 13,
+      "columns": 64,
+      "phase": 1,
+      "group": 39,
+      "rows": 128,
+      "last_columns": 96,
+      "consumer": [
+        1,
+        0
+      ],
+      "packet_kind": 4,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 211,
+      "y": 13,
+      "columns": 54,
+      "phase": 2,
+      "group": 0,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        40,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 266,
+      "y": 13,
+      "columns": 54,
+      "phase": 2,
+      "group": 1,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        41,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 321,
+      "y": 13,
+      "columns": 54,
+      "phase": 2,
+      "group": 2,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        42,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 376,
+      "y": 13,
+      "columns": 54,
+      "phase": 2,
+      "group": 3,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        43,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 431,
+      "y": 13,
+      "columns": 54,
+      "phase": 2,
+      "group": 4,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        44,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 486,
+      "y": 13,
+      "columns": 54,
+      "phase": 2,
+      "group": 5,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        45,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 541,
+      "y": 13,
+      "columns": 54,
+      "phase": 2,
+      "group": 6,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        46,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 596,
+      "y": 13,
+      "columns": 54,
+      "phase": 2,
+      "group": 7,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        47,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 651,
+      "y": 13,
+      "columns": 54,
+      "phase": 2,
+      "group": 8,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        48,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 16,
+      "y": 14,
+      "columns": 54,
+      "phase": 2,
+      "group": 9,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        49,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 71,
+      "y": 14,
+      "columns": 54,
+      "phase": 2,
+      "group": 10,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        50,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 126,
+      "y": 14,
+      "columns": 54,
+      "phase": 2,
+      "group": 11,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        51,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 181,
+      "y": 14,
+      "columns": 54,
+      "phase": 2,
+      "group": 12,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        52,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 236,
+      "y": 14,
+      "columns": 54,
+      "phase": 2,
+      "group": 13,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        53,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 291,
+      "y": 14,
+      "columns": 54,
+      "phase": 2,
+      "group": 14,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        54,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 346,
+      "y": 14,
+      "columns": 54,
+      "phase": 2,
+      "group": 15,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        55,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 401,
+      "y": 14,
+      "columns": 54,
+      "phase": 2,
+      "group": 16,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        56,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 456,
+      "y": 14,
+      "columns": 54,
+      "phase": 2,
+      "group": 17,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        57,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 511,
+      "y": 14,
+      "columns": 54,
+      "phase": 2,
+      "group": 18,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        58,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 566,
+      "y": 14,
+      "columns": 54,
+      "phase": 2,
+      "group": 19,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        59,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 621,
+      "y": 14,
+      "columns": 54,
+      "phase": 2,
+      "group": 20,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        60,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 676,
+      "y": 14,
+      "columns": 54,
+      "phase": 2,
+      "group": 21,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        61,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 16,
+      "y": 15,
+      "columns": 54,
+      "phase": 2,
+      "group": 22,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        62,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 71,
+      "y": 15,
+      "columns": 54,
+      "phase": 2,
+      "group": 23,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        63,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 126,
+      "y": 15,
+      "columns": 54,
+      "phase": 2,
+      "group": 24,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        64,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 181,
+      "y": 15,
+      "columns": 54,
+      "phase": 2,
+      "group": 25,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        65,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 236,
+      "y": 15,
+      "columns": 54,
+      "phase": 2,
+      "group": 26,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        66,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 291,
+      "y": 15,
+      "columns": 54,
+      "phase": 2,
+      "group": 27,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        67,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 346,
+      "y": 15,
+      "columns": 54,
+      "phase": 2,
+      "group": 28,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        68,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 401,
+      "y": 15,
+      "columns": 54,
+      "phase": 2,
+      "group": 29,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        69,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 456,
+      "y": 15,
+      "columns": 54,
+      "phase": 2,
+      "group": 30,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        70,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 511,
+      "y": 15,
+      "columns": 54,
+      "phase": 2,
+      "group": 31,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        71,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 566,
+      "y": 15,
+      "columns": 54,
+      "phase": 2,
+      "group": 32,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        72,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 621,
+      "y": 15,
+      "columns": 54,
+      "phase": 2,
+      "group": 33,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        73,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 676,
+      "y": 15,
+      "columns": 54,
+      "phase": 2,
+      "group": 34,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        74,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 16,
+      "y": 16,
+      "columns": 54,
+      "phase": 2,
+      "group": 35,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        75,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 71,
+      "y": 16,
+      "columns": 54,
+      "phase": 2,
+      "group": 36,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        76,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 126,
+      "y": 16,
+      "columns": 54,
+      "phase": 2,
+      "group": 37,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        77,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 181,
+      "y": 16,
+      "columns": 54,
+      "phase": 2,
+      "group": 38,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        78,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 236,
+      "y": 16,
+      "columns": 54,
+      "phase": 2,
+      "group": 39,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        79,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 291,
+      "y": 16,
+      "columns": 54,
+      "phase": 2,
+      "group": 40,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        80,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 346,
+      "y": 16,
+      "columns": 54,
+      "phase": 2,
+      "group": 41,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        81,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 401,
+      "y": 16,
+      "columns": 54,
+      "phase": 2,
+      "group": 42,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        82,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 456,
+      "y": 16,
+      "columns": 54,
+      "phase": 2,
+      "group": 43,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        83,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 511,
+      "y": 16,
+      "columns": 54,
+      "phase": 2,
+      "group": 44,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        84,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 566,
+      "y": 16,
+      "columns": 54,
+      "phase": 2,
+      "group": 45,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        85,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 621,
+      "y": 16,
+      "columns": 54,
+      "phase": 2,
+      "group": 46,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        86,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 676,
+      "y": 16,
+      "columns": 54,
+      "phase": 2,
+      "group": 47,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        87,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 16,
+      "y": 17,
+      "columns": 54,
+      "phase": 2,
+      "group": 48,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        88,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 71,
+      "y": 17,
+      "columns": 54,
+      "phase": 2,
+      "group": 49,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        89,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 126,
+      "y": 17,
+      "columns": 54,
+      "phase": 2,
+      "group": 50,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        90,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 181,
+      "y": 17,
+      "columns": 54,
+      "phase": 2,
+      "group": 51,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        91,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 236,
+      "y": 17,
+      "columns": 54,
+      "phase": 2,
+      "group": 52,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        92,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 291,
+      "y": 17,
+      "columns": 54,
+      "phase": 2,
+      "group": 53,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        93,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 346,
+      "y": 17,
+      "columns": 54,
+      "phase": 2,
+      "group": 54,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        94,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 401,
+      "y": 17,
+      "columns": 54,
+      "phase": 2,
+      "group": 55,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        95,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 456,
+      "y": 17,
+      "columns": 54,
+      "phase": 2,
+      "group": 56,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        96,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 511,
+      "y": 17,
+      "columns": 54,
+      "phase": 2,
+      "group": 57,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        97,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 566,
+      "y": 17,
+      "columns": 54,
+      "phase": 2,
+      "group": 58,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        98,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 621,
+      "y": 17,
+      "columns": 54,
+      "phase": 2,
+      "group": 59,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        99,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 676,
+      "y": 17,
+      "columns": 54,
+      "phase": 2,
+      "group": 60,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        100,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 16,
+      "y": 18,
+      "columns": 54,
+      "phase": 2,
+      "group": 61,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        101,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 71,
+      "y": 18,
+      "columns": 54,
+      "phase": 2,
+      "group": 62,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        102,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 126,
+      "y": 18,
+      "columns": 54,
+      "phase": 2,
+      "group": 63,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        103,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 181,
+      "y": 18,
+      "columns": 54,
+      "phase": 2,
+      "group": 64,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        104,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 236,
+      "y": 18,
+      "columns": 54,
+      "phase": 2,
+      "group": 65,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        105,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 291,
+      "y": 18,
+      "columns": 54,
+      "phase": 2,
+      "group": 66,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        106,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 346,
+      "y": 18,
+      "columns": 54,
+      "phase": 2,
+      "group": 67,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        107,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 401,
+      "y": 18,
+      "columns": 54,
+      "phase": 2,
+      "group": 68,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        108,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 456,
+      "y": 18,
+      "columns": 54,
+      "phase": 2,
+      "group": 69,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        109,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 511,
+      "y": 18,
+      "columns": 54,
+      "phase": 2,
+      "group": 70,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        110,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 566,
+      "y": 18,
+      "columns": 54,
+      "phase": 2,
+      "group": 71,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        111,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 621,
+      "y": 18,
+      "columns": 54,
+      "phase": 2,
+      "group": 72,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        112,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 676,
+      "y": 18,
+      "columns": 54,
+      "phase": 2,
+      "group": 73,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        113,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 16,
+      "y": 19,
+      "columns": 54,
+      "phase": 2,
+      "group": 74,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        114,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 71,
+      "y": 19,
+      "columns": 54,
+      "phase": 2,
+      "group": 75,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        115,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 126,
+      "y": 19,
+      "columns": 54,
+      "phase": 2,
+      "group": 76,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        116,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 181,
+      "y": 19,
+      "columns": 54,
+      "phase": 2,
+      "group": 77,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        117,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 236,
+      "y": 19,
+      "columns": 54,
+      "phase": 2,
+      "group": 78,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        118,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 291,
+      "y": 19,
+      "columns": 54,
+      "phase": 2,
+      "group": 79,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        119,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 346,
+      "y": 19,
+      "columns": 54,
+      "phase": 2,
+      "group": 80,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        120,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 401,
+      "y": 19,
+      "columns": 54,
+      "phase": 2,
+      "group": 81,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        121,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 456,
+      "y": 19,
+      "columns": 54,
+      "phase": 2,
+      "group": 82,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        122,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 511,
+      "y": 19,
+      "columns": 54,
+      "phase": 2,
+      "group": 83,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        123,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 566,
+      "y": 19,
+      "columns": 54,
+      "phase": 2,
+      "group": 84,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        124,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 621,
+      "y": 19,
+      "columns": 54,
+      "phase": 2,
+      "group": 85,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        125,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 676,
+      "y": 19,
+      "columns": 54,
+      "phase": 2,
+      "group": 86,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        126,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 16,
+      "y": 20,
+      "columns": 54,
+      "phase": 2,
+      "group": 87,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        127,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 71,
+      "y": 20,
+      "columns": 54,
+      "phase": 2,
+      "group": 88,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        128,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 126,
+      "y": 20,
+      "columns": 54,
+      "phase": 2,
+      "group": 89,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        129,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 181,
+      "y": 20,
+      "columns": 54,
+      "phase": 2,
+      "group": 90,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        130,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 236,
+      "y": 20,
+      "columns": 54,
+      "phase": 2,
+      "group": 91,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        131,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 291,
+      "y": 20,
+      "columns": 54,
+      "phase": 2,
+      "group": 92,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        132,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 346,
+      "y": 20,
+      "columns": 54,
+      "phase": 2,
+      "group": 93,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        133,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 401,
+      "y": 20,
+      "columns": 54,
+      "phase": 2,
+      "group": 94,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        134,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 456,
+      "y": 20,
+      "columns": 54,
+      "phase": 2,
+      "group": 95,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        135,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 511,
+      "y": 20,
+      "columns": 54,
+      "phase": 2,
+      "group": 96,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        136,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 566,
+      "y": 20,
+      "columns": 54,
+      "phase": 2,
+      "group": 97,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        137,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 621,
+      "y": 20,
+      "columns": 54,
+      "phase": 2,
+      "group": 98,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        138,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 676,
+      "y": 20,
+      "columns": 54,
+      "phase": 2,
+      "group": 99,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        139,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 16,
+      "y": 21,
+      "columns": 54,
+      "phase": 2,
+      "group": 100,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        140,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 71,
+      "y": 21,
+      "columns": 54,
+      "phase": 2,
+      "group": 101,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        141,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 126,
+      "y": 21,
+      "columns": 54,
+      "phase": 2,
+      "group": 102,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        142,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 181,
+      "y": 21,
+      "columns": 54,
+      "phase": 2,
+      "group": 103,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        143,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 236,
+      "y": 21,
+      "columns": 54,
+      "phase": 2,
+      "group": 104,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        144,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 291,
+      "y": 21,
+      "columns": 54,
+      "phase": 2,
+      "group": 105,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        145,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 346,
+      "y": 21,
+      "columns": 54,
+      "phase": 2,
+      "group": 106,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        146,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 401,
+      "y": 21,
+      "columns": 54,
+      "phase": 2,
+      "group": 107,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        147,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 456,
+      "y": 21,
+      "columns": 54,
+      "phase": 2,
+      "group": 108,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        148,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 511,
+      "y": 21,
+      "columns": 54,
+      "phase": 2,
+      "group": 109,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        149,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 566,
+      "y": 21,
+      "columns": 54,
+      "phase": 2,
+      "group": 110,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        150,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 621,
+      "y": 21,
+      "columns": 54,
+      "phase": 2,
+      "group": 111,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        151,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 676,
+      "y": 21,
+      "columns": 54,
+      "phase": 2,
+      "group": 112,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        152,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 16,
+      "y": 22,
+      "columns": 54,
+      "phase": 2,
+      "group": 113,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        153,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 71,
+      "y": 22,
+      "columns": 54,
+      "phase": 2,
+      "group": 114,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        154,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 126,
+      "y": 22,
+      "columns": 54,
+      "phase": 2,
+      "group": 115,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        155,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 181,
+      "y": 22,
+      "columns": 54,
+      "phase": 2,
+      "group": 116,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        156,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 236,
+      "y": 22,
+      "columns": 54,
+      "phase": 2,
+      "group": 117,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        157,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 291,
+      "y": 22,
+      "columns": 54,
+      "phase": 2,
+      "group": 118,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        158,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 346,
+      "y": 22,
+      "columns": 54,
+      "phase": 2,
+      "group": 119,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        159,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 401,
+      "y": 22,
+      "columns": 54,
+      "phase": 2,
+      "group": 120,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        160,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 456,
+      "y": 22,
+      "columns": 54,
+      "phase": 2,
+      "group": 121,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        161,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 511,
+      "y": 22,
+      "columns": 54,
+      "phase": 2,
+      "group": 122,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        162,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 566,
+      "y": 22,
+      "columns": 54,
+      "phase": 2,
+      "group": 123,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        163,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 621,
+      "y": 22,
+      "columns": 54,
+      "phase": 2,
+      "group": 124,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        164,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 676,
+      "y": 22,
+      "columns": 54,
+      "phase": 2,
+      "group": 125,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        165,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 16,
+      "y": 23,
+      "columns": 54,
+      "phase": 2,
+      "group": 126,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        166,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 71,
+      "y": 23,
+      "columns": 54,
+      "phase": 2,
+      "group": 127,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        167,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 126,
+      "y": 23,
+      "columns": 54,
+      "phase": 2,
+      "group": 128,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        168,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 181,
+      "y": 23,
+      "columns": 54,
+      "phase": 2,
+      "group": 129,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        169,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 236,
+      "y": 23,
+      "columns": 54,
+      "phase": 2,
+      "group": 130,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        170,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 291,
+      "y": 23,
+      "columns": 54,
+      "phase": 2,
+      "group": 131,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        171,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 346,
+      "y": 23,
+      "columns": 54,
+      "phase": 2,
+      "group": 132,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        172,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 401,
+      "y": 23,
+      "columns": 54,
+      "phase": 2,
+      "group": 133,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        173,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 456,
+      "y": 23,
+      "columns": 54,
+      "phase": 2,
+      "group": 134,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        174,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 511,
+      "y": 23,
+      "columns": 54,
+      "phase": 2,
+      "group": 135,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        175,
+        0
+      ],
+      "packet_kind": 5,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 566,
+      "y": 23,
+      "columns": 54,
+      "phase": 2,
+      "group": 0,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        40,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 621,
+      "y": 23,
+      "columns": 54,
+      "phase": 2,
+      "group": 1,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        41,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 676,
+      "y": 23,
+      "columns": 54,
+      "phase": 2,
+      "group": 2,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        42,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 16,
+      "y": 24,
+      "columns": 54,
+      "phase": 2,
+      "group": 3,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        43,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 71,
+      "y": 24,
+      "columns": 54,
+      "phase": 2,
+      "group": 4,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        44,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 126,
+      "y": 24,
+      "columns": 54,
+      "phase": 2,
+      "group": 5,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        45,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 181,
+      "y": 24,
+      "columns": 54,
+      "phase": 2,
+      "group": 6,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        46,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 236,
+      "y": 24,
+      "columns": 54,
+      "phase": 2,
+      "group": 7,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        47,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 291,
+      "y": 24,
+      "columns": 54,
+      "phase": 2,
+      "group": 8,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        48,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 346,
+      "y": 24,
+      "columns": 54,
+      "phase": 2,
+      "group": 9,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        49,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 401,
+      "y": 24,
+      "columns": 54,
+      "phase": 2,
+      "group": 10,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        50,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 456,
+      "y": 24,
+      "columns": 54,
+      "phase": 2,
+      "group": 11,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        51,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 511,
+      "y": 24,
+      "columns": 54,
+      "phase": 2,
+      "group": 12,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        52,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 566,
+      "y": 24,
+      "columns": 54,
+      "phase": 2,
+      "group": 13,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        53,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 621,
+      "y": 24,
+      "columns": 54,
+      "phase": 2,
+      "group": 14,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        54,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 676,
+      "y": 24,
+      "columns": 54,
+      "phase": 2,
+      "group": 15,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        55,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 16,
+      "y": 25,
+      "columns": 54,
+      "phase": 2,
+      "group": 16,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        56,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 71,
+      "y": 25,
+      "columns": 54,
+      "phase": 2,
+      "group": 17,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        57,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 126,
+      "y": 25,
+      "columns": 54,
+      "phase": 2,
+      "group": 18,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        58,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 181,
+      "y": 25,
+      "columns": 54,
+      "phase": 2,
+      "group": 19,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        59,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 236,
+      "y": 25,
+      "columns": 54,
+      "phase": 2,
+      "group": 20,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        60,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 291,
+      "y": 25,
+      "columns": 54,
+      "phase": 2,
+      "group": 21,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        61,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 346,
+      "y": 25,
+      "columns": 54,
+      "phase": 2,
+      "group": 22,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        62,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 401,
+      "y": 25,
+      "columns": 54,
+      "phase": 2,
+      "group": 23,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        63,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 456,
+      "y": 25,
+      "columns": 54,
+      "phase": 2,
+      "group": 24,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        64,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 511,
+      "y": 25,
+      "columns": 54,
+      "phase": 2,
+      "group": 25,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        65,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 566,
+      "y": 25,
+      "columns": 54,
+      "phase": 2,
+      "group": 26,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        66,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 621,
+      "y": 25,
+      "columns": 54,
+      "phase": 2,
+      "group": 27,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        67,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 676,
+      "y": 25,
+      "columns": 54,
+      "phase": 2,
+      "group": 28,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        68,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 16,
+      "y": 26,
+      "columns": 54,
+      "phase": 2,
+      "group": 29,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        69,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 71,
+      "y": 26,
+      "columns": 54,
+      "phase": 2,
+      "group": 30,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        70,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 126,
+      "y": 26,
+      "columns": 54,
+      "phase": 2,
+      "group": 31,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        71,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 181,
+      "y": 26,
+      "columns": 54,
+      "phase": 2,
+      "group": 32,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        72,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 236,
+      "y": 26,
+      "columns": 54,
+      "phase": 2,
+      "group": 33,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        73,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 291,
+      "y": 26,
+      "columns": 54,
+      "phase": 2,
+      "group": 34,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        74,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 346,
+      "y": 26,
+      "columns": 54,
+      "phase": 2,
+      "group": 35,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        75,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 401,
+      "y": 26,
+      "columns": 54,
+      "phase": 2,
+      "group": 36,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        76,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 456,
+      "y": 26,
+      "columns": 54,
+      "phase": 2,
+      "group": 37,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        77,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 511,
+      "y": 26,
+      "columns": 54,
+      "phase": 2,
+      "group": 38,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        78,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 566,
+      "y": 26,
+      "columns": 54,
+      "phase": 2,
+      "group": 39,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        79,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 621,
+      "y": 26,
+      "columns": 54,
+      "phase": 2,
+      "group": 40,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        80,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 676,
+      "y": 26,
+      "columns": 54,
+      "phase": 2,
+      "group": 41,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        81,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 16,
+      "y": 27,
+      "columns": 54,
+      "phase": 2,
+      "group": 42,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        82,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 71,
+      "y": 27,
+      "columns": 54,
+      "phase": 2,
+      "group": 43,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        83,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 126,
+      "y": 27,
+      "columns": 54,
+      "phase": 2,
+      "group": 44,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        84,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 181,
+      "y": 27,
+      "columns": 54,
+      "phase": 2,
+      "group": 45,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        85,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 236,
+      "y": 27,
+      "columns": 54,
+      "phase": 2,
+      "group": 46,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        86,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 291,
+      "y": 27,
+      "columns": 54,
+      "phase": 2,
+      "group": 47,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        87,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 346,
+      "y": 27,
+      "columns": 54,
+      "phase": 2,
+      "group": 48,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        88,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 401,
+      "y": 27,
+      "columns": 54,
+      "phase": 2,
+      "group": 49,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        89,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 456,
+      "y": 27,
+      "columns": 54,
+      "phase": 2,
+      "group": 50,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        90,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 511,
+      "y": 27,
+      "columns": 54,
+      "phase": 2,
+      "group": 51,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        91,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 566,
+      "y": 27,
+      "columns": 54,
+      "phase": 2,
+      "group": 52,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        92,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 621,
+      "y": 27,
+      "columns": 54,
+      "phase": 2,
+      "group": 53,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        93,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 676,
+      "y": 27,
+      "columns": 54,
+      "phase": 2,
+      "group": 54,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        94,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 16,
+      "y": 28,
+      "columns": 54,
+      "phase": 2,
+      "group": 55,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        95,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 71,
+      "y": 28,
+      "columns": 54,
+      "phase": 2,
+      "group": 56,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        96,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 126,
+      "y": 28,
+      "columns": 54,
+      "phase": 2,
+      "group": 57,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        97,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 181,
+      "y": 28,
+      "columns": 54,
+      "phase": 2,
+      "group": 58,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        98,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 236,
+      "y": 28,
+      "columns": 54,
+      "phase": 2,
+      "group": 59,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        99,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 291,
+      "y": 28,
+      "columns": 54,
+      "phase": 2,
+      "group": 60,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        100,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 346,
+      "y": 28,
+      "columns": 54,
+      "phase": 2,
+      "group": 61,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        101,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 401,
+      "y": 28,
+      "columns": 54,
+      "phase": 2,
+      "group": 62,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        102,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 456,
+      "y": 28,
+      "columns": 54,
+      "phase": 2,
+      "group": 63,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        103,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 511,
+      "y": 28,
+      "columns": 54,
+      "phase": 2,
+      "group": 64,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        104,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 566,
+      "y": 28,
+      "columns": 54,
+      "phase": 2,
+      "group": 65,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        105,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 621,
+      "y": 28,
+      "columns": 54,
+      "phase": 2,
+      "group": 66,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        106,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 676,
+      "y": 28,
+      "columns": 54,
+      "phase": 2,
+      "group": 67,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        107,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 16,
+      "y": 29,
+      "columns": 54,
+      "phase": 2,
+      "group": 68,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        108,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 71,
+      "y": 29,
+      "columns": 54,
+      "phase": 2,
+      "group": 69,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        109,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 126,
+      "y": 29,
+      "columns": 54,
+      "phase": 2,
+      "group": 70,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        110,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 181,
+      "y": 29,
+      "columns": 54,
+      "phase": 2,
+      "group": 71,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        111,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 236,
+      "y": 29,
+      "columns": 54,
+      "phase": 2,
+      "group": 72,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        112,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 291,
+      "y": 29,
+      "columns": 54,
+      "phase": 2,
+      "group": 73,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        113,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 346,
+      "y": 29,
+      "columns": 54,
+      "phase": 2,
+      "group": 74,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        114,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 401,
+      "y": 29,
+      "columns": 54,
+      "phase": 2,
+      "group": 75,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        115,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 456,
+      "y": 29,
+      "columns": 54,
+      "phase": 2,
+      "group": 76,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        116,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 511,
+      "y": 29,
+      "columns": 54,
+      "phase": 2,
+      "group": 77,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        117,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 566,
+      "y": 29,
+      "columns": 54,
+      "phase": 2,
+      "group": 78,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        118,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 621,
+      "y": 29,
+      "columns": 54,
+      "phase": 2,
+      "group": 79,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        119,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 676,
+      "y": 29,
+      "columns": 54,
+      "phase": 2,
+      "group": 80,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        120,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 16,
+      "y": 30,
+      "columns": 54,
+      "phase": 2,
+      "group": 81,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        121,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 71,
+      "y": 30,
+      "columns": 54,
+      "phase": 2,
+      "group": 82,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        122,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 126,
+      "y": 30,
+      "columns": 54,
+      "phase": 2,
+      "group": 83,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        123,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 181,
+      "y": 30,
+      "columns": 54,
+      "phase": 2,
+      "group": 84,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        124,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 236,
+      "y": 30,
+      "columns": 54,
+      "phase": 2,
+      "group": 85,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        125,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 291,
+      "y": 30,
+      "columns": 54,
+      "phase": 2,
+      "group": 86,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        126,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 346,
+      "y": 30,
+      "columns": 54,
+      "phase": 2,
+      "group": 87,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        127,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 401,
+      "y": 30,
+      "columns": 54,
+      "phase": 2,
+      "group": 88,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        128,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 456,
+      "y": 30,
+      "columns": 54,
+      "phase": 2,
+      "group": 89,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        129,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 511,
+      "y": 30,
+      "columns": 54,
+      "phase": 2,
+      "group": 90,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        130,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 566,
+      "y": 30,
+      "columns": 54,
+      "phase": 2,
+      "group": 91,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        131,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 621,
+      "y": 30,
+      "columns": 54,
+      "phase": 2,
+      "group": 92,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        132,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 676,
+      "y": 30,
+      "columns": 54,
+      "phase": 2,
+      "group": 93,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        133,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 16,
+      "y": 31,
+      "columns": 54,
+      "phase": 2,
+      "group": 94,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        134,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 71,
+      "y": 31,
+      "columns": 54,
+      "phase": 2,
+      "group": 95,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        135,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 126,
+      "y": 31,
+      "columns": 54,
+      "phase": 2,
+      "group": 96,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        136,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 181,
+      "y": 31,
+      "columns": 54,
+      "phase": 2,
+      "group": 97,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        137,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 236,
+      "y": 31,
+      "columns": 54,
+      "phase": 2,
+      "group": 98,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        138,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 291,
+      "y": 31,
+      "columns": 54,
+      "phase": 2,
+      "group": 99,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        139,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 346,
+      "y": 31,
+      "columns": 54,
+      "phase": 2,
+      "group": 100,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        140,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 401,
+      "y": 31,
+      "columns": 54,
+      "phase": 2,
+      "group": 101,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        141,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 456,
+      "y": 31,
+      "columns": 54,
+      "phase": 2,
+      "group": 102,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        142,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 511,
+      "y": 31,
+      "columns": 54,
+      "phase": 2,
+      "group": 103,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        143,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 566,
+      "y": 31,
+      "columns": 54,
+      "phase": 2,
+      "group": 104,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        144,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 621,
+      "y": 31,
+      "columns": 54,
+      "phase": 2,
+      "group": 105,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        145,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 676,
+      "y": 31,
+      "columns": 54,
+      "phase": 2,
+      "group": 106,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        146,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 16,
+      "y": 32,
+      "columns": 54,
+      "phase": 2,
+      "group": 107,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        147,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 71,
+      "y": 32,
+      "columns": 54,
+      "phase": 2,
+      "group": 108,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        148,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 126,
+      "y": 32,
+      "columns": 54,
+      "phase": 2,
+      "group": 109,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        149,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 181,
+      "y": 32,
+      "columns": 54,
+      "phase": 2,
+      "group": 110,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        150,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 236,
+      "y": 32,
+      "columns": 54,
+      "phase": 2,
+      "group": 111,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        151,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 291,
+      "y": 32,
+      "columns": 54,
+      "phase": 2,
+      "group": 112,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        152,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 346,
+      "y": 32,
+      "columns": 54,
+      "phase": 2,
+      "group": 113,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        153,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 401,
+      "y": 32,
+      "columns": 54,
+      "phase": 2,
+      "group": 114,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        154,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 456,
+      "y": 32,
+      "columns": 54,
+      "phase": 2,
+      "group": 115,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        155,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 511,
+      "y": 32,
+      "columns": 54,
+      "phase": 2,
+      "group": 116,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        156,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 566,
+      "y": 32,
+      "columns": 54,
+      "phase": 2,
+      "group": 117,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        157,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 621,
+      "y": 32,
+      "columns": 54,
+      "phase": 2,
+      "group": 118,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        158,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 676,
+      "y": 32,
+      "columns": 54,
+      "phase": 2,
+      "group": 119,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        159,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 16,
+      "y": 33,
+      "columns": 54,
+      "phase": 2,
+      "group": 120,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        160,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 71,
+      "y": 33,
+      "columns": 54,
+      "phase": 2,
+      "group": 121,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        161,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 126,
+      "y": 33,
+      "columns": 54,
+      "phase": 2,
+      "group": 122,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        162,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 181,
+      "y": 33,
+      "columns": 54,
+      "phase": 2,
+      "group": 123,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        163,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 236,
+      "y": 33,
+      "columns": 54,
+      "phase": 2,
+      "group": 124,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        164,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 291,
+      "y": 33,
+      "columns": 54,
+      "phase": 2,
+      "group": 125,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        165,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 346,
+      "y": 33,
+      "columns": 54,
+      "phase": 2,
+      "group": 126,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        166,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 401,
+      "y": 33,
+      "columns": 54,
+      "phase": 2,
+      "group": 127,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        167,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 456,
+      "y": 33,
+      "columns": 54,
+      "phase": 2,
+      "group": 128,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        168,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 511,
+      "y": 33,
+      "columns": 54,
+      "phase": 2,
+      "group": 129,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        169,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 566,
+      "y": 33,
+      "columns": 54,
+      "phase": 2,
+      "group": 130,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        170,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 621,
+      "y": 33,
+      "columns": 54,
+      "phase": 2,
+      "group": 131,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        171,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 676,
+      "y": 33,
+      "columns": 54,
+      "phase": 2,
+      "group": 132,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        172,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 16,
+      "y": 34,
+      "columns": 54,
+      "phase": 2,
+      "group": 133,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        173,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 71,
+      "y": 34,
+      "columns": 54,
+      "phase": 2,
+      "group": 134,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        174,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 126,
+      "y": 34,
+      "columns": 54,
+      "phase": 2,
+      "group": 135,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        175,
+        0
+      ],
+      "packet_kind": 6,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.down_proj.weight",
+      "x": 181,
+      "y": 34,
+      "columns": 182,
+      "phase": 3,
+      "group": 0,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        2,
+        0
+      ],
+      "packet_kind": 7,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.down_proj.weight",
+      "x": 364,
+      "y": 34,
+      "columns": 182,
+      "phase": 3,
+      "group": 1,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        2,
+        0
+      ],
+      "packet_kind": 7,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.down_proj.weight",
+      "x": 547,
+      "y": 34,
+      "columns": 182,
+      "phase": 3,
+      "group": 2,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        2,
+        0
+      ],
+      "packet_kind": 7,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.down_proj.weight",
+      "x": 16,
+      "y": 35,
+      "columns": 182,
+      "phase": 3,
+      "group": 3,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        2,
+        0
+      ],
+      "packet_kind": 7,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.down_proj.weight",
+      "x": 199,
+      "y": 35,
+      "columns": 182,
+      "phase": 3,
+      "group": 4,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        2,
+        0
+      ],
+      "packet_kind": 7,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.down_proj.weight",
+      "x": 382,
+      "y": 35,
+      "columns": 182,
+      "phase": 3,
+      "group": 5,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        2,
+        0
+      ],
+      "packet_kind": 7,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.down_proj.weight",
+      "x": 565,
+      "y": 35,
+      "columns": 182,
+      "phase": 3,
+      "group": 6,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        2,
+        0
+      ],
+      "packet_kind": 7,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.down_proj.weight",
+      "x": 16,
+      "y": 36,
+      "columns": 182,
+      "phase": 3,
+      "group": 7,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        2,
+        0
+      ],
+      "packet_kind": 7,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.down_proj.weight",
+      "x": 199,
+      "y": 36,
+      "columns": 182,
+      "phase": 3,
+      "group": 8,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        2,
+        0
+      ],
+      "packet_kind": 7,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.down_proj.weight",
+      "x": 382,
+      "y": 36,
+      "columns": 182,
+      "phase": 3,
+      "group": 9,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        2,
+        0
+      ],
+      "packet_kind": 7,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.down_proj.weight",
+      "x": 565,
+      "y": 36,
+      "columns": 182,
+      "phase": 3,
+      "group": 10,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        2,
+        0
+      ],
+      "packet_kind": 7,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.down_proj.weight",
+      "x": 16,
+      "y": 37,
+      "columns": 182,
+      "phase": 3,
+      "group": 11,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        2,
+        0
+      ],
+      "packet_kind": 7,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.down_proj.weight",
+      "x": 199,
+      "y": 37,
+      "columns": 182,
+      "phase": 3,
+      "group": 12,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        2,
+        0
+      ],
+      "packet_kind": 7,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.down_proj.weight",
+      "x": 382,
+      "y": 37,
+      "columns": 182,
+      "phase": 3,
+      "group": 13,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        2,
+        0
+      ],
+      "packet_kind": 7,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.down_proj.weight",
+      "x": 565,
+      "y": 37,
+      "columns": 182,
+      "phase": 3,
+      "group": 14,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        2,
+        0
+      ],
+      "packet_kind": 7,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.down_proj.weight",
+      "x": 16,
+      "y": 38,
+      "columns": 182,
+      "phase": 3,
+      "group": 15,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        2,
+        0
+      ],
+      "packet_kind": 7,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.down_proj.weight",
+      "x": 199,
+      "y": 38,
+      "columns": 182,
+      "phase": 3,
+      "group": 16,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        2,
+        0
+      ],
+      "packet_kind": 7,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.down_proj.weight",
+      "x": 382,
+      "y": 38,
+      "columns": 182,
+      "phase": 3,
+      "group": 17,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        2,
+        0
+      ],
+      "packet_kind": 7,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.down_proj.weight",
+      "x": 565,
+      "y": 38,
+      "columns": 182,
+      "phase": 3,
+      "group": 18,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        2,
+        0
+      ],
+      "packet_kind": 7,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.down_proj.weight",
+      "x": 16,
+      "y": 39,
+      "columns": 182,
+      "phase": 3,
+      "group": 19,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        2,
+        0
+      ],
+      "packet_kind": 7,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.down_proj.weight",
+      "x": 199,
+      "y": 39,
+      "columns": 182,
+      "phase": 3,
+      "group": 20,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        2,
+        0
+      ],
+      "packet_kind": 7,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.down_proj.weight",
+      "x": 382,
+      "y": 39,
+      "columns": 182,
+      "phase": 3,
+      "group": 21,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        2,
+        0
+      ],
+      "packet_kind": 7,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.down_proj.weight",
+      "x": 565,
+      "y": 39,
+      "columns": 182,
+      "phase": 3,
+      "group": 22,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        2,
+        0
+      ],
+      "packet_kind": 7,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.down_proj.weight",
+      "x": 16,
+      "y": 40,
+      "columns": 182,
+      "phase": 3,
+      "group": 23,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        2,
+        0
+      ],
+      "packet_kind": 7,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.down_proj.weight",
+      "x": 199,
+      "y": 40,
+      "columns": 182,
+      "phase": 3,
+      "group": 24,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        2,
+        0
+      ],
+      "packet_kind": 7,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.down_proj.weight",
+      "x": 382,
+      "y": 40,
+      "columns": 182,
+      "phase": 3,
+      "group": 25,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        2,
+        0
+      ],
+      "packet_kind": 7,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.down_proj.weight",
+      "x": 565,
+      "y": 40,
+      "columns": 182,
+      "phase": 3,
+      "group": 26,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        2,
+        0
+      ],
+      "packet_kind": 7,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.down_proj.weight",
+      "x": 16,
+      "y": 41,
+      "columns": 182,
+      "phase": 3,
+      "group": 27,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        2,
+        0
+      ],
+      "packet_kind": 7,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.down_proj.weight",
+      "x": 199,
+      "y": 41,
+      "columns": 182,
+      "phase": 3,
+      "group": 28,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        2,
+        0
+      ],
+      "packet_kind": 7,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.down_proj.weight",
+      "x": 382,
+      "y": 41,
+      "columns": 182,
+      "phase": 3,
+      "group": 29,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        2,
+        0
+      ],
+      "packet_kind": 7,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.down_proj.weight",
+      "x": 565,
+      "y": 41,
+      "columns": 182,
+      "phase": 3,
+      "group": 30,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        2,
+        0
+      ],
+      "packet_kind": 7,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.down_proj.weight",
+      "x": 16,
+      "y": 42,
+      "columns": 182,
+      "phase": 3,
+      "group": 31,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        2,
+        0
+      ],
+      "packet_kind": 7,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.down_proj.weight",
+      "x": 199,
+      "y": 42,
+      "columns": 182,
+      "phase": 3,
+      "group": 32,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        2,
+        0
+      ],
+      "packet_kind": 7,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.down_proj.weight",
+      "x": 382,
+      "y": 42,
+      "columns": 182,
+      "phase": 3,
+      "group": 33,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        2,
+        0
+      ],
+      "packet_kind": 7,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.down_proj.weight",
+      "x": 565,
+      "y": 42,
+      "columns": 182,
+      "phase": 3,
+      "group": 34,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        2,
+        0
+      ],
+      "packet_kind": 7,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.down_proj.weight",
+      "x": 16,
+      "y": 43,
+      "columns": 182,
+      "phase": 3,
+      "group": 35,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        2,
+        0
+      ],
+      "packet_kind": 7,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.down_proj.weight",
+      "x": 199,
+      "y": 43,
+      "columns": 182,
+      "phase": 3,
+      "group": 36,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        2,
+        0
+      ],
+      "packet_kind": 7,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.down_proj.weight",
+      "x": 382,
+      "y": 43,
+      "columns": 182,
+      "phase": 3,
+      "group": 37,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        2,
+        0
+      ],
+      "packet_kind": 7,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.down_proj.weight",
+      "x": 565,
+      "y": 43,
+      "columns": 182,
+      "phase": 3,
+      "group": 38,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        2,
+        0
+      ],
+      "packet_kind": 7,
+      "fanout": 1
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.down_proj.weight",
+      "x": 16,
+      "y": 44,
+      "columns": 182,
+      "phase": 3,
+      "group": 39,
+      "rows": 128,
+      "last_columns": 32,
+      "consumer": [
+        2,
+        0
+      ],
+      "packet_kind": 7,
+      "fanout": 1
+    }
+  ],
+  "weight_batches": [
+    {
+      "name": "model.language_model.layers.3.self_attn.k_proj.weight",
+      "x": 16,
+      "y": 1,
+      "width": 54,
+      "height": 1,
+      "row_groups": [
+        0
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 1327104,
+      "shape": [
+        1024,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.k_proj.weight",
+      "x": 71,
+      "y": 1,
+      "width": 54,
+      "height": 1,
+      "row_groups": [
+        1
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 1327104,
+      "shape": [
+        1024,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.k_proj.weight",
+      "x": 126,
+      "y": 1,
+      "width": 54,
+      "height": 1,
+      "row_groups": [
+        2
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 1327104,
+      "shape": [
+        1024,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.k_proj.weight",
+      "x": 181,
+      "y": 1,
+      "width": 54,
+      "height": 1,
+      "row_groups": [
+        3
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 1327104,
+      "shape": [
+        1024,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.k_proj.weight",
+      "x": 236,
+      "y": 1,
+      "width": 54,
+      "height": 1,
+      "row_groups": [
+        4
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 1327104,
+      "shape": [
+        1024,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.k_proj.weight",
+      "x": 291,
+      "y": 1,
+      "width": 54,
+      "height": 1,
+      "row_groups": [
+        5
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 1327104,
+      "shape": [
+        1024,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.k_proj.weight",
+      "x": 346,
+      "y": 1,
+      "width": 54,
+      "height": 1,
+      "row_groups": [
+        6
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 1327104,
+      "shape": [
+        1024,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.k_proj.weight",
+      "x": 401,
+      "y": 1,
+      "width": 54,
+      "height": 1,
+      "row_groups": [
+        7
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 1327104,
+      "shape": [
+        1024,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 16,
+      "y": 2,
+      "width": 54,
+      "height": 7,
+      "row_groups": [
+        5,
+        18,
+        31,
+        44,
+        57,
+        70,
+        83
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 9289728,
+      "shape": [
+        12288,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 71,
+      "y": 2,
+      "width": 54,
+      "height": 7,
+      "row_groups": [
+        6,
+        19,
+        32,
+        45,
+        58,
+        71,
+        84
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 9289728,
+      "shape": [
+        12288,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 126,
+      "y": 2,
+      "width": 54,
+      "height": 7,
+      "row_groups": [
+        7,
+        20,
+        33,
+        46,
+        59,
+        72,
+        85
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 9289728,
+      "shape": [
+        12288,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 181,
+      "y": 2,
+      "width": 54,
+      "height": 7,
+      "row_groups": [
+        8,
+        21,
+        34,
+        47,
+        60,
+        73,
+        86
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 9289728,
+      "shape": [
+        12288,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 236,
+      "y": 2,
+      "width": 54,
+      "height": 7,
+      "row_groups": [
+        9,
+        22,
+        35,
+        48,
+        61,
+        74,
+        87
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 9289728,
+      "shape": [
+        12288,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 291,
+      "y": 2,
+      "width": 54,
+      "height": 7,
+      "row_groups": [
+        10,
+        23,
+        36,
+        49,
+        62,
+        75,
+        88
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 9289728,
+      "shape": [
+        12288,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 346,
+      "y": 2,
+      "width": 54,
+      "height": 7,
+      "row_groups": [
+        11,
+        24,
+        37,
+        50,
+        63,
+        76,
+        89
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 9289728,
+      "shape": [
+        12288,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 401,
+      "y": 2,
+      "width": 54,
+      "height": 7,
+      "row_groups": [
+        12,
+        25,
+        38,
+        51,
+        64,
+        77,
+        90
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 9289728,
+      "shape": [
+        12288,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 456,
+      "y": 1,
+      "width": 54,
+      "height": 8,
+      "row_groups": [
+        0,
+        13,
+        26,
+        39,
+        52,
+        65,
+        78,
+        91
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 10616832,
+      "shape": [
+        12288,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 511,
+      "y": 1,
+      "width": 54,
+      "height": 8,
+      "row_groups": [
+        1,
+        14,
+        27,
+        40,
+        53,
+        66,
+        79,
+        92
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 10616832,
+      "shape": [
+        12288,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 566,
+      "y": 1,
+      "width": 54,
+      "height": 8,
+      "row_groups": [
+        2,
+        15,
+        28,
+        41,
+        54,
+        67,
+        80,
+        93
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 10616832,
+      "shape": [
+        12288,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 621,
+      "y": 1,
+      "width": 54,
+      "height": 8,
+      "row_groups": [
+        3,
+        16,
+        29,
+        42,
+        55,
+        68,
+        81,
+        94
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 10616832,
+      "shape": [
+        12288,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+      "x": 676,
+      "y": 1,
+      "width": 54,
+      "height": 8,
+      "row_groups": [
+        4,
+        17,
+        30,
+        43,
+        56,
+        69,
+        82,
+        95
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 10616832,
+      "shape": [
+        12288,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.v_proj.weight",
+      "x": 16,
+      "y": 9,
+      "width": 54,
+      "height": 1,
+      "row_groups": [
+        0
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 1327104,
+      "shape": [
+        1024,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.v_proj.weight",
+      "x": 71,
+      "y": 9,
+      "width": 54,
+      "height": 1,
+      "row_groups": [
+        1
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 1327104,
+      "shape": [
+        1024,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.v_proj.weight",
+      "x": 126,
+      "y": 9,
+      "width": 54,
+      "height": 1,
+      "row_groups": [
+        2
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 1327104,
+      "shape": [
+        1024,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.v_proj.weight",
+      "x": 181,
+      "y": 9,
+      "width": 54,
+      "height": 1,
+      "row_groups": [
+        3
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 1327104,
+      "shape": [
+        1024,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.v_proj.weight",
+      "x": 236,
+      "y": 9,
+      "width": 54,
+      "height": 1,
+      "row_groups": [
+        4
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 1327104,
+      "shape": [
+        1024,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.v_proj.weight",
+      "x": 291,
+      "y": 9,
+      "width": 54,
+      "height": 1,
+      "row_groups": [
+        5
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 1327104,
+      "shape": [
+        1024,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.v_proj.weight",
+      "x": 346,
+      "y": 9,
+      "width": 54,
+      "height": 1,
+      "row_groups": [
+        6
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 1327104,
+      "shape": [
+        1024,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.v_proj.weight",
+      "x": 401,
+      "y": 9,
+      "width": 54,
+      "height": 1,
+      "row_groups": [
+        7
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 1327104,
+      "shape": [
+        1024,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+      "x": 16,
+      "y": 10,
+      "width": 64,
+      "height": 4,
+      "row_groups": [
+        4,
+        15,
+        26,
+        37
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 6291456,
+      "shape": [
+        5120,
+        6144
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+      "x": 81,
+      "y": 10,
+      "width": 64,
+      "height": 4,
+      "row_groups": [
+        5,
+        16,
+        27,
+        38
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 6291456,
+      "shape": [
+        5120,
+        6144
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+      "x": 146,
+      "y": 10,
+      "width": 64,
+      "height": 4,
+      "row_groups": [
+        6,
+        17,
+        28,
+        39
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 6291456,
+      "shape": [
+        5120,
+        6144
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+      "x": 211,
+      "y": 10,
+      "width": 64,
+      "height": 3,
+      "row_groups": [
+        7,
+        18,
+        29
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 4718592,
+      "shape": [
+        5120,
+        6144
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+      "x": 276,
+      "y": 10,
+      "width": 64,
+      "height": 3,
+      "row_groups": [
+        8,
+        19,
+        30
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 4718592,
+      "shape": [
+        5120,
+        6144
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+      "x": 341,
+      "y": 10,
+      "width": 64,
+      "height": 3,
+      "row_groups": [
+        9,
+        20,
+        31
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 4718592,
+      "shape": [
+        5120,
+        6144
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+      "x": 406,
+      "y": 10,
+      "width": 64,
+      "height": 3,
+      "row_groups": [
+        10,
+        21,
+        32
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 4718592,
+      "shape": [
+        5120,
+        6144
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+      "x": 456,
+      "y": 9,
+      "width": 64,
+      "height": 1,
+      "row_groups": [
+        0
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 1572864,
+      "shape": [
+        5120,
+        6144
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+      "x": 471,
+      "y": 10,
+      "width": 64,
+      "height": 3,
+      "row_groups": [
+        11,
+        22,
+        33
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 4718592,
+      "shape": [
+        5120,
+        6144
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+      "x": 521,
+      "y": 9,
+      "width": 64,
+      "height": 1,
+      "row_groups": [
+        1
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 1572864,
+      "shape": [
+        5120,
+        6144
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+      "x": 536,
+      "y": 10,
+      "width": 64,
+      "height": 3,
+      "row_groups": [
+        12,
+        23,
+        34
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 4718592,
+      "shape": [
+        5120,
+        6144
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+      "x": 586,
+      "y": 9,
+      "width": 64,
+      "height": 1,
+      "row_groups": [
+        2
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 1572864,
+      "shape": [
+        5120,
+        6144
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+      "x": 601,
+      "y": 10,
+      "width": 64,
+      "height": 3,
+      "row_groups": [
+        13,
+        24,
+        35
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 4718592,
+      "shape": [
+        5120,
+        6144
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+      "x": 651,
+      "y": 9,
+      "width": 64,
+      "height": 1,
+      "row_groups": [
+        3
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 1572864,
+      "shape": [
+        5120,
+        6144
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+      "x": 666,
+      "y": 10,
+      "width": 64,
+      "height": 3,
+      "row_groups": [
+        14,
+        25,
+        36
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 4718592,
+      "shape": [
+        5120,
+        6144
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 16,
+      "y": 14,
+      "width": 54,
+      "height": 10,
+      "row_groups": [
+        9,
+        22,
+        35,
+        48,
+        61,
+        74,
+        87,
+        100,
+        113,
+        126
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 13271040,
+      "shape": [
+        17408,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 71,
+      "y": 14,
+      "width": 54,
+      "height": 10,
+      "row_groups": [
+        10,
+        23,
+        36,
+        49,
+        62,
+        75,
+        88,
+        101,
+        114,
+        127
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 13271040,
+      "shape": [
+        17408,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 126,
+      "y": 14,
+      "width": 54,
+      "height": 10,
+      "row_groups": [
+        11,
+        24,
+        37,
+        50,
+        63,
+        76,
+        89,
+        102,
+        115,
+        128
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 13271040,
+      "shape": [
+        17408,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 181,
+      "y": 14,
+      "width": 54,
+      "height": 10,
+      "row_groups": [
+        12,
+        25,
+        38,
+        51,
+        64,
+        77,
+        90,
+        103,
+        116,
+        129
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 13271040,
+      "shape": [
+        17408,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 211,
+      "y": 13,
+      "width": 54,
+      "height": 1,
+      "row_groups": [
+        0
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 1327104,
+      "shape": [
+        17408,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 236,
+      "y": 14,
+      "width": 54,
+      "height": 10,
+      "row_groups": [
+        13,
+        26,
+        39,
+        52,
+        65,
+        78,
+        91,
+        104,
+        117,
+        130
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 13271040,
+      "shape": [
+        17408,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 266,
+      "y": 13,
+      "width": 54,
+      "height": 1,
+      "row_groups": [
+        1
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 1327104,
+      "shape": [
+        17408,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 291,
+      "y": 14,
+      "width": 54,
+      "height": 10,
+      "row_groups": [
+        14,
+        27,
+        40,
+        53,
+        66,
+        79,
+        92,
+        105,
+        118,
+        131
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 13271040,
+      "shape": [
+        17408,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 321,
+      "y": 13,
+      "width": 54,
+      "height": 1,
+      "row_groups": [
+        2
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 1327104,
+      "shape": [
+        17408,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 346,
+      "y": 14,
+      "width": 54,
+      "height": 10,
+      "row_groups": [
+        15,
+        28,
+        41,
+        54,
+        67,
+        80,
+        93,
+        106,
+        119,
+        132
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 13271040,
+      "shape": [
+        17408,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 376,
+      "y": 13,
+      "width": 54,
+      "height": 1,
+      "row_groups": [
+        3
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 1327104,
+      "shape": [
+        17408,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 401,
+      "y": 14,
+      "width": 54,
+      "height": 10,
+      "row_groups": [
+        16,
+        29,
+        42,
+        55,
+        68,
+        81,
+        94,
+        107,
+        120,
+        133
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 13271040,
+      "shape": [
+        17408,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 431,
+      "y": 13,
+      "width": 54,
+      "height": 1,
+      "row_groups": [
+        4
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 1327104,
+      "shape": [
+        17408,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 456,
+      "y": 14,
+      "width": 54,
+      "height": 10,
+      "row_groups": [
+        17,
+        30,
+        43,
+        56,
+        69,
+        82,
+        95,
+        108,
+        121,
+        134
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 13271040,
+      "shape": [
+        17408,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 486,
+      "y": 13,
+      "width": 54,
+      "height": 1,
+      "row_groups": [
+        5
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 1327104,
+      "shape": [
+        17408,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 511,
+      "y": 14,
+      "width": 54,
+      "height": 10,
+      "row_groups": [
+        18,
+        31,
+        44,
+        57,
+        70,
+        83,
+        96,
+        109,
+        122,
+        135
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 13271040,
+      "shape": [
+        17408,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 541,
+      "y": 13,
+      "width": 54,
+      "height": 1,
+      "row_groups": [
+        6
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 1327104,
+      "shape": [
+        17408,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 566,
+      "y": 14,
+      "width": 54,
+      "height": 9,
+      "row_groups": [
+        19,
+        32,
+        45,
+        58,
+        71,
+        84,
+        97,
+        110,
+        123
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 11943936,
+      "shape": [
+        17408,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 596,
+      "y": 13,
+      "width": 54,
+      "height": 1,
+      "row_groups": [
+        7
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 1327104,
+      "shape": [
+        17408,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 621,
+      "y": 14,
+      "width": 54,
+      "height": 9,
+      "row_groups": [
+        20,
+        33,
+        46,
+        59,
+        72,
+        85,
+        98,
+        111,
+        124
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 11943936,
+      "shape": [
+        17408,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 651,
+      "y": 13,
+      "width": 54,
+      "height": 1,
+      "row_groups": [
+        8
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 1327104,
+      "shape": [
+        17408,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+      "x": 676,
+      "y": 14,
+      "width": 54,
+      "height": 9,
+      "row_groups": [
+        21,
+        34,
+        47,
+        60,
+        73,
+        86,
+        99,
+        112,
+        125
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 11943936,
+      "shape": [
+        17408,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 16,
+      "y": 24,
+      "width": 54,
+      "height": 11,
+      "row_groups": [
+        3,
+        16,
+        29,
+        42,
+        55,
+        68,
+        81,
+        94,
+        107,
+        120,
+        133
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 14598144,
+      "shape": [
+        17408,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 71,
+      "y": 24,
+      "width": 54,
+      "height": 11,
+      "row_groups": [
+        4,
+        17,
+        30,
+        43,
+        56,
+        69,
+        82,
+        95,
+        108,
+        121,
+        134
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 14598144,
+      "shape": [
+        17408,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 126,
+      "y": 24,
+      "width": 54,
+      "height": 11,
+      "row_groups": [
+        5,
+        18,
+        31,
+        44,
+        57,
+        70,
+        83,
+        96,
+        109,
+        122,
+        135
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 14598144,
+      "shape": [
+        17408,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 181,
+      "y": 24,
+      "width": 54,
+      "height": 10,
+      "row_groups": [
+        6,
+        19,
+        32,
+        45,
+        58,
+        71,
+        84,
+        97,
+        110,
+        123
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 13271040,
+      "shape": [
+        17408,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 236,
+      "y": 24,
+      "width": 54,
+      "height": 10,
+      "row_groups": [
+        7,
+        20,
+        33,
+        46,
+        59,
+        72,
+        85,
+        98,
+        111,
+        124
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 13271040,
+      "shape": [
+        17408,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 291,
+      "y": 24,
+      "width": 54,
+      "height": 10,
+      "row_groups": [
+        8,
+        21,
+        34,
+        47,
+        60,
+        73,
+        86,
+        99,
+        112,
+        125
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 13271040,
+      "shape": [
+        17408,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 346,
+      "y": 24,
+      "width": 54,
+      "height": 10,
+      "row_groups": [
+        9,
+        22,
+        35,
+        48,
+        61,
+        74,
+        87,
+        100,
+        113,
+        126
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 13271040,
+      "shape": [
+        17408,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 401,
+      "y": 24,
+      "width": 54,
+      "height": 10,
+      "row_groups": [
+        10,
+        23,
+        36,
+        49,
+        62,
+        75,
+        88,
+        101,
+        114,
+        127
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 13271040,
+      "shape": [
+        17408,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 456,
+      "y": 24,
+      "width": 54,
+      "height": 10,
+      "row_groups": [
+        11,
+        24,
+        37,
+        50,
+        63,
+        76,
+        89,
+        102,
+        115,
+        128
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 13271040,
+      "shape": [
+        17408,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 511,
+      "y": 24,
+      "width": 54,
+      "height": 10,
+      "row_groups": [
+        12,
+        25,
+        38,
+        51,
+        64,
+        77,
+        90,
+        103,
+        116,
+        129
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 13271040,
+      "shape": [
+        17408,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 566,
+      "y": 23,
+      "width": 54,
+      "height": 11,
+      "row_groups": [
+        0,
+        13,
+        26,
+        39,
+        52,
+        65,
+        78,
+        91,
+        104,
+        117,
+        130
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 14598144,
+      "shape": [
+        17408,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 621,
+      "y": 23,
+      "width": 54,
+      "height": 11,
+      "row_groups": [
+        1,
+        14,
+        27,
+        40,
+        53,
+        66,
+        79,
+        92,
+        105,
+        118,
+        131
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 14598144,
+      "shape": [
+        17408,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.up_proj.weight",
+      "x": 676,
+      "y": 23,
+      "width": 54,
+      "height": 11,
+      "row_groups": [
+        2,
+        15,
+        28,
+        41,
+        54,
+        67,
+        80,
+        93,
+        106,
+        119,
+        132
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 14598144,
+      "shape": [
+        17408,
+        5120
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.down_proj.weight",
+      "x": 16,
+      "y": 35,
+      "width": 182,
+      "height": 3,
+      "row_groups": [
+        3,
+        7,
+        11
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 13418496,
+      "shape": [
+        5120,
+        17408
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.down_proj.weight",
+      "x": 16,
+      "y": 38,
+      "width": 182,
+      "height": 3,
+      "row_groups": [
+        15,
+        19,
+        23
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 13418496,
+      "shape": [
+        5120,
+        17408
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.down_proj.weight",
+      "x": 16,
+      "y": 41,
+      "width": 182,
+      "height": 3,
+      "row_groups": [
+        27,
+        31,
+        35
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 13418496,
+      "shape": [
+        5120,
+        17408
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.down_proj.weight",
+      "x": 16,
+      "y": 44,
+      "width": 182,
+      "height": 1,
+      "row_groups": [
+        39
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 4472832,
+      "shape": [
+        5120,
+        17408
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.down_proj.weight",
+      "x": 181,
+      "y": 34,
+      "width": 182,
+      "height": 1,
+      "row_groups": [
+        0
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 4472832,
+      "shape": [
+        5120,
+        17408
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.down_proj.weight",
+      "x": 199,
+      "y": 35,
+      "width": 182,
+      "height": 3,
+      "row_groups": [
+        4,
+        8,
+        12
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 13418496,
+      "shape": [
+        5120,
+        17408
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.down_proj.weight",
+      "x": 199,
+      "y": 38,
+      "width": 182,
+      "height": 3,
+      "row_groups": [
+        16,
+        20,
+        24
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 13418496,
+      "shape": [
+        5120,
+        17408
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.down_proj.weight",
+      "x": 199,
+      "y": 41,
+      "width": 182,
+      "height": 3,
+      "row_groups": [
+        28,
+        32,
+        36
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 13418496,
+      "shape": [
+        5120,
+        17408
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.down_proj.weight",
+      "x": 364,
+      "y": 34,
+      "width": 182,
+      "height": 1,
+      "row_groups": [
+        1
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 4472832,
+      "shape": [
+        5120,
+        17408
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.down_proj.weight",
+      "x": 382,
+      "y": 35,
+      "width": 182,
+      "height": 3,
+      "row_groups": [
+        5,
+        9,
+        13
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 13418496,
+      "shape": [
+        5120,
+        17408
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.down_proj.weight",
+      "x": 382,
+      "y": 38,
+      "width": 182,
+      "height": 3,
+      "row_groups": [
+        17,
+        21,
+        25
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 13418496,
+      "shape": [
+        5120,
+        17408
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.down_proj.weight",
+      "x": 382,
+      "y": 41,
+      "width": 182,
+      "height": 3,
+      "row_groups": [
+        29,
+        33,
+        37
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 13418496,
+      "shape": [
+        5120,
+        17408
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.down_proj.weight",
+      "x": 547,
+      "y": 34,
+      "width": 182,
+      "height": 1,
+      "row_groups": [
+        2
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 4472832,
+      "shape": [
+        5120,
+        17408
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.down_proj.weight",
+      "x": 565,
+      "y": 35,
+      "width": 182,
+      "height": 3,
+      "row_groups": [
+        6,
+        10,
+        14
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 13418496,
+      "shape": [
+        5120,
+        17408
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.down_proj.weight",
+      "x": 565,
+      "y": 38,
+      "width": 182,
+      "height": 3,
+      "row_groups": [
+        18,
+        22,
+        26
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 13418496,
+      "shape": [
+        5120,
+        17408
+      ]
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.down_proj.weight",
+      "x": 565,
+      "y": 41,
+      "width": 182,
+      "height": 3,
+      "row_groups": [
+        30,
+        34,
+        38
+      ],
+      "count_per_PE": 6144,
+      "bits": 32,
+      "host_bytes": 13418496,
+      "shape": [
+        5120,
+        17408
+      ]
+    }
+  ],
+  "row_ends": [
+    0,
+    729,
+    729,
+    729,
+    729,
+    729,
+    729,
+    729,
+    729,
+    714,
+    729,
+    729,
+    729,
+    704,
+    729,
+    729,
+    729,
+    729,
+    729,
+    729,
+    729,
+    729,
+    729,
+    729,
+    729,
+    729,
+    729,
+    729,
+    729,
+    729,
+    729,
+    729,
+    729,
+    729,
+    728,
+    746,
+    746,
+    746,
+    746,
+    746,
+    746,
+    746,
+    746,
+    746,
+    197
+  ],
+  "packed_weight_bytes": 751435776,
+  "weight_upload_calls": 95,
+  "input_norm": [
+    1,
+    0
+  ],
+  "post_norm": [
+    2,
+    0
+  ],
+  "attention_heads": [
+    16,
+    0,
+    24
+  ],
+  "mlp_owners": [
+    40,
+    0,
+    136
+  ],
+  "origin": [
+    0,
+    0
+  ],
+  "layer": 3,
+  "context": 8,
+  "phases": 4,
+  "original_weights_read": false,
+  "compiled": false
+}

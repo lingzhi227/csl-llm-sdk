@@ -1,0 +1,18 @@
+// Qualified domain[-24,1]. Selection loop picks n; recompute remainder with split ln2.
+// Degree8 Taylor on abs(r)<=ln2/2, then exact normal power-of-two scaling.
+fn exp_f32(x:f32) f32 {
+ var n:i16=0;var select:f32=x;
+ while(select < -0.34657359027997265){select+=0.6931471805599453;n-=1;}
+ while(select > 0.34657359027997265){select-=0.6931471805599453;n+=1;}
+ const nf:f32=@as(f32,n);
+ const reduced:f32=(x-nf*0.693145751953125)-nf*0.000001428606765330187;
+ var p:f32=0.0000248015873015873;
+ p=0.0001984126984126984+reduced*p;
+ p=0.001388888888888889+reduced*p;
+ p=0.008333333333333333+reduced*p;
+ p=0.041666666666666664+reduced*p;
+ p=0.16666666666666666+reduced*p;
+ p=0.5+reduced*p;p=1.0+reduced*p;p=1.0+reduced*p;
+ const scale:u32=@as(u32,n+127)<<23;
+ return p*@bitcast(f32,scale);
+}

@@ -1,0 +1,91 @@
+// Pure ownership state shared by fixture and future original wrapper.
+// Callers invoke every state-changing method outside assertions, inspect its
+// boolean result, and schedule transport only after successful transitions.
+const protocol=@import_module("credit_protocol.csl",.{});
+var identity=@zeros([4]u32);
+var operation:u16=0;
+var kind:u16=0;var group:u16=0;var first_head:u16=0;var recipients:u16=0;
+var fanout:u16=0;var grants:u16=0;var source_completions:u16=0;
+var receipts:u16=0;var rows_retired:u16=0;
+var initialized:bool=false;var granted:bool=false;var output_ready:bool=false;
+var row_active:bool=false;var source_done:bool=false;var receipt_done:bool=false;
+var done_pending:bool=false;var done_inflight:bool=false;var done_sent:bool=false;
+var errors:u32=0;var rejected:u32=0;
+
+fn reject(flag:u32) bool {errors|=flag;rejected+=1;return false;}
+fn quiescent() bool {
+ return initialized and done_sent and !row_active and !done_pending and !done_inflight;
+}
+fn begin(request:u32,reset:u32,position:u32,stage:u32,new_operation:u16,
+         new_kind:u16,new_group:u16) bool {
+ if(initialized and !quiescent()){return reject(protocol.ERR_LEASE);}
+ if(new_operation==0xffff){return reject(protocol.ERR_PHASE);}
+ if(initialized and identity[0]==request and identity[1]==reset and identity[2]==position and
+    identity[3]==stage and operation==new_operation){return reject(protocol.ERR_DUPLICATE);}
+ if(!protocol.valid_group(new_kind,new_group)){return reject(protocol.ERR_KIND_GROUP);}
+ identity[0]=request;identity[1]=reset;identity[2]=position;identity[3]=stage;
+ operation=new_operation;kind=new_kind;group=new_group;
+ first_head=protocol.first_head(kind,group);recipients=protocol.recipient_count(kind);
+ fanout=0;grants=0;source_completions=0;receipts=0;rows_retired=0;
+ granted=false;output_ready=false;row_active=false;source_done=false;receipt_done=false;
+ done_pending=false;done_inflight=false;done_sent=false;errors=0;rejected=0;initialized=true;
+ return true;
+}
+noinline fn receive_grant(data:[*]u32,length:u16) bool {
+ if(length!=8){return reject(protocol.ERR_LENGTH);}
+ if(!initialized or !protocol.matches(data,&identity)){return reject(protocol.ERR_IDENTITY);}
+ if(data[5]>>16!=@as(u32,operation)){return reject(protocol.ERR_PHASE);}
+ if(data[0]!=protocol.GRANT or data[5]!=protocol.operation_kind(operation,kind) or data[6]!=@as(u32,group) or
+    data[7]!=@as(u32,protocol.root_id(kind,group))){return reject(protocol.ERR_KIND_GROUP);}
+ if(granted){return reject(protocol.ERR_DUPLICATE);}
+ granted=true;grants+=1;return true;
+}
+fn mark_output_ready() bool {
+ if(!initialized){return reject(protocol.ERR_ORDER);}
+ if(output_ready){return reject(protocol.ERR_DUPLICATE);}
+ output_ready=true;return true;
+}
+fn can_start_row() bool {
+ return initialized and granted and output_ready and !row_active and fanout<recipients and
+        !done_pending and !done_inflight and !done_sent;
+}
+fn start_row() bool {
+ if(!can_start_row()){return reject(protocol.ERR_ORDER);}
+ row_active=true;source_done=false;receipt_done=false;return true;
+}
+fn mark_source_complete() bool {
+ if(!row_active){return reject(protocol.ERR_ORDER);}
+ if(source_done){return reject(protocol.ERR_DUPLICATE);}
+ source_done=true;source_completions+=1;return true;
+}
+noinline fn receive_receipt(data:[*]u32,length:u16) bool {
+ if(length!=8){return reject(protocol.ERR_LENGTH);}
+ if(!initialized or !protocol.matches(data,&identity)){return reject(protocol.ERR_IDENTITY);}
+ if(data[5]>>16!=@as(u32,operation)){return reject(protocol.ERR_PHASE);}
+ if(data[0]!=protocol.ROW_CONSUMED or data[5]!=protocol.operation_kind(operation,kind) or data[6]!=@as(u32,group)){
+  return reject(protocol.ERR_KIND_GROUP);
+ }
+ if(!row_active){return reject(protocol.ERR_ORDER);}
+ if(data[7]!=@as(u32,first_head+fanout)){return reject(protocol.ERR_RECIPIENT);}
+ if(receipt_done){return reject(protocol.ERR_DUPLICATE);}
+ receipt_done=true;receipts+=1;return true;
+}
+fn joined() bool {return row_active and source_done and receipt_done;}
+fn retire_row() bool {
+ if(!joined()){return reject(protocol.ERR_LEASE);}
+ row_active=false;fanout+=1;rows_retired+=1;
+ if(fanout==recipients){done_pending=true;}
+ return true;
+}
+// Wrapper releases the original lane output exactly once, immediately after
+// retiring its final joined row, before this ROOT_DONE can be submitted.
+fn take_done(target:[*]u32) bool {
+ if(!done_pending or done_inflight or done_sent or row_active){return reject(protocol.ERR_ORDER);}
+ const pack_ok=protocol.pack(target,protocol.ROOT_DONE,&identity,operation,kind,group,protocol.root_id(kind,group));
+ if(!pack_ok){return reject(protocol.ERR_IDENTITY);}
+ done_pending=false;done_inflight=true;return true;
+}
+fn done_source_complete() bool {
+ if(!done_inflight or done_sent){return reject(protocol.ERR_ORDER);}
+ done_inflight=false;done_sent=true;return true;
+}
