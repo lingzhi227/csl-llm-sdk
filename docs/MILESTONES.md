@@ -2,6 +2,16 @@
 
 Only accepted results are listed below. Unresolved integration work and the remaining scope are tracked in [implementation status](STATUS.md).
 
+## Managed RX comparison — Same-system identical failure, September 19, 2026 UTC
+
+The managed receive descriptor variant passed minimal syntax and complete
+356-PE compilation with 25,600 bytes maximum including stack. All 13 actual
+physical captures match combined-TX runtime002 byte for byte on the same system.
+The strict protocol still fails at the same record and payload; all 408 producer
+records are exact. Normal stop, release and actual waiter exit1 are verified.
+No full-graph promotion, unique cause or complete neural epoch is accepted.
+See the [report](READY-FANIN-REPRODUCTION.md) and immutable source provenance.
+
 ## Combined-frame TX comparison — Compile and failed-runtime evidence, September 19, 2026 UTC
 
 The corrected combined-TX module passed two-PE syntax and complete 356-PE physical

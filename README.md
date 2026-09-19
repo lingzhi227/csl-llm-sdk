@@ -2,7 +2,7 @@
 
 **Building inference for open language models with handwritten Cerebras Systems Language (CSL), targeting sequential execution of three model stages on WSE-3.** We implement the numerical kernels, execution control and persistent model state, and use the Cerebras SDK to compile and run the device programs. The first target is **Qwen3.8-27B text inference**; the longer-term goal is a reusable SDK for related model architectures.
 
-**Working today:** the complete original-weight **5120 → 17408 → 5120 layer-3 MLP runs on physical WSE-3** for four inputs with independent numerical checks. A separate full 64-layer CPU reference generates four tokens with cache restoration. **Current integration:** the complete native layer-3 graph fits across all 33,750 PEs, but execution stops on malformed READY messages. A 136-producer physical fixture now reproduces the corruption: all 408 sender snapshots are correct, while a received payload contains a network-header value. Its strict check fails and its runtime exits normally. A combined-frame transmission comparison also failed; the cause remains unresolved and **complete neural-layer epochs remain zero**. **Current work:** qualify a focused transport change, original-layer numerics, then three sequential stages with state checkpoints. Complete CSL text generation and measured token latency remain ahead.
+**Working today:** the complete original-weight **5120 → 17408 → 5120 layer-3 MLP runs on physical WSE-3** for four inputs with independent numerical checks. A separate full 64-layer CPU reference generates four tokens with cache restoration. **Current integration:** the complete native layer-3 graph fits across all 33,750 PEs, but execution stops on malformed READY messages. A 136-producer physical fixture now reproduces the corruption: all 408 sender snapshots are correct, while a received payload contains a network-header value. Its strict check fails and its runtime exits normally. Combined-frame transmission and managed receive descriptor comparisons also failed; the cause remains unresolved and **complete neural-layer epochs remain zero**. **Current work:** qualify a focused transport change, original-layer numerics, then three sequential stages with state checkpoints. Complete CSL text generation and measured token latency remain ahead.
 
 ## 1. Project design
 
@@ -86,6 +86,17 @@ Full attention/recurrent layers and the three-stage model remain integration wor
 ## 3. Completed development log — newest first
 
 Each **WP** or **HW** is a scoped development milestone. HW00/HW01 use physical WSE-3; earlier WP device results use the SDK simulator, and WP04 is a CPU/source audit. **BF16** means bfloat16 data, and **FP32** means 32-bit floating-point arithmetic. Reports contain numerical thresholds, failure history and reproduction details.
+
+### Managed receive descriptors · Identical physical failure · September 19, 2026 (UTC)
+
+Changing receive descriptor allocation compiled across all 356 fixture PEs with
+25,600 bytes maximum storage including stack. It still failed: all 13 actual
+captures are byte-identical to the combined-TX run on the same physical system,
+including the malformed payload. All 408 producer records were exact, normal
+exit and resource release were verified, and no transport repair or neural epoch
+is accepted. Investigation now turns to message termination boundaries.
+
+[Source variant](examples/ready_fanin/managed_rx) · [Report](docs/READY-FANIN-REPRODUCTION.md) · [Evidence](evidence/ready-fanin/attempts.json)
 
 ### Combined-frame transmission · Same physical protocol failure · September 19, 2026 (UTC)
 

@@ -16,6 +16,7 @@ See [reproduction report](READY-FANIN-REPRODUCTION.md).
 
 | Component | Current accepted scope |
 |---|---|
+| Managed receive descriptor comparison | Complete 356-PE compile passes at 25,600 bytes including stack; all 13 physical captures byte-identical to combined TX on the same system; strict protocol still fails, normal exit and release verified |
 | Combined-frame transmission comparison | Complete356PE compile passes at 25,600 bytes including stack; physical run still fails on the same malformed payload despite408 exact source records and normal exit; different assigned system |
 | Concurrent READY physical reproduction | 442 coherent records; all 408 producer snapshots exact; malformed receive at record 21; strict check failed, normal context exit and release verified |
 | Physical QK archive/alias | Four PEs, two synthetic resets, exact960archive/256output/1280source-poison each; normal stop/release |

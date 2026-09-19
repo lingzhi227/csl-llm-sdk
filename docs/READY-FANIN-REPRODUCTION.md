@@ -98,11 +98,33 @@ on a different physical system from baseline001. This limits causal comparison;
 no extra run was arranged solely to match system identity. The combined-TX
 change **did not repair this fixture** and is not promoted to the full graph.
 
-The next source comparison examines compiler-managed receive descriptors while
-retaining the transmit path, UT7, input queue, callbacks, lengths and workload.
-No result or unverified receive source is published in this milestone. Buffering,
-operation boundaries, compiler allocation and physical system differences remain
-distinct possible influences; no unique SDK defect is claimed.
+## Managed receive descriptors also reproduce the failure
+
+The next source variant retains combined TX and changes the two RX operations
+from explicit DSR6 loads to compiler-managed DSD operands. UT7, IQ6, lengths,
+callbacks, receive leasing, all 136 concurrent producers, requests, fragments
+and strict application checking remain unchanged. Its two-PE syntax compilation
+passed, followed by independently accepted physicalcompile005: 356 programs,
+six exact CSL sources, 25,600 bytes maximum including the 4 KiB stack allowance,
+and 138 aligned, disjoint 128-byte transmit frames. The artifact is 1,988,353 bytes.
+Actual origin, peer and producer code uses RX pair1, TX pair2 and copy pair3.
+That confirms a real static allocation change, not dynamic resource exclusivity.
+
+Physicalruntime003 still failed. All 13 returned raw captures were independently
+compared byte for byte and are identical to runtime002, on the same physical
+system. Both have 443 coherent records, all 408 complete producer records exact,
+and the same first malformed origin record22. Context entry took 103.035 seconds,
+normal exit 6.729 seconds, and guarded time 111.686 seconds. The runtime saved
+all captures, stopped normally, was released, and its waiter returned exit1.
+An initial audit incorrectly requested success-only physical.json; correcting the
+failed-run file comparison required no source change or repeated device run.
+
+These results show that this receive-descriptor change **did not repair the
+fixture**. The next source investigation examines control-terminated message
+boundaries. Its planned static-route two-PE positive and negative cases must
+first qualify callback, error and lease behavior; they cannot establish actual
+message-passing fabric correctness. No unqualified control-protocol source or
+runtime success is included in this milestone. Full inference remains unfinished.
 
 Any selected transport must subsequently pass complete-graph fit, resource
 ownership review and original-layer physical numerics. The full graph currently

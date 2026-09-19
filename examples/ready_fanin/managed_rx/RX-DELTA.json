@@ -1,0 +1,21 @@
+{
+  "parent_compile": "ready-fanin-hw-compile-004",
+  "parent_packet_sha256": "8d014752dd5d3b368fa8f566453b311f42cc7c6bcdf8deca5a04330dab01c551",
+  "candidate_packet_sha256": "2a55503b5fd5ac3962ce94528180a2cb525f3c564ea3d228b555645f5566ed56",
+  "changes": [
+    {
+      "old": "const rd=@get_dsr(dsr_dest,6);const rs=@get_dsr(dsr_src1,6);\n",
+      "new": ""
+    },
+    {
+      "old": " @load_to_dsr(rd,dst);@load_to_dsr(rs,src,.{.async=true,.activate=header_task_id,.ut_id=@get_ut_id(7)});\n @mov32(rd,rs,.{.async=true});",
+      "new": " @mov32(dst,src,.{.async=true,.activate=header_task_id,.ut_id=@get_ut_id(7)});"
+    },
+    {
+      "old": " @load_to_dsr(rd,dst);@load_to_dsr(rs,src,.{.async=true,.activate=received_task_id,.ut_id=@get_ut_id(7)});@mov32(rd,rs,.{.async=true});",
+      "new": " @mov32(dst,src,.{.async=true,.activate=received_task_id,.ut_id=@get_ut_id(7)});"
+    }
+  ],
+  "official_API": "https://sdk.cerebras.ai/csl/language/microthreads_wse3",
+  "scope": "Only explicit RX DSR ownership replaced by compiler-managed DSD operations. UT7, IQ6, lengths, callbacks, lease, combined TX and application remain unchanged."
+}
