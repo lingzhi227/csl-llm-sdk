@@ -2,6 +2,17 @@
 
 Only accepted results are listed below. Unresolved integration work and the remaining scope are tracked in [implementation status](STATUS.md).
 
+## Bidirectional payload and row lifecycle · Accepted subscope, strict run failed · September 19, 2026 UTC
+
+Physical 006 completes 9 packets totaling 200 words, two synthetic 128-halfword rows, complete
+banks/suffixes and stable 64-word state at all 3 PEs. Origin records one actual RX
+during unfinished TX. Only 30/31 independent checks pass: producer first-TX witness
+is 0x12a rather than 0x107, so the unchanged strict suite remains failed. Ten raw
+captures, normal exit and independent resource release are verified. Full
+SIM012/014/015 precompute failures and SIM013 prefix-only success remain preserved.
+The 136-producer corruption and complete original neural epochs remain unresolved/zero.
+See the [scoped report](NATIVE-CONTROL-BIDIRECTIONAL.md).
+
 ## Native control two-source comparison · Matched simulator and physical pass · September 19, 2026 UTC
 
 Three PEs, two independent senders and one shared short route pass the same

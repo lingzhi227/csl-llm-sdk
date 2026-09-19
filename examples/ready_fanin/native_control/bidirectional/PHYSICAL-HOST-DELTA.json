@@ -1,0 +1,69 @@
+{
+  "scope": "Unbound physical adapter; no SDK or device admission",
+  "parent": "ready-fanin-control-sim-015",
+  "parent_capture_sha256": "1154cce83b07a5ace70935a6114a2d341919d939e284668cbaf2511254f2751b",
+  "candidate_capture_sha256": "f7cdb98257d9283fbab11907542b67fbbcb2864035b90311a3bcbef8755fca8d",
+  "replacements": [
+    {
+      "old": "\"\"\"Finite simulator capture core, separately host-testable without SDK imports.\"\"\"",
+      "new": "\"\"\"Same finite capture and checks using the already entered physical context.\"\"\""
+    },
+    {
+      "old": "        event('load_enter');runner.load();event('load_exit')\n        event('run_enter');runner.run();event('run_exit')\n",
+      "new": ""
+    },
+    {
+      "old": "            try:runner.stop();normal_stop=True;event('stop_exit')",
+      "new": "            try:\n                runner.stop();normal_stop=runner.closed\n                if not normal_stop:raise ValueError('Actual physical context exit not returned')\n                event('stop_exit')"
+    },
+    {
+      "old": "hardware=False,PEs=3",
+      "new": "hardware=True,PEs=3"
+    }
+  ],
+  "original_captured_result_AST_sha256": "7fd60ad9a9471f4e4a5f8776d5abcf4675baa998386443049c0b79a67fac7788",
+  "validator_only_delta": "hardware False to True; exact root stays cases/lifecycle",
+  "context_parent": "ready-fanin-hw-run-005",
+  "context_Class_AST_unchanged": true,
+  "watchdog_only_delta": "evidence/journal.jsonl to cases/lifecycle/evidence/journal.jsonl",
+  "protocol_checker_unchanged": true,
+  "original_capture_store_unchanged": true,
+  "profile": {
+    "runtime_seconds": 300,
+    "capture_progress_seconds": 30,
+    "worker_cpu_millicores": 1000,
+    "worker_memory_bytes": 4294967296,
+    "host_address_space_bytes": 4294967296,
+    "host_sampled_rss_bytes": 1073741824,
+    "host_file_bytes": 134217728,
+    "host_log_bytes": 8388608,
+    "candidate_bytes": 33554432,
+    "host_disk_reserve_bytes": 34359738368,
+    "application": [
+      3,
+      1
+    ],
+    "fabric": [
+      762,
+      1172
+    ],
+    "offset": [
+      4,
+      1
+    ],
+    "lifecycle_seconds": 90,
+    "copies_min": 10,
+    "copies_max": 17,
+    "launches_max": 11,
+    "H2D": 0,
+    "status_polls_max": 8,
+    "host_slot_bytes_max": 18120,
+    "raw_files_max": 17,
+    "raw_file_bytes_max": 8192,
+    "raw_total_bytes_max": 1048576,
+    "rounds": 1,
+    "reset": false,
+    "full_model": false
+  },
+  "actual_success_counts": "p is actual contiguous state polls1..8; copies=p+9, launches=p+3, hostbytes=11976+768*p"
+}

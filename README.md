@@ -2,7 +2,7 @@
 
 **Building inference for open language models with handwritten Cerebras Systems Language (CSL), targeting sequential execution of three model stages on WSE-3.** We implement the numerical kernels, execution control and persistent model state, and use the Cerebras SDK to compile and run the device programs. The first target is **Qwen3.8-27B text inference**; the longer-term goal is a reusable SDK for related model architectures.
 
-**Working today:** the complete original-weight **5120 → 17408 → 5120 layer-3 MLP runs on physical WSE-3** for four inputs with independent numerical checks. A separate full 64-layer CPU reference generates four tokens with cache restoration. **Current integration:** the complete native layer-3 graph fits across all 33,750 PEs, but execution stops on malformed READY messages. A 136-producer physical fixture now reproduces the corruption: all 408 sender snapshots are correct, while a received payload contains a network-header value. Its strict check fails and its runtime exits normally. Combined-frame transmission and managed receive descriptor comparisons also failed; the cause remains unresolved and **complete neural-layer epochs remain zero**. **Current work:** native control now passes a matched three-PE, two-source simulator and physical comparison: all 73 words, complete buffers, first-packet overlap witnesses and final stability are independently checked. The physical 136-producer fixture still fails at a control-tail boundary. We are comparing its request/fan-in lifecycle and scale before original-layer numerics and three sequential stages with state checkpoints. Complete CSL text generation and measured token latency remain ahead.
+**Working today:** the complete original-weight **5120 → 17408 → 5120 layer-3 MLP runs on physical WSE-3** for four inputs with independent numerical checks. A separate full 64-layer CPU reference generates four tokens with cache restoration. **Current integration:** the complete native layer-3 graph fits across all 33,750 PEs, but execution stops on malformed READY messages. A 136-producer physical fixture now reproduces the corruption: all 408 sender snapshots are correct, while a received payload contains a network-header value. Its strict check fails and its runtime exits normally. Combined-frame transmission and managed receive descriptor comparisons also failed; the cause remains unresolved and **complete neural-layer epochs remain zero**. **Current work:** a three-PE physical bidirectional fixture now passes all 200 payload words, two exact synthetic rows, complete buffers and state stability. Its overall strict run still fails one of two first-send overlap witnesses (30/31 checks); earlier full simulator attempts fail before compute. We are correcting the fixture launch order before returning to the unresolved 136-producer, phase-dependent dataflow and original-layer numerics. Complete CSL text generation and measured token latency remain ahead.
 
 ## 1. Project design
 
@@ -86,6 +86,18 @@ Full attention/recurrent layers and the three-stage model remain integration wor
 ## 3. Completed development log — newest first
 
 Each **WP** or **HW** is a scoped development milestone. HW00/HW01 use physical WSE-3; earlier WP device results use the SDK simulator, and WP04 is a CPU/source audit. **BF16** means bfloat16 data, and **FP32** means 32-bit floating-point arithmetic. Reports contain numerical thresholds, failure history and reproduction details.
+
+### Bidirectional native control · Payload and rows accepted; strict overlap failed · September 19, 2026 (UTC)
+
+Physical RUN006 completes 9 packets/200 exact words and two 128-halfword synthetic
+rows with full source/frame/RX suffix checks and stable state. Origin records an
+actual receive during an unfinished TX. Overall the run remains failed:30/31
+independent checks pass, but producer's required first-send overlap witness is
+absent. Normal stop and resource release are verified. SIM012/014/015 failures
+and the prefix-only SIM013 success remain preserved; 136-producer corruption and zero
+complete original neural epochs remain unchanged.
+
+[Source](examples/ready_fanin/native_control/bidirectional) · [Report](docs/NATIVE-CONTROL-BIDIRECTIONAL.md) · [Evidence](evidence/ready-fanin/native-control/bidirectional-attempts.json)
 
 ### Native control from two sources · Matched simulator and physical pass · September 19, 2026 (UTC)
 

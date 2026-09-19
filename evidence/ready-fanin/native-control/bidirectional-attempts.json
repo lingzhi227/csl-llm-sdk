@@ -1,0 +1,292 @@
+{
+  "scope": "Physical payload, row lifecycle and stability subscopes accepted; original overall strict run failed its dual-first-lease witness",
+  "overall_physical_run_passed": false,
+  "physical006": {
+    "candidate": "ready-fanin-hw-run-006",
+    "manifest_sha256": "2d4684bc37b5c8ed30383b550a7511dd3c9a4b446b5b7909a007ddbb3fb69b35",
+    "status": "strict_failure_independently_verified_and_released",
+    "overall_passed": false,
+    "protocol_scope_accepted": true,
+    "stability_scope_accepted": true,
+    "dual_first_TX_lease_overlap_qualified": false,
+    "scope": "Actualphysical3PE full9packet200word bidirectional payload/row lifecycle and cachedstate passed. Second first-TXleasewitness absent; fullrun remainsfailed. Noformal136repair/no neuralepoch.",
+    "normal_stop": true,
+    "wall_seconds": 203.52791283698753,
+    "raw_files": 10,
+    "raw_bytes": 15384,
+    "D2H": 10,
+    "host_D2H_bytes": 12744,
+    "launches": 4,
+    "H2D": 0,
+    "journal_events": 34,
+    "checks_passed": 30,
+    "checks_total": 31,
+    "actual_witnesses": [
+      65799,
+      298
+    ],
+    "expected_witnesses": [
+      65799,
+      263
+    ],
+    "producer_witness_decode": {
+      "value": "0x12a",
+      "notice_count": 1,
+      "completed_TX": 1,
+      "first_completed": 1,
+      "sending": false,
+      "first_issued": true,
+      "qualified_overlap_bit": false
+    },
+    "local_RX_during_unfinished_TX": [
+      1,
+      0,
+      0
+    ],
+    "simultaneous_DMA_claim": false,
+    "READY_position": 0,
+    "actual_assembled_rows": 2,
+    "actual_source_released_rows": 2,
+    "all200words_and_fullbanks_headers_suffixes_exact": true,
+    "state0_final_raw_byteequal": true,
+    "state0_final_raw_sha256": "db2f548e85ec1910a3cb2b8760f290932eb322c5af96335f0117406f586d8aff",
+    "compile_invocations": 0,
+    "SDK_simulator_invocations": 0,
+    "complete_neural_epochs": 0,
+    "automatic_retry": false,
+    "original_receipt": "READY-FANIN-HW-RUN-006-FAILURE-ACCEPTANCE.json",
+    "original_receipt_sha256": "3141b4d75406c38b77f01454030064c17a61c5ed31bb329acb3076ce0e69b28a",
+    "actual_executor_exit": 1,
+    "actual_executor_reaped": true,
+    "independent_terminal_unassigned_owned_processes_absent": true,
+    "raw_backup_independently_verified": true,
+    "captures": [
+      {
+        "path": "evidence/initial-state.npz",
+        "bytes": 1032,
+        "sha256": "f11d39843a8231c9ff94fcbd2496aa5dfe983007164bf634eab2e7f6cbaf092b",
+        "shape": [
+          3,
+          64
+        ]
+      },
+      {
+        "path": "evidence/routing.npz",
+        "bytes": 360,
+        "sha256": "3fbea959bc82d5eee4e2488ce657f2e2b61bfd7ce69164c97fa58e5e95c42b92",
+        "shape": [
+          3,
+          8
+        ]
+      },
+      {
+        "path": "evidence/state-0.npz",
+        "bytes": 1032,
+        "sha256": "db2f548e85ec1910a3cb2b8760f290932eb322c5af96335f0117406f586d8aff",
+        "shape": [
+          3,
+          64
+        ]
+      },
+      {
+        "path": "evidence/observed.npz",
+        "bytes": 3336,
+        "sha256": "c44bfcf5a93702b19c7800856b3c53886c52568322ed857cde2ddb79f04f1dfb",
+        "shape": [
+          3,
+          256
+        ]
+      },
+      {
+        "path": "evidence/tx-proof.npz",
+        "bytes": 4872,
+        "sha256": "7734fc79adcc1b8de2a962e4a8640d62747b5abc5572dd150092a8c031c88c78",
+        "shape": [
+          3,
+          384
+        ]
+      },
+      {
+        "path": "evidence/rx-banks.npz",
+        "bytes": 636,
+        "sha256": "4d27b698e2a047fa9ea8e5a7cce71f9fb3c79da19caa1e7da34efb65ef22efc8",
+        "shape": [
+          3,
+          31
+        ]
+      },
+      {
+        "path": "evidence/live-frames.npz",
+        "bytes": 648,
+        "sha256": "72d7aa10db2ceed679d46009cef6c6aeb247f4ad3a7bddc674a379b907510859",
+        "shape": [
+          3,
+          32
+        ]
+      },
+      {
+        "path": "evidence/live-sources.npz",
+        "bytes": 636,
+        "sha256": "0c7956d923f5a153605ca18bfb31e5aedaead7c4bebad245bf69b99d9ca830be",
+        "shape": [
+          3,
+          31
+        ]
+      },
+      {
+        "path": "evidence/row-archive.npz",
+        "bytes": 1800,
+        "sha256": "11bf6db162f8e06ec0d3c27c2068fe23d5f61483ef4fb766af988c34401b9ba4",
+        "shape": [
+          3,
+          128
+        ]
+      },
+      {
+        "path": "evidence/final-state.npz",
+        "bytes": 1032,
+        "sha256": "db2f548e85ec1910a3cb2b8760f290932eb322c5af96335f0117406f586d8aff",
+        "shape": [
+          3,
+          64
+        ]
+      }
+    ],
+    "capture_seconds": 7.830190168228
+  },
+  "physical_compile008": {
+    "candidate": "ready-fanin-hw-compile-008",
+    "manifest_sha256": "5fe3a91dc9eaa5620d445c26647aa46ed3028b8fcf39411f94fbda0c6bbddb09",
+    "artifact_sha256": "934e118fba08cdecce06799e3a391736d8d4afaa3cbf41ce466471a5c414b83b",
+    "artifact_bytes": 76571,
+    "application_programs": 3,
+    "PEs": 3,
+    "embedded_CSL": 4,
+    "max_ordinary_plus4096": 19632,
+    "ceiling": 48128,
+    "actual_programs": [
+      {
+        "file": "compiled/out/bin/out_0_0.elf",
+        "column": 0,
+        "bytes": 47760,
+        "sha256": "cc71c4e86be65787ce0ff6bb618876ee2a8642abcd0149e06a4259e28a334e43",
+        "ordinary_plus_4096_stack": 19616
+      },
+      {
+        "file": "compiled/out/bin/out_1_0.elf",
+        "column": 1,
+        "bytes": 44400,
+        "sha256": "bafb486f32dfd3d77a62fb258d647d521f1773407821532ecde902451340bb1a",
+        "ordinary_plus_4096_stack": 18048
+      },
+      {
+        "file": "compiled/out/bin/out_2_0.elf",
+        "column": 2,
+        "bytes": 47168,
+        "sha256": "1f1cf38260235aa673f041ed88ff66c1258b76eb3f0f7525fc3cfad53356f331",
+        "ordinary_plus_4096_stack": 19632
+      }
+    ],
+    "DSR_exact_SDK021": true,
+    "SDK_code_comparison": "Actualall SHF_EXECINSTR text/task/config sections byte/address equal021; completeELF/fabricgeometry differ.",
+    "source_lifetime_review": "All actual physical008 decoded DSR function/name/address records exactly match accepted021 and all actual text/task/config sections byte/address equal021. Exact021 source ordering/phase/queues/UT leases retained. Fullbanks and retainedstates independentlydisjoint. Static/source proof only; physical runtime still pending.",
+    "runtime_admitted": false,
+    "complete_neural_epochs": 0,
+    "margin": 28496,
+    "original_receipt_sha256": "6e37aee7f3fc29005a41b0f64562bd6fcca94e3dbf9751bb0e8b22a476e6ade3",
+    "geometry": [
+      762,
+      1172
+    ],
+    "application": [
+      3,
+      1
+    ],
+    "offset": [
+      4,
+      1
+    ],
+    "stack_allowance_bytes": 4096,
+    "measured_dynamic_stack": false
+  },
+  "simulator_attempts": {
+    "SIM012": {
+      "original_receipt": "CONTROL-SIM-012-FAILURE-ACCEPTANCE.json",
+      "original_receipt_sha256": "0a5273cd1ba01e93b4897a3b5c1ed478e1f6b9b7e6cc9f4263a50cafaab3acfc",
+      "manifest_sha256": "e49548f8c0feada5f0ecdc0d7c9220afc1f75922d8e7b2e4d63796f303d9f853",
+      "passed_initialization_prefix_only": false,
+      "full_application_qualified": false,
+      "compute_launched": false,
+      "child_exit": -6,
+      "child_reaped": true,
+      "raw_files": 1,
+      "raw_bytes": 1032,
+      "scope": "Full lifecycle failed before compute: first768-byte state copy returned, second96-byte routing copy received0. No application qualification.",
+      "tracing_enabled": false,
+      "platform_retained_in_main": false,
+      "unchanged_retry": false,
+      "root_cause_established": false,
+      "complete_neural_epochs": 0
+    },
+    "SIM013": {
+      "original_receipt": "CONTROL-SIM-013-ACCEPTANCE.json",
+      "original_receipt_sha256": "8125b96c119830d460ced19cba74b6ff5d09283854a5377a7d3f2ed1ac0ebe13",
+      "manifest_sha256": "81c75d872a4262ceeb29d4a7abe5ef1d04484486f9dfe7a2f0b32614880a71bf",
+      "passed_initialization_prefix_only": true,
+      "full_application_qualified": false,
+      "compute_launched": false,
+      "child_exit": 0,
+      "child_reaped": true,
+      "raw_files": 2,
+      "raw_bytes": 1392,
+      "scope": "Traced shortened initialization prefix: two D2H calls,864host bytes, normal stop. No application traffic or repair claim.",
+      "tracing_enabled": true,
+      "platform_retained_in_main": false,
+      "unchanged_retry": false,
+      "root_cause_established": false,
+      "complete_neural_epochs": 0
+    },
+    "SIM014": {
+      "original_receipt": "CONTROL-SIM-014-FAILURE-ACCEPTANCE.json",
+      "original_receipt_sha256": "a04cd60200dde72a89a081f4e64e1611abce64ff15de3e91b3432d79e25a11ec",
+      "manifest_sha256": "652a4900e2fdfa7a02ca3b761d3c795a943d8fdcb4998ce076f622bba7eccbe1",
+      "passed_initialization_prefix_only": false,
+      "full_application_qualified": false,
+      "compute_launched": false,
+      "child_exit": -11,
+      "child_reaped": true,
+      "raw_files": 1,
+      "raw_bytes": 1032,
+      "scope": "Full lifecycle failed before compute: first768-byte state copy returned, second96-byte routing copy received0. No application qualification.",
+      "tracing_enabled": true,
+      "platform_retained_in_main": false,
+      "unchanged_retry": false,
+      "root_cause_established": false,
+      "complete_neural_epochs": 0
+    },
+    "SIM015": {
+      "original_receipt": "CONTROL-SIM-015-FAILURE-ACCEPTANCE.json",
+      "original_receipt_sha256": "aee373167b8ddfa79df50cba0e2a91de0c1f507397fb73ec08076c6a2e959916",
+      "manifest_sha256": "22a4fbfecd2dfea40a314607f1b9f8e9b93e585b11dec01bdb45d9998a7e31b5",
+      "passed_initialization_prefix_only": false,
+      "full_application_qualified": false,
+      "compute_launched": false,
+      "child_exit": -6,
+      "child_reaped": true,
+      "raw_files": 1,
+      "raw_bytes": 1032,
+      "scope": "Full lifecycle failed before compute: first768-byte state copy returned, second96-byte routing copy received0. No application qualification.",
+      "tracing_enabled": true,
+      "platform_retained_in_main": true,
+      "unchanged_retry": false,
+      "root_cause_established": false,
+      "complete_neural_epochs": 0
+    }
+  },
+  "formal136_failure_unresolved": true,
+  "complete_neural_epochs": 0,
+  "model_generations": 0,
+  "simultaneous_DMA_claim": false,
+  "raw_arrays_published": false,
+  "compiled_artifacts_published": false
+}
