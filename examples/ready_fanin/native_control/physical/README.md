@@ -6,7 +6,7 @@ programs, but the physical protocol check failed. This is an archived failure
 reproduction component. No execution admission or compiled artifact is included.
 
 The application retains 178 x 2 PEs, 136 simultaneous READY producers, eight
-requests and 24 three-part row fragments. The success condition remains 650
+requests and 24 row fragments (three per request). The success condition remains 650
 exact records. Header bit 5 selects control termination, and a native control
 task consumes each expected tail before the receiver releases its payload.
 

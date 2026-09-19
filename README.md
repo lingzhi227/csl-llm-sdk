@@ -87,17 +87,17 @@ Full attention/recurrent layers and the three-stage model remain integration wor
 
 Each **WP** or **HW** is a scoped development milestone. HW00/HW01 use physical WSE-3; earlier WP device results use the SDK simulator, and WP04 is a CPU/source audit. **BF16** means bfloat16 data, and **FP32** means 32-bit floating-point arithmetic. Reports contain numerical thresholds, failure history and reproduction details.
 
-### Native control on physical WSE-3 | Full compile accepted, concurrent protocol failed | September 19, 2026 (UTC)
+### Native control on physical WSE-3 · Full compile accepted, concurrent protocol failed · September 19, 2026 (UTC)
 
-The356-program fixture compiled with27,872 bytes maximum storage including
+The 356-program fixture compiled with 27,872 bytes maximum storage including
 stack and independently checked task/register assignments. The physical run
-then failed: all408 producer records were exact, but after22 valid origin
-records the control-tail receive encountered ordinary value3. All13 captures
+then failed: all 408 producer records were exact, but after 22 valid origin
+records the control-tail receive encountered ordinary value 3. All 13 captures
 were saved, normal exit and resource release were verified, and only initial
 and producer files match the prior run byte for byte. This is a preserved
 failure comparison; no transport repair or complete neural epoch is accepted.
 
-[Source](examples/ready_fanin/native_control/physical) | [Report](docs/NATIVE-CONTROL-PHYSICAL.md) | [Evidence](evidence/ready-fanin/native-control/physical-attempts.json)
+[Source](examples/ready_fanin/native_control/physical) · [Report](docs/NATIVE-CONTROL-PHYSICAL.md) · [Evidence](evidence/ready-fanin/native-control/physical-attempts.json)
 
 ### Native control termination · Two-PE protocol and message routing qualified · September 19, 2026 (UTC)
 
