@@ -105,5 +105,105 @@
     "executor_reaped_exit1": true,
     "all_owned_resources_independently_released": true,
     "correction": "Explicit @ptrcast([*]u32,&transmit_frame[1]); new candidate requires separate admission"
+  },
+  "combined_TX_compile004": {
+    "status": "accepted_physical_ready_fanin_compile_storage_SRAM",
+    "updated_at_utc": "2026-09-19T11:33:03.485497+00:00",
+    "manifest_sha256": "b58b52f775aeee23cfbd112676ff5b82b165408c06dcce5574888a24dc0c1bc0",
+    "artifact_sha256": "f6ddbcef09e0d09aecdd40e320a8824fc0b62934c770679bfd6be706d3048207",
+    "artifact_bytes": 1991893,
+    "independent_audit_summary_sha256": "cd7735fbf63bc104c3d17fcdb3ad199ed2a06a4f55d6acbe166b57ac81f01434",
+    "PEs": 356,
+    "application_ELFs": 356,
+    "embedded_CSL": 6,
+    "max_ordinary_plus4096": 25600,
+    "ceiling": 48128,
+    "margin": 22528,
+    "all_owned_resources_independently_released": true,
+    "waiter_reaped_exit0": true,
+    "scope": "Actual combined-frame356PE compile, embedded source, static frame alignment/disjoint storage and SRAM only. SDK placement receipt plus independent coverage/ELF checks; no dynamic stack/resource, protocol, original neural or full-model acceptance.",
+    "acceptance_sha256": "43d35e5f43d4460139ea95d24545632179bfdc6c44388af510058cb55b7bc2ae"
+  },
+  "combined_TX_runtime002": {
+    "at": "2026-09-19T11:44:40.379992+00:00",
+    "status": "accepted_physical_ready_fanin_failed_attempt_evidence",
+    "manifest_sha256": "3faf19b136d471e355ae961673145b38e36ab42e73a206149ca30ea764e9dc9b",
+    "artifact_sha256": "f6ddbcef09e0d09aecdd40e320a8824fc0b62934c770679bfd6be706d3048207",
+    "raw_files": 13,
+    "raw_bytes": 104936,
+    "returned_copies": 13,
+    "host_bytes": 101504,
+    "launches": 2,
+    "journal_entries": 34,
+    "coherent_records": 443,
+    "torn_columns": [],
+    "source_point_records": 408,
+    "all136_three_source_headers_exact": true,
+    "first_bad": {
+      "sequence": 22,
+      "event": 4,
+      "length": 8,
+      "network_header": 4194568,
+      "header": [
+        10,
+        1,
+        1,
+        4194568,
+        0,
+        10,
+        0,
+        1
+      ],
+      "reason": 2
+    },
+    "normal_stop": true,
+    "context_entry_seconds": 213.1782685467042,
+    "context_exit_seconds": 6.58278198633343,
+    "capture_seconds": 6.906184829305857,
+    "guard_seconds": 220.96130371419713,
+    "guard_max_journal_idle_seconds": 5.024006363004446,
+    "all_owned_resources_independently_released": true,
+    "executor_reaped_exit1": true,
+    "fixture_protocol_pass": false,
+    "rootcause_proven": false,
+    "complete_original_neural_epochs": 0,
+    "independent_audit_sha256": "b81222c905974e249aa844a3ae13b1af50ae2b86792226e42bcf11d23949fb09",
+    "source_correlation_sha256": "63f6d57187da9cff2fa69715d5bf6cd1b4945bcdbfc30bf09fe82ca408779a1b",
+    "scope": "Combined TX still produces the same corrupted received payload despite all408exact source point records and normal exit. Actual assigned physical system differed from baseline. No continuous source/internal frame observation, rootcause, protocol or original neural inference acceptance.",
+    "producer_and_peer_raw_byte_hashes_identical_to_baseline": true,
+    "combined_TX_fixed_fixture": false,
+    "same_physical_system_as_baseline": false,
+    "acceptance_sha256": "f5687462bdb7c44389db5b28595fae258e6fa8e2bfbd547dd8b1995e8d83ef14"
+  },
+  "combined_TX_syntax001": {
+    "status": "failed_compile_only",
+    "guard_seconds": 2.6427108426578343,
+    "error": "fabout_dsd constructor extent must be comptime-known",
+    "artifact_created": false,
+    "runtime_created": false,
+    "independently_released": true,
+    "executor_reaped_exit1": true
+  },
+  "combined_TX_physical003": {
+    "status": "unadmitted_unexecuted_source_draft",
+    "reason": "Same source failed the minimal syntax001 qualification; no physical attempt"
+  },
+  "combined_TX_syntax002": {
+    "status": "independently_accepted_minimal_compile_only",
+    "guard_seconds": 4.203116025775671,
+    "peak_bytes": 456777728,
+    "programs": 2,
+    "transmit_frame_bytes_each": 128,
+    "frame_addresses": [
+      4552,
+      4520
+    ],
+    "CPU_affinity": [
+      0
+    ],
+    "swap_bytes": 0,
+    "runtime_created": false,
+    "independently_released": true,
+    "executor_reaped_exit0": true
   }
 }

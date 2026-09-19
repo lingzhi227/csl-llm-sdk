@@ -1,0 +1,9 @@
+{
+  "parent_packet_sha256": "0392a1800a1355f2484743934131f06e273d06bbd5be8e30f503e038429df67b",
+  "candidate_packet_sha256": "8d014752dd5d3b368fa8f566453b311f42cc7c6bcdf8deca5a04330dab01c551",
+  "state_insertion": "var transmit_frame=@zeros([32]u32);",
+  "old_call": " mp.send_message(pending_x,pending_y,pending_source,pending_length,.{.activate=sent_task_id});",
+  "new_call": " // One operation injects the SDK-format header and all application words.\n // Fixed-length header encoding, queues, routing and receiver are unchanged.\n transmit_frame[0]=mp.encode_header(pending_x,pending_y,pending_length);\n copy_words(pending_source,@ptrcast([*]u32,&transmit_frame[1]),pending_length);\n const frame_length=pending_length+1;\n const frame_src=@get_dsd(mem1d_dsd,.{.base_address=&transmit_frame,.extent=frame_length});\n const frame_base=@get_dsd(fabout_dsd,.{.output_queue=mp.mp_output_queue,.extent=1,.simd_mode=.{.simd_off=true}});\n const frame_out=@set_dsd_length(frame_base,frame_length);\n @mov32(frame_out,frame_src,.{.async=true,.activate=sent_task_id});",
+  "source_point_scope": "Caller payload snapshots remain at enqueue, before the candidate copy/injection, and source completion. They do not directly snapshot the new internal frame or establish continuous DMA immutability.",
+  "source_tests_pending": false
+}

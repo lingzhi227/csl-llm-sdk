@@ -2,6 +2,17 @@
 
 Only accepted results are listed below. Unresolved integration work and the remaining scope are tracked in [implementation status](STATUS.md).
 
+## Combined-frame TX comparison — Compile and failed-runtime evidence, September 19, 2026 UTC
+
+The corrected combined-TX module passed two-PE syntax and complete 356-PE physical
+compilation; maximum storage plus 4 KiB stack is 25,600 bytes. Physicalruntime002
+still failed on the same malformed receive, with443 coherent records and all 408
+source observations exact. It saved 13 captures and exited normally. Independent
+release and actual waiter exit1 are verified. Different physical system assignment
+limits causal comparison. No full-graph promotion, root-cause claim or original
+neural epoch is accepted. Pointer/comptime type failures and the unexecuted003
+draft remain in the [report](READY-FANIN-REPRODUCTION.md).
+
 ## Concurrent READY physical failure reproduction — Accepted evidence, September 19, 2026 UTC
 
 The bounded 356-PE fixture reproduces a network-header value inside received

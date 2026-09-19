@@ -65,17 +65,44 @@ failures, fit failures and diagnostic read timeouts remain preserved in the
 [native graph report](NATIVE-LAYER3-GRAPH.md), [archive report](QK-ARCHIVE-PHYSICAL.md)
 and [FIFO report](LAYER3-FIFO-TRACE.md).
 
-## Next comparison and limits
+## Combined transmission did not repair the fixture
 
-A candidate combines the SDK-format network header and payload in
-one leased 32-word transmit buffer and injects it in one asynchronous operation.
-It preserves all 136 concurrent producers, the receiver, strict packet checker
-and neural math. Its first compilation failed before producing an artifact: an interior array
-element was passed as a single pointer where a many pointer was required. The
-failed attempt took 41.576 seconds and was independently released. A corrected
-source candidate adds the explicit pointer cast; no pass is claimed here. A favorable result
-would still combine changes to buffering, operation boundaries, output extent
-and compiler allocation; it would not uniquely establish an SDK defect.
+The candidate uses one leased 32-word buffer containing the SDK-format network
+header and application payload, injected by one asynchronous operation. All 136
+producers, the explicit receiver, strict packet checker and fragment traffic are
+unchanged. Its first physical compilation failed at an interior-pointer type
+check. A subsequent two-PE syntax check found that a fabric descriptor's initial
+extent must be comptime-known. Both failures remain recorded. The corrected
+source uses an explicit many-pointer cast and a constant descriptor base followed
+by a runtime length update. Physicalcompile003 was an unadmitted, unexecuted draft.
+
+The corrected two-PE syntax002 qualification passed in 4.203 seconds. Complete
+physicalcompile004 then passed independent inspection of 356 actual programs and
+all six embedded CSL files. Maximum storage including 4 KiB stack allowance is
+25,600 bytes, leaving 22,528 bytes. The artifact is 1,991,893 bytes. These are static
+compile and storage results, not transport or dynamic-resource acceptance.
+
+Physicalruntime002 still failed strict checking. It retained 13 captures totalling
+104,936 bytes and 443 coherent records. All 408 complete producer point records
+were compared independently and matched their expected values. The complete
+producer and peer capture hashes match baseline001. Eighteen valid READY messages
+arrived before the first malformed receive at sequence 22, whose eight application
+words are identical to baseline's first error. Valid source arrival order was
+not strictly increasing; the reviewer corrected an initial ordering assumption
+to check actual identity and uniqueness. This audit correction required no rerun.
+
+Runtime002 entered its context in 213.178 seconds, captured and exited in 6.906
+seconds, and used 220.961 seconds of guarded host time. Normal exit, all returned
+copies, resource release and executor exit1 were independently verified. It ran
+on a different physical system from baseline001. This limits causal comparison;
+no extra run was arranged solely to match system identity. The combined-TX
+change **did not repair this fixture** and is not promoted to the full graph.
+
+The next source comparison examines compiler-managed receive descriptors while
+retaining the transmit path, UT7, input queue, callbacks, lengths and workload.
+No result or unverified receive source is published in this milestone. Buffering,
+operation boundaries, compiler allocation and physical system differences remain
+distinct possible influences; no unique SDK defect is claimed.
 
 Any selected transport must subsequently pass complete-graph fit, resource
 ownership review and original-layer physical numerics. The full graph currently
