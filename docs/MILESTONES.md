@@ -2,6 +2,18 @@
 
 Only accepted results are listed below. Unresolved integration work and the remaining scope are tracked in [implementation status](STATUS.md).
 
+## Bidirectional native control · Strict physical pass after prepared launch · September 19, 2026 UTC
+
+Physical RUN007 passes all 31 checks over 9 packets/200 words, two assembled and
+two released source rows, complete banks/suffixes, stable state and both first-TX
+lease witnesses. Origin also records RX during unfinished TX. The only device
+change moves the existing GO after REQUEST0 preparation. Normal exit, owner reap,
+resource release and raw evidence are independently verified. One pass neither
+identifies a unique root cause nor repairs the 136-producer failure;006 and the
+simulator failures remain preserved. [Report](NATIVE-CONTROL-BIDIRECTIONAL.md) ·
+[Source](../examples/ready_fanin/native_control/bidirectional/prepared_launch) ·
+[Evidence](../evidence/ready-fanin/native-control/bidirectional-prepared-launch.json).
+
 ## Bidirectional payload and row lifecycle · Accepted subscope, strict run failed · September 19, 2026 UTC
 
 Physical 006 completes 9 packets totaling 200 words, two synthetic 128-halfword rows, complete

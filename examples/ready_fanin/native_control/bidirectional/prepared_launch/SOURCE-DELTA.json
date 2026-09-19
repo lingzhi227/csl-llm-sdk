@@ -1,0 +1,49 @@
+{
+  "scope": "Mutable source proposal only; no compile or runtime admission",
+  "parent": "ready-fanin-hw-compile-008",
+  "parent_manifest_sha256": "5fe3a91dc9eaa5620d445c26647aa46ed3028b8fcf39411f94fbda0c6bbddb09",
+  "original_pe_sha256": "fe6119fc68dc6dae3d98741402c747f09502d7b5d5b473e1fe65bde17d74d193",
+  "candidate_pe_sha256": "9dd023c584ab9c65ada416b603c0fbd296ac32f836def879e1221e6d998f8705",
+  "changes": [
+    {
+      "old": "   header(11,2,@as(u32,current_group),@as(u32,current_group)*128);send_packet(2,&payload,8);",
+      "new": "   header(11,2,@as(u32,current_group),@as(u32,current_group)*128);\n   // Prepare REQUEST0 before the one GO; notices never gate traffic.\n   if(current_group==0){\n    const out=@get_dsd(fabout_dsd,.{.output_queue=go_oq,.extent=1});@mov32(out,0x474f3031);\n   }\n   send_packet(2,&payload,8);"
+    },
+    {
+      "old": " if(comptime origin){\n  const out=@get_dsd(fabout_dsd,.{.output_queue=go_oq,.extent=1});@mov32(out,0x474f3031);\n }else if(comptime producer){maybe_produce();}",
+      "new": " if(comptime producer){maybe_produce();}"
+    }
+  ],
+  "sources": {
+    "layout.csl": {
+      "bytes": 1186,
+      "sha256": "7afbad43b8edd43c942706fdd8dc979b6ae42bbb3005942029aa463cdb49951b",
+      "parent_exact": true
+    },
+    "pe.csl": {
+      "bytes": 12694,
+      "sha256": "9dd023c584ab9c65ada416b603c0fbd296ac32f836def879e1221e6d998f8705",
+      "parent_exact": false
+    },
+    "packets.csl": {
+      "bytes": 10722,
+      "sha256": "06083863a5c55d92bc79c4ba3aad07400617c6faa6e4bd9246fe8abe35c7fd85",
+      "parent_exact": true
+    },
+    "row_packet.csl": {
+      "bytes": 2882,
+      "sha256": "a30bfaa6089c261ec971234ac7fdd9bb761d4f3ac1a91da64147a89cdc1b80ba",
+      "parent_exact": true
+    }
+  },
+  "immutable_failure": "ready-fanin-hw-run-006: protocol/stability passed, producer first-notice sample0x12a; overall strict dual-witness failure",
+  "changes_to_capture_checker_or_callback_release": false,
+  "packets": 9,
+  "application_words": 200,
+  "inference_epochs": 0,
+  "SDK_invocations": 0,
+  "hardware_invocations": 0,
+  "compile_and_actual_all_function_DSR_review_required": true,
+  "note": "Scheduling skew is plausible, not proven root cause; dual witnesses are still mandatory and not guaranteed by this source change",
+  "producer_preparation_unchanged": true
+}

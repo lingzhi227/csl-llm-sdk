@@ -15,7 +15,8 @@ unfinished TX. None of these observations proves simultaneous DMA.
 The complete strict checker is unchanged and still rejects that missing witness.
 SIM012/014/015 failed before compute; traced SIM013 passed only a shortened
 initialization prefix. The 136-producer corruption and original neural execution
-remain open. A subsequent GO-relocation proposal does not replace this source.
+remain open. The [prepared-launch variant](prepared_launch) subsequently passes all 31 checks
+on physical RUN007. This directory retains the original failed RUN006 source.
 
 capture.py accepts a factory returning an already entered physical context with
 an explicit closed flag. Site admission, artifact bindings and allocation guards

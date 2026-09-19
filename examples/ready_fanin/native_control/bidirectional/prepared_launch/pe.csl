@@ -1,0 +1,244 @@
+// Current native-control request/response lifecycle with independent READY.
+param memcpy_params;param column:u16;
+const origin=column==0;const producer=column==1;const peer=column==2;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const packets=@import_module("packets.csl",.{
+ .sent_task_id=@get_local_task_id(12),.received_task_id=@get_local_task_id(13),
+ .before_sdk=before_sdk,.on_sent=sent,.on_received=received,
+ .before_control=control_started,.on_protocol_error=failed,
+ .diagnostics=true,.on_sdk_started=frame_started,.initialize_message_routing=true});
+const rows=@import_module(if(origin or peer) "row_packet.csl" else "<empty>",
+ if(origin or peer) .{.source_role=peer,.send=send_row,.on_source_released=row_sent,.on_row_received=row_received} else .{});
+const tc=packets.mp.internal.tc;
+const service=@get_local_task_id(17);
+const go_iq=@get_input_queue(3);const go_oq=@get_output_queue(3);
+const notice_iq=@get_input_queue(4);const notice_oq=@get_output_queue(4);
+var state=@zeros([64]u32);var routing=@zeros([8]u32);
+// Eight slots, each complete31-word RX bank plus the actual network header.
+var observed=@zeros([256]u32);
+// Six slots:31-word source,32-word wire frame, three lease-proof bits.
+var tx_proof=@zeros([384]u32);
+var payload=@zeros([31]u32);var current_source=@zeros([31]u32);
+var row_source=@zeros([if(peer) 128 else 1]u16);
+// Two actual128-halfword rows, packed for exact host inspection.
+var row_archive=@zeros([128]u32);var archived_rows:u16=0;
+var start_markers=@zeros([2]u32);
+var tx_source:[*]u32;var tx_length:u16=0;
+// TX completions,RX deliveries,harness errors,protocol error,first issued,
+// first completed,actual first-notice witness,notice count.
+var book=@zeros([8]u32);
+var go_seen:bool=false;var notice_sent:bool=false;var bad_notices:u16=0;
+var ready_seen:bool=false;var producer_started:bool=false;
+var rows_done:u16=0;var peer_rows:u16=0;var requests_received:u16=0;
+var request_pending:bool=false;var pending_group:u16=0;var current_group:u16=0;
+
+fn failed(code:u16) void {if(book[3]==0){book[3]=@as(u32,code);}}
+fn header(kind:u32,phase:u32,group:u32,detail:u32) void {
+ payload[0]=kind;payload[1]=1;payload[2]=1;payload[3]=0;payload[4]=0;
+ payload[5]=phase;payload[6]=group;payload[7]=detail;
+}
+fn send_packet(x:u16,data:[*]u32,length:u16) void {
+ @assert(!packets.sending and book[0]<6);tx_source=data;tx_length=length;
+ packets.send(x,0,data,length);
+}
+fn expected_source(slot:u16,i:u16) u32 {
+ const group=if(peer) slot/3 else if(origin) slot else @as(u16,0);
+ const offset:u16=if(peer) (if(slot%3==0) @as(u16,0) else if(slot%3==1) @as(u16,23) else @as(u16,46)) else @as(u16,0);
+ if(i==0){return if(origin) @as(u32,11) else if(producer) @as(u32,10) else @as(u32,9);}
+ if(i==1 or i==2){return 1;}if(i==3 or i==4){return 0;}
+ if(i==5){return if(producer) @as(u32,3) else @as(u32,2);}
+ if(i==6){return @as(u32,group);}
+ if(i==7){return if(origin) @as(u32,group)*128 else @as(u32,offset);}
+ if(comptime peer){
+  // A26-word source retains five words from the preceding31-word fragment.
+  const retained_offset=if(slot%3==2 and i>=26) @as(u16,23) else offset;
+  const low:u32=0x3f00+@as(u32,group)*128+2*@as(u32,retained_offset+i-8);
+  return low|((low+1)<<16);
+ }
+ return 0;
+}
+fn before_sdk(data:[*]u32,length:u16) void {
+ const slot=@as(u16,book[0]);@assert(slot<6);
+ var valid=packets.sending and !packets.pending and length==tx_length;
+ for(@range(u16,31))|i|{if(data[i]!=expected_source(slot,i)){valid=false;}}
+ if(valid){tx_proof[slot*64+63]|=1;}else{book[2]+=1;}
+}
+fn frame_started() void {
+ @assert(packets.sending and packets.tx_phase==1);
+ if(comptime origin or producer){if(book[0]==0){
+  @assert(book[4]==0 and !notice_sent);book[4]=1;notice_sent=true;
+  const out=@get_dsd(fabout_dsd,.{.output_queue=notice_oq,.extent=1});
+  @mov32(out,0x53540000|(@as(u32,column)<<8));
+ }}
+}
+task peer_started(data:u32) void {
+ @assert(origin or producer);book[7]+=1;
+ const other=if(origin) @as(u32,1) else @as(u32,0);
+ if(book[7]!=1 or data!=(0x53540000|(other<<8))){bad_notices+=1;return;}
+ // The real completion count excludes a late notice in origin REQUEST1.
+ book[6]=(other<<16)|(book[7]<<8)|(book[0]<<5)|(book[5]<<3)
+  |(@as(u32,packets.sending)<<2)|(book[4]<<1);
+ if(book[4]==1 and book[5]==0 and book[0]==0 and packets.sending){book[6]|=1;}
+}
+fn control_started() void {
+ const slot=@as(u16,book[0]);@assert(slot<6);
+ if(packets.sending and packets.tx_phase==2){tx_proof[slot*64+63]|=2;}
+ else{book[2]+=1;}
+}
+fn sent() void {
+ const slot=@as(u16,book[0]);@assert(slot<6);const base:u16=slot*64;
+ if(!packets.sending and !packets.pending and packets.tx_phase==0){tx_proof[base+63]|=4;}
+ else{book[2]+=1;}
+ for(@range(u16,31))|i|{tx_proof[base+i]=tx_source[i];}
+ for(@range(u16,32))|i|{tx_proof[base+31+i]=packets.transmit_frame[i];}
+ book[0]+=1;if(comptime origin or producer){if(slot==0){book[5]=1;}}
+ // All banks above are preserved before rows.sent reuses its source bank.
+ if(comptime peer){rows.sent();}
+ @activate(service);
+}
+fn send_row(x:u16,y:u16,data:[*]u32,length:u16) void {
+ @assert(peer and x==0 and y==0);send_packet(x,data,length);
+}
+fn archive_row(data:[*]u16,group:u16) void {
+ @assert(group<2 and archived_rows==group);
+ for(@range(u16,64))|i|{row_archive[group*64+i]=@as(u32,data[2*i])|(@as(u32,data[2*i+1])<<16);}
+ archived_rows+=1;
+}
+fn start_marker(group:u16) u32 {
+ // Every count and lease flag is sampled at actual enqueue/start, not derived
+ // later from final counts. Low bits qualify predecessor-release conditions.
+ var value=(@as(u32,group)<<8)|(book[0]<<12)|(@as(u32,rows_done)<<16)
+  |(@as(u32,peer_rows)<<20)|(@as(u32,archived_rows)<<24)|(@as(u32,requests_received)<<28);
+ if(book[0]==@as(u32,if(origin) group else group*3)){value|=1;}
+ if(!packets.sending){value|=2;}if(!packets.pending){value|=4;}
+ if(comptime origin or peer){if(!rows.active){value|=8;}if(!rows.sending){value|=64;}}
+ if(archived_rows==group){value|=16;}
+ if((origin and rows_done==group) or (peer and peer_rows==group)){value|=32;}
+ if(state[0]==2){value|=128;}
+ return value;
+}
+fn row_sent(phase:u16) void {
+ if(comptime peer){
+  @assert(phase==2 and !rows.active and !rows.sending and !packets.sending);
+  archive_row(&row_source,peer_rows);peer_rows+=1;@activate(service);
+ }
+}
+fn row_received(data:[*]u16,phase:u16,group:u16) void {
+ if(comptime origin){
+  @assert(phase==2 and group==rows_done);archive_row(data,group);
+  for(@range(u16,128))|i|{if(data[i]!=0x3f00+@as(u16,group*128+i)){book[2]+=1;}}
+  rows.release_row(phase);rows_done+=1;@activate(service);
+ }
+}
+fn received(data:[*]u32,length:u16) void {
+ const arrival=@as(u16,book[1]);book[1]+=1;
+ if(arrival>=8){book[2]+=1;return;}
+ for(@range(u16,31))|i|{observed[arrival*32+i]=data[i];}
+ observed[arrival*32+31]=packets.header_buffer[0];
+ if(!packets.receiving or packets.rx_phase!=3 or length<8 or data[1]!=1
+    or data[2]!=1 or data[3]!=0 or data[4]!=0
+    or packets.header_buffer[0]!=(packets.mp.encode_header(column,0,0)|@as(u32,length))){book[2]+=1;return;}
+ if(comptime origin){
+  if(data[0]==10){
+   if(ready_seen or length!=8 or data[5]!=3 or data[6]!=0 or data[7]!=0){book[2]+=1;return;}
+   ready_seen=true;
+  }else if(data[0]==9){
+   if(!rows.active or rows.received or data[5]!=2 or data[6]!=@as(u32,rows_done)
+      or data[7]!=@as(u32,rows.offset)
+      or length!=(if(rows.offset==46) @as(u16,26) else @as(u16,31))){book[2]+=1;return;}
+   for(@range(u16,23))|i|{if(i<length-8){
+    const low:u32=0x3f00+@as(u32,rows_done)*128+2*@as(u32,rows.offset+i);
+    if(data[8+i]!=(low|((low+1)<<16))){book[2]+=1;return;}
+   }}
+   rows.receive(data,length);
+  }else{book[2]+=1;}
+ }else if(comptime peer){
+  if(length!=8 or data[0]!=11 or data[5]!=2 or data[6]>=2
+     or data[7]!=data[6]*128 or request_pending or data[6]!=@as(u32,requests_received)){
+   book[2]+=1;return;
+  }
+  pending_group=@as(u16,data[6]);request_pending=true;requests_received+=1;
+ }else{book[2]+=1;}
+ @activate(service);
+}
+fn maybe_produce() void {
+ if(comptime producer){if(state[0]==2 and go_seen and !producer_started){
+  producer_started=true;header(10,3,0,0);send_packet(0,&payload,8);
+ }}
+}
+task go(data:u32) void {
+ @assert(producer and data==0x474f3031 and !go_seen);go_seen=true;maybe_produce();
+}
+task pump() void {
+ if(state[0]!=2 or book[2]!=0 or book[3]!=0 or packets.sending){return;}
+ if(comptime origin){
+  if(rows_done<2 and !rows.active){
+   current_group=rows_done;start_markers[current_group]=start_marker(current_group);rows.begin(1,1,0,0,9,2,current_group,128);
+   header(11,2,@as(u32,current_group),@as(u32,current_group)*128);
+   // Prepare REQUEST0 before the one GO; notices never gate traffic.
+   if(current_group==0){
+    const out=@get_dsd(fabout_dsd,.{.output_queue=go_oq,.extent=1});@mov32(out,0x474f3031);
+   }
+   send_packet(2,&payload,8);
+  }
+ }else if(comptime peer){
+  if(request_pending and !rows.active){
+   current_group=pending_group;start_markers[current_group]=start_marker(current_group);request_pending=false;
+   for(@range(u16,128))|i|{row_source[i]=0x3f00+@as(u16,current_group*128+i);}
+   rows.begin(1,1,0,0,9,2,current_group,128);rows.transmit(0,0,&row_source);
+  }
+ }
+}
+fn initialize() void {
+ @assert(state[0]==0);tx_source=&payload;
+ @assert((@get_config(@get_int(tc.addresses.MISC_FABRIC_CFG)/tc.word_size)&4)==0);
+ packets.init();
+ inline for(@range(u16,5))|i|{routing[i]=@as(u32,@get_config(@get_int(tc.addresses.COLOR_CONFIG)/tc.word_size+14+i));}
+ routing[5]=@as(u32,@get_config(@get_int(tc.addresses.SWITCH_CONFIG)/tc.word_size+16*4));
+ routing[6]=@as(u32,@get_config(@get_int(tc.addresses.SWITCH_CONFIG)/tc.word_size+17*4));
+ routing[7]=@as(u32,@get_config(@get_int(tc.addresses.MISC_FABRIC_CFG)/tc.word_size));
+ @assert((routing[7]&4)==4);state[0]=1;state[1]=@as(u32,column);sys.unblock_cmd_stream();
+}
+fn compute() void {
+ @assert(state[0]==1);state[0]=2;
+ if(comptime producer){maybe_produce();}
+ @activate(service);sys.unblock_cmd_stream();
+}
+fn snapshot() void {
+ state[2]=book[0];state[3]=book[1];state[4]=start_markers[0];state[5]=book[2];state[6]=start_markers[1];
+ state[7]=book[4];state[8]=book[5];state[9]=book[6];state[10]=book[7];state[11]=@as(u32,bad_notices);
+ state[12]=@as(u32,packets.rx_phase);state[13]=@as(u32,packets.tx_phase);state[14]=@as(u32,packets.sending);
+ state[15]=@as(u32,packets.pending);state[16]=@as(u32,packets.receiving);state[17]=@as(u32,packets.header_waiting);
+ state[18]=@as(u32,packets.protocol_error);state[19]=packets.control_buffer[0];
+ state[20]=packets.header_buffer[0];state[21]=@as(u32,packets.receive_length);
+ state[22]=packets.tail_normal_events[0];state[23]=packets.consumption_events[0];state[24]=packets.consumption_events[1];
+ for(@range(u16,6))|i|{state[25+i]=packets.protocol_events[i];}
+ for(@range(u16,16))|i|{state[31+i]=packets.stats[i];}
+ state[47]=@as(u32,go_seen);state[48]=@as(u32,rows_done);state[49]=@as(u32,peer_rows);
+ state[50]=@as(u32,requests_received);state[51]=@as(u32,request_pending);state[52]=@as(u32,current_group);
+ state[53]=@as(u32,ready_seen);state[54]=if(producer) @as(u32,producer_started) else @as(u32,archived_rows);state[55]=@as(u32,notice_sent);
+ if(comptime origin or peer){
+  state[56]=@as(u32,rows.active);state[57]=@as(u32,rows.sending);state[58]=@as(u32,rows.received);
+  state[59]=@as(u32,rows.offset);state[60]=@as(u32,rows.group);state[61]=@as(u32,rows.packet_words);
+ }
+ state[62]=@as(u32,tx_length);state[63]=@as(u32,pending_group);
+ for(@range(u16,31))|i|{current_source[i]=tx_source[i];}
+ sys.unblock_cmd_stream();
+}
+const state_ptr:[*]u32=&state;const routing_ptr:[*]u32=&routing;const observed_ptr:[*]u32=&observed;
+const proof_ptr:[*]u32=&tx_proof;const buffer_ptr:[*]u32=&packets.receive_buffer;
+const frame_ptr:[*]u32=&packets.transmit_frame;const source_ptr:[*]u32=&current_source;const archive_ptr:[*]u32=&row_archive;
+comptime {
+ if(producer){@initialize_queue(go_iq,.{.color=@get_color(3)});@bind_data_task(go,@get_data_task_id(go_iq));}
+ if(origin){@initialize_queue(go_oq,.{.color=@get_color(3)});}
+ if(origin or producer){
+  @initialize_queue(notice_oq,.{.color=if(origin) @get_color(7) else @get_color(4)});
+  @initialize_queue(notice_iq,.{.color=if(origin) @get_color(4) else @get_color(7)});
+  @bind_data_task(peer_started,@get_data_task_id(notice_iq));
+ }
+ @bind_local_task(pump,service);
+ @export_symbol(state_ptr,"state");@export_symbol(routing_ptr,"routing");@export_symbol(observed_ptr,"observed");
+ @export_symbol(proof_ptr,"tx_proof");@export_symbol(buffer_ptr,"received_buffer");
+ @export_symbol(frame_ptr,"transmit_frame");@export_symbol(source_ptr,"current_source");@export_symbol(archive_ptr,"row_archive");
+ @export_symbol(initialize);@export_symbol(compute);@export_symbol(snapshot);
+}

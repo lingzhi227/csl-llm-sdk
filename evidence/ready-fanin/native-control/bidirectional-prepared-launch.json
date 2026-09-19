@@ -1,0 +1,270 @@
+{
+  "scope": "One independently accepted physical007 prepared-launch comparison",
+  "physical007": {
+    "candidate": "ready-fanin-hw-run-007",
+    "manifest_sha256": "a9fb1e218bf1b8f96c72752a6da52bc81becf42a2a02fa175d44fc237c770c89",
+    "binding_sha256": "a66bfe4f78f33682e42de4db07812f93efeb9d3ec57216b12c9c11b497085669",
+    "status": "passed_independently_verified_and_released",
+    "overall_passed": true,
+    "scope": "One actual physical three-PE prepared-launch bidirectional lifecycle: all 9 packets/200 words, complete source/frame/RX banks and suffixes, two assembled and two source-released rows, whole64word state stability, both first-TX lease witnesses. No full136 repair or original neural epoch.",
+    "executor_session": 73307,
+    "executor_reaped": true,
+    "executor_exit": 0,
+    "executor_reap_chunk": "8c88d4",
+    "normal_stop": true,
+    "wall_seconds": 200.34577111620456,
+    "capture_seconds": 8.168624673970044,
+    "maximum_journal_idle_seconds": 7.037362239789218,
+    "raw_files": 10,
+    "raw_bytes": 15384,
+    "D2H": 10,
+    "host_D2H_bytes": 12744,
+    "launches": 4,
+    "H2D": 0,
+    "journal_events": 34,
+    "checks_passed": 31,
+    "checks_total": 31,
+    "actual_witnesses": [
+      65799,
+      263
+    ],
+    "expected_witnesses": [
+      65799,
+      263
+    ],
+    "dual_first_TX_lease_overlap_qualified": true,
+    "local_RX_during_unfinished_TX": [
+      1,
+      0,
+      0
+    ],
+    "simultaneous_DMA_claim": false,
+    "READY_position": 0,
+    "actual_assembled_rows": 2,
+    "actual_source_released_rows": 2,
+    "all200words_and_fullbanks_headers_suffixes_exact": true,
+    "state0_final_raw_byteequal": true,
+    "state0_final_raw_sha256": "fed1e4fadd4f7f159fe3588e85ed870783092b5a9d4c162cdf96487a1b4cd99f",
+    "historical_client_pid_observed": false,
+    "release_scope": "Known guard/waiter absent, actual job terminal and no system assignment, bounded own-UID candidate process scan empty. Historical client PID unavailable; SSH authentication helpers retained.",
+    "Mass1_backup_independently_verified": true,
+    "complete_neural_epochs": 0,
+    "previous006_strict_failure_preserved": true,
+    "causal_limit": "Pass follows two GO-relocation source edits, but one observation does not establish a unique timing or transport root cause.",
+    "automatic_retry": false,
+    "original_acceptance_sha256": "818f977d8b6409a1a2ce29b24609e3c7edcf145d3c5b0250cb2677102b3c3366",
+    "independent_evidence_sha256": {
+      "READY-FANIN-HW-RUN-007-INDEPENDENT-AUDIT.json": "edb8b7d06bab732fc5ad86914ac7be91b30c8914999c15e5360fe9848d3dc9ca",
+      "READY-FANIN-HW-RUN-007-RELEASE.json": "8f2f842e7c71f46df1f2a5418ee5f679f120a97d36ded47f9476e194849a02fe",
+      "READY-FANIN-HW-RUN-007-BACKUP-AUDIT.json": "f4c1aabbc5fd62cb901566b911c879153f076271a77f9698d1c988d73211b40c"
+    }
+  },
+  "physical_compile009": {
+    "candidate": "ready-fanin-hw-compile-009",
+    "manifest_sha256": "042c0d857a7513956045bac7e636ad720b601d62424be21b938f3bc0de0c16f8",
+    "scope": "Prepared-launch three-PE bidirectional fixture compiled for physical deployment. Actual ELF storage, task bindings, DSR instructions and source lifetimes accepted. No runtime or full-model correctness claim.",
+    "artifact_sha256": "a25c800311adb31eb1e85917f7ea9f273c84f22e20aea847bd8dddf45c66ae7a",
+    "artifact_bytes": 76636,
+    "placement_sha256": "1f9349ff4a895a074c7ae5b0f5980f0d8bf964f193932c58ca0e2f07486f008b",
+    "application_programs": 3,
+    "PEs": 3,
+    "embedded_CSL": 4,
+    "max_ordinary_plus4096": 19632,
+    "ceiling": 48128,
+    "margin": 28496,
+    "source_delta": "Existing GO moved from origin compute into origin pump after row and REQUEST0 preparation immediately before send_packet; only current_group 0. Producer source unchanged.",
+    "source_lifetime_review": "Origin synchronous GO uses DDS4 at byte address 804, before queued frame DDS2/S1DS3 and while packets.sending is false. Armed RX uses DDS3/S1DS4; source and destination register families are distinct. Existing copy DDS4/S1DS2, notice DDS4, tail pair1 and SDK pair0 remain phase-separated. UT6/TX/OQ6 and UT7/RX/IQ6 lifecycle unchanged. No dynamic overlap or timing guarantee inferred.",
+    "code_comparison_scope": "Producer and peer executable text/task/config sections byte/address equal physical008. Origin text and task table differ; actual task IDs retain their role bindings. No whole-ELF or whole-code identity claim.",
+    "producer_peer_DSR_records_exact008": true,
+    "actual_programs": [
+      {
+        "file": "compiled/out/bin/out_0_0.elf",
+        "column": 0,
+        "bytes": 47816,
+        "sha256": "2c8711931fe046ef66631d970ebb2662a4949674d8417cd820218071be125e0a",
+        "ordinary_plus_4096_stack": 19616
+      },
+      {
+        "file": "compiled/out/bin/out_1_0.elf",
+        "column": 1,
+        "bytes": 44400,
+        "sha256": "b92927ec3106845dca828f7ab3105b064d1226a6df7cfd412c7c2f63c3443425",
+        "ordinary_plus_4096_stack": 18048
+      },
+      {
+        "file": "compiled/out/bin/out_2_0.elf",
+        "column": 2,
+        "bytes": 47168,
+        "sha256": "85827d7126e67590a99c10cab04d45cffdb234b987c210cf98ad3d377a4e4065",
+        "ordinary_plus_4096_stack": 19632
+      }
+    ],
+    "executor_session": 22430,
+    "executor_reaped": true,
+    "executor_exit": 0,
+    "executor_reap_chunk": "cedabc",
+    "compile_seconds": 42.486355664,
+    "historical_client_pid_observed": false,
+    "release_scope": "Terminal job, no assignment, both known guard/waiter PIDs absent, bounded owned candidate process scan empty. Historical compile-client PID unavailable. Protected authentication helpers retained.",
+    "backup_verified": true,
+    "runtime_admitted": false,
+    "complete_neural_epochs": 0,
+    "original_acceptance_sha256": "3d79a407a5698965430f6b5988ede2989aca6b62c7ce538010413884af9d3da2"
+  },
+  "source_map": {
+    "examples/ready_fanin/native_control/bidirectional/layout.csl": {
+      "bytes": 1186,
+      "sha256": "7afbad43b8edd43c942706fdd8dc979b6ae42bbb3005942029aa463cdb49951b",
+      "byte_identical": true
+    },
+    "examples/ready_fanin/native_control/bidirectional/prepared_launch/pe.csl": {
+      "bytes": 12694,
+      "sha256": "9dd023c584ab9c65ada416b603c0fbd296ac32f836def879e1221e6d998f8705",
+      "byte_identical": true
+    },
+    "examples/ready_fanin/native_control/bidirectional/packets.csl": {
+      "bytes": 10722,
+      "sha256": "06083863a5c55d92bc79c4ba3aad07400617c6faa6e4bd9246fe8abe35c7fd85",
+      "byte_identical": true
+    },
+    "examples/ready_fanin/native_control/bidirectional/row_packet.csl": {
+      "bytes": 2882,
+      "sha256": "a30bfaa6089c261ec971234ac7fdd9bb761d4f3ac1a91da64147a89cdc1b80ba",
+      "byte_identical": true
+    },
+    "examples/ready_fanin/native_control/bidirectional/capture.py": {
+      "bytes": 4815,
+      "sha256": "f7cdb98257d9283fbab11907542b67fbbcb2864035b90311a3bcbef8755fca8d",
+      "byte_identical": true
+    },
+    "examples/ready_fanin/native_control/bidirectional/capture_store.py": {
+      "bytes": 1728,
+      "sha256": "8ce06844bc3e2b13ec4e64317fb413155a802de506e5ec73cf51b1b6cf13173b",
+      "byte_identical": true
+    },
+    "examples/ready_fanin/native_control/bidirectional/check_lifecycle.py": {
+      "bytes": 8434,
+      "sha256": "445a97993c7fc1f73e799514275cf81d747302511c0d139c98ac97d7eeffcbfb",
+      "byte_identical": true
+    },
+    "examples/ready_fanin/native_control/bidirectional/checker_tests.py": {
+      "bytes": 6139,
+      "sha256": "6a330efdead0f73faef02259eb2029fe943242761059bbf17636c15fb5dbece3",
+      "byte_identical": true
+    },
+    "examples/ready_fanin/native_control/bidirectional/validate_capture.py": {
+      "bytes": 2928,
+      "sha256": "03216525995b1ff6cd5d9930d8475b0fdb866f43232d627a81ecb55416c319eb",
+      "byte_identical": true
+    },
+    "examples/ready_fanin/native_control/bidirectional/run_hw.py": {
+      "bytes": 2725,
+      "sha256": "fa24de1087a7675715bbf1cd433925ba4c679182249e3a995ffe8c3a7f716c03",
+      "byte_identical": true
+    }
+  },
+  "raw_capture_metadata": [
+    {
+      "path": "evidence/initial-state.npz",
+      "bytes": 1032,
+      "sha256": "f11d39843a8231c9ff94fcbd2496aa5dfe983007164bf634eab2e7f6cbaf092b",
+      "shape": [
+        3,
+        64
+      ]
+    },
+    {
+      "path": "evidence/routing.npz",
+      "bytes": 360,
+      "sha256": "3fbea959bc82d5eee4e2488ce657f2e2b61bfd7ce69164c97fa58e5e95c42b92",
+      "shape": [
+        3,
+        8
+      ]
+    },
+    {
+      "path": "evidence/state-0.npz",
+      "bytes": 1032,
+      "sha256": "fed1e4fadd4f7f159fe3588e85ed870783092b5a9d4c162cdf96487a1b4cd99f",
+      "shape": [
+        3,
+        64
+      ]
+    },
+    {
+      "path": "evidence/observed.npz",
+      "bytes": 3336,
+      "sha256": "c44bfcf5a93702b19c7800856b3c53886c52568322ed857cde2ddb79f04f1dfb",
+      "shape": [
+        3,
+        256
+      ]
+    },
+    {
+      "path": "evidence/tx-proof.npz",
+      "bytes": 4872,
+      "sha256": "7734fc79adcc1b8de2a962e4a8640d62747b5abc5572dd150092a8c031c88c78",
+      "shape": [
+        3,
+        384
+      ]
+    },
+    {
+      "path": "evidence/rx-banks.npz",
+      "bytes": 636,
+      "sha256": "4d27b698e2a047fa9ea8e5a7cce71f9fb3c79da19caa1e7da34efb65ef22efc8",
+      "shape": [
+        3,
+        31
+      ]
+    },
+    {
+      "path": "evidence/live-frames.npz",
+      "bytes": 648,
+      "sha256": "72d7aa10db2ceed679d46009cef6c6aeb247f4ad3a7bddc674a379b907510859",
+      "shape": [
+        3,
+        32
+      ]
+    },
+    {
+      "path": "evidence/live-sources.npz",
+      "bytes": 636,
+      "sha256": "0c7956d923f5a153605ca18bfb31e5aedaead7c4bebad245bf69b99d9ca830be",
+      "shape": [
+        3,
+        31
+      ]
+    },
+    {
+      "path": "evidence/row-archive.npz",
+      "bytes": 1800,
+      "sha256": "11bf6db162f8e06ec0d3c27c2068fe23d5f61483ef4fb766af988c34401b9ba4",
+      "shape": [
+        3,
+        128
+      ]
+    },
+    {
+      "path": "evidence/final-state.npz",
+      "bytes": 1032,
+      "sha256": "fed1e4fadd4f7f159fe3588e85ed870783092b5a9d4c162cdf96487a1b4cd99f",
+      "shape": [
+        3,
+        64
+      ]
+    }
+  ],
+  "original006_strict_failure_preserved": true,
+  "simulator_failures_preserved": [
+    "SIM012",
+    "SIM014",
+    "SIM015"
+  ],
+  "SIM013_prefix_only": true,
+  "formal136_failure_unresolved": true,
+  "complete_neural_epochs": 0,
+  "model_generations": 0,
+  "raw_arrays_published": false,
+  "compiled_artifacts_published": false
+}

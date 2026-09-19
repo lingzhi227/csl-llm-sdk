@@ -26,9 +26,15 @@ two synthetic rows and final stability, while its strict dual-first-send witness
 fails (30/31 checks). Full simulator 012/014/015 fail before compute;013 passes
 only a shortened prefix. None repairs the 136-producer fixture.
 
+The prepared-launch physical RUN007 subsequently passes all 31 checks, including
+both first-TX lease witnesses, with the same strict data/bank/row/stability checks.
+Its only device change moves the existing GO after origin prepares REQUEST0.
+The prior 006 and simulator failures remain preserved; one pass establishes no
+unique root cause or full 136 repair.
+
 | Component | Current accepted scope |
 |---|---|
-| Native bidirectional payload/row lifecycle | Physical 006:200 words/two exact rows/full banks/stability accepted; origin RX during unfinishedTX observed; overall strict run failed producer first-lease witness (30/31), normal exit/release; simulator failures preserved |
+| Native bidirectional lifecycle | Physical 007: all 31 checks, 200 words,two rows,full banks/stability and both first-TX witnesses pass; origin RX during unfinished TX observed; normal exit/release. Physical006 overall 30/31 failure and simulator failures preserved |
 | Native control two-source comparison | Same three-PE program, four packets and73 exact words pass independent simulator and physical checks; complete banks/suffixes, both first-lease witnesses and stable state; normal exit/release, larger fixture still open |
 | Native control physical comparison | Full356-program compile accepted at27,872 bytes including stack; physical004 fails at a control-tail boundary,408 source records exact,13 captures saved, normal stop/release verified; no repair |
 | Native control termination | Separately accepted isolated static-route cases and consecutive 31→8 packets, then actual SDK message routing with both bankA=4; complete buffers/leases/order/suffixes/counts pass; simulator only, physical136 remains open |

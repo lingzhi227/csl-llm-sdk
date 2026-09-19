@@ -1,5 +1,37 @@
 # Physical bidirectional payload and row lifecycle
 
+Physical RUN007 now passes all 31 independent checks after the two reviewed GO
+relocation edits. It transfers 9 packets/200 exact words, assembles two synthetic
+rows, releases both peer source rows, preserves full source/frame/RX banks and
+suffixes, and keeps the complete 64-word state stable. Both first-TX lease
+witnesses are exact (0x10107 and 0x107). Origin separately records one RX while
+an issued TX remains unfinished. This is software lease-overlap evidence;
+simultaneous DMA and a unique timing root cause are not established.
+
+The change moves the existing one-shot GO after origin prepares row state and
+REQUEST0, immediately before its send call. It adds no delay, acknowledgement,
+source hold, host pacing or relaxed check. The original RUN006 source, its
+30/31 overall failure, and all simulator failures below remain preserved.
+The unchanged strict checker is shared by both physical attempts.
+
+RUN007 saves 10 arrays/15,384 bytes via 10 D2H calls carrying 12,744 bytes, 4 launches
+and zero H2D. Capture plus normal exit takes 8.169 s; the complete supervised stage
+takes 200.346 s including setup. These measurements are not inference latency.
+The actual owner exits 0, the job is terminal and unassigned, and the known
+guard/waiter plus bounded candidate-process scan are clear. The historical
+client PID was unavailable and is explicitly recorded as such. Original raw
+evidence and sources are independently verified at the compute site.
+
+Physical compile 009 retains the 19,632-byte maximum including 4,096-byte stack
+allowance. Producer/peer executable sections and DSR records match 008; origin
+code/task-table addresses change with the GO relocation and were independently
+checked. No whole-ELF or whole-program identity claim is made.
+
+[Exact prepared-launch source](../examples/ready_fanin/native_control/bidirectional/prepared_launch) |
+[Independent acceptance evidence](../evidence/ready-fanin/native-control/bidirectional-prepared-launch.json)
+
+## Original RUN006: accepted subscopes and strict failure
+
 Physical RUN006 independently passes payload, full-buffer, two-row lifecycle and
 stable-state checks. Its overall strict result remains failed: 30 of 31 checks
 pass, with the dual-first-TX lease witness absent on the READY producer. This is
