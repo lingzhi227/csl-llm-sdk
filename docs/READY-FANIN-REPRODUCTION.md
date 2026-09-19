@@ -141,3 +141,13 @@ These summaries are not a substitute for independently re-reading raw arrays.
 [Source](../examples/ready_fanin) ·
 [Attempt evidence](../evidence/ready-fanin/attempts.json) ·
 [Source correlation](../evidence/ready-fanin/source-correlation.json)
+
+## Native control comparison: physical failure remains
+
+The subsequent [native-control comparison](NATIVE-CONTROL-PHYSICAL.md) passed
+full356-program compilation but failed on physical hardware. All408 producer
+records remained exact. After22 valid deliveries the origin reported ordinary
+value3 at its control-tail receive. Only initial and producer raw files match
+run003 byte for byte; the record order and failure class changed. All13 captures,
+normal exit and release were independently checked. Full neural epochs remain
+zero; the650-record success condition and all error checks remain in force.

@@ -75,3 +75,10 @@ topology or model inference.
 [Compact evidence](../evidence/ready-fanin/native-control/attempts.json) ·
 [Source identities](../evidence/ready-fanin/native-control/source-map.json) ·
 [Earlier physical reproduction](READY-FANIN-REPRODUCTION.md)
+
+## Subsequent physical comparison
+
+The accepted simulator scope above was followed by full356-program compilation
+and physicalrun004. Compilation passed; the physical protocol failed on ordinary
+value3 at a control-tail boundary. This does not revoke the focused simulator
+results or extend them to136 concurrent producers. See the [physical comparison](NATIVE-CONTROL-PHYSICAL.md).

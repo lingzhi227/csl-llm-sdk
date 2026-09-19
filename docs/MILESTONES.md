@@ -2,6 +2,16 @@
 
 Only accepted results are listed below. Unresolved integration work and the remaining scope are tracked in [implementation status](STATUS.md).
 
+## Native control physical comparison - Accepted compile, failed runtime, September 19, 2026 UTC
+
+All356 programs compiled and passed independent fit/allocation checks at27,872
+bytes including stack. Physicalrun004 then failed strict checking with447
+coherent records:408 exact producer records,22 valid origin deliveries and a
+control-tail error on ordinary value3. Only initial/producer raw files match
+the prior comparison; receive order and the first fault changed. Normal stop,
+actual executor exit1 and independent release were verified. No repair or
+original neural epoch is accepted. See the [report](NATIVE-CONTROL-PHYSICAL.md).
+
 ## Native control termination — Scoped SDK qualification, September 19, 2026 UTC
 
 Separately recorded isolated positive/negative cases, consecutive 31→8 packets,

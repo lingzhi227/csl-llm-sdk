@@ -1,0 +1,369 @@
+{
+  "scope": "Accepted full fixture compilation and strict physical protocol failure; no neural epoch or transport repair.",
+  "compile006": {
+    "acceptance_sha256": "72c33de02e40836e9ef6c9739effc9ae6dc01912239960b2057742e4235c78d9",
+    "acceptance": {
+      "candidate": "ready-fanin-hw-compile-006",
+      "manifest_sha256": "e35f7e5a961d2d57f1d4883f5350a903f9247d696efd80084b960fb85680e2db",
+      "accepted_at": "2026-09-19T14:40:15.538878+00:00",
+      "scope": "Compiled entire136producer/356PE native-control fixture with exact qualifiedpacket, strict650record protocol unchanged except required control-header bit5 relative historical005. ActualfullroleDSR/task/storage source closure accepted for preparing separate physical runtime; no measured physicalprotocol/dynamicexclusion/neural result.",
+      "artifact_sha256": "b9f38e0921852ae69508ca6022ec1a5667091a2d463ab9a47db3a987aaa3f2c5",
+      "artifact_bytes": 2570943,
+      "application_programs": 356,
+      "PEs": 356,
+      "embedded_CSL": 6,
+      "max_ordinary_plus4096": 27872,
+      "ceiling": 48128,
+      "margin": 20256,
+      "actual_task_bindings": [
+        6,
+        10,
+        41
+      ],
+      "control_payload": "0x00290000",
+      "actual_DSR_mapping": {
+        "origin": {
+          "RX": [
+            1,
+            1
+          ],
+          "frame": [
+            2,
+            2
+          ],
+          "copy": [
+            3,
+            3
+          ],
+          "tail": [
+            5,
+            4
+          ],
+          "GO_dest": 4,
+          "diagnostic": [
+            7,
+            7
+          ],
+          "SDK": [
+            0,
+            0
+          ]
+        },
+        "peer_and136producers": {
+          "RX": [
+            1,
+            1
+          ],
+          "frame": [
+            2,
+            2
+          ],
+          "copy": [
+            3,
+            3
+          ],
+          "tail": [
+            4,
+            4
+          ],
+          "diagnostic": [
+            7,
+            7
+          ],
+          "SDK": [
+            0,
+            0
+          ]
+        },
+        "idle_row0": {
+          "RX": [
+            1,
+            1
+          ]
+        },
+        "diagnostic_row1": {
+          "RX": [
+            7,
+            7
+          ],
+          "synchronous_publish_copy": [
+            3,
+            3
+          ],
+          "packet_not_initialized": true
+        }
+      },
+      "source_lifetime_review": "Origin packets.init armsRX1 beforeGO DDS4; families/numbers disjoint. Tail on origin usesDDS5/S1DS4, so S1DS4 does not collide with GO DDS4. Frame2/sourcecopy3/RX1/diag7/SDK0 remain disjoint. Other transmitters have noGO andtail4pair. PacketTXdefaultUT6/RXexplicitUT7,diagUT5 andqueues6/5 separate; GO synchronousqueue3. Source/frameleasedthroughactualtailcompletion, RXleaseheldthroughcontrol41 consumption; nativepickIQ6block/unblock source qualified.",
+      "static_decoder": {
+        "programs": 356,
+        "instructions": 609352,
+        "models": 5,
+        "read_only_seconds": 1.2784740827046335,
+        "maxrss_bytes": 55222272,
+        "actual_child_reaped_exit": 0,
+        "initial_launcher_path_error": "Missing /usr/bin/python3 insideSIF; corrected to existingSDK /python/python-x86_64/bin/python before actualdecode, no SDKcompile/sim or candidate edits."
+      },
+      "executor_session": 17565,
+      "executor_reaped": true,
+      "executor_exit": 0,
+      "executor_reap_chunk": "589bab",
+      "job_id": "wsjob-klz4np9bbn9z3jyuvrgjdu",
+      "compile_seconds": 133.9518964169547,
+      "independent_release": "READY-FANIN-HW-COMPILE-006-RELEASE.json",
+      "structural_audit": "READY-FANIN-HW-COMPILE-006-INDEPENDENT-AUDIT.json",
+      "DSR_audit": "READY-FANIN-HW-COMPILE-006-DSR-STATIC.json",
+      "runtime_admitted": false,
+      "complete_neural_epochs": 0,
+      "billing_ledger_verified": false
+    }
+  },
+  "runtime004": {
+    "acceptance_sha256": "69085395789c8ff5b50ee5d21c7e8fd7a7a69ed1ab51262f1a20576269c98e84",
+    "acceptance": {
+      "candidate": "ready-fanin-hw-run-004",
+      "manifest_sha256": "03a630eb2b83c49069159c11260e9f0bdf5bb6f69f1486db203e04334c505224",
+      "accepted_at": "2026-09-19T14:49:58.869884+00:00",
+      "status": "failure_evidence_accepted_released",
+      "protocol_passed": false,
+      "complete_original_neural_epochs": 0,
+      "scope": "Genuine CS3 concurrent136producer native-control comparison strictlyfailed; all408sourcepoint records exact, receive control-tail operation completed on ordinary3. Not a repaired protocol, fullneural or model result.",
+      "artifact_sha256": "b9f38e0921852ae69508ca6022ec1a5667091a2d463ab9a47db3a987aaa3f2c5",
+      "executor_session": 38673,
+      "executor_reaped": true,
+      "executor_exit": 1,
+      "executor_reap_chunk": "c8434a",
+      "job_id": "wsjob-mi6qtk6uvtuezp46nkwcaf",
+      "system": "cer-anl-wse001-cs-sy02",
+      "job_phase": "SUCCEEDED",
+      "runtime_process_exit": 1,
+      "normal_stop": true,
+      "raw_files": 13,
+      "raw_bytes": 104936,
+      "D2H_copies": 13,
+      "host_slot_bytes": 101504,
+      "launches": 2,
+      "H2D": 0,
+      "journal_entries": 34,
+      "coherent_records": 447,
+      "torn_columns": [],
+      "producer_full16word_source_records": 408,
+      "producer_records_exact": true,
+      "origin_records": 23,
+      "peer_records": 16,
+      "first_fault": {
+        "column": 0,
+        "sequence": 23,
+        "reason": 268,
+        "network": 4194600,
+        "length": 8,
+        "first8": [
+          268,
+          12,
+          4,
+          3,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "guard_seconds": 211.12013128725812,
+      "capture_including_stop_seconds": 7.286784213036299,
+      "context_entry_seconds": 202.79795931698754,
+      "context_exit_seconds": 6.967950399033725,
+      "independent_release": "READY-FANIN-HW-RUN-004-RELEASE.json",
+      "independent_raw_audit": "READY-FANIN-HW-RUN-004-INDEPENDENT-RAW-AUDIT.json",
+      "independent_prefix_comparison": "READY-FANIN-HW-RUN-004-INDEPENDENT-PREFIX-COMPARISON.json",
+      "comparison": {
+        "raw_byte_equal_labels": [
+          "initial",
+          "producers"
+        ],
+        "allrawbyteequal": false,
+        "origin_valid_prefix_records": 22,
+        "origin_valid_READY_owners": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17
+        ],
+        "origin_valid_row_fragments": [
+          [
+            0,
+            0,
+            31
+          ],
+          [
+            0,
+            23,
+            31
+          ],
+          [
+            0,
+            46,
+            26
+          ],
+          [
+            1,
+            0,
+            31
+          ]
+        ],
+        "old003_fault": "record22 applicationREADYerror2 withnetworkheaderinsidepayload",
+        "new004_fault": "record23 event5 nativeprotocolerror12 ordinarydata3 atcontrol-tail position",
+        "ordering_different": true,
+        "rootcause_proven": false
+      },
+      "billing_ledger_verified": false,
+      "next": "Source-only concurrent routing/arbitration and tail consumption analysis using exactcapturedprefix andpinnedSDK; preserve strict650checks/failure, no unchangedhardware retry. Publish acceptedcompile and truthfully failedhardwarecomparison preservingREADMEformat."
+    },
+    "captures": [
+      {
+        "bytes": 5960,
+        "path": "evidence/initial.npz",
+        "sha256": "7021888f028998d374ed4ef9d0f7921724172ecc0f8050b915eb868c8de7a244",
+        "shape": [
+          356,
+          4
+        ]
+      },
+      {
+        "bytes": 5960,
+        "path": "evidence/progress-00.npz",
+        "sha256": "ec937169504ba31424b8a91c65f9f3e37ac98786931c5d33cbfd0ffe982b92b2",
+        "shape": [
+          178,
+          8
+        ]
+      },
+      {
+        "bytes": 5960,
+        "path": "evidence/progress-01.npz",
+        "sha256": "ec937169504ba31424b8a91c65f9f3e37ac98786931c5d33cbfd0ffe982b92b2",
+        "shape": [
+          178,
+          8
+        ]
+      },
+      {
+        "bytes": 5960,
+        "path": "evidence/progress-02.npz",
+        "sha256": "ec937169504ba31424b8a91c65f9f3e37ac98786931c5d33cbfd0ffe982b92b2",
+        "shape": [
+          178,
+          8
+        ]
+      },
+      {
+        "bytes": 5960,
+        "path": "evidence/progress-03.npz",
+        "sha256": "ec937169504ba31424b8a91c65f9f3e37ac98786931c5d33cbfd0ffe982b92b2",
+        "shape": [
+          178,
+          8
+        ]
+      },
+      {
+        "bytes": 5960,
+        "path": "evidence/progress-04.npz",
+        "sha256": "ec937169504ba31424b8a91c65f9f3e37ac98786931c5d33cbfd0ffe982b92b2",
+        "shape": [
+          178,
+          8
+        ]
+      },
+      {
+        "bytes": 5960,
+        "path": "evidence/progress-05.npz",
+        "sha256": "ec937169504ba31424b8a91c65f9f3e37ac98786931c5d33cbfd0ffe982b92b2",
+        "shape": [
+          178,
+          8
+        ]
+      },
+      {
+        "bytes": 5960,
+        "path": "evidence/progress-06.npz",
+        "sha256": "ec937169504ba31424b8a91c65f9f3e37ac98786931c5d33cbfd0ffe982b92b2",
+        "shape": [
+          178,
+          8
+        ]
+      },
+      {
+        "bytes": 5960,
+        "path": "evidence/progress-07.npz",
+        "sha256": "ec937169504ba31424b8a91c65f9f3e37ac98786931c5d33cbfd0ffe982b92b2",
+        "shape": [
+          178,
+          8
+        ]
+      },
+      {
+        "bytes": 12552,
+        "path": "evidence/origin.npz",
+        "sha256": "d9620712ea7338fbc20a8a45bfee698d337b0e4ea99f1888193f0e905a1d4aee",
+        "shape": [
+          1,
+          3072
+        ]
+      },
+      {
+        "bytes": 6408,
+        "path": "evidence/peer.npz",
+        "sha256": "70e57778d8655efe7f05515764a5e33c4ac1c84765a862e528965283908f89ed",
+        "shape": [
+          1,
+          1536
+        ]
+      },
+      {
+        "bytes": 26376,
+        "path": "evidence/producers.npz",
+        "sha256": "39df477c7bd5f83aff5141a485cce23327608450557632f8ee0fc3cdecbd4280",
+        "shape": [
+          136,
+          48
+        ]
+      },
+      {
+        "bytes": 5960,
+        "path": "evidence/final-status.npz",
+        "sha256": "ec937169504ba31424b8a91c65f9f3e37ac98786931c5d33cbfd0ffe982b92b2",
+        "shape": [
+          178,
+          8
+        ]
+      }
+    ]
+  },
+  "comparison": {
+    "raw_byte_equal_labels": [
+      "initial",
+      "producers"
+    ],
+    "ordering_changed": true,
+    "all_raw_byte_equal": false,
+    "origin_valid_prefix_records": 22,
+    "first_error_record": 23,
+    "old003_error": "application error2: network header inside READY payload",
+    "new004_error": "native protocol error12: ordinary value3 at control-tail receive",
+    "root_cause_proven": false
+  },
+  "raw_arrays_published": false,
+  "raw_retained_at_compute_site": true
+}

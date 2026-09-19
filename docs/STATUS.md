@@ -15,10 +15,13 @@ runtime exit. This narrows the investigation but proves no root cause or repair.
 See [reproduction report](READY-FANIN-REPRODUCTION.md). A native-control transport
 now passes focused two-PE simulator checks, including actual message routing.
 The [qualification report](NATIVE-CONTROL-QUALIFICATION.md) preserves the failed
-suites and separates that result from physical fixture repair.
+suites and separates that result from physical fixture repair. The subsequent
+[native-control physical comparison](NATIVE-CONTROL-PHYSICAL.md) also failed,
+with ordinary value3 at the expected control-tail position.
 
 | Component | Current accepted scope |
 |---|---|
+| Native control physical comparison | Full356-program compile accepted at27,872 bytes including stack; physical004 fails at a control-tail boundary,408 source records exact,13 captures saved, normal stop/release verified; no repair |
 | Native control termination | Separately accepted isolated static-route cases and consecutive 31→8 packets, then actual SDK message routing with both bankA=4; complete buffers/leases/order/suffixes/counts pass; simulator only, physical136 remains open |
 | Managed receive descriptor comparison | Complete 356-PE compile passes at 25,600 bytes including stack; all 13 physical captures byte-identical to combined TX on the same system; strict protocol still fails, normal exit and release verified |
 | Combined-frame transmission comparison | Complete356PE compile passes at 25,600 bytes including stack; physical run still fails on the same malformed payload despite408 exact source records and normal exit; different assigned system |
