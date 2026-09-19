@@ -1,0 +1,121 @@
+{
+  "status": "source_reviewed_not_compiled",
+  "rounds": 1,
+  "reset": false,
+  "application": [
+    178,
+    2
+  ],
+  "fabric": [
+    185,
+    4
+  ],
+  "offset": [
+    4,
+    1
+  ],
+  "origin": [
+    0,
+    0
+  ],
+  "peer": [
+    2,
+    0
+  ],
+  "concurrent_producer_x": [
+    40,
+    175
+  ],
+  "owner122": [
+    162,
+    0
+  ],
+  "source_snapshots": [
+    "enqueue",
+    "preSDK",
+    "source_completion"
+  ],
+  "source_snapshots_are_point_observations": true,
+  "sender_overflow_exported": false,
+  "diagnostic_route": "independent vertical color5 links to idle row1 sinks",
+  "record_words": 16,
+  "record_capacity": {
+    "origin": 192,
+    "peer": 96,
+    "producer": 3
+  },
+  "expected_records": {
+    "origin": 161,
+    "peer": 81,
+    "all_producers": 408
+  },
+  "packet_receive": {
+    "iq": 6,
+    "dsr_dest": 6,
+    "dsr_src1": 6,
+    "ut": 7,
+    "tasks": [
+      13,
+      16
+    ]
+  },
+  "packet_send": {
+    "oq": 6,
+    "ut": 6,
+    "implicit_dsr": "not independently disassembled",
+    "tasks": [
+      12,
+      15
+    ]
+  },
+  "diagnostics": {
+    "iq": 5,
+    "oq": 5,
+    "dsr_dest": 7,
+    "dsr_src1": 7,
+    "ut": 5,
+    "tasks": [
+      14,
+      18
+    ]
+  },
+  "go": {
+    "iq": 3,
+    "oq": 3,
+    "dsr_dest": 4,
+    "data_task": 3,
+    "color": 3,
+    "synchronous_words": 1
+  },
+  "service_task": 17,
+  "host_reads_after_compute": "row1 diagnostic sinks only",
+  "launches": 2,
+  "copies_min": 6,
+  "copies_max": 37,
+  "poll_max": 32,
+  "poll_spacing_seconds": 0.025,
+  "host_array_bytes_max": 238208,
+  "raw_files_max": 37,
+  "raw_file_bytes_max": 131072,
+  "raw_total_bytes_max": 1048576,
+  "compile_seconds": 300,
+  "driver_seconds": 180,
+  "child_AS": 4294967296,
+  "profile": {
+    "stage": "compile_then_simulate",
+    "seconds": 520,
+    "memory": 4294967296,
+    "swap": 0,
+    "pids": 128,
+    "cpu": [
+      0
+    ],
+    "file_bytes": 16777216,
+    "log_bytes": 4194304,
+    "run_bytes": 268435456,
+    "ram_reserve": 8589934592,
+    "ssd_reserve": 34359738368,
+    "hdd_reserve": 34359738368
+  },
+  "SDK_or_hardware_invocations": 0
+}

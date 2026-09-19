@@ -1,0 +1,62 @@
+// Independent vertical links: queued immutable records, asynchronous source DMA.
+param sender:bool;param enabled:bool;param capacity:u16;
+const oq=@get_output_queue(5);const iq=@get_input_queue(5);
+const rd=@get_dsr(dsr_dest,7);const rs=@get_dsr(dsr_src1,7);
+const completed=@get_local_task_id(14);const service=@get_local_task_id(18);
+var records=@zeros([16*capacity]u32);var incoming=@zeros([16]u32);
+// initialized, appended/received, delivered, overflow, malformed, active, capacity, compute.
+var status=@zeros([8]u32);var active:bool=false;
+fn init() void {status[0]=1;status[6]=@as(u32,capacity);if(comptime enabled and !sender){arm();}}
+fn append(event:u32,subject:u32,length:u16,network:u32,data:[*]u32,error:u32) void {
+ if(comptime enabled and sender){
+  if(status[1]>=@as(u32,capacity)){status[3]+=1;return;}
+  const seq=status[1]+1;const base=@as(u16,status[1])*16;
+  records[base]=2*seq;records[base+1]=event;records[base+2]=subject;
+  records[base+3]=@as(u32,length);records[base+4]=network;
+  var mask:u32=0;
+  for(@range(u16,8))|i|{records[base+5+i]=0;if(i<length){records[base+5+i]=data[i];mask|=@as(u32,1)<<i;}}
+  records[base+13]=mask;records[base+14]=error;records[base+15]=2*seq;
+  status[1]=seq;@activate(service);
+ }
+}
+fn arm() void {
+ @assert(enabled and !sender and !active);active=true;status[5]=1;
+ const dst=@get_dsd(mem1d_dsd,.{.base_address=&incoming,.extent=16});
+ const src=@get_dsd(fabin_dsd,.{.input_queue=iq,.extent=16,.simd_mode=.{.simd_off=true}});
+ @load_to_dsr(rd,dst);@load_to_dsr(rs,src,.{.async=true,.activate=completed,.ut_id=@get_ut_id(5)});
+ @mov32(rd,rs,.{.async=true});
+}
+task pump() void {
+ if(comptime enabled and sender){
+  if(active or status[2]==status[1]){return;}
+  @assert(status[2]<status[1] and status[1]<=@as(u32,capacity));
+  active=true;status[5]=1;const base=@as(u16,status[2])*16;
+  const dst=@get_dsd(fabout_dsd,.{.output_queue=oq,.extent=16,.simd_mode=.{.simd_off=true}});
+  const src=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]u32,&records[base]),.extent=16});
+  @load_to_dsr(rs,src);@load_to_dsr(rd,dst,.{.async=true,.activate=completed,.ut_id=@get_ut_id(5)});
+  @mov32(rd,rs,.{.async=true});
+ }
+}
+task complete() void {
+ @assert(enabled and active);active=false;status[5]=0;
+ if(comptime sender){status[2]+=1;@activate(service);}
+ else{
+  if(status[1]>=@as(u32,capacity)){status[3]+=1;}
+  else{
+   const seq=status[1]+1;const base=@as(u16,status[1])*16;
+   if(incoming[0]!=2*seq or incoming[15]!=2*seq){status[4]+=1;}
+   // Published sink records use the same ordered seqlock writes as production observer.
+   const first=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]u32,&records[base]),.extent=1});
+   const last=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]u32,&records[base+15]),.extent=1});
+   const src=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]u32,&incoming[1]),.extent=14});
+   const dst=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]u32,&records[base+1]),.extent=14});
+   @mov32(first,2*seq-1);@mov32(last,2*seq-1);@mov32(dst,src);
+   @mov32(last,2*seq);@mov32(first,2*seq);status[1]=seq;status[2]=seq;
+  }
+  arm();
+ }
+}
+comptime {
+ if(enabled){if(sender){@initialize_queue(oq,.{.color=@get_color(5)});}else{@initialize_queue(iq,.{.color=@get_color(5)});}}
+ @bind_local_task(complete,completed);@bind_local_task(pump,service);
+}

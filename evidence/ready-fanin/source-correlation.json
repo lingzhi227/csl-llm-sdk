@@ -1,0 +1,70 @@
+{
+  "all_source_records_compared": 408,
+  "producers": 136,
+  "point_events": [
+    "enqueue",
+    "preSDK",
+    "source_completion"
+  ],
+  "all_exact_expected_READY": true,
+  "mismatches": [],
+  "expected_header_formula": "[10,1,1,0,0,3,owner,0] for owner0..135",
+  "origin_records": 21,
+  "peer_records": 13,
+  "correct_READY_owners_before_bad": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16
+  ],
+  "correct_group0_fragments": [
+    [
+      31,
+      0
+    ],
+    [
+      31,
+      23
+    ],
+    [
+      26,
+      46
+    ]
+  ],
+  "first_bad": {
+    "sequence": 21,
+    "event": 4,
+    "length": 8,
+    "network_header": 4194568,
+    "header": [
+      10,
+      1,
+      1,
+      4194568,
+      0,
+      10,
+      0,
+      1
+    ],
+    "reason": 2
+  },
+  "peer_last_event": "group1 offset0 enqueue and preSDK; completion not observed",
+  "detail_bytes": 8082,
+  "detail_sha256": "311dbddc034b5509ef17233bcd824c81ab2e7e6e70707e87545c115573128902",
+  "limits": "CPU0/512MiBAS/20CPU; original raw files stay ALCF",
+  "scope": "Actual point values all correct while receiver payload corrupted. Continuous DMA source immutability, exact failing sender identity, wire-vs-receiver-vs-compiler cause unproven.",
+  "independent_receipt_sha256": "9d1f99b5778ee056ee3138ce59be02128aad14adeea37f2ae9dd8af8b94bba60"
+}

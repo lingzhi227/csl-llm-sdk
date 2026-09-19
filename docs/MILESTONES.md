@@ -2,6 +2,16 @@
 
 Only accepted results are listed below. Unresolved integration work and the remaining scope are tracked in [implementation status](STATUS.md).
 
+## Concurrent READY physical failure reproduction — Accepted evidence, September 19, 2026 UTC
+
+The bounded 356-PE fixture reproduces a network-header value inside received
+application data with 136 concurrent producers and no neural math. All 408
+source point snapshots are exact. Strict checking fails at origin record 21;
+13 raw captures and a normal context exit were independently verified. The SDK
+predecessor timed out with status-only evidence and remains failed. Resource
+release is confirmed for all attempts. Root cause, transport repair and complete
+original neural epochs remain unaccepted. See [report](READY-FANIN-REPRODUCTION.md).
+
 ## Complete native graph and first-error evidence — Accepted scope, September 19, 2026 UTC
 
 Both fullgraph001/002 pass actual placement, original storage and SRAM review:

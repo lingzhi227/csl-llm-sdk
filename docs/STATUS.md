@@ -8,8 +8,15 @@ but the original layer remains incomplete. The latest first-error record rejects
 a malformed MLP READY message. Both failed jobs were released. Complete original
 neural-layer epochs and CSL model generations remain zero.
 
+A separate physical 136-producer fixture now reproduces the READY corruption
+without neural math. All 408 source snapshots are correct; a received payload
+contains a network-header value. Strict validation failed despite a normal
+runtime exit. This narrows the investigation but proves no root cause or repair.
+See [reproduction report](READY-FANIN-REPRODUCTION.md).
+
 | Component | Current accepted scope |
 |---|---|
+| Concurrent READY physical reproduction | 442 coherent records; all 408 producer snapshots exact; malformed receive at record 21; strict check failed, normal context exit and release verified |
 | Physical QK archive/alias | Four PEs, two synthetic resets, exact960archive/256output/1280source-poison each; normal stop/release |
 | Selected complete native programs | 89 original positions, all24heads/24sinks, max47552 including4096stack; other programs demoted, never executable |
 | Native KV/Q ownership | 45-PE SDK fixture, three operations/reset, 29,184 exact payload halfwords, 192 canaries, 525 actual API rejects, normal stop and release |

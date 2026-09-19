@@ -1,0 +1,102 @@
+// Event-driven fixed-length adapter over the SDK's public message-passing API.
+// A packet contains1..31 u32 wavelets, including application metadata.
+// Routing bank14 occupies the SDK-defined message-passing colors, not DSR14.
+param input_queue_id:u16=6;
+param output_queue_id:u16=6;
+param sent_task_id:local_task_id;
+param received_task_id:local_task_id;
+// One application-owned local task; existing callers reserve task15 by default.
+param deferred_task_id:local_task_id=@get_local_task_id(15);
+param diagnostics:bool=false;
+param on_sdk_started:fn()void=diagnostic_noop;
+fn diagnostic_noop() void {}
+param before_sdk:fn([*]u32,u16)void;
+param on_sent:fn()void;
+param on_received:fn([*]u32,u16)void;
+const mp=@import_module("<message_passing>",.{.enable_asserts=true,.bank_id=14,.input_queue_id=input_queue_id,.output_queue_id=output_queue_id});
+param header_task_id:local_task_id=@get_local_task_id(16);
+const rd=@get_dsr(dsr_dest,6);const rs=@get_dsr(dsr_src1,6);
+var header_buffer=@zeros([1]u32);var header_waiting:bool=false;
+var receive_buffer=@zeros([31]u32);var receive_length:u16=0;
+var sending:bool=false;var receiving:bool=false;var initialized:bool=false;
+// The caller keeps the source immutable while sending is true. One request
+// can be pending because send acquires that same lease before returning.
+var pending:bool=false;
+var pending_x:u16=0;var pending_y:u16=0;var pending_length:u16=0;
+var pending_source:[*]u32;
+// Fixture-only: all queued requests, receive-held deferrals, SDK starts, source completions, illegal
+// SDK starts, receive-reacquired retries, stale tasks, completion violations.
+// Added diagnostics: SDK returns, RX headers, RX during returned unfinished TX,
+// and the TX starts/completions/returns observed at the latest RX start.
+// Diagnostics14: successful header arms;15: SDK starts while header waiting.
+var stats=@zeros([if(diagnostics) 16 else 1]u32);
+fn init() void {@assert(!initialized);mp.init();initialized=true;arm_header();}
+// A waiting header owns RX DSR6/UT7 but not the application payload lease.
+// There is no data-task binding competing for IQ6.
+fn arm_header() void {
+ @assert(initialized and !receiving and !header_waiting);header_waiting=true;
+ const dst=@get_dsd(mem1d_dsd,.{.base_address=&header_buffer,.extent=1});
+ const src=@get_dsd(fabin_dsd,.{.input_queue=mp.mp_input_queue,.extent=1,.simd_mode=.{.simd_off=true}});
+ @load_to_dsr(rd,dst);@load_to_dsr(rs,src,.{.async=true,.activate=header_task_id,.ut_id=@get_ut_id(7)});
+ @mov32(rd,rs,.{.async=true});
+ if(comptime diagnostics){stats[14]+=1;}
+}
+// Source remains owned until on_sent. That callback is not a delivery ACK.
+noinline fn send(x:u16,y:u16,source:[*]u32,length:u16) void {
+ @assert(initialized and !sending and !pending and length>0 and length<=31);sending=true;
+ pending_x=x;pending_y=y;pending_source=source;pending_length=length;pending=true;
+ if(comptime diagnostics){stats[0]+=1;}
+ if(receiving){if(comptime diagnostics){stats[1]+=1;}return;}
+ @activate(deferred_task_id);
+}
+task deferred() void {
+ if(!pending){if(comptime diagnostics){stats[6]+=1;}return;}
+ @assert(sending);
+ // A header may reacquire the receive lease before this task is scheduled.
+ // Leave the request intact: that receive's release activates us again.
+ if(receiving){if(comptime diagnostics){stats[5]+=1;}return;}
+ pending=false;
+ if(comptime diagnostics){stats[2]+=1;if(header_waiting){stats[15]+=1;}if(receiving){stats[4]+=1;}}
+ @assert(sending and !receiving);
+ // All requests reach this single SDK callsite. No callback expands another
+ // copy of the synchronous SDK header implementation.
+ before_sdk(pending_source,pending_length);
+ mp.send_message(pending_x,pending_y,pending_source,pending_length,.{.activate=sent_task_id});
+ if(comptime diagnostics){stats[8]+=1;on_sdk_started();}
+}
+// Bit-preserving synchronous copy for application payload assembly/retention.
+// Callers supply valid disjoint ranges; count is a packet-sized runtime extent.
+fn copy_words(source:[*]u32,destination:[*]u32,count:u16) void {
+ @assert(count>0 and count<=31);
+ const src=@get_dsd(mem1d_dsd,.{.base_address=source,.extent=count});
+ const dst=@get_dsd(mem1d_dsd,.{.base_address=destination,.extent=count});
+ @mov32(dst,src);
+}
+task sent() void {
+ if(comptime diagnostics){
+  if(!sending or pending or stats[2]!=stats[3]+1){stats[7]+=1;}
+  stats[3]+=1;
+ }
+ @assert(sending and !pending);sending=false;on_sent();
+}
+task header() void {
+ @assert(initialized and header_waiting and !receiving);header_waiting=false;receiving=true;
+ const word=header_buffer[0];
+ receive_length=mp.get_header_len(word);@assert(receive_length>0 and receive_length<=31);
+ const dst=@get_dsd(mem1d_dsd,.{.base_address=&receive_buffer,.extent=receive_length});
+ const base=@get_dsd(fabin_dsd,.{.input_queue=mp.mp_input_queue,.extent=1,.simd_mode=.{.simd_off=true}});
+ const src=@set_dsd_length(base,receive_length);
+ if(comptime diagnostics){
+  stats[9]+=1;stats[11]=stats[2];stats[12]=stats[3];stats[13]=stats[8];
+  if(sending and stats[2]>stats[3] and stats[8]>stats[3]){stats[10]+=1;}
+ }
+ @load_to_dsr(rd,dst);@load_to_dsr(rs,src,.{.async=true,.activate=received_task_id,.ut_id=@get_ut_id(7)});@mov32(rd,rs,.{.async=true});
+}
+task received() void {
+ @assert(receiving);
+ // The callback must copy any retained data before returning. This buffer is
+ // reused by the next packet; the receive queue stays leased to this module.
+ on_received(&receive_buffer,receive_length);receiving=false;arm_header();
+ if(pending){@activate(deferred_task_id);}
+}
+comptime {@bind_local_task(header,header_task_id);@bind_local_task(sent,sent_task_id);@bind_local_task(received,received_task_id);@bind_local_task(deferred,deferred_task_id);}

@@ -2,7 +2,7 @@
 
 **Building inference for open language models with handwritten Cerebras Systems Language (CSL), targeting sequential execution of three model stages on WSE-3.** We implement the numerical kernels, execution control and persistent model state, and use the Cerebras SDK to compile and run the device programs. The first target is **Qwen3.8-27B text inference**; the longer-term goal is a reusable SDK for related model architectures.
 
-**Working today:** the complete original-weight **5120 → 17408 → 5120 layer-3 MLP runs on physical WSE-3** for four inputs with independent numerical checks. A separate full 64-layer CPU reference generates four tokens with cache restoration. **Current integration:** the complete native layer-3 graph passes independent placement, storage and SRAM checks across all 33,750 PEs and 24 attention heads. Physical execution now reports all 24 heads finished, but the layer stops on a malformed MLP READY message. Its exact first-error packet and failed lifecycle are preserved; **complete neural-layer epochs remain zero**. Bounded native transport and physical diagnostic-archive fixtures are accepted separately. **Current work:** resolve the message corruption, qualify original-layer numerics, then integrate three sequential stages with state checkpoints. Complete 64-layer CSL text generation and measured token latency remain ahead.
+**Working today:** the complete original-weight **5120 → 17408 → 5120 layer-3 MLP runs on physical WSE-3** for four inputs with independent numerical checks. A separate full 64-layer CPU reference generates four tokens with cache restoration. **Current integration:** the complete native layer-3 graph fits across all 33,750 PEs, but execution stops on malformed READY messages. A 136-producer physical fixture now reproduces the corruption: all 408 sender snapshots are correct, while a received payload contains a network-header value. Its strict check fails and its runtime exits normally. The cause remains unresolved; **complete neural-layer epochs remain zero**. **Current work:** qualify a focused transport change, original-layer numerics, then three sequential stages with state checkpoints. Complete CSL text generation and measured token latency remain ahead.
 
 ## 1. Project design
 
@@ -60,6 +60,7 @@ Full attention/recurrent layers and the three-stage model remain integration wor
 | Path | Purpose |
 |---|---|
 | [`csl/kernels/`](csl/kernels) | Reusable handwritten CSL arithmetic kernels. |
+| [`examples/ready_fanin/`](examples/ready_fanin) | Physical concurrent READY corruption reproduction, source observations and strict capture checks. |
 | [`examples/native_layer3/`](examples/native_layer3) | Complete native graph compile, exact source provenance and first-error diagnostics. |
 | [`examples/qk_archive/`](examples/qk_archive) | Physical original-kernel archive/alias equivalence, durable raw evidence and selected complete-program fit. |
 | [`examples/native_kv_sdk/`](examples/native_kv_sdk) | Accepted three-operation native KV/Q transport, durable raw captures and preserved failure history. |
@@ -85,6 +86,20 @@ Full attention/recurrent layers and the three-stage model remain integration wor
 ## 3. Completed development log — newest first
 
 Each **WP** or **HW** is a scoped development milestone. HW00/HW01 use physical WSE-3; earlier WP device results use the SDK simulator, and WP04 is a CPU/source audit. **BF16** means bfloat16 data, and **FP32** means 32-bit floating-point arithmetic. Reports contain numerical thresholds, failure history and reproduction details.
+
+### Concurrent READY reproduction · Physical failure isolated from neural math · September 19, 2026 (UTC)
+
+A 356-PE fixture with 136 concurrent producers reproduces the malformed-packet
+failure on WSE-3. All 408 enqueue, pre-send and completion snapshots are correct,
+but the origin's 21st record contains a network-header value inside its payload.
+Strict validation fails. All 13 captures were retained and the runtime exited
+normally; independent checks confirmed resource release. Three point samples
+do not prove continuous DMA immutability or identify the failing component.
+
+The earlier SDK attempt timed out during diagnostic readback and remains a
+failed attempt with status-only evidence. No original neural epoch is complete.
+
+[Source](examples/ready_fanin) · [Report](docs/READY-FANIN-REPRODUCTION.md) · [Evidence](evidence/ready-fanin/attempts.json)
 
 ### Complete native layer3 · Full-graph fit and first-error capture · September 19, 2026 (UTC)
 
