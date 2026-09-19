@@ -1,0 +1,51 @@
+// SOURCE DRAFT: bounded one-word trace, one independently running FIFO drain.
+// This module has not yet been compiled or qualified by an SDK fixture.
+param capacity:u16;
+param maximum_attempts:u16;
+param output_queue_id:u16;
+param stream_color:color;
+param microthread_id:u16;
+param output_dsr_id:u16;
+param fifo_dsr_id:u16=8;
+param fifo_xdsr_id:u16=2;
+comptime {
+ @comptime_assert(capacity==64 or capacity==128);
+ @comptime_assert(maximum_attempts>0 and maximum_attempts<=capacity+1);
+ @comptime_assert(fifo_dsr_id>=4 and fifo_dsr_id<12);
+ @comptime_assert(output_dsr_id!=fifo_dsr_id);
+}
+var storage=@zeros([capacity]u32);
+const fifo=@allocate_fifo(storage,.{
+ .dest=@get_dsr(dsr_dest,fifo_dsr_id),
+ .src=@get_dsr(dsr_src1,fifo_dsr_id),
+ .xdsr=@get_xdsr(fifo_xdsr_id)});
+const trace_oq=@get_output_queue(output_queue_id);
+const output_dsr=@get_dsr(dsr_dest,output_dsr_id);
+var initialized:bool=false;
+var armed:bool=false;
+var attempts:u16=0;
+var accepted:u16=0;
+var full_returns:u16=0;
+var bound_violations:u16=0;
+
+fn initialize() void {@assert(!initialized);initialized=true;}
+fn arm() void {
+ @assert(initialized and !armed);armed=true;
+ @set_fifo_read_length(fifo,capacity);
+ const out=@get_dsd(fabout_dsd,.{.output_queue=trace_oq,.extent=capacity});
+ @load_to_dsr(output_dsr,out,.{.async=true,.ut_id=@get_ut_id(microthread_id)});
+ // No source local task is required to drain the next marker.
+ @mov32(output_dsr,fifo,.{.async=true});
+}
+fn push(token:u32) bool {
+ @assert(initialized);
+ if(attempts>=maximum_attempts){bound_violations+=1;return false;}
+ attempts+=1;
+ @set_fifo_write_length(fifo,1);
+ // The default test_or_suspend action returns false on synchronous full.
+ // Never ignore this result or retry a failed marker silently.
+ const complete=@mov32(fifo,token);
+ if(!complete){full_returns+=1;return false;}
+ accepted+=1;return true;
+}
+comptime {@initialize_queue(trace_oq,.{.color=stream_color});}

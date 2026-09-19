@@ -2,6 +2,23 @@
 
 Only accepted results are listed below. Unresolved integration work and the remaining scope are tracked in [implementation status](STATUS.md).
 
+## Original layer 3 FIFO diagnostics — Accepted diagnostic, September 19, 2026 UTC
+
+A 16-PE SDK fixture qualified finite FIFO capacity/device-gated drain and packet
+coexistence. Full original layer 3 compilation produced 563 programs/33750 PEs,
+max 47920 bytes including 4096-byte stack. One physical 32 KB snapshot independently
+retained 20 READY heads, 549of 576 Q/K/V packet observations and 380 FIFO events;
+heads 17, 21, 22, 23 remain incomplete. Complete neural epochs: 0. All resources were
+released. The aliased retained-RMS audit remains invalid. See[report](LAYER3-FIFO-TRACE.md).
+
+## Full original MLP and full CPU reference — Accepted, September 18, 2026
+
+HW01 completed the full 5120→17408→5120 original MLP on physical WSE-3 for four
+inputs with independent numerical/retention/release checks. A separate full
+64-layer CPU reference generated four tokens with original cache restoration.
+Neither result is complete CSL model generation. See[MLP](HW01-FULL-MLP.md) and
+[reference](FULL-REFERENCE.md).
+
 ## HW00 physical fragment — Accepted, September 18, 2026
 
 Original layer3 resident 8PE MLP, three inputs, all125operations and112arrays passed independent numerical audit on physical WSE-3. New physical compilation/SRAM/placement, normal stop and device release were independently verified. Full MLP/model remain open. See [report](HW00-PHYSICAL.md).

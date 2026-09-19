@@ -1,0 +1,276 @@
+{
+  "date_utc": "2026-09-19",
+  "model": {
+    "repository": "Qwen/Qwen3.8-27B",
+    "revision": "1d4bf0f2ff6012fd82039f2fa52739d0dd7c60c0"
+  },
+  "scope": "Independently accepted physical diagnostic, not neural numerical acceptance",
+  "compile": {
+    "programs": 563,
+    "matrix_programs": 532,
+    "PEs": 33750,
+    "matrix_PEs": 30576,
+    "maximum_ordinary_plus_stack_bytes": 47920,
+    "stack_allowance_bytes": 4096,
+    "ceiling_bytes": 48128,
+    "dynamic_stack_measured": false,
+    "artifact_bytes": 10000512,
+    "artifact_sha256": "ccf1a39ad563b6e92ded907e23357e11ea74cf4cba9b3fbbef7c6f01738db975"
+  },
+  "physical": {
+    "copies": 394,
+    "launches": 3,
+    "journal_entries": 799,
+    "host_transfer_bytes": 1508898048,
+    "observation_bytes": 32000,
+    "observer_offset_seconds": 20.011086292099208,
+    "capture_seconds": 34.02529421262443,
+    "host_stage_seconds": 251.9990855799988,
+    "complete_neural_epochs": 0,
+    "phase": 1,
+    "ready_counts": [
+      1,
+      20,
+      0,
+      0,
+      0
+    ],
+    "ready_heads": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      18,
+      19,
+      20
+    ],
+    "packet_observations": 549,
+    "expected_QKV_packets": 576,
+    "trace_tokens": 380,
+    "all_original_records_coherent": true,
+    "all_original_fields_valid": true,
+    "all_trace_records_valid": true,
+    "all_padding_zero": true,
+    "normal_stop": true,
+    "independent_fresh_release_verified": true,
+    "billing_ledger_verified": false
+  },
+  "missing_heads": [
+    {
+      "head": 17,
+      "packets_entered": 21,
+      "collector_counts": {
+        "Q": [
+          64,
+          64,
+          64,
+          64
+        ],
+        "K": [
+          64,
+          64
+        ],
+        "V": [
+          64,
+          0
+        ]
+      }
+    },
+    {
+      "head": 21,
+      "packets_entered": 20,
+      "collector_counts": {
+        "Q": [
+          64,
+          64,
+          64,
+          64
+        ],
+        "K": [
+          23,
+          23
+        ],
+        "V": [
+          64,
+          64
+        ]
+      }
+    },
+    {
+      "head": 22,
+      "packets_entered": 15,
+      "collector_counts": {
+        "Q": [
+          64,
+          64,
+          64,
+          64
+        ],
+        "K": [
+          0,
+          0
+        ],
+        "V": [
+          46,
+          23
+        ]
+      }
+    },
+    {
+      "head": 23,
+      "packets_entered": 13,
+      "collector_counts": {
+        "Q": [
+          64,
+          64,
+          64,
+          64
+        ],
+        "K": [
+          0,
+          0
+        ],
+        "V": [
+          0,
+          23
+        ]
+      }
+    }
+  ],
+  "traces": [
+    {
+      "source": "K1",
+      "source_xy": [
+        71,
+        1
+      ],
+      "sink_xy": [
+        749,
+        1
+      ],
+      "count": 62,
+      "packet_ordinal": 18,
+      "last_event": "FANOUT_ADVANCE",
+      "fanout_advanced": 6,
+      "reached_maximum_count": true
+    },
+    {
+      "source": "Q12",
+      "source_xy": [
+        401,
+        2
+      ],
+      "sink_xy": [
+        749,
+        2
+      ],
+      "count": 12,
+      "packet_ordinal": 3,
+      "last_event": "FANOUT_ADVANCE",
+      "fanout_advanced": 1,
+      "reached_maximum_count": true
+    },
+    {
+      "source": "Q64",
+      "source_xy": [
+        401,
+        6
+      ],
+      "sink_xy": [
+        749,
+        6
+      ],
+      "count": 12,
+      "packet_ordinal": 3,
+      "last_event": "FANOUT_ADVANCE",
+      "fanout_advanced": 1,
+      "reached_maximum_count": true
+    },
+    {
+      "source": "head0",
+      "source_xy": [
+        16,
+        0
+      ],
+      "sink_xy": [
+        749,
+        24
+      ],
+      "count": 98,
+      "packet_ordinal": 24,
+      "last_event": "REARM",
+      "fanout_advanced": null,
+      "reached_maximum_count": false
+    },
+    {
+      "source": "head3",
+      "source_xy": [
+        19,
+        0
+      ],
+      "sink_xy": [
+        749,
+        21
+      ],
+      "count": 98,
+      "packet_ordinal": 24,
+      "last_event": "REARM",
+      "fanout_advanced": null,
+      "reached_maximum_count": false
+    },
+    {
+      "source": "head16",
+      "source_xy": [
+        32,
+        0
+      ],
+      "sink_xy": [
+        749,
+        8
+      ],
+      "count": 98,
+      "packet_ordinal": 24,
+      "last_event": "REARM",
+      "fanout_advanced": null,
+      "reached_maximum_count": false
+    }
+  ],
+  "limitations": [
+    "No complete layer or model numerical acceptance",
+    "The twenty valid heads report zero QK/attention runtime errors and finite summaries, not reference equality",
+    "Original retained RMS intermediate audit is invalid because its4KiB storage aliases later attention workspace",
+    "No globally simultaneous snapshot, source-counter read, later source-bound exclusion, permanent-stall proof, or causal FIFO-fix claim",
+    "Timings include initialization, transfers, fixed sampling delay and cleanup; not token latency or billing"
+  ],
+  "pins": {
+    "compile_manifest": "e2ef983bdebef352fce73bebc25f6b661ecfbc4a91d5372aeb6af44bc43a7ab7",
+    "runtime_manifest": "abab6b15b41dd71f515d4d30e74c2115f33169515ce132ad82ea815bfe6e5bbe",
+    "compile_acceptance": "8d233a005dbdd0025539f7cc80fce07f02b7c7ada60a0c5c0c1d8e1580e0e6e6",
+    "runtime_acceptance": "9afcc8aed517a582f4d084bc98dfefae8b1335c70a239288a22ecaaaad6f6d71",
+    "capture": "1bce601419d4c266588e5d72c5d670489ede83395661332e6ec8e84150a78fe0",
+    "journal": "41ddae6324fb9e773eb207e766477b9939536590ae466fe0b272de0e203658c8"
+  },
+  "retained_remote": {
+    "NPZ_files": 3,
+    "NPZ_bytes": 3272788,
+    "journal_bytes": 204677
+  },
+  "preserved_failures": [
+    "Fullcompile001 failed on three-argument range syntax before any ELF;002 changes only layout loop syntax and its scope note",
+    "Earlier full-head probes exceeded SRAM by944,448,and128bytes; shared noinline finish brought the unchanged head arithmetic within budget",
+    "SDK trace001 was revoked before execution because outside-ROI SDK callbacks invalidate host-triggered release assumptions"
+  ]
+}

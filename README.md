@@ -2,7 +2,7 @@
 
 **Building inference for open language models with handwritten Cerebras Systems Language (CSL), targeting sequential execution of three model stages on WSE-3.** We implement the numerical kernels, execution control and persistent model state, and use the Cerebras SDK to compile and run the device programs. The first target is **Qwen3.8-27B text inference**; the longer-term goal is a reusable SDK for related model architectures.
 
-**Working today:** the complete original-weight **5120 → 17408 → 5120 layer-3 MLP runs on physical WSE-3** with four inputs, resident weights, independent numerical checks and verified release. A separate **full 64-layer CPU reference** generates four tokens with original cache restoration and independently checked saved evidence. Earlier bounded SDK milestones cover normalization, recurrent state and selected attention heads. **Current integration:** the complete layer-3 graph compiles, and its synthetic Q/K/V fanout completes in the SDK simulator. A physical observer reached 15 of 24 attention READY heads; a complete layer-3 epoch remains open. **Current work:** diagnose that boundary, complete attention/recurrent layers and integrate three sequential stages with state checkpoints. **Still ahead:** complete 64-layer CSL text generation, device stage state restoration and measured token latency. The completed log records each result's exact scope.
+**Working today:** the complete original-weight **5120 → 17408 → 5120 layer-3 MLP runs on physical WSE-3** with four inputs, resident weights, independent numerical checks and verified release. A separate **full 64-layer CPU reference** generates four tokens with original cache restoration and independently checked saved evidence. Earlier bounded SDK milestones cover normalization, recurrent state and selected attention heads. **Current integration:** the complete layer-3 graph compiles, and its synthetic Q/K/V fanout completes in the SDK simulator. The latest physical FIFO diagnostic recorded 20 of 24 attention READY heads and 549 of 576 Q/K/V packet observations; complete neural epochs remain zero. **Current work:** complete K/V fanout to heads 17, 21, 22 and 23, establish the applicable numerical audit, and integrate three sequential stages with state checkpoints. **Still ahead:** complete 64-layer CSL text generation, device stage state restoration and measured token latency. The completed log records each result's exact scope.
 
 ## 1. Project design
 
@@ -60,6 +60,8 @@ Full attention/recurrent layers and the three-stage model remain integration wor
 | Path | Purpose |
 |---|---|
 | [`csl/kernels/`](csl/kernels) | Reusable handwritten CSL arithmetic kernels. |
+| [`examples/layer3_fifo_trace/`](examples/layer3_fifo_trace) | Accepted full-layout FIFO diagnostics, finite physical capture and independent raw-word decoders. |
+| [`examples/fifo_trace_sdk/`](examples/fifo_trace_sdk) | Qualified FIFO capacity, device-gated drain and packet/sideband coexistence fixture. |
 | [`examples/layer3/`](examples/layer3) | Original complete layer-3 source and placement; compiled fit is accepted, neural epoch completion remains open. |
 | [`examples/qkv_fanout/`](examples/qkv_fanout) | Accepted synthetic 112-root, 24-head fanout and offline core checks. |
 | [`examples/hw01/`](examples/hw01) | Full original layer-3 MLP device graph, physical capture and post-release numerical checks. |
@@ -80,6 +82,23 @@ Full attention/recurrent layers and the three-stage model remain integration wor
 ## 3. Completed development log — newest first
 
 Each **WP** or **HW** is a scoped development milestone. HW00/HW01 use physical WSE-3; earlier WP device results use the SDK simulator, and WP04 is a CPU/source audit. **BF16** means bfloat16 data, and **FP32** means 32-bit floating-point arithmetic. Reports contain numerical thresholds, failure history and reproduction details.
+
+### Layer-3 FIFO diagnostics · 20 attention heads ready on physical WSE-3 · September 19, 2026 (UTC)
+
+The full original layer compiled into 563 programs across 33,750 PEs. Actual
+storage plus a 4 KiB stack allowance stayed at or below 47,920 bytes under the
+48,128-byte limit. A separate 16-PE SDK fixture qualified FIFO capacities 64/128,
+finite device-gated histories and coexistence with the original packet transport.
+
+One physical run retained a single 32 KB idle snapshot, then stopped normally.
+Independent review checked all 50 read locations, 799 journal entries, 380 FIFO
+events and 549 of 576 Q/K/V packet observations. Twenty heads reported READY;
+heads 17, 21, 22 and 23 still lacked K/V data. Complete neural epochs remain zero,
+and the aliased RMS intermediate record prevents the old retained-RMS audit.
+The next source proposal uses receiver-confirmed device credits to advance that
+boundary; it is not yet implemented or qualified. All owned resources were released.
+
+[Source](examples/layer3_fifo_trace) · [SDK fixture](examples/fifo_trace_sdk) · [Report](docs/LAYER3-FIFO-TRACE.md) · [Evidence](evidence/layer3-fifo-trace.json)
 
 ### Layer-3 integration · Compiled graph and complete synthetic Q/K/V fanout · September 18, 2026
 
@@ -298,6 +317,6 @@ PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest discover -s tests -v
 
 For simulator runs, follow the milestone reports and the [development guide](docs/DEVELOPMENT.md). A separately installed Cerebras SDK 2.10.1 and Singularity are required. The repository includes source and sanitized evidence; SDK distributions, model weight payloads and private runtime artifacts are excluded.
 
-**In progress (WP16):** full-dimension resident spatial source integration, including54 gate/up input shards and182 down shards,32-column tails, FP32 trees and consumer/routing ownership. This is source work; the full MLP layer is not yet accepted. The current resident fragment and earlier partial profiles are separately qualified. WP09 remains unaccepted. Complete-model integration and physical three-system trials remain open. See [current status](docs/STATUS.md) and [milestone details](docs/MILESTONES.md).
+**In progress:** complete the original layer-3 Q/K/V fanout at heads 17, 21, 22 and 23, qualify its numerical evidence, and integrate attention/recurrent layers into three sequential stages with host state checkpoints. The full MLP and full 64-layer CPU reference are accepted; complete CSL layer/model generation remains open. WP09 remains unaccepted. See [current status](docs/STATUS.md) and [milestone details](docs/MILESTONES.md).
 
 MIT licensed; see [LICENSE](LICENSE). This is an independent research project, not an official Cerebras inference product.

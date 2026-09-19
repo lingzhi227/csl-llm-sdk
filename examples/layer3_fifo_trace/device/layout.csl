@@ -1,0 +1,163 @@
+// Complete original layer3 geometry; compilation/fit is not yet qualified.
+const memcpy=@import_module("<memcpy/get_params>",.{.width=750,.height=45});
+const sx:[7]u16=[7]u16{16,456,16,456,211,566,181};
+const sy:[7]u16=[7]u16{1,1,9,9,13,23,34};
+const first:[7]u16=[7]u16{13,5,13,4,9,3,3};
+const per:[7]u16=[7]u16{13,13,13,11,13,13,4};
+const groups:[7]u16=[7]u16{8,96,8,40,136,136,40};
+const columns:[7]u16=[7]u16{54,54,54,64,54,54,182};
+const ends:[45]u16=[45]u16{0,729,729,729,729,729,729,729,729,714,729,729,729,704,729,729,729,729,729,729,729,729,729,729,729,729,729,729,729,729,729,729,729,729,728,746,746,746,746,746,746,746,746,746,197};
+layout {
+ @set_rectangle(750,45);
+ for(@range(u16,45))|y|{for(@range(u16,750))|x|{
+  var role:u16=0;var ordinal:u16=0;var participants:u16=54;
+  if(y==0){
+   if(x==0){role=6;}else if(x==1){role=2;}else if(x==2){role=3;}
+   else if(x==748){role=7;}
+   else if(x>=16 and x<40){role=4;}else if(x>=40 and x<176){role=5;}
+  }
+  for(@range(u16,7))|r|{
+   if(y>=sy[r]){
+    const base:u16=if(y==sy[r]) sx[r] else 16;
+    if(x>=base){
+     const stride:u16=columns[r]+1;const slot:u16=(x-base)/stride;
+     const group:u16=if(y==sy[r]) slot else first[r]+(y-sy[r]-1)*per[r]+slot;
+     const limit:u16=if(y==sy[r]) first[r] else per[r];
+     if(slot<limit and group<groups[r] and (x-base)%stride<columns[r]){
+      role=1;ordinal=(x-base)%stride;participants=columns[r];
+     }
+    }
+   }
+  }
+  if(x==748 and y>=1 and y<=24){@comptime_assert(role==0);role=8;}
+  var trace_id:u16=0xffff;
+  const source_x=[6]u16{71,401,401,16,19,32};
+  const source_y=[6]u16{1,2,6,0,0,0};
+  const sink_y=[6]u16{1,2,6,24,21,8};
+  const maximum=[6]u16{62,12,12,106,106,106};
+  for(@range(u16,6))|i|{if(x==source_x[i] and y==source_y[i]){trace_id=i;}}
+  const source_trace=trace_id!=0xffff;
+  if(source_trace){@comptime_assert((trace_id<3 and role==1 and ordinal==0) or (trace_id>=3 and role==4));}
+  if(x==749 and y<=24){
+   @comptime_assert(role==0);role=10;
+   for(@range(u16,6))|i|{if(y==sink_y[i]){role=9;trace_id=i;}}
+  }
+  const any_trace=trace_id!=0xffff;
+  @set_tile_code(x,y,"layer3_pe.csl",.{.memcpy_params=memcpy.get_params(x),
+   .role=role,.ordinal=ordinal,.participants=participants,
+   .trace_head=source_trace and trace_id>=3,.trace_root=source_trace and trace_id<3,
+   .trace_max=if(any_trace) maximum[trace_id] else @as(u16,106),
+   .trace_source_id=if(any_trace) @as(u32,trace_id) else @as(u32,0),
+   .trace_source_x=if(any_trace) source_x[trace_id] else @as(u16,0),
+   .trace_source_y=if(any_trace) source_y[trace_id] else @as(u16,0),
+   .trace_sink_head=any_trace and trace_id>=3});
+  if(y==0 and x<=748){@set_color_config(x,y,@get_color(5),.{.routes=.{
+   .rx=if(x==0) .{RAMP} else .{WEST},
+   .tx=if(x==748) .{RAMP} else .{EAST}}});}
+  if(x==0){
+   @set_color_config(x,y,@get_color(4),.{.routes=.{
+    .rx=if(y==0) .{RAMP} else .{NORTH},
+    .tx=if(y==0) .{SOUTH} else if(y==44) .{EAST} else .{EAST,SOUTH}}});
+  }else if(y>0 and x<=ends[y]){
+   if(role==1){
+    @set_color_config(x,y,@get_color(4),.{.routes=.{.rx=.{WEST},
+     .tx=if(x==ends[y]) .{RAMP} else .{RAMP,EAST}},
+     .filter=.{.kind=.{.counter=true},.count_data=true,
+      .init_counter=(17472-ordinal*96)%17472,.max_counter=95,.limit1=17471}});
+   }else{@set_color_config(x,y,@get_color(4),.{.routes=.{.rx=.{WEST},.tx=.{EAST}}});}
+  }
+ }}
+ for(@range(u16,24))|h|{
+  const head_x:u16=16+h;const turn:u16=24-h;
+  for(@range(u16,25))|y|{if(y<=turn){
+   @set_color_config(head_x,y,@get_color(6),.{.routes=.{
+    .rx=if(y==0) .{RAMP} else .{NORTH},.tx=if(y==turn) .{EAST} else .{SOUTH}}});
+  }}
+  for(@range(u16,749))|x|{if(x>head_x){
+   @set_color_config(x,turn,@get_color(6),.{.routes=.{
+    .rx=.{WEST},.tx=if(x==748) .{RAMP} else .{EAST}}});
+  }}
+ }
+ for(@range(u16,750))|x|{if(x>=71){
+  @set_color_config(x,1,@get_color(7),.{.routes=.{
+   .rx=if(x==71) .{RAMP} else .{WEST},.tx=if(x==749) .{RAMP} else .{EAST}}});
+ }}
+ for(@range(u16,750))|x|{if(x>=401){
+  @set_color_config(x,2,@get_color(7),.{.routes=.{
+   .rx=if(x==401) .{RAMP} else .{WEST},.tx=if(x==749) .{RAMP} else .{EAST}}});
+ }}
+ for(@range(u16,750))|x|{if(x>=401){
+  @set_color_config(x,6,@get_color(7),.{.routes=.{
+   .rx=if(x==401) .{RAMP} else .{WEST},.tx=if(x==749) .{RAMP} else .{EAST}}});
+ }}
+ for(@range(u16,25))|y|{
+  @set_color_config(16,y,@get_color(8),.{.routes=.{
+   .rx=if(y==0) .{RAMP} else .{NORTH},.tx=if(y==24) .{EAST} else .{SOUTH}}});
+ }
+ for(@range(u16,750))|x|{if(x>=17){
+  @set_color_config(x,24,@get_color(8),.{.routes=.{
+   .rx=.{WEST},.tx=if(x==749) .{RAMP} else .{EAST}}});
+ }}
+ for(@range(u16,22))|y|{
+  @set_color_config(19,y,@get_color(8),.{.routes=.{
+   .rx=if(y==0) .{RAMP} else .{NORTH},.tx=if(y==21) .{EAST} else .{SOUTH}}});
+ }
+ for(@range(u16,750))|x|{if(x>=20){
+  @set_color_config(x,21,@get_color(8),.{.routes=.{
+   .rx=.{WEST},.tx=if(x==749) .{RAMP} else .{EAST}}});
+ }}
+ for(@range(u16,9))|y|{
+  @set_color_config(32,y,@get_color(8),.{.routes=.{
+   .rx=if(y==0) .{RAMP} else .{NORTH},.tx=if(y==8) .{EAST} else .{SOUTH}}});
+ }
+ for(@range(u16,750))|x|{if(x>=33){
+  @set_color_config(x,8,@get_color(8),.{.routes=.{
+   .rx=.{WEST},.tx=if(x==749) .{RAMP} else .{EAST}}});
+ }}
+ @export_name("trace_status",[*]u32,false);
+ @export_name("observer",[*]u32,false);
+ @export_name("weights",[*]u32,false);
+ @export_name("descriptor",[*]u16,false);
+ @export_name("route",[*]u16,false);
+ @export_name("state",[*]u32,false);
+ @export_name("hidden",[*]u16,false);
+ @export_name("norm_gains",[*]u16,false);
+ @export_name("qk_gains",[*]u16,false);
+ @export_name("frequencies",[*]f32,false);
+ @export_name("cache",[*]u16,false);
+ @export_name("input",[*]f32,false);
+ @export_name("active_input",[*]f32,false);
+ @export_name("partial",[*]f32,false);
+ @export_name("result",[*]f32,false);
+ @export_name("norm_saved",[*]u16,false);
+ @export_name("norm_stats",[*]f32,false);
+ @export_name("qk_input",[*]u16,false);
+ @export_name("qk_output",[*]u16,false);
+ @export_name("qk_normalized",[*]u16,false);
+ @export_name("qk_stats",[*]f32,false);
+ @export_name("qk_rms_stages",[*]f32,false);
+ @export_name("qk_trig",[*]f32,false);
+ @export_name("qk_trig_casts",[*]u16,false);
+ @export_name("qk_rotary_stages",[*]f32,false);
+ @export_name("qk_product_casts",[*]u16,false);
+ @export_name("attention_input",[*]u16,false);
+ @export_name("attention_scores",[*]f32,false);
+ @export_name("attention_score_casts",[*]u16,false);
+ @export_name("attention_stats",[*]f32,false);
+ @export_name("attention_stages",[*]f32,false);
+ @export_name("attention_casts",[*]u16,false);
+ @export_name("mlp_gate",[*]u16,false);
+ @export_name("mlp_up",[*]u16,false);
+ @export_name("mlp_product",[*]u16,false);
+ @export_name("mlp_silu",[*]u16,false);
+ @export_name("mlp_exponential",[*]f32,false);
+ @export_name("mlp_sigmoid",[*]f32,false);
+ @export_name("mlp_activation",[*]f32,false);
+ @export_name("mlp_product_fp32",[*]f32,false);
+ @export_name("lane_counters",[*]u32,false);
+ @export_name("frame_counters",[*]u32,false);
+ @export_name("rounded",[*]u16,false);
+ @export_name("initialize",fn()void);
+ @export_name("prepare",fn()void);
+ @export_name("compute",fn()void);
+}

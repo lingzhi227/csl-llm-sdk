@@ -1,0 +1,380 @@
+{
+  "status": "source_only_full_compile_pending",
+  "baseline": "layer3-dsd-header-compile-001",
+  "baseline_manifest_sha256": "e055ca88e0ab374e8e9049db97243d7ec2e5376be4132654bc17b09d9bf92e93",
+  "sources": [
+    {
+      "identity": 0,
+      "name": "K1",
+      "source": [
+        71,
+        1
+      ],
+      "sink": [
+        749,
+        1
+      ],
+      "color": 7,
+      "OQ": 5,
+      "UT": 5,
+      "fabric_dest": 7,
+      "FIFO_DSR": 8,
+      "FIFO_XDSR": 2,
+      "capacity": 64,
+      "maximum": 62,
+      "route_PEs": 679,
+      "role": "root",
+      "kind": 2,
+      "group": 1,
+      "fanout": 6,
+      "packet_maximum": 18
+    },
+    {
+      "identity": 1,
+      "name": "Q12",
+      "source": [
+        401,
+        2
+      ],
+      "sink": [
+        749,
+        2
+      ],
+      "color": 7,
+      "OQ": 5,
+      "UT": 5,
+      "fabric_dest": 7,
+      "FIFO_DSR": 8,
+      "FIFO_XDSR": 2,
+      "capacity": 64,
+      "maximum": 12,
+      "route_PEs": 349,
+      "role": "root",
+      "kind": 1,
+      "group": 12,
+      "fanout": 1,
+      "packet_maximum": 3
+    },
+    {
+      "identity": 2,
+      "name": "Q64",
+      "source": [
+        401,
+        6
+      ],
+      "sink": [
+        749,
+        6
+      ],
+      "color": 7,
+      "OQ": 5,
+      "UT": 5,
+      "fabric_dest": 7,
+      "FIFO_DSR": 8,
+      "FIFO_XDSR": 2,
+      "capacity": 64,
+      "maximum": 12,
+      "route_PEs": 349,
+      "role": "root",
+      "kind": 1,
+      "group": 64,
+      "fanout": 1,
+      "packet_maximum": 3
+    },
+    {
+      "identity": 3,
+      "name": "head0",
+      "source": [
+        16,
+        0
+      ],
+      "sink": [
+        749,
+        24
+      ],
+      "color": 8,
+      "OQ": 3,
+      "UT": 3,
+      "fabric_dest": 4,
+      "FIFO_DSR": 8,
+      "FIFO_XDSR": 2,
+      "capacity": 128,
+      "maximum": 106,
+      "route_PEs": 758,
+      "role": "head",
+      "head": 0,
+      "packet_maximum": 26
+    },
+    {
+      "identity": 4,
+      "name": "head3",
+      "source": [
+        19,
+        0
+      ],
+      "sink": [
+        749,
+        21
+      ],
+      "color": 8,
+      "OQ": 3,
+      "UT": 3,
+      "fabric_dest": 4,
+      "FIFO_DSR": 8,
+      "FIFO_XDSR": 2,
+      "capacity": 128,
+      "maximum": 106,
+      "route_PEs": 752,
+      "role": "head",
+      "head": 3,
+      "packet_maximum": 26
+    },
+    {
+      "identity": 5,
+      "name": "head16",
+      "source": [
+        32,
+        0
+      ],
+      "sink": [
+        749,
+        8
+      ],
+      "color": 8,
+      "OQ": 3,
+      "UT": 3,
+      "fabric_dest": 4,
+      "FIFO_DSR": 8,
+      "FIFO_XDSR": 2,
+      "capacity": 128,
+      "maximum": 106,
+      "route_PEs": 726,
+      "role": "head",
+      "head": 16,
+      "packet_maximum": 26
+    }
+  ],
+  "unchanged_CSL": {
+    "attention_kernel.csl": "7a0331e973fd62a8e70d6eed5de4ae7699874708dd8183b48a85e920ea39f888",
+    "attention_owner8.csl": "2c957ab1fe3b7d406746aa2932817ba5e615ec7b3fa38b78f129ce28ac0ed327",
+    "exp_kernel.csl": "1dff6a4550d90bf788f4dd7f167a7240ed6742aefd25e3f7772a3bff58f583f7",
+    "frame_origin.csl": "fef4d3836b27344c4683f923ab3b8ed278996b580de5a9f27374c2770a484c89",
+    "gemv_kernel.csl": "3e92175efe12b28065bb77934c54136db3c9287c68c81877781a0e527354304c",
+    "input.csl": "e9b289a13f821df69a08e58e9bf6847f4b542d94d617c60d8df143413d2a61af",
+    "line.csl": "21f8628d937c6e481c24a45747895fb27caa1bd2a6b18d7338e138d492a4a529",
+    "matrix_lane.csl": "58e650bbebf49cd63118b4a281ad1c7affc7ea02521752be634792c687c15eb3",
+    "mlp_owner.csl": "41f8280776c3f0b4002850919dc1e5d17b08dc7572c9ac0a605c73897f6ed8b5",
+    "nonlinear_kernel.csl": "65313bf5b798ac199f76ddc3fddbbf3de438f9edb0dbd5642763b67bd190a6b0",
+    "norm_owner.csl": "81426362c7911ae4245ce82ad72ec4e21ea5f9b6da1a270c9449e5501c6c106d",
+    "qk_kernel.csl": "0670a82b1ccff5188dd964572fd99b56a0151a2db687518f87890f0d2996edb0",
+    "rms_retained.csl": "2df2017a0f38ec65f8f05ad98f12f55162ed996d43ea3388241d975e3052298b",
+    "row_packet.csl": "a30bfaa6089c261ec971234ac7fdd9bb761d4f3ac1a91da64147a89cdc1b80ba",
+    "trig_kernel.csl": "1bef20bacbb075df00559e3b5b77c56a22066681a9a0db49ee96bc384a023b15",
+    "vector_collect.csl": "0fc9c90dbfae6851d5c77d68e03deff173bd08d1ec2c5f69c506d547ac0b0b94"
+  },
+  "changed_CSL": [
+    "head_observer.csl",
+    "layer3_pe.csl",
+    "layout.csl",
+    "observer.csl",
+    "packets.csl"
+  ],
+  "added_CSL": [
+    "fifo_trace.csl",
+    "trace_sink.csl"
+  ],
+  "acceptances": {
+    "FIFO-ROOT-COMPILE-004-ACCEPTANCE.json": {
+      "path": "coordination/qwen38-hardware/FIFO-ROOT-COMPILE-004-ACCEPTANCE.json",
+      "sha256": "a3bf549b0ae94a5583f8ab88f0c1ff9f3858b326739b8ce62f85133270b2e97b"
+    },
+    "FIFO-TRACE-SDK-002-ACCEPTANCE.json": {
+      "path": "coordination/qwen38-hardware/FIFO-TRACE-SDK-002-ACCEPTANCE.json",
+      "sha256": "b9202be1f3b2d385aa2cb32c8d62d171d03997eea0bc9d1a47b8853b18df9511"
+    },
+    "FIFO-HEAD-COMPILE-004-ACCEPTANCE.json": {
+      "path": "coordination/qwen38-hardware/FIFO-HEAD-COMPILE-004-ACCEPTANCE.json",
+      "sha256": "f78877cc409c74e445d3a18816abb84ff9413e0e90a87cd6a27bbb26dc4af286"
+    }
+  },
+  "FIFO_sha256": "b2b424559c7df1b6f939d50e268cde160a39b2655dcce4c568057404484bdbe8",
+  "trace_sink_sha256": "aa8873c6e905e91c75254ad685af108fe94a81b600ac3aa28f56a6518431bf22",
+  "head_complete_hook_qualification": "fifo-head-compile-004",
+  "root_complete_hooks_actual_fit_pending": true,
+  "event_encoding": {
+    "event": [
+      31,
+      28
+    ],
+    "emission_ordinal": [
+      27,
+      20
+    ],
+    "packet_ordinal": [
+      19,
+      14
+    ],
+    "detail": [
+      13,
+      8
+    ],
+    "flags": [
+      7,
+      0
+    ]
+  },
+  "flags": {
+    "sending": 1,
+    "receiving": 2,
+    "header_waiting": 4,
+    "reserved_mask": 248
+  },
+  "root_events": {
+    "1": {
+      "name": "COMPUTE",
+      "point": "after command_waiting=true, before original observe2",
+      "ordinal": "current trace_tx_packet",
+      "detail": 0
+    },
+    "2": {
+      "name": "OUTPUT",
+      "point": "after original row ownership fields set, before pump",
+      "ordinal": "current trace_tx_packet (zero for original single-position output)",
+      "detail": 0
+    },
+    "3": {
+      "name": "SDK_ENTER",
+      "point": "after trace_tx_packet increment, immediately before sole SDK send call",
+      "ordinal": "new trace_tx_packet",
+      "detail": "pending_length"
+    },
+    "4": {
+      "name": "SDK_RETURN",
+      "point": "immediately after same SDK call returns",
+      "ordinal": "current trace_tx_packet",
+      "detail": "pending_length"
+    },
+    "5": {
+      "name": "SOURCE_COMPLETE",
+      "point": "after sent task lease assertion, before sending=false and application on_sent",
+      "ordinal": "current trace_tx_packet",
+      "detail": "pending_length",
+      "sending_flag": true
+    },
+    "6": {
+      "name": "FANOUT_ADVANCE",
+      "point": "after fanout_index increment, before lane release and next pump",
+      "ordinal": "current trace_tx_packet",
+      "detail": "fanout_index"
+    }
+  },
+  "head_events": {
+    "1": {
+      "name": "COMPUTE",
+      "detail": 0
+    },
+    "7": {
+      "name": "INITIAL_HEADER_ARM",
+      "detail": 0
+    },
+    "8": {
+      "name": "PAYLOAD_ARM",
+      "detail": "receive_length"
+    },
+    "9": {
+      "name": "CALLBACK_ENTER",
+      "detail": "receive_length"
+    },
+    "10": {
+      "name": "EVENT4_RETURN",
+      "detail": "receive_length",
+      "point": "after original synchronous observe4 returned, while application RX lease remains held"
+    },
+    "11": {
+      "name": "REARM",
+      "detail": 0,
+      "point": "after application callback returns, receiving=false and next header issued"
+    }
+  },
+  "root_packet_lengths": [
+    31,
+    31,
+    26
+  ],
+  "head_packet_lengths": {
+    "QKV": [
+      31,
+      31,
+      26
+    ],
+    "REQUEST": 8
+  },
+  "COMPUTE_may_interleave": true,
+  "emission_ordinal_one_based": true,
+  "global_simultaneity": false,
+  "max_root_tokens": 86,
+  "max_head_tokens": 318,
+  "max_all_trace_tokens": 404,
+  "max_trace_stream_bytes": 1616,
+  "sink_record": {
+    "words": 160,
+    "metadata_words": 32,
+    "raw_words": 128,
+    "sequence_endpoints": [
+      0,
+      31
+    ],
+    "magic": 1179207217,
+    "version": 1,
+    "fields": {
+      "1": "magic",
+      "2": "version",
+      "3": "source_id",
+      "4": "source_x",
+      "5": "source_y",
+      "6": "maximum_tokens",
+      "7": "count",
+      "8": "errors"
+    },
+    "reserved_zero": [
+      9,
+      30
+    ],
+    "raw_start": 32,
+    "padding_zero": true,
+    "max_sequence": 256
+  },
+  "host_read": {
+    "box": [
+      748,
+      0,
+      2,
+      25
+    ],
+    "count": 160,
+    "PEs": 50,
+    "words": 8000,
+    "bytes": 32000,
+    "column748": "25 original32-word records plus128 zero padding each",
+    "column749": "6 raw trace records and19 all-zero160-word arrays",
+    "busy_source_read": false
+  },
+  "observed_source_counter_scope": "sink histories do not expose busy-source attempts/accepted/full/bound counters; a maximum-length sink prefix cannot exclude a later source bound violation",
+  "original_sideband_event4_retained": true,
+  "original_math_retained": true,
+  "original_cache_bytes": 8192,
+  "diagnostic_RMS_alias_bytes": 4096,
+  "original_QK_record_retention": false,
+  "full_math_acceptance": false,
+  "SDK_output_stall_qualified": false,
+  "CPU_stalled_throughout_drain_qualified": false,
+  "application_ELF_cap": 640,
+  "source_partition_estimate": 563,
+  "all_original_resource_limits_preserved": true,
+  "compile_only": true,
+  "runtime_created": false,
+  "historical_provenance_only": [
+    "head-sideband-ELF-partition-estimate.json",
+    "head-sideband-route-proof.json"
+  ]
+}

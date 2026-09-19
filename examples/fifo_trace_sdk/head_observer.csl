@@ -1,0 +1,56 @@
+// Independent one-source path. Synchronous source ownership, bounded output.
+param sender:bool;
+param stream_color:color=@get_color(6);
+param fill:fn([*]u32)void;
+param on_published:fn()void=published_noop;
+fn published_noop() void {}
+const queue_out=@get_output_queue(5);const queue_in=@get_input_queue(5);
+const dest=@get_dsr(dsr_dest,7);const source=@get_dsr(dsr_src1,7);
+const completion=@get_local_task_id(14);
+var buffer=@zeros([32]u32);
+var snapshot=@zeros([if(sender) 1 else 32]u32);
+var active:bool=false;var initialized:bool=false;
+var sequence:u32=0;var protocol_error:bool=false;
+fn init() void {
+ @assert(!initialized);initialized=true;
+ if(comptime !sender){arm();}
+}
+fn arm() void {
+ @assert(!sender and initialized and !active);active=true;
+ const input=@get_dsd(fabin_dsd,.{.input_queue=queue_in,.extent=32});
+ const mem=@get_dsd(mem1d_dsd,.{.base_address=&buffer,.extent=32});
+ @load_to_dsr(dest,mem);
+ @load_to_dsr(source,input,.{.async=true,.activate=completion,.ut_id=@get_ut_id(5)});
+ @mov32(dest,source,.{.async=true});
+}
+fn changed() void {
+ @assert(sender and initialized);
+ // Record64 is an explicit terminal overflow marker; no later call sends.
+ // The admitted original head protocol has at most61 normal notifications.
+ if(sequence>=64){return;}
+ sequence+=1;fill(&buffer);buffer[0]=2*sequence;buffer[31]=2*sequence;
+ if(sequence==64){buffer[30]|=0x80000000;}
+ const mem=@get_dsd(mem1d_dsd,.{.base_address=&buffer,.extent=32});
+ const out=@get_dsd(fabout_dsd,.{.output_queue=queue_out,.extent=32});
+ @load_to_dsr(dest,out);@load_to_dsr(source,mem);@mov32(dest,source);
+}
+task complete() void {
+ @assert(initialized and active);active=false;
+ if(comptime !sender){
+  if(buffer[0]!=buffer[31] or buffer[0]!=2*(sequence+1) or sequence>=64){protocol_error=true;}
+  sequence+=1;
+  const first=@get_dsd(mem1d_dsd,.{.base_address=&snapshot,.extent=1});
+  const last=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]u32,&snapshot[31]),.extent=1});
+  const body_in=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]u32,&buffer[1]),.extent=30});
+  const body_out=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]u32,&snapshot[1]),.extent=30});
+  @mov32(first,2*sequence-1);@mov32(last,2*sequence-1);
+  @mov32(body_out,body_in);
+  if(protocol_error){snapshot[30]|=0x40000000;}
+  @mov32(last,2*sequence);@mov32(first,2*sequence);
+  arm();on_published();
+ }
+}
+comptime {
+ if(sender){@initialize_queue(queue_out,.{.color=stream_color});}
+ else{@initialize_queue(queue_in,.{.color=stream_color});@bind_local_task(complete,completion);}
+}

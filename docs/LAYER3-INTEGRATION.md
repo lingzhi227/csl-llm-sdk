@@ -58,14 +58,15 @@ capture were preserved. A new runtime with corrected format checking and a later
 sampling time supplied the complete result; the earlier capture was not retried
 or relabeled as complete.
 
-## Next integration work
+## Subsequent accepted diagnostic and next work
 
-The next diagnostic observes the first missing original head directly, including
-its collector counts, Q/K normalization and rotary stages, attention completion,
-error returns and READY transmission. Only accepted source and evidence are
-published here; that new diagnostic is still under development. Full-layer
-numerical checks, longer contexts, recurrent-layer integration, stage state
-restoration and complete 64-layer CSL generation remain open.
+The later[FIFO diagnostic](LAYER3-FIFO-TRACE.md) compiled563 programs and retained
+20of24 READY heads,549of576 Q/K/V packet observations and380 trace events in one
+physical idle snapshot. This report's earlier15-head observation remains its
+historical result. The new boundary is missing K/V data at heads17,21,22,23.
+No complete original layer3 numerical epoch is accepted. Device-only sender
+credits and an applicable aliased-RMS evidence gate are source proposals.
+Full layers,recurrent integration,stage restoration and CSL generation remain open.
 
-[Compact result record](../evidence/layer3-integration.json) ·
+[Earlier result record](../evidence/layer3-integration.json) ·
 [Offline debugging notes](QKV-CORE-DEBUGGING.md)

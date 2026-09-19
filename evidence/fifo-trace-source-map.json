@@ -1,0 +1,484 @@
+{
+  "sources": {
+    "examples/layer3_fifo_trace/device/attention_kernel.csl": {
+      "source": "hardware/layer3-fifo-trace-compile-002/attention_kernel.csl",
+      "source_sha256": "7a0331e973fd62a8e70d6eed5de4ae7699874708dd8183b48a85e920ea39f888",
+      "published_sha256": "7a0331e973fd62a8e70d6eed5de4ae7699874708dd8183b48a85e920ea39f888",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/layer3_fifo_trace/device/attention_owner8.csl": {
+      "source": "hardware/layer3-fifo-trace-compile-002/attention_owner8.csl",
+      "source_sha256": "2c957ab1fe3b7d406746aa2932817ba5e615ec7b3fa38b78f129ce28ac0ed327",
+      "published_sha256": "2c957ab1fe3b7d406746aa2932817ba5e615ec7b3fa38b78f129ce28ac0ed327",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/layer3_fifo_trace/device/compile_hw.py": {
+      "source": "hardware/layer3-fifo-trace-compile-002/compile_hw.py",
+      "source_sha256": "5e01f9d11998cbae136360b24796fffcffa9a8e64e5efe8ff86600e8e69e4ce9",
+      "published_sha256": "a009ef63ce7dbfb0b86b4872c089c5d91f185a5e5739feadb3445132fa7bf0e7",
+      "byte_identical": false,
+      "portability_edit": "SDK inspection interpreter selected by CSL_INSPECT_PYTHON; default cs_python. No device-code edit or new run."
+    },
+    "examples/layer3_fifo_trace/device/core/qwen38/__init__.py": {
+      "source": "hardware/layer3-fifo-trace-compile-002/core/qwen38/__init__.py",
+      "source_sha256": "92977aa9088ee68919bc3eff6b0c1a1e2f5162f15b7b0744ca75d02e63e3a01b",
+      "published_sha256": "92977aa9088ee68919bc3eff6b0c1a1e2f5162f15b7b0744ca75d02e63e3a01b",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/layer3_fifo_trace/device/core/qwen38/elf_inventory.py": {
+      "source": "hardware/layer3-fifo-trace-compile-002/core/qwen38/elf_inventory.py",
+      "source_sha256": "7cf549358cfd409d6896fffec1611fa065104a5b2efb2855649e37218328b779",
+      "published_sha256": "7cf549358cfd409d6896fffec1611fa065104a5b2efb2855649e37218328b779",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/layer3_fifo_trace/device/elf_symbols.py": {
+      "source": "hardware/layer3-fifo-trace-compile-002/elf_symbols.py",
+      "source_sha256": "3c0e39170507d31479b81813f40cbe37ce66959d820cf48dec7a9a2a195da4b6",
+      "published_sha256": "3c0e39170507d31479b81813f40cbe37ce66959d820cf48dec7a9a2a195da4b6",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/layer3_fifo_trace/device/exp_kernel.csl": {
+      "source": "hardware/layer3-fifo-trace-compile-002/exp_kernel.csl",
+      "source_sha256": "1dff6a4550d90bf788f4dd7f167a7240ed6742aefd25e3f7772a3bff58f583f7",
+      "published_sha256": "1dff6a4550d90bf788f4dd7f167a7240ed6742aefd25e3f7772a3bff58f583f7",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/layer3_fifo_trace/device/fifo-trace-contract.json": {
+      "source": "hardware/layer3-fifo-trace-compile-002/fifo-trace-contract.json",
+      "source_sha256": "b52ef35d473b1fc3dd6b61d02042d653ac4ca213e2588f147d716266eb21fcf5",
+      "published_sha256": "b52ef35d473b1fc3dd6b61d02042d653ac4ca213e2588f147d716266eb21fcf5",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/layer3_fifo_trace/device/fifo_trace.csl": {
+      "source": "hardware/layer3-fifo-trace-compile-002/fifo_trace.csl",
+      "source_sha256": "b2b424559c7df1b6f939d50e268cde160a39b2655dcce4c568057404484bdbe8",
+      "published_sha256": "b2b424559c7df1b6f939d50e268cde160a39b2655dcce4c568057404484bdbe8",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/layer3_fifo_trace/device/frame_origin.csl": {
+      "source": "hardware/layer3-fifo-trace-compile-002/frame_origin.csl",
+      "source_sha256": "fef4d3836b27344c4683f923ab3b8ed278996b580de5a9f27374c2770a484c89",
+      "published_sha256": "fef4d3836b27344c4683f923ab3b8ed278996b580de5a9f27374c2770a484c89",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/layer3_fifo_trace/device/gemv_kernel.csl": {
+      "source": "hardware/layer3-fifo-trace-compile-002/gemv_kernel.csl",
+      "source_sha256": "3e92175efe12b28065bb77934c54136db3c9287c68c81877781a0e527354304c",
+      "published_sha256": "3e92175efe12b28065bb77934c54136db3c9287c68c81877781a0e527354304c",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/layer3_fifo_trace/device/head_observer.csl": {
+      "source": "hardware/layer3-fifo-trace-compile-002/head_observer.csl",
+      "source_sha256": "220cdd6c510246075799b0a7ddd110db23d8d2ef7c41d197b7c3c1a90f55b453",
+      "published_sha256": "220cdd6c510246075799b0a7ddd110db23d8d2ef7c41d197b7c3c1a90f55b453",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/layer3_fifo_trace/device/hw00/__init__.py": {
+      "source": "hardware/layer3-fifo-trace-compile-002/hw00/__init__.py",
+      "source_sha256": "db47c5e2c4bec34d6a920d89c08b2fa813a07ec8a619166eda349991267396b4",
+      "published_sha256": "db47c5e2c4bec34d6a920d89c08b2fa813a07ec8a619166eda349991267396b4",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/layer3_fifo_trace/device/hw00/job_capture.py": {
+      "source": "hardware/layer3-fifo-trace-compile-002/hw00/job_capture.py",
+      "source_sha256": "753b2f091de6a7181e8eeb9b9d350d7c647071e427d3acad6c4ef332000367f2",
+      "published_sha256": "753b2f091de6a7181e8eeb9b9d350d7c647071e427d3acad6c4ef332000367f2",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/layer3_fifo_trace/device/hw00/store.py": {
+      "source": "hardware/layer3-fifo-trace-compile-002/hw00/store.py",
+      "source_sha256": "d499e04e756091cb6ae690cbbc2b2932bb4323dd4e2a874436821cf00d7b5dce",
+      "published_sha256": "d499e04e756091cb6ae690cbbc2b2932bb4323dd4e2a874436821cf00d7b5dce",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/layer3_fifo_trace/device/hw00/watchdog.py": {
+      "source": "hardware/layer3-fifo-trace-compile-002/hw00/watchdog.py",
+      "source_sha256": "8ad3a853d4dfacd1ed8bd289cee8ca63448d9842b2dd3a87834d79f175686940",
+      "published_sha256": "8ad3a853d4dfacd1ed8bd289cee8ca63448d9842b2dd3a87834d79f175686940",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/layer3_fifo_trace/device/input.csl": {
+      "source": "hardware/layer3-fifo-trace-compile-002/input.csl",
+      "source_sha256": "e9b289a13f821df69a08e58e9bf6847f4b542d94d617c60d8df143413d2a61af",
+      "published_sha256": "e9b289a13f821df69a08e58e9bf6847f4b542d94d617c60d8df143413d2a61af",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/layer3_fifo_trace/device/inspect_full_elf.py": {
+      "source": "hardware/layer3-fifo-trace-compile-002/inspect_full_elf.py",
+      "source_sha256": "4fc4d3af4c4e987523e34d093d0ce8a359fcc6aba048d772c1d1e9faff330094",
+      "published_sha256": "4fc4d3af4c4e987523e34d093d0ce8a359fcc6aba048d772c1d1e9faff330094",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/layer3_fifo_trace/device/layer3-plan.json": {
+      "source": "hardware/layer3-fifo-trace-compile-002/layer3-plan.json",
+      "source_sha256": "016b3641a46df90c3db5bd50659e73914fff0cbd60a9fe9a0559f19717138487",
+      "published_sha256": "016b3641a46df90c3db5bd50659e73914fff0cbd60a9fe9a0559f19717138487",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/layer3_fifo_trace/device/layer3_pe.csl": {
+      "source": "hardware/layer3-fifo-trace-compile-002/layer3_pe.csl",
+      "source_sha256": "50a0a3a90e22d9934859e2a76ee08ba4748ecf1a19836cdc492c0ac309cf706c",
+      "published_sha256": "50a0a3a90e22d9934859e2a76ee08ba4748ecf1a19836cdc492c0ac309cf706c",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/layer3_fifo_trace/device/layout.csl": {
+      "source": "hardware/layer3-fifo-trace-compile-002/layout.csl",
+      "source_sha256": "0310ad24ddbc3343aaebd990ba6fbd612bb2bacdf780df749b883d5f239ee377",
+      "published_sha256": "0310ad24ddbc3343aaebd990ba6fbd612bb2bacdf780df749b883d5f239ee377",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/layer3_fifo_trace/device/layout.json": {
+      "source": "hardware/layer3-fifo-trace-compile-002/layout.json",
+      "source_sha256": "27d964c009ecebfd4571436d1d793a1166495f2a355fac9401b6368320f1ad92",
+      "published_sha256": "27d964c009ecebfd4571436d1d793a1166495f2a355fac9401b6368320f1ad92",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/layer3_fifo_trace/device/line.csl": {
+      "source": "hardware/layer3-fifo-trace-compile-002/line.csl",
+      "source_sha256": "21f8628d937c6e481c24a45747895fb27caa1bd2a6b18d7338e138d492a4a529",
+      "published_sha256": "21f8628d937c6e481c24a45747895fb27caa1bd2a6b18d7338e138d492a4a529",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/layer3_fifo_trace/device/matrix_lane.csl": {
+      "source": "hardware/layer3-fifo-trace-compile-002/matrix_lane.csl",
+      "source_sha256": "58e650bbebf49cd63118b4a281ad1c7affc7ea02521752be634792c687c15eb3",
+      "published_sha256": "58e650bbebf49cd63118b4a281ad1c7affc7ea02521752be634792c687c15eb3",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/layer3_fifo_trace/device/mlp_owner.csl": {
+      "source": "hardware/layer3-fifo-trace-compile-002/mlp_owner.csl",
+      "source_sha256": "41f8280776c3f0b4002850919dc1e5d17b08dc7572c9ac0a605c73897f6ed8b5",
+      "published_sha256": "41f8280776c3f0b4002850919dc1e5d17b08dc7572c9ac0a605c73897f6ed8b5",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/layer3_fifo_trace/device/nonlinear_kernel.csl": {
+      "source": "hardware/layer3-fifo-trace-compile-002/nonlinear_kernel.csl",
+      "source_sha256": "65313bf5b798ac199f76ddc3fddbbf3de438f9edb0dbd5642763b67bd190a6b0",
+      "published_sha256": "65313bf5b798ac199f76ddc3fddbbf3de438f9edb0dbd5642763b67bd190a6b0",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/layer3_fifo_trace/device/norm_owner.csl": {
+      "source": "hardware/layer3-fifo-trace-compile-002/norm_owner.csl",
+      "source_sha256": "81426362c7911ae4245ce82ad72ec4e21ea5f9b6da1a270c9449e5501c6c106d",
+      "published_sha256": "81426362c7911ae4245ce82ad72ec4e21ea5f9b6da1a270c9449e5501c6c106d",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/layer3_fifo_trace/device/observer.csl": {
+      "source": "hardware/layer3-fifo-trace-compile-002/observer.csl",
+      "source_sha256": "9ea75a76263700344a3a67ad2f04409e87ecb7055c7b60f043231fbd5351da02",
+      "published_sha256": "9ea75a76263700344a3a67ad2f04409e87ecb7055c7b60f043231fbd5351da02",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/layer3_fifo_trace/device/packets.csl": {
+      "source": "hardware/layer3-fifo-trace-compile-002/packets.csl",
+      "source_sha256": "426423f6237da859f22fab23064f71f0e167a798eaf6e573ec3baef28cf8a65d",
+      "published_sha256": "426423f6237da859f22fab23064f71f0e167a798eaf6e573ec3baef28cf8a65d",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/layer3_fifo_trace/device/qk_kernel.csl": {
+      "source": "hardware/layer3-fifo-trace-compile-002/qk_kernel.csl",
+      "source_sha256": "0670a82b1ccff5188dd964572fd99b56a0151a2db687518f87890f0d2996edb0",
+      "published_sha256": "0670a82b1ccff5188dd964572fd99b56a0151a2db687518f87890f0d2996edb0",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/layer3_fifo_trace/device/rms_retained.csl": {
+      "source": "hardware/layer3-fifo-trace-compile-002/rms_retained.csl",
+      "source_sha256": "2df2017a0f38ec65f8f05ad98f12f55162ed996d43ea3388241d975e3052298b",
+      "published_sha256": "2df2017a0f38ec65f8f05ad98f12f55162ed996d43ea3388241d975e3052298b",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/layer3_fifo_trace/device/row_packet.csl": {
+      "source": "hardware/layer3-fifo-trace-compile-002/row_packet.csl",
+      "source_sha256": "a30bfaa6089c261ec971234ac7fdd9bb761d4f3ac1a91da64147a89cdc1b80ba",
+      "published_sha256": "a30bfaa6089c261ec971234ac7fdd9bb761d4f3ac1a91da64147a89cdc1b80ba",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/layer3_fifo_trace/device/source_gate.py": {
+      "source": "hardware/layer3-fifo-trace-compile-002/source_gate.py",
+      "source_sha256": "c45162fad52e89f603d9dd2d001ee4d3877fe5a55955a5de7416c8ae583daf5f",
+      "published_sha256": "c45162fad52e89f603d9dd2d001ee4d3877fe5a55955a5de7416c8ae583daf5f",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/layer3_fifo_trace/device/supervisor.py": {
+      "source": "hardware/layer3-fifo-trace-compile-002/supervisor.py",
+      "source_sha256": "80d88ba4c9b6856c9fbb2352816235e6f56c8a0bc79e74c0f87c4c7202d23882",
+      "published_sha256": "80d88ba4c9b6856c9fbb2352816235e6f56c8a0bc79e74c0f87c4c7202d23882",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/layer3_fifo_trace/device/trace_sink.csl": {
+      "source": "hardware/layer3-fifo-trace-compile-002/trace_sink.csl",
+      "source_sha256": "aa8873c6e905e91c75254ad685af108fe94a81b600ac3aa28f56a6518431bf22",
+      "published_sha256": "aa8873c6e905e91c75254ad685af108fe94a81b600ac3aa28f56a6518431bf22",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/layer3_fifo_trace/device/trig_kernel.csl": {
+      "source": "hardware/layer3-fifo-trace-compile-002/trig_kernel.csl",
+      "source_sha256": "1bef20bacbb075df00559e3b5b77c56a22066681a9a0db49ee96bc384a023b15",
+      "published_sha256": "1bef20bacbb075df00559e3b5b77c56a22066681a9a0db49ee96bc384a023b15",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/layer3_fifo_trace/device/vector_collect.csl": {
+      "source": "hardware/layer3-fifo-trace-compile-002/vector_collect.csl",
+      "source_sha256": "0fc9c90dbfae6851d5c77d68e03deff173bd08d1ec2c5f69c506d547ac0b0b94",
+      "published_sha256": "0fc9c90dbfae6851d5c77d68e03deff173bd08d1ec2c5f69c506d547ac0b0b94",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/layer3_fifo_trace/capture/RUNTIME-SCOPE.md": {
+      "source": "hardware/layer3-fifo-trace-run-001/RUNTIME-SCOPE.md",
+      "source_sha256": "aa4399d7cdbaffb85d55abc7dffa5b84aa6eb8db118b03f6e63d1934c5633000",
+      "published_sha256": "aa4399d7cdbaffb85d55abc7dffa5b84aa6eb8db118b03f6e63d1934c5633000",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/layer3_fifo_trace/capture/contract.py": {
+      "source": "hardware/layer3-fifo-trace-run-001/contract.py",
+      "source_sha256": "30baab7936852c44ba0eb88033ff89cde0e317592607e20685e215d82fef4ec3",
+      "published_sha256": "30baab7936852c44ba0eb88033ff89cde0e317592607e20685e215d82fef4ec3",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/layer3_fifo_trace/capture/copy-contract.json": {
+      "source": "hardware/layer3-fifo-trace-run-001/copy-contract.json",
+      "source_sha256": "a15e44b0bc1209f472b1794c12c9a2cd1104dd1d7ffcd9c7a1ff940986b5d963",
+      "published_sha256": "a15e44b0bc1209f472b1794c12c9a2cd1104dd1d7ffcd9c7a1ff940986b5d963",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/layer3_fifo_trace/capture/fifo-trace-contract.json": {
+      "source": "hardware/layer3-fifo-trace-run-001/fifo-trace-contract.json",
+      "source_sha256": "b52ef35d473b1fc3dd6b61d02042d653ac4ca213e2588f147d716266eb21fcf5",
+      "published_sha256": "b52ef35d473b1fc3dd6b61d02042d653ac4ca213e2588f147d716266eb21fcf5",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/layer3_fifo_trace/capture/fifo_observer_decode.py": {
+      "source": "hardware/layer3-fifo-trace-run-001/fifo_observer_decode.py",
+      "source_sha256": "61a768d59fefde6ec1a995fd88b86bb506943520e6cd82d9d4d672e3a50e3199",
+      "published_sha256": "61a768d59fefde6ec1a995fd88b86bb506943520e6cd82d9d4d672e3a50e3199",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/layer3_fifo_trace/capture/hw00/__init__.py": {
+      "source": "hardware/layer3-fifo-trace-run-001/hw00/__init__.py",
+      "source_sha256": "db47c5e2c4bec34d6a920d89c08b2fa813a07ec8a619166eda349991267396b4",
+      "published_sha256": "db47c5e2c4bec34d6a920d89c08b2fa813a07ec8a619166eda349991267396b4",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/layer3_fifo_trace/capture/hw00/job_capture.py": {
+      "source": "hardware/layer3-fifo-trace-run-001/hw00/job_capture.py",
+      "source_sha256": "753b2f091de6a7181e8eeb9b9d350d7c647071e427d3acad6c4ef332000367f2",
+      "published_sha256": "753b2f091de6a7181e8eeb9b9d350d7c647071e427d3acad6c4ef332000367f2",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/layer3_fifo_trace/capture/hw00/store.py": {
+      "source": "hardware/layer3-fifo-trace-run-001/hw00/store.py",
+      "source_sha256": "d499e04e756091cb6ae690cbbc2b2932bb4323dd4e2a874436821cf00d7b5dce",
+      "published_sha256": "d499e04e756091cb6ae690cbbc2b2932bb4323dd4e2a874436821cf00d7b5dce",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/layer3_fifo_trace/capture/hw00/watchdog.py": {
+      "source": "hardware/layer3-fifo-trace-run-001/hw00/watchdog.py",
+      "source_sha256": "7ecbdb15b20a77a4d92000aec72793fb09e16853c9b6f82ea5245b0f7a0a8cdc",
+      "published_sha256": "7ecbdb15b20a77a4d92000aec72793fb09e16853c9b6f82ea5245b0f7a0a8cdc",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/layer3_fifo_trace/capture/layer3-plan.json": {
+      "source": "hardware/layer3-fifo-trace-run-001/layer3-plan.json",
+      "source_sha256": "016b3641a46df90c3db5bd50659e73914fff0cbd60a9fe9a0559f19717138487",
+      "published_sha256": "016b3641a46df90c3db5bd50659e73914fff0cbd60a9fe9a0559f19717138487",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/layer3_fifo_trace/capture/layer3_capture.py": {
+      "source": "hardware/layer3-fifo-trace-run-001/layer3_capture.py",
+      "source_sha256": "a3f2e91bc63927958223ceca75e8b11b058c8ab663a19ab35b5994149c00735f",
+      "published_sha256": "a3f2e91bc63927958223ceca75e8b11b058c8ab663a19ab35b5994149c00735f",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/layer3_fifo_trace/capture/observer-contract.json": {
+      "source": "hardware/layer3-fifo-trace-run-001/observer-contract.json",
+      "source_sha256": "d41a597e21dae45e1a5e424f8a5357340022dd18a5cda0e867b8e6d56b15f076",
+      "published_sha256": "d41a597e21dae45e1a5e424f8a5357340022dd18a5cda0e867b8e6d56b15f076",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/layer3_fifo_trace/capture/observer_decode.py": {
+      "source": "hardware/layer3-fifo-trace-run-001/observer_decode.py",
+      "source_sha256": "1658d4ec098f3aa488aa7f9dd80a18b2ab845dd0ee222fab17ec71fa4ec030f8",
+      "published_sha256": "1658d4ec098f3aa488aa7f9dd80a18b2ab845dd0ee222fab17ec71fa4ec030f8",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/layer3_fifo_trace/capture/prepared.json": {
+      "source": "hardware/layer3-fifo-trace-run-001/prepared.json",
+      "source_sha256": "5bc4ae8ec10bc7e8ee61cf94d51e8016c3f997de300004371043dc4db490958f",
+      "published_sha256": "5bc4ae8ec10bc7e8ee61cf94d51e8016c3f997de300004371043dc4db490958f",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/layer3_fifo_trace/capture/run_hw.py": {
+      "source": "hardware/layer3-fifo-trace-run-001/run_hw.py",
+      "source_sha256": "1820b7a20015898cfc723ce49c3e417dfede48b474f3b7a12a476362652a4c52",
+      "published_sha256": "1820b7a20015898cfc723ce49c3e417dfede48b474f3b7a12a476362652a4c52",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/layer3_fifo_trace/capture/source_gate.py": {
+      "source": "hardware/layer3-fifo-trace-run-001/source_gate.py",
+      "source_sha256": "4ebc25d88faf8f1aac35bd27eadca9ad6c656b39c44613495e4294a821bb907c",
+      "published_sha256": "4ebc25d88faf8f1aac35bd27eadca9ad6c656b39c44613495e4294a821bb907c",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/layer3_fifo_trace/capture/supervisor.py": {
+      "source": "hardware/layer3-fifo-trace-run-001/supervisor.py",
+      "source_sha256": "a79f7401413c1ce3843e58e047da99dd752322642ff77a162ca734f75777a784",
+      "published_sha256": "a79f7401413c1ce3843e58e047da99dd752322642ff77a162ca734f75777a784",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/fifo_trace_sdk/check_capture.py": {
+      "source": "hardware/fifo-trace-sdk-002/check_capture.py",
+      "source_sha256": "6fca433aeeda5f74e9fab4dd0ceb25b387f36a499e8060eb74a6c8c4855fb3d4",
+      "published_sha256": "6fca433aeeda5f74e9fab4dd0ceb25b387f36a499e8060eb74a6c8c4855fb3d4",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/fifo_trace_sdk/compile.py": {
+      "source": "hardware/fifo-trace-sdk-002/compile.py",
+      "source_sha256": "3fd67732bcca4f836e9f7da3d2e5af3f30e6f6dff0bfd26b307277734fb74d8c",
+      "published_sha256": "3fd67732bcca4f836e9f7da3d2e5af3f30e6f6dff0bfd26b307277734fb74d8c",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/fifo_trace_sdk/core/qwen38/elf_inventory.py": {
+      "source": "hardware/fifo-trace-sdk-002/core/qwen38/elf_inventory.py",
+      "source_sha256": "7cf549358cfd409d6896fffec1611fa065104a5b2efb2855649e37218328b779",
+      "published_sha256": "7cf549358cfd409d6896fffec1611fa065104a5b2efb2855649e37218328b779",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/fifo_trace_sdk/driver.py": {
+      "source": "hardware/fifo-trace-sdk-002/driver.py",
+      "source_sha256": "0e99b424e1dfe093d6fa1c31b3d8adbcf2cd0f3c130e6180a939c65882494aec",
+      "published_sha256": "0e99b424e1dfe093d6fa1c31b3d8adbcf2cd0f3c130e6180a939c65882494aec",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/fifo_trace_sdk/elf_symbols.py": {
+      "source": "hardware/fifo-trace-sdk-002/elf_symbols.py",
+      "source_sha256": "3c0e39170507d31479b81813f40cbe37ce66959d820cf48dec7a9a2a195da4b6",
+      "published_sha256": "3c0e39170507d31479b81813f40cbe37ce66959d820cf48dec7a9a2a195da4b6",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/fifo_trace_sdk/entry.py": {
+      "source": "hardware/fifo-trace-sdk-002/entry.py",
+      "source_sha256": "61ae371bb364713137cccfb1e9bdadd11296e53436d2d6c0de79a2f6ef34af12",
+      "published_sha256": "61ae371bb364713137cccfb1e9bdadd11296e53436d2d6c0de79a2f6ef34af12",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/fifo_trace_sdk/fifo_trace.csl": {
+      "source": "hardware/fifo-trace-sdk-002/fifo_trace.csl",
+      "source_sha256": "b2b424559c7df1b6f939d50e268cde160a39b2655dcce4c568057404484bdbe8",
+      "published_sha256": "b2b424559c7df1b6f939d50e268cde160a39b2655dcce4c568057404484bdbe8",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/fifo_trace_sdk/head_observer.csl": {
+      "source": "hardware/fifo-trace-sdk-002/head_observer.csl",
+      "source_sha256": "407ed590b3f1daba86a0f07287df0aa20535b06a429741156c3a56711aaaaa21",
+      "published_sha256": "407ed590b3f1daba86a0f07287df0aa20535b06a429741156c3a56711aaaaa21",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/fifo_trace_sdk/layout.csl": {
+      "source": "hardware/fifo-trace-sdk-002/layout.csl",
+      "source_sha256": "5c40607984ba1f6a8758bf3cc517501487df950bfae4e79bbaf468cf6ecefcc3",
+      "published_sha256": "5c40607984ba1f6a8758bf3cc517501487df950bfae4e79bbaf468cf6ecefcc3",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/fifo_trace_sdk/layout.json": {
+      "source": "hardware/fifo-trace-sdk-002/layout.json",
+      "source_sha256": "c86801df0f4f8bbf7af4ce3549583a99c9dfbc609b5f8803e4a657b001eef2b3",
+      "published_sha256": "c86801df0f4f8bbf7af4ce3549583a99c9dfbc609b5f8803e4a657b001eef2b3",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/fifo_trace_sdk/packets.csl": {
+      "source": "hardware/fifo-trace-sdk-002/packets.csl",
+      "source_sha256": "f367fd9e612ab03b67c3fd5dc39865ce0505033d98210e3fd693aa48491edb80",
+      "published_sha256": "f367fd9e612ab03b67c3fd5dc39865ce0505033d98210e3fd693aa48491edb80",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/fifo_trace_sdk/pe.csl": {
+      "source": "hardware/fifo-trace-sdk-002/pe.csl",
+      "source_sha256": "be3167f26ad715953a80d4ea7ff49edde27281ccefbcdde299678147be178873",
+      "published_sha256": "be3167f26ad715953a80d4ea7ff49edde27281ccefbcdde299678147be178873",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "examples/fifo_trace_sdk/trace_sink.csl": {
+      "source": "hardware/fifo-trace-sdk-002/trace_sink.csl",
+      "source_sha256": "aa8873c6e905e91c75254ad685af108fe94a81b600ac3aa28f56a6518431bf22",
+      "published_sha256": "aa8873c6e905e91c75254ad685af108fe94a81b600ac3aa28f56a6518431bf22",
+      "byte_identical": true,
+      "portability_edit": null
+    },
+    "core/qwen38/elf_inventory.py": {
+      "source": "hardware/layer3-fifo-trace-compile-002/core/qwen38/elf_inventory.py",
+      "source_sha256": "7cf549358cfd409d6896fffec1611fa065104a5b2efb2855649e37218328b779",
+      "published_sha256": "7cf549358cfd409d6896fffec1611fa065104a5b2efb2855649e37218328b779",
+      "byte_identical": true,
+      "portability_edit": null
+    }
+  },
+  "SDK_distribution_included": false,
+  "model_payload_included": false,
+  "compiled_binary_included": false,
+  "source_only_portability_edits_not_reexecuted": true
+}

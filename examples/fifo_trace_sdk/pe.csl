@@ -1,0 +1,209 @@
+// SOURCE DRAFT: no compiler, runtime, or numerical qualification yet.
+param memcpy_params;
+param x:u16;
+param y:u16;
+const has_fifo=x==0 or x==3 or x==4;
+const trace_receiver=x==2 or x==5;
+const packet_endpoint=x==0 or x==7;
+const side_sender=y==1 and x==0;
+const side_receiver=y==1 and x==6;
+const capacity:u16=if(y==0) 64 else 128;
+const legal:u16=if(y==0) 62 else 106;
+const trace_queue_id:u16=if(y==0) 5 else 3;
+const trace_color=@get_color(if(y==0) 7 else 8);
+const trace_ut=@get_ut_id(trace_queue_id);
+const sys=@import_module("<memcpy/memcpy>",.{
+ .first_pe=memcpy_params.first_pe,.last_pe=memcpy_params.last_pe,
+ .MEMCPYH2D_1=memcpy_params.MEMCPYH2D_1,.MEMCPYH2D_2=memcpy_params.MEMCPYH2D_2,
+ .MEMCPYH2D_3=memcpy_params.MEMCPYH2D_3,.MEMCPYH2D_4=memcpy_params.MEMCPYH2D_4,
+ .MEMCPYD2H_1=memcpy_params.MEMCPYD2H_1,.MEMCPYD2H_2=memcpy_params.MEMCPYD2H_2,
+ .MEMCPYD2H_3=memcpy_params.MEMCPYD2H_3,.MEMCPYD2H_4=memcpy_params.MEMCPYD2H_4,
+ .LAUNCH=memcpy_params.LAUNCH});
+const logger=@import_module(if(has_fifo) "fifo_trace.csl" else "<empty>",if(has_fifo) .{
+ .capacity=capacity,.maximum_attempts=if(x==3) capacity+1 else legal,
+ .output_queue_id=trace_queue_id,.stream_color=trace_color,.microthread_id=trace_queue_id,
+ .output_dsr_id=if(y==0) @as(u16,7) else @as(u16,4),.fifo_dsr_id=8,.fifo_xdsr_id=2} else .{});
+const sink=@import_module(if(trace_receiver) "trace_sink.csl" else "<empty>",if(trace_receiver) .{
+ .input_queue_id=trace_queue_id,.stream_color=trace_color,.microthread_id=trace_queue_id,
+ .source_id=@as(u32,if(x==2) @as(u16,0) else @as(u16,4))+8*@as(u32,y),
+ .source_x=if(x==2) @as(u16,0) else @as(u16,4),.source_y=y,
+ .maximum_tokens=legal,.on_received=trace_received} else .{});
+// Every intermediate PE must initialize the SDK message-passing routing bank.
+const packets=@import_module("packets.csl",.{
+ .sent_task_id=@get_local_task_id(12),.received_task_id=@get_local_task_id(13),
+ .diagnostics=true,.on_sent=packet_sent,.on_received=packet_received});
+const side=@import_module(if(side_sender or side_receiver) "head_observer.csl" else "<empty>",
+ if(side_sender or side_receiver) .{.sender=side_sender,.fill=fill_side,.on_published=side_published} else .{});
+const release_iq=@get_input_queue(4);const release_oq=@get_output_queue(4);
+const release_dest=@get_dsr(dsr_dest,1);const release_source=@get_dsr(dsr_src1,1);
+// x2 has an active trace RX in dest/src1=1 when it emits the prefix notification.
+const notify_dest=@get_dsr(dsr_dest,4);
+const finish_id=@get_local_task_id(18);
+// phase,x,y,command released,push attempts,accepted,full,bound,returned,
+// gate token/count,RX completions,TX completions,gate sends,side sequence,error,header arms.
+// Initial boolean push outcomes occupy16..144. Packet endpoints overwrite144..159
+// with their final16-word actual packet diagnostics, never capacity-probe outcomes.
+var evidence=@zeros([160]u32);
+var empty_fifo=@zeros([128]u32);
+var empty_trace=@zeros([160]u32);
+var empty_side=@zeros([32]u32);
+var release_word=@zeros([1]u32);
+var received_data=@zeros([31]u32);
+var outgoing_data=@zeros([31]u32);
+var gate_pending:bool=false;
+var command_released:bool=false;
+
+fn trace_word(source_x:u16,ordinal:u16) u32 {
+ return 0x80000000|(@as(u32,y)<<24)|(@as(u32,source_x)<<16)|(@as(u32,ordinal)*0x101);
+}
+fn return_word() u32 {return 0xf0000000|(@as(u32,y)<<24)|@as(u32,legal);}
+fn release_token() u32 {return 0xdead3100|@as(u32,y);}
+fn prefix_token() u32 {return 0xcafe3200|@as(u32,y);}
+fn packet_word(source_x:u16,ordinal:u16) u32 {
+ return 0x9a000000|(@as(u32,y)<<20)|(@as(u32,source_x)<<16)|(@as(u32,ordinal)*0x101);
+}
+fn release_command() void {
+ if(!command_released){
+  command_released=true;evidence[3]=1;evidence[15]=packets.stats[14];sys.unblock_cmd_stream();
+ }
+}
+fn record_fifo() void {
+ if(comptime has_fifo){
+  evidence[4]=@as(u32,logger.attempts);evidence[5]=@as(u32,logger.accepted);
+  evidence[6]=@as(u32,logger.full_returns);evidence[7]=@as(u32,logger.bound_violations);
+ }
+}
+fn initialize() void {
+ @assert(evidence[0]==0);evidence[0]=1;evidence[1]=@as(u32,x);evidence[2]=@as(u32,y);
+ packets.init();
+ if(comptime packet_endpoint){for(@range(u16,31))|i|{outgoing_data[i]=packet_word(x,i+1);}}
+ if(comptime side_sender or side_receiver){side.init();}
+ if(comptime trace_receiver){sink.initialize();}
+ if(comptime x==1){
+  // Notification RX is armed before sources can drain, independently of launch ordering.
+  const mem=@get_dsd(mem1d_dsd,.{.base_address=&release_word,.extent=1});
+  const input=@get_dsd(fabin_dsd,.{.input_queue=release_iq,.extent=1});
+  @load_to_dsr(release_dest,mem);
+  @load_to_dsr(release_source,input,.{.async=true,.activate=finish_id,.ut_id=@get_ut_id(4)});
+  @mov32(release_dest,release_source,.{.async=true});
+ }
+ if(comptime has_fifo){
+  logger.initialize();
+  if(comptime x!=3){@block(trace_ut);logger.arm();}
+  const attempts:u16=if(x==3) capacity+1 else if(x==0) legal-1 else legal;
+  for(@range(u16,attempts))|i|{
+   const ok=logger.push(trace_word(x,i+1));evidence[16+i]=if(ok) @as(u32,1) else @as(u32,0);
+  }
+  record_fifo();
+ }
+ release_command();
+}
+fn stall() void {
+ @assert(evidence[0]==1);evidence[0]=2;evidence[3]=0;command_released=false;
+ if(comptime x==1){maybe_release();}
+ else if(comptime x==0){
+  // The main task cannot finish until the sink's complete prefix causes a release.
+  // The release may reach IQ4 before this instruction; no timing claim is made.
+  @unblock(trace_ut);
+  const mem=@get_dsd(mem1d_dsd,.{.base_address=&release_word,.extent=1});
+  const input=@get_dsd(fabin_dsd,.{.input_queue=release_iq,.extent=1});
+  @load_to_dsr(release_dest,mem);@load_to_dsr(release_source,input);
+  @mov32(release_dest,release_source);
+  evidence[9]=release_word[0];if(release_word[0]!=release_token()){evidence[14]|=1;}
+  const ok=logger.push(return_word());if(!ok){evidence[14]|=2;}
+  evidence[8]=1;record_fifo();release_command();
+ }else if(comptime x==4){@unblock(trace_ut);release_command();}
+ else if(comptime trace_receiver){trace_received(sink.count);}
+ else{release_command();}
+}
+fn maybe_release() void {
+ if(comptime x==1){
+  if(gate_pending and evidence[0]==2 and evidence[12]==0){
+   gate_pending=false;evidence[12]=1;
+   const output=@get_dsd(fabout_dsd,.{.output_queue=release_oq,.extent=1});
+   @load_to_dsr(release_dest,output);@mov32(release_dest,release_token());
+   release_command();
+  }
+ }
+}
+task gate_received() void {
+ if(comptime x==1){
+  evidence[9]=release_word[0];
+  if(release_word[0]!=prefix_token()){evidence[14]|=32;}
+  gate_pending=true;maybe_release();
+ }
+}
+fn trace_received(count:u16) void {
+ if(comptime trace_receiver){
+  if(evidence[0]==2){
+   if(comptime x==2){
+    if(count==legal-1 and evidence[12]==0){
+     evidence[9]=@as(u32,count);evidence[12]=1;
+     const output=@get_dsd(fabout_dsd,.{.output_queue=release_oq,.extent=1});
+     @load_to_dsr(notify_dest,output);@mov32(notify_dest,prefix_token());
+    }
+   }
+   if(count>=legal){release_command();}
+  }else if(evidence[0]==3 and count>=legal){evidence[0]=4;release_command();}
+ }
+}
+fn coexist() void {
+ @assert(evidence[0]==2);evidence[0]=3;evidence[3]=0;command_released=false;
+ if(comptime x==0){
+  if(evidence[8]!=1 or evidence[9]!=release_token()){evidence[14]|=4;}
+  if(comptime side_sender){side.changed();evidence[13]=side.sequence;}
+  packets.send(7,y,&outgoing_data,31);
+ }else if(comptime x==7){@activate(finish_id);}
+ else if(comptime trace_receiver){trace_received(sink.count);}
+ else if(comptime side_receiver){side_published();}
+ else{evidence[0]=4;release_command();}
+}
+fn packet_sent() void {
+ if(comptime packet_endpoint){evidence[11]+=1;@activate(finish_id);}
+}
+fn packet_received(data:[*]u32,length:u16) void {
+ if(comptime packet_endpoint){
+  if(length!=31 or evidence[10]!=0){evidence[14]|=8;}
+  if(length==31){packets.copy_words(data,&received_data,31);}
+  evidence[10]+=1;
+  if(comptime x==7){packets.send(0,y,&outgoing_data,31);}
+  @activate(finish_id);
+ }
+}
+task finish() void {
+ if(comptime packet_endpoint){
+  if(evidence[0]==3 and evidence[10]==1 and evidence[11]==1 and
+     !packets.sending and !packets.receiving and packets.header_waiting){
+   for(@range(u16,16))|i|{evidence[144+i]=packets.stats[i];}
+   evidence[0]=4;release_command();
+  }
+ }
+}
+fn fill_side(target:[*]u32) void {
+ for(@range(u16,32))|i|{target[i]=0x11000000|(@as(u32,y)<<16)|@as(u32,i);}
+}
+fn side_published() void {
+ if(comptime side_receiver){
+  evidence[13]=side.sequence;if(side.protocol_error){evidence[14]|=16;}
+  if(evidence[0]==3 and side.sequence==1){evidence[0]=4;release_command();}
+ }
+}
+const evidence_ptr:[*]u32=&evidence;
+const fifo_ptr:[*]u32=if(has_fifo) &logger.storage else &empty_fifo;
+const trace_ptr:[*]u32=if(trace_receiver) &sink.snapshot else &empty_trace;
+const side_ptr:[*]u32=if(side_receiver) &side.snapshot else &empty_side;
+const data_ptr:[*]u32=&received_data;
+comptime {
+ if(x==0){@initialize_queue(release_iq,.{.color=@get_color(3)});}
+ if(x==1){
+  @initialize_queue(release_iq,.{.color=@get_color(4)});
+  @initialize_queue(release_oq,.{.color=@get_color(3)});
+  @bind_local_task(gate_received,finish_id);
+ }
+ if(x==2){@initialize_queue(release_oq,.{.color=@get_color(4)});}
+ if(packet_endpoint){@bind_local_task(finish,finish_id);}
+ @export_symbol(evidence_ptr,"evidence");@export_symbol(fifo_ptr,"fifo_backing");
+ @export_symbol(trace_ptr,"trace");@export_symbol(side_ptr,"sideband");
+ @export_symbol(data_ptr,"packet_data");
+ @export_symbol(initialize);@export_symbol(stall);@export_symbol(coexist);
+}

@@ -1,47 +1,30 @@
 # Implementation status
 
-September 18, 2026: HW00 accepted the original-weight 8PE fragment on physical WSE-3. Full MLP and full-model generation remain incomplete. See [physical report](HW00-PHYSICAL.md).
+September 19, 2026 UTC: the latest original layer 3 physical diagnostic records 20 of 24
+attention READY heads, 549 of 576 Q/K/V packet observations and 380 FIFO events.
+The run stopped normally and all owned resources were independently released.
+Complete original neural epochs and complete CSL model generations remain zero.
 
-WP00–WP08 and WP10–WP15 accepted, with separately accepted one-input, connected three-generation and eight-PE resident spatial WP16 fragments, 2026-09-11 UTC. Continuous development is
-active under bounded control-node packages. Full-model inference remains incomplete.
-
-| Component | Status |
+| Component | Current accepted scope |
 |---|---|
-| Resource admission, cache/entry checks | CPU unit tests passed, including injected low-resource readings |
-| Single heavy-job lock | Contention/release fixture passed |
-| Three host bit codecs | CPU patterns/odd-offset/dtype/length/negative tests passed |
-| cgroup bounded execution | Per-experiment actual limits verified; latest resident fragment reused existing compiled programs and used simulation512MiB/420s, Swap0/CPU0; serial execution |
-| Native memcpy16 SDK bit copy | One WSE-3 PE, seven BF16 bit patterns, SDK 2.10.1 simulator; exact output and normal stop/exit |
-| Packed-u32 host codec | CPU tests only; no packed BF16 SDK qualification |
-| Raw32 recurrent frames | Generation/token/phase headers and128-value bodies pass two-PE SDK transfer checks |
-| Pinned model structure/equations | 851 metadata matches and27 extracted-function CPU checks accepted; full runtime integration remains open |
-| Full checkpoint, GPU reference | Not qualified; no full-model download/execution |
-| Local 128×112 BF16 GEMV | Four same-runtime SDK calls passed on an original Qwen3.8 weight slice; WP01 accepted |
-| Two-PE GEMV/fabric/SUM/RMS128 | Four SDK calls with both device join orders accepted; reduced unit-gain operator fixture |
-| Persistent 128×5120 contraction | Four full-width same-runtime SDK calls accepted, 46 tiles each; 128 selected output rows |
-| Ordinary RMS5120 + device BF16 RNE | Four synthetic calls accepted under48 KiB application SRAM; shared gain/output lifecycle |
-| Full128×128 recurrent state | Four synthetic tokens/three generations on two PEs accepted; all device reductions and updates, normalized/scaled inputs |
-| BF16 gated RMS128 and recurrence composition | Four standalone calls and four composed tokens accepted; third consumer PE, input/early/product/final BF16 casts, ACK before root completion |
-| Selected-head preprocessing384 | Eight tokens accepted: width4 history, BF16 conv/SiLU, Q/K L2/scaling, beta/g/decay; pending-gates/finalize commands; standalone only |
-| WP09 recurrent-head integration | Not accepted: eight-token numerical observations pass, but final weight readback/runtime lifecycle fails; investigation remains open |
-| WP10 attention core and KV cache | Accepted: one256-dimensional query/KV head, capacity8; ten tokens, overflow/reset and normal stop; all2560outputs match official BF16 reference |
-| WP11 Q/K preprocessing | Accepted: ordinary RMS256 and device partial RoPE64 for text positions0–7; ten calls and all5120official BF16 outputs match, with separate product casts and tail/sign checks |
-| WP12 Q/K-to-attention composition | Accepted: one PE, original synthetic Q/K/V/gate through normalization/rotation, device copy and persistent cache8 attention; ten successes, overflow/reset and normal stop |
-| WP13 original attention projections | Accepted: all1024 selected Q/rawgate/K/V rows over5120columns, four common inputs, eight independent single-PE runtimes;4096final outputs and lifecycle/source gates pass for standalone projection coverage |
-| WP14 original hidden Q/K preprocessing | Accepted: four full5120 Q/K projection PEs hand off exact operands to a trained RMS/partialRoPE consumer; one dense call atposition1, all source/stage/retention checks and normalstop; no attention/KV composition |
-| WP15 original projected attention | Accepted: ten PEs, all1024 selected rows/full5120columns, two same-request original-hidden tokens, persistent KV, exact device handoff and all source/stage/cast/cache/retention gates; normal stop in1187.19s |
-| WP16 original full MLP | Full original CPU reference accepted. Separate four-PE profiles accepted: one dense input with5120-column projections; three dense/changed/zero generations with112-column resident projections and connected reset/retention/release. Full5120 connected reuse and whole17408-channel CSL MLP remain open; timings are different workloads |
-| Resident spatial MLP fragment | Accepted after independent saved-file review: eightPEs/threeinputs,125operations, actual4x2placement, FP32 pair reductions and device ownership; original post-stop auxiliary guardexit1 preserved. Full-dimension spatial source integration is next. |
-| Physical WSE-3 fragment | HW00 accepted: original layer3 8PE MLP, three inputs, 112 arrays, retained weights, normal stop and independently verified device release |
-| Full generation | Not implemented/qualified |
+| Original layer 3 MLP | HW01: complete 5120→17408→5120 MLP, four original/changed/zero inputs, full resident weight retention and independent numerical audit on physical WSE-3 |
+| Full text CPU reference | Original 64 layers, 851 text tensors, full vocabulary, four generated tokens and complete original cache restoration; CPU acceptance only |
+| Full layer 3 compiled graph | Latest diagnostic 563 programs, 33750 PEs, 30576 matrix PEs; maximum ordinary storage plus 4096 stack 47920 under 48128 |
+| Full layer 3 physical diagnostic | Twenty READY heads; incomplete heads 17, 21, 22 and 23 lack K/V fanout data; no complete neural epoch or reference numerical acceptance |
+| Finite FIFO observation | SDK16-PE capacity 64/128 and device-gated drain fixture; physical six-source finite-prefix capture through 50 idle locations |
+| Q/K/V synthetic fanout |112 roots, 24 heads, 576 packets, 192 rows and 24576 exact markers completed in the compressed SDK graph |
+| Dense-stage transport | Physical 600-PE two-epoch ownership, packed BF16 bank and connected transport qualification |
+| Selected original attention | WP15: selected query/KV head, two original inputs, persistent KV and independently checked handoffs/numerical stages |
+| Recurrent primitives | Scoped convolution/DeltaNet/gated-normalization simulator milestones; complete original recurrent layer remains integration work |
+| WP09 recurrent integration | Unaccepted; prior lifecycle/weight-readback issue remains open |
+| Three sequential logical stages | Target layers 0–19, 20–43, 44–63 with host hidden/KV/DeltaNet/convolution checkpoints; complete device execution not yet qualified |
+| Complete CSL text generation | Not yet accepted |
 
-Attempt wp00-001 failed in the installed wrapper's temporary-directory mount before
-cslc ran; simulation did not start. Controller-approved wp00-002 corrected only the
-container launch and recorded normal compiler and simulator exits. Original failure
-is preserved. See [WP00 report](WP00-REPORT.md) for measurements and scope limits.
+The immediate progress proposal is device-only, receiver-confirmed Q/K/V sender
+credits. A moved trace is an alternative diagnostic. Neither is currently
+implemented or qualified. The overwritten QK RMS intermediates must be handled by
+an explicitly qualified enclosure gate or a retained-evidence design before a
+complete mathematical capture; no simulated values may be labeled observations.
 
-See [partial MLP report](WP16-PARTIAL-MLP-REPORT.md) for exact scope, evidence limits and measured resources. WP09 remains unresolved; full-model generation remains unqualified; physical scope is limited to HW00.
-
-See [connected MLP report](WP16-CONNECTED-MLP-REPORT.md) for the latest accepted generation lifecycle and exact scope. No full-model or physical hardware result is implied.
-
-See [resident spatial report](RESIDENT-SPATIAL-RUN002.md) for the newest result, both preserved failures, independent acceptance and the exact limits of this fragment. The current target is three sequential stages with host checkpoints and stage-scoped resident weights; full-dimensional integration is active.
+[Current diagnostic](LAYER3-FIFO-TRACE.md) · [Full MLP](HW01-FULL-MLP.md) ·
+[CPU reference](FULL-REFERENCE.md) · [Earlier milestones](MILESTONES.md)

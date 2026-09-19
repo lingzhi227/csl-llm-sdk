@@ -1,0 +1,57 @@
+// SOURCE DRAFT: actual 160-word evidence, append-only raw tokens, no sender task.
+param input_queue_id:u16;
+param stream_color:color;
+param microthread_id:u16;
+param source_id:u32;
+param source_x:u16;
+param source_y:u16;
+param maximum_tokens:u16;
+param on_received:fn(u16)void;
+const trace_iq=@get_input_queue(input_queue_id);
+const incoming_dest=@get_dsr(dsr_dest,1);
+const incoming_source=@get_dsr(dsr_src1,1);
+const completion=@get_local_task_id(17);
+var incoming=@zeros([1]u32);
+var snapshot=@zeros([160]u32);
+var initialized:bool=false;
+var active:bool=false;
+var count:u16=0;
+var sequence:u32=0;
+var errors:u32=0;
+comptime {@comptime_assert(maximum_tokens>0 and maximum_tokens<=128);}
+
+fn initialize() void {
+ @assert(!initialized);initialized=true;
+ snapshot[1]=0x46494631;snapshot[2]=1;snapshot[3]=source_id;
+ snapshot[4]=@as(u32,source_x);snapshot[5]=@as(u32,source_y);
+ snapshot[6]=@as(u32,maximum_tokens);
+ arm();
+}
+fn arm() void {
+ @assert(initialized and !active);active=true;
+ const mem=@get_dsd(mem1d_dsd,.{.base_address=&incoming,.extent=1});
+ const input=@get_dsd(fabin_dsd,.{.input_queue=trace_iq,.extent=1});
+ @load_to_dsr(incoming_dest,mem);
+ @load_to_dsr(incoming_source,input,.{.async=true,.activate=completion,
+  .ut_id=@get_ut_id(microthread_id)});
+ @mov32(incoming_dest,incoming_source,.{.async=true});
+}
+task complete() void {
+ @assert(initialized and active);active=false;
+ // The two endpoint sequence stores bracket all metadata and raw-history writes.
+ sequence+=1;
+ const first=@get_dsd(mem1d_dsd,.{.base_address=&snapshot,.extent=1});
+ const last=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]u32,&snapshot[31]),.extent=1});
+ @mov32(first,2*sequence-1);@mov32(last,2*sequence-1);
+ if(count<128){snapshot[32+count]=incoming[0];count+=1;}else{errors|=2;}
+ if(count>maximum_tokens){errors|=1;}
+ snapshot[7]=@as(u32,count);snapshot[8]=errors;
+ @mov32(last,2*sequence);@mov32(first,2*sequence);
+ // Finite raw backing. The last accepted entry remains available on exhaustion.
+ if(count<128){arm();}
+ on_received(count);
+}
+comptime {
+ @initialize_queue(trace_iq,.{.color=stream_color});
+ @bind_local_task(complete,completion);
+}
