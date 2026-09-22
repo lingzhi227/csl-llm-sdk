@@ -1,5 +1,15 @@
 # Implementation status
 
+Updated September 22, 2026 UTC.
+
+A new [136-producer first-fault capture](FULL136-FIRST-FAULT.md) independently
+preserves the original strict failure: all 13 earlier captures are byte-identical,
+while two added fault-bank reads agree. The bad eight-word prefix is visible at
+a phase 3 ordinary-tail failure; its remaining RX words are retained prior data.
+Normal exit, all-process release and durable backup are verified. This is accepted
+diagnostic evidence, not a protocol pass or root-cause proof. Complete neural
+layer epochs and CSL model generations remain zero.
+
 September 19, 2026 UTC: the complete native layer3 graph passed independent
 actual placement, original storage and SRAM checks: all 33,750 PEs, 24 heads and
 1,254 application ELFs, with 576 bytes minimum static headroom. Two physical
@@ -34,6 +44,7 @@ unique root cause or full 136 repair.
 
 | Component | Current accepted scope |
 |---|---|
+| Full136 first-fault diagnostic | Physical RUN008 strictly fails; stable completed fault bank, 408 exact producer records, 13 prior captures byte-identical, normal exit/release and backup independently verified; no root-cause or neural-inference pass |
 | Native bidirectional lifecycle | Physical 007: all 31 checks, 200 words,two rows,full banks/stability and both first-TX witnesses pass; origin RX during unfinished TX observed; normal exit/release. Physical006 overall 30/31 failure and simulator failures preserved |
 | Native control two-source comparison | Same three-PE program, four packets and73 exact words pass independent simulator and physical checks; complete banks/suffixes, both first-lease witnesses and stable state; normal exit/release, larger fixture still open |
 | Native control physical comparison | Full356-program compile accepted at27,872 bytes including stack; physical004 fails at a control-tail boundary,408 source records exact,13 captures saved, normal stop/release verified; no repair |

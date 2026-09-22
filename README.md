@@ -2,7 +2,7 @@
 
 **Building inference for open language models with handwritten Cerebras Systems Language (CSL), targeting sequential execution of three model stages on WSE-3.** We implement the numerical kernels, execution control and persistent model state, and use the Cerebras SDK to compile and run the device programs. The first target is **Qwen3.8-27B text inference**; the longer-term goal is a reusable SDK for related model architectures.
 
-**Working today:** the complete original-weight **5120 → 17408 → 5120 layer-3 MLP runs on physical WSE-3** for four inputs with independent numerical checks. A separate full 64-layer CPU reference generates four tokens with cache restoration. **Current integration:** the complete native layer-3 graph fits across all 33,750 PEs, but execution stops on malformed READY messages. A 136-producer physical fixture now reproduces the corruption: all 408 sender snapshots are correct, while a received payload contains a network-header value. Its strict check fails and its runtime exits normally. Combined-frame transmission and managed receive descriptor comparisons also failed; the cause remains unresolved and **complete neural-layer epochs remain zero**. **Current work:** a three-PE physical bidirectional fixture now passes all 200 payload words, two exact synthetic rows, complete buffers and state stability. After moving the existing GO after request preparation, a subsequent run passes all 31 checks, including both first-send lease witnesses. The prior 30/31 failure and precompute simulator failures remain preserved. Work now returns to the unresolved 136-producer, phase-dependent dataflow and original-layer numerics. Complete CSL text generation and measured token latency remain ahead.
+**Working today:** the complete original-weight **5120 → 17408 → 5120 layer-3 MLP runs on physical WSE-3** for four inputs with independent numerical checks. A separate full 64-layer CPU reference generates four tokens with cache restoration. **Current integration:** the complete native layer-3 graph fits across all 33,750 PEs, but execution stops on malformed READY messages. A 136-producer physical fixture now reproduces the corruption: all 408 sender snapshots are correct, while a received payload contains a network-header value. Its strict check fails and its runtime exits normally. Combined-frame transmission and managed receive descriptor comparisons also failed; the cause remains unresolved and **complete neural-layer epochs remain zero**. **Current work:** a three-PE physical bidirectional fixture now passes all 200 payload words, two exact synthetic rows, complete buffers and state stability. After moving the existing GO after request preparation, a subsequent run passes all 31 checks, including both first-send lease witnesses. The prior 30/31 failure and precompute simulator failures remain preserved. A new 136-producer diagnostic reproduces the original strict failure with all 13 prior captures byte-identical, and adds two matching first-fault snapshots. It records a malformed body and ordinary-data control-tail failure; resource release and backup are independently verified. The cause remains unresolved. Complete CSL text generation and measured token latency remain ahead.
 
 ## 1. Project design
 
@@ -86,6 +86,17 @@ Full attention/recurrent layers and the three-stage model remain integration wor
 ## 3. Completed development log — newest first
 
 Each **WP** or **HW** is a scoped development milestone. HW00/HW01 use physical WSE-3; earlier WP device results use the SDK simulator, and WP04 is a CPU/source audit. **BF16** means bfloat16 data, and **FP32** means 32-bit floating-point arithmetic. Reports contain numerical thresholds, failure history and reproduction details.
+
+### Full136 first-fault capture · Failure evidence accepted · September 22, 2026 (UTC)
+
+Physical RUN008 still fails the original 650-record criterion. All 408 producer
+source records are exact and all 13 original RUN004 captures are byte-identical.
+Two added fault-bank reads agree: origin's malformed eight-word prefix is retained at
+an ordinary-tail failure in RX phase 3; the buffer suffix contains prior fragment
+data. Normal exit, release and durable backup are independently verified. This
+is diagnostic evidence, not a repair or neural-inference pass. [Report](docs/FULL136-FIRST-FAULT.md) ·
+[Source](examples/ready_fanin/native_control/first_fault) ·
+[Evidence](evidence/ready-fanin/native-control/full136-first-fault.json).
 
 ### Bidirectional native control · Strict physical pass after prepared launch · September 19, 2026 (UTC)
 

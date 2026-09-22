@@ -1,0 +1,20 @@
+const memcpy=@import_module("<memcpy/get_params>",.{.width=178,.height=2});
+layout {
+ @set_rectangle(178,2);
+ for(@range(u16,2))|y|{for(@range(u16,178))|x|{
+  const origin=x==0;const peer=x==2;const producer=x>=40 and x<176;
+  const role:u16=if(y==1) 4 else if(origin) 1 else if(peer) 2 else if(producer) 3 else 0;
+  const capacity:u16=if(origin) 192 else if(peer) 96 else if(producer) 3 else 1;
+  @set_tile_code(x,y,"pe.csl",.{.memcpy_params=memcpy.get_params(x),.role=role,
+   .column=x,.capacity=capacity,.diagnostic_enabled=origin or peer or producer});
+  if(origin or peer or producer){@set_color_config(x,y,@get_color(5),.{.routes=.{
+   .rx=if(y==0) .{RAMP} else .{NORTH},.tx=if(y==0) .{SOUTH} else .{RAMP}}});}
+  if(y==0 and x<176){@set_color_config(x,y,@get_color(3),.{.routes=.{
+   .rx=if(x==0) .{RAMP} else .{WEST},
+   .tx=if(x==175) .{RAMP} else if(producer) .{RAMP,EAST} else .{EAST}}});}
+ }}
+ @export_name("fault_snapshot",[*]u32,false);
+ @export_name("state",[*]u32,false);@export_name("diagnostic_status",[*]u32,false);
+ @export_name("diagnostic_records",[*]u32,false);
+ @export_name("initialize",fn()void);@export_name("compute",fn()void);
+}

@@ -1,0 +1,483 @@
+{
+  "scope": "Accepted integrity and release of a failed physical136-producer diagnostic; strict protocol not passed",
+  "physical008": {
+    "candidate": "ready-fanin-hw-run-008",
+    "accepted_at": "2026-09-22T11:18:33.276199+00:00",
+    "status": "strict_failure_evidence_accepted_released",
+    "protocol_passed": false,
+    "complete_original_neural_epochs": 0,
+    "scope": "Genuine CS3 concurrent136-producer synthetic transport diagnostic. Original650-record criterion failed; one stable committed first-fault snapshot accepted. No transport repair or neural inference pass.",
+    "manifest_sha256": "6d5ab530ac6642d9222062912cdd777baa45e13e3c2285bc4649420446bec2fb",
+    "binding_sha256": "c0718928a537ca8c63f8ac7f52cf8768309ff4eb4d1d6414693e19259aa855a0",
+    "artifact_sha256": "dea169566129844530606c8671797a157344893a265bd26dd6450e4c35d7baf2",
+    "executor_session": 58245,
+    "executor_reaped": true,
+    "executor_exit": 1,
+    "executor_reap_chunk": "00eb6d",
+    "job_phase": "SUCCEEDED",
+    "normal_stop": true,
+    "guard_seconds": 234.018431650009,
+    "guard_idle_sampled_seconds": 5.023722372949123,
+    "independent_journal_max_gap_seconds": 6.564542212989181,
+    "capture_including_stop_seconds": 6.920043657999486,
+    "raw_files": 15,
+    "raw_bytes": 287736,
+    "D2H_copies": 15,
+    "host_slot_bytes": 283776,
+    "launches": 2,
+    "H2D": 0,
+    "journal_entries": 38,
+    "coherent_records": 447,
+    "producer_full16word_source_records": 408,
+    "producer_records_exact": true,
+    "origin_records": 23,
+    "peer_records": 16,
+    "torn_columns": [],
+    "first_error": {
+      "column": 0,
+      "sequence": 23,
+      "reason": 268,
+      "network": 4194600,
+      "length": 8,
+      "first8": [
+        268,
+        12,
+        4,
+        3,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "billing_ledger_verified": false,
+    "limits": [
+      "408 source records are point observations, not continuous DMA immutability.",
+      "First-fault bank is a stable completed scalar copy, not an atomic cross-word DMA snapshot.",
+      "Zero source bank has invalid source lease and does not establish an actual zero source.",
+      "TX frame is retained previous REQUEST1, not currently issued.",
+      "Scheduler SUCCEEDED means job lifecycle completed; application protocol strictly failed."
+    ],
+    "original_acceptance_sha256": "a0535771f58f3ba36967ebf765de112b0c9da365645f84fc4c9e93e58bcf58dd",
+    "selected_decoded_fault": {
+      "column": 0,
+      "metadata": {
+        "TX_frames": 2,
+        "TX_tails": 2,
+        "application_flags": 16,
+        "begin": 2,
+        "bodies": 23,
+        "control_tails": 22,
+        "control_word": 3,
+        "end": 2,
+        "errors": 1,
+        "first_error": 268,
+        "headers": 23,
+        "leases": 4,
+        "magic": 1177629494,
+        "native_control_entries": 22,
+        "network_header": 4194600,
+        "ordinary_tail_events": 1,
+        "peer_rows": 0,
+        "pending_length": 8,
+        "pending_xy": 2,
+        "protocol_error": 12,
+        "ready_count": 18,
+        "receive_length": 8,
+        "request": 1,
+        "requests_received": 0,
+        "role_column": 1,
+        "rows_done": 1,
+        "rx_phase_after": 4,
+        "rx_phase_before": 3,
+        "site": 1,
+        "source_frame_validity": 0,
+        "tx_phase": 0,
+        "unexpected_data_entries": 0
+      },
+      "RX_first8": [
+        10,
+        1,
+        1,
+        4194600,
+        0,
+        10,
+        0,
+        1
+      ],
+      "RX_retained_suffix_words": 23,
+      "RX_retained_suffix_exact_prior_group1_offset0": true,
+      "TX_frame_prefix": [
+        6291752,
+        11,
+        1,
+        1,
+        0,
+        0,
+        2,
+        1,
+        128
+      ],
+      "TX_frame_retained_completed_REQUEST1": true,
+      "source_lease_valid": false,
+      "source_zero_bank_not_evidence_of_zero_source": true,
+      "completed_copy_not_atomic_DMA_snapshot": true
+    },
+    "original004_correlation": {
+      "shared_captures": 13,
+      "all_shared_bytes_shapes_sha256_equal": true,
+      "RX_retained_suffix_words": 23,
+      "RX_retained_suffix_exact_previous_group1_offset0": true,
+      "RX_word3_equals_network_header": true,
+      "TX_frame_exact_previous_REQUEST1": true,
+      "atomic_DMA_snapshot": false,
+      "unique_rootcause_proven": false
+    }
+  },
+  "physical_compile010": {
+    "status": "accepted_compile_only",
+    "manifest_sha256": "a602ce966a1fe11cccdae0a3e541c03d76b6a2f3ed82313f57c00432782dc755",
+    "artifact_sha256": "dea169566129844530606c8671797a157344893a265bd26dd6450e4c35d7baf2",
+    "artifact_bytes": 4898120,
+    "source_files": 53,
+    "actual_ELFs": 356,
+    "PEs": 356,
+    "embedded_CSL": 6,
+    "max_ordinary_plus4096": 29792,
+    "ceiling": 48128,
+    "all_actual_task_bindings_exact006": true,
+    "all_function_DSR_signatures_exact006": true,
+    "all356_fault_helper_closures_scalar": true,
+    "helper_names": [
+      "memcpy",
+      "memset",
+      "__ld16_align1",
+      "__st16_align1"
+    ],
+    "lowered_order": {
+      "all356_bool_latch_stored_before_first_helper_call": true,
+      "all356_final_two_bank_stores": "snapshot[31]=2 followed by snapshot[0]=2; both after all scalar copy helpers; only stack restoration/return follows",
+      "source_store_order_preserved": false,
+      "observation": "Compiler can reorder early metadata and remove intermediate begin stores. No source-literal order or general preemption claim. Static closure contains only scalar memory/register/arithmetic/control instructions, no task activation, DSR, UT, async vector or fabric operation."
+    },
+    "snapshot_limit": "Completion markers show a finished scalar copy, not atomic coherence across simultaneously DMA-updated words. Require both actual captures identical, valid metadata/capacity/flags/commit markers, and independent existing protocol records; invalid or partial data cannot support success.",
+    "backup_independently_verified": true,
+    "host_runtime_qualified": false,
+    "physical_run_admitted": false,
+    "complete_neural_epochs": 0,
+    "original_acceptance_sha256": "bc009f142ece3a3d064b7e0b7fba912f73348f1446db8e2fa984a83381faf2bc",
+    "candidate": "ready-fanin-hw-compile-010"
+  },
+  "host_capture_qualification": {
+    "status": "accepted_host_only",
+    "proposal_sha256": "6640649906253d6ad7bf465928b7f972f18ed79d9024118caee9fe74a2f1623a",
+    "admission_sha256": "c65acc3e8ffc99ed840aa833e8e44bd7951e4186b8a109ad1c47aea7ebce5214",
+    "source_files": 9,
+    "raw_files": 78,
+    "raw_bytes": 2164464,
+    "source_after_hashes_verified": true,
+    "no_candidate_validator_imported_in_independent_audit": true,
+    "SDK_invocations": 0,
+    "hardware_invocations": 0,
+    "cases": {
+      "complete": {
+        "raw_files": 8,
+        "host_bytes": 243904,
+        "coherent_saved_records": 650,
+        "strict_success_expected": true,
+        "normal_stop": true
+      },
+      "incomplete": {
+        "raw_files": 15,
+        "host_bytes": 283776,
+        "coherent_saved_records": 650,
+        "strict_success_expected": false,
+        "normal_stop": true
+      },
+      "packet_fault": {
+        "raw_files": 8,
+        "host_bytes": 243904,
+        "coherent_saved_records": 650,
+        "strict_success_expected": false,
+        "normal_stop": true
+      },
+      "invalid_source_length": {
+        "raw_files": 8,
+        "host_bytes": 243904,
+        "coherent_saved_records": 650,
+        "strict_success_expected": false,
+        "normal_stop": true
+      },
+      "uncommitted": {
+        "raw_files": 8,
+        "host_bytes": 243904,
+        "coherent_saved_records": 650,
+        "strict_success_expected": false,
+        "normal_stop": true
+      },
+      "unstable": {
+        "raw_files": 8,
+        "host_bytes": 243904,
+        "coherent_saved_records": 650,
+        "strict_success_expected": false,
+        "normal_stop": true
+      },
+      "last_copy_error": {
+        "raw_files": 7,
+        "host_bytes": 152768,
+        "coherent_saved_records": 650,
+        "strict_success_expected": false,
+        "normal_stop": true
+      },
+      "stop_error": {
+        "raw_files": 8,
+        "host_bytes": 243904,
+        "coherent_saved_records": 650,
+        "strict_success_expected": false,
+        "normal_stop": false
+      },
+      "rehash_contradiction": {
+        "raw_files": 8,
+        "host_bytes": 243904,
+        "coherent_saved_records": 650,
+        "strict_success_expected": false,
+        "normal_stop": true
+      }
+    },
+    "original_acceptance_sha256": "dbd7f413f3896885a9af90ecd5fff3bcca1bf86a0c3fd1cbc2e79002a0fd70e6"
+  },
+  "source_map": {
+    "examples/ready_fanin/native_control/first_fault/layout.csl": {
+      "bytes": 1158,
+      "sha256": "cbc9f2315443ce58e0cde4bd5c7b0927d3c70ad268ba31be3eb2dfb770e49b9e",
+      "byte_identical": true
+    },
+    "examples/ready_fanin/native_control/first_fault/pe.csl": {
+      "bytes": 9975,
+      "sha256": "ac9165f0977b22855d416a3eaf3926167a0bf793607e81b52f404cfdc6404787",
+      "byte_identical": true
+    },
+    "examples/ready_fanin/native_control/first_fault/packets.csl": {
+      "bytes": 10857,
+      "sha256": "b010dff972fcc937da9ea75fe28acd6a01a87e7ec3e96d4676d21dce40b29d8c",
+      "byte_identical": true
+    },
+    "examples/ready_fanin/native_control/first_fault/production-packets.csl": {
+      "bytes": 5624,
+      "sha256": "50842405712c5c09fd791adcec25b2d481005efeea3d8c480679c574f0936fbd",
+      "byte_identical": true
+    },
+    "examples/ready_fanin/native_control/first_fault/row_packet.csl": {
+      "bytes": 2882,
+      "sha256": "a30bfaa6089c261ec971234ac7fdd9bb761d4f3ac1a91da64147a89cdc1b80ba",
+      "byte_identical": true
+    },
+    "examples/ready_fanin/native_control/first_fault/diagnostics.csl": {
+      "bytes": 3319,
+      "sha256": "2fe5c00593b742dfd33fbf50664577e07158764d9f93a70faa00c29c27034c10",
+      "byte_identical": true
+    },
+    "examples/ready_fanin/native_control/first_fault/capture.py": {
+      "bytes": 4874,
+      "sha256": "0e331b3834ce12fd9321cf8e3aa2db3cdcd4ef31c95728f79bcd50d046d75830",
+      "byte_identical": true
+    },
+    "examples/ready_fanin/native_control/first_fault/capture_store.py": {
+      "bytes": 1715,
+      "sha256": "19e112d54e18bfac5695281065dfb330cf397a458dd3c953aaedb1e5b8f10230",
+      "byte_identical": true
+    },
+    "examples/ready_fanin/native_control/first_fault/check_capture.py": {
+      "bytes": 5267,
+      "sha256": "23c64d60f59517c3523e79e276bdf60d8697fbf4f97c0a86b13063d3c325ecfb",
+      "byte_identical": true
+    },
+    "examples/ready_fanin/native_control/first_fault/check_fault_capture.py": {
+      "bytes": 2864,
+      "sha256": "363f85673ef1058875d8f957668243b4f1d62d913ebbd8ae65b4b9c6b59cdb40",
+      "byte_identical": true
+    },
+    "examples/ready_fanin/native_control/first_fault/validate_capture.py": {
+      "bytes": 2530,
+      "sha256": "fa546391e7d2bfe29e0a81b860454be3024e26bc83e48d304a82130a1323e53d",
+      "byte_identical": true
+    },
+    "examples/ready_fanin/native_control/first_fault/host_tests.py": {
+      "bytes": 5257,
+      "sha256": "8aefe4384b719cf30eeeba18e2a2d39a0cbfe95d25ebff036d668c4f60b94eb0",
+      "byte_identical": true
+    },
+    "examples/ready_fanin/native_control/first_fault/original_650_fixtures.py": {
+      "bytes": 5516,
+      "sha256": "48aee47d41689580f1ff1bd6176eb0fb265dd7a9cdaec9ed9a3224ae1a0503b5",
+      "byte_identical": true
+    },
+    "examples/ready_fanin/native_control/first_fault/hw00/__init__.py": {
+      "bytes": 83,
+      "sha256": "db47c5e2c4bec34d6a920d89c08b2fa813a07ec8a619166eda349991267396b4",
+      "byte_identical": true
+    },
+    "examples/ready_fanin/native_control/first_fault/hw00/store.py": {
+      "bytes": 4738,
+      "sha256": "d499e04e756091cb6ae690cbbc2b2932bb4323dd4e2a874436821cf00d7b5dce",
+      "byte_identical": true
+    },
+    "examples/ready_fanin/native_control/first_fault/run_hw.py": {
+      "bytes": 2293,
+      "sha256": "d52aa7bf25df0091d8d7808cddfd5bfbc2e48d7cad3598fea3683a5377d7ff29",
+      "byte_identical": true
+    }
+  },
+  "raw_capture_metadata": [
+    {
+      "bytes": 5960,
+      "path": "evidence/initial.npz",
+      "sha256": "7021888f028998d374ed4ef9d0f7921724172ecc0f8050b915eb868c8de7a244",
+      "shape": [
+        356,
+        4
+      ]
+    },
+    {
+      "bytes": 5960,
+      "path": "evidence/progress-00.npz",
+      "sha256": "ec937169504ba31424b8a91c65f9f3e37ac98786931c5d33cbfd0ffe982b92b2",
+      "shape": [
+        178,
+        8
+      ]
+    },
+    {
+      "bytes": 5960,
+      "path": "evidence/progress-01.npz",
+      "sha256": "ec937169504ba31424b8a91c65f9f3e37ac98786931c5d33cbfd0ffe982b92b2",
+      "shape": [
+        178,
+        8
+      ]
+    },
+    {
+      "bytes": 5960,
+      "path": "evidence/progress-02.npz",
+      "sha256": "ec937169504ba31424b8a91c65f9f3e37ac98786931c5d33cbfd0ffe982b92b2",
+      "shape": [
+        178,
+        8
+      ]
+    },
+    {
+      "bytes": 5960,
+      "path": "evidence/progress-03.npz",
+      "sha256": "ec937169504ba31424b8a91c65f9f3e37ac98786931c5d33cbfd0ffe982b92b2",
+      "shape": [
+        178,
+        8
+      ]
+    },
+    {
+      "bytes": 5960,
+      "path": "evidence/progress-04.npz",
+      "sha256": "ec937169504ba31424b8a91c65f9f3e37ac98786931c5d33cbfd0ffe982b92b2",
+      "shape": [
+        178,
+        8
+      ]
+    },
+    {
+      "bytes": 5960,
+      "path": "evidence/progress-05.npz",
+      "sha256": "ec937169504ba31424b8a91c65f9f3e37ac98786931c5d33cbfd0ffe982b92b2",
+      "shape": [
+        178,
+        8
+      ]
+    },
+    {
+      "bytes": 5960,
+      "path": "evidence/progress-06.npz",
+      "sha256": "ec937169504ba31424b8a91c65f9f3e37ac98786931c5d33cbfd0ffe982b92b2",
+      "shape": [
+        178,
+        8
+      ]
+    },
+    {
+      "bytes": 5960,
+      "path": "evidence/progress-07.npz",
+      "sha256": "ec937169504ba31424b8a91c65f9f3e37ac98786931c5d33cbfd0ffe982b92b2",
+      "shape": [
+        178,
+        8
+      ]
+    },
+    {
+      "bytes": 12552,
+      "path": "evidence/origin.npz",
+      "sha256": "d9620712ea7338fbc20a8a45bfee698d337b0e4ea99f1888193f0e905a1d4aee",
+      "shape": [
+        1,
+        3072
+      ]
+    },
+    {
+      "bytes": 6408,
+      "path": "evidence/peer.npz",
+      "sha256": "70e57778d8655efe7f05515764a5e33c4ac1c84765a862e528965283908f89ed",
+      "shape": [
+        1,
+        1536
+      ]
+    },
+    {
+      "bytes": 26376,
+      "path": "evidence/producers.npz",
+      "sha256": "39df477c7bd5f83aff5141a485cce23327608450557632f8ee0fc3cdecbd4280",
+      "shape": [
+        136,
+        48
+      ]
+    },
+    {
+      "bytes": 5960,
+      "path": "evidence/final-status.npz",
+      "sha256": "ec937169504ba31424b8a91c65f9f3e37ac98786931c5d33cbfd0ffe982b92b2",
+      "shape": [
+        178,
+        8
+      ]
+    },
+    {
+      "bytes": 91400,
+      "path": "evidence/first-fault.npz",
+      "sha256": "fa1d32f18f881dde1b0560aab65d3323322dd2efb8bf4fe8333ccfa8f168dde5",
+      "shape": [
+        178,
+        128
+      ]
+    },
+    {
+      "bytes": 91400,
+      "path": "evidence/first-fault-final.npz",
+      "sha256": "fa1d32f18f881dde1b0560aab65d3323322dd2efb8bf4fe8333ccfa8f168dde5",
+      "shape": [
+        178,
+        128
+      ]
+    }
+  ],
+  "backup": {
+    "independently_verified": true,
+    "selected_files": 71,
+    "source_files": 39,
+    "raw_files": 15,
+    "raw_bytes": 287736
+  },
+  "previous_failures_preserved": true,
+  "small_physical007_pass_does_not_repair_full136": true,
+  "complete_neural_epochs": 0,
+  "model_generations": 0,
+  "unique_rootcause_proven": false,
+  "raw_capture_files_published": false,
+  "compiled_artifacts_published": false,
+  "vendor_SDK_sources_published": false
+}

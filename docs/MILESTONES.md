@@ -2,6 +2,17 @@
 
 Only accepted results are listed below. Unresolved integration work and the remaining scope are tracked in [implementation status](STATUS.md).
 
+## Full136 first-fault capture · Failure evidence accepted · September 22, 2026 UTC
+
+Physical RUN008 still fails the original 650-record criterion. All 408 producer
+source records are exact and all 13 original RUN004 captures are byte-identical.
+Two added fault-bank reads agree: origin's malformed eight-word prefix is retained at
+an ordinary-tail failure in RX phase 3; the buffer suffix contains prior fragment
+data. Normal exit, release and durable backup are independently verified. This
+is diagnostic evidence, not a repair or neural-inference pass. [Report](FULL136-FIRST-FAULT.md) ·
+[Source](../examples/ready_fanin/native_control/first_fault) ·
+[Evidence](../evidence/ready-fanin/native-control/full136-first-fault.json).
+
 ## Bidirectional native control · Strict physical pass after prepared launch · September 19, 2026 UTC
 
 Physical RUN007 passes all 31 checks over 9 packets/200 words, two assembled and
