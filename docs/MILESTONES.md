@@ -2,6 +2,20 @@
 
 Only accepted results are listed below. Unresolved integration work and the remaining scope are tracked in [implementation status](STATUS.md).
 
+## Original Layer3 · Continuous positions and device reset accepted · September 22, 2026 (UTC)
+
+One initialization and weight upload serve physical positions 0 and 1, followed
+by device reset and an exact position-0 replay. All three captures pass the
+conditional operator gates, KV/state checks and independent reconstruction.
+The device client exits normally. The original outer supervisor exits 1 because
+its schedule comparison mixes a JSON list and Python tuple; that failure and
+absence of COMPLETE remain preserved. A separate postcapture audit passes.
+Nominal CPU BF16 mismatches are 346/1,150/346 of 5,120; no propagated whole-layer
+enclosure or bitwise parity is claimed. Full-model inference remains open.
+[Report](LAYER3-CONTINUOUS-RESET.md) ·
+[Source](../examples/native_layer3/continuous_reset) ·
+[Evidence](../evidence/native-layer3/continuous-reset/summary.json).
+
 ## Original Layer3 · Single-position physical/operator contract accepted · September 22, 2026 (UTC)
 
 The complete original Layer3 graph runs position 0 on physical WSE-3, with

@@ -45,7 +45,7 @@ The execution box is what the compiled program does. We write its scheduling, bu
 | Part | What this project implements or reuses |
 |---|---|
 | **Our device code** | Matrix products, normalization, attention, recurrence and other model operations; task dependencies, communication and state updates. The completed log identifies the implemented subsets. |
-| **Our host code** | Stage weight/state loading, checkpoint coordination, tensor placement, resource limits and validation. Physical execution is qualified for the full layer-3 MLP at four module inputs and the complete Layer3 conditional operator contract at one position; the full model remains open. |
+| **Our host code** | Stage weight/state loading, checkpoint coordination, tensor placement, resource limits and validation. Physical execution is qualified for the full layer-3 MLP at four module inputs and the complete Layer3 conditional operator contract at positions 0 and 1 with device reset replay; the full model remains open. |
 | **Cerebras tooling** | CSL layout/compiler, device tasks and communication primitives, host transfers and runtime launches. |
 | **Reference computation** | CPU numerical references and selected functions extracted from a pinned official implementation. GPU reference execution and applicable CS-Torch / Model Zoo integration remain future work. |
 
@@ -70,8 +70,9 @@ flowchart LR
 
 This diagram shows the accepted full layer-3 MLP. FP32 local accumulation and
 right-to-left reductions, BF16 casts and neural handoffs execute on device.
-The complete Layer3 full-attention path also has one-position physical/operator
-qualification. Nonzero positions, recurrent layers and the three-stage model remain open.
+The complete Layer3 full-attention path also has physical/operator qualification
+for positions 0 and 1 plus device reset replay. Recurrent layers, complete stages
+and full-model inference remain open.
 
 ## 2. Repository guide
 
@@ -104,6 +105,20 @@ qualification. Nonzero positions, recurrent layers and the three-stage model rem
 ## 3. Completed development log — newest first
 
 Each **WP** or **HW** is a scoped development milestone. HW00/HW01 use physical WSE-3; earlier WP device results use the SDK simulator, and WP04 is a CPU/source audit. **BF16** means bfloat16 data, and **FP32** means 32-bit floating-point arithmetic. Reports contain numerical thresholds, failure history and reproduction details.
+
+### Original Layer3 · Continuous positions and device reset accepted · September 22, 2026 (UTC)
+
+One initialization and weight upload serve physical positions 0 and 1, followed
+by device reset and an exact position-0 replay. All three captures pass the
+conditional operator gates, KV/state checks and independent reconstruction.
+The device client exits normally. The original outer supervisor exits 1 because
+its schedule comparison mixes a JSON list and Python tuple; that failure and
+absence of COMPLETE remain preserved. A separate postcapture audit passes.
+Nominal CPU BF16 mismatches are 346/1,150/346 of 5,120; no propagated whole-layer
+enclosure or bitwise parity is claimed. Full-model inference remains open.
+[Report](docs/LAYER3-CONTINUOUS-RESET.md) ·
+[Source](examples/native_layer3/continuous_reset) ·
+[Evidence](evidence/native-layer3/continuous-reset/summary.json).
 
 ### Original Layer3 · Single-position physical/operator contract accepted · September 22, 2026 (UTC)
 

@@ -2,6 +2,18 @@
 
 Updated September 22, 2026 UTC.
 
+The [continuous original Layer3 sequence](LAYER3-CONTINUOUS-RESET.md) now has
+accepted physical positions 0 and 1 plus device reset replay. All three captures
+pass the complete conditional operator audit and independent state/transport
+reconstruction. The original outer supervisor exit 1 and missing COMPLETE remain
+preserved; a separately admitted postcapture audit passes. Nominal CPU BF16
+mismatches are 346/1,150/346 of 5,120. Bitwise parity and a propagated whole-layer
+enclosure are not established. Complete recurrent Layer0 and actual 0→1→2→3
+hidden flow are next; all 64 layers, full-vocabulary logits, generated tokens and
+three-stage checkpoint restoration remain unqualified.
+
+The following records retain the scope of earlier milestones.
+
 The [complete original Layer3 static graph](LAYER3-STATIC-TRANSPORT.md) now has
 accepted single-position physical and conditional operator-contract evidence.
 One full epoch is captured, the runtime exits normally, and independent checks
@@ -82,6 +94,7 @@ unique root cause or full 136 repair.
 
 | Component | Current accepted scope |
 |---|---|
+| Original Layer3 continuous execution | Physical positions 0 and 1 plus reset0; all conditional operator gates pass, original outer failure preserved; full model remains open |
 | Original Layer3 static transport | One physical position and conditional operator contract accepted; nominal output differs at 346/5120 BF16 values; full model remains open |
 | Full136 static transport | Physical 534 PE fixture passes full double reads and exact ownership checks; one epoch, no reset, zero neural epochs |
 | Small static transport | SDK27 PE/3 producer fixture passes both full reads, exact provenance/release checks and normal exit; full 136-producer physical and neural inference remain unqualified |
