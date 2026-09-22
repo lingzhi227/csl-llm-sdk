@@ -54,7 +54,7 @@ observed native processes gone. All 71 selected source/receipt/capture files
 are independently rehashed in durable backup. No raw arrays or ELF are included
 in this public update.
 
-The nine changed host-source files were separately qualified with synthetic
+The nine host-source files were separately qualified with synthetic
 capture replies, including incomplete, faulted, unstable, failed-copy and
 failed-stop cases. That host exercise is separate from physical acceptance.
 The original 650 checker and all failure criteria remain unchanged; success
