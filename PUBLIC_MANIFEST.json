@@ -1,5 +1,5 @@
 {
-  "README.md": "4791bc3d892521cc69b76c70437278115392492efe559ae7bb8dbc050a0bffcc",
+  "README.md": "d05fa6950e7df29c65d336188a4ffd7c91c91d0599fa856f08888b8ee184064a",
   "LICENSE": "9a36237af23778b2e828b65ddca4ceeed111806709c0de1468a7d94200a69566",
   ".gitignore": "7ce76ae4e2446e018a7fd97a9168cb3b9594d660c875e2b2cdb7f1a3fb9b97b7",
   "core/qwen38/codecs.py": "ff392fd861c27523fd01f6abdb330bf54f0583e3b8e6081ed6309dd4361ef7fa",
@@ -16,7 +16,7 @@
   "examples/wp00/driver.py": "b3b6ad635ac357d7fd6b0b207e4b2c4d3742ad2f8775b7cbf2d726fb28a8958d",
   "examples/wp00/layout.csl": "01954ddb984d89eaaef393ba3ac847ecea1358ff5d54d4a8f92e68a88ee9766f",
   "examples/wp00/pe.csl": "98f6b972e90056ea548291407254e90174f5e9f7646fd2d6c3ca5d153ab7be62",
-  "docs/MILESTONES.md": "3e52b803b6c9fef3937e22713265457d9a783c737ed3347600f3d6be41daf384",
+  "docs/MILESTONES.md": "2a0579b276d9cc11b6bdb55290b9aeee4c95708e35237c00394dfbb15afa8f7b",
   "evidence/wp00.json": "4c82ee7c9fa107a633789403133cd0f9bb61dfb77574b814cc0c726bc5937a5a",
   "core/qwen38/numerics.py": "fee8e59d860620b4d860b2e1ca773feaf27ba15d800a7cc7744e145391a7898d",
   "core/qwen38/ranged.py": "f624f91b6fa2c0ab26a70853953ce21e72cff7a004eb4845a3251e04bc93b271",
@@ -283,7 +283,7 @@
   "evidence/wp15-source-case2.json": "94126ecf0e25baffcb4acac5038551c8520d2056f82497f2860ca2c1d82e44bc",
   "evidence/wp15-source-case3.json": "2180c4835fc0ffbc16ee4a3c0e95ae03c71963a1a99e4b386b529110d66205cc",
   "evidence/wp15.json": "87c8688f7350c23c19a78d58a24e5a40a48b14b22fe7cccad3a1f28a192dc9cc",
-  "docs/STATUS.md": "5f09bb17cecb6ff8ed9932131a99d7cafaab27b64b82d723b1ec3c35b87d4efe",
+  "docs/STATUS.md": "d837a5bda3cce1f887f24f651adc703b17c5e269d08ec734db539060b2b2c2b3",
   "core/qwen38/wp16_diag_layout.py": "8f206c23777aa0da389eaa590973b0c366ace78a82555fc89b26b5fc9506e18e",
   "core/qwen38/wp16_diag_protocol.py": "53b9eea419771921a29bf8cf00c30345d5b0e1a966127f084594da36c298a53a",
   "core/qwen38/wp16_sdk_admission.py": "d1758c04f64e76d695c79a4d6057a6d2d5347cb961a32d069abadecaf977f885",
@@ -1176,5 +1176,16 @@
   "examples/ready_fanin/native_control/sender_frame/SOURCE-DELTA.patch": "a2a05a5a0931c6fb2e6ffce84601a85330f63194ca0857af1d0044025ec380ae",
   "examples/ready_fanin/native_control/sender_frame/README.md": "561fc03e5c01411fabc7ee12b72311f34fd025af4bc92a95563c782bb9fd888b",
   "evidence/ready-fanin/native-control/full136-sender-frame.json": "319830452c43b4cc641c473a3fc67f3bf8699dcd680b354a86cb5186994ff0c1",
-  "docs/FULL136-SENDER-FRAME.md": "4d0c504f929cddd81910cef03145819cf236d0186257a8790fc53f49279078b0"
+  "docs/FULL136-SENDER-FRAME.md": "4d0c504f929cddd81910cef03145819cf236d0186257a8790fc53f49279078b0",
+  "examples/ready_fanin/static_transport/app.csl": "5b609c42cc7cc70e655de820e342e1c35c95800746d3864370aaf88dff02c064",
+  "examples/ready_fanin/static_transport/layout.csl": "5f3a89e6fdaec913d557bae97f09acfd211e7d1b1e693230e2b4cda44a378958",
+  "examples/ready_fanin/static_transport/relay.csl": "319f5272dabb50e2c4d7a2d4df65d611cf529568e0bf34a57ea1c789c27200d7",
+  "examples/ready_fanin/static_transport/static_input.csl": "a4213c817b7e7bfef699a63ee2b6d28577c6186f754da81a58c7e315cd12046f",
+  "examples/ready_fanin/static_transport/static_output.csl": "88b4a88a00dca897a5bfa7bde0a0fcf9eb6c505bf6d0b67d7ed4402c7ac0e377",
+  "examples/ready_fanin/static_transport/schema.py": "810b308b90f8c22b71b32d8960b8f05cbb0dd790b8bb67ddf7caf88246eaedd7",
+  "examples/ready_fanin/static_transport/capture.py": "3cfd2fc7bb252899902fe7bd247a697fb20f20e3654511236ee87cbb82bb404e",
+  "examples/ready_fanin/static_transport/driver.py": "e82afd11a132eec584e9aa92a7a93765d19515f17439f4ac6fb8492ef0a73dea",
+  "examples/ready_fanin/static_transport/README.md": "f00ebdadb405ce9234f40aa600d2200b4335aba7a5ddec189155dc80f623c413",
+  "evidence/ready-fanin/static-transport-small.json": "58988b8b5d1aa5d287c0ee985b4c10a7a4fbfb88ae690a3f45b43ed9c944eccc",
+  "docs/STATIC-TRANSPORT-SMALL.md": "21cd8fb321c2685a942d51136b747ed33528f7375e5e1b32291c3a9207dfa3fc"
 }

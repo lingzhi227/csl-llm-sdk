@@ -2,6 +2,11 @@
 
 Updated September 22, 2026 UTC.
 
+The [small static transport fixture](STATIC-TRANSPORT-SMALL.md) passes complete
+double-read protocol and normal-stop qualification on the workstation SDK.
+Its 27 PE/3 producer scope does not qualify full 136-producer physical transport or an
+original neural epoch. Prior timing and native-control failures are retained.
+
 The [actual sender-frame checks](FULL136-SENDER-FRAME.md) traverse all136
 producers at three qualified instruction boundaries, yet RUN011 still receives
 the same malformed prefix. These point observations do not prove continuous
@@ -62,6 +67,7 @@ unique root cause or full 136 repair.
 
 | Component | Current accepted scope |
 |---|---|
+| Small static transport | SDK27 PE/3 producer fixture passes both full reads, exact provenance/release checks and normal exit; full 136-producer physical and neural inference remain unqualified |
 | Full136 actual sender-frame checks | RUN011 strictly fails after all136 producer three-point checks; zero sender guard faults; same retained fault context, different origin order; no continuous DMA or wire proof |
 | Full136 origin word receiver | RUN010 strictly fails through scalar IQ arguments; same bad prefix with different ordering/context; bulk origin body DMA not necessary, upstream cause unresolved |
 | Full136 body-completion boundary | RUN009 strictly fails with the same invalid prefix before current tail arming; independently accepted boundary evidence, release and backup; no unique root cause or repair |

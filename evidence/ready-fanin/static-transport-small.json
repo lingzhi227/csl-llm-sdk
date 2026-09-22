@@ -1,0 +1,1331 @@
+{
+  "scope": "Accepted27PE three-producer static transport simulator qualification",
+  "runtime002": {
+    "at": "2026-09-22T14:41:58.621762+00:00",
+    "status": "small_static_transport_SDK_runtime_accepted",
+    "candidate": "static-transport-sim-002",
+    "manifest_sha256": "5cffcacf5492104ddda58ad1a9168fc883051ba49f01103f4b41801857a4f876",
+    "compiler_acceptance_sha256": "1b3ce58eb60702a409430d485eea8253f9f8f0ee2787a6d84bf01e51d1cbfd81",
+    "reaped_exit": 0,
+    "supervisor_seconds": 64.83695475198328,
+    "peak_bytes": 205819904,
+    "profile": {
+      "child_seconds": 75,
+      "guard_seconds": 90,
+      "idle_seconds": 30,
+      "CPU": [
+        0
+      ],
+      "memory_bytes": 4294967296,
+      "swap_bytes": 0
+    },
+    "independent_raw": {
+      "at": "2026-09-22T14:38:00.094738+00:00",
+      "candidate": "static-transport-sim-002",
+      "manifest_sha256": "5cffcacf5492104ddda58ad1a9168fc883051ba49f01103f4b41801857a4f876",
+      "raw_files": 37,
+      "raw_bytes": 129384,
+      "host_bytes": 119616,
+      "polls": 4,
+      "complete_snapshots": 2,
+      "schema_results": [
+        {
+          "schema": "static-ready-row-v1",
+          "count": 3,
+          "qualification_gate": true,
+          "ready": 3,
+          "requests": 8,
+          "fragments": 24,
+          "halfwords": 1024,
+          "relay_links": 6,
+          "neural_epochs": 0,
+          "scope": "raw schema validation only; execution provenance and normal-stop gates external"
+        },
+        {
+          "schema": "static-ready-row-v1",
+          "count": 3,
+          "qualification_gate": true,
+          "ready": 3,
+          "requests": 8,
+          "fragments": 24,
+          "halfwords": 1024,
+          "relay_links": 6,
+          "neural_epochs": 0,
+          "scope": "raw schema validation only; execution provenance and normal-stop gates external"
+        }
+      ],
+      "second_completed_exports": [
+        "final-1-state",
+        "final-1-input_a_status",
+        "final-1-input_b_status",
+        "final-1-output_status",
+        "final-1-diagnostic_status",
+        "final-1-origin_records",
+        "final-1-peer_records",
+        "final-1-producer_records",
+        "final-1-idle1_records",
+        "final-1-idle3_records",
+        "final-1-idle7_records",
+        "final-1-relay_records",
+        "final-1-row_packets",
+        "final-1-gate_words"
+      ],
+      "second_prefix_exact": true,
+      "normal_stop": true,
+      "complete_stable_raw_and_stop_passed": true,
+      "journal_events": 86,
+      "last_journal": {
+        "sequence": 85,
+        "seconds": 63.148322395049036,
+        "kind": "stop_exit"
+      },
+      "scope": "Original raw hash/ZIP/NPY/u32 decoding, coordinate assembly and independent-of-CSL schema. Unit release and generated artifacts require separate evidence.",
+      "SDK_invocations": 0,
+      "NumPy_imports": 0
+    },
+    "scope": "27PE/3READY full ordinary-word static relay; two retained-input gate witness,8REQUEST/24fragments/1024BF16halves,allsource/sink/provenance/drain checks,2stable fullreads and normalstop. Not full136 transport or neural inference.",
+    "original_neural_epochs": 0,
+    "HW_runs": 0,
+    "original_acceptance_sha256": "ee20a6191981e59dbe8e1f751f6fd44c8e7e25004d0b12d255f3d3add50433dc",
+    "all_owned_processes_absent": true,
+    "owned_unit_quiescent": true
+  },
+  "compile002": {
+    "at": "2026-09-22T14:05:51.392664+00:00",
+    "manifest_sha256": "1e24b52b64f0552a11b09c5f3345c019dce5d4001bb49ba3cd2534d86617b867",
+    "status": "compiled_small_fixture_resource_ownership_accepted",
+    "program_count": 27,
+    "PEs": 27,
+    "max_ordinary_plus4096": 29792,
+    "margin": 18336,
+    "source_storage_report_reconciled_all27": true,
+    "task_checks": [
+      {
+        "file": "out/bin/out_0_0.elf",
+        "coordinates": [
+          [
+            0,
+            0
+          ]
+        ],
+        "actual_task_ids": [
+          0,
+          10,
+          11,
+          12,
+          14,
+          15,
+          16,
+          17,
+          18,
+          21,
+          27,
+          28,
+          29,
+          30,
+          33,
+          34,
+          35,
+          36,
+          37
+        ],
+        "DMA_IQ2_IQ4_blocked": true
+      },
+      {
+        "file": "out/bin/out_10_0.elf",
+        "coordinates": [
+          [
+            1,
+            1
+          ]
+        ],
+        "actual_task_ids": [
+          0,
+          14,
+          17,
+          18,
+          21,
+          27,
+          28,
+          29,
+          30,
+          33,
+          34,
+          35,
+          36,
+          37
+        ],
+        "DMA_IQ2_IQ4_blocked": true
+      },
+      {
+        "file": "out/bin/out_11_0.elf",
+        "coordinates": [
+          [
+            2,
+            1
+          ]
+        ],
+        "actual_task_ids": [
+          0,
+          14,
+          17,
+          18,
+          21,
+          27,
+          28,
+          29,
+          30,
+          33,
+          34,
+          35,
+          36,
+          37
+        ],
+        "DMA_IQ2_IQ4_blocked": true
+      },
+      {
+        "file": "out/bin/out_12_0.elf",
+        "coordinates": [
+          [
+            3,
+            1
+          ]
+        ],
+        "actual_task_ids": [
+          0,
+          14,
+          17,
+          18,
+          21,
+          27,
+          28,
+          29,
+          30,
+          33,
+          34,
+          35,
+          36,
+          37
+        ],
+        "DMA_IQ2_IQ4_blocked": true
+      },
+      {
+        "file": "out/bin/out_13_0.elf",
+        "coordinates": [
+          [
+            4,
+            1
+          ]
+        ],
+        "actual_task_ids": [
+          0,
+          14,
+          17,
+          18,
+          21,
+          27,
+          28,
+          29,
+          30,
+          33,
+          34,
+          35,
+          36,
+          37
+        ],
+        "DMA_IQ2_IQ4_blocked": true
+      },
+      {
+        "file": "out/bin/out_14_0.elf",
+        "coordinates": [
+          [
+            5,
+            1
+          ]
+        ],
+        "actual_task_ids": [
+          0,
+          14,
+          17,
+          18,
+          21,
+          27,
+          28,
+          29,
+          30,
+          33,
+          34,
+          35,
+          36,
+          37
+        ],
+        "DMA_IQ2_IQ4_blocked": true
+      },
+      {
+        "file": "out/bin/out_15_0.elf",
+        "coordinates": [
+          [
+            6,
+            1
+          ]
+        ],
+        "actual_task_ids": [
+          0,
+          14,
+          17,
+          18,
+          21,
+          27,
+          28,
+          29,
+          30,
+          33,
+          34,
+          35,
+          36,
+          37
+        ],
+        "DMA_IQ2_IQ4_blocked": true
+      },
+      {
+        "file": "out/bin/out_16_0.elf",
+        "coordinates": [
+          [
+            7,
+            1
+          ]
+        ],
+        "actual_task_ids": [
+          0,
+          14,
+          17,
+          18,
+          21,
+          27,
+          28,
+          29,
+          30,
+          33,
+          34,
+          35,
+          36,
+          37
+        ],
+        "DMA_IQ2_IQ4_blocked": true
+      },
+      {
+        "file": "out/bin/out_17_0.elf",
+        "coordinates": [
+          [
+            8,
+            1
+          ]
+        ],
+        "actual_task_ids": [
+          0,
+          14,
+          17,
+          18,
+          21,
+          27,
+          28,
+          29,
+          30,
+          33,
+          34,
+          35,
+          36,
+          37
+        ],
+        "DMA_IQ2_IQ4_blocked": true
+      },
+      {
+        "file": "out/bin/out_18_0.elf",
+        "coordinates": [
+          [
+            0,
+            2
+          ]
+        ],
+        "actual_task_ids": [
+          0,
+          11,
+          12,
+          13,
+          16,
+          21,
+          27,
+          28,
+          29,
+          30,
+          33,
+          34,
+          35,
+          36,
+          37
+        ],
+        "DMA_IQ2_IQ4_blocked": true
+      },
+      {
+        "file": "out/bin/out_19_0.elf",
+        "coordinates": [
+          [
+            1,
+            2
+          ]
+        ],
+        "actual_task_ids": [
+          0,
+          11,
+          12,
+          13,
+          16,
+          21,
+          27,
+          28,
+          29,
+          30,
+          33,
+          34,
+          35,
+          36,
+          37
+        ],
+        "DMA_IQ2_IQ4_blocked": true
+      },
+      {
+        "file": "out/bin/out_1_0.elf",
+        "coordinates": [
+          [
+            1,
+            0
+          ]
+        ],
+        "actual_task_ids": [
+          0,
+          14,
+          17,
+          18,
+          21,
+          27,
+          28,
+          29,
+          30,
+          33,
+          34,
+          35,
+          36,
+          37
+        ],
+        "DMA_IQ2_IQ4_blocked": true
+      },
+      {
+        "file": "out/bin/out_20_0.elf",
+        "coordinates": [
+          [
+            2,
+            2
+          ]
+        ],
+        "actual_task_ids": [
+          0,
+          11,
+          12,
+          13,
+          16,
+          21,
+          27,
+          28,
+          29,
+          30,
+          33,
+          34,
+          35,
+          36,
+          37
+        ],
+        "DMA_IQ2_IQ4_blocked": true
+      },
+      {
+        "file": "out/bin/out_21_0.elf",
+        "coordinates": [
+          [
+            3,
+            2
+          ]
+        ],
+        "actual_task_ids": [
+          0,
+          11,
+          12,
+          13,
+          16,
+          21,
+          27,
+          28,
+          29,
+          30,
+          33,
+          34,
+          35,
+          36,
+          37
+        ],
+        "DMA_IQ2_IQ4_blocked": true
+      },
+      {
+        "file": "out/bin/out_22_0.elf",
+        "coordinates": [
+          [
+            4,
+            2
+          ]
+        ],
+        "actual_task_ids": [
+          0,
+          10,
+          11,
+          12,
+          13,
+          15,
+          16,
+          19,
+          21,
+          27,
+          28,
+          29,
+          30,
+          33,
+          34,
+          35,
+          36,
+          37
+        ],
+        "DMA_IQ2_IQ4_blocked": true
+      },
+      {
+        "file": "out/bin/out_23_0.elf",
+        "coordinates": [
+          [
+            5,
+            2
+          ]
+        ],
+        "actual_task_ids": [
+          0,
+          10,
+          11,
+          12,
+          13,
+          15,
+          16,
+          21,
+          27,
+          28,
+          29,
+          30,
+          33,
+          34,
+          35,
+          36,
+          37
+        ],
+        "DMA_IQ2_IQ4_blocked": true
+      },
+      {
+        "file": "out/bin/out_24_0.elf",
+        "coordinates": [
+          [
+            6,
+            2
+          ]
+        ],
+        "actual_task_ids": [
+          0,
+          10,
+          12,
+          13,
+          15,
+          21,
+          27,
+          28,
+          29,
+          30,
+          33,
+          34,
+          35,
+          36,
+          37
+        ],
+        "DMA_IQ2_IQ4_blocked": true
+      },
+      {
+        "file": "out/bin/out_25_0.elf",
+        "coordinates": [
+          [
+            7,
+            2
+          ]
+        ],
+        "actual_task_ids": [
+          0,
+          13,
+          21,
+          27,
+          28,
+          29,
+          30,
+          33,
+          34,
+          35,
+          36,
+          37
+        ],
+        "DMA_IQ2_IQ4_blocked": true
+      },
+      {
+        "file": "out/bin/out_26_0.elf",
+        "coordinates": [
+          [
+            8,
+            2
+          ]
+        ],
+        "actual_task_ids": [
+          0,
+          13,
+          21,
+          27,
+          28,
+          29,
+          30,
+          33,
+          34,
+          35,
+          36,
+          37
+        ],
+        "DMA_IQ2_IQ4_blocked": true
+      },
+      {
+        "file": "out/bin/out_2_0.elf",
+        "coordinates": [
+          [
+            2,
+            0
+          ]
+        ],
+        "actual_task_ids": [
+          0,
+          10,
+          12,
+          14,
+          15,
+          17,
+          18,
+          21,
+          27,
+          28,
+          29,
+          30,
+          33,
+          34,
+          35,
+          36,
+          37
+        ],
+        "DMA_IQ2_IQ4_blocked": true
+      },
+      {
+        "file": "out/bin/out_3_0.elf",
+        "coordinates": [
+          [
+            3,
+            0
+          ]
+        ],
+        "actual_task_ids": [
+          0,
+          14,
+          17,
+          18,
+          21,
+          27,
+          28,
+          29,
+          30,
+          33,
+          34,
+          35,
+          36,
+          37
+        ],
+        "DMA_IQ2_IQ4_blocked": true
+      },
+      {
+        "file": "out/bin/out_4_0.elf",
+        "coordinates": [
+          [
+            4,
+            0
+          ]
+        ],
+        "actual_task_ids": [
+          0,
+          3,
+          12,
+          14,
+          17,
+          18,
+          21,
+          27,
+          28,
+          29,
+          30,
+          33,
+          34,
+          35,
+          36,
+          37
+        ],
+        "DMA_IQ2_IQ4_blocked": true
+      },
+      {
+        "file": "out/bin/out_5_0.elf",
+        "coordinates": [
+          [
+            5,
+            0
+          ]
+        ],
+        "actual_task_ids": [
+          0,
+          3,
+          12,
+          14,
+          17,
+          18,
+          21,
+          27,
+          28,
+          29,
+          30,
+          33,
+          34,
+          35,
+          36,
+          37
+        ],
+        "DMA_IQ2_IQ4_blocked": true
+      },
+      {
+        "file": "out/bin/out_6_0.elf",
+        "coordinates": [
+          [
+            6,
+            0
+          ]
+        ],
+        "actual_task_ids": [
+          0,
+          3,
+          12,
+          14,
+          17,
+          18,
+          21,
+          27,
+          28,
+          29,
+          30,
+          33,
+          34,
+          35,
+          36,
+          37
+        ],
+        "DMA_IQ2_IQ4_blocked": true
+      },
+      {
+        "file": "out/bin/out_7_0.elf",
+        "coordinates": [
+          [
+            7,
+            0
+          ]
+        ],
+        "actual_task_ids": [
+          0,
+          14,
+          17,
+          18,
+          21,
+          27,
+          28,
+          29,
+          30,
+          33,
+          34,
+          35,
+          36,
+          37
+        ],
+        "DMA_IQ2_IQ4_blocked": true
+      },
+      {
+        "file": "out/bin/out_8_0.elf",
+        "coordinates": [
+          [
+            8,
+            0
+          ]
+        ],
+        "actual_task_ids": [
+          0,
+          14,
+          17,
+          18,
+          21,
+          27,
+          28,
+          29,
+          30,
+          33,
+          34,
+          35,
+          36,
+          37
+        ],
+        "DMA_IQ2_IQ4_blocked": true
+      },
+      {
+        "file": "out/bin/out_9_0.elf",
+        "coordinates": [
+          [
+            0,
+            1
+          ]
+        ],
+        "actual_task_ids": [
+          0,
+          14,
+          17,
+          18,
+          21,
+          27,
+          28,
+          29,
+          30,
+          33,
+          34,
+          35,
+          36,
+          37
+        ],
+        "DMA_IQ2_IQ4_blocked": true
+      }
+    ],
+    "actual_DSR_review": {
+      "all_emitted_function_IMOV_accesses": "Only expected explicit input2/4,output6(orproducer2),GOdestination3,diag7,SDK0; sink synchronouscopy1 after own prior receive completion",
+      "descriptor_configuration": "2a2e9e explicitly checks mapped descriptor writes and named DSR loads in origin/peer/two-input relay; all operations retained in full report",
+      "scalar_helpers": "No unexpected IMOV DSR operations in row assembly, source/reference checks, retained source comparisons, relay records or gate copy across full emitted function decode",
+      "gate": "03faa2 actual16 scalarloads/stores of both full packets precede ublk12; tasks10/11/12/13/15/16/19 unique on gate relay",
+      "row_identity_optimization": "8572cc actualpeer rows.pump stores literal0 into rows.tx words3/4; origin input_b.complete explicitly loads those two received fields and compares0. identity0/1 remain4B each; no weakening of original identity contract",
+      "scope": "Static actual generated-code and source lifetime review; no claim of runtime DMA overlap, runtime correctness, arbitrary fault immunity or original neural epoch"
+    },
+    "neural_epochs": 0,
+    "original_acceptance_sha256": "1b3ce58eb60702a409430d485eea8253f9f8f0ee2787a6d84bf01e51d1cbfd81"
+  },
+  "prior_runtime001": {
+    "candidate": "static-transport-sim-001",
+    "manifest_sha256": "e5bb5c6dcc7c2ee190721756ddfb969fe380d0fc958687d8868de3fe1809dbb2",
+    "status": "partial_protocol_evidence_from_capture_timeout_accepted_released",
+    "whole_runtime_passed": false,
+    "normal_stop": false,
+    "complete_second_read": false,
+    "neural_epochs": 0,
+    "raw_audit": {
+      "tool": "decf8f",
+      "method": "Independent standard-library ZIP/NPY header/u32 parsing and hash verification, then reviewed CSL-independent static-v1 schema",
+      "raw_files": 28,
+      "raw_bytes": 83616,
+      "host_bytes": 76224,
+      "first_complete_export_bytes": 50016,
+      "first_complete_schema_passed": true,
+      "first_snapshot_scope": "3READY/8REQUEST/24fragments/1024halfwords/all relay/source release/provenance/gate held-input witness/local causal order",
+      "second_completed_exports": [
+        "state",
+        "input_a_status",
+        "input_b_status",
+        "output_status",
+        "diagnostic_status"
+      ],
+      "second_completed_prefix_exact": true
+    },
+    "failure_boundary": {
+      "last_journal_sequence": 66,
+      "last_copy": "final-1-origin_records",
+      "last_copy_enter_seconds": 40.01912351837382,
+      "first_complete_read_end_seconds": 37.292,
+      "raw_result_json_present": false,
+      "meaning": "Live D2H progress reached second full verification; original45s child budget insufficient. Not precompute nativeabort, not established device deadlock."
+    },
+    "original_acceptance_sha256": "13978dd6c7ab473730c2e67976dd9241387e2a3b9b35bceb2ac7976a3f18c729"
+  },
+  "generated_artifact_provenance": {
+    "status": "first_observed_structure_and_pinned_SDK_source_accepted",
+    "review": "All generated ELF64 little endian WSE3 flags2/fabric16x5. Default25 payload/address/flags identical to accepted011, fullfabric extent16x5. Coord21 loads exact every X0..15/Y0..4 and coordinate register/data value. MEMCPY5 two-byte traffic-map loads confined to memcpy boundary outside applicationx4..12; source derives routes from netlist, SDK log loads these files and all27 pinned applicationELFs. Hashes first observed; no independent generation/deterministic reconstruction claim.",
+    "files": {
+      "out/generated/MEMCPY_XY_ROUTES.elf": {
+        "bytes": 824,
+        "sha256": "2885a126731f9c2a69492f50caa1885e5351bb795e664f01e068755f7e5ac5ba"
+      },
+      "out/generated/coord.elf": {
+        "bytes": 1752,
+        "sha256": "e56fee6a8958121683151c51e83276bf1ab7ff3e2c798bd3efd97695ebc6df2f"
+      },
+      "out/generated/default.elf": {
+        "bytes": 52720,
+        "sha256": "2420041715d20409fc576a1624861b6e2f45533f379bef23c7e903f275f67181"
+      }
+    },
+    "independent_generation_claim": false
+  },
+  "source_map": {
+    "examples/ready_fanin/static_transport/app.csl": {
+      "bytes": 8912,
+      "sha256": "5b609c42cc7cc70e655de820e342e1c35c95800746d3864370aaf88dff02c064",
+      "byte_identical": true
+    },
+    "examples/ready_fanin/static_transport/layout.csl": {
+      "bytes": 3065,
+      "sha256": "5f3a89e6fdaec913d557bae97f09acfd211e7d1b1e693230e2b4cda44a378958",
+      "byte_identical": true
+    },
+    "examples/ready_fanin/static_transport/relay.csl": {
+      "bytes": 6823,
+      "sha256": "319f5272dabb50e2c4d7a2d4df65d611cf529568e0bf34a57ea1c789c27200d7",
+      "byte_identical": true
+    },
+    "examples/ready_fanin/static_transport/static_input.csl": {
+      "bytes": 1753,
+      "sha256": "a4213c817b7e7bfef699a63ee2b6d28577c6186f754da81a58c7e315cd12046f",
+      "byte_identical": true
+    },
+    "examples/ready_fanin/static_transport/static_output.csl": {
+      "bytes": 1612,
+      "sha256": "88b4a88a00dca897a5bfa7bde0a0fcf9eb6c505bf6d0b67d7ed4402c7ac0e377",
+      "byte_identical": true
+    },
+    "examples/ready_fanin/static_transport/schema.py": {
+      "bytes": 12091,
+      "sha256": "810b308b90f8c22b71b32d8960b8f05cbb0dd790b8bb67ddf7caf88246eaedd7",
+      "byte_identical": true
+    },
+    "examples/ready_fanin/static_transport/capture.py": {
+      "bytes": 9623,
+      "sha256": "3cfd2fc7bb252899902fe7bd247a697fb20f20e3654511236ee87cbb82bb404e",
+      "byte_identical": true
+    },
+    "examples/ready_fanin/static_transport/driver.py": {
+      "bytes": 647,
+      "sha256": "e82afd11a132eec584e9aa92a7a93765d19515f17439f4ac6fb8492ef0a73dea",
+      "byte_identical": true
+    },
+    "examples/ready_fanin/native_control/first_fault/diagnostics.csl": {
+      "bytes": 3319,
+      "sha256": "2fe5c00593b742dfd33fbf50664577e07158764d9f93a70faa00c29c27034c10",
+      "byte_identical": true
+    },
+    "examples/ready_fanin/native_control/first_fault/row_packet.csl": {
+      "bytes": 2882,
+      "sha256": "a30bfaa6089c261ec971234ac7fdd9bb761d4f3ac1a91da64147a89cdc1b80ba",
+      "byte_identical": true
+    }
+  },
+  "raw_capture_metadata": [
+    {
+      "path": "evidence/initial-state.npz",
+      "shape": [
+        3,
+        9,
+        32
+      ],
+      "bytes": 3720,
+      "sha256": "65bcd0b1481a073ba0aa1fe77b15f398674cb11eec90bac7e26d196ba15d7381"
+    },
+    {
+      "path": "evidence/poll-0-state.npz",
+      "shape": [
+        3,
+        9,
+        32
+      ],
+      "bytes": 3720,
+      "sha256": "7313132a5f32c5a2a3bbb3d686d25383e2a5652637d26e12c5e8bfe352352637"
+    },
+    {
+      "path": "evidence/poll-0-diag.npz",
+      "shape": [
+        2,
+        9,
+        8
+      ],
+      "bytes": 840,
+      "sha256": "0feda010af9b105307cd94820aaafc144c13179251c57811df1382319c7f6d45"
+    },
+    {
+      "path": "evidence/poll-1-state.npz",
+      "shape": [
+        3,
+        9,
+        32
+      ],
+      "bytes": 3720,
+      "sha256": "f959f7b5b9ae59a5bc2b76fc9f96691dbee7065398c099ec69914a098a40d7bc"
+    },
+    {
+      "path": "evidence/poll-1-diag.npz",
+      "shape": [
+        2,
+        9,
+        8
+      ],
+      "bytes": 840,
+      "sha256": "6c034983a64b313a4d70e9888a95426b04b7689184e6ad970c715b3cfa939dd2"
+    },
+    {
+      "path": "evidence/poll-2-state.npz",
+      "shape": [
+        3,
+        9,
+        32
+      ],
+      "bytes": 3720,
+      "sha256": "9e6093a34dff626eed2e3a7b236823c074b7eed1e4af4cec05b33a40cc1fb83c"
+    },
+    {
+      "path": "evidence/poll-2-diag.npz",
+      "shape": [
+        2,
+        9,
+        8
+      ],
+      "bytes": 840,
+      "sha256": "d9dd585840603175fd15d2f197b5599a16db5422632660475ac90d366cc2229d"
+    },
+    {
+      "path": "evidence/poll-3-state.npz",
+      "shape": [
+        3,
+        9,
+        32
+      ],
+      "bytes": 3720,
+      "sha256": "8d04aff0e3af5d8c34d1e568cdb5529a5aafe5c28fc5bdd49f216d99afd042f6"
+    },
+    {
+      "path": "evidence/poll-3-diag.npz",
+      "shape": [
+        2,
+        9,
+        8
+      ],
+      "bytes": 840,
+      "sha256": "d9dd585840603175fd15d2f197b5599a16db5422632660475ac90d366cc2229d"
+    },
+    {
+      "path": "evidence/final-0-state.npz",
+      "shape": [
+        3,
+        9,
+        32
+      ],
+      "bytes": 3720,
+      "sha256": "8d04aff0e3af5d8c34d1e568cdb5529a5aafe5c28fc5bdd49f216d99afd042f6"
+    },
+    {
+      "path": "evidence/final-0-input_a_status.npz",
+      "shape": [
+        3,
+        9,
+        8
+      ],
+      "bytes": 1128,
+      "sha256": "865b3ca4509485a746932e28eda1561081e8d6b6d016bafce41f161a18840838"
+    },
+    {
+      "path": "evidence/final-0-input_b_status.npz",
+      "shape": [
+        3,
+        9,
+        8
+      ],
+      "bytes": 1128,
+      "sha256": "739d86d273db97b65dc38a1247aaf69c6ee86588a7857efc8fcb6a1eb0cd03d8"
+    },
+    {
+      "path": "evidence/final-0-output_status.npz",
+      "shape": [
+        3,
+        9,
+        8
+      ],
+      "bytes": 1128,
+      "sha256": "a8f8d0680dde43465fa1bec74291cd4a9a6fe2cdcd4eb31e4033f970b58dd09f"
+    },
+    {
+      "path": "evidence/final-0-diagnostic_status.npz",
+      "shape": [
+        2,
+        9,
+        8
+      ],
+      "bytes": 840,
+      "sha256": "d9dd585840603175fd15d2f197b5599a16db5422632660475ac90d366cc2229d"
+    },
+    {
+      "path": "evidence/final-0-origin_records.npz",
+      "shape": [
+        2,
+        1,
+        3072
+      ],
+      "bytes": 24840,
+      "sha256": "7729989390c2de2f80cac09be009626c967e529ecd4b4f46d96414604b8d3e13"
+    },
+    {
+      "path": "evidence/final-0-peer_records.npz",
+      "shape": [
+        2,
+        1,
+        1536
+      ],
+      "bytes": 12552,
+      "sha256": "a4c7f066f76eb80fbbbd8e6ec7f0aaba780b48f095d6cfb3b63fc438e01e8adf"
+    },
+    {
+      "path": "evidence/final-0-producer_records.npz",
+      "shape": [
+        2,
+        3,
+        48
+      ],
+      "bytes": 1416,
+      "sha256": "ff4a24a41ebeecefba809581ed3508efb8841e335925b7c737506c76843a29c0"
+    },
+    {
+      "path": "evidence/final-0-idle1_records.npz",
+      "shape": [
+        2,
+        1,
+        16
+      ],
+      "bytes": 392,
+      "sha256": "3e782d7eb59570296ce6e51b5be21e3d8b288905cb04e675cfccc761af84928c"
+    },
+    {
+      "path": "evidence/final-0-idle3_records.npz",
+      "shape": [
+        2,
+        1,
+        16
+      ],
+      "bytes": 392,
+      "sha256": "3e782d7eb59570296ce6e51b5be21e3d8b288905cb04e675cfccc761af84928c"
+    },
+    {
+      "path": "evidence/final-0-idle7_records.npz",
+      "shape": [
+        2,
+        2,
+        16
+      ],
+      "bytes": 520,
+      "sha256": "ec21b9f7a955d0f9fc8b757aeaf1626c421e08beb7af82b3473faae6e727b59b"
+    },
+    {
+      "path": "evidence/final-0-relay_records.npz",
+      "shape": [
+        1,
+        9,
+        48
+      ],
+      "bytes": 1992,
+      "sha256": "68327cd47a1650dd0514c3a8efe0e4007476c2016079c756d2a7ab762435da1a"
+    },
+    {
+      "path": "evidence/final-0-row_packets.npz",
+      "shape": [
+        1,
+        1,
+        768
+      ],
+      "bytes": 3336,
+      "sha256": "d6eae4250d997ae01227f9727f67be1d4a2bafced134f2b050eadfd627942926"
+    },
+    {
+      "path": "evidence/final-0-gate_words.npz",
+      "shape": [
+        1,
+        1,
+        16
+      ],
+      "bytes": 328,
+      "sha256": "f331f820d841d18e1b877f0b09d900911119ff85d3479c425344b9acecc80206"
+    },
+    {
+      "path": "evidence/final-1-state.npz",
+      "shape": [
+        3,
+        9,
+        32
+      ],
+      "bytes": 3720,
+      "sha256": "8d04aff0e3af5d8c34d1e568cdb5529a5aafe5c28fc5bdd49f216d99afd042f6"
+    },
+    {
+      "path": "evidence/final-1-input_a_status.npz",
+      "shape": [
+        3,
+        9,
+        8
+      ],
+      "bytes": 1128,
+      "sha256": "865b3ca4509485a746932e28eda1561081e8d6b6d016bafce41f161a18840838"
+    },
+    {
+      "path": "evidence/final-1-input_b_status.npz",
+      "shape": [
+        3,
+        9,
+        8
+      ],
+      "bytes": 1128,
+      "sha256": "739d86d273db97b65dc38a1247aaf69c6ee86588a7857efc8fcb6a1eb0cd03d8"
+    },
+    {
+      "path": "evidence/final-1-output_status.npz",
+      "shape": [
+        3,
+        9,
+        8
+      ],
+      "bytes": 1128,
+      "sha256": "a8f8d0680dde43465fa1bec74291cd4a9a6fe2cdcd4eb31e4033f970b58dd09f"
+    },
+    {
+      "path": "evidence/final-1-diagnostic_status.npz",
+      "shape": [
+        2,
+        9,
+        8
+      ],
+      "bytes": 840,
+      "sha256": "d9dd585840603175fd15d2f197b5599a16db5422632660475ac90d366cc2229d"
+    },
+    {
+      "path": "evidence/final-1-origin_records.npz",
+      "shape": [
+        2,
+        1,
+        3072
+      ],
+      "bytes": 24840,
+      "sha256": "7729989390c2de2f80cac09be009626c967e529ecd4b4f46d96414604b8d3e13"
+    },
+    {
+      "path": "evidence/final-1-peer_records.npz",
+      "shape": [
+        2,
+        1,
+        1536
+      ],
+      "bytes": 12552,
+      "sha256": "a4c7f066f76eb80fbbbd8e6ec7f0aaba780b48f095d6cfb3b63fc438e01e8adf"
+    },
+    {
+      "path": "evidence/final-1-producer_records.npz",
+      "shape": [
+        2,
+        3,
+        48
+      ],
+      "bytes": 1416,
+      "sha256": "ff4a24a41ebeecefba809581ed3508efb8841e335925b7c737506c76843a29c0"
+    },
+    {
+      "path": "evidence/final-1-idle1_records.npz",
+      "shape": [
+        2,
+        1,
+        16
+      ],
+      "bytes": 392,
+      "sha256": "3e782d7eb59570296ce6e51b5be21e3d8b288905cb04e675cfccc761af84928c"
+    },
+    {
+      "path": "evidence/final-1-idle3_records.npz",
+      "shape": [
+        2,
+        1,
+        16
+      ],
+      "bytes": 392,
+      "sha256": "3e782d7eb59570296ce6e51b5be21e3d8b288905cb04e675cfccc761af84928c"
+    },
+    {
+      "path": "evidence/final-1-idle7_records.npz",
+      "shape": [
+        2,
+        2,
+        16
+      ],
+      "bytes": 520,
+      "sha256": "ec21b9f7a955d0f9fc8b757aeaf1626c421e08beb7af82b3473faae6e727b59b"
+    },
+    {
+      "path": "evidence/final-1-relay_records.npz",
+      "shape": [
+        1,
+        9,
+        48
+      ],
+      "bytes": 1992,
+      "sha256": "68327cd47a1650dd0514c3a8efe0e4007476c2016079c756d2a7ab762435da1a"
+    },
+    {
+      "path": "evidence/final-1-row_packets.npz",
+      "shape": [
+        1,
+        1,
+        768
+      ],
+      "bytes": 3336,
+      "sha256": "d6eae4250d997ae01227f9727f67be1d4a2bafced134f2b050eadfd627942926"
+    },
+    {
+      "path": "evidence/final-1-gate_words.npz",
+      "shape": [
+        1,
+        1,
+        16
+      ],
+      "bytes": 328,
+      "sha256": "f331f820d841d18e1b877f0b09d900911119ff85d3479c425344b9acecc80206"
+    }
+  ],
+  "compiled_original_files_unchanged": 45,
+  "compiled_original_bytes": 1165461,
+  "trace_files": 3,
+  "trace_bytes": 8495,
+  "complete_neural_epochs": 0,
+  "model_generations": 0,
+  "full136_static_physical_qualified": false,
+  "previous_native_control_failures_preserved": true,
+  "unique_rootcause_proven": false,
+  "continuous_DMA_or_wire_observation": false,
+  "raw_capture_files_published": false,
+  "compiled_artifacts_published": false,
+  "vendor_SDK_sources_published": false
+}

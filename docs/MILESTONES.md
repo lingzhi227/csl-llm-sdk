@@ -2,6 +2,17 @@
 
 Only accepted results are listed below. Unresolved integration work and the remaining scope are tracked in [implementation status](STATUS.md).
 
+## Small static transport · SDK qualification accepted · September 22, 2026 (UTC)
+
+The 27 PE fixture delivers all 3 READY packets,8 requests,24 fragments and 1024
+halfwords. Two complete exports match, all retained-input/provenance/release
+checks pass and the runtime exits normally. The first capture-timeout failure
+is preserved. Full 136-producer physical transport and original neural inference remain
+unqualified; this is not token-latency evidence.
+[Report](STATIC-TRANSPORT-SMALL.md) ·
+[Source](../examples/ready_fanin/static_transport) ·
+[Evidence](../evidence/ready-fanin/static-transport-small.json).
+
 ## Full136 actual sender-frame checks · Failure evidence accepted · September22,2026 (UTC)
 
 All136 producers traverse three qualified actual frame/source/tail checks,

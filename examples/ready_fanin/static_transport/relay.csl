@@ -1,0 +1,124 @@
+param memcpy_params;param column:u16;param first:u16;param count:u16;
+param qualification_gate:bool;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const last=first+count-1;
+const local_count:u16=if(column>=first and column<=last) 1 else 0;
+const upstream_count:u16=if(column<first) count else if(column<last) last-column else 0;
+const expected=local_count+upstream_count;
+const service=@get_local_task_id(13);
+const gate_task=@get_local_task_id(19);
+var state=@zeros([32]u32);
+// Per owner: seqlock, ingress, owner, ingress ordinal, output ordinal,
+// all eight original words, point-check mask, error, seqlock.
+var records=@zeros([16*count]u32);
+var gate_words=@zeros([if(qualification_gate) 16 else 1]u32);
+var selected:u16=0;var prefer_local:bool=true;
+fn healthy() bool {return state[4]==0;}
+fn fail(code:u32) void {if(state[4]==0){state[4]=code;}}
+const local=@import_module("static_input.csl",.{.enabled=local_count>0,.capacity=8,
+ .queue_id=2,.color_id=8,.resource_id=2,.done_id=@get_local_task_id(10),
+ .error_id=@get_local_task_id(15),.healthy=healthy,.received=local_received,.failed=fail});
+const upstream=@import_module("static_input.csl",.{.enabled=upstream_count>0,.capacity=8,
+ .queue_id=4,.color_id=10+((column+1)%2),.resource_id=4,.done_id=@get_local_task_id(11),
+ .error_id=@get_local_task_id(16),.healthy=healthy,.received=upstream_received,.failed=fail});
+const output=@import_module("static_output.csl",.{.enabled=expected>0,.queue_id=6,
+ .color_id=if(column==0) 9 else 10+(column%2),.resource_id=6,.done_id=@get_local_task_id(12),
+ .healthy=healthy,.valid=valid_output,.before=before_output,.sent=output_sent,.failed=fail});
+fn valid_ready(data:[*]u32,length:u16,port:u16) bool {
+ if(length!=8 or data[0]!=10 or data[1]!=1 or data[2]!=1 or data[3]!=0 or data[4]!=0 or data[5]!=3 or data[6]>=@as(u32,count) or data[7]!=0){return false;}
+ const owner_column=first+@as(u16,data[6]);
+ if(port==1){return owner_column==column;}
+ return port==2 and owner_column>column;
+}
+fn receive(data:[*]u32,length:u16,port:u16) void {
+ if(!valid_ready(data,length,port)){fail(301);return;}
+ const base=@as(u16,data[6])*16;
+ if(records[base]!=0){fail(302);return;}
+ const index:u16=if(port==1) 8 else 9;
+ state[index]+=1;
+ if(state[index]>@as(u32,if(port==1) local_count else upstream_count)){fail(303);return;}
+ records[base]=1;records[base+15]=1;
+ records[base+1]=@as(u32,port);records[base+2]=data[6];records[base+3]=state[index];
+ for(@range(u16,8))|i|{records[base+5+i]=data[i];}
+ records[base+15]=2;records[base]=2;@activate(service);
+ if(comptime qualification_gate){@activate(gate_task);}
+}
+fn local_received(data:[*]u32,length:u16) void {receive(data,length,1);}
+fn upstream_received(data:[*]u32,length:u16) void {receive(data,length,2);}
+fn valid_output(data:[*]u32,length:u16) bool {
+ if(!valid_ready(data,length,selected)){return false;}
+ if((selected==1 and local.status[3]!=3) or (selected==2 and upstream.status[3]!=3)){return false;}
+ const base=@as(u16,data[6])*16;
+ for(@range(u16,8))|i|{if(records[base+5+i]!=data[i]){return false;}}
+ return records[base+1]==@as(u32,selected) and records[base]==records[base+15] and (records[base]==2 or records[base]==4);
+}
+fn before_output(data:[*]u32,length:u16) void {
+ const base=@as(u16,data[6])*16;
+ records[base]=3;records[base+15]=3;records[base+4]=state[10]+1;records[base+13]=1;
+ records[base+15]=4;records[base]=4;
+}
+fn output_sent(data:[*]u32,length:u16) void {
+ const base=@as(u16,data[6])*16;
+ records[base]=5;records[base+15]=5;records[base+13]=3;
+ records[base+15]=6;records[base]=6;state[10]+=1;
+ if(selected==1){local.release();prefer_local=false;
+  if(state[8]<@as(u32,local_count)){local.arm(8);}
+ }else{upstream.release();prefer_local=true;
+  if(state[9]<@as(u32,upstream_count)){upstream.arm(8);}
+ }
+ selected=0;state[12]=0;
+ if(state[10]==@as(u32,expected)){
+  if(state[8]!=@as(u32,local_count) or state[9]!=@as(u32,upstream_count) or local.status[3]!=0 or upstream.status[3]!=0){fail(304);return;}
+  state[2]=1;
+ }
+ @activate(service);
+}
+task pump() void {
+ if(!healthy() or output.status[3]!=0){return;}
+ const a=local.status[3]==2;const b=upstream.status[3]==2;
+ if(!a and !b){return;}
+ if(a and b){state[13]+=1;}else{state[14]+=1;}
+ selected=if(a and (!b or prefer_local)) 1 else 2;state[12]=@as(u32,selected);
+ if(selected==1){local.forward();output.send(&local.buffer,8);}
+ else{upstream.forward();output.send(&upstream.buffer,8);}
+ if(comptime qualification_gate){@activate(gate_task);}
+}
+// Qualification only: hold the first output callback until both retained input
+// buffers coexist. This delays source release, not a measured fabric transfer.
+// It has no timer, host message or all-producer dependency and is disabled in
+// the full136 case. State records the exact lease witness before unblocking.
+task release_gate() void {
+ if(comptime qualification_gate){
+  if(!healthy() or state[16]!=0 or output.status[3]!=1){return;}
+  const both=(local.status[3]==2 or local.status[3]==3) and (upstream.status[3]==2 or upstream.status[3]==3);
+  if(!both){return;}
+  if(output.status[1]!=1 or output.status[2]!=0 or state[10]!=0){fail(305);return;}
+  state[16]=1;state[17]=@as(u32,selected);state[18]=local.status[3];state[19]=upstream.status[3];
+  state[20]=output.status[1];state[21]=output.status[2];state[22]=2;
+  for(@range(u16,8))|i|{gate_words[i]=local.buffer[i];gate_words[8+i]=upstream.buffer[i];}
+  @unblock(@get_local_task_id(12));
+ }
+}
+fn initialize() void {
+ @assert(state[0]==0);state[0]=1;state[1]=5;state[3]=@as(u32,column);
+ state[5]=@as(u32,local_count);state[6]=@as(u32,upstream_count);state[7]=@as(u32,expected);
+ if(comptime qualification_gate){@block(@get_local_task_id(12));}
+ if(comptime local_count>0){local.arm(8);}if(comptime upstream_count>0){upstream.arm(8);}
+ if(comptime expected==0){state[2]=1;}
+ sys.unblock_cmd_stream();
+}
+fn compute() void {@assert(state[0]==1);state[0]=2;sys.unblock_cmd_stream();}
+const state_ptr:[*]u32=&state;const records_ptr:[*]u32=&records;
+const a_ptr:[*]u32=&local.status;const b_ptr:[*]u32=&upstream.status;const out_ptr:[*]u32=&output.status;
+const gate_ptr:[*]u32=&gate_words;
+// Unused uniform exports keep capture layout explicit without aliasing records.
+var unused=@zeros([1]u32);const unused_ptr:[*]u32=&unused;
+comptime {
+ @bind_local_task(pump,service);
+ if(qualification_gate){@bind_local_task(release_gate,gate_task);}
+ @export_symbol(state_ptr,"state");@export_symbol(records_ptr,"relay_records");
+ @export_symbol(gate_ptr,"gate_words");
+ @export_symbol(a_ptr,"input_a_status");@export_symbol(b_ptr,"input_b_status");@export_symbol(out_ptr,"output_status");
+ @export_symbol(unused_ptr,"diagnostic_status");@export_symbol(unused_ptr,"diagnostic_records");@export_symbol(unused_ptr,"row_packets");
+ @export_symbol(initialize);@export_symbol(compute);
+}

@@ -87,6 +87,17 @@ Full attention/recurrent layers and the three-stage model remain integration wor
 
 Each **WP** or **HW** is a scoped development milestone. HW00/HW01 use physical WSE-3; earlier WP device results use the SDK simulator, and WP04 is a CPU/source audit. **BF16** means bfloat16 data, and **FP32** means 32-bit floating-point arithmetic. Reports contain numerical thresholds, failure history and reproduction details.
 
+### Small static transport · SDK qualification accepted · September 22, 2026 (UTC)
+
+The 27 PE fixture delivers all 3 READY packets,8 requests,24 fragments and 1024
+halfwords. Two complete exports match, all retained-input/provenance/release
+checks pass and the runtime exits normally. The first capture-timeout failure
+is preserved. Full 136-producer physical transport and original neural inference remain
+unqualified; this is not token-latency evidence.
+[Report](docs/STATIC-TRANSPORT-SMALL.md) ·
+[Source](examples/ready_fanin/static_transport) ·
+[Evidence](evidence/ready-fanin/static-transport-small.json).
+
 ### Full136 actual sender-frame checks · Failure evidence accepted · September22,2026 (UTC)
 
 All136 producers traverse three qualified actual frame/source/tail checks,

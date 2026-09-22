@@ -1,0 +1,37 @@
+// Finite ordinary-data receive with an explicit retained-buffer lease.
+param enabled:bool;param capacity:u16;param queue_id:u16;param color_id:u16;
+param resource_id:u16;param done_id:local_task_id;param error_id:local_task_id;
+param healthy:fn()bool;param received:fn([*]u32,u16)void;param failed:fn(u32)void;
+const iq=@get_input_queue(queue_id);
+const rd=@get_dsr(dsr_dest,resource_id);const rs=@get_dsr(dsr_src1,resource_id);
+var buffer=@zeros([capacity]u32);
+// arms, complete packets, releases, lease(0 free/1 armed/2 held/3 forwarding),
+// current length, error, reserved, reserved. Armed does not imply partial data.
+var status=@zeros([8]u32);
+fn arm(length:u16) void {
+ @assert(enabled and status[3]==0 and length>0 and length<=capacity and healthy());
+ status[0]+=1;status[3]=1;status[4]=@as(u32,length);
+ const dst=@get_dsd(mem1d_dsd,.{.base_address=&buffer,.extent=length});
+ const base=@get_dsd(fabin_dsd,.{.input_queue=iq,.extent=1,.simd_mode=.{.simd_off=true}});
+ const src=@set_dsd_length(base,length);
+ @load_to_dsr(rd,dst);
+ @load_to_dsr(rs,src,.{.async=true,.activate=done_id,.on_control=.{.activate=error_id},.ut_id=@get_ut_id(resource_id)});
+ @mov32(rd,rs,.{.async=true});
+}
+fn forward() void {@assert(status[3]==2 and healthy());status[3]=3;}
+fn release() void {
+ @assert((status[3]==2 or status[3]==3) and healthy());
+ status[2]+=1;status[3]=0;
+}
+task complete() void {
+ if(!healthy()){return;}
+ if(status[3]!=1){status[5]=1;failed(101);return;}
+ status[1]+=1;status[3]=2;received(&buffer,@as(u16,status[4]));
+}
+task control_error() void {status[5]=2;failed(102);}
+comptime {
+ if(enabled){
+  @initialize_queue(iq,.{.color=@get_color(color_id)});
+  @bind_local_task(complete,done_id);@bind_local_task(control_error,error_id);
+ }
+}

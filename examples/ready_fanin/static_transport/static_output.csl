@@ -1,0 +1,32 @@
+// Direct retained-source output. Completion releases a source, not its receiver.
+param enabled:bool;param queue_id:u16;param color_id:u16;param resource_id:u16;
+param done_id:local_task_id;param healthy:fn()bool;
+param valid:fn([*]u32,u16)bool;param before:fn([*]u32,u16)void;
+param sent:fn([*]u32,u16)void;param failed:fn(u32)void;
+const oq=@get_output_queue(queue_id);
+const rd=@get_dsr(dsr_dest,resource_id);const rs=@get_dsr(dsr_src1,resource_id);
+var source:[*]u32;var length:u16=0;
+// leases acquired, issued, completed, active lease, length, error, pre/post checks.
+var status=@zeros([8]u32);
+fn send(data:[*]u32,count:u16) void {
+ @assert(enabled and status[3]==0 and count>0 and count<=31 and healthy());
+ source=data;length=count;status[0]+=1;status[3]=1;status[4]=@as(u32,count);
+ if(!valid(source,length)){status[5]=1;failed(201);return;}
+ status[6]+=1;before(source,length);
+ if(!healthy()){return;}
+ const src=@get_dsd(mem1d_dsd,.{.base_address=source,.extent=length});
+ const base=@get_dsd(fabout_dsd,.{.output_queue=oq,.extent=1,.simd_mode=.{.simd_off=true}});
+ const dst=@set_dsd_length(base,length);
+ @load_to_dsr(rs,src);
+ @load_to_dsr(rd,dst,.{.async=true,.activate=done_id,.ut_id=@get_ut_id(resource_id)});
+ status[1]+=1;@mov32(rd,rs,.{.async=true});
+}
+task complete() void {
+ if(!healthy()){return;}
+ if(status[3]!=1){status[5]=2;failed(202);return;}
+ if(!valid(source,length)){status[5]=3;failed(203);return;}
+ status[7]+=1;status[2]+=1;status[3]=0;sent(source,length);
+}
+comptime {
+ if(enabled){@initialize_queue(oq,.{.color=@get_color(color_id)});@bind_local_task(complete,done_id);}
+}
