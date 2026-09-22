@@ -2,6 +2,18 @@
 
 Only accepted results are listed below. Unresolved integration work and the remaining scope are tracked in [implementation status](STATUS.md).
 
+## Full136 body-completion boundary · Failure evidence accepted · September 22, 2026 UTC
+
+Physical RUN009 detects the same bad eight-word prefix as RUN008 before arming
+the current packet's tail receive. The first 22 origin records, all 16 peer
+records and all 408 producer source records remain exact and comparable.
+Strict protocol checking still fails; normal exit, release and durable backup
+are verified. Earlier boundary handling, routing, body DMA and sender lifetime
+remain alternatives. No repair or neural epoch is claimed.
+[Report](FULL136-BODY-BOUNDARY.md) ·
+[Source](../examples/ready_fanin/native_control/body_boundary) ·
+[Evidence](../evidence/ready-fanin/native-control/full136-body-boundary.json).
+
 ## Full136 first-fault capture · Failure evidence accepted · September 22, 2026 UTC
 
 Physical RUN008 still fails the original 650-record criterion. All 408 producer

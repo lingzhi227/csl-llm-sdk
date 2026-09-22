@@ -2,6 +2,12 @@
 
 Updated September 22, 2026 UTC.
 
+The [body-completion boundary diagnostic](FULL136-BODY-BOUNDARY.md) detects the
+same malformed prefix before the current tail receive is armed. Its strict
+protocol check still fails. Comparable records, normal exit, release and backup
+are independently accepted; earlier boundary, routing, DMA and sender-lifetime
+alternatives remain. Complete neural epochs and CSL model generations remain zero.
+
 A new [136-producer first-fault capture](FULL136-FIRST-FAULT.md) independently
 preserves the original strict failure: all 13 earlier captures are byte-identical,
 while two added fault-bank reads agree. The bad eight-word prefix is visible at
@@ -44,6 +50,7 @@ unique root cause or full 136 repair.
 
 | Component | Current accepted scope |
 |---|---|
+| Full136 body-completion boundary | RUN009 strictly fails with the same invalid prefix before current tail arming; independently accepted boundary evidence, release and backup; no unique root cause or repair |
 | Full136 first-fault diagnostic | Physical RUN008 strictly fails; stable completed fault bank, 408 exact producer records, 13 prior captures byte-identical, normal exit/release and backup independently verified; no root-cause or neural-inference pass |
 | Native bidirectional lifecycle | Physical 007: all 31 checks, 200 words,two rows,full banks/stability and both first-TX witnesses pass; origin RX during unfinished TX observed; normal exit/release. Physical006 overall 30/31 failure and simulator failures preserved |
 | Native control two-source comparison | Same three-PE program, four packets and73 exact words pass independent simulator and physical checks; complete banks/suffixes, both first-lease witnesses and stable state; normal exit/release, larger fixture still open |

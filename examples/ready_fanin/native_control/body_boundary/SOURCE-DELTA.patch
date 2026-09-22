@@ -1,0 +1,56 @@
+--- run008/packets.csl
++++ body_boundary/packets.csl
+@@ -28,6 +28,9 @@
+ param initialize_message_routing:bool=true;
+ param on_protocol_error:fn(u16)void=protocol_error_noop;
+ param before_control:fn()void=diagnostic_noop;
++// Observe immutable application prefix validity after body DMA, before tail arming.
++param body_prefix_valid:fn([*]u32,u16)bool=body_prefix_default;
++fn body_prefix_default(data:[*]u32,length:u16) bool {return true;}
+ fn protocol_error_noop(code:u16) void {}
+ // RX:0 idle,1 header,2 body,3 control tail,4 failed,5 native consumption.
+ // TX:0 idle,1 frame,2 tail.
+@@ -155,6 +158,10 @@
+  protocol_events[1]+=1;
+  if(protocol_error!=0){return;}
+  if(!receiving or rx_phase!=2){fail_protocol(15);return;}
++ // This gate does not commit, deliver, release or rearm a packet.
++ if(!body_prefix_valid(&receive_buffer,receive_length)){
++  protocol_events[3]+=1;fail_protocol(22);return;
++ }
+  rx_phase=3;
+  const dst=@get_dsd(mem1d_dsd,.{.base_address=&control_buffer,.extent=1});
+  const src=@get_dsd(fabin_dsd,.{.input_queue=mp.mp_input_queue,.extent=1,.simd_mode=.{.simd_off=true}});
+--- run008/pe.csl
++++ body_boundary/pe.csl
+@@ -2,7 +2,7 @@
+ const origin=role==1;const peer=role==2;const producer=role==3;const sink=role==4;
+ const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+ const packets=@import_module("packets.csl",.{.sent_task_id=@get_local_task_id(12),
+- .received_task_id=@get_local_task_id(13),.on_sent=sent,.on_received=received,.before_sdk=before_sdk,.on_protocol_error=packet_error,.initialize_message_routing=true});
++ .received_task_id=@get_local_task_id(13),.on_sent=sent,.on_received=received,.before_sdk=before_sdk,.on_protocol_error=packet_error,.body_prefix_valid=body_prefix_valid,.initialize_message_routing=true});
+ const diag=@import_module("diagnostics.csl",.{.sender=!sink,.enabled=diagnostic_enabled,.capacity=capacity});
+ const rows=@import_module(if(origin or peer) "row_packet.csl" else "<empty>",
+  if(origin or peer) .{.source_role=peer,.send=send_row,.on_source_released=row_sent,.on_row_received=row_received} else .{});
+@@ -108,6 +108,21 @@
+   rows.release_row(phase);rows_done+=1;request+=1;@activate(service);
+  }
+ }
++// Read-only format check at the completed-body / unarmed-tail boundary.
++// Stateful ownership and full payload checks remain in received after native control.
++fn body_prefix_valid(data:[*]u32,length:u16) bool {
++ if(comptime origin or peer){
++  if(length<8 or data[1]!=1 or data[2]!=1 or data[3]!=0 or data[4]!=0){return false;}
++  if(comptime origin){
++   if(data[0]==10){return length==8 and data[5]==3 and data[6]<136 and data[7]==0;}
++   if(data[0]!=9 or data[5]!=2 or data[6]>=8){return false;}
++   if(data[7]==0 or data[7]==23){return length==31;}
++   return data[7]==46 and length==26;
++  }
++  return length==8 and data[0]==11 and data[5]==2 and data[6]<8 and data[7]==data[6]*128;
++ }
++ return true;
++}
+ fn received(data:[*]u32,length:u16) void {
+  if(comptime origin){
+   var error:u32=0;
