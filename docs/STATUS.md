@@ -2,6 +2,12 @@
 
 Updated September 22, 2026 UTC.
 
+The [actual sender-frame checks](FULL136-SENDER-FRAME.md) traverse all136
+producers at three qualified instruction boundaries, yet RUN011 still receives
+the same malformed prefix. These point observations do not prove continuous
+DMA or wire immutability or a unique routing cause. Release and backup are
+independently verified; no transport repair or neural epoch is claimed.
+
 The [origin word receiver](FULL136-WORD-RECEIVER.md) delivers the same malformed
 prefix through qualified scalar task arguments. Strict checking still fails;
 ordering and retained context differ from RUN009. Bulk origin body DMA is not
@@ -56,6 +62,7 @@ unique root cause or full 136 repair.
 
 | Component | Current accepted scope |
 |---|---|
+| Full136 actual sender-frame checks | RUN011 strictly fails after all136 producer three-point checks; zero sender guard faults; same retained fault context, different origin order; no continuous DMA or wire proof |
 | Full136 origin word receiver | RUN010 strictly fails through scalar IQ arguments; same bad prefix with different ordering/context; bulk origin body DMA not necessary, upstream cause unresolved |
 | Full136 body-completion boundary | RUN009 strictly fails with the same invalid prefix before current tail arming; independently accepted boundary evidence, release and backup; no unique root cause or repair |
 | Full136 first-fault diagnostic | Physical RUN008 strictly fails; stable completed fault bank, 408 exact producer records, 13 prior captures byte-identical, normal exit/release and backup independently verified; no root-cause or neural-inference pass |

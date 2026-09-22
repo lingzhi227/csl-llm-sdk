@@ -87,6 +87,17 @@ Full attention/recurrent layers and the three-stage model remain integration wor
 
 Each **WP** or **HW** is a scoped development milestone. HW00/HW01 use physical WSE-3; earlier WP device results use the SDK simulator, and WP04 is a CPU/source audit. **BF16** means bfloat16 data, and **FP32** means 32-bit floating-point arithmetic. Reports contain numerical thresholds, failure history and reproduction details.
 
+### Full136 actual sender-frame checks · Failure evidence accepted · September22,2026 (UTC)
+
+All136 producers traverse three qualified actual frame/source/tail checks,
+but RUN011 receives the same malformed prefix and still fails strict checking.
+Retained fault context and peer records match RUN010; earlier origin ordering
+differs. Point checks do not establish continuous DMA or wire immutability,
+a unique routing cause, a transport repair or a neural epoch.
+[Report](docs/FULL136-SENDER-FRAME.md) ·
+[Source](examples/ready_fanin/native_control/sender_frame) ·
+[Evidence](evidence/ready-fanin/native-control/full136-sender-frame.json).
+
 ### Full136 origin word receiver · Failure evidence accepted · September 22, 2026 (UTC)
 
 Physical RUN010 receives the same malformed prefix through qualified scalar

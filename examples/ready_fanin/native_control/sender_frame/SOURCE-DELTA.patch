@@ -1,0 +1,62 @@
+--- RUN010/packets.csl
++++ sender_frame_guard/packets.csl
+@@ -97,6 +97,7 @@
+  @activate(deferred_task_id);
+ }
+ task deferred() void {
++ if(protocol_error!=0){return;}
+  if(!pending){if(comptime diagnostics){stats[6]+=1;}return;}
+  @assert(sending);
+  // A header may reacquire the receive lease before this task is scheduled.
+@@ -113,6 +114,8 @@
+  // Bit5 selects control termination; low five bits retain advertised app length.
+  transmit_frame[0]=mp.encode_header(pending_x,pending_y,0)|@as(u32,pending_length);
+  copy_words(pending_source,@ptrcast([*]u32,&transmit_frame[1]),pending_length);
++ // Observe the actual staging allocation before any frame output is issued.
++ if(!frame_matches_source()){protocol_events[3]+=1;fail_protocol(23);return;}
+  const frame_length=pending_length+1;
+  const frame_src=@get_dsd(mem1d_dsd,.{.base_address=&transmit_frame,.extent=frame_length});
+  const frame_base=@get_dsd(fabout_dsd,.{.output_queue=mp.mp_output_queue,.extent=1,.simd_mode=.{.simd_off=true}});
+@@ -121,6 +124,20 @@
+  @mov32(frame_out,frame_src,.{.async=true,.activate=sent_task_id});
+  if(comptime diagnostics){stats[8]+=1;on_sdk_started();}
+ }
++// Scalar point checks of the actual frame allocation, not another copy of it.
++// This does not observe every DMA read or the injected wavelet stream.
++noinline fn frame_matches_source() bool {
++ if(!sending or pending or pending_length==0 or pending_length>31){return false;}
++ if(transmit_control[0]!=tail_control_payload){return false;}
++ const expected_header=mp.encode_header(pending_x,pending_y,0)|@as(u32,pending_length);
++ if(transmit_frame[0]!=expected_header){return false;}
++ for(@range(u16,31))|i|{
++  if(i<pending_length){
++   if(transmit_frame[1+i]!=pending_source[i]){return false;}
++  }
++ }
++ return true;
++}
+ // Bit-preserving synchronous copy for application payload assembly/retention.
+ // Callers supply valid disjoint ranges; count is a packet-sized runtime extent.
+ fn copy_words(source:[*]u32,destination:[*]u32,count:u16) void {
+@@ -131,7 +148,10 @@
+ }
+ task sent() void {
+  protocol_events[4]+=1;
++ if(protocol_error!=0){return;}
+  if(tx_phase!=1 or !sending or pending){fail_protocol(20);return;}
++ // Frame completion still holds both source and staging leases.
++ if(!frame_matches_source()){protocol_events[3]+=1;fail_protocol(24);return;}
+  tx_phase=2;before_control();
+  const tail=@get_dsd(fabout_dsd,.{.output_queue=mp.mp_output_queue,.extent=1,.control=true,.simd_mode=.{.simd_off=true}});
+  const tail_src=@get_dsd(mem1d_dsd,.{.base_address=&transmit_control,.extent=1});
+@@ -139,7 +159,10 @@
+ }
+ task tail_sent() void {
+  protocol_events[5]+=1;
++ if(protocol_error!=0){return;}
+  if(tx_phase!=2 or !sending or pending){fail_protocol(21);return;}
++ // Tail completion is the last observation before the source lease releases.
++ if(!frame_matches_source()){protocol_events[3]+=1;fail_protocol(25);return;}
+  tx_phase=0;
+  if(comptime diagnostics){
+   if(!sending or pending or stats[2]!=stats[3]+1){stats[7]+=1;}

@@ -1,0 +1,466 @@
+{
+  "scope": "Accepted three-point actual sender-frame evidence from a failed physical transport diagnostic",
+  "physical011": {
+    "candidate": "ready-fanin-hw-run-011",
+    "accepted_at": "2026-09-22T13:33:02.956906+00:00",
+    "status": "strict_failure_sender_frame_point_evidence_accepted_released",
+    "protocol_passed": false,
+    "complete_original_neural_epochs": 0,
+    "scope": "Genuine CS3 concurrent136-producer synthetic transport diagnostic. Original650-record criterion failed. All136 producers reached exact completion records through three qualified actual frame/source/tail checks. No transport repair or neural inference pass.",
+    "manifest_sha256": "99f88c117c1857370b0e663bb3bb7fced304162afd7d997501cacb5f223e4bde",
+    "binding_sha256": "a264577f060eab0321c5ded2f17b88a3cc0ad1cb5facf069666dacf767be7036",
+    "artifact_sha256": "97495f0b31e822d52ce2e4e79f93cc8bb1990c7f13b4bb6ba94ef7503a5bb27c",
+    "executor_session": 34585,
+    "executor_reaped": true,
+    "executor_exit": 1,
+    "executor_reap_chunk": "134827",
+    "job_phase": "SUCCEEDED",
+    "normal_stop": true,
+    "guard_seconds": 217.449370093178,
+    "guard_idle_sampled_seconds": 5.023238107096404,
+    "independent_journal_max_gap_seconds": 6.813645775895566,
+    "capture_including_stop_seconds": 7.1580923749133945,
+    "raw_files": 15,
+    "raw_bytes": 287736,
+    "D2H_copies": 15,
+    "host_slot_bytes": 283776,
+    "launches": 2,
+    "H2D": 0,
+    "journal_entries": 38,
+    "coherent_records": 440,
+    "producer_full16word_source_records": 408,
+    "producer_records_exact": true,
+    "all136_producers_traversed_three_actual_frame_checks": true,
+    "observed_sender_guard_failures": 0,
+    "origin_records": 22,
+    "peer_records": 10,
+    "torn_columns": [],
+    "first_error": {
+      "column": 0,
+      "sequence": 22,
+      "reason": 278,
+      "network": 4194600,
+      "length": 8,
+      "first8": [
+        278,
+        22,
+        4,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "billing_ledger_verified": false,
+    "limits": [
+      "Three frame/source/tail point comparisons do not prove uninterrupted DMA immutability or actual injected wavelets.",
+      "Source and staging may share transient corruption between point observations.",
+      "Stable completed scalar fault copy is not an atomic cross-word DMA snapshot.",
+      "Same complete retained fault context and peer trace as010, but earlier origin arrival order differs at records2,3,9,10,12,13,14,15.",
+      "Scheduler SUCCEEDED is lifecycle only; application strictly failed.",
+      "No unique fabric, routing, packet-boundary, output queue or transient lifetime rootcause established.",
+      "No unchanged fixed-length or receiver retry; original001/002/003/004/008/009/010 failures retained."
+    ],
+    "original_acceptance_sha256": "4b5a4f82b7b63675e521bed6eb8ffd29b55a7eb7dc3e66d6cc6dc0a0172bb4c6",
+    "selected_decoded_fault": {
+      "metadata": {
+        "TX_frames": 1,
+        "TX_tails": 1,
+        "application_flags": 16,
+        "begin": 2,
+        "bodies": 22,
+        "control_tails": 21,
+        "control_word": 0,
+        "end": 2,
+        "errors": 1,
+        "first_error": 278,
+        "headers": 22,
+        "leases": 7,
+        "magic": 1177629494,
+        "native_control_entries": 21,
+        "network_header": 4194600,
+        "ordinary_tail_events": 0,
+        "peer_rows": 0,
+        "pending_length": 8,
+        "pending_xy": 2,
+        "protocol_error": 22,
+        "ready_count": 18,
+        "receive_length": 8,
+        "request": 1,
+        "requests_received": 0,
+        "role_column": 1,
+        "rows_done": 1,
+        "rx_phase_after": 4,
+        "rx_phase_before": 2,
+        "site": 1,
+        "source_frame_validity": 5,
+        "tx_phase": 0,
+        "unexpected_data_entries": 0
+      },
+      "RX_first8": [
+        10,
+        1,
+        1,
+        4194600,
+        0,
+        10,
+        0,
+        1
+      ],
+      "TX_frame_prefix": [
+        6291752,
+        11,
+        1,
+        1,
+        0,
+        0,
+        2,
+        0,
+        0
+      ],
+      "source_first8": [
+        11,
+        1,
+        1,
+        0,
+        0,
+        2,
+        1,
+        128
+      ],
+      "retained_completed_REQUEST0": true,
+      "queued_REQUEST1_not_issued": true,
+      "source_lease_valid": true,
+      "completed_scalar_copy_not_atomic_DMA_snapshot": true
+    }
+  },
+  "physical_compile013": {
+    "candidate": "ready-fanin-hw-compile-013",
+    "status": "accepted_compile_only",
+    "manifest_sha256": "33ac2bceffe12b6ac14e12908f3cda35dabc63ac29848a4eeb29534cce51a510",
+    "artifact_sha256": "97495f0b31e822d52ce2e4e79f93cc8bb1990c7f13b4bb6ba94ef7503a5bb27c",
+    "artifact_bytes": 5018124,
+    "source_files": 83,
+    "actual_ELFs": 356,
+    "PEs": 356,
+    "embedded_CSL": 6,
+    "max_ordinary_plus4096": 33056,
+    "ceiling": 48128,
+    "margin": 15072,
+    "all_actual_task_bindings_exact006": true,
+    "all_function_DSR_signatures_exact012": true,
+    "all356_fault_helper_closures_scalar": true,
+    "actual_sender_guard_review": {
+      "passed": true,
+      "at": "2026-09-22T13:12:02.665622+00:00",
+      "candidate": "ready-fanin-hw-compile-013",
+      "actual_instruction_report_sha256": "66ef51d2c34cb4957ae912a504e674cd4dc5cf0097efe96bc7ea8e71e7214bed",
+      "actual_all138_calls_sha256": "0a5c67b1bfd471d3b9b6c632ea9d8df033588bf00dd1a2a62a668e2c1300b9df",
+      "all356_function_DSR_signatures_exact012": true,
+      "all356_taskbindings_exact006": true,
+      "all356_scalar_fault_closures_and_final_commits": true,
+      "actual_sender_programs": 138,
+      "unique_helper_variants": 7,
+      "actual_header_tail_source_and_staging_payload_loads": true,
+      "constantfolded_tail_comparison": false,
+      "all_three_checks_dominate_issue_tail_release": true,
+      "prior_protocol_error_returns_before_actions": true,
+      "new_scalar_helpers_use_no_DSR_UT_task_activation": true,
+      "bound_scope": "All helpers iterate at most31 and gate each pair load on index<pending_length; >31 rejection in source is optimized away under fixture reachable invariants. No arbitrary memory-corrupted-length rejection claim.",
+      "source_pointer_scope": "Compiler specializes held source pointer to actual origin tx / peer rows.tx / producer tx allocations; comparisons use actual emitted source and staged-frame memory reads.",
+      "sampled_body_load_bytes": {
+        "origin": [
+          3616,
+          3624
+        ],
+        "peer": [
+          3680,
+          3688
+        ],
+        "producer40": [
+          3592,
+          3600
+        ]
+      },
+      "failure_codes": [
+        23,
+        24,
+        25
+      ],
+      "failure_effect_scope": "Every guard return check precedes its protected operation; failure branch bypasses that operation and goes through existing first-fault path. Selected role full instruction review plus all138 callsite audit.",
+      "limits": [
+        "Three point samples do not observe continuous DMA or actual wire wavelets.",
+        "Equal source and staging buffer can share transient corruption between observations.",
+        "Diagnostic changes task duration; a pass alone would not identify a repair."
+      ]
+    },
+    "complete_neural_epochs": 0,
+    "original_acceptance_sha256": "9566fc16bdcc47d331044e2936c6f0a53d674d1c6c3bc7db0680fe29920a2a41"
+  },
+  "boundary_comparison": {
+    "passed": true,
+    "at": "2026-09-22T13:26:21.053282+00:00",
+    "same_all22_origin_records": false,
+    "origin_changed_record_indices": [
+      2,
+      3,
+      9,
+      10,
+      12,
+      13,
+      14,
+      15
+    ],
+    "same_all10_peer_records": true,
+    "same_complete_first_fault_metadata_RX31_TX32_source31": true,
+    "all408_producer_full16word_records_exact": true,
+    "no_sender_guard_failures23_24_25": true,
+    "protocol_passed": false,
+    "complete_original_neural_epochs": 0,
+    "allowed_inference": "All136 producer completion records are present and exact. Actual qualified frame/source/tail checks dominate that completion, so all three checks passed per producer at their sample points; same malformed receive prefix and full retained fault context recur. Prior origin arrival order differs. This does not observe continuous DMA or actual injected wavelets or prove a unique routing defect.",
+    "not_excluded": [
+      "transient source or frame changes between samples",
+      "output queue/fabric routing/merge behavior",
+      "earlier packet framing/boundary handling"
+    ],
+    "decision": "Prioritize explicit static software packet relays and separate REQUEST/row channels; no unchanged MP receiver or fixed-length retry."
+  },
+  "source_map": {
+    "examples/ready_fanin/native_control/first_fault/layout.csl": {
+      "bytes": 1158,
+      "sha256": "cbc9f2315443ce58e0cde4bd5c7b0927d3c70ad268ba31be3eb2dfb770e49b9e",
+      "byte_identical": true
+    },
+    "examples/ready_fanin/native_control/word_receiver/pe.csl": {
+      "bytes": 10734,
+      "sha256": "3d921912623646db956d5b9379970a7499fa3e3f64b6d51f9750eb9cbe28b3d1",
+      "byte_identical": true
+    },
+    "examples/ready_fanin/native_control/sender_frame/packets.csl": {
+      "bytes": 14700,
+      "sha256": "482184853a9bda68e9009ae3753a9622f9e07ba05fd4ee9c195864590b1a1531",
+      "byte_identical": true
+    },
+    "examples/ready_fanin/native_control/first_fault/production-packets.csl": {
+      "bytes": 5624,
+      "sha256": "50842405712c5c09fd791adcec25b2d481005efeea3d8c480679c574f0936fbd",
+      "byte_identical": true
+    },
+    "examples/ready_fanin/native_control/first_fault/row_packet.csl": {
+      "bytes": 2882,
+      "sha256": "a30bfaa6089c261ec971234ac7fdd9bb761d4f3ac1a91da64147a89cdc1b80ba",
+      "byte_identical": true
+    },
+    "examples/ready_fanin/native_control/first_fault/diagnostics.csl": {
+      "bytes": 3319,
+      "sha256": "2fe5c00593b742dfd33fbf50664577e07158764d9f93a70faa00c29c27034c10",
+      "byte_identical": true
+    },
+    "examples/ready_fanin/native_control/first_fault/capture.py": {
+      "bytes": 4874,
+      "sha256": "0e331b3834ce12fd9321cf8e3aa2db3cdcd4ef31c95728f79bcd50d046d75830",
+      "byte_identical": true
+    },
+    "examples/ready_fanin/native_control/first_fault/capture_store.py": {
+      "bytes": 1715,
+      "sha256": "19e112d54e18bfac5695281065dfb330cf397a458dd3c953aaedb1e5b8f10230",
+      "byte_identical": true
+    },
+    "examples/ready_fanin/native_control/first_fault/check_capture.py": {
+      "bytes": 5267,
+      "sha256": "23c64d60f59517c3523e79e276bdf60d8697fbf4f97c0a86b13063d3c325ecfb",
+      "byte_identical": true
+    },
+    "examples/ready_fanin/native_control/first_fault/check_fault_capture.py": {
+      "bytes": 2864,
+      "sha256": "363f85673ef1058875d8f957668243b4f1d62d913ebbd8ae65b4b9c6b59cdb40",
+      "byte_identical": true
+    },
+    "examples/ready_fanin/native_control/first_fault/validate_capture.py": {
+      "bytes": 2530,
+      "sha256": "fa546391e7d2bfe29e0a81b860454be3024e26bc83e48d304a82130a1323e53d",
+      "byte_identical": true
+    },
+    "examples/ready_fanin/native_control/first_fault/host_tests.py": {
+      "bytes": 5257,
+      "sha256": "8aefe4384b719cf30eeeba18e2a2d39a0cbfe95d25ebff036d668c4f60b94eb0",
+      "byte_identical": true
+    },
+    "examples/ready_fanin/native_control/first_fault/original_650_fixtures.py": {
+      "bytes": 5516,
+      "sha256": "48aee47d41689580f1ff1bd6176eb0fb265dd7a9cdaec9ed9a3224ae1a0503b5",
+      "byte_identical": true
+    },
+    "examples/ready_fanin/native_control/first_fault/hw00/__init__.py": {
+      "bytes": 83,
+      "sha256": "db47c5e2c4bec34d6a920d89c08b2fa813a07ec8a619166eda349991267396b4",
+      "byte_identical": true
+    },
+    "examples/ready_fanin/native_control/first_fault/hw00/store.py": {
+      "bytes": 4738,
+      "sha256": "d499e04e756091cb6ae690cbbc2b2932bb4323dd4e2a874436821cf00d7b5dce",
+      "byte_identical": true
+    },
+    "examples/ready_fanin/native_control/first_fault/run_hw.py": {
+      "bytes": 2293,
+      "sha256": "d52aa7bf25df0091d8d7808cddfd5bfbc2e48d7cad3598fea3683a5377d7ff29",
+      "byte_identical": true
+    }
+  },
+  "raw_capture_metadata": [
+    {
+      "bytes": 5960,
+      "path": "evidence/initial.npz",
+      "sha256": "7021888f028998d374ed4ef9d0f7921724172ecc0f8050b915eb868c8de7a244",
+      "shape": [
+        356,
+        4
+      ]
+    },
+    {
+      "bytes": 5960,
+      "path": "evidence/progress-00.npz",
+      "sha256": "f3c4e3b2a81c9f717cae65962a31062091735795a49f6f926bd5271c88733809",
+      "shape": [
+        178,
+        8
+      ]
+    },
+    {
+      "bytes": 5960,
+      "path": "evidence/progress-01.npz",
+      "sha256": "f3c4e3b2a81c9f717cae65962a31062091735795a49f6f926bd5271c88733809",
+      "shape": [
+        178,
+        8
+      ]
+    },
+    {
+      "bytes": 5960,
+      "path": "evidence/progress-02.npz",
+      "sha256": "f3c4e3b2a81c9f717cae65962a31062091735795a49f6f926bd5271c88733809",
+      "shape": [
+        178,
+        8
+      ]
+    },
+    {
+      "bytes": 5960,
+      "path": "evidence/progress-03.npz",
+      "sha256": "f3c4e3b2a81c9f717cae65962a31062091735795a49f6f926bd5271c88733809",
+      "shape": [
+        178,
+        8
+      ]
+    },
+    {
+      "bytes": 5960,
+      "path": "evidence/progress-04.npz",
+      "sha256": "f3c4e3b2a81c9f717cae65962a31062091735795a49f6f926bd5271c88733809",
+      "shape": [
+        178,
+        8
+      ]
+    },
+    {
+      "bytes": 5960,
+      "path": "evidence/progress-05.npz",
+      "sha256": "f3c4e3b2a81c9f717cae65962a31062091735795a49f6f926bd5271c88733809",
+      "shape": [
+        178,
+        8
+      ]
+    },
+    {
+      "bytes": 5960,
+      "path": "evidence/progress-06.npz",
+      "sha256": "f3c4e3b2a81c9f717cae65962a31062091735795a49f6f926bd5271c88733809",
+      "shape": [
+        178,
+        8
+      ]
+    },
+    {
+      "bytes": 5960,
+      "path": "evidence/progress-07.npz",
+      "sha256": "f3c4e3b2a81c9f717cae65962a31062091735795a49f6f926bd5271c88733809",
+      "shape": [
+        178,
+        8
+      ]
+    },
+    {
+      "bytes": 12552,
+      "path": "evidence/origin.npz",
+      "sha256": "c755ae8bdc2d11610f6b7df461a0e97329025e3cc86b52939f8f2c6fc2b21586",
+      "shape": [
+        1,
+        3072
+      ]
+    },
+    {
+      "bytes": 6408,
+      "path": "evidence/peer.npz",
+      "sha256": "b06cd39f3dec4e153d8d85d39fa21c93dac5d24c23d00f3ae96654225c9ccf5a",
+      "shape": [
+        1,
+        1536
+      ]
+    },
+    {
+      "bytes": 26376,
+      "path": "evidence/producers.npz",
+      "sha256": "39df477c7bd5f83aff5141a485cce23327608450557632f8ee0fc3cdecbd4280",
+      "shape": [
+        136,
+        48
+      ]
+    },
+    {
+      "bytes": 5960,
+      "path": "evidence/final-status.npz",
+      "sha256": "f3c4e3b2a81c9f717cae65962a31062091735795a49f6f926bd5271c88733809",
+      "shape": [
+        178,
+        8
+      ]
+    },
+    {
+      "bytes": 91400,
+      "path": "evidence/first-fault.npz",
+      "sha256": "d5dc670814732ad3f88ad5f4e95ad5125280de61ab58242168d9441beae69aef",
+      "shape": [
+        178,
+        128
+      ]
+    },
+    {
+      "bytes": 91400,
+      "path": "evidence/first-fault-final.npz",
+      "sha256": "d5dc670814732ad3f88ad5f4e95ad5125280de61ab58242168d9441beae69aef",
+      "shape": [
+        178,
+        128
+      ]
+    }
+  ],
+  "unchanged_host_qualification_sha256": "dbd7f413f3896885a9af90ecd5fff3bcca1bf86a0c3fd1cbc2e79002a0fd70e6",
+  "backup": {
+    "independently_verified": true,
+    "selected_files": 73,
+    "source_files": 41,
+    "raw_files": 15,
+    "raw_bytes": 287736
+  },
+  "original010_failure_preserved": true,
+  "previous_failures_preserved": true,
+  "strict650_unchanged": true,
+  "complete_neural_epochs": 0,
+  "model_generations": 0,
+  "unique_rootcause_proven": false,
+  "continuous_DMA_or_wire_observation": false,
+  "raw_capture_files_published": false,
+  "compiled_artifacts_published": false,
+  "vendor_SDK_sources_published": false
+}
