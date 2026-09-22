@@ -2,6 +2,12 @@
 
 Updated September 22, 2026 UTC.
 
+The [origin word receiver](FULL136-WORD-RECEIVER.md) delivers the same malformed
+prefix through qualified scalar task arguments. Strict checking still fails;
+ordering and retained context differ from RUN009. Bulk origin body DMA is not
+necessary for this occurrence. Release and backup are independently verified;
+no repair, complete neural epoch or CSL model generation is claimed.
+
 The [body-completion boundary diagnostic](FULL136-BODY-BOUNDARY.md) detects the
 same malformed prefix before the current tail receive is armed. Its strict
 protocol check still fails. Comparable records, normal exit, release and backup
@@ -50,6 +56,7 @@ unique root cause or full 136 repair.
 
 | Component | Current accepted scope |
 |---|---|
+| Full136 origin word receiver | RUN010 strictly fails through scalar IQ arguments; same bad prefix with different ordering/context; bulk origin body DMA not necessary, upstream cause unresolved |
 | Full136 body-completion boundary | RUN009 strictly fails with the same invalid prefix before current tail arming; independently accepted boundary evidence, release and backup; no unique root cause or repair |
 | Full136 first-fault diagnostic | Physical RUN008 strictly fails; stable completed fault bank, 408 exact producer records, 13 prior captures byte-identical, normal exit/release and backup independently verified; no root-cause or neural-inference pass |
 | Native bidirectional lifecycle | Physical 007: all 31 checks, 200 words,two rows,full banks/stability and both first-TX witnesses pass; origin RX during unfinished TX observed; normal exit/release. Physical006 overall 30/31 failure and simulator failures preserved |

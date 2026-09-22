@@ -1,0 +1,103 @@
+--- RUN009/packets.csl
++++ word_receiver/packets.csl
+@@ -26,6 +26,10 @@
+ param tail_normal_task_id:local_task_id=@get_local_task_id(10);
+ // False only in the static-route callback qualification harness.
+ param initialize_message_routing:bool=true;
++// Diagnostic origin-only alternative: consume each IQ data word in its task.
++// Routing, transmit framing and native control identity remain unchanged.
++param word_receiver:bool=false;
++var word_receive_index:u16=0;
+ param on_protocol_error:fn(u16)void=protocol_error_noop;
+ param before_control:fn()void=diagnostic_noop;
+ // Observe immutable application prefix validity after body DMA, before tail arming.
+@@ -46,6 +50,8 @@
+ // Actual native control entries and unexpected ordinary data entries.
+ var consumption_events=@zeros([2]u32);
+ fn fail_protocol(code:u16) void {
++ // A TX callback can fail while IQ picking is enabled between RX words.
++ if(comptime word_receiver){@block(guarded_data_task_id);}
+  if(protocol_error!=0){return;}
+  failure_rx_phase=rx_phase;
+  protocol_error=code;rx_phase=4;receiving=true;header_waiting=false;
+@@ -73,6 +79,10 @@
+ // Native task picking is enabled only after the tail receive has terminated.
+ fn arm_header() void {
+  @assert(initialized and !receiving and !header_waiting and protocol_error==0);header_waiting=true;rx_phase=1;
++ if(comptime word_receiver){
++  if(comptime diagnostics){stats[14]+=1;}
++  @unblock(guarded_data_task_id);return;
++ }
+  const dst=@get_dsd(mem1d_dsd,.{.base_address=&header_buffer,.extent=1});
+  const src=@get_dsd(fabin_dsd,.{.input_queue=mp.mp_input_queue,.extent=1,.simd_mode=.{.simd_off=true}});
+  @mov32(dst,src,.{.async=true,.activate=header_task_id,.on_control=.{.activate=error_task_id},.ut_id=@get_ut_id(7)});
+@@ -177,6 +187,13 @@
+ }
+ task consume_control(data:u16) void {
+  @block(guarded_data_task_id);
++ if(comptime word_receiver){
++  // The task argument consumes the native tail directly; no tail fabin DSD.
++  protocol_events[2]+=1;
++  if(protocol_error!=0){return;}
++  if(!receiving or rx_phase!=3){protocol_events[3]+=1;fail_protocol(16);return;}
++  rx_phase=5;
++ }
+  consumption_events[0]+=1;
+  if(protocol_error!=0){return;}
+  // Task identity is fixed by binding41; its expected low16 payload is zero.
+@@ -187,8 +204,44 @@
+ }
+ task unexpected_data(data:u32) void {
+  @block(guarded_data_task_id);
++ if(comptime word_receiver){receive_word(data);return;}
+  consumption_events[1]+=1;control_buffer[0]=data;
+  protocol_events[3]+=1;fail_protocol(19);
++}
++// Data-task argument observations avoid the origin asynchronous header/body
++// receive operations. This is a diagnostic alternative, not a pacing repair.
++fn receive_word(data:u32) void {
++ if(protocol_error!=0){return;}
++ if(rx_phase==1){
++  protocol_events[0]+=1;
++  if(!initialized or !header_waiting or receiving){fail_protocol(13);return;}
++  header_buffer[0]=data;header_waiting=false;receiving=true;rx_phase=2;
++  receive_length=@as(u16,data&31);word_receive_index=0;
++  if((data&32)==0 or receive_length==0){fail_protocol(14);return;}
++  if(comptime diagnostics){
++   stats[9]+=1;stats[11]=stats[2];stats[12]=stats[3];stats[13]=stats[8];
++   if(sending and stats[2]>stats[3] and stats[8]>stats[3]){stats[10]+=1;}
++  }
++ }else if(rx_phase==2){
++  if(!receiving or word_receive_index>=receive_length){fail_protocol(15);return;}
++  receive_buffer[word_receive_index]=data;word_receive_index+=1;
++  if(word_receive_index==receive_length){
++   protocol_events[1]+=1;
++   if(!body_prefix_valid(&receive_buffer,receive_length)){
++    protocol_events[3]+=1;fail_protocol(22);return;
++   }
++   rx_phase=3;
++  }
++ }else if(rx_phase==3){
++  control_buffer[0]=data;tail_normal_events[0]+=1;
++  protocol_events[3]+=1;fail_protocol(12);return;
++ }else{
++  consumption_events[1]+=1;control_buffer[0]=data;
++  protocol_events[3]+=1;fail_protocol(19);return;
++ }
++ // Each entry blocks IQ picking before touching state. Failed paths stay
++ // blocked with the RX lease held; valid paths reenable the next word.
++ @unblock(guarded_data_task_id);
+ }
+ task tail_normal_error() void {
+  tail_normal_events[0]+=1;
+--- RUN009/pe.csl
++++ word_receiver/pe.csl
+@@ -2,7 +2,7 @@
+ const origin=role==1;const peer=role==2;const producer=role==3;const sink=role==4;
+ const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+ const packets=@import_module("packets.csl",.{.sent_task_id=@get_local_task_id(12),
+- .received_task_id=@get_local_task_id(13),.on_sent=sent,.on_received=received,.before_sdk=before_sdk,.on_protocol_error=packet_error,.body_prefix_valid=body_prefix_valid,.initialize_message_routing=true});
++ .received_task_id=@get_local_task_id(13),.on_sent=sent,.on_received=received,.before_sdk=before_sdk,.on_protocol_error=packet_error,.body_prefix_valid=body_prefix_valid,.word_receiver=origin,.initialize_message_routing=true});
+ const diag=@import_module("diagnostics.csl",.{.sender=!sink,.enabled=diagnostic_enabled,.capacity=capacity});
+ const rows=@import_module(if(origin or peer) "row_packet.csl" else "<empty>",
+  if(origin or peer) .{.source_role=peer,.send=send_row,.on_source_released=row_sent,.on_row_received=row_received} else .{});

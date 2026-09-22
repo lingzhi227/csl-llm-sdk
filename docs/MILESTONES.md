@@ -2,6 +2,17 @@
 
 Only accepted results are listed below. Unresolved integration work and the remaining scope are tracked in [implementation status](STATUS.md).
 
+## Full136 origin word receiver · Failure evidence accepted · September 22, 2026 UTC
+
+Physical RUN010 receives the same malformed prefix through qualified scalar
+input-queue task arguments. Its packet order and retained context differ from
+RUN009. Bulk origin body DMA is not necessary for this occurrence; strict
+protocol checking still fails. All408 producer source records, normal exit,
+release and backup are independently verified. No repair or neural epoch.
+[Report](FULL136-WORD-RECEIVER.md) ·
+[Source](../examples/ready_fanin/native_control/word_receiver) ·
+[Evidence](../evidence/ready-fanin/native-control/full136-word-receiver.json).
+
 ## Full136 body-completion boundary · Failure evidence accepted · September 22, 2026 UTC
 
 Physical RUN009 detects the same bad eight-word prefix as RUN008 before arming
