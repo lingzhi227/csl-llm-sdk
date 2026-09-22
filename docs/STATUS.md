@@ -2,6 +2,15 @@
 
 Updated September 22, 2026 UTC.
 
+The [complete original Layer3 static graph](LAYER3-STATIC-TRANSPORT.md) now has
+accepted single-position physical and conditional operator-contract evidence.
+One full epoch is captured, the runtime exits normally, and independent checks
+verify all transport/raw/parameter bindings and alternate exact FMA samples.
+The nominal CPU BF16 comparison has 346/5,120 mismatches, maximum absolute
+error 0.00390625; propagated whole-layer enclosure and bitwise parity are false.
+Continuous positions/reset, all 64 layers, full vocabulary logits and three-stage
+state reload remain unqualified. The records below preserve earlier scopes.
+
 The [full136 static transport fixture](STATIC-TRANSPORT-FULL136.md) now passes
 on physical WSE-3: two identical complete captures, exact protocol and ownership
 checks, normal exit, released resources and verified backup. This single epoch
@@ -73,6 +82,7 @@ unique root cause or full 136 repair.
 
 | Component | Current accepted scope |
 |---|---|
+| Original Layer3 static transport | One physical position and conditional operator contract accepted; nominal output differs at 346/5120 BF16 values; full model remains open |
 | Full136 static transport | Physical 534 PE fixture passes full double reads and exact ownership checks; one epoch, no reset, zero neural epochs |
 | Small static transport | SDK27 PE/3 producer fixture passes both full reads, exact provenance/release checks and normal exit; full 136-producer physical and neural inference remain unqualified |
 | Full136 actual sender-frame checks | RUN011 strictly fails after all136 producer three-point checks; zero sender guard faults; same retained fault context, different origin order; no continuous DMA or wire proof |

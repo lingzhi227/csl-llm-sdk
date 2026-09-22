@@ -1,5 +1,5 @@
 {
-  "README.md": "35e2ede5686f157d1fd997afde63b5dd759f951dafec906e6f4155dafc7b68a2",
+  "README.md": "8d022d14ecfba843ba34971cf2bb9b7d78715e8461398963259d45b2891e90e0",
   "LICENSE": "9a36237af23778b2e828b65ddca4ceeed111806709c0de1468a7d94200a69566",
   ".gitignore": "7ce76ae4e2446e018a7fd97a9168cb3b9594d660c875e2b2cdb7f1a3fb9b97b7",
   "core/qwen38/codecs.py": "ff392fd861c27523fd01f6abdb330bf54f0583e3b8e6081ed6309dd4361ef7fa",
@@ -16,7 +16,7 @@
   "examples/wp00/driver.py": "b3b6ad635ac357d7fd6b0b207e4b2c4d3742ad2f8775b7cbf2d726fb28a8958d",
   "examples/wp00/layout.csl": "01954ddb984d89eaaef393ba3ac847ecea1358ff5d54d4a8f92e68a88ee9766f",
   "examples/wp00/pe.csl": "98f6b972e90056ea548291407254e90174f5e9f7646fd2d6c3ca5d153ab7be62",
-  "docs/MILESTONES.md": "dd7ae582b865917da600f37dcbc4f75c9f15493f3a132705b430dd211b1ba660",
+  "docs/MILESTONES.md": "3a5444320771b40b4617a989d46410d73cf28d38a1599d5f8213f309cb5ba38d",
   "evidence/wp00.json": "4c82ee7c9fa107a633789403133cd0f9bb61dfb77574b814cc0c726bc5937a5a",
   "core/qwen38/numerics.py": "fee8e59d860620b4d860b2e1ca773feaf27ba15d800a7cc7744e145391a7898d",
   "core/qwen38/ranged.py": "f624f91b6fa2c0ab26a70853953ce21e72cff7a004eb4845a3251e04bc93b271",
@@ -283,7 +283,7 @@
   "evidence/wp15-source-case2.json": "94126ecf0e25baffcb4acac5038551c8520d2056f82497f2860ca2c1d82e44bc",
   "evidence/wp15-source-case3.json": "2180c4835fc0ffbc16ee4a3c0e95ae03c71963a1a99e4b386b529110d66205cc",
   "evidence/wp15.json": "87c8688f7350c23c19a78d58a24e5a40a48b14b22fe7cccad3a1f28a192dc9cc",
-  "docs/STATUS.md": "a816fe92c46aaddb31ac790dcc0d248b684bd4c5676c7b9a71d162c23d1a27f4",
+  "docs/STATUS.md": "965d31d3c0663cb5496ad09074a4d15c8406471490837dc88eb25ce582231316",
   "core/qwen38/wp16_diag_layout.py": "8f206c23777aa0da389eaa590973b0c366ace78a82555fc89b26b5fc9506e18e",
   "core/qwen38/wp16_diag_protocol.py": "53b9eea419771921a29bf8cf00c30345d5b0e1a966127f084594da36c298a53a",
   "core/qwen38/wp16_sdk_admission.py": "d1758c04f64e76d695c79a4d6057a6d2d5347cb961a32d069abadecaf977f885",
@@ -1192,5 +1192,16 @@
   "examples/ready_fanin/static_transport/full136/capture.py": "73a4fdba4123ccb9b09c1cc3c5de773497a9d4baf43be85cf6600c1f55daad6c",
   "examples/ready_fanin/static_transport/full136/README.md": "e6917ab5a44b55cd85294db8a69c26b4ad59add5e15419dc502d595e299c1416",
   "evidence/ready-fanin/static-transport-full136.json": "30f57f782e2ebd0389c52ef98c03d59726fd5264d8703ec15243156ffb1491be",
-  "docs/STATIC-TRANSPORT-FULL136.md": "c57a064447be563dd844be04fd1a031f1b20ac22acdeb16e1a29588d1689e773"
+  "docs/STATIC-TRANSPORT-FULL136.md": "c57a064447be563dd844be04fd1a031f1b20ac22acdeb16e1a29588d1689e773",
+  "docs/LAYER3-STATIC-TRANSPORT.md": "1311a2095beff575a3cb1a5970647691c63af0cec9d9dc7a60c1934b86b6af96",
+  "evidence/native-layer3/static-transport/audit.json": "e367fe541252a864d82542217e358685a69c57d0fee0506f1256abfe6f9ebf99",
+  "evidence/native-layer3/static-transport/summary.json": "b59ecccbd7d7bcca681270bff7bca50373975f4e88094d5ab3446eb82f77dc4a",
+  "examples/native_layer3/static_transport/README.md": "52bfee03810cc7e00898f0f0f0d4647b7193e2d3f12fcbeaa2a1fca1e40620d1",
+  "examples/native_layer3/static_transport/device/layer3_pe.csl": "bfb09f6a81758406dd2e3f2e381d608a7c75ff297f5ba10b4eb8ca1b4df3699c",
+  "examples/native_layer3/static_transport/device/layout.csl": "ee7c26797a8e7bf87974fd3334dc01234678db126dd5b54bc57549d402a8b8dc",
+  "examples/native_layer3/static_transport/device/packets.csl": "edf7c287a9f8beac5823874af5b6e2fcb9897b05637645897d7f71b276eb4271",
+  "examples/native_layer3/static_transport/device/transport_header.csl": "3417c6ea41b2da2bec9a37d2f337f21b06ca2d3e58a5153d31707e39e10c73b9",
+  "examples/native_layer3/static_transport/device/tree_port.csl": "df1fa3ed2afe4d1e3cd88c13a063b969ee3d7af1e6de7b5ca22c3e97f49de086",
+  "examples/native_layer3/static_transport/device/tree_router.csl": "2db4c28a687d337cd34bad1c41dbee69f2968bbf9fb67d7065d5099ab8165522",
+  "examples/native_layer3/static_transport/source-map.json": "acd1dae18ad2a45f6105a2eb40c38a19cfe28641808a29c499243882611ea9a3"
 }

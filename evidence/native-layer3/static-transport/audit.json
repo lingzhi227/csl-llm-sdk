@@ -1,0 +1,5445 @@
+{
+  "status": "passed",
+  "layer": 3,
+  "positions": 1,
+  "local_conditional_rows": 3913728,
+  "exact_FMA_samples": 30576,
+  "sample_formula": "((app_y*37)+(app_x*17)+((position+1)*13))%valid_rows",
+  "exact_FMA_multiply_slots": 2935296,
+  "results": [
+    {
+      "position": 0,
+      "norms": [
+        {
+          "squared_sum_absolute_error": 0.005803268344607204,
+          "unobserved_precast_replayed": true
+        },
+        {
+          "squared_sum_absolute_error": 0.003828045621048659,
+          "unobserved_precast_replayed": true
+        }
+      ],
+      "nonlinear": {
+        "rows": 17408,
+        "exp_max_absolute_error": 4.9334657914457125e-08
+      },
+      "heads": [
+        {
+          "qk": {
+            "passed": true,
+            "retained_RMS": {
+              "passed": true,
+              "heads": [
+                {
+                  "head": 0,
+                  "passed": true,
+                  "checks": {
+                    "square": {
+                      "passed": true,
+                      "absolute_error": 2.9313682034626254e-05,
+                      "allowed_absolute_error": 0.0014462055171030736
+                    },
+                    "mean": {
+                      "passed": true,
+                      "absolute_error": 0.0,
+                      "allowed_absolute_error": 1.1033328917164908e-08
+                    },
+                    "denominator": {
+                      "passed": true,
+                      "absolute_error": 1.6221974874497391e-09,
+                      "allowed_absolute_error": 1.1033388521809533e-08
+                    },
+                    "root": {
+                      "passed": true,
+                      "lower_squared_inequality": true,
+                      "upper_squared_inequality": true
+                    },
+                    "inverse": {
+                      "passed": true,
+                      "absolute_error": 7.360044397012716e-09,
+                      "allowed_absolute_error": 2.216591617723285e-06
+                    }
+                  }
+                },
+                {
+                  "head": 1,
+                  "passed": true,
+                  "checks": {
+                    "square": {
+                      "passed": true,
+                      "absolute_error": 0.00015359936514869332,
+                      "allowed_absolute_error": 0.008651411647536664
+                    },
+                    "mean": {
+                      "passed": true,
+                      "absolute_error": 0.0,
+                      "allowed_absolute_error": 6.600298263492732e-08
+                    },
+                    "denominator": {
+                      "passed": true,
+                      "absolute_error": 4.632568106899271e-08,
+                      "allowed_absolute_error": 6.600304223957195e-08
+                    },
+                    "root": {
+                      "passed": true,
+                      "lower_squared_inequality": true,
+                      "upper_squared_inequality": true
+                    },
+                    "inverse": {
+                      "passed": true,
+                      "absolute_error": 1.67285553967468e-09,
+                      "allowed_absolute_error": 9.0627116992811e-07
+                    }
+                  }
+                }
+              ],
+              "epsilon_fp32_bits": 897988541,
+              "observed_statistics": 10,
+              "overwritten_products_used": false,
+              "comparison_arithmetic": "exact rational; exact squared sqrt inequalities"
+            },
+            "normalization_enclosure": {
+              "passed": true,
+              "values": 512,
+              "ambiguous_numeric_bins": 0,
+              "zero_sign_not_bitwise_checked": 0,
+              "failed_samples": [],
+              "FP32_intermediates_observed": false
+            },
+            "stages": {
+              "0_product0": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "0_product1": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "0_sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_product0": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_product1": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "angles": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "sine": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "cosine": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              }
+            },
+            "conversions": {
+              "0_product_zero_signs": true,
+              "0_product0": true,
+              "0_product1": true,
+              "0_sum_zero_signs": true,
+              "0_output": true,
+              "0_tail": true,
+              "0_position_zero": true,
+              "1_product_zero_signs": true,
+              "1_product0": true,
+              "1_product1": true,
+              "1_sum_zero_signs": true,
+              "1_output": true,
+              "1_tail": true,
+              "1_position_zero": true,
+              "angle_zero_exact": true,
+              "trig_domain": true,
+              "sin_bf16": true,
+              "cos_bf16": true
+            },
+            "rotary_and_trig_gates_unchanged": true
+          },
+          "attention": {
+            "passed": true,
+            "stages": {
+              "dot": {
+                "passed": true,
+                "max_absolute_error": 4.2028725147247314e-05,
+                "max_error_over_bound": 0.006276478331036919
+              },
+              "scale": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "shift": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "exponential": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "inverse": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "probability": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "value_reduction": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "gate_exp": {
+                "passed": true,
+                "max_absolute_error": 2.984723572463377e-09,
+                "max_error_over_bound": 0.0634408202183082
+              },
+              "sigmoid": {
+                "passed": true,
+                "max_absolute_error": 4.266696426724614e-09,
+                "max_error_over_bound": 0.03583913103739885
+              },
+              "product": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              }
+            },
+            "conversions": {
+              "dot": true,
+              "scaled": true,
+              "probability": true,
+              "maximum_valid": true,
+              "invalid_slots_zero": true,
+              "actual_exp_domain": true,
+              "gate_input": true,
+              "gate_exp_domain": true,
+              "attention": true,
+              "gate": true,
+              "output": true
+            }
+          }
+        },
+        {
+          "qk": {
+            "passed": true,
+            "retained_RMS": {
+              "passed": true,
+              "heads": [
+                {
+                  "head": 0,
+                  "passed": true,
+                  "checks": {
+                    "square": {
+                      "passed": true,
+                      "absolute_error": 2.4112698156386614e-05,
+                      "allowed_absolute_error": 0.0019985672823876165
+                    },
+                    "mean": {
+                      "passed": true,
+                      "absolute_error": 0.0,
+                      "allowed_absolute_error": 1.524738735270148e-08
+                    },
+                    "denominator": {
+                      "passed": true,
+                      "absolute_error": 1.3278963706397917e-08,
+                      "allowed_absolute_error": 1.5247446957346105e-08
+                    },
+                    "root": {
+                      "passed": true,
+                      "lower_squared_inequality": true,
+                      "upper_squared_inequality": true
+                    },
+                    "inverse": {
+                      "passed": true,
+                      "absolute_error": 4.854090813759401e-08,
+                      "allowed_absolute_error": 1.8855652789181192e-06
+                    }
+                  }
+                },
+                {
+                  "head": 1,
+                  "passed": true,
+                  "checks": {
+                    "square": {
+                      "passed": true,
+                      "absolute_error": 0.00015359936514869332,
+                      "allowed_absolute_error": 0.008651411647536664
+                    },
+                    "mean": {
+                      "passed": true,
+                      "absolute_error": 0.0,
+                      "allowed_absolute_error": 6.600298263492732e-08
+                    },
+                    "denominator": {
+                      "passed": true,
+                      "absolute_error": 4.632568106899271e-08,
+                      "allowed_absolute_error": 6.600304223957195e-08
+                    },
+                    "root": {
+                      "passed": true,
+                      "lower_squared_inequality": true,
+                      "upper_squared_inequality": true
+                    },
+                    "inverse": {
+                      "passed": true,
+                      "absolute_error": 1.67285553967468e-09,
+                      "allowed_absolute_error": 9.0627116992811e-07
+                    }
+                  }
+                }
+              ],
+              "epsilon_fp32_bits": 897988541,
+              "observed_statistics": 10,
+              "overwritten_products_used": false,
+              "comparison_arithmetic": "exact rational; exact squared sqrt inequalities"
+            },
+            "normalization_enclosure": {
+              "passed": true,
+              "values": 512,
+              "ambiguous_numeric_bins": 0,
+              "zero_sign_not_bitwise_checked": 0,
+              "failed_samples": [],
+              "FP32_intermediates_observed": false
+            },
+            "stages": {
+              "0_product0": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "0_product1": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "0_sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_product0": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_product1": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "angles": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "sine": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "cosine": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              }
+            },
+            "conversions": {
+              "0_product_zero_signs": true,
+              "0_product0": true,
+              "0_product1": true,
+              "0_sum_zero_signs": true,
+              "0_output": true,
+              "0_tail": true,
+              "0_position_zero": true,
+              "1_product_zero_signs": true,
+              "1_product0": true,
+              "1_product1": true,
+              "1_sum_zero_signs": true,
+              "1_output": true,
+              "1_tail": true,
+              "1_position_zero": true,
+              "angle_zero_exact": true,
+              "trig_domain": true,
+              "sin_bf16": true,
+              "cos_bf16": true
+            },
+            "rotary_and_trig_gates_unchanged": true
+          },
+          "attention": {
+            "passed": true,
+            "stages": {
+              "dot": {
+                "passed": true,
+                "max_absolute_error": 4.379451274871826e-05,
+                "max_error_over_bound": 0.0064642535919676326
+              },
+              "scale": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "shift": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "exponential": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "inverse": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "probability": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "value_reduction": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "gate_exp": {
+                "passed": true,
+                "max_absolute_error": 2.432458713619301e-09,
+                "max_error_over_bound": 0.0634408202183082
+              },
+              "sigmoid": {
+                "passed": true,
+                "max_absolute_error": 4.988060207933298e-09,
+                "max_error_over_bound": 0.03583913103739885
+              },
+              "product": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              }
+            },
+            "conversions": {
+              "dot": true,
+              "scaled": true,
+              "probability": true,
+              "maximum_valid": true,
+              "invalid_slots_zero": true,
+              "actual_exp_domain": true,
+              "gate_input": true,
+              "gate_exp_domain": true,
+              "attention": true,
+              "gate": true,
+              "output": true
+            }
+          }
+        },
+        {
+          "qk": {
+            "passed": true,
+            "retained_RMS": {
+              "passed": true,
+              "heads": [
+                {
+                  "head": 0,
+                  "passed": true,
+                  "checks": {
+                    "square": {
+                      "passed": true,
+                      "absolute_error": 5.126930773258209e-06,
+                      "allowed_absolute_error": 0.0012462883082912804
+                    },
+                    "mean": {
+                      "passed": true,
+                      "absolute_error": 0.0,
+                      "allowed_absolute_error": 9.508133835822719e-09
+                    },
+                    "denominator": {
+                      "passed": true,
+                      "absolute_error": 1.6221974874497391e-09,
+                      "allowed_absolute_error": 9.508193440467343e-09
+                    },
+                    "root": {
+                      "passed": true,
+                      "lower_squared_inequality": true,
+                      "upper_squared_inequality": true
+                    },
+                    "inverse": {
+                      "passed": true,
+                      "absolute_error": 1.0442871489390759e-07,
+                      "allowed_absolute_error": 2.3877624785213304e-06
+                    }
+                  }
+                },
+                {
+                  "head": 1,
+                  "passed": true,
+                  "checks": {
+                    "square": {
+                      "passed": true,
+                      "absolute_error": 0.00015359936514869332,
+                      "allowed_absolute_error": 0.008651411647536664
+                    },
+                    "mean": {
+                      "passed": true,
+                      "absolute_error": 0.0,
+                      "allowed_absolute_error": 6.600298263492732e-08
+                    },
+                    "denominator": {
+                      "passed": true,
+                      "absolute_error": 4.632568106899271e-08,
+                      "allowed_absolute_error": 6.600304223957195e-08
+                    },
+                    "root": {
+                      "passed": true,
+                      "lower_squared_inequality": true,
+                      "upper_squared_inequality": true
+                    },
+                    "inverse": {
+                      "passed": true,
+                      "absolute_error": 1.67285553967468e-09,
+                      "allowed_absolute_error": 9.0627116992811e-07
+                    }
+                  }
+                }
+              ],
+              "epsilon_fp32_bits": 897988541,
+              "observed_statistics": 10,
+              "overwritten_products_used": false,
+              "comparison_arithmetic": "exact rational; exact squared sqrt inequalities"
+            },
+            "normalization_enclosure": {
+              "passed": true,
+              "values": 512,
+              "ambiguous_numeric_bins": 0,
+              "zero_sign_not_bitwise_checked": 0,
+              "failed_samples": [],
+              "FP32_intermediates_observed": false
+            },
+            "stages": {
+              "0_product0": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "0_product1": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "0_sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_product0": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_product1": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "angles": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "sine": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "cosine": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              }
+            },
+            "conversions": {
+              "0_product_zero_signs": true,
+              "0_product0": true,
+              "0_product1": true,
+              "0_sum_zero_signs": true,
+              "0_output": true,
+              "0_tail": true,
+              "0_position_zero": true,
+              "1_product_zero_signs": true,
+              "1_product0": true,
+              "1_product1": true,
+              "1_sum_zero_signs": true,
+              "1_output": true,
+              "1_tail": true,
+              "1_position_zero": true,
+              "angle_zero_exact": true,
+              "trig_domain": true,
+              "sin_bf16": true,
+              "cos_bf16": true
+            },
+            "rotary_and_trig_gates_unchanged": true
+          },
+          "attention": {
+            "passed": true,
+            "stages": {
+              "dot": {
+                "passed": true,
+                "max_absolute_error": 3.4570693969726562e-06,
+                "max_error_over_bound": 0.000516080039301426
+              },
+              "scale": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "shift": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "exponential": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "inverse": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "probability": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "value_reduction": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "gate_exp": {
+                "passed": true,
+                "max_absolute_error": 4.3739693811328806e-09,
+                "max_error_over_bound": 0.0634408202183082
+              },
+              "sigmoid": {
+                "passed": true,
+                "max_absolute_error": 4.9557534048672025e-09,
+                "max_error_over_bound": 0.03583913103739885
+              },
+              "product": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              }
+            },
+            "conversions": {
+              "dot": true,
+              "scaled": true,
+              "probability": true,
+              "maximum_valid": true,
+              "invalid_slots_zero": true,
+              "actual_exp_domain": true,
+              "gate_input": true,
+              "gate_exp_domain": true,
+              "attention": true,
+              "gate": true,
+              "output": true
+            }
+          }
+        },
+        {
+          "qk": {
+            "passed": true,
+            "retained_RMS": {
+              "passed": true,
+              "heads": [
+                {
+                  "head": 0,
+                  "passed": true,
+                  "checks": {
+                    "square": {
+                      "passed": true,
+                      "absolute_error": 8.783084922470152e-06,
+                      "allowed_absolute_error": 0.0018077304340107258
+                    },
+                    "mean": {
+                      "passed": true,
+                      "absolute_error": 0.0,
+                      "allowed_absolute_error": 1.3791465747203802e-08
+                    },
+                    "denominator": {
+                      "passed": true,
+                      "absolute_error": 1.6221974874497391e-09,
+                      "allowed_absolute_error": 1.3791525351848426e-08
+                    },
+                    "root": {
+                      "passed": true,
+                      "lower_squared_inequality": true,
+                      "upper_squared_inequality": true
+                    },
+                    "inverse": {
+                      "passed": true,
+                      "absolute_error": 7.524603915472642e-08,
+                      "allowed_absolute_error": 1.982594923082442e-06
+                    }
+                  }
+                },
+                {
+                  "head": 1,
+                  "passed": true,
+                  "checks": {
+                    "square": {
+                      "passed": true,
+                      "absolute_error": 0.00015359936514869332,
+                      "allowed_absolute_error": 0.008651411647536664
+                    },
+                    "mean": {
+                      "passed": true,
+                      "absolute_error": 0.0,
+                      "allowed_absolute_error": 6.600298263492732e-08
+                    },
+                    "denominator": {
+                      "passed": true,
+                      "absolute_error": 4.632568106899271e-08,
+                      "allowed_absolute_error": 6.600304223957195e-08
+                    },
+                    "root": {
+                      "passed": true,
+                      "lower_squared_inequality": true,
+                      "upper_squared_inequality": true
+                    },
+                    "inverse": {
+                      "passed": true,
+                      "absolute_error": 1.67285553967468e-09,
+                      "allowed_absolute_error": 9.0627116992811e-07
+                    }
+                  }
+                }
+              ],
+              "epsilon_fp32_bits": 897988541,
+              "observed_statistics": 10,
+              "overwritten_products_used": false,
+              "comparison_arithmetic": "exact rational; exact squared sqrt inequalities"
+            },
+            "normalization_enclosure": {
+              "passed": true,
+              "values": 512,
+              "ambiguous_numeric_bins": 0,
+              "zero_sign_not_bitwise_checked": 0,
+              "failed_samples": [],
+              "FP32_intermediates_observed": false
+            },
+            "stages": {
+              "0_product0": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "0_product1": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "0_sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_product0": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_product1": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "angles": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "sine": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "cosine": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              }
+            },
+            "conversions": {
+              "0_product_zero_signs": true,
+              "0_product0": true,
+              "0_product1": true,
+              "0_sum_zero_signs": true,
+              "0_output": true,
+              "0_tail": true,
+              "0_position_zero": true,
+              "1_product_zero_signs": true,
+              "1_product0": true,
+              "1_product1": true,
+              "1_sum_zero_signs": true,
+              "1_output": true,
+              "1_tail": true,
+              "1_position_zero": true,
+              "angle_zero_exact": true,
+              "trig_domain": true,
+              "sin_bf16": true,
+              "cos_bf16": true
+            },
+            "rotary_and_trig_gates_unchanged": true
+          },
+          "attention": {
+            "passed": true,
+            "stages": {
+              "dot": {
+                "passed": true,
+                "max_absolute_error": 2.7567148208618164e-05,
+                "max_error_over_bound": 0.004108655650217737
+              },
+              "scale": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "shift": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "exponential": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "inverse": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "probability": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "value_reduction": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "gate_exp": {
+                "passed": true,
+                "max_absolute_error": 4.3739693811328806e-09,
+                "max_error_over_bound": 0.0634408202183082
+              },
+              "sigmoid": {
+                "passed": true,
+                "max_absolute_error": 4.5220713978944005e-09,
+                "max_error_over_bound": 0.03583913103739885
+              },
+              "product": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              }
+            },
+            "conversions": {
+              "dot": true,
+              "scaled": true,
+              "probability": true,
+              "maximum_valid": true,
+              "invalid_slots_zero": true,
+              "actual_exp_domain": true,
+              "gate_input": true,
+              "gate_exp_domain": true,
+              "attention": true,
+              "gate": true,
+              "output": true
+            }
+          }
+        },
+        {
+          "qk": {
+            "passed": true,
+            "retained_RMS": {
+              "passed": true,
+              "heads": [
+                {
+                  "head": 0,
+                  "passed": true,
+                  "checks": {
+                    "square": {
+                      "passed": true,
+                      "absolute_error": 3.573670983314514e-05,
+                      "allowed_absolute_error": 0.002788329067628268
+                    },
+                    "mean": {
+                      "passed": true,
+                      "absolute_error": 0.0,
+                      "allowed_absolute_error": 2.1272605010835832e-08
+                    },
+                    "denominator": {
+                      "passed": true,
+                      "absolute_error": 1.3278963706397917e-08,
+                      "allowed_absolute_error": 2.1272664615480457e-08
+                    },
+                    "root": {
+                      "passed": true,
+                      "lower_squared_inequality": true,
+                      "upper_squared_inequality": true
+                    },
+                    "inverse": {
+                      "passed": true,
+                      "absolute_error": 4.246301965110516e-08,
+                      "allowed_absolute_error": 1.5963539276292948e-06
+                    }
+                  }
+                },
+                {
+                  "head": 1,
+                  "passed": true,
+                  "checks": {
+                    "square": {
+                      "passed": true,
+                      "absolute_error": 0.00015359936514869332,
+                      "allowed_absolute_error": 0.008651411647536664
+                    },
+                    "mean": {
+                      "passed": true,
+                      "absolute_error": 0.0,
+                      "allowed_absolute_error": 6.600298263492732e-08
+                    },
+                    "denominator": {
+                      "passed": true,
+                      "absolute_error": 4.632568106899271e-08,
+                      "allowed_absolute_error": 6.600304223957195e-08
+                    },
+                    "root": {
+                      "passed": true,
+                      "lower_squared_inequality": true,
+                      "upper_squared_inequality": true
+                    },
+                    "inverse": {
+                      "passed": true,
+                      "absolute_error": 1.67285553967468e-09,
+                      "allowed_absolute_error": 9.0627116992811e-07
+                    }
+                  }
+                }
+              ],
+              "epsilon_fp32_bits": 897988541,
+              "observed_statistics": 10,
+              "overwritten_products_used": false,
+              "comparison_arithmetic": "exact rational; exact squared sqrt inequalities"
+            },
+            "normalization_enclosure": {
+              "passed": true,
+              "values": 512,
+              "ambiguous_numeric_bins": 0,
+              "zero_sign_not_bitwise_checked": 0,
+              "failed_samples": [],
+              "FP32_intermediates_observed": false
+            },
+            "stages": {
+              "0_product0": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "0_product1": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "0_sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_product0": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_product1": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "angles": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "sine": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "cosine": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              }
+            },
+            "conversions": {
+              "0_product_zero_signs": true,
+              "0_product0": true,
+              "0_product1": true,
+              "0_sum_zero_signs": true,
+              "0_output": true,
+              "0_tail": true,
+              "0_position_zero": true,
+              "1_product_zero_signs": true,
+              "1_product0": true,
+              "1_product1": true,
+              "1_sum_zero_signs": true,
+              "1_output": true,
+              "1_tail": true,
+              "1_position_zero": true,
+              "angle_zero_exact": true,
+              "trig_domain": true,
+              "sin_bf16": true,
+              "cos_bf16": true
+            },
+            "rotary_and_trig_gates_unchanged": true
+          },
+          "attention": {
+            "passed": true,
+            "stages": {
+              "dot": {
+                "passed": true,
+                "max_absolute_error": 6.382167339324951e-05,
+                "max_error_over_bound": 0.0099666576454562
+              },
+              "scale": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "shift": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "exponential": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "inverse": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "probability": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "value_reduction": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "gate_exp": {
+                "passed": true,
+                "max_absolute_error": 3.710082005503601e-09,
+                "max_error_over_bound": 0.0634408202183082
+              },
+              "sigmoid": {
+                "passed": true,
+                "max_absolute_error": 6.860601156621904e-09,
+                "max_error_over_bound": 0.02864290647686154
+              },
+              "product": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              }
+            },
+            "conversions": {
+              "dot": true,
+              "scaled": true,
+              "probability": true,
+              "maximum_valid": true,
+              "invalid_slots_zero": true,
+              "actual_exp_domain": true,
+              "gate_input": true,
+              "gate_exp_domain": true,
+              "attention": true,
+              "gate": true,
+              "output": true
+            }
+          }
+        },
+        {
+          "qk": {
+            "passed": true,
+            "retained_RMS": {
+              "passed": true,
+              "heads": [
+                {
+                  "head": 0,
+                  "passed": true,
+                  "checks": {
+                    "square": {
+                      "passed": true,
+                      "absolute_error": 6.64684921503067e-06,
+                      "allowed_absolute_error": 0.0013668040095248626
+                    },
+                    "mean": {
+                      "passed": true,
+                      "absolute_error": 0.0,
+                      "allowed_absolute_error": 1.0427567254112091e-08
+                    },
+                    "denominator": {
+                      "passed": true,
+                      "absolute_error": 1.6221974874497391e-09,
+                      "allowed_absolute_error": 1.0427626858756716e-08
+                    },
+                    "root": {
+                      "passed": true,
+                      "lower_squared_inequality": true,
+                      "upper_squared_inequality": true
+                    },
+                    "inverse": {
+                      "passed": true,
+                      "absolute_error": 1.7885179167153444e-08,
+                      "allowed_absolute_error": 2.2800659110053224e-06
+                    }
+                  }
+                },
+                {
+                  "head": 1,
+                  "passed": true,
+                  "checks": {
+                    "square": {
+                      "passed": true,
+                      "absolute_error": 0.00015359936514869332,
+                      "allowed_absolute_error": 0.008651411647536664
+                    },
+                    "mean": {
+                      "passed": true,
+                      "absolute_error": 0.0,
+                      "allowed_absolute_error": 6.600298263492732e-08
+                    },
+                    "denominator": {
+                      "passed": true,
+                      "absolute_error": 4.632568106899271e-08,
+                      "allowed_absolute_error": 6.600304223957195e-08
+                    },
+                    "root": {
+                      "passed": true,
+                      "lower_squared_inequality": true,
+                      "upper_squared_inequality": true
+                    },
+                    "inverse": {
+                      "passed": true,
+                      "absolute_error": 1.67285553967468e-09,
+                      "allowed_absolute_error": 9.0627116992811e-07
+                    }
+                  }
+                }
+              ],
+              "epsilon_fp32_bits": 897988541,
+              "observed_statistics": 10,
+              "overwritten_products_used": false,
+              "comparison_arithmetic": "exact rational; exact squared sqrt inequalities"
+            },
+            "normalization_enclosure": {
+              "passed": true,
+              "values": 512,
+              "ambiguous_numeric_bins": 0,
+              "zero_sign_not_bitwise_checked": 0,
+              "failed_samples": [],
+              "FP32_intermediates_observed": false
+            },
+            "stages": {
+              "0_product0": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "0_product1": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "0_sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_product0": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_product1": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "angles": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "sine": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "cosine": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              }
+            },
+            "conversions": {
+              "0_product_zero_signs": true,
+              "0_product0": true,
+              "0_product1": true,
+              "0_sum_zero_signs": true,
+              "0_output": true,
+              "0_tail": true,
+              "0_position_zero": true,
+              "1_product_zero_signs": true,
+              "1_product0": true,
+              "1_product1": true,
+              "1_sum_zero_signs": true,
+              "1_output": true,
+              "1_tail": true,
+              "1_position_zero": true,
+              "angle_zero_exact": true,
+              "trig_domain": true,
+              "sin_bf16": true,
+              "cos_bf16": true
+            },
+            "rotary_and_trig_gates_unchanged": true
+          },
+          "attention": {
+            "passed": true,
+            "stages": {
+              "dot": {
+                "passed": true,
+                "max_absolute_error": 3.674626350402832e-05,
+                "max_error_over_bound": 0.005615564030242632
+              },
+              "scale": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "shift": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "exponential": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "inverse": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "probability": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "value_reduction": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "gate_exp": {
+                "passed": true,
+                "max_absolute_error": 4.053485491706255e-09,
+                "max_error_over_bound": 0.0634408202183082
+              },
+              "sigmoid": {
+                "passed": true,
+                "max_absolute_error": 4.5220713978944005e-09,
+                "max_error_over_bound": 0.03583913103739885
+              },
+              "product": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              }
+            },
+            "conversions": {
+              "dot": true,
+              "scaled": true,
+              "probability": true,
+              "maximum_valid": true,
+              "invalid_slots_zero": true,
+              "actual_exp_domain": true,
+              "gate_input": true,
+              "gate_exp_domain": true,
+              "attention": true,
+              "gate": true,
+              "output": true
+            }
+          }
+        },
+        {
+          "qk": {
+            "passed": true,
+            "retained_RMS": {
+              "passed": true,
+              "heads": [
+                {
+                  "head": 0,
+                  "passed": true,
+                  "checks": {
+                    "square": {
+                      "passed": true,
+                      "absolute_error": 2.46330164372921e-05,
+                      "allowed_absolute_error": 0.001557670858626606
+                    },
+                    "mean": {
+                      "passed": true,
+                      "absolute_error": 0.0,
+                      "allowed_absolute_error": 1.1883717121463633e-08
+                    },
+                    "denominator": {
+                      "passed": true,
+                      "absolute_error": 1.6221974874497391e-09,
+                      "allowed_absolute_error": 1.1883776726108258e-08
+                    },
+                    "root": {
+                      "passed": true,
+                      "lower_squared_inequality": true,
+                      "upper_squared_inequality": true
+                    },
+                    "inverse": {
+                      "passed": true,
+                      "absolute_error": 1.677424877521486e-08,
+                      "allowed_absolute_error": 2.1358114441582753e-06
+                    }
+                  }
+                },
+                {
+                  "head": 1,
+                  "passed": true,
+                  "checks": {
+                    "square": {
+                      "passed": true,
+                      "absolute_error": 6.928411312401295e-05,
+                      "allowed_absolute_error": 0.005665813039674892
+                    },
+                    "mean": {
+                      "passed": true,
+                      "absolute_error": 0.0,
+                      "allowed_absolute_error": 4.322538771361906e-08
+                    },
+                    "denominator": {
+                      "passed": true,
+                      "absolute_error": 1.3278963706397917e-08,
+                      "allowed_absolute_error": 4.322544731826368e-08
+                    },
+                    "root": {
+                      "passed": true,
+                      "lower_squared_inequality": true,
+                      "upper_squared_inequality": true
+                    },
+                    "inverse": {
+                      "passed": true,
+                      "absolute_error": 2.2204363277152236e-08,
+                      "allowed_absolute_error": 1.1198771046865317e-06
+                    }
+                  }
+                }
+              ],
+              "epsilon_fp32_bits": 897988541,
+              "observed_statistics": 10,
+              "overwritten_products_used": false,
+              "comparison_arithmetic": "exact rational; exact squared sqrt inequalities"
+            },
+            "normalization_enclosure": {
+              "passed": true,
+              "values": 512,
+              "ambiguous_numeric_bins": 0,
+              "zero_sign_not_bitwise_checked": 0,
+              "failed_samples": [],
+              "FP32_intermediates_observed": false
+            },
+            "stages": {
+              "0_product0": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "0_product1": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "0_sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_product0": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_product1": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "angles": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "sine": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "cosine": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              }
+            },
+            "conversions": {
+              "0_product_zero_signs": true,
+              "0_product0": true,
+              "0_product1": true,
+              "0_sum_zero_signs": true,
+              "0_output": true,
+              "0_tail": true,
+              "0_position_zero": true,
+              "1_product_zero_signs": true,
+              "1_product0": true,
+              "1_product1": true,
+              "1_sum_zero_signs": true,
+              "1_output": true,
+              "1_tail": true,
+              "1_position_zero": true,
+              "angle_zero_exact": true,
+              "trig_domain": true,
+              "sin_bf16": true,
+              "cos_bf16": true
+            },
+            "rotary_and_trig_gates_unchanged": true
+          },
+          "attention": {
+            "passed": true,
+            "stages": {
+              "dot": {
+                "passed": true,
+                "max_absolute_error": 5.066394805908203e-06,
+                "max_error_over_bound": 0.0007588960089752087
+              },
+              "scale": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "shift": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "exponential": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "inverse": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "probability": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "value_reduction": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "gate_exp": {
+                "passed": true,
+                "max_absolute_error": 4.781780860163565e-09,
+                "max_error_over_bound": 0.0634408202183082
+              },
+              "sigmoid": {
+                "passed": true,
+                "max_absolute_error": 4.988060207933298e-09,
+                "max_error_over_bound": 0.03583913103739885
+              },
+              "product": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              }
+            },
+            "conversions": {
+              "dot": true,
+              "scaled": true,
+              "probability": true,
+              "maximum_valid": true,
+              "invalid_slots_zero": true,
+              "actual_exp_domain": true,
+              "gate_input": true,
+              "gate_exp_domain": true,
+              "attention": true,
+              "gate": true,
+              "output": true
+            }
+          }
+        },
+        {
+          "qk": {
+            "passed": true,
+            "retained_RMS": {
+              "passed": true,
+              "heads": [
+                {
+                  "head": 0,
+                  "passed": true,
+                  "checks": {
+                    "square": {
+                      "passed": true,
+                      "absolute_error": 1.0620802640914917e-05,
+                      "allowed_absolute_error": 0.002067925277909234
+                    },
+                    "mean": {
+                      "passed": true,
+                      "absolute_error": 0.0,
+                      "allowed_absolute_error": 1.5776533857092545e-08
+                    },
+                    "denominator": {
+                      "passed": true,
+                      "absolute_error": 1.3278963706397917e-08,
+                      "allowed_absolute_error": 1.577659346173717e-08
+                    },
+                    "root": {
+                      "passed": true,
+                      "lower_squared_inequality": true,
+                      "upper_squared_inequality": true
+                    },
+                    "inverse": {
+                      "passed": true,
+                      "absolute_error": 5.9027346971529024e-08,
+                      "allowed_absolute_error": 1.85367463190656e-06
+                    }
+                  }
+                },
+                {
+                  "head": 1,
+                  "passed": true,
+                  "checks": {
+                    "square": {
+                      "passed": true,
+                      "absolute_error": 6.928411312401295e-05,
+                      "allowed_absolute_error": 0.005665813039674892
+                    },
+                    "mean": {
+                      "passed": true,
+                      "absolute_error": 0.0,
+                      "allowed_absolute_error": 4.322538771361906e-08
+                    },
+                    "denominator": {
+                      "passed": true,
+                      "absolute_error": 1.3278963706397917e-08,
+                      "allowed_absolute_error": 4.322544731826368e-08
+                    },
+                    "root": {
+                      "passed": true,
+                      "lower_squared_inequality": true,
+                      "upper_squared_inequality": true
+                    },
+                    "inverse": {
+                      "passed": true,
+                      "absolute_error": 2.2204363277152236e-08,
+                      "allowed_absolute_error": 1.1198771046865317e-06
+                    }
+                  }
+                }
+              ],
+              "epsilon_fp32_bits": 897988541,
+              "observed_statistics": 10,
+              "overwritten_products_used": false,
+              "comparison_arithmetic": "exact rational; exact squared sqrt inequalities"
+            },
+            "normalization_enclosure": {
+              "passed": true,
+              "values": 512,
+              "ambiguous_numeric_bins": 0,
+              "zero_sign_not_bitwise_checked": 0,
+              "failed_samples": [],
+              "FP32_intermediates_observed": false
+            },
+            "stages": {
+              "0_product0": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "0_product1": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "0_sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_product0": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_product1": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "angles": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "sine": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "cosine": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              }
+            },
+            "conversions": {
+              "0_product_zero_signs": true,
+              "0_product0": true,
+              "0_product1": true,
+              "0_sum_zero_signs": true,
+              "0_output": true,
+              "0_tail": true,
+              "0_position_zero": true,
+              "1_product_zero_signs": true,
+              "1_product0": true,
+              "1_product1": true,
+              "1_sum_zero_signs": true,
+              "1_output": true,
+              "1_tail": true,
+              "1_position_zero": true,
+              "angle_zero_exact": true,
+              "trig_domain": true,
+              "sin_bf16": true,
+              "cos_bf16": true
+            },
+            "rotary_and_trig_gates_unchanged": true
+          },
+          "attention": {
+            "passed": true,
+            "stages": {
+              "dot": {
+                "passed": true,
+                "max_absolute_error": 1.0132789611816406e-06,
+                "max_error_over_bound": 0.00018774274104595387
+              },
+              "scale": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "shift": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "exponential": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "inverse": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "probability": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "value_reduction": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "gate_exp": {
+                "passed": true,
+                "max_absolute_error": 3.604397724732422e-09,
+                "max_error_over_bound": 0.0634408202183082
+              },
+              "sigmoid": {
+                "passed": true,
+                "max_absolute_error": 1.4087957661557127e-08,
+                "max_error_over_bound": 0.03583913103739885
+              },
+              "product": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              }
+            },
+            "conversions": {
+              "dot": true,
+              "scaled": true,
+              "probability": true,
+              "maximum_valid": true,
+              "invalid_slots_zero": true,
+              "actual_exp_domain": true,
+              "gate_input": true,
+              "gate_exp_domain": true,
+              "attention": true,
+              "gate": true,
+              "output": true
+            }
+          }
+        },
+        {
+          "qk": {
+            "passed": true,
+            "retained_RMS": {
+              "passed": true,
+              "heads": [
+                {
+                  "head": 0,
+                  "passed": true,
+                  "checks": {
+                    "square": {
+                      "passed": true,
+                      "absolute_error": 4.140590317547321e-05,
+                      "allowed_absolute_error": 0.002309679556981063
+                    },
+                    "mean": {
+                      "passed": true,
+                      "absolute_error": 0.0,
+                      "allowed_absolute_error": 1.762090917623027e-08
+                    },
+                    "denominator": {
+                      "passed": true,
+                      "absolute_error": 1.3278963706397917e-08,
+                      "allowed_absolute_error": 1.7620968780874895e-08
+                    },
+                    "root": {
+                      "passed": true,
+                      "lower_squared_inequality": true,
+                      "upper_squared_inequality": true
+                    },
+                    "inverse": {
+                      "passed": true,
+                      "absolute_error": 2.0070906873557256e-09,
+                      "allowed_absolute_error": 1.7539824720146615e-06
+                    }
+                  }
+                },
+                {
+                  "head": 1,
+                  "passed": true,
+                  "checks": {
+                    "square": {
+                      "passed": true,
+                      "absolute_error": 6.928411312401295e-05,
+                      "allowed_absolute_error": 0.005665813039674892
+                    },
+                    "mean": {
+                      "passed": true,
+                      "absolute_error": 0.0,
+                      "allowed_absolute_error": 4.322538771361906e-08
+                    },
+                    "denominator": {
+                      "passed": true,
+                      "absolute_error": 1.3278963706397917e-08,
+                      "allowed_absolute_error": 4.322544731826368e-08
+                    },
+                    "root": {
+                      "passed": true,
+                      "lower_squared_inequality": true,
+                      "upper_squared_inequality": true
+                    },
+                    "inverse": {
+                      "passed": true,
+                      "absolute_error": 2.2204363277152236e-08,
+                      "allowed_absolute_error": 1.1198771046865317e-06
+                    }
+                  }
+                }
+              ],
+              "epsilon_fp32_bits": 897988541,
+              "observed_statistics": 10,
+              "overwritten_products_used": false,
+              "comparison_arithmetic": "exact rational; exact squared sqrt inequalities"
+            },
+            "normalization_enclosure": {
+              "passed": true,
+              "values": 512,
+              "ambiguous_numeric_bins": 0,
+              "zero_sign_not_bitwise_checked": 0,
+              "failed_samples": [],
+              "FP32_intermediates_observed": false
+            },
+            "stages": {
+              "0_product0": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "0_product1": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "0_sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_product0": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_product1": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "angles": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "sine": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "cosine": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              }
+            },
+            "conversions": {
+              "0_product_zero_signs": true,
+              "0_product0": true,
+              "0_product1": true,
+              "0_sum_zero_signs": true,
+              "0_output": true,
+              "0_tail": true,
+              "0_position_zero": true,
+              "1_product_zero_signs": true,
+              "1_product0": true,
+              "1_product1": true,
+              "1_sum_zero_signs": true,
+              "1_output": true,
+              "1_tail": true,
+              "1_position_zero": true,
+              "angle_zero_exact": true,
+              "trig_domain": true,
+              "sin_bf16": true,
+              "cos_bf16": true
+            },
+            "rotary_and_trig_gates_unchanged": true
+          },
+          "attention": {
+            "passed": true,
+            "stages": {
+              "dot": {
+                "passed": true,
+                "max_absolute_error": 1.519918441772461e-05,
+                "max_error_over_bound": 0.0026457595163158387
+              },
+              "scale": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "shift": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "exponential": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "inverse": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "probability": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "value_reduction": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "gate_exp": {
+                "passed": true,
+                "max_absolute_error": 1.6620318343818496e-08,
+                "max_error_over_bound": 0.0634408202183082
+              },
+              "sigmoid": {
+                "passed": true,
+                "max_absolute_error": 1.3267993176357962e-08,
+                "max_error_over_bound": 0.03583913103739885
+              },
+              "product": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              }
+            },
+            "conversions": {
+              "dot": true,
+              "scaled": true,
+              "probability": true,
+              "maximum_valid": true,
+              "invalid_slots_zero": true,
+              "actual_exp_domain": true,
+              "gate_input": true,
+              "gate_exp_domain": true,
+              "attention": true,
+              "gate": true,
+              "output": true
+            }
+          }
+        },
+        {
+          "qk": {
+            "passed": true,
+            "retained_RMS": {
+              "passed": true,
+              "heads": [
+                {
+                  "head": 0,
+                  "passed": true,
+                  "checks": {
+                    "square": {
+                      "passed": true,
+                      "absolute_error": 2.8983689844608307e-05,
+                      "allowed_absolute_error": 0.0018542166414749406
+                    },
+                    "mean": {
+                      "passed": true,
+                      "absolute_error": 0.0,
+                      "allowed_absolute_error": 1.4146111837476383e-08
+                    },
+                    "denominator": {
+                      "passed": true,
+                      "absolute_error": 1.6221974874497391e-09,
+                      "allowed_absolute_error": 1.4146171442121008e-08
+                    },
+                    "root": {
+                      "passed": true,
+                      "lower_squared_inequality": true,
+                      "upper_squared_inequality": true
+                    },
+                    "inverse": {
+                      "passed": true,
+                      "absolute_error": 1.0061446731632808e-08,
+                      "allowed_absolute_error": 1.9575852451906106e-06
+                    }
+                  }
+                },
+                {
+                  "head": 1,
+                  "passed": true,
+                  "checks": {
+                    "square": {
+                      "passed": true,
+                      "absolute_error": 6.928411312401295e-05,
+                      "allowed_absolute_error": 0.005665813039674892
+                    },
+                    "mean": {
+                      "passed": true,
+                      "absolute_error": 0.0,
+                      "allowed_absolute_error": 4.322538771361906e-08
+                    },
+                    "denominator": {
+                      "passed": true,
+                      "absolute_error": 1.3278963706397917e-08,
+                      "allowed_absolute_error": 4.322544731826368e-08
+                    },
+                    "root": {
+                      "passed": true,
+                      "lower_squared_inequality": true,
+                      "upper_squared_inequality": true
+                    },
+                    "inverse": {
+                      "passed": true,
+                      "absolute_error": 2.2204363277152236e-08,
+                      "allowed_absolute_error": 1.1198771046865317e-06
+                    }
+                  }
+                }
+              ],
+              "epsilon_fp32_bits": 897988541,
+              "observed_statistics": 10,
+              "overwritten_products_used": false,
+              "comparison_arithmetic": "exact rational; exact squared sqrt inequalities"
+            },
+            "normalization_enclosure": {
+              "passed": true,
+              "values": 512,
+              "ambiguous_numeric_bins": 0,
+              "zero_sign_not_bitwise_checked": 0,
+              "failed_samples": [],
+              "FP32_intermediates_observed": false
+            },
+            "stages": {
+              "0_product0": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "0_product1": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "0_sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_product0": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_product1": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "angles": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "sine": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "cosine": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              }
+            },
+            "conversions": {
+              "0_product_zero_signs": true,
+              "0_product0": true,
+              "0_product1": true,
+              "0_sum_zero_signs": true,
+              "0_output": true,
+              "0_tail": true,
+              "0_position_zero": true,
+              "1_product_zero_signs": true,
+              "1_product0": true,
+              "1_product1": true,
+              "1_sum_zero_signs": true,
+              "1_output": true,
+              "1_tail": true,
+              "1_position_zero": true,
+              "angle_zero_exact": true,
+              "trig_domain": true,
+              "sin_bf16": true,
+              "cos_bf16": true
+            },
+            "rotary_and_trig_gates_unchanged": true
+          },
+          "attention": {
+            "passed": true,
+            "stages": {
+              "dot": {
+                "passed": true,
+                "max_absolute_error": 2.4974346160888672e-05,
+                "max_error_over_bound": 0.003937211260312484
+              },
+              "scale": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "shift": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "exponential": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "inverse": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "probability": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "value_reduction": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "gate_exp": {
+                "passed": true,
+                "max_absolute_error": 4.171481188253168e-09,
+                "max_error_over_bound": 0.0634408202183082
+              },
+              "sigmoid": {
+                "passed": true,
+                "max_absolute_error": 6.860601156621904e-09,
+                "max_error_over_bound": 0.03583913103739885
+              },
+              "product": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              }
+            },
+            "conversions": {
+              "dot": true,
+              "scaled": true,
+              "probability": true,
+              "maximum_valid": true,
+              "invalid_slots_zero": true,
+              "actual_exp_domain": true,
+              "gate_input": true,
+              "gate_exp_domain": true,
+              "attention": true,
+              "gate": true,
+              "output": true
+            }
+          }
+        },
+        {
+          "qk": {
+            "passed": true,
+            "retained_RMS": {
+              "passed": true,
+              "heads": [
+                {
+                  "head": 0,
+                  "passed": true,
+                  "checks": {
+                    "square": {
+                      "passed": true,
+                      "absolute_error": 7.3176342993974686e-06,
+                      "allowed_absolute_error": 0.001794107983926924
+                    },
+                    "mean": {
+                      "passed": true,
+                      "absolute_error": 0.0,
+                      "allowed_absolute_error": 1.368753821395785e-08
+                    },
+                    "denominator": {
+                      "passed": true,
+                      "absolute_error": 1.6221974874497391e-09,
+                      "allowed_absolute_error": 1.3687597818602475e-08
+                    },
+                    "root": {
+                      "passed": true,
+                      "lower_squared_inequality": true,
+                      "upper_squared_inequality": true
+                    },
+                    "inverse": {
+                      "passed": true,
+                      "absolute_error": 3.8542191965576834e-09,
+                      "allowed_absolute_error": 1.990107424754971e-06
+                    }
+                  }
+                },
+                {
+                  "head": 1,
+                  "passed": true,
+                  "checks": {
+                    "square": {
+                      "passed": true,
+                      "absolute_error": 6.928411312401295e-05,
+                      "allowed_absolute_error": 0.005665813039674892
+                    },
+                    "mean": {
+                      "passed": true,
+                      "absolute_error": 0.0,
+                      "allowed_absolute_error": 4.322538771361906e-08
+                    },
+                    "denominator": {
+                      "passed": true,
+                      "absolute_error": 1.3278963706397917e-08,
+                      "allowed_absolute_error": 4.322544731826368e-08
+                    },
+                    "root": {
+                      "passed": true,
+                      "lower_squared_inequality": true,
+                      "upper_squared_inequality": true
+                    },
+                    "inverse": {
+                      "passed": true,
+                      "absolute_error": 2.2204363277152236e-08,
+                      "allowed_absolute_error": 1.1198771046865317e-06
+                    }
+                  }
+                }
+              ],
+              "epsilon_fp32_bits": 897988541,
+              "observed_statistics": 10,
+              "overwritten_products_used": false,
+              "comparison_arithmetic": "exact rational; exact squared sqrt inequalities"
+            },
+            "normalization_enclosure": {
+              "passed": true,
+              "values": 512,
+              "ambiguous_numeric_bins": 0,
+              "zero_sign_not_bitwise_checked": 0,
+              "failed_samples": [],
+              "FP32_intermediates_observed": false
+            },
+            "stages": {
+              "0_product0": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "0_product1": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "0_sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_product0": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_product1": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "angles": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "sine": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "cosine": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              }
+            },
+            "conversions": {
+              "0_product_zero_signs": true,
+              "0_product0": true,
+              "0_product1": true,
+              "0_sum_zero_signs": true,
+              "0_output": true,
+              "0_tail": true,
+              "0_position_zero": true,
+              "1_product_zero_signs": true,
+              "1_product0": true,
+              "1_product1": true,
+              "1_sum_zero_signs": true,
+              "1_output": true,
+              "1_tail": true,
+              "1_position_zero": true,
+              "angle_zero_exact": true,
+              "trig_domain": true,
+              "sin_bf16": true,
+              "cos_bf16": true
+            },
+            "rotary_and_trig_gates_unchanged": true
+          },
+          "attention": {
+            "passed": true,
+            "stages": {
+              "dot": {
+                "passed": true,
+                "max_absolute_error": 3.3795833587646484e-05,
+                "max_error_over_bound": 0.005283102421842562
+              },
+              "scale": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "shift": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "exponential": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "inverse": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "probability": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "value_reduction": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "gate_exp": {
+                "passed": true,
+                "max_absolute_error": 8.40162167614622e-09,
+                "max_error_over_bound": 0.0634408202183082
+              },
+              "sigmoid": {
+                "passed": true,
+                "max_absolute_error": 1.2602464627420318e-08,
+                "max_error_over_bound": 0.03583913103739885
+              },
+              "product": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              }
+            },
+            "conversions": {
+              "dot": true,
+              "scaled": true,
+              "probability": true,
+              "maximum_valid": true,
+              "invalid_slots_zero": true,
+              "actual_exp_domain": true,
+              "gate_input": true,
+              "gate_exp_domain": true,
+              "attention": true,
+              "gate": true,
+              "output": true
+            }
+          }
+        },
+        {
+          "qk": {
+            "passed": true,
+            "retained_RMS": {
+              "passed": true,
+              "heads": [
+                {
+                  "head": 0,
+                  "passed": true,
+                  "checks": {
+                    "square": {
+                      "passed": true,
+                      "absolute_error": 8.217524737119675e-06,
+                      "allowed_absolute_error": 0.0018635847002410404
+                    },
+                    "mean": {
+                      "passed": true,
+                      "absolute_error": 0.0,
+                      "allowed_absolute_error": 1.421758710762333e-08
+                    },
+                    "denominator": {
+                      "passed": true,
+                      "absolute_error": 1.6221974874497391e-09,
+                      "allowed_absolute_error": 1.4217646712267956e-08
+                    },
+                    "root": {
+                      "passed": true,
+                      "lower_squared_inequality": true,
+                      "upper_squared_inequality": true
+                    },
+                    "inverse": {
+                      "passed": true,
+                      "absolute_error": 1.1797762599276007e-07,
+                      "allowed_absolute_error": 1.9526584071250063e-06
+                    }
+                  }
+                },
+                {
+                  "head": 1,
+                  "passed": true,
+                  "checks": {
+                    "square": {
+                      "passed": true,
+                      "absolute_error": 6.928411312401295e-05,
+                      "allowed_absolute_error": 0.005665813039674892
+                    },
+                    "mean": {
+                      "passed": true,
+                      "absolute_error": 0.0,
+                      "allowed_absolute_error": 4.322538771361906e-08
+                    },
+                    "denominator": {
+                      "passed": true,
+                      "absolute_error": 1.3278963706397917e-08,
+                      "allowed_absolute_error": 4.322544731826368e-08
+                    },
+                    "root": {
+                      "passed": true,
+                      "lower_squared_inequality": true,
+                      "upper_squared_inequality": true
+                    },
+                    "inverse": {
+                      "passed": true,
+                      "absolute_error": 2.2204363277152236e-08,
+                      "allowed_absolute_error": 1.1198771046865317e-06
+                    }
+                  }
+                }
+              ],
+              "epsilon_fp32_bits": 897988541,
+              "observed_statistics": 10,
+              "overwritten_products_used": false,
+              "comparison_arithmetic": "exact rational; exact squared sqrt inequalities"
+            },
+            "normalization_enclosure": {
+              "passed": true,
+              "values": 512,
+              "ambiguous_numeric_bins": 0,
+              "zero_sign_not_bitwise_checked": 0,
+              "failed_samples": [],
+              "FP32_intermediates_observed": false
+            },
+            "stages": {
+              "0_product0": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "0_product1": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "0_sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_product0": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_product1": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "angles": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "sine": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "cosine": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              }
+            },
+            "conversions": {
+              "0_product_zero_signs": true,
+              "0_product0": true,
+              "0_product1": true,
+              "0_sum_zero_signs": true,
+              "0_output": true,
+              "0_tail": true,
+              "0_position_zero": true,
+              "1_product_zero_signs": true,
+              "1_product0": true,
+              "1_product1": true,
+              "1_sum_zero_signs": true,
+              "1_output": true,
+              "1_tail": true,
+              "1_position_zero": true,
+              "angle_zero_exact": true,
+              "trig_domain": true,
+              "sin_bf16": true,
+              "cos_bf16": true
+            },
+            "rotary_and_trig_gates_unchanged": true
+          },
+          "attention": {
+            "passed": true,
+            "stages": {
+              "dot": {
+                "passed": true,
+                "max_absolute_error": 2.1710991859436035e-05,
+                "max_error_over_bound": 0.003485453151653342
+              },
+              "scale": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "shift": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "exponential": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "inverse": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "probability": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "value_reduction": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "gate_exp": {
+                "passed": true,
+                "max_absolute_error": 4.053485491706255e-09,
+                "max_error_over_bound": 0.0634408202183082
+              },
+              "sigmoid": {
+                "passed": true,
+                "max_absolute_error": 6.860601156621904e-09,
+                "max_error_over_bound": 0.03583913103739885
+              },
+              "product": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              }
+            },
+            "conversions": {
+              "dot": true,
+              "scaled": true,
+              "probability": true,
+              "maximum_valid": true,
+              "invalid_slots_zero": true,
+              "actual_exp_domain": true,
+              "gate_input": true,
+              "gate_exp_domain": true,
+              "attention": true,
+              "gate": true,
+              "output": true
+            }
+          }
+        },
+        {
+          "qk": {
+            "passed": true,
+            "retained_RMS": {
+              "passed": true,
+              "heads": [
+                {
+                  "head": 0,
+                  "passed": true,
+                  "checks": {
+                    "square": {
+                      "passed": true,
+                      "absolute_error": 1.7709331586956978e-05,
+                      "allowed_absolute_error": 0.0017351491261887778
+                    },
+                    "mean": {
+                      "passed": true,
+                      "absolute_error": 0.0,
+                      "allowed_absolute_error": 1.3237729135084919e-08
+                    },
+                    "denominator": {
+                      "passed": true,
+                      "absolute_error": 1.6221974874497391e-09,
+                      "allowed_absolute_error": 1.3237788739729544e-08
+                    },
+                    "root": {
+                      "passed": true,
+                      "lower_squared_inequality": true,
+                      "upper_squared_inequality": true
+                    },
+                    "inverse": {
+                      "passed": true,
+                      "absolute_error": 1.0626744892057987e-07,
+                      "allowed_absolute_error": 2.023636069289299e-06
+                    }
+                  }
+                },
+                {
+                  "head": 1,
+                  "passed": true,
+                  "checks": {
+                    "square": {
+                      "passed": true,
+                      "absolute_error": 0.00012101331958547235,
+                      "allowed_absolute_error": 0.006904917979349199
+                    },
+                    "mean": {
+                      "passed": true,
+                      "absolute_error": 0.0,
+                      "allowed_absolute_error": 5.267870761826998e-08
+                    },
+                    "denominator": {
+                      "passed": true,
+                      "absolute_error": 1.3278963706397917e-08,
+                      "allowed_absolute_error": 5.267876722291461e-08
+                    },
+                    "root": {
+                      "passed": true,
+                      "lower_squared_inequality": true,
+                      "upper_squared_inequality": true
+                    },
+                    "inverse": {
+                      "passed": true,
+                      "absolute_error": 1.7473881633234033e-08,
+                      "allowed_absolute_error": 1.0144305921833684e-06
+                    }
+                  }
+                }
+              ],
+              "epsilon_fp32_bits": 897988541,
+              "observed_statistics": 10,
+              "overwritten_products_used": false,
+              "comparison_arithmetic": "exact rational; exact squared sqrt inequalities"
+            },
+            "normalization_enclosure": {
+              "passed": true,
+              "values": 512,
+              "ambiguous_numeric_bins": 0,
+              "zero_sign_not_bitwise_checked": 0,
+              "failed_samples": [],
+              "FP32_intermediates_observed": false
+            },
+            "stages": {
+              "0_product0": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "0_product1": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "0_sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_product0": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_product1": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "angles": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "sine": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "cosine": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              }
+            },
+            "conversions": {
+              "0_product_zero_signs": true,
+              "0_product0": true,
+              "0_product1": true,
+              "0_sum_zero_signs": true,
+              "0_output": true,
+              "0_tail": true,
+              "0_position_zero": true,
+              "1_product_zero_signs": true,
+              "1_product0": true,
+              "1_product1": true,
+              "1_sum_zero_signs": true,
+              "1_output": true,
+              "1_tail": true,
+              "1_position_zero": true,
+              "angle_zero_exact": true,
+              "trig_domain": true,
+              "sin_bf16": true,
+              "cos_bf16": true
+            },
+            "rotary_and_trig_gates_unchanged": true
+          },
+          "attention": {
+            "passed": true,
+            "stages": {
+              "dot": {
+                "passed": true,
+                "max_absolute_error": 1.3023614883422852e-05,
+                "max_error_over_bound": 0.0019260223824765052
+              },
+              "scale": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "shift": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "exponential": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "inverse": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "probability": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "value_reduction": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "gate_exp": {
+                "passed": true,
+                "max_absolute_error": 4.011758605870774e-09,
+                "max_error_over_bound": 0.07328381239891121
+              },
+              "sigmoid": {
+                "passed": true,
+                "max_absolute_error": 8.166231191264472e-09,
+                "max_error_over_bound": 0.03583913103739885
+              },
+              "product": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              }
+            },
+            "conversions": {
+              "dot": true,
+              "scaled": true,
+              "probability": true,
+              "maximum_valid": true,
+              "invalid_slots_zero": true,
+              "actual_exp_domain": true,
+              "gate_input": true,
+              "gate_exp_domain": true,
+              "attention": true,
+              "gate": true,
+              "output": true
+            }
+          }
+        },
+        {
+          "qk": {
+            "passed": true,
+            "retained_RMS": {
+              "passed": true,
+              "heads": [
+                {
+                  "head": 0,
+                  "passed": true,
+                  "checks": {
+                    "square": {
+                      "passed": true,
+                      "absolute_error": 1.508761488366872e-05,
+                      "allowed_absolute_error": 0.002657832658152568
+                    },
+                    "mean": {
+                      "passed": true,
+                      "absolute_error": 0.0,
+                      "allowed_absolute_error": 2.0277031609339247e-08
+                    },
+                    "denominator": {
+                      "passed": true,
+                      "absolute_error": 1.3278963706397917e-08,
+                      "allowed_absolute_error": 2.027709121398387e-08
+                    },
+                    "root": {
+                      "passed": true,
+                      "lower_squared_inequality": true,
+                      "upper_squared_inequality": true
+                    },
+                    "inverse": {
+                      "passed": true,
+                      "absolute_error": 2.2130174111187543e-08,
+                      "allowed_absolute_error": 1.6350736375851107e-06
+                    }
+                  }
+                },
+                {
+                  "head": 1,
+                  "passed": true,
+                  "checks": {
+                    "square": {
+                      "passed": true,
+                      "absolute_error": 0.00012101331958547235,
+                      "allowed_absolute_error": 0.006904917979349199
+                    },
+                    "mean": {
+                      "passed": true,
+                      "absolute_error": 0.0,
+                      "allowed_absolute_error": 5.267870761826998e-08
+                    },
+                    "denominator": {
+                      "passed": true,
+                      "absolute_error": 1.3278963706397917e-08,
+                      "allowed_absolute_error": 5.267876722291461e-08
+                    },
+                    "root": {
+                      "passed": true,
+                      "lower_squared_inequality": true,
+                      "upper_squared_inequality": true
+                    },
+                    "inverse": {
+                      "passed": true,
+                      "absolute_error": 1.7473881633234033e-08,
+                      "allowed_absolute_error": 1.0144305921833684e-06
+                    }
+                  }
+                }
+              ],
+              "epsilon_fp32_bits": 897988541,
+              "observed_statistics": 10,
+              "overwritten_products_used": false,
+              "comparison_arithmetic": "exact rational; exact squared sqrt inequalities"
+            },
+            "normalization_enclosure": {
+              "passed": true,
+              "values": 512,
+              "ambiguous_numeric_bins": 0,
+              "zero_sign_not_bitwise_checked": 0,
+              "failed_samples": [],
+              "FP32_intermediates_observed": false
+            },
+            "stages": {
+              "0_product0": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "0_product1": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "0_sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_product0": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_product1": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "angles": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "sine": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "cosine": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              }
+            },
+            "conversions": {
+              "0_product_zero_signs": true,
+              "0_product0": true,
+              "0_product1": true,
+              "0_sum_zero_signs": true,
+              "0_output": true,
+              "0_tail": true,
+              "0_position_zero": true,
+              "1_product_zero_signs": true,
+              "1_product0": true,
+              "1_product1": true,
+              "1_sum_zero_signs": true,
+              "1_output": true,
+              "1_tail": true,
+              "1_position_zero": true,
+              "angle_zero_exact": true,
+              "trig_domain": true,
+              "sin_bf16": true,
+              "cos_bf16": true
+            },
+            "rotary_and_trig_gates_unchanged": true
+          },
+          "attention": {
+            "passed": true,
+            "stages": {
+              "dot": {
+                "passed": true,
+                "max_absolute_error": 1.208484172821045e-05,
+                "max_error_over_bound": 0.0018258691646433265
+              },
+              "scale": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "shift": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "exponential": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "inverse": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "probability": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "value_reduction": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "gate_exp": {
+                "passed": true,
+                "max_absolute_error": 4.597678904261215e-09,
+                "max_error_over_bound": 0.0622625405124283
+              },
+              "sigmoid": {
+                "passed": true,
+                "max_absolute_error": 8.503314441465903e-09,
+                "max_error_over_bound": 0.03583913103739885
+              },
+              "product": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              }
+            },
+            "conversions": {
+              "dot": true,
+              "scaled": true,
+              "probability": true,
+              "maximum_valid": true,
+              "invalid_slots_zero": true,
+              "actual_exp_domain": true,
+              "gate_input": true,
+              "gate_exp_domain": true,
+              "attention": true,
+              "gate": true,
+              "output": true
+            }
+          }
+        },
+        {
+          "qk": {
+            "passed": true,
+            "retained_RMS": {
+              "passed": true,
+              "heads": [
+                {
+                  "head": 0,
+                  "passed": true,
+                  "checks": {
+                    "square": {
+                      "passed": true,
+                      "absolute_error": 6.359216058626771e-05,
+                      "allowed_absolute_error": 0.0023352122903095994
+                    },
+                    "mean": {
+                      "passed": true,
+                      "absolute_error": 0.0,
+                      "allowed_absolute_error": 1.7815697361811544e-08
+                    },
+                    "denominator": {
+                      "passed": true,
+                      "absolute_error": 1.3278963706397917e-08,
+                      "allowed_absolute_error": 1.781575696645617e-08
+                    },
+                    "root": {
+                      "passed": true,
+                      "lower_squared_inequality": true,
+                      "upper_squared_inequality": true
+                    },
+                    "inverse": {
+                      "passed": true,
+                      "absolute_error": 4.474361530581773e-09,
+                      "allowed_absolute_error": 1.7443675190482207e-06
+                    }
+                  }
+                },
+                {
+                  "head": 1,
+                  "passed": true,
+                  "checks": {
+                    "square": {
+                      "passed": true,
+                      "absolute_error": 0.00012101331958547235,
+                      "allowed_absolute_error": 0.006904917979349199
+                    },
+                    "mean": {
+                      "passed": true,
+                      "absolute_error": 0.0,
+                      "allowed_absolute_error": 5.267870761826998e-08
+                    },
+                    "denominator": {
+                      "passed": true,
+                      "absolute_error": 1.3278963706397917e-08,
+                      "allowed_absolute_error": 5.267876722291461e-08
+                    },
+                    "root": {
+                      "passed": true,
+                      "lower_squared_inequality": true,
+                      "upper_squared_inequality": true
+                    },
+                    "inverse": {
+                      "passed": true,
+                      "absolute_error": 1.7473881633234033e-08,
+                      "allowed_absolute_error": 1.0144305921833684e-06
+                    }
+                  }
+                }
+              ],
+              "epsilon_fp32_bits": 897988541,
+              "observed_statistics": 10,
+              "overwritten_products_used": false,
+              "comparison_arithmetic": "exact rational; exact squared sqrt inequalities"
+            },
+            "normalization_enclosure": {
+              "passed": true,
+              "values": 512,
+              "ambiguous_numeric_bins": 0,
+              "zero_sign_not_bitwise_checked": 0,
+              "failed_samples": [],
+              "FP32_intermediates_observed": false
+            },
+            "stages": {
+              "0_product0": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "0_product1": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "0_sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_product0": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_product1": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "angles": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "sine": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "cosine": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              }
+            },
+            "conversions": {
+              "0_product_zero_signs": true,
+              "0_product0": true,
+              "0_product1": true,
+              "0_sum_zero_signs": true,
+              "0_output": true,
+              "0_tail": true,
+              "0_position_zero": true,
+              "1_product_zero_signs": true,
+              "1_product0": true,
+              "1_product1": true,
+              "1_sum_zero_signs": true,
+              "1_output": true,
+              "1_tail": true,
+              "1_position_zero": true,
+              "angle_zero_exact": true,
+              "trig_domain": true,
+              "sin_bf16": true,
+              "cos_bf16": true
+            },
+            "rotary_and_trig_gates_unchanged": true
+          },
+          "attention": {
+            "passed": true,
+            "stages": {
+              "dot": {
+                "passed": true,
+                "max_absolute_error": 1.2874603271484375e-05,
+                "max_error_over_bound": 0.0019418101837893778
+              },
+              "scale": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "shift": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "exponential": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "inverse": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "probability": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "value_reduction": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "gate_exp": {
+                "passed": true,
+                "max_absolute_error": 4.009044124453354e-09,
+                "max_error_over_bound": 0.0622625405124283
+              },
+              "sigmoid": {
+                "passed": true,
+                "max_absolute_error": 9.417110133358442e-09,
+                "max_error_over_bound": 0.03583913103739885
+              },
+              "product": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              }
+            },
+            "conversions": {
+              "dot": true,
+              "scaled": true,
+              "probability": true,
+              "maximum_valid": true,
+              "invalid_slots_zero": true,
+              "actual_exp_domain": true,
+              "gate_input": true,
+              "gate_exp_domain": true,
+              "attention": true,
+              "gate": true,
+              "output": true
+            }
+          }
+        },
+        {
+          "qk": {
+            "passed": true,
+            "retained_RMS": {
+              "passed": true,
+              "heads": [
+                {
+                  "head": 0,
+                  "passed": true,
+                  "checks": {
+                    "square": {
+                      "passed": true,
+                      "absolute_error": 6.571231642737985e-05,
+                      "allowed_absolute_error": 0.002354248238045209
+                    },
+                    "mean": {
+                      "passed": true,
+                      "absolute_error": 0.0,
+                      "allowed_absolute_error": 1.796092519157355e-08
+                    },
+                    "denominator": {
+                      "passed": true,
+                      "absolute_error": 1.3278963706397917e-08,
+                      "allowed_absolute_error": 1.7960984796218176e-08
+                    },
+                    "root": {
+                      "passed": true,
+                      "lower_squared_inequality": true,
+                      "upper_squared_inequality": true
+                    },
+                    "inverse": {
+                      "passed": true,
+                      "absolute_error": 4.674819278802947e-09,
+                      "allowed_absolute_error": 1.7373009813144592e-06
+                    }
+                  }
+                },
+                {
+                  "head": 1,
+                  "passed": true,
+                  "checks": {
+                    "square": {
+                      "passed": true,
+                      "absolute_error": 0.00012101331958547235,
+                      "allowed_absolute_error": 0.006904917979349199
+                    },
+                    "mean": {
+                      "passed": true,
+                      "absolute_error": 0.0,
+                      "allowed_absolute_error": 5.267870761826998e-08
+                    },
+                    "denominator": {
+                      "passed": true,
+                      "absolute_error": 1.3278963706397917e-08,
+                      "allowed_absolute_error": 5.267876722291461e-08
+                    },
+                    "root": {
+                      "passed": true,
+                      "lower_squared_inequality": true,
+                      "upper_squared_inequality": true
+                    },
+                    "inverse": {
+                      "passed": true,
+                      "absolute_error": 1.7473881633234033e-08,
+                      "allowed_absolute_error": 1.0144305921833684e-06
+                    }
+                  }
+                }
+              ],
+              "epsilon_fp32_bits": 897988541,
+              "observed_statistics": 10,
+              "overwritten_products_used": false,
+              "comparison_arithmetic": "exact rational; exact squared sqrt inequalities"
+            },
+            "normalization_enclosure": {
+              "passed": true,
+              "values": 512,
+              "ambiguous_numeric_bins": 0,
+              "zero_sign_not_bitwise_checked": 0,
+              "failed_samples": [],
+              "FP32_intermediates_observed": false
+            },
+            "stages": {
+              "0_product0": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "0_product1": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "0_sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_product0": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_product1": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "angles": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "sine": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "cosine": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              }
+            },
+            "conversions": {
+              "0_product_zero_signs": true,
+              "0_product0": true,
+              "0_product1": true,
+              "0_sum_zero_signs": true,
+              "0_output": true,
+              "0_tail": true,
+              "0_position_zero": true,
+              "1_product_zero_signs": true,
+              "1_product0": true,
+              "1_product1": true,
+              "1_sum_zero_signs": true,
+              "1_output": true,
+              "1_tail": true,
+              "1_position_zero": true,
+              "angle_zero_exact": true,
+              "trig_domain": true,
+              "sin_bf16": true,
+              "cos_bf16": true
+            },
+            "rotary_and_trig_gates_unchanged": true
+          },
+          "attention": {
+            "passed": true,
+            "stages": {
+              "dot": {
+                "passed": true,
+                "max_absolute_error": 2.7358531951904297e-05,
+                "max_error_over_bound": 0.004006650655413583
+              },
+              "scale": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "shift": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "exponential": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "inverse": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "probability": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "value_reduction": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "gate_exp": {
+                "passed": true,
+                "max_absolute_error": 3.1058196015010253e-09,
+                "max_error_over_bound": 0.0634408202183082
+              },
+              "sigmoid": {
+                "passed": true,
+                "max_absolute_error": 6.860601156621904e-09,
+                "max_error_over_bound": 0.03583913103739885
+              },
+              "product": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              }
+            },
+            "conversions": {
+              "dot": true,
+              "scaled": true,
+              "probability": true,
+              "maximum_valid": true,
+              "invalid_slots_zero": true,
+              "actual_exp_domain": true,
+              "gate_input": true,
+              "gate_exp_domain": true,
+              "attention": true,
+              "gate": true,
+              "output": true
+            }
+          }
+        },
+        {
+          "qk": {
+            "passed": true,
+            "retained_RMS": {
+              "passed": true,
+              "heads": [
+                {
+                  "head": 0,
+                  "passed": true,
+                  "checks": {
+                    "square": {
+                      "passed": true,
+                      "absolute_error": 1.0324889444746077e-05,
+                      "allowed_absolute_error": 0.0026012901937617424
+                    },
+                    "mean": {
+                      "passed": true,
+                      "absolute_error": 0.0,
+                      "allowed_absolute_error": 1.984566111445929e-08
+                    },
+                    "denominator": {
+                      "passed": true,
+                      "absolute_error": 1.3278963706397917e-08,
+                      "allowed_absolute_error": 1.9845720719103915e-08
+                    },
+                    "root": {
+                      "passed": true,
+                      "lower_squared_inequality": true,
+                      "upper_squared_inequality": true
+                    },
+                    "inverse": {
+                      "passed": true,
+                      "absolute_error": 3.774013996841185e-08,
+                      "allowed_absolute_error": 1.6527482879851914e-06
+                    }
+                  }
+                },
+                {
+                  "head": 1,
+                  "passed": true,
+                  "checks": {
+                    "square": {
+                      "passed": true,
+                      "absolute_error": 0.00012101331958547235,
+                      "allowed_absolute_error": 0.006904917979349199
+                    },
+                    "mean": {
+                      "passed": true,
+                      "absolute_error": 0.0,
+                      "allowed_absolute_error": 5.267870761826998e-08
+                    },
+                    "denominator": {
+                      "passed": true,
+                      "absolute_error": 1.3278963706397917e-08,
+                      "allowed_absolute_error": 5.267876722291461e-08
+                    },
+                    "root": {
+                      "passed": true,
+                      "lower_squared_inequality": true,
+                      "upper_squared_inequality": true
+                    },
+                    "inverse": {
+                      "passed": true,
+                      "absolute_error": 1.7473881633234033e-08,
+                      "allowed_absolute_error": 1.0144305921833684e-06
+                    }
+                  }
+                }
+              ],
+              "epsilon_fp32_bits": 897988541,
+              "observed_statistics": 10,
+              "overwritten_products_used": false,
+              "comparison_arithmetic": "exact rational; exact squared sqrt inequalities"
+            },
+            "normalization_enclosure": {
+              "passed": true,
+              "values": 512,
+              "ambiguous_numeric_bins": 0,
+              "zero_sign_not_bitwise_checked": 0,
+              "failed_samples": [],
+              "FP32_intermediates_observed": false
+            },
+            "stages": {
+              "0_product0": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "0_product1": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "0_sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_product0": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_product1": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "angles": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "sine": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "cosine": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              }
+            },
+            "conversions": {
+              "0_product_zero_signs": true,
+              "0_product0": true,
+              "0_product1": true,
+              "0_sum_zero_signs": true,
+              "0_output": true,
+              "0_tail": true,
+              "0_position_zero": true,
+              "1_product_zero_signs": true,
+              "1_product0": true,
+              "1_product1": true,
+              "1_sum_zero_signs": true,
+              "1_output": true,
+              "1_tail": true,
+              "1_position_zero": true,
+              "angle_zero_exact": true,
+              "trig_domain": true,
+              "sin_bf16": true,
+              "cos_bf16": true
+            },
+            "rotary_and_trig_gates_unchanged": true
+          },
+          "attention": {
+            "passed": true,
+            "stages": {
+              "dot": {
+                "passed": true,
+                "max_absolute_error": 1.329183578491211e-05,
+                "max_error_over_bound": 0.001839131004235812
+              },
+              "scale": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "shift": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "exponential": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "inverse": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "probability": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "value_reduction": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "gate_exp": {
+                "passed": true,
+                "max_absolute_error": 2.4451562052885123e-08,
+                "max_error_over_bound": 0.07190725435919394
+              },
+              "sigmoid": {
+                "passed": true,
+                "max_absolute_error": 1.4459006575373579e-08,
+                "max_error_over_bound": 0.03583913103739885
+              },
+              "product": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              }
+            },
+            "conversions": {
+              "dot": true,
+              "scaled": true,
+              "probability": true,
+              "maximum_valid": true,
+              "invalid_slots_zero": true,
+              "actual_exp_domain": true,
+              "gate_input": true,
+              "gate_exp_domain": true,
+              "attention": true,
+              "gate": true,
+              "output": true
+            }
+          }
+        },
+        {
+          "qk": {
+            "passed": true,
+            "retained_RMS": {
+              "passed": true,
+              "heads": [
+                {
+                  "head": 0,
+                  "passed": true,
+                  "checks": {
+                    "square": {
+                      "passed": true,
+                      "absolute_error": 4.255761450622231e-05,
+                      "allowed_absolute_error": 0.0020913159686788674
+                    },
+                    "mean": {
+                      "passed": true,
+                      "absolute_error": 0.0,
+                      "allowed_absolute_error": 1.5954977783394497e-08
+                    },
+                    "denominator": {
+                      "passed": true,
+                      "absolute_error": 1.3278963706397917e-08,
+                      "allowed_absolute_error": 1.5955037388039122e-08
+                    },
+                    "root": {
+                      "passed": true,
+                      "lower_squared_inequality": true,
+                      "upper_squared_inequality": true
+                    },
+                    "inverse": {
+                      "passed": true,
+                      "absolute_error": 3.0807405352376756e-08,
+                      "allowed_absolute_error": 1.8432795353000127e-06
+                    }
+                  }
+                },
+                {
+                  "head": 1,
+                  "passed": true,
+                  "checks": {
+                    "square": {
+                      "passed": true,
+                      "absolute_error": 0.00012101331958547235,
+                      "allowed_absolute_error": 0.006904917979349199
+                    },
+                    "mean": {
+                      "passed": true,
+                      "absolute_error": 0.0,
+                      "allowed_absolute_error": 5.267870761826998e-08
+                    },
+                    "denominator": {
+                      "passed": true,
+                      "absolute_error": 1.3278963706397917e-08,
+                      "allowed_absolute_error": 5.267876722291461e-08
+                    },
+                    "root": {
+                      "passed": true,
+                      "lower_squared_inequality": true,
+                      "upper_squared_inequality": true
+                    },
+                    "inverse": {
+                      "passed": true,
+                      "absolute_error": 1.7473881633234033e-08,
+                      "allowed_absolute_error": 1.0144305921833684e-06
+                    }
+                  }
+                }
+              ],
+              "epsilon_fp32_bits": 897988541,
+              "observed_statistics": 10,
+              "overwritten_products_used": false,
+              "comparison_arithmetic": "exact rational; exact squared sqrt inequalities"
+            },
+            "normalization_enclosure": {
+              "passed": true,
+              "values": 512,
+              "ambiguous_numeric_bins": 0,
+              "zero_sign_not_bitwise_checked": 0,
+              "failed_samples": [],
+              "FP32_intermediates_observed": false
+            },
+            "stages": {
+              "0_product0": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "0_product1": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "0_sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_product0": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_product1": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "angles": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "sine": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "cosine": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              }
+            },
+            "conversions": {
+              "0_product_zero_signs": true,
+              "0_product0": true,
+              "0_product1": true,
+              "0_sum_zero_signs": true,
+              "0_output": true,
+              "0_tail": true,
+              "0_position_zero": true,
+              "1_product_zero_signs": true,
+              "1_product0": true,
+              "1_product1": true,
+              "1_sum_zero_signs": true,
+              "1_output": true,
+              "1_tail": true,
+              "1_position_zero": true,
+              "angle_zero_exact": true,
+              "trig_domain": true,
+              "sin_bf16": true,
+              "cos_bf16": true
+            },
+            "rotary_and_trig_gates_unchanged": true
+          },
+          "attention": {
+            "passed": true,
+            "stages": {
+              "dot": {
+                "passed": true,
+                "max_absolute_error": 2.8625130653381348e-05,
+                "max_error_over_bound": 0.004669021760608461
+              },
+              "scale": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "shift": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "exponential": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "inverse": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "probability": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "value_reduction": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "gate_exp": {
+                "passed": true,
+                "max_absolute_error": 7.361444981368592e-09,
+                "max_error_over_bound": 0.0634408202183082
+              },
+              "sigmoid": {
+                "passed": true,
+                "max_absolute_error": 4.9557534048672025e-09,
+                "max_error_over_bound": 0.03583913103739885
+              },
+              "product": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              }
+            },
+            "conversions": {
+              "dot": true,
+              "scaled": true,
+              "probability": true,
+              "maximum_valid": true,
+              "invalid_slots_zero": true,
+              "actual_exp_domain": true,
+              "gate_input": true,
+              "gate_exp_domain": true,
+              "attention": true,
+              "gate": true,
+              "output": true
+            }
+          }
+        },
+        {
+          "qk": {
+            "passed": true,
+            "retained_RMS": {
+              "passed": true,
+              "heads": [
+                {
+                  "head": 0,
+                  "passed": true,
+                  "checks": {
+                    "square": {
+                      "passed": true,
+                      "absolute_error": 8.335156599059701e-05,
+                      "allowed_absolute_error": 0.0038762411549075307
+                    },
+                    "mean": {
+                      "passed": true,
+                      "absolute_error": 0.0,
+                      "allowed_absolute_error": 2.9572451154535884e-08
+                    },
+                    "denominator": {
+                      "passed": true,
+                      "absolute_error": 1.3278963706397917e-08,
+                      "allowed_absolute_error": 2.957251075918051e-08
+                    },
+                    "root": {
+                      "passed": true,
+                      "lower_squared_inequality": true,
+                      "upper_squared_inequality": true
+                    },
+                    "inverse": {
+                      "passed": true,
+                      "absolute_error": 1.5291056746789337e-08,
+                      "allowed_absolute_error": 1.3539294205055148e-06
+                    }
+                  }
+                },
+                {
+                  "head": 1,
+                  "passed": true,
+                  "checks": {
+                    "square": {
+                      "passed": true,
+                      "absolute_error": 9.648804552853107e-05,
+                      "allowed_absolute_error": 0.004675338848702302
+                    },
+                    "mean": {
+                      "passed": true,
+                      "absolute_error": 0.0,
+                      "allowed_absolute_error": 3.566889361650283e-08
+                    },
+                    "denominator": {
+                      "passed": true,
+                      "absolute_error": 1.3278963706397917e-08,
+                      "allowed_absolute_error": 3.566895322114745e-08
+                    },
+                    "root": {
+                      "passed": true,
+                      "lower_squared_inequality": true,
+                      "upper_squared_inequality": true
+                    },
+                    "inverse": {
+                      "passed": true,
+                      "absolute_error": 4.863277435430885e-08,
+                      "allowed_absolute_error": 1.232806585899343e-06
+                    }
+                  }
+                }
+              ],
+              "epsilon_fp32_bits": 897988541,
+              "observed_statistics": 10,
+              "overwritten_products_used": false,
+              "comparison_arithmetic": "exact rational; exact squared sqrt inequalities"
+            },
+            "normalization_enclosure": {
+              "passed": true,
+              "values": 512,
+              "ambiguous_numeric_bins": 0,
+              "zero_sign_not_bitwise_checked": 0,
+              "failed_samples": [],
+              "FP32_intermediates_observed": false
+            },
+            "stages": {
+              "0_product0": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "0_product1": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "0_sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_product0": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_product1": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "angles": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "sine": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "cosine": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              }
+            },
+            "conversions": {
+              "0_product_zero_signs": true,
+              "0_product0": true,
+              "0_product1": true,
+              "0_sum_zero_signs": true,
+              "0_output": true,
+              "0_tail": true,
+              "0_position_zero": true,
+              "1_product_zero_signs": true,
+              "1_product0": true,
+              "1_product1": true,
+              "1_sum_zero_signs": true,
+              "1_output": true,
+              "1_tail": true,
+              "1_position_zero": true,
+              "angle_zero_exact": true,
+              "trig_domain": true,
+              "sin_bf16": true,
+              "cos_bf16": true
+            },
+            "rotary_and_trig_gates_unchanged": true
+          },
+          "attention": {
+            "passed": true,
+            "stages": {
+              "dot": {
+                "passed": true,
+                "max_absolute_error": 1.3150274753570557e-06,
+                "max_error_over_bound": 0.0002498983571319164
+              },
+              "scale": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "shift": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "exponential": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "inverse": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "probability": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "value_reduction": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "gate_exp": {
+                "passed": true,
+                "max_absolute_error": 2.367903828570661e-08,
+                "max_error_over_bound": 0.0634408202183082
+              },
+              "sigmoid": {
+                "passed": true,
+                "max_absolute_error": 4.427712207988321e-08,
+                "max_error_over_bound": 0.03583913103739885
+              },
+              "product": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              }
+            },
+            "conversions": {
+              "dot": true,
+              "scaled": true,
+              "probability": true,
+              "maximum_valid": true,
+              "invalid_slots_zero": true,
+              "actual_exp_domain": true,
+              "gate_input": true,
+              "gate_exp_domain": true,
+              "attention": true,
+              "gate": true,
+              "output": true
+            }
+          }
+        },
+        {
+          "qk": {
+            "passed": true,
+            "retained_RMS": {
+              "passed": true,
+              "heads": [
+                {
+                  "head": 0,
+                  "passed": true,
+                  "checks": {
+                    "square": {
+                      "passed": true,
+                      "absolute_error": 3.0117608730506618e-05,
+                      "allowed_absolute_error": 0.0020663309343400033
+                    },
+                    "mean": {
+                      "passed": true,
+                      "absolute_error": 0.0,
+                      "allowed_absolute_error": 1.5764365812742653e-08
+                    },
+                    "denominator": {
+                      "passed": true,
+                      "absolute_error": 1.3278963706397917e-08,
+                      "allowed_absolute_error": 1.5764425417387278e-08
+                    },
+                    "root": {
+                      "passed": true,
+                      "lower_squared_inequality": true,
+                      "upper_squared_inequality": true
+                    },
+                    "inverse": {
+                      "passed": true,
+                      "absolute_error": 5.6411225595126543e-08,
+                      "allowed_absolute_error": 1.854389833307739e-06
+                    }
+                  }
+                },
+                {
+                  "head": 1,
+                  "passed": true,
+                  "checks": {
+                    "square": {
+                      "passed": true,
+                      "absolute_error": 9.648804552853107e-05,
+                      "allowed_absolute_error": 0.004675338848702302
+                    },
+                    "mean": {
+                      "passed": true,
+                      "absolute_error": 0.0,
+                      "allowed_absolute_error": 3.566889361650283e-08
+                    },
+                    "denominator": {
+                      "passed": true,
+                      "absolute_error": 1.3278963706397917e-08,
+                      "allowed_absolute_error": 3.566895322114745e-08
+                    },
+                    "root": {
+                      "passed": true,
+                      "lower_squared_inequality": true,
+                      "upper_squared_inequality": true
+                    },
+                    "inverse": {
+                      "passed": true,
+                      "absolute_error": 4.863277435430885e-08,
+                      "allowed_absolute_error": 1.232806585899343e-06
+                    }
+                  }
+                }
+              ],
+              "epsilon_fp32_bits": 897988541,
+              "observed_statistics": 10,
+              "overwritten_products_used": false,
+              "comparison_arithmetic": "exact rational; exact squared sqrt inequalities"
+            },
+            "normalization_enclosure": {
+              "passed": true,
+              "values": 512,
+              "ambiguous_numeric_bins": 0,
+              "zero_sign_not_bitwise_checked": 0,
+              "failed_samples": [],
+              "FP32_intermediates_observed": false
+            },
+            "stages": {
+              "0_product0": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "0_product1": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "0_sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_product0": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_product1": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "angles": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "sine": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "cosine": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              }
+            },
+            "conversions": {
+              "0_product_zero_signs": true,
+              "0_product0": true,
+              "0_product1": true,
+              "0_sum_zero_signs": true,
+              "0_output": true,
+              "0_tail": true,
+              "0_position_zero": true,
+              "1_product_zero_signs": true,
+              "1_product0": true,
+              "1_product1": true,
+              "1_sum_zero_signs": true,
+              "1_output": true,
+              "1_tail": true,
+              "1_position_zero": true,
+              "angle_zero_exact": true,
+              "trig_domain": true,
+              "sin_bf16": true,
+              "cos_bf16": true
+            },
+            "rotary_and_trig_gates_unchanged": true
+          },
+          "attention": {
+            "passed": true,
+            "stages": {
+              "dot": {
+                "passed": true,
+                "max_absolute_error": 8.540228009223938e-05,
+                "max_error_over_bound": 0.008662786846803603
+              },
+              "scale": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "shift": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "exponential": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "inverse": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "probability": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "value_reduction": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "gate_exp": {
+                "passed": true,
+                "max_absolute_error": 4.597678904261215e-09,
+                "max_error_over_bound": 0.0634408202183082
+              },
+              "sigmoid": {
+                "passed": true,
+                "max_absolute_error": 6.860601156621904e-09,
+                "max_error_over_bound": 0.03583913103739885
+              },
+              "product": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              }
+            },
+            "conversions": {
+              "dot": true,
+              "scaled": true,
+              "probability": true,
+              "maximum_valid": true,
+              "invalid_slots_zero": true,
+              "actual_exp_domain": true,
+              "gate_input": true,
+              "gate_exp_domain": true,
+              "attention": true,
+              "gate": true,
+              "output": true
+            }
+          }
+        },
+        {
+          "qk": {
+            "passed": true,
+            "retained_RMS": {
+              "passed": true,
+              "heads": [
+                {
+                  "head": 0,
+                  "passed": true,
+                  "checks": {
+                    "square": {
+                      "passed": true,
+                      "absolute_error": 9.05962660908699e-05,
+                      "allowed_absolute_error": 0.0039498409228826015
+                    },
+                    "mean": {
+                      "passed": true,
+                      "absolute_error": 0.0,
+                      "allowed_absolute_error": 3.0133953998756624e-08
+                    },
+                    "denominator": {
+                      "passed": true,
+                      "absolute_error": 1.3278963706397917e-08,
+                      "allowed_absolute_error": 3.013401360340125e-08
+                    },
+                    "root": {
+                      "passed": true,
+                      "lower_squared_inequality": true,
+                      "upper_squared_inequality": true
+                    },
+                    "inverse": {
+                      "passed": true,
+                      "absolute_error": 3.132336251393013e-08,
+                      "allowed_absolute_error": 1.3412559084418479e-06
+                    }
+                  }
+                },
+                {
+                  "head": 1,
+                  "passed": true,
+                  "checks": {
+                    "square": {
+                      "passed": true,
+                      "absolute_error": 9.648804552853107e-05,
+                      "allowed_absolute_error": 0.004675338848702302
+                    },
+                    "mean": {
+                      "passed": true,
+                      "absolute_error": 0.0,
+                      "allowed_absolute_error": 3.566889361650283e-08
+                    },
+                    "denominator": {
+                      "passed": true,
+                      "absolute_error": 1.3278963706397917e-08,
+                      "allowed_absolute_error": 3.566895322114745e-08
+                    },
+                    "root": {
+                      "passed": true,
+                      "lower_squared_inequality": true,
+                      "upper_squared_inequality": true
+                    },
+                    "inverse": {
+                      "passed": true,
+                      "absolute_error": 4.863277435430885e-08,
+                      "allowed_absolute_error": 1.232806585899343e-06
+                    }
+                  }
+                }
+              ],
+              "epsilon_fp32_bits": 897988541,
+              "observed_statistics": 10,
+              "overwritten_products_used": false,
+              "comparison_arithmetic": "exact rational; exact squared sqrt inequalities"
+            },
+            "normalization_enclosure": {
+              "passed": true,
+              "values": 512,
+              "ambiguous_numeric_bins": 0,
+              "zero_sign_not_bitwise_checked": 0,
+              "failed_samples": [],
+              "FP32_intermediates_observed": false
+            },
+            "stages": {
+              "0_product0": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "0_product1": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "0_sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_product0": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_product1": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "angles": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "sine": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "cosine": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              }
+            },
+            "conversions": {
+              "0_product_zero_signs": true,
+              "0_product0": true,
+              "0_product1": true,
+              "0_sum_zero_signs": true,
+              "0_output": true,
+              "0_tail": true,
+              "0_position_zero": true,
+              "1_product_zero_signs": true,
+              "1_product0": true,
+              "1_product1": true,
+              "1_sum_zero_signs": true,
+              "1_output": true,
+              "1_tail": true,
+              "1_position_zero": true,
+              "angle_zero_exact": true,
+              "trig_domain": true,
+              "sin_bf16": true,
+              "cos_bf16": true
+            },
+            "rotary_and_trig_gates_unchanged": true
+          },
+          "attention": {
+            "passed": true,
+            "stages": {
+              "dot": {
+                "passed": true,
+                "max_absolute_error": 1.6391277313232422e-06,
+                "max_error_over_bound": 0.0002940806419985214
+              },
+              "scale": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "shift": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "exponential": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "inverse": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "probability": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "value_reduction": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "gate_exp": {
+                "passed": true,
+                "max_absolute_error": 4.3739693811328806e-09,
+                "max_error_over_bound": 0.0634408202183082
+              },
+              "sigmoid": {
+                "passed": true,
+                "max_absolute_error": 4.9557534048672025e-09,
+                "max_error_over_bound": 0.03583913103739885
+              },
+              "product": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              }
+            },
+            "conversions": {
+              "dot": true,
+              "scaled": true,
+              "probability": true,
+              "maximum_valid": true,
+              "invalid_slots_zero": true,
+              "actual_exp_domain": true,
+              "gate_input": true,
+              "gate_exp_domain": true,
+              "attention": true,
+              "gate": true,
+              "output": true
+            }
+          }
+        },
+        {
+          "qk": {
+            "passed": true,
+            "retained_RMS": {
+              "passed": true,
+              "heads": [
+                {
+                  "head": 0,
+                  "passed": true,
+                  "checks": {
+                    "square": {
+                      "passed": true,
+                      "absolute_error": 2.3105181753635406e-05,
+                      "allowed_absolute_error": 0.002491452635294338
+                    },
+                    "mean": {
+                      "passed": true,
+                      "absolute_error": 0.0,
+                      "allowed_absolute_error": 1.9007689644467973e-08
+                    },
+                    "denominator": {
+                      "passed": true,
+                      "absolute_error": 1.3278963706397917e-08,
+                      "allowed_absolute_error": 1.9007749249112598e-08
+                    },
+                    "root": {
+                      "passed": true,
+                      "lower_squared_inequality": true,
+                      "upper_squared_inequality": true
+                    },
+                    "inverse": {
+                      "passed": true,
+                      "absolute_error": 8.31115505643976e-09,
+                      "allowed_absolute_error": 1.6887866047135301e-06
+                    }
+                  }
+                },
+                {
+                  "head": 1,
+                  "passed": true,
+                  "checks": {
+                    "square": {
+                      "passed": true,
+                      "absolute_error": 9.648804552853107e-05,
+                      "allowed_absolute_error": 0.004675338848702302
+                    },
+                    "mean": {
+                      "passed": true,
+                      "absolute_error": 0.0,
+                      "allowed_absolute_error": 3.566889361650283e-08
+                    },
+                    "denominator": {
+                      "passed": true,
+                      "absolute_error": 1.3278963706397917e-08,
+                      "allowed_absolute_error": 3.566895322114745e-08
+                    },
+                    "root": {
+                      "passed": true,
+                      "lower_squared_inequality": true,
+                      "upper_squared_inequality": true
+                    },
+                    "inverse": {
+                      "passed": true,
+                      "absolute_error": 4.863277435430885e-08,
+                      "allowed_absolute_error": 1.232806585899343e-06
+                    }
+                  }
+                }
+              ],
+              "epsilon_fp32_bits": 897988541,
+              "observed_statistics": 10,
+              "overwritten_products_used": false,
+              "comparison_arithmetic": "exact rational; exact squared sqrt inequalities"
+            },
+            "normalization_enclosure": {
+              "passed": true,
+              "values": 512,
+              "ambiguous_numeric_bins": 0,
+              "zero_sign_not_bitwise_checked": 0,
+              "failed_samples": [],
+              "FP32_intermediates_observed": false
+            },
+            "stages": {
+              "0_product0": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "0_product1": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "0_sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_product0": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_product1": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "angles": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "sine": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "cosine": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              }
+            },
+            "conversions": {
+              "0_product_zero_signs": true,
+              "0_product0": true,
+              "0_product1": true,
+              "0_sum_zero_signs": true,
+              "0_output": true,
+              "0_tail": true,
+              "0_position_zero": true,
+              "1_product_zero_signs": true,
+              "1_product0": true,
+              "1_product1": true,
+              "1_sum_zero_signs": true,
+              "1_output": true,
+              "1_tail": true,
+              "1_position_zero": true,
+              "angle_zero_exact": true,
+              "trig_domain": true,
+              "sin_bf16": true,
+              "cos_bf16": true
+            },
+            "rotary_and_trig_gates_unchanged": true
+          },
+          "attention": {
+            "passed": true,
+            "stages": {
+              "dot": {
+                "passed": true,
+                "max_absolute_error": 1.3530254364013672e-05,
+                "max_error_over_bound": 0.0014247695030403223
+              },
+              "scale": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "shift": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "exponential": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "inverse": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "probability": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "value_reduction": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "gate_exp": {
+                "passed": true,
+                "max_absolute_error": 4.009044124453354e-09,
+                "max_error_over_bound": 0.0610437811775739
+              },
+              "sigmoid": {
+                "passed": true,
+                "max_absolute_error": 9.417110133358442e-09,
+                "max_error_over_bound": 0.03583913103739885
+              },
+              "product": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              }
+            },
+            "conversions": {
+              "dot": true,
+              "scaled": true,
+              "probability": true,
+              "maximum_valid": true,
+              "invalid_slots_zero": true,
+              "actual_exp_domain": true,
+              "gate_input": true,
+              "gate_exp_domain": true,
+              "attention": true,
+              "gate": true,
+              "output": true
+            }
+          }
+        },
+        {
+          "qk": {
+            "passed": true,
+            "retained_RMS": {
+              "passed": true,
+              "heads": [
+                {
+                  "head": 0,
+                  "passed": true,
+                  "checks": {
+                    "square": {
+                      "passed": true,
+                      "absolute_error": 0.00017061876133084297,
+                      "allowed_absolute_error": 0.007433904041539137
+                    },
+                    "mean": {
+                      "passed": true,
+                      "absolute_error": 0.0,
+                      "allowed_absolute_error": 5.671441627441709e-08
+                    },
+                    "denominator": {
+                      "passed": true,
+                      "absolute_error": 1.3278963706397917e-08,
+                      "allowed_absolute_error": 5.6714475879061715e-08
+                    },
+                    "root": {
+                      "passed": true,
+                      "lower_squared_inequality": true,
+                      "upper_squared_inequality": true
+                    },
+                    "inverse": {
+                      "passed": true,
+                      "absolute_error": 2.93563694503467e-08,
+                      "allowed_absolute_error": 9.776719882371394e-07
+                    }
+                  }
+                },
+                {
+                  "head": 1,
+                  "passed": true,
+                  "checks": {
+                    "square": {
+                      "passed": true,
+                      "absolute_error": 9.648804552853107e-05,
+                      "allowed_absolute_error": 0.004675338848702302
+                    },
+                    "mean": {
+                      "passed": true,
+                      "absolute_error": 0.0,
+                      "allowed_absolute_error": 3.566889361650283e-08
+                    },
+                    "denominator": {
+                      "passed": true,
+                      "absolute_error": 1.3278963706397917e-08,
+                      "allowed_absolute_error": 3.566895322114745e-08
+                    },
+                    "root": {
+                      "passed": true,
+                      "lower_squared_inequality": true,
+                      "upper_squared_inequality": true
+                    },
+                    "inverse": {
+                      "passed": true,
+                      "absolute_error": 4.863277435430885e-08,
+                      "allowed_absolute_error": 1.232806585899343e-06
+                    }
+                  }
+                }
+              ],
+              "epsilon_fp32_bits": 897988541,
+              "observed_statistics": 10,
+              "overwritten_products_used": false,
+              "comparison_arithmetic": "exact rational; exact squared sqrt inequalities"
+            },
+            "normalization_enclosure": {
+              "passed": true,
+              "values": 512,
+              "ambiguous_numeric_bins": 0,
+              "zero_sign_not_bitwise_checked": 0,
+              "failed_samples": [],
+              "FP32_intermediates_observed": false
+            },
+            "stages": {
+              "0_product0": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "0_product1": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "0_sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_product0": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_product1": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "angles": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "sine": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "cosine": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              }
+            },
+            "conversions": {
+              "0_product_zero_signs": true,
+              "0_product0": true,
+              "0_product1": true,
+              "0_sum_zero_signs": true,
+              "0_output": true,
+              "0_tail": true,
+              "0_position_zero": true,
+              "1_product_zero_signs": true,
+              "1_product0": true,
+              "1_product1": true,
+              "1_sum_zero_signs": true,
+              "1_output": true,
+              "1_tail": true,
+              "1_position_zero": true,
+              "angle_zero_exact": true,
+              "trig_domain": true,
+              "sin_bf16": true,
+              "cos_bf16": true
+            },
+            "rotary_and_trig_gates_unchanged": true
+          },
+          "attention": {
+            "passed": true,
+            "stages": {
+              "dot": {
+                "passed": true,
+                "max_absolute_error": 2.156198024749756e-05,
+                "max_error_over_bound": 0.004827601747823557
+              },
+              "scale": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "shift": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "exponential": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "inverse": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "probability": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "value_reduction": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "gate_exp": {
+                "passed": true,
+                "max_absolute_error": 4.3739693811328806e-09,
+                "max_error_over_bound": 0.0634408202183082
+              },
+              "sigmoid": {
+                "passed": true,
+                "max_absolute_error": 1.1561259172232496e-08,
+                "max_error_over_bound": 0.02684906578280817
+              },
+              "product": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              }
+            },
+            "conversions": {
+              "dot": true,
+              "scaled": true,
+              "probability": true,
+              "maximum_valid": true,
+              "invalid_slots_zero": true,
+              "actual_exp_domain": true,
+              "gate_input": true,
+              "gate_exp_domain": true,
+              "attention": true,
+              "gate": true,
+              "output": true
+            }
+          }
+        },
+        {
+          "qk": {
+            "passed": true,
+            "retained_RMS": {
+              "passed": true,
+              "heads": [
+                {
+                  "head": 0,
+                  "passed": true,
+                  "checks": {
+                    "square": {
+                      "passed": true,
+                      "absolute_error": 0.00021995976567268372,
+                      "allowed_absolute_error": 0.009483435154747918
+                    },
+                    "mean": {
+                      "passed": true,
+                      "absolute_error": 0.0,
+                      "allowed_absolute_error": 7.235060905941282e-08
+                    },
+                    "denominator": {
+                      "passed": true,
+                      "absolute_error": 4.632568106899271e-08,
+                      "allowed_absolute_error": 7.235066866405744e-08
+                    },
+                    "root": {
+                      "passed": true,
+                      "lower_squared_inequality": true,
+                      "upper_squared_inequality": true
+                    },
+                    "inverse": {
+                      "passed": true,
+                      "absolute_error": 1.1939117121782884e-08,
+                      "allowed_absolute_error": 8.656032946592601e-07
+                    }
+                  }
+                },
+                {
+                  "head": 1,
+                  "passed": true,
+                  "checks": {
+                    "square": {
+                      "passed": true,
+                      "absolute_error": 9.648804552853107e-05,
+                      "allowed_absolute_error": 0.004675338848702302
+                    },
+                    "mean": {
+                      "passed": true,
+                      "absolute_error": 0.0,
+                      "allowed_absolute_error": 3.566889361650283e-08
+                    },
+                    "denominator": {
+                      "passed": true,
+                      "absolute_error": 1.3278963706397917e-08,
+                      "allowed_absolute_error": 3.566895322114745e-08
+                    },
+                    "root": {
+                      "passed": true,
+                      "lower_squared_inequality": true,
+                      "upper_squared_inequality": true
+                    },
+                    "inverse": {
+                      "passed": true,
+                      "absolute_error": 4.863277435430885e-08,
+                      "allowed_absolute_error": 1.232806585899343e-06
+                    }
+                  }
+                }
+              ],
+              "epsilon_fp32_bits": 897988541,
+              "observed_statistics": 10,
+              "overwritten_products_used": false,
+              "comparison_arithmetic": "exact rational; exact squared sqrt inequalities"
+            },
+            "normalization_enclosure": {
+              "passed": true,
+              "values": 512,
+              "ambiguous_numeric_bins": 0,
+              "zero_sign_not_bitwise_checked": 0,
+              "failed_samples": [],
+              "FP32_intermediates_observed": false
+            },
+            "stages": {
+              "0_product0": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "0_product1": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "0_sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_product0": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_product1": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "1_sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "angles": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "sine": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "cosine": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              }
+            },
+            "conversions": {
+              "0_product_zero_signs": true,
+              "0_product0": true,
+              "0_product1": true,
+              "0_sum_zero_signs": true,
+              "0_output": true,
+              "0_tail": true,
+              "0_position_zero": true,
+              "1_product_zero_signs": true,
+              "1_product0": true,
+              "1_product1": true,
+              "1_sum_zero_signs": true,
+              "1_output": true,
+              "1_tail": true,
+              "1_position_zero": true,
+              "angle_zero_exact": true,
+              "trig_domain": true,
+              "sin_bf16": true,
+              "cos_bf16": true
+            },
+            "rotary_and_trig_gates_unchanged": true
+          },
+          "attention": {
+            "passed": true,
+            "stages": {
+              "dot": {
+                "passed": true,
+                "max_absolute_error": 5.869567394256592e-05,
+                "max_error_over_bound": 0.006336537522312054
+              },
+              "scale": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "shift": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "exponential": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "sum": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "inverse": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "probability": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "value_reduction": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              },
+              "gate_exp": {
+                "passed": true,
+                "max_absolute_error": 1.152227979694942e-08,
+                "max_error_over_bound": 0.0634408202183082
+              },
+              "sigmoid": {
+                "passed": true,
+                "max_absolute_error": 1.0462293253965527e-08,
+                "max_error_over_bound": 0.03583913103739885
+              },
+              "product": {
+                "passed": true,
+                "max_absolute_error": 0.0,
+                "max_error_over_bound": 0.0
+              }
+            },
+            "conversions": {
+              "dot": true,
+              "scaled": true,
+              "probability": true,
+              "maximum_valid": true,
+              "invalid_slots_zero": true,
+              "actual_exp_domain": true,
+              "gate_input": true,
+              "gate_exp_domain": true,
+              "attention": true,
+              "gate": true,
+              "output": true
+            }
+          }
+        }
+      ],
+      "nominal_original_bf16_mismatches": 346,
+      "nominal_max_absolute_error": 0.00390625,
+      "nominal_max_relative_error_nonzero": 0.3333333333333333,
+      "nominal_zero_reference_absolute_error": 0.0001220703125,
+      "nominal_bitwise_match": false
+    }
+  ],
+  "seconds": 17.199654451571405,
+  "original_whole_layer_nominal_compared": true,
+  "all_operator_gates": true,
+  "archived_standalone_trig_probes_numeric_gate": false,
+  "QK_RMS_observed_statistics": 10,
+  "QK_normalization_uses_conditional_enclosure": true,
+  "overwritten_RMS_stages_used_as_observations": false,
+  "full_model": false,
+  "source_propagated_whole_layer_enclosure": false,
+  "SDK_imported": false
+}

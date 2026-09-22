@@ -2,6 +2,19 @@
 
 Only accepted results are listed below. Unresolved integration work and the remaining scope are tracked in [implementation status](STATUS.md).
 
+## Original Layer3 · Single-position physical/operator contract accepted · September 22, 2026 (UTC)
+
+The complete original Layer3 graph runs position 0 on physical WSE-3, with
+normal exit and independently verified raw data, transport and parameter
+retention. All conditional operator gates pass; independent exact FMA samples
+use a different row at every matrix PE. The final BF16 vector differs from the
+nominal CPU reference at 346 of 5,120 values (maximum absolute error 0.00390625).
+There is no propagated whole-layer error enclosure or bitwise parity claim.
+Repeated positions, reset, all 64 layers and text generation remain open.
+[Report](LAYER3-STATIC-TRANSPORT.md) ·
+[Source](../examples/native_layer3/static_transport) ·
+[Evidence](../evidence/native-layer3/static-transport/summary.json).
+
 ## Full136 static transport · Physical qualification accepted · September 22, 2026 (UTC)
 
 The 534 PE fixture passes all 136 READY messages, 8 requests, 24 fragments and

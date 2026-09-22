@@ -2,14 +2,24 @@
 
 **Building inference for open language models with handwritten Cerebras Systems Language (CSL), targeting sequential execution of three model stages on WSE-3.** We implement the numerical kernels, execution control and persistent model state, and use the Cerebras SDK to compile and run the device programs. The first target is **Qwen3.8-27B text inference**; the longer-term goal is a reusable SDK for related model architectures.
 
-**Working today:** the complete original-weight **5120 → 17408 → 5120 layer-3 MLP runs on physical WSE-3** for four inputs with independent numerical checks. A separate full 64-layer CPU reference generates four tokens with cache restoration. **Current integration:** the complete native layer-3 graph fits across all 33,750 PEs, but execution stops on malformed READY messages. A 136-producer physical fixture now reproduces the corruption: all 408 sender snapshots are correct, while a received payload contains a network-header value. Its strict check fails and its runtime exits normally. Combined-frame transmission and managed receive descriptor comparisons also failed; the cause remains unresolved and **complete neural-layer epochs remain zero**. **Current work:** a three-PE physical bidirectional fixture now passes all 200 payload words, two exact synthetic rows, complete buffers and state stability. After moving the existing GO after request preparation, a subsequent run passes all 31 checks, including both first-send lease witnesses. The prior 30/31 failure and precompute simulator failures remain preserved. A new 136-producer diagnostic reproduces the original strict failure with all 13 prior captures byte-identical, and adds two matching first-fault snapshots. It records a malformed body and ordinary-data control-tail failure; resource release and backup are independently verified. A subsequent body-completion check detects the same prefix before the current tail receive is armed, narrowing the boundary while preserving strict failure. A further run receives the same invalid prefix through scalar input-queue task arguments, so bulk origin body DMA is not necessary for that occurrence. Its execution order and retained context differ; earlier packet handling, routing and sender/output lifetime remain unresolved. Complete CSL text generation and measured token latency remain ahead.
+**Working today:** the complete original-weight Layer3 attention/MLP graph
+completes one position on physical WSE-3. Its single-position physical and
+conditional operator contract is independently accepted, including complete
+transport, raw-data provenance, parameter retention and normal resource release.
+The previously accepted full 5120 → 17408 → 5120 MLP covers four inputs, and a
+separate full 64-layer CPU reference generates four tokens with cache restoration.
 
-**Latest transport milestone (September 22, 2026):** a new static network passes
-the complete 136-producer physical fixture, with two identical full captures,
-normal exit and independent release. This resolves the scoped fixture transport
-qualification; the earlier native message-passing failures remain preserved and
-their unique cause is still unknown. The original neural graph is the next
-integration target; complete neural epochs remain zero.
+**Numerical scope:** the original Layer3 operator gates and independent FMA
+samples pass. The final BF16 hidden vector differs from the nominal CPU reference
+at 346 of 5,120 values, with maximum absolute difference 0.00390625. Bitwise CPU
+parity and a source-propagated whole-layer error enclosure are not established.
+
+**Current work:** extend the source to continuous positions and reset, then
+qualify the remaining layer types and all 64 layers across three serial stages.
+The accepted artifact explicitly allows one position; repeated calls require a
+new reviewed source and compile. Full CSL text generation and measured token
+latency remain ahead. Earlier compiler and native message-passing failures stay
+in the completed log and their original evidence records.
 
 ## 1. Project design
 
@@ -35,7 +45,7 @@ The execution box is what the compiled program does. We write its scheduling, bu
 | Part | What this project implements or reuses |
 |---|---|
 | **Our device code** | Matrix products, normalization, attention, recurrence and other model operations; task dependencies, communication and state updates. The completed log identifies the implemented subsets. |
-| **Our host code** | Stage weight/state loading, checkpoint coordination, tensor placement, resource limits and validation. Physical execution is qualified for the full layer-3 MLP at four module inputs; the full model remains open. |
+| **Our host code** | Stage weight/state loading, checkpoint coordination, tensor placement, resource limits and validation. Physical execution is qualified for the full layer-3 MLP at four module inputs and the complete Layer3 conditional operator contract at one position; the full model remains open. |
 | **Cerebras tooling** | CSL layout/compiler, device tasks and communication primitives, host transfers and runtime launches. |
 | **Reference computation** | CPU numerical references and selected functions extracted from a pinned official implementation. GPU reference execution and applicable CS-Torch / Model Zoo integration remain future work. |
 
@@ -60,7 +70,8 @@ flowchart LR
 
 This diagram shows the accepted full layer-3 MLP. FP32 local accumulation and
 right-to-left reductions, BF16 casts and neural handoffs execute on device.
-Full attention/recurrent layers and the three-stage model remain integration work.
+The complete Layer3 full-attention path also has one-position physical/operator
+qualification. Nonzero positions, recurrent layers and the three-stage model remain open.
 
 ## 2. Repository guide
 
@@ -68,7 +79,7 @@ Full attention/recurrent layers and the three-stage model remain integration wor
 |---|---|
 | [`csl/kernels/`](csl/kernels) | Reusable handwritten CSL arithmetic kernels. |
 | [`examples/ready_fanin/`](examples/ready_fanin) | Physical concurrent READY corruption reproduction, strict capture checks, and scoped native-control simulator qualification. |
-| [`examples/native_layer3/`](examples/native_layer3) | Complete native graph compile, exact source provenance and first-error diagnostics. |
+| [`examples/native_layer3/`](examples/native_layer3) | Complete original Layer3 static-transport execution, conditional operator checks and preserved first-error diagnostics. |
 | [`examples/qk_archive/`](examples/qk_archive) | Physical original-kernel archive/alias equivalence, durable raw evidence and selected complete-program fit. |
 | [`examples/native_kv_sdk/`](examples/native_kv_sdk) | Accepted three-operation native KV/Q transport, durable raw captures and preserved failure history. |
 | [`examples/layer3_fifo_trace/`](examples/layer3_fifo_trace) | Accepted full-layout FIFO diagnostics, finite physical capture and independent raw-word decoders. |
@@ -93,6 +104,19 @@ Full attention/recurrent layers and the three-stage model remain integration wor
 ## 3. Completed development log — newest first
 
 Each **WP** or **HW** is a scoped development milestone. HW00/HW01 use physical WSE-3; earlier WP device results use the SDK simulator, and WP04 is a CPU/source audit. **BF16** means bfloat16 data, and **FP32** means 32-bit floating-point arithmetic. Reports contain numerical thresholds, failure history and reproduction details.
+
+### Original Layer3 · Single-position physical/operator contract accepted · September 22, 2026 (UTC)
+
+The complete original Layer3 graph runs position 0 on physical WSE-3, with
+normal exit and independently verified raw data, transport and parameter
+retention. All conditional operator gates pass; independent exact FMA samples
+use a different row at every matrix PE. The final BF16 vector differs from the
+nominal CPU reference at 346 of 5,120 values (maximum absolute error 0.00390625).
+There is no propagated whole-layer error enclosure or bitwise parity claim.
+Repeated positions, reset, all 64 layers and text generation remain open.
+[Report](docs/LAYER3-STATIC-TRANSPORT.md) ·
+[Source](examples/native_layer3/static_transport) ·
+[Evidence](evidence/native-layer3/static-transport/summary.json).
 
 ### Full136 static transport · Physical qualification accepted · September 22, 2026 (UTC)
 

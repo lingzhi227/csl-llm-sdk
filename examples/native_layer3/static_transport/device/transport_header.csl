@@ -1,0 +1,12 @@
+// Routing metadata is separate from the unchanged application identity.
+// Exactly 32 ordinary u32 wavelets: header, 1..31 payload words, zero padding.
+const MAGIC:u32=0x51a00000;
+fn encode(x:u16,y:u16,length:u16) u32 {
+ return MAGIC|(@as(u32,length)<<16)|(@as(u32,y)<<10)|@as(u32,x);
+}
+fn x(word:u32) u16 {return @as(u16,word&1023);}
+fn y(word:u32) u16 {return @as(u16,(word>>10)&63);}
+fn length(word:u32) u16 {return @as(u16,(word>>16)&31);}
+fn valid(word:u32) bool {
+ return (word&0xffe00000)==MAGIC and x(word)<749 and y(word)<45 and length(word)>0;
+}

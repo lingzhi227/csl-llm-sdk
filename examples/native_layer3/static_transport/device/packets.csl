@@ -1,0 +1,102 @@
+// Fixed 32-word ordinary-data endpoint for the dedicated software route tree.
+// New lowering: source-only until the actual fullgraph ELF and hardware audit.
+param enabled:bool=true;
+param input_queue_id:u16=6;param output_queue_id:u16=6;
+param sent_task_id:local_task_id;param received_task_id:local_task_id;
+param deferred_task_id:local_task_id=@get_local_task_id(15);
+param header_task_id:local_task_id=@get_local_task_id(16);
+param on_sent:fn()void;param on_received:fn([*]u32,u16)void;
+param on_error:fn()void;
+const envelope=@import_module("transport_header.csl",.{});
+const iq=@get_input_queue(input_queue_id);const oq=@get_output_queue(output_queue_id);
+const rd=@get_dsr(dsr_dest,6);const rs=@get_dsr(dsr_src1,6);
+const td=@get_dsr(dsr_dest,1);const ts=@get_dsr(dsr_src1,1);
+// Host loads original logical x/y; neither payload nor credit tables are remapped.
+var config=@zeros([2]u16);
+var receive_buffer=@zeros([32]u32);
+var transmit_buffer=@zeros([32]u32);
+// error, TX acquired, TX issued, TX completed, RX completed, RX released,
+// initialized, reserved. Outstanding RX waits are expected between messages.
+var status=@zeros([8]u32);
+var sending:bool=false;var receiving:bool=false;var initialized:bool=false;
+var pending:bool=false;var armed:bool=false;
+fn fail(code:u32) void {if(status[0]==0){status[0]=code;}on_error();}
+fn arm() void {
+ if(!enabled or !initialized or armed or receiving or status[0]!=0){fail(201);return;}
+ armed=true;
+ const dst=@get_dsd(mem1d_dsd,.{.base_address=&receive_buffer,.extent=32});
+ const src=@get_dsd(fabin_dsd,.{.input_queue=iq,.extent=32,.simd_mode=.{.simd_off=true}});
+ @load_to_dsr(rd,dst);
+ @load_to_dsr(rs,src,.{.async=true,.activate=received_task_id,
+  .on_control=.{.activate=header_task_id},.ut_id=@get_ut_id(7)});
+ @mov32(rd,rs,.{.async=true});
+}
+fn init() void {
+ if(initialized){fail(202);return;}
+ initialized=true;status[6]=1;
+ if(comptime enabled){if(config[0]>=749 or config[1]>=45){fail(203);return;}arm();}
+}
+// Scalar copies avoid introducing an implicit vector DSR shared with async TX.
+// The actual instructions remain an admission gate, including compiler lowering.
+fn copy_words(source:[*]u32,destination:[*]u32,count:u16) void {
+ if(count==0 or count>31){fail(204);return;}
+ var i:u16=0;while(i<count){destination[i]=source[i];i+=1;}
+}
+noinline fn send(x:u16,y:u16,source:[*]u32,length:u16) void {
+ if(!enabled or !initialized or status[0]!=0 or sending or pending or
+    x>=749 or y>=45 or length==0 or length>31){fail(205);return;}
+ sending=true;pending=true;status[1]+=1;
+ transmit_buffer[0]=envelope.encode(x,y,length);
+ var i:u16=0;while(i<31){
+  transmit_buffer[1+i]=if(i<length) source[i] else @as(u32,0);i+=1;
+ }
+ // The application source lease is conservatively retained through on_sent,
+ // even though the independent complete transport bank now owns the bits.
+ if(!receiving){@activate(deferred_task_id);}
+}
+task deferred() void {
+ if(status[0]!=0 or !pending or receiving){return;}
+ if(!sending){fail(206);return;}
+ pending=false;status[2]+=1;
+ const src=@get_dsd(mem1d_dsd,.{.base_address=&transmit_buffer,.extent=32});
+ const dst=@get_dsd(fabout_dsd,.{.output_queue=oq,.extent=32,.simd_mode=.{.simd_off=true}});
+ @load_to_dsr(ts,src);
+ @load_to_dsr(td,dst,.{.async=true,.activate=sent_task_id,.ut_id=@get_ut_id(6)});
+ @mov32(td,ts,.{.async=true});
+}
+task sent() void {
+ if(status[0]!=0){return;}
+ if(!sending or pending or status[2]!=status[3]+1){fail(207);return;}
+ status[3]+=1;sending=false;on_sent();
+}
+// Keep each move as an actual scalar function boundary. The unqualified
+// inline loop was lowered to an unavailable memmove by the SDK compiler.
+noinline fn compact_word(index:u16) void {
+ receive_buffer[index]=receive_buffer[index+1];
+}
+task received() void {
+ if(status[0]!=0){return;}
+ if(!armed or receiving){fail(208);return;}
+ armed=false;receiving=true;status[4]+=1;
+ const word=receive_buffer[0];
+ if(!envelope.valid(word) or envelope.x(word)!=config[0] or envelope.y(word)!=config[1]){fail(209);return;}
+ const length=envelope.length(word);
+ var i:u16=length+1;while(i<32){if(receive_buffer[i]!=0){fail(210);return;}i+=1;}
+ // The completed frame is exclusively owned until this callback returns.
+ // Validate the envelope and padding before compacting its payload in place.
+ // Forward indexed copies read a higher, not-yet-overwritten source word.
+ var payload_index:u16=0;while(payload_index<length){
+  compact_word(payload_index);payload_index+=1;
+ }
+ on_received(&receive_buffer,length);
+ if(status[0]!=0){return;}
+ receiving=false;status[5]+=1;arm();
+ if(pending){@activate(deferred_task_id);}
+}
+task control_error() void {fail(211);}
+comptime {if(enabled){
+ @initialize_queue(iq,.{.color=@get_color(18)});
+ @initialize_queue(oq,.{.color=@get_color(17)});
+ @bind_local_task(sent,sent_task_id);@bind_local_task(received,received_task_id);
+ @bind_local_task(deferred,deferred_task_id);@bind_local_task(control_error,header_task_id);
+}}
