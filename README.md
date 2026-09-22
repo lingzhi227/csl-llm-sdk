@@ -3,22 +3,24 @@
 **Building inference for open language models with handwritten Cerebras Systems Language (CSL), targeting sequential execution of three model stages on WSE-3.** We implement the numerical kernels, execution control and persistent model state, and use the Cerebras SDK to compile and run the device programs. The first target is **Qwen3.8-27B text inference**; the longer-term goal is a reusable SDK for related model architectures.
 
 **Working today:** the complete original-weight Layer3 attention/MLP graph
-completes one position on physical WSE-3. Its single-position physical and
-conditional operator contract is independently accepted, including complete
-transport, raw-data provenance, parameter retention and normal resource release.
-The previously accepted full 5120 → 17408 → 5120 MLP covers four inputs, and a
-separate full 64-layer CPU reference generates four tokens with cache restoration.
+executes causal positions 0 and 1, then device reset and exact position-0 replay
+on physical WSE-3. All three captures pass the conditional operator gates and
+independent transport, state, parameter and release checks. The device client
+exits normally; the original outer supervisor exit 1 and missing COMPLETE are
+preserved, and a separate postcapture audit passes. The earlier full MLP covers
+four inputs; a separate 64-layer CPU reference generates four tokens with cache
+restoration.
 
-**Numerical scope:** the original Layer3 operator gates and independent FMA
-samples pass. The final BF16 hidden vector differs from the nominal CPU reference
-at 346 of 5,120 values, with maximum absolute difference 0.00390625. Bitwise CPU
-parity and a source-propagated whole-layer error enclosure are not established.
+**Numerical scope:** Layer3 conditional operator gates and independent FMA
+samples pass. Nominal CPU BF16 mismatches are 346/1,150/346 of 5,120 across the
+three serials, with maximum absolute differences 0.00390625/0.001953125/0.00390625.
+Bitwise CPU parity and a source-propagated whole-layer enclosure are not established.
 
-**Current work:** extend the source to continuous positions and reset, then
-qualify the remaining layer types and all 64 layers across three serial stages.
-The accepted artifact explicitly allows one position; repeated calls require a
-new reviewed source and compile. Full CSL text generation and measured token
-latency remain ahead. Earlier compiler and native message-passing failures stay
+**Current work:** integrate complete original Layer0 convolution and DeltaNet
+state, then actual 0→1→2→3 hidden flow and all 64 layers across three sequential
+stages with host checkpoint restoration. The accepted Layer3 scope is the finite
+0→1→reset→0 sequence. Full-vocabulary logits, CSL text generation and measured
+token latency remain ahead. Earlier compiler and message-passing failures remain
 in the completed log and their original evidence records.
 
 ## 1. Project design
