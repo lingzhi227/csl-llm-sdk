@@ -2,6 +2,12 @@
 
 Updated September 22, 2026 UTC.
 
+The [full136 static transport fixture](STATIC-TRANSPORT-FULL136.md) now passes
+on physical WSE-3: two identical complete captures, exact protocol and ownership
+checks, normal exit, released resources and verified backup. This single epoch
+has no reset and includes no neural computation. Earlier results below retain
+their original scope and failure history; complete neural epochs remain zero.
+
 The [small static transport fixture](STATIC-TRANSPORT-SMALL.md) passes complete
 double-read protocol and normal-stop qualification on the workstation SDK.
 Its 27 PE/3 producer scope does not qualify full 136-producer physical transport or an
@@ -67,6 +73,7 @@ unique root cause or full 136 repair.
 
 | Component | Current accepted scope |
 |---|---|
+| Full136 static transport | Physical 534 PE fixture passes full double reads and exact ownership checks; one epoch, no reset, zero neural epochs |
 | Small static transport | SDK27 PE/3 producer fixture passes both full reads, exact provenance/release checks and normal exit; full 136-producer physical and neural inference remain unqualified |
 | Full136 actual sender-frame checks | RUN011 strictly fails after all136 producer three-point checks; zero sender guard faults; same retained fault context, different origin order; no continuous DMA or wire proof |
 | Full136 origin word receiver | RUN010 strictly fails through scalar IQ arguments; same bad prefix with different ordering/context; bulk origin body DMA not necessary, upstream cause unresolved |

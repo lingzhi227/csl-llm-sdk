@@ -1,0 +1,47 @@
+// Default bounded qualification: three producers and seven READY relay hops.
+// Full136 uses producer_first=40, producer_count=136 with the same topology.
+param producer_first:u16=4;param producer_count:u16=3;
+param qualification_gate:bool=false;
+const width=producer_first+producer_count+2;const last=producer_first+producer_count-1;
+const memcpy=@import_module("<memcpy/get_params>",.{.width=width,.height=3});
+layout {
+ @comptime_assert(producer_first>=4 and producer_count>0 and producer_count<=136 and width<=178);
+ @comptime_assert(!qualification_gate or (producer_first==4 and producer_count==3));
+ @set_rectangle(width,3);
+ for(@range(u16,3))|y|{for(@range(u16,width))|x|{
+  const origin=x==0;const peer=x==2;const producer=x>=producer_first and x<=last;
+  const diagnostic=origin or peer or producer;
+  const capacity:u16=if(origin) 192 else if(peer) 96 else if(producer) 3 else 1;
+  if(y==2){
+   @set_tile_code(x,y,"relay.csl",.{.memcpy_params=memcpy.get_params(x),.column=x,.first=producer_first,.count=producer_count,
+    .qualification_gate=qualification_gate and x==producer_first});
+  }else{
+   const role:u16=if(y==1) 4 else if(origin) 1 else if(peer) 2 else if(producer) 3 else 0;
+   @set_tile_code(x,y,"app.csl",.{.memcpy_params=memcpy.get_params(x),.role=role,.column=x,
+    .first=producer_first,.count=producer_count,.capacity=capacity,.diagnostic_enabled=diagnostic});
+  }
+  if(y<2 and diagnostic){@set_color_config(x,y,@get_color(5),.{.routes=.{
+   .rx=if(y==0) .{RAMP} else .{NORTH},.tx=if(y==0) .{SOUTH} else .{RAMP}}});}
+  if(y==0 and x<=last){@set_color_config(x,y,@get_color(3),.{.routes=.{
+   .rx=if(x==0) .{RAMP} else .{WEST},
+   .tx=if(x==last) .{RAMP} else if(producer) .{RAMP,EAST} else .{EAST}}});}
+  // Each source has its own local vertical path, separate from horizontal transit.
+  if(producer){@set_color_config(x,y,@get_color(8),.{.routes=.{
+   .rx=if(y==0) .{RAMP} else .{NORTH},.tx=if(y==2) .{RAMP} else .{SOUTH}}});}
+  if(x==0){@set_color_config(x,y,@get_color(9),.{.routes=.{
+   .rx=if(y==2) .{RAMP} else .{SOUTH},.tx=if(y==0) .{RAMP} else .{NORTH}}});}
+  if(y==2 and x<=last){
+   if(x>0){@set_color_config(x,y,@get_color(10+(x%2)),.{.routes=.{.rx=.{RAMP},.tx=.{WEST}}});}
+   if(x<last){@set_color_config(x,y,@get_color(10+((x+1)%2)),.{.routes=.{.rx=.{EAST},.tx=.{RAMP}}});}
+  }
+  if(y==0 and x<=2){
+   @set_color_config(x,y,@get_color(12),.{.routes=.{.rx=if(x==0) .{RAMP} else .{WEST},.tx=if(x==2) .{RAMP} else .{EAST}}});
+   @set_color_config(x,y,@get_color(13),.{.routes=.{.rx=if(x==2) .{RAMP} else .{EAST},.tx=if(x==0) .{RAMP} else .{WEST}}});
+  }
+ }}
+ @export_name("state",[*]u32,false);@export_name("relay_records",[*]u32,false);
+ @export_name("gate_words",[*]u32,false);
+ @export_name("input_a_status",[*]u32,false);@export_name("input_b_status",[*]u32,false);@export_name("output_status",[*]u32,false);
+ @export_name("diagnostic_status",[*]u32,false);@export_name("diagnostic_records",[*]u32,false);@export_name("row_packets",[*]u32,false);
+ @export_name("initialize",fn()void);@export_name("compute",fn()void);
+}

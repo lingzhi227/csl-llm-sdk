@@ -4,6 +4,13 @@
 
 **Working today:** the complete original-weight **5120 → 17408 → 5120 layer-3 MLP runs on physical WSE-3** for four inputs with independent numerical checks. A separate full 64-layer CPU reference generates four tokens with cache restoration. **Current integration:** the complete native layer-3 graph fits across all 33,750 PEs, but execution stops on malformed READY messages. A 136-producer physical fixture now reproduces the corruption: all 408 sender snapshots are correct, while a received payload contains a network-header value. Its strict check fails and its runtime exits normally. Combined-frame transmission and managed receive descriptor comparisons also failed; the cause remains unresolved and **complete neural-layer epochs remain zero**. **Current work:** a three-PE physical bidirectional fixture now passes all 200 payload words, two exact synthetic rows, complete buffers and state stability. After moving the existing GO after request preparation, a subsequent run passes all 31 checks, including both first-send lease witnesses. The prior 30/31 failure and precompute simulator failures remain preserved. A new 136-producer diagnostic reproduces the original strict failure with all 13 prior captures byte-identical, and adds two matching first-fault snapshots. It records a malformed body and ordinary-data control-tail failure; resource release and backup are independently verified. A subsequent body-completion check detects the same prefix before the current tail receive is armed, narrowing the boundary while preserving strict failure. A further run receives the same invalid prefix through scalar input-queue task arguments, so bulk origin body DMA is not necessary for that occurrence. Its execution order and retained context differ; earlier packet handling, routing and sender/output lifetime remain unresolved. Complete CSL text generation and measured token latency remain ahead.
 
+**Latest transport milestone (September 22, 2026):** a new static network passes
+the complete 136-producer physical fixture, with two identical full captures,
+normal exit and independent release. This resolves the scoped fixture transport
+qualification; the earlier native message-passing failures remain preserved and
+their unique cause is still unknown. The original neural graph is the next
+integration target; complete neural epochs remain zero.
+
 ## 1. Project design
 
 Qwen3.8 combines recurrent DeltaNet layers with full-attention layers. This requires two forms of state that survive between token calls: recurrent matrices and attention key/value (KV) caches. Our research focuses on mapping that computation, state and communication explicitly onto the wafer's processing elements (PEs).
@@ -86,6 +93,17 @@ Full attention/recurrent layers and the three-stage model remain integration wor
 ## 3. Completed development log — newest first
 
 Each **WP** or **HW** is a scoped development milestone. HW00/HW01 use physical WSE-3; earlier WP device results use the SDK simulator, and WP04 is a CPU/source audit. **BF16** means bfloat16 data, and **FP32** means 32-bit floating-point arithmetic. Reports contain numerical thresholds, failure history and reproduction details.
+
+### Full136 static transport · Physical qualification accepted · September 22, 2026 (UTC)
+
+The 534 PE fixture passes all 136 READY messages, 8 requests, 24 fragments and
+1,024 halfwords. Two complete exports match; source/relay/sink ownership and
+local causality checks pass, followed by normal exit and independently verified
+release and backup. This is one transport epoch without reset. Original neural
+epochs remain zero, and previous native-control failures remain preserved.
+[Report](docs/STATIC-TRANSPORT-FULL136.md) ·
+[Source](examples/ready_fanin/static_transport/full136) ·
+[Evidence](evidence/ready-fanin/static-transport-full136.json).
 
 ### Small static transport · SDK qualification accepted · September 22, 2026 (UTC)
 

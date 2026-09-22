@@ -2,6 +2,17 @@
 
 Only accepted results are listed below. Unresolved integration work and the remaining scope are tracked in [implementation status](STATUS.md).
 
+## Full136 static transport · Physical qualification accepted · September 22, 2026 (UTC)
+
+The 534 PE fixture passes all 136 READY messages, 8 requests, 24 fragments and
+1,024 halfwords. Two complete exports match; source/relay/sink ownership and
+local causality checks pass, followed by normal exit and independently verified
+release and backup. This is one transport epoch without reset. Original neural
+epochs remain zero, and previous native-control failures remain preserved.
+[Report](STATIC-TRANSPORT-FULL136.md) ·
+[Source](../examples/ready_fanin/static_transport/full136) ·
+[Evidence](../evidence/ready-fanin/static-transport-full136.json).
+
 ## Small static transport · SDK qualification accepted · September 22, 2026 (UTC)
 
 The 27 PE fixture delivers all 3 READY packets,8 requests,24 fragments and 1024
