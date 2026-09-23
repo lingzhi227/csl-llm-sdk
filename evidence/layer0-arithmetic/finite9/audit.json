@@ -1,0 +1,1569 @@
+{
+  "passed": true,
+  "scope": "Synthetic nine-PE finite arithmetic and persistent/reset qualification only",
+  "original_weights_or_model_arrays": false,
+  "original_projection": false,
+  "full_layer": false,
+  "full_model": false,
+  "reference_engine": "Existing qualified integer FP32 engine plus FP64 conditional bounds; not a second integer engine",
+  "exp": {
+    "points": 35181,
+    "max_relative_error": 7.911365883364319e-08,
+    "relative_budget": 9.5367431640625e-07,
+    "continuum_proof": false
+  },
+  "conditional_state_and_all_intermediates": true,
+  "full128_order_exact_integer_checked": true,
+  "all_RNE_boundaries_from_actual_readbacks": true,
+  "parameter_retention": true,
+  "zero_reset": true,
+  "exact_first_position_replays": [
+    3,
+    6
+  ],
+  "cases": [
+    {
+      "serial": 1,
+      "generation": 1,
+      "position": 0,
+      "preprocess": {
+        "passed": true,
+        "stages": {
+          "convolution": {
+            "passed": true,
+            "max_absolute_error": 0.0,
+            "max_error_over_bound": 0.0
+          },
+          "conv_exp": {
+            "passed": true,
+            "max_absolute_error": 3.4928447245619054e-08,
+            "max_error_over_bound": 0.05225666057602691
+          },
+          "silu": {
+            "passed": true,
+            "max_absolute_error": 3.7021094190237136e-08,
+            "max_error_over_bound": 0.034398586002160635
+          },
+          "q_sum": {
+            "passed": true,
+            "max_absolute_error": 0.00046825408935546875,
+            "max_error_over_bound": 0.018358861145664367
+          },
+          "q_denom": {
+            "passed": true,
+            "max_absolute_error": 0.00046725408947168035,
+            "max_error_over_bound": 0.018177641261594307
+          },
+          "q_sqrt": {
+            "passed": true,
+            "max_absolute_error": 9.19525064091431e-07,
+            "max_error_over_bound": 0.023583532180396598
+          },
+          "q_inverse": {
+            "passed": true,
+            "max_absolute_error": 7.654597060369195e-10,
+            "max_error_over_bound": 0.032815337205612166
+          },
+          "q_normalized": {
+            "passed": true,
+            "max_absolute_error": 9.687764312982239e-08,
+            "max_error_over_bound": 0.013980854661676884
+          },
+          "q_actual_inverse": {
+            "passed": true,
+            "max_absolute_error": 1.1175870895385742e-08,
+            "max_error_over_bound": 0.9291844510679669
+          },
+          "k_sum": {
+            "passed": true,
+            "max_absolute_error": 0.00048351287841796875,
+            "max_error_over_bound": 0.018957167406266223
+          },
+          "k_denom": {
+            "passed": true,
+            "max_absolute_error": 0.00048251287853418035,
+            "max_error_over_bound": 0.018771309377458842
+          },
+          "k_sqrt": {
+            "passed": true,
+            "max_absolute_error": 8.244809635016281e-08,
+            "max_error_over_bound": 0.0021145917370136826
+          },
+          "k_inverse": {
+            "passed": true,
+            "max_absolute_error": 6.02507523039808e-11,
+            "max_error_over_bound": 0.0025829524023047584
+          },
+          "k_normalized": {
+            "passed": true,
+            "max_absolute_error": 1.499355563039373e-07,
+            "max_error_over_bound": 0.02040328804791644
+          },
+          "k_actual_inverse": {
+            "passed": true,
+            "max_absolute_error": 6.51925802230835e-09,
+            "max_error_over_bound": 0.8913675829643098
+          },
+          "q_scale": {
+            "passed": true,
+            "max_absolute_error": 9.371186743267756e-10,
+            "max_error_over_bound": 0.45519615363837485
+          },
+          "gate_add": {
+            "passed": true,
+            "max_absolute_error": 0.0,
+            "max_error_over_bound": 0.0
+          },
+          "beta_exp": {
+            "passed": true,
+            "max_absolute_error": 7.87344886722181e-20,
+            "max_error_over_bound": 0.014260496418962227
+          },
+          "beta_sigmoid": {
+            "passed": true,
+            "max_absolute_error": 7.876800483510427e-20,
+            "max_error_over_bound": 0.003566641727879345
+          },
+          "A_exp": {
+            "passed": true,
+            "max_absolute_error": 1.0473700379209916e-10,
+            "max_error_over_bound": 0.02860639392204583
+          },
+          "softplus_exp": {
+            "passed": true,
+            "max_absolute_error": 7.87344886722181e-20,
+            "max_error_over_bound": 0.014260496418962227
+          },
+          "log1p_ratio": {
+            "passed": true,
+            "max_absolute_error": 8.378838773150664e-24,
+            "max_error_over_bound": 2.4281381430894306e-05
+          },
+          "log1p": {
+            "passed": true,
+            "max_absolute_error": 1.6758485339868274e-23,
+            "max_error_over_bound": 7.588298373343148e-07
+          },
+          "softplus": {
+            "passed": true,
+            "max_absolute_error": 7.875124715755797e-20,
+            "max_error_over_bound": 0.0035658829345985308
+          },
+          "g_actual_operands": {
+            "passed": true,
+            "max_absolute_error": 3.3528784660653137e-22,
+            "max_error_over_bound": 0.2530873790230905
+          },
+          "decay_actual_g": {
+            "passed": true,
+            "max_absolute_error": 2.220446049250313e-14,
+            "max_error_over_bound": 2.328306436538748e-08
+          }
+        },
+        "conversions": {
+          "convolution": true,
+          "activation": true,
+          "actual_exp_arguments_in_domain": true,
+          "gate_input_identity": true,
+          "beta": true
+        },
+        "v_exact": true,
+        "reset_zero_qkv": true,
+        "conv_oracle_bit_mismatches_non_gating": 0,
+        "activation_oracle_bit_mismatches_non_gating": 0
+      },
+      "gated": {
+        "passed": true,
+        "stages": {
+          "sum": {
+            "passed": true,
+            "max_absolute_error": 0.0,
+            "max_error_over_bound": 0.0
+          },
+          "denominator": {
+            "passed": true,
+            "max_absolute_error": 4.632568106899271e-08,
+            "max_error_over_bound": 0.00226068109843758
+          },
+          "sqrt": {
+            "passed": true,
+            "max_absolute_error": 1.4821915916840567e-08,
+            "max_error_over_bound": 0.013463750906410889
+          },
+          "inverse": {
+            "passed": true,
+            "max_absolute_error": 2.0683836421397928e-08,
+            "max_error_over_bound": 0.02503624562776835
+          },
+          "normalized_math": {
+            "passed": true,
+            "max_absolute_error": 8.891477509820334e-08,
+            "max_error_over_bound": 0.0068683990048650344
+          },
+          "normalized_actual_inverse": {
+            "passed": true,
+            "max_absolute_error": 5.960464477539063e-08,
+            "max_error_over_bound": 0.9234814864354223
+          },
+          "gain_product": {
+            "passed": true,
+            "max_absolute_error": 0.0,
+            "max_error_over_bound": 0.0
+          },
+          "exp": {
+            "passed": true,
+            "max_absolute_error": 9.149755175741348e-09,
+            "max_error_over_bound": 0.030955198367817745
+          },
+          "silu": {
+            "passed": true,
+            "max_absolute_error": 1.1519168019447079e-07,
+            "max_error_over_bound": 0.014476205940940156
+          },
+          "final_product": {
+            "passed": true,
+            "max_absolute_error": 4.6193599700927734e-07,
+            "max_error_over_bound": 0.8666114668331828
+          }
+        },
+        "conversions": {
+          "normalized": true,
+          "gain_product": true,
+          "final": true
+        },
+        "annihilation": true,
+        "oracle_output_bf16_mismatches_non_gating": 0,
+        "adversaries": {
+          "late_cast": 36,
+          "offset_gain": 122,
+          "sigmoid_only": 114
+        }
+      },
+      "recurrent": {
+        "prediction": {
+          "passed": true,
+          "max_absolute_error": 0.0,
+          "max_error_over_bound": 0.0,
+          "exact_integer_numeric_mismatches": 0,
+          "zero_sign_differences": 0
+        },
+        "delta": {
+          "passed": true,
+          "max_absolute_error": 0.0,
+          "max_error_over_bound": 0.0,
+          "exact_integer_numeric_mismatches": 0,
+          "zero_sign_differences": 0
+        },
+        "state": {
+          "passed": true,
+          "max_absolute_error": 0.0,
+          "max_error_over_bound": 0.0,
+          "exact_integer_numeric_mismatches": 0,
+          "zero_sign_differences": 0
+        },
+        "output": {
+          "passed": true,
+          "max_absolute_error": 0.0,
+          "max_error_over_bound": 0.0,
+          "exact_integer_numeric_mismatches": 0,
+          "zero_sign_differences": 0
+        }
+      }
+    },
+    {
+      "serial": 2,
+      "generation": 1,
+      "position": 1,
+      "preprocess": {
+        "passed": true,
+        "stages": {
+          "convolution": {
+            "passed": true,
+            "max_absolute_error": 0.0,
+            "max_error_over_bound": 0.0
+          },
+          "conv_exp": {
+            "passed": true,
+            "max_absolute_error": 3.469077847206847e-08,
+            "max_error_over_bound": 0.05544685585280272
+          },
+          "silu": {
+            "passed": true,
+            "max_absolute_error": 6.878437153190475e-08,
+            "max_error_over_bound": 0.02778463119942671
+          },
+          "q_sum": {
+            "passed": true,
+            "max_absolute_error": 5.4895877838134766e-05,
+            "max_error_over_bound": 0.0016204452358029701
+          },
+          "q_denom": {
+            "passed": true,
+            "max_absolute_error": 5.589587772192317e-05,
+            "max_error_over_bound": 0.0016371733372040607
+          },
+          "q_sqrt": {
+            "passed": true,
+            "max_absolute_error": 1.0877054137381492e-06,
+            "max_error_over_bound": 0.024205935342877946
+          },
+          "q_inverse": {
+            "passed": true,
+            "max_absolute_error": 3.6751306511928483e-10,
+            "max_error_over_bound": 0.018157750349498236
+          },
+          "q_normalized": {
+            "passed": true,
+            "max_absolute_error": 5.568260696975358e-08,
+            "max_error_over_bound": 0.008923752458178016
+          },
+          "q_actual_inverse": {
+            "passed": true,
+            "max_absolute_error": 2.7939677238464355e-08,
+            "max_error_over_bound": 0.9790609464371315
+          },
+          "k_sum": {
+            "passed": true,
+            "max_absolute_error": 2.8371810913085938e-05,
+            "max_error_over_bound": 0.0008373192020099541
+          },
+          "k_denom": {
+            "passed": true,
+            "max_absolute_error": 2.9371810796874342e-05,
+            "max_error_over_bound": 0.0008601119369516897
+          },
+          "k_sqrt": {
+            "passed": true,
+            "max_absolute_error": 1.2997058576047493e-06,
+            "max_error_over_bound": 0.028920802352943878
+          },
+          "k_inverse": {
+            "passed": true,
+            "max_absolute_error": 4.847654430650827e-10,
+            "max_error_over_bound": 0.023953348355499976
+          },
+          "k_normalized": {
+            "passed": true,
+            "max_absolute_error": 5.114726919774881e-08,
+            "max_error_over_bound": 0.009296234693131185
+          },
+          "k_actual_inverse": {
+            "passed": true,
+            "max_absolute_error": 7.450580596923828e-09,
+            "max_error_over_bound": 0.7709945859827634
+          },
+          "q_scale": {
+            "passed": true,
+            "max_absolute_error": 1.377200076202456e-09,
+            "max_error_over_bound": 0.37718416701601243
+          },
+          "gate_add": {
+            "passed": true,
+            "max_absolute_error": 0.0,
+            "max_error_over_bound": 0.0
+          },
+          "beta_exp": {
+            "passed": true,
+            "max_absolute_error": 7.87344886722181e-20,
+            "max_error_over_bound": 0.014260496418962227
+          },
+          "beta_sigmoid": {
+            "passed": true,
+            "max_absolute_error": 5.789368984210341e-12,
+            "max_error_over_bound": 1.517648343005622e-06
+          },
+          "A_exp": {
+            "passed": true,
+            "max_absolute_error": 2.2051349635177075e-10,
+            "max_error_over_bound": 0.0006849387746488669
+          },
+          "softplus_exp": {
+            "passed": true,
+            "max_absolute_error": 7.87344886722181e-20,
+            "max_error_over_bound": 0.014260496418962227
+          },
+          "log1p_ratio": {
+            "passed": true,
+            "max_absolute_error": 8.378838773150664e-24,
+            "max_error_over_bound": 2.4281381430894306e-05
+          },
+          "log1p": {
+            "passed": true,
+            "max_absolute_error": 1.6758485339868274e-23,
+            "max_error_over_bound": 7.588298373343148e-07
+          },
+          "softplus": {
+            "passed": true,
+            "max_absolute_error": 5.7909232964448165e-12,
+            "max_error_over_bound": 5.8668823057889475e-08
+          },
+          "g_actual_operands": {
+            "passed": true,
+            "max_absolute_error": 8.195638656616211e-08,
+            "max_error_over_bound": 0.15741242299955086
+          },
+          "decay_actual_g": {
+            "passed": true,
+            "max_absolute_error": 2.572828939912536e-12,
+            "max_error_over_bound": 0.016771813201802224
+          }
+        },
+        "conversions": {
+          "convolution": true,
+          "activation": true,
+          "actual_exp_arguments_in_domain": true,
+          "gate_input_identity": true,
+          "beta": true
+        },
+        "v_exact": true,
+        "reset_zero_qkv": true,
+        "conv_oracle_bit_mismatches_non_gating": 0,
+        "activation_oracle_bit_mismatches_non_gating": 0
+      },
+      "gated": {
+        "passed": true,
+        "stages": {
+          "sum": {
+            "passed": true,
+            "max_absolute_error": 0.0,
+            "max_error_over_bound": 0.0
+          },
+          "denominator": {
+            "passed": true,
+            "max_absolute_error": 4.632568106899271e-08,
+            "max_error_over_bound": 0.00226068109843758
+          },
+          "sqrt": {
+            "passed": true,
+            "max_absolute_error": 1.4821915916840567e-08,
+            "max_error_over_bound": 0.013463750906410889
+          },
+          "inverse": {
+            "passed": true,
+            "max_absolute_error": 2.0683836421397928e-08,
+            "max_error_over_bound": 0.02503624562776835
+          },
+          "normalized_math": {
+            "passed": true,
+            "max_absolute_error": 8.891477509820334e-08,
+            "max_error_over_bound": 0.0068683990048650344
+          },
+          "normalized_actual_inverse": {
+            "passed": true,
+            "max_absolute_error": 5.960464477539063e-08,
+            "max_error_over_bound": 0.9234814864354223
+          },
+          "gain_product": {
+            "passed": true,
+            "max_absolute_error": 0.0,
+            "max_error_over_bound": 0.0
+          },
+          "exp": {
+            "passed": true,
+            "max_absolute_error": 9.149755175741348e-09,
+            "max_error_over_bound": 0.030955198367817745
+          },
+          "silu": {
+            "passed": true,
+            "max_absolute_error": 1.1519168019447079e-07,
+            "max_error_over_bound": 0.014476205940940156
+          },
+          "final_product": {
+            "passed": true,
+            "max_absolute_error": 8.046627044677734e-07,
+            "max_error_over_bound": 0.8847503170691952
+          }
+        },
+        "conversions": {
+          "normalized": true,
+          "gain_product": true,
+          "final": true
+        },
+        "annihilation": true,
+        "oracle_output_bf16_mismatches_non_gating": 0,
+        "adversaries": {
+          "late_cast": 33,
+          "offset_gain": 121,
+          "sigmoid_only": 114
+        }
+      },
+      "recurrent": {
+        "prediction": {
+          "passed": true,
+          "max_absolute_error": 0.0,
+          "max_error_over_bound": 0.0,
+          "exact_integer_numeric_mismatches": 0,
+          "zero_sign_differences": 0
+        },
+        "delta": {
+          "passed": true,
+          "max_absolute_error": 0.0,
+          "max_error_over_bound": 0.0,
+          "exact_integer_numeric_mismatches": 0,
+          "zero_sign_differences": 0
+        },
+        "state": {
+          "passed": true,
+          "max_absolute_error": 0.0,
+          "max_error_over_bound": 0.0,
+          "exact_integer_numeric_mismatches": 0,
+          "zero_sign_differences": 0
+        },
+        "output": {
+          "passed": true,
+          "max_absolute_error": 0.0,
+          "max_error_over_bound": 0.0,
+          "exact_integer_numeric_mismatches": 0,
+          "zero_sign_differences": 0
+        }
+      }
+    },
+    {
+      "serial": 3,
+      "generation": 2,
+      "position": 0,
+      "preprocess": {
+        "passed": true,
+        "stages": {
+          "convolution": {
+            "passed": true,
+            "max_absolute_error": 0.0,
+            "max_error_over_bound": 0.0
+          },
+          "conv_exp": {
+            "passed": true,
+            "max_absolute_error": 3.4928447245619054e-08,
+            "max_error_over_bound": 0.05225666057602691
+          },
+          "silu": {
+            "passed": true,
+            "max_absolute_error": 3.7021094190237136e-08,
+            "max_error_over_bound": 0.034398586002160635
+          },
+          "q_sum": {
+            "passed": true,
+            "max_absolute_error": 0.00046825408935546875,
+            "max_error_over_bound": 0.018358861145664367
+          },
+          "q_denom": {
+            "passed": true,
+            "max_absolute_error": 0.00046725408947168035,
+            "max_error_over_bound": 0.018177641261594307
+          },
+          "q_sqrt": {
+            "passed": true,
+            "max_absolute_error": 9.19525064091431e-07,
+            "max_error_over_bound": 0.023583532180396598
+          },
+          "q_inverse": {
+            "passed": true,
+            "max_absolute_error": 7.654597060369195e-10,
+            "max_error_over_bound": 0.032815337205612166
+          },
+          "q_normalized": {
+            "passed": true,
+            "max_absolute_error": 9.687764312982239e-08,
+            "max_error_over_bound": 0.013980854661676884
+          },
+          "q_actual_inverse": {
+            "passed": true,
+            "max_absolute_error": 1.1175870895385742e-08,
+            "max_error_over_bound": 0.9291844510679669
+          },
+          "k_sum": {
+            "passed": true,
+            "max_absolute_error": 0.00048351287841796875,
+            "max_error_over_bound": 0.018957167406266223
+          },
+          "k_denom": {
+            "passed": true,
+            "max_absolute_error": 0.00048251287853418035,
+            "max_error_over_bound": 0.018771309377458842
+          },
+          "k_sqrt": {
+            "passed": true,
+            "max_absolute_error": 8.244809635016281e-08,
+            "max_error_over_bound": 0.0021145917370136826
+          },
+          "k_inverse": {
+            "passed": true,
+            "max_absolute_error": 6.02507523039808e-11,
+            "max_error_over_bound": 0.0025829524023047584
+          },
+          "k_normalized": {
+            "passed": true,
+            "max_absolute_error": 1.499355563039373e-07,
+            "max_error_over_bound": 0.02040328804791644
+          },
+          "k_actual_inverse": {
+            "passed": true,
+            "max_absolute_error": 6.51925802230835e-09,
+            "max_error_over_bound": 0.8913675829643098
+          },
+          "q_scale": {
+            "passed": true,
+            "max_absolute_error": 9.371186743267756e-10,
+            "max_error_over_bound": 0.45519615363837485
+          },
+          "gate_add": {
+            "passed": true,
+            "max_absolute_error": 0.0,
+            "max_error_over_bound": 0.0
+          },
+          "beta_exp": {
+            "passed": true,
+            "max_absolute_error": 7.87344886722181e-20,
+            "max_error_over_bound": 0.014260496418962227
+          },
+          "beta_sigmoid": {
+            "passed": true,
+            "max_absolute_error": 7.876800483510427e-20,
+            "max_error_over_bound": 0.003566641727879345
+          },
+          "A_exp": {
+            "passed": true,
+            "max_absolute_error": 1.0473700379209916e-10,
+            "max_error_over_bound": 0.02860639392204583
+          },
+          "softplus_exp": {
+            "passed": true,
+            "max_absolute_error": 7.87344886722181e-20,
+            "max_error_over_bound": 0.014260496418962227
+          },
+          "log1p_ratio": {
+            "passed": true,
+            "max_absolute_error": 8.378838773150664e-24,
+            "max_error_over_bound": 2.4281381430894306e-05
+          },
+          "log1p": {
+            "passed": true,
+            "max_absolute_error": 1.6758485339868274e-23,
+            "max_error_over_bound": 7.588298373343148e-07
+          },
+          "softplus": {
+            "passed": true,
+            "max_absolute_error": 7.875124715755797e-20,
+            "max_error_over_bound": 0.0035658829345985308
+          },
+          "g_actual_operands": {
+            "passed": true,
+            "max_absolute_error": 3.3528784660653137e-22,
+            "max_error_over_bound": 0.2530873790230905
+          },
+          "decay_actual_g": {
+            "passed": true,
+            "max_absolute_error": 2.220446049250313e-14,
+            "max_error_over_bound": 2.328306436538748e-08
+          }
+        },
+        "conversions": {
+          "convolution": true,
+          "activation": true,
+          "actual_exp_arguments_in_domain": true,
+          "gate_input_identity": true,
+          "beta": true
+        },
+        "v_exact": true,
+        "reset_zero_qkv": true,
+        "conv_oracle_bit_mismatches_non_gating": 0,
+        "activation_oracle_bit_mismatches_non_gating": 0
+      },
+      "gated": {
+        "passed": true,
+        "stages": {
+          "sum": {
+            "passed": true,
+            "max_absolute_error": 0.0,
+            "max_error_over_bound": 0.0
+          },
+          "denominator": {
+            "passed": true,
+            "max_absolute_error": 4.632568106899271e-08,
+            "max_error_over_bound": 0.00226068109843758
+          },
+          "sqrt": {
+            "passed": true,
+            "max_absolute_error": 1.4821915916840567e-08,
+            "max_error_over_bound": 0.013463750906410889
+          },
+          "inverse": {
+            "passed": true,
+            "max_absolute_error": 2.0683836421397928e-08,
+            "max_error_over_bound": 0.02503624562776835
+          },
+          "normalized_math": {
+            "passed": true,
+            "max_absolute_error": 8.891477509820334e-08,
+            "max_error_over_bound": 0.0068683990048650344
+          },
+          "normalized_actual_inverse": {
+            "passed": true,
+            "max_absolute_error": 5.960464477539063e-08,
+            "max_error_over_bound": 0.9234814864354223
+          },
+          "gain_product": {
+            "passed": true,
+            "max_absolute_error": 0.0,
+            "max_error_over_bound": 0.0
+          },
+          "exp": {
+            "passed": true,
+            "max_absolute_error": 9.149755175741348e-09,
+            "max_error_over_bound": 0.030955198367817745
+          },
+          "silu": {
+            "passed": true,
+            "max_absolute_error": 1.1519168019447079e-07,
+            "max_error_over_bound": 0.014476205940940156
+          },
+          "final_product": {
+            "passed": true,
+            "max_absolute_error": 4.6193599700927734e-07,
+            "max_error_over_bound": 0.8666114668331828
+          }
+        },
+        "conversions": {
+          "normalized": true,
+          "gain_product": true,
+          "final": true
+        },
+        "annihilation": true,
+        "oracle_output_bf16_mismatches_non_gating": 0,
+        "adversaries": {
+          "late_cast": 36,
+          "offset_gain": 122,
+          "sigmoid_only": 114
+        }
+      },
+      "recurrent": {
+        "prediction": {
+          "passed": true,
+          "max_absolute_error": 0.0,
+          "max_error_over_bound": 0.0,
+          "exact_integer_numeric_mismatches": 0,
+          "zero_sign_differences": 0
+        },
+        "delta": {
+          "passed": true,
+          "max_absolute_error": 0.0,
+          "max_error_over_bound": 0.0,
+          "exact_integer_numeric_mismatches": 0,
+          "zero_sign_differences": 0
+        },
+        "state": {
+          "passed": true,
+          "max_absolute_error": 0.0,
+          "max_error_over_bound": 0.0,
+          "exact_integer_numeric_mismatches": 0,
+          "zero_sign_differences": 0
+        },
+        "output": {
+          "passed": true,
+          "max_absolute_error": 0.0,
+          "max_error_over_bound": 0.0,
+          "exact_integer_numeric_mismatches": 0,
+          "zero_sign_differences": 0
+        }
+      }
+    },
+    {
+      "serial": 4,
+      "generation": 3,
+      "position": 0,
+      "preprocess": {
+        "passed": true,
+        "stages": {
+          "convolution": {
+            "passed": true,
+            "max_absolute_error": 0.0,
+            "max_error_over_bound": 0.0
+          },
+          "conv_exp": {
+            "passed": true,
+            "max_absolute_error": 4.4623022610323915e-08,
+            "max_error_over_bound": 0.06581191904532369
+          },
+          "silu": {
+            "passed": true,
+            "max_absolute_error": 4.193876868008317e-08,
+            "max_error_over_bound": 0.034398586002160635
+          },
+          "q_sum": {
+            "passed": true,
+            "max_absolute_error": 0.0003772033378481865,
+            "max_error_over_bound": 0.014787687750726168
+          },
+          "q_denom": {
+            "passed": true,
+            "max_absolute_error": 0.0003762033379643981,
+            "max_error_over_bound": 0.014634154915071366
+          },
+          "q_sqrt": {
+            "passed": true,
+            "max_absolute_error": 1.0938224477285985e-06,
+            "max_error_over_bound": 0.028052554611455817
+          },
+          "q_inverse": {
+            "passed": true,
+            "max_absolute_error": 2.794736213285187e-10,
+            "max_error_over_bound": 0.011981606508330078
+          },
+          "q_normalized": {
+            "passed": true,
+            "max_absolute_error": 1.0991253751591046e-07,
+            "max_error_over_bound": 0.015295543453270477
+          },
+          "q_actual_inverse": {
+            "passed": true,
+            "max_absolute_error": 1.30385160446167e-08,
+            "max_error_over_bound": 0.9018964309526812
+          },
+          "k_sum": {
+            "passed": true,
+            "max_absolute_error": 0.00015929038636386395,
+            "max_error_over_bound": 0.006245416614839462
+          },
+          "k_denom": {
+            "passed": true,
+            "max_absolute_error": 0.00015829038648007554,
+            "max_error_over_bound": 0.006158098723825211
+          },
+          "k_sqrt": {
+            "passed": true,
+            "max_absolute_error": 1.3727824352827156e-06,
+            "max_error_over_bound": 0.03520877204978583
+          },
+          "k_inverse": {
+            "passed": true,
+            "max_absolute_error": 3.967721637354593e-10,
+            "max_error_over_bound": 0.017009511563133295
+          },
+          "k_normalized": {
+            "passed": true,
+            "max_absolute_error": 4.060625247159777e-08,
+            "max_error_over_bound": 0.008963325209387321
+          },
+          "k_actual_inverse": {
+            "passed": true,
+            "max_absolute_error": 1.0710209608078003e-08,
+            "max_error_over_bound": 0.9488736203395495
+          },
+          "q_scale": {
+            "passed": true,
+            "max_absolute_error": 1.3424094058578362e-09,
+            "max_error_over_bound": 0.616060381253193
+          },
+          "gate_add": {
+            "passed": true,
+            "max_absolute_error": 0.0,
+            "max_error_over_bound": 0.0
+          },
+          "beta_exp": {
+            "passed": true,
+            "max_absolute_error": 0.0,
+            "max_error_over_bound": 0.0
+          },
+          "beta_sigmoid": {
+            "passed": true,
+            "max_absolute_error": 0.0,
+            "max_error_over_bound": 0.0
+          },
+          "A_exp": {
+            "passed": true,
+            "max_absolute_error": 2.2051349635177075e-10,
+            "max_error_over_bound": 0.0006849387746488669
+          },
+          "softplus_exp": {
+            "passed": true,
+            "max_absolute_error": 0.0,
+            "max_error_over_bound": 0.0
+          },
+          "log1p_ratio": {
+            "passed": true,
+            "max_absolute_error": 9.934107481068821e-09,
+            "max_error_over_bound": 0.24999997066333887
+          },
+          "log1p": {
+            "passed": true,
+            "max_absolute_error": 1.904654323148236e-09,
+            "max_error_over_bound": 0.0007203285491026979
+          },
+          "softplus": {
+            "passed": true,
+            "max_absolute_error": 1.904654323148236e-09,
+            "max_error_over_bound": 0.0007203285491026979
+          },
+          "g_actual_operands": {
+            "passed": true,
+            "max_absolute_error": 1.1882264061569003e-09,
+            "max_error_over_bound": 0.0851942526429412
+          },
+          "decay_actual_g": {
+            "passed": true,
+            "max_absolute_error": 2.3623460077004665e-08,
+            "max_error_over_bound": 0.03130161019477904
+          }
+        },
+        "conversions": {
+          "convolution": true,
+          "activation": true,
+          "actual_exp_arguments_in_domain": true,
+          "gate_input_identity": true,
+          "beta": true
+        },
+        "v_exact": true,
+        "reset_zero_qkv": true,
+        "conv_oracle_bit_mismatches_non_gating": 0,
+        "activation_oracle_bit_mismatches_non_gating": 0
+      },
+      "gated": {
+        "passed": true,
+        "stages": {
+          "sum": {
+            "passed": true,
+            "max_absolute_error": 0.0,
+            "max_error_over_bound": 0.0
+          },
+          "denominator": {
+            "passed": true,
+            "max_absolute_error": 4.632568106899271e-08,
+            "max_error_over_bound": 0.00226068109843758
+          },
+          "sqrt": {
+            "passed": true,
+            "max_absolute_error": 1.4821915916840567e-08,
+            "max_error_over_bound": 0.013463750906410889
+          },
+          "inverse": {
+            "passed": true,
+            "max_absolute_error": 2.0683836421397928e-08,
+            "max_error_over_bound": 0.02503624562776835
+          },
+          "normalized_math": {
+            "passed": true,
+            "max_absolute_error": 8.891477509820334e-08,
+            "max_error_over_bound": 0.0068683990048650344
+          },
+          "normalized_actual_inverse": {
+            "passed": true,
+            "max_absolute_error": 5.960464477539063e-08,
+            "max_error_over_bound": 0.9234814864354223
+          },
+          "gain_product": {
+            "passed": true,
+            "max_absolute_error": 0.0,
+            "max_error_over_bound": 0.0
+          },
+          "exp": {
+            "passed": true,
+            "max_absolute_error": 9.149755175741348e-09,
+            "max_error_over_bound": 0.030955198367817745
+          },
+          "silu": {
+            "passed": true,
+            "max_absolute_error": 1.1519168019447079e-07,
+            "max_error_over_bound": 0.014476205940940156
+          },
+          "final_product": {
+            "passed": true,
+            "max_absolute_error": 4.917383193969727e-07,
+            "max_error_over_bound": 0.870663324817465
+          }
+        },
+        "conversions": {
+          "normalized": true,
+          "gain_product": true,
+          "final": true
+        },
+        "annihilation": true,
+        "oracle_output_bf16_mismatches_non_gating": 0,
+        "adversaries": {
+          "late_cast": 35,
+          "offset_gain": 123,
+          "sigmoid_only": 114
+        }
+      },
+      "recurrent": {
+        "prediction": {
+          "passed": true,
+          "max_absolute_error": 0.0,
+          "max_error_over_bound": 0.0,
+          "exact_integer_numeric_mismatches": 0,
+          "zero_sign_differences": 0
+        },
+        "delta": {
+          "passed": true,
+          "max_absolute_error": 0.0,
+          "max_error_over_bound": 0.0,
+          "exact_integer_numeric_mismatches": 0,
+          "zero_sign_differences": 0
+        },
+        "state": {
+          "passed": true,
+          "max_absolute_error": 0.0,
+          "max_error_over_bound": 0.0,
+          "exact_integer_numeric_mismatches": 0,
+          "zero_sign_differences": 0
+        },
+        "output": {
+          "passed": true,
+          "max_absolute_error": 1.0,
+          "max_error_over_bound": 0.0006452726086360335,
+          "exact_integer_numeric_mismatches": 0,
+          "zero_sign_differences": 0
+        }
+      }
+    },
+    {
+      "serial": 5,
+      "generation": 3,
+      "position": 1,
+      "preprocess": {
+        "passed": true,
+        "stages": {
+          "convolution": {
+            "passed": true,
+            "max_absolute_error": 0.0,
+            "max_error_over_bound": 0.0
+          },
+          "conv_exp": {
+            "passed": true,
+            "max_absolute_error": 4.9334657914457125e-08,
+            "max_error_over_bound": 0.06947602733157203
+          },
+          "silu": {
+            "passed": true,
+            "max_absolute_error": 5.467544761383891e-08,
+            "max_error_over_bound": 0.03543117991804379
+          },
+          "q_sum": {
+            "passed": true,
+            "max_absolute_error": 8.754152804613113e-05,
+            "max_error_over_bound": 0.002584297984323361
+          },
+          "q_denom": {
+            "passed": true,
+            "max_absolute_error": 8.654152816234273e-05,
+            "max_error_over_bound": 0.0025349726879203053
+          },
+          "q_sqrt": {
+            "passed": true,
+            "max_absolute_error": 4.848144854463499e-07,
+            "max_error_over_bound": 0.010789543569727337
+          },
+          "q_inverse": {
+            "passed": true,
+            "max_absolute_error": 1.4594358013764186e-10,
+            "max_error_over_bound": 0.0072103665114473395
+          },
+          "q_normalized": {
+            "passed": true,
+            "max_absolute_error": 1.365921042939533e-09,
+            "max_error_over_bound": 0.0077233010339245655
+          },
+          "q_actual_inverse": {
+            "passed": true,
+            "max_absolute_error": 2.421438694000244e-08,
+            "max_error_over_bound": 0.8669203994979406
+          },
+          "k_sum": {
+            "passed": true,
+            "max_absolute_error": 0.0007349681109189987,
+            "max_error_over_bound": 0.021698318512541066
+          },
+          "k_denom": {
+            "passed": true,
+            "max_absolute_error": 0.0007359681108027871,
+            "max_error_over_bound": 0.02155940841340281
+          },
+          "k_sqrt": {
+            "passed": true,
+            "max_absolute_error": 1.771597993638352e-06,
+            "max_error_over_bound": 0.039428232149423786
+          },
+          "k_inverse": {
+            "passed": true,
+            "max_absolute_error": 5.380999673620934e-10,
+            "max_error_over_bound": 0.026584021737573182
+          },
+          "k_normalized": {
+            "passed": true,
+            "max_absolute_error": 1.7736378088439864e-07,
+            "max_error_over_bound": 0.021005773008563725
+          },
+          "k_actual_inverse": {
+            "passed": true,
+            "max_absolute_error": 2.421438694000244e-08,
+            "max_error_over_bound": 0.8668911850041221
+          },
+          "q_scale": {
+            "passed": true,
+            "max_absolute_error": 3.3089261608498788e-09,
+            "max_error_over_bound": 0.5207493896869232
+          },
+          "gate_add": {
+            "passed": true,
+            "max_absolute_error": 0.0,
+            "max_error_over_bound": 0.0
+          },
+          "beta_exp": {
+            "passed": true,
+            "max_absolute_error": 3.695372838025818e-12,
+            "max_error_over_bound": 0.011550852305765132
+          },
+          "beta_sigmoid": {
+            "passed": true,
+            "max_absolute_error": 7.435945630941687e-12,
+            "max_error_over_bound": 0.005812696505488404
+          },
+          "A_exp": {
+            "passed": true,
+            "max_absolute_error": 1.0473700379209916e-10,
+            "max_error_over_bound": 0.02860639392204583
+          },
+          "softplus_exp": {
+            "passed": true,
+            "max_absolute_error": 2.172035961462912e-12,
+            "max_error_over_bound": 0.011193606118736755
+          },
+          "log1p_ratio": {
+            "passed": true,
+            "max_absolute_error": 2.379964674230524e-12,
+            "max_error_over_bound": 0.19626263572150252
+          },
+          "log1p": {
+            "passed": true,
+            "max_absolute_error": 4.058188193042239e-12,
+            "max_error_over_bound": 0.005229008831542299
+          },
+          "softplus": {
+            "passed": true,
+            "max_absolute_error": 3.1504273501070656e-07,
+            "max_error_over_bound": 0.00971583365445963
+          },
+          "g_actual_operands": {
+            "passed": true,
+            "max_absolute_error": 1.7525114692773514e-09,
+            "max_error_over_bound": 0.900978708187897
+          },
+          "decay_actual_g": {
+            "passed": true,
+            "max_absolute_error": 2.6028488919749293e-08,
+            "max_error_over_bound": 0.028198207576833712
+          }
+        },
+        "conversions": {
+          "convolution": true,
+          "activation": true,
+          "actual_exp_arguments_in_domain": true,
+          "gate_input_identity": true,
+          "beta": true
+        },
+        "v_exact": true,
+        "reset_zero_qkv": true,
+        "conv_oracle_bit_mismatches_non_gating": 0,
+        "activation_oracle_bit_mismatches_non_gating": 0
+      },
+      "gated": {
+        "passed": true,
+        "stages": {
+          "sum": {
+            "passed": true,
+            "max_absolute_error": 0.0,
+            "max_error_over_bound": 0.0
+          },
+          "denominator": {
+            "passed": true,
+            "max_absolute_error": 4.632568106899271e-08,
+            "max_error_over_bound": 0.00226068109843758
+          },
+          "sqrt": {
+            "passed": true,
+            "max_absolute_error": 1.4821915916840567e-08,
+            "max_error_over_bound": 0.013463750906410889
+          },
+          "inverse": {
+            "passed": true,
+            "max_absolute_error": 2.0683836421397928e-08,
+            "max_error_over_bound": 0.02503624562776835
+          },
+          "normalized_math": {
+            "passed": true,
+            "max_absolute_error": 8.891477509820334e-08,
+            "max_error_over_bound": 0.0068683990048650344
+          },
+          "normalized_actual_inverse": {
+            "passed": true,
+            "max_absolute_error": 5.960464477539063e-08,
+            "max_error_over_bound": 0.9234814864354223
+          },
+          "gain_product": {
+            "passed": true,
+            "max_absolute_error": 0.0,
+            "max_error_over_bound": 0.0
+          },
+          "exp": {
+            "passed": true,
+            "max_absolute_error": 9.149755175741348e-09,
+            "max_error_over_bound": 0.030955198367817745
+          },
+          "silu": {
+            "passed": true,
+            "max_absolute_error": 1.1519168019447079e-07,
+            "max_error_over_bound": 0.014476205940940156
+          },
+          "final_product": {
+            "passed": true,
+            "max_absolute_error": 2.682209014892578e-07,
+            "max_error_over_bound": 0.905089404817908
+          }
+        },
+        "conversions": {
+          "normalized": true,
+          "gain_product": true,
+          "final": true
+        },
+        "annihilation": true,
+        "oracle_output_bf16_mismatches_non_gating": 0,
+        "adversaries": {
+          "late_cast": 19,
+          "offset_gain": 123,
+          "sigmoid_only": 114
+        }
+      },
+      "recurrent": {
+        "prediction": {
+          "passed": true,
+          "max_absolute_error": 0.03125,
+          "max_error_over_bound": 0.0006403468597497364,
+          "exact_integer_numeric_mismatches": 0,
+          "zero_sign_differences": 0
+        },
+        "delta": {
+          "passed": true,
+          "max_absolute_error": 0.0,
+          "max_error_over_bound": 0.0,
+          "exact_integer_numeric_mismatches": 0,
+          "zero_sign_differences": 0
+        },
+        "state": {
+          "passed": true,
+          "max_absolute_error": 0.0,
+          "max_error_over_bound": 0.0,
+          "exact_integer_numeric_mismatches": 0,
+          "zero_sign_differences": 0
+        },
+        "output": {
+          "passed": true,
+          "max_absolute_error": 0.0234375,
+          "max_error_over_bound": 0.000693268088471869,
+          "exact_integer_numeric_mismatches": 0,
+          "zero_sign_differences": 0
+        }
+      }
+    },
+    {
+      "serial": 6,
+      "generation": 4,
+      "position": 0,
+      "preprocess": {
+        "passed": true,
+        "stages": {
+          "convolution": {
+            "passed": true,
+            "max_absolute_error": 0.0,
+            "max_error_over_bound": 0.0
+          },
+          "conv_exp": {
+            "passed": true,
+            "max_absolute_error": 3.4928447245619054e-08,
+            "max_error_over_bound": 0.05225666057602691
+          },
+          "silu": {
+            "passed": true,
+            "max_absolute_error": 3.7021094190237136e-08,
+            "max_error_over_bound": 0.034398586002160635
+          },
+          "q_sum": {
+            "passed": true,
+            "max_absolute_error": 0.00046825408935546875,
+            "max_error_over_bound": 0.018358861145664367
+          },
+          "q_denom": {
+            "passed": true,
+            "max_absolute_error": 0.00046725408947168035,
+            "max_error_over_bound": 0.018177641261594307
+          },
+          "q_sqrt": {
+            "passed": true,
+            "max_absolute_error": 9.19525064091431e-07,
+            "max_error_over_bound": 0.023583532180396598
+          },
+          "q_inverse": {
+            "passed": true,
+            "max_absolute_error": 7.654597060369195e-10,
+            "max_error_over_bound": 0.032815337205612166
+          },
+          "q_normalized": {
+            "passed": true,
+            "max_absolute_error": 9.687764312982239e-08,
+            "max_error_over_bound": 0.013980854661676884
+          },
+          "q_actual_inverse": {
+            "passed": true,
+            "max_absolute_error": 1.1175870895385742e-08,
+            "max_error_over_bound": 0.9291844510679669
+          },
+          "k_sum": {
+            "passed": true,
+            "max_absolute_error": 0.00048351287841796875,
+            "max_error_over_bound": 0.018957167406266223
+          },
+          "k_denom": {
+            "passed": true,
+            "max_absolute_error": 0.00048251287853418035,
+            "max_error_over_bound": 0.018771309377458842
+          },
+          "k_sqrt": {
+            "passed": true,
+            "max_absolute_error": 8.244809635016281e-08,
+            "max_error_over_bound": 0.0021145917370136826
+          },
+          "k_inverse": {
+            "passed": true,
+            "max_absolute_error": 6.02507523039808e-11,
+            "max_error_over_bound": 0.0025829524023047584
+          },
+          "k_normalized": {
+            "passed": true,
+            "max_absolute_error": 1.499355563039373e-07,
+            "max_error_over_bound": 0.02040328804791644
+          },
+          "k_actual_inverse": {
+            "passed": true,
+            "max_absolute_error": 6.51925802230835e-09,
+            "max_error_over_bound": 0.8913675829643098
+          },
+          "q_scale": {
+            "passed": true,
+            "max_absolute_error": 9.371186743267756e-10,
+            "max_error_over_bound": 0.45519615363837485
+          },
+          "gate_add": {
+            "passed": true,
+            "max_absolute_error": 0.0,
+            "max_error_over_bound": 0.0
+          },
+          "beta_exp": {
+            "passed": true,
+            "max_absolute_error": 7.87344886722181e-20,
+            "max_error_over_bound": 0.014260496418962227
+          },
+          "beta_sigmoid": {
+            "passed": true,
+            "max_absolute_error": 7.876800483510427e-20,
+            "max_error_over_bound": 0.003566641727879345
+          },
+          "A_exp": {
+            "passed": true,
+            "max_absolute_error": 1.0473700379209916e-10,
+            "max_error_over_bound": 0.02860639392204583
+          },
+          "softplus_exp": {
+            "passed": true,
+            "max_absolute_error": 7.87344886722181e-20,
+            "max_error_over_bound": 0.014260496418962227
+          },
+          "log1p_ratio": {
+            "passed": true,
+            "max_absolute_error": 8.378838773150664e-24,
+            "max_error_over_bound": 2.4281381430894306e-05
+          },
+          "log1p": {
+            "passed": true,
+            "max_absolute_error": 1.6758485339868274e-23,
+            "max_error_over_bound": 7.588298373343148e-07
+          },
+          "softplus": {
+            "passed": true,
+            "max_absolute_error": 7.875124715755797e-20,
+            "max_error_over_bound": 0.0035658829345985308
+          },
+          "g_actual_operands": {
+            "passed": true,
+            "max_absolute_error": 3.3528784660653137e-22,
+            "max_error_over_bound": 0.2530873790230905
+          },
+          "decay_actual_g": {
+            "passed": true,
+            "max_absolute_error": 2.220446049250313e-14,
+            "max_error_over_bound": 2.328306436538748e-08
+          }
+        },
+        "conversions": {
+          "convolution": true,
+          "activation": true,
+          "actual_exp_arguments_in_domain": true,
+          "gate_input_identity": true,
+          "beta": true
+        },
+        "v_exact": true,
+        "reset_zero_qkv": true,
+        "conv_oracle_bit_mismatches_non_gating": 0,
+        "activation_oracle_bit_mismatches_non_gating": 0
+      },
+      "gated": {
+        "passed": true,
+        "stages": {
+          "sum": {
+            "passed": true,
+            "max_absolute_error": 0.0,
+            "max_error_over_bound": 0.0
+          },
+          "denominator": {
+            "passed": true,
+            "max_absolute_error": 4.632568106899271e-08,
+            "max_error_over_bound": 0.00226068109843758
+          },
+          "sqrt": {
+            "passed": true,
+            "max_absolute_error": 1.4821915916840567e-08,
+            "max_error_over_bound": 0.013463750906410889
+          },
+          "inverse": {
+            "passed": true,
+            "max_absolute_error": 2.0683836421397928e-08,
+            "max_error_over_bound": 0.02503624562776835
+          },
+          "normalized_math": {
+            "passed": true,
+            "max_absolute_error": 8.891477509820334e-08,
+            "max_error_over_bound": 0.0068683990048650344
+          },
+          "normalized_actual_inverse": {
+            "passed": true,
+            "max_absolute_error": 5.960464477539063e-08,
+            "max_error_over_bound": 0.9234814864354223
+          },
+          "gain_product": {
+            "passed": true,
+            "max_absolute_error": 0.0,
+            "max_error_over_bound": 0.0
+          },
+          "exp": {
+            "passed": true,
+            "max_absolute_error": 9.149755175741348e-09,
+            "max_error_over_bound": 0.030955198367817745
+          },
+          "silu": {
+            "passed": true,
+            "max_absolute_error": 1.1519168019447079e-07,
+            "max_error_over_bound": 0.014476205940940156
+          },
+          "final_product": {
+            "passed": true,
+            "max_absolute_error": 4.6193599700927734e-07,
+            "max_error_over_bound": 0.8666114668331828
+          }
+        },
+        "conversions": {
+          "normalized": true,
+          "gain_product": true,
+          "final": true
+        },
+        "annihilation": true,
+        "oracle_output_bf16_mismatches_non_gating": 0,
+        "adversaries": {
+          "late_cast": 36,
+          "offset_gain": 122,
+          "sigmoid_only": 114
+        }
+      },
+      "recurrent": {
+        "prediction": {
+          "passed": true,
+          "max_absolute_error": 0.0,
+          "max_error_over_bound": 0.0,
+          "exact_integer_numeric_mismatches": 0,
+          "zero_sign_differences": 0
+        },
+        "delta": {
+          "passed": true,
+          "max_absolute_error": 0.0,
+          "max_error_over_bound": 0.0,
+          "exact_integer_numeric_mismatches": 0,
+          "zero_sign_differences": 0
+        },
+        "state": {
+          "passed": true,
+          "max_absolute_error": 0.0,
+          "max_error_over_bound": 0.0,
+          "exact_integer_numeric_mismatches": 0,
+          "zero_sign_differences": 0
+        },
+        "output": {
+          "passed": true,
+          "max_absolute_error": 0.0,
+          "max_error_over_bound": 0.0,
+          "exact_integer_numeric_mismatches": 0,
+          "zero_sign_differences": 0
+        }
+      }
+    }
+  ],
+  "contract": {
+    "operations": 452,
+    "launches": 85,
+    "copies": 367,
+    "H2D": 130,
+    "D2H": 237,
+    "host_bytes": 1357236,
+    "saved_array_bytes": 1279656,
+    "cases": [
+      {
+        "serial": 1,
+        "generation": 1,
+        "position": 0,
+        "fixture": 0
+      },
+      {
+        "serial": 2,
+        "generation": 1,
+        "position": 1,
+        "fixture": 1
+      },
+      {
+        "serial": 3,
+        "generation": 2,
+        "position": 0,
+        "fixture": 0
+      },
+      {
+        "serial": 4,
+        "generation": 3,
+        "position": 0,
+        "fixture": 2
+      },
+      {
+        "serial": 5,
+        "generation": 3,
+        "position": 1,
+        "fixture": 3
+      },
+      {
+        "serial": 6,
+        "generation": 4,
+        "position": 0,
+        "fixture": 0
+      }
+    ],
+    "exp_inputs": 35181,
+    "exp_batches": 69,
+    "PEs": 9,
+    "simulation_invocations": 1,
+    "compile_invocations": 0,
+    "hardware_invocations": 0,
+    "transfer_scope": "Only actual active-role rectangles; common controls/status cover all9PEs"
+  },
+  "seconds": 1.9268522821366787
+}

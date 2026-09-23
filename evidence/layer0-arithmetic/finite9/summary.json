@@ -1,0 +1,142 @@
+{
+  "scope": {
+    "PEs": 9,
+    "synthetic_only": true,
+    "original_weights_loaded": false,
+    "original_projection": false,
+    "full_layer": false,
+    "packet_transport": false,
+    "full_stage": false,
+    "full_model": false,
+    "logits": false,
+    "tokens": false
+  },
+  "model": "Qwen/Qwen3.8-27B",
+  "revision": "1d4bf0f2ff6012fd82039f2fa52739d0dd7c60c0",
+  "canonical_acceptance_sha256": "8d051df0c262e8189fd293ce61c31011f709bb4c0e2deff48a1a906e973130b0",
+  "compile": {
+    "manifest_sha256": "18024f8d9419db53893617e73f7c30ef3cb7c23d48be08d24f68b1b671f15ce1",
+    "PEs": 9,
+    "programs": 9,
+    "exported_names": 29,
+    "active_role_banks": 88,
+    "max_ordinary_plus_4096_stack_bytes": 27824,
+    "sram_ceiling_bytes": 48128,
+    "dynamic_stack_proof": false,
+    "compiled_files": 27,
+    "compiled_bytes": 791841,
+    "actual_DSRs_include": [
+      1,
+      3,
+      4
+    ]
+  },
+  "runtime": {
+    "manifest_sha256": "2dbd9d213369f1bd4c32f844a816b5700efe4a93fd9431bdbfa3dd63e8c58a24",
+    "exit_code": 0,
+    "child_reaped": true,
+    "normal_stop": true,
+    "guard_seconds": 957.5461679948494,
+    "child_seconds": 954.5172097841278,
+    "peak_bytes": 220958720,
+    "CPU": [
+      0
+    ],
+    "memory_cap_bytes": 4294967296,
+    "swap": 0,
+    "child_limit_seconds": 1800,
+    "guard_limit_seconds": 2100,
+    "idle_limit_seconds": 180,
+    "owned_resources_released": true,
+    "compile_invocations": 0,
+    "simulation_invocations": 1,
+    "physical_invocations": 0
+  },
+  "contract": {
+    "operations": 452,
+    "launches": 85,
+    "H2D": 130,
+    "D2H": 237,
+    "host_bytes": 1357236,
+    "saved_arrays": 367,
+    "saved_bytes": 1279656,
+    "computes": 6,
+    "zero_resets": 3,
+    "exact_replays": [
+      3,
+      6
+    ]
+  },
+  "arithmetic": {
+    "exp_points": 35181,
+    "exp_domain": [
+      -48,
+      1
+    ],
+    "finite_points_only": true,
+    "exp_max_relative_error": 7.91136589899103e-08,
+    "exp_budget": 9.5367431640625e-07,
+    "operator_audit_pass_nodes": 253,
+    "conditional_bound_nodes": 240,
+    "worst_error_over_bound": {
+      "path": "/cases/1/preprocess/stages/q_actual_inverse",
+      "ratio": 0.9790609464371315
+    },
+    "full128_key_order": true,
+    "value_shards": 4,
+    "values_per_shard": 32,
+    "all_recurrent_prediction_delta_state_output_checked": true,
+    "independent_ordered_FMAs": 294912,
+    "independent_state_words": 98304,
+    "exact_integer_numeric_mismatches": 0,
+    "zero_sign_differences": 0,
+    "BF16_RNE_from_actual_intermediates": true,
+    "all_history_and_state_resets": true,
+    "parameter_retention": true,
+    "conditional_FP64_nonzero_differences": [
+      {
+        "serial": 4,
+        "operator": "output",
+        "max_absolute_error": 1.0
+      },
+      {
+        "serial": 5,
+        "operator": "prediction",
+        "max_absolute_error": 0.03125
+      },
+      {
+        "serial": 5,
+        "operator": "output",
+        "max_absolute_error": 0.0234375
+      }
+    ],
+    "cancellation_witness": "Full128 ordered FP32 output1 versus real-valued2 and old two64 order0.",
+    "reference_limit": "Independent controller column-major capture reconstruction uses the same qualified integer rounding primitives, not a second arithmetic engine. Conditional FP64 bounds are not FP64 bitwise agreement or universal domain proof."
+  },
+  "audit": {
+    "path": "evidence/layer0-arithmetic/finite9/audit.json",
+    "bytes": 51098,
+    "sha256": "bd0e344df7ec5b0fe2e27ea651a6e656e87a59bd16670bc4f7967c4bb296313f"
+  },
+  "source_map_path": "examples/layer0_arithmetic/finite9/source-map.json",
+  "preserved_failures": [
+    {
+      "candidate": "SDK001",
+      "scope": "Compilation",
+      "result": "Named typed pointer exports required; original failure retained, minimal declaration fix compiled separately."
+    },
+    {
+      "candidate": "SIM001",
+      "scope": "Finite simulator",
+      "result": "Original240s child timeout retained, with112 completedcalls and34 complete expbatches; SIM002 changed time ceilings only."
+    },
+    {
+      "candidate": "SIM001 local precondition",
+      "scope": "Before SSH or SDK",
+      "result": "Missing local exact admission caused local exit1; exact canonical bytes installed before the single remote attempt."
+    }
+  ],
+  "checker_history": "Initial independent audit canonicalized190 zero-beta product signs. The corrected checker uses the existing qualified multiply32 primitive and finds zero numeric and sign mismatches on the same captured bytes. Both versions are retained privately; no device rerun or tolerance change.",
+  "full_model": false,
+  "model_generations": 0
+}

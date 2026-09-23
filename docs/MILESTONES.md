@@ -2,6 +2,19 @@
 
 Only accepted results are listed below. Unresolved integration work and the remaining scope are tracked in [implementation status](STATUS.md).
 
+## Layer0 arithmetic · Finite nine-PE simulator qualification accepted · September 22, 2026 (UTC)
+
+All 35,181 finite exp inputs and six synthetic convolution/DeltaNet/gated-RMS
+computations pass the original budgets, full 128 ordered FP32 checks, persistent
+state, zero resets and exact replay. Independent reconstruction checks 294,912
+FMAs and 98,304 state words without numeric or sign mismatches. This uses shared
+qualified integer primitives, not a second arithmetic engine. Conditional FP64
+differences remain reported; no continuum, complete-layer or CS-3 claim is made.
+The original SDK export failure and 240-second SIM001 timeout remain preserved.
+[Report](LAYER0-ARITHMETIC-FINITE9.md) ·
+[Source](../examples/layer0_arithmetic/finite9) ·
+[Evidence](../evidence/layer0-arithmetic/finite9/summary.json).
+
 ## Original Layer3 · Continuous positions and device reset accepted · September 22, 2026 (UTC)
 
 One initialization and weight upload serve physical positions 0 and 1, followed

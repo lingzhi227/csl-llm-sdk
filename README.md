@@ -2,6 +2,12 @@
 
 **Building inference for open language models with handwritten Cerebras Systems Language (CSL), targeting sequential execution of three model stages on WSE-3.** We implement the numerical kernels, execution control and persistent model state, and use the Cerebras SDK to compile and run the device programs. The first target is **Qwen3.8-27B text inference**; the longer-term goal is a reusable SDK for related model architectures.
 
+**Latest accepted component:** finite Layer0 arithmetic in the SDK simulator:
+35,181 exp inputs and six convolution/DeltaNet/gated-RMS computations, including
+continuation and exact reset replay. This nine-PE synthetic result keeps the
+original error budgets and does not qualify a complete Layer0 or CS-3 execution.
+See the [report](docs/LAYER0-ARITHMETIC-FINITE9.md).
+
 **Working today:** the complete original-weight Layer3 attention/MLP graph
 executes causal positions 0 and 1, then device reset and exact position-0 replay
 on physical WSE-3. All three captures pass the conditional operator gates and
@@ -16,9 +22,10 @@ samples pass. Nominal CPU BF16 mismatches are 346/1,150/346 of 5,120 across the
 three serials, with maximum absolute differences 0.00390625/0.001953125/0.00390625.
 Bitwise CPU parity and a source-propagated whole-layer enclosure are not established.
 
-**Current work:** integrate complete original Layer0 convolution and DeltaNet
-state, then actual 0→1→2→3 hidden flow and all 64 layers across three sequential
-stages with host checkpoint restoration. The accepted Layer3 scope is the finite
+**Current work:** qualify dense-stage communication alongside the accepted
+Layer0 arithmetic, integrate the complete original recurrent layer, then actual
+0→1→2→3 hidden flow and all 64 layers across three sequential stages with host
+checkpoint restoration. The accepted Layer3 scope is the finite
 0→1→reset→0 sequence. Full-vocabulary logits, CSL text generation and measured
 token latency remain ahead. Earlier compiler and message-passing failures remain
 in the completed log and their original evidence records.
@@ -80,6 +87,7 @@ and full-model inference remain open.
 
 | Path | Purpose |
 |---|---|
+| [`examples/layer0_arithmetic/finite9/`](examples/layer0_arithmetic/finite9) | Exact nine-PE finite arithmetic source, state/reset coverage and preserved simulator failure history. |
 | [`csl/kernels/`](csl/kernels) | Reusable handwritten CSL arithmetic kernels. |
 | [`examples/ready_fanin/`](examples/ready_fanin) | Physical concurrent READY corruption reproduction, strict capture checks, and scoped native-control simulator qualification. |
 | [`examples/native_layer3/`](examples/native_layer3) | Complete original Layer3 static-transport execution, conditional operator checks and preserved first-error diagnostics. |
@@ -107,6 +115,19 @@ and full-model inference remain open.
 ## 3. Completed development log — newest first
 
 Each **WP** or **HW** is a scoped development milestone. HW00/HW01 use physical WSE-3; earlier WP device results use the SDK simulator, and WP04 is a CPU/source audit. **BF16** means bfloat16 data, and **FP32** means 32-bit floating-point arithmetic. Reports contain numerical thresholds, failure history and reproduction details.
+
+### Layer0 arithmetic · Finite nine-PE simulator qualification accepted · September 22, 2026 (UTC)
+
+All 35,181 finite exp inputs and six synthetic convolution/DeltaNet/gated-RMS
+computations pass the original budgets, full 128 ordered FP32 checks, persistent
+state, zero resets and exact replay. Independent reconstruction checks 294,912
+FMAs and 98,304 state words without numeric or sign mismatches. This uses shared
+qualified integer primitives, not a second arithmetic engine. Conditional FP64
+differences remain reported; no continuum, complete-layer or CS-3 claim is made.
+The original SDK export failure and 240-second SIM001 timeout remain preserved.
+[Report](docs/LAYER0-ARITHMETIC-FINITE9.md) ·
+[Source](examples/layer0_arithmetic/finite9) ·
+[Evidence](evidence/layer0-arithmetic/finite9/summary.json).
 
 ### Original Layer3 · Continuous positions and device reset accepted · September 22, 2026 (UTC)
 

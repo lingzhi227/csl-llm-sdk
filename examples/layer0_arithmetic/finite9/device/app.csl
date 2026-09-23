@@ -1,0 +1,133 @@
+// Nine independent arithmetic PEs. No Layer0 graph or packet transport claim.
+// role0 exp,1Q-conv,2K-conv,3V-conv,4..7 four recurrent value shards,8 gates/RMS.
+param memcpy_params;
+param role:u16;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const is_exp=role==0;const is_conv=role>=1 and role<=3;
+const is_recurrent=role>=4 and role<=7;const is_gated=role==8;
+const exp_kernel=@import_module(if(is_exp) "exp_kernel.csl" else "<empty>");
+const conv=@import_module(if(is_conv) "convolution_owner.csl" else "<empty>",
+ if(is_conv) .{.vector_kind=role-1} else .{});
+const recurrent=@import_module(if(is_recurrent) "recurrent_owner.csl" else "<empty>");
+const gated=@import_module(if(is_gated) "gated_kernel.csl" else "<empty>");
+const scalar=@import_module(if(is_gated) "gate_kernel.csl" else "<empty>");
+var controls=@zeros([3]u32); // next serial, generation, position
+var status=@zeros([8]u32);
+var unused16=@zeros([1]u16);var unused32=@zeros([1]u32);var unusedf=@zeros([1]f32);
+var exp_input=@zeros([if(is_exp) 512 else 1]f32);
+var exp_output=@zeros([if(is_exp) 512 else 1]f32);
+var gated_input=@zeros([if(is_gated) 128 else 1]u16);
+var gated_gain=@zeros([if(is_gated) 128 else 1]u16);
+var gated_z=@zeros([if(is_gated) 128 else 1]u16);
+var gated_stages=@zeros([if(is_gated) 640 else 1]f32);
+var gated_casts=@zeros([if(is_gated) 384 else 1]u16);
+var gated_stats=@zeros([if(is_gated) 4 else 1]f32);
+var gate_stages=@zeros([if(is_gated) 15 else 1]f32);
+var beta_bits=@zeros([1]u16);
+var recurrent_gates=@zeros([2]f32);
+fn refresh_owner_state() void {
+ if(comptime is_conv){
+  status[2]=if(conv.output_owned) 1 else 0;
+  status[3]=conv.serial;status[4]=conv.generation;status[5]=conv.position;
+ }
+ if(comptime is_recurrent){
+  status[2]=if(recurrent.output_owned) 1 else 0;
+  status[3]=recurrent.serial;status[4]=recurrent.generation;status[5]=recurrent.position;
+ }
+}
+fn initialize() void {
+ @assert(status[0]==0);status[0]=1;status[1]=role;refresh_owner_state();sys.unblock_cmd_stream();
+}
+fn exponential() void {
+ @assert(status[0]==1);
+ if(comptime is_exp){
+  for(@range(u16,512))|i|{
+   @assert(exp_input[i]>=-48.0 and exp_input[i]<=1.0);
+   exp_output[i]=exp_kernel.exp_f32(exp_input[i]);
+  }
+  status[2]+=1;
+ }
+ sys.unblock_cmd_stream();
+}
+fn compute() void {
+ @assert(status[0]==1);
+ if(comptime is_conv){conv.compute(controls[0],controls[1],controls[2]);}
+ if(comptime is_recurrent){
+  recurrent.beta=recurrent_gates[0];recurrent.decay=recurrent_gates[1];
+  recurrent.compute(controls[0],controls[1],controls[2]);
+ }
+ if(comptime is_gated){
+  scalar.compute_gates(&gate_stages,&beta_bits);
+  gated.compute(&gated_input,&gated_gain,&gated_z,&gated_stages,&gated_casts,&gated_stats);
+ }
+ status[3]=controls[0];status[4]=controls[1];status[5]=controls[2];status[6]+=1;
+ refresh_owner_state();
+ sys.unblock_cmd_stream();
+}
+fn release() void {
+ @assert(status[0]==1);
+ if(comptime is_conv){conv.release_output(controls[0]);}
+ if(comptime is_recurrent){recurrent.release_output(controls[0]);}
+ status[7]+=1;refresh_owner_state();sys.unblock_cmd_stream();
+}
+fn reset() void {
+ @assert(status[0]==1);
+ if(comptime is_conv){conv.reset_after_global_quiescence(controls[1]);}
+ if(comptime is_recurrent){recurrent.reset_after_global_quiescence(controls[1]);}
+ refresh_owner_state();sys.unblock_cmd_stream();
+}
+// Export named pointer symbols, as required by the actual SDK compiler.
+const export_controls:[*]u32=&controls;
+const export_status:[*]u32=&status;
+const export_exp_input:[*]f32=&exp_input;
+const export_exp_output:[*]f32=&exp_output;
+const export_conv_weights:[*]u16=if(is_conv) &conv.weights else &unused16;
+const export_conv_history:[*]u16=if(is_conv) &conv.history else &unused16;
+const export_conv_input:[*]u16=if(is_conv) &conv.input else &unused16;
+const export_conv_stages:[*]f32=if(is_conv) &conv.stages else &unusedf;
+const export_conv_casts:[*]u16=if(is_conv) &conv.casts else &unused16;
+const export_conv_unscaled:[*]f32=if(is_conv) &conv.unscaled else &unusedf;
+const export_conv_output:[*]f32=if(is_conv) &conv.output else &unusedf;
+const export_conv_stats:[*]f32=if(is_conv) &conv.stats else &unusedf;
+const export_matrix:[*]f32=if(is_recurrent) &recurrent.matrix else &unusedf;
+const export_query:[*]f32=if(is_recurrent) &recurrent.query else &unusedf;
+const export_key:[*]f32=if(is_recurrent) &recurrent.key else &unusedf;
+const export_value:[*]f32=if(is_recurrent) &recurrent.value else &unusedf;
+const export_prediction:[*]f32=if(is_recurrent) &recurrent.prediction else &unusedf;
+const export_delta:[*]f32=if(is_recurrent) &recurrent.delta else &unusedf;
+const export_recurrent_output:[*]f32=if(is_recurrent) &recurrent.output else &unusedf;
+const export_recurrent_bf16:[*]u16=if(is_recurrent) &recurrent.output_bf16 else &unused16;
+const export_recurrent_gates:[*]f32=&recurrent_gates;
+const export_gated_input:[*]u16=&gated_input;
+const export_gated_gain:[*]u16=&gated_gain;
+const export_gated_z:[*]u16=&gated_z;
+const export_gated_stages:[*]f32=&gated_stages;
+const export_gated_casts:[*]u16=&gated_casts;
+const export_gated_stats:[*]f32=&gated_stats;
+const export_gate_stages:[*]f32=&gate_stages;
+const export_beta_bits:[*]u16=&beta_bits;
+comptime {
+ @export_symbol(export_controls,"controls");@export_symbol(export_status,"status");
+ @export_symbol(export_exp_input,"exp_input");@export_symbol(export_exp_output,"exp_output");
+ @export_symbol(export_conv_weights,"conv_weights");
+ @export_symbol(export_conv_history,"conv_history");
+ @export_symbol(export_conv_input,"conv_input");
+ @export_symbol(export_conv_stages,"conv_stages");
+ @export_symbol(export_conv_casts,"conv_casts");
+ @export_symbol(export_conv_unscaled,"conv_unscaled");
+ @export_symbol(export_conv_output,"conv_output");
+ @export_symbol(export_conv_stats,"conv_stats");
+ @export_symbol(export_matrix,"matrix");
+ @export_symbol(export_query,"query");
+ @export_symbol(export_key,"key");
+ @export_symbol(export_value,"value");
+ @export_symbol(export_prediction,"prediction");
+ @export_symbol(export_delta,"delta");
+ @export_symbol(export_recurrent_output,"recurrent_output");
+ @export_symbol(export_recurrent_bf16,"recurrent_bf16");
+ @export_symbol(export_recurrent_gates,"recurrent_gates");
+ @export_symbol(export_gated_input,"gated_input");@export_symbol(export_gated_gain,"gated_gain");@export_symbol(export_gated_z,"gated_z");
+ @export_symbol(export_gated_stages,"gated_stages");@export_symbol(export_gated_casts,"gated_casts");@export_symbol(export_gated_stats,"gated_stats");
+ @export_symbol(export_gate_stages,"gate_stages");@export_symbol(export_beta_bits,"beta_bits");
+ @export_symbol(initialize);@export_symbol(exponential);@export_symbol(compute);@export_symbol(release);@export_symbol(reset);
+}
