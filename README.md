@@ -2,21 +2,24 @@
 
 **Building inference for open language models with handwritten Cerebras Systems Language (CSL), targeting sequential execution of three model stages on WSE-3.** We implement the numerical kernels, execution control and persistent model state, and use the Cerebras SDK to compile and run the device programs. The first target is **Qwen3.8-27B text inference**; the longer-term goal is a reusable SDK for related model architectures.
 
-**Latest accepted milestone:** complete original-weight Layer3 runs positions
-0/1/reset/0 on physical WSE-3 in a vertical 29×1160 region. All conditional
-operator, KV-state, transport and reset checks pass. Final hidden vectors match
-the earlier horizontal Layer3 bit-for-bit. Original nominal BF16 differences
-remain 346/1,150/346 of 5,120 values. See the [report](docs/LAYER3-VERTICAL.md).
+**Latest accepted milestone:** original layers 0→1→2→3 execute real causal hidden
+handoffs on physical WSE-3. Positions 0/1/reset/0 pass conditional operator and
+state checks. A separate runtime reloads weights and a checkpoint; every one of
+39 semantic banks then matches uninterrupted position 1 bit-for-bit. See the
+[report](docs/FOUR-LAYER-FRESH-RESTORE.md).
 
-**Also accepted:** original vertical Layer0 has finite physical operator and
-persistent-state qualification, with nominal differences 0/438/0. A separate
-full 64-layer CPU reference generates four tokens; it is not CSL full-model execution.
+**Numerical scope:** 48,084,480 conditional matrix rows and 375,660 exact FMA
+samples pass. Nominal CPU hidden differences reach 0.0078125; bitwise CPU parity
+and a propagated whole-chain error enclosure are not established. Earlier
+individual Layer0/Layer3 results and the separate 64-layer CPU reference remain
+in the completed log.
 
-**Current work:** actual wafer-resident 0→1→2→3 hidden flow, parameterized layer
-lowering, and complete hidden/KV/DeltaNet/convolution/control checkpoint restore.
-The target remains all 64 original layers and the full 248,320-token vocabulary,
-using one physical CS3 for sequential 20/24/20 stages and dependent generated tokens.
-Full-model execution and matched performance remain open.
+**Current work:** complete all 64 original layers and the 248,320-token vocabulary
+using one physical CS3 for sequential 20/24/20 stages, with dependent generated
+tokens and host checkpoint reload. Full-stage/head compilation, original tensor
+preparation, runtime integration and matched evaluation remain open. The latest
+physical monitoring gap is disclosed; future stage deadlines must remain
+responsive during shared-filesystem stalls.
 
 ## 1. Project design
 
@@ -78,6 +81,7 @@ qualification. Complete stages and full-model inference remain open.
 | [`examples/layer0_vertical/top_spine/`](examples/layer0_vertical/top_spine) | Complete generated vertical Layer0 device program, exact host mapping and actual static qualification; physical scope is documented separately. |
 | [`examples/layer0_vertical/physical_runtime/`](examples/layer0_vertical/physical_runtime) | Exact accepted Layer0 host capture, resource guards and post-release operator audit source; environment-specific inputs and admissions are excluded. |
 | [`examples/layer3_vertical/`](examples/layer3_vertical) | Exact accepted vertical Layer3 device and host/audit source, placement maps, and scoped physical evidence. |
+| [`examples/four_layer_chain/`](examples/four_layer_chain) | Exact four-layer device/runtime/audit source and scoped causal handoff, checkpoint and fresh-restore evidence. |
 | [`examples/dense_transport/finite136/`](examples/dense_transport/finite136) | Exact finite physical packet/math source, independent operand checks, reset and retained ownership evidence. |
 | [`examples/layer0_arithmetic/finite9/`](examples/layer0_arithmetic/finite9) | Exact nine-PE finite arithmetic source, state/reset coverage and preserved simulator failure history. |
 | [`csl/kernels/`](csl/kernels) | Reusable handwritten CSL arithmetic kernels. |
@@ -105,6 +109,26 @@ qualification. Complete stages and full-model inference remain open.
 **Suggested first read:** follow the two-PE example from its [layout](examples/wp02/layout.csl) to [device program](examples/wp02/pe.csl), [host driver](examples/wp02/driver.py), [report](docs/WP02-REPORT.md) and [result record](evidence/wp02.json). For the model equations and precision rules, read the [semantics contract](docs/WP04-SEMANTICS.md).
 
 ## 3. Completed development log — newest first
+
+### Original four-layer chain · Fresh full-state restore accepted · September 23, 2026 UTC
+
+Original BF16 layers 0→1→2→3 execute causal hidden handoffs entirely on one
+physical WSE-3, at positions 0 and 1 plus device reset and position-0 replay.
+All 48,084,480 conditional matrix rows and 375,660 predetermined exact FMA
+samples pass, together with operator, state, transport and parameter checks.
+A distinct physical runtime reloads original weights and the position-0
+checkpoint, then computes position 1. All 39 semantic banks, 14,378,752 native
+bytes, match uninterrupted position 1 bit-for-bit.
+
+All 36,789 raw files from both successful runs are durably preserved and hashed.
+Nominal CPU parity is not claimed: the maximum absolute hidden difference across
+the four layers is 0.0078125. Conditional operator checks are not a propagated
+whole-chain error bound. Failed compilation/runtime/audit attempts remain in
+the evidence history. The restored run's largest parent-monitor poll gap is
+60.486867 seconds, so a hard 15-second cancellation guarantee is not established.
+Full 64-layer/full-vocabulary generation and matched performance remain open.
+[Report](docs/FOUR-LAYER-FRESH-RESTORE.md) · [Source](examples/four_layer_chain) ·
+[Evidence](evidence/four-layer-chain/qualification.json).
 
 ### Original vertical Layer3 · Physical attention and reset accepted · September 23, 2026
 
@@ -663,14 +687,13 @@ PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest discover -s tests -v
 
 For simulator runs, follow the milestone reports and the [development guide](docs/DEVELOPMENT.md). A separately installed Cerebras SDK 2.10.1 and Singularity are required. The repository includes source and sanitized evidence; SDK distributions, model weight payloads and private runtime artifacts are excluded.
 
-**In progress:** connect actual wafer-resident 0→1→2→3 hidden flow using original
-Layer1/2 weights, executable parameterized placement/lowering, and checkpoint
-restoration of hidden, all three linear-layer DeltaNet/convolution states,
-Layer3 KV and request/position/generation/control state. A separate runtime
-reload must reproduce uninterrupted position-1 behavior. Continue to all 64
-layers, full-vocabulary logits and dependent tokens across sequential 20/24/20
-stages on one physical CS3. Accepted individual layers retain their finite
-0/1/reset/0 scope; full-model CSL generation remains open. Earlier WP09 evidence
-remains unaccepted. See [status](docs/STATUS.md) and [milestones](docs/MILESTONES.md).
+**In progress:** original full64 and full248320-vocabulary inference across
+sequential 20/24/20 stages on one physical CS3. Implement and qualify final
+normalization/head, context8 prefill and dependent decoding, complete stage
+checkpoints, bounded streamed capture metadata and filesystem-independent parent
+deadlines. The four-layer physical chain and separate fresh reload are accepted
+within their finite scope; full-model CSL generation and matched performance
+remain open. Earlier WP09 evidence remains unaccepted. See
+[status](docs/STATUS.md) and [milestones](docs/MILESTONES.md).
 
 MIT licensed; see [LICENSE](LICENSE). This is an independent research project, not an official Cerebras inference product.

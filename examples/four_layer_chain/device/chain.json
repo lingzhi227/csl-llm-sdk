@@ -1,0 +1,66 @@
+{
+  "schema": 1,
+  "model": "Qwen/Qwen3.8-27B",
+  "revision": "1d4bf0f2ff6012fd82039f2fa52739d0dd7c60c0",
+  "layers": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "stage_id": 0,
+  "request_id": 1,
+  "precision": {
+    "weights": "BF16",
+    "hidden": "BF16",
+    "accumulator": "FP32",
+    "recurrent_state": "FP32",
+    "convolution_state": "BF16",
+    "KV_state": "BF16",
+    "reduction_order": "accepted_logical_stripe_order"
+  },
+  "placement": {
+    "policy": "accepted_vertical_families_west_to_east",
+    "application_height": 1160,
+    "maximum_width": 750,
+    "fabric": [
+      762,
+      1172
+    ],
+    "offset": [
+      4,
+      1
+    ],
+    "channels": 16
+  },
+  "handoff": {
+    "policy": "adjacent_post_to_pre",
+    "color": 13,
+    "queue": 2,
+    "DSR": 2,
+    "UT": 2,
+    "completion_task": 18,
+    "control_error_task": 20,
+    "header_u32_words": 8,
+    "hidden_words": 5120,
+    "payload": "two_exact_BF16_words_per_u32",
+    "transport": "identity_header_then_packed_hidden",
+    "payload_u32_words": 2560
+  },
+  "qualification": {
+    "context_capacity": 8,
+    "baseline_positions": [
+      0,
+      1
+    ],
+    "reset_replay_position": 0,
+    "checkpoint_after_position": 0,
+    "restored_next_position": 1,
+    "reset_generation": 1,
+    "local_serial_limit": 3,
+    "independent_runtime_reload": true,
+    "restore_local_transport_counters": false,
+    "restore_entry": "initialize",
+    "export_policy": "role_scoped"
+  }
+}

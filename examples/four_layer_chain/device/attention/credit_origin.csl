@@ -1,0 +1,114 @@
+// Bounded root window. This module owns no queue, task, or transport buffer.
+// A root's semantic reservation can retire before its GRANT source callback.
+param root_count:u16;
+param root_ids:[root_count]u16;
+param expected_heads:u32;
+const protocol=@import_module("credit_protocol.csl",.{});
+comptime {
+ @comptime_assert(root_count>0 and root_count<=112);
+ @comptime_assert(expected_heads>0 and expected_heads<=0x00ffffff);
+ for(@range(u16,root_count))|i|{
+  @comptime_assert(root_ids[i]<112);
+  const kind=protocol.root_kind(root_ids[i]);const group=protocol.root_group(root_ids[i]);
+  @comptime_assert((protocol.recipient_mask(kind,group)&expected_heads)==protocol.recipient_mask(kind,group));
+  for(@range(u16,root_count))|j|{if(i<j){@comptime_assert(root_ids[i]!=root_ids[j]);}}
+ }
+}
+var identity=@zeros([4]u32);
+var operation:u16=0;var window:u16=1;
+// 0 unissued,1 reserved,2 receiver-retained and root-released.
+var states=@zeros([root_count]u16);
+var active_mask:u32=0;var ready_mask:u32=0;
+var active_count:u16=0;var granted_count:u16=0;var done_count:u16=0;
+var maximum_active:u16=0;
+var initialized:bool=false;var injected:bool=false;var next_phase_taken:bool=false;
+var grant_inflight:bool=false;var grant_tx_id:u16=0xffff;
+var grant_source_completions:u16=0;var done_before_grant_release:u16=0;
+var errors:u32=0;var rejected:u32=0;
+fn reject(flag:u32) bool {errors|=flag;rejected+=1;return false;}
+fn quiescent() bool {
+ return initialized and next_phase_taken and done_count==root_count and active_count==0 and
+        active_mask==0 and ready_mask==expected_heads and !grant_inflight;
+}
+fn begin(request:u32,reset:u32,position:u32,stage:u32,new_operation:u16,new_window:u16) bool {
+ if(initialized and !quiescent()){return reject(protocol.ERR_LEASE);}
+ if(new_window==0 or new_window>24 or new_operation==0xffff){return reject(protocol.ERR_CAPACITY);}
+ if(initialized and identity[0]==request and identity[1]==reset and identity[2]==position and
+    identity[3]==stage and operation==new_operation){return reject(protocol.ERR_DUPLICATE);}
+ identity[0]=request;identity[1]=reset;identity[2]=position;identity[3]=stage;
+ operation=new_operation;window=new_window;
+ for(@range(u16,root_count))|i|{states[i]=0;}
+ active_mask=0;ready_mask=0;active_count=0;granted_count=0;done_count=0;maximum_active=0;
+ injected=false;next_phase_taken=false;grant_inflight=false;grant_tx_id=0xffff;
+ grant_source_completions=0;done_before_grant_release=0;errors=0;rejected=0;initialized=true;
+ return true;
+}
+fn mark_injected() bool {
+ if(!initialized){return reject(protocol.ERR_ORDER);}
+ if(injected){return reject(protocol.ERR_DUPLICATE);}
+ injected=true;return true;
+}
+fn eligible() u16 {
+ if(!initialized or !injected or grant_inflight or active_count>=window){return 0xffff;}
+ // Finite deterministic scan. Each root can be issued only once per operation.
+ for(@range(u16,root_count))|i|{
+  if(states[i]==0){
+   const id=root_ids[i];const mask=protocol.recipient_mask(protocol.root_kind(id),protocol.root_group(id));
+   if((mask&active_mask)==0){return i;}
+  }
+ }
+ return 0xffff;
+}
+fn take_grant(target:[*]u32) bool {
+ const selected=eligible();if(selected==0xffff){return false;}
+ const id=root_ids[selected];const kind=protocol.root_kind(id);const group=protocol.root_group(id);
+ const mask=protocol.recipient_mask(kind,group);
+ const pack_ok=protocol.pack(target,protocol.GRANT,&identity,operation,kind,group,id);
+ if(!pack_ok){return reject(protocol.ERR_IDENTITY);}
+ states[selected]=1;active_mask|=mask;active_count+=1;granted_count+=1;
+ if(active_count>maximum_active){maximum_active=active_count;}
+ grant_inflight=true;grant_tx_id=id;
+ return true;
+}
+fn grant_source_complete() bool {
+ if(!grant_inflight){return reject(protocol.ERR_LEASE);}
+ // Do not look up states[grant_tx_id]: DONE may already have retired that root.
+ grant_inflight=false;grant_tx_id=0xffff;grant_source_completions+=1;return true;
+}
+fn receive_done(data:[*]u32,length:u16) bool {
+ if(length!=8){return reject(protocol.ERR_LENGTH);}
+ if(!initialized or !protocol.matches(data,&identity)){return reject(protocol.ERR_IDENTITY);}
+ if(data[5]>>16!=@as(u32,operation)){return reject(protocol.ERR_PHASE);}
+ if(data[0]!=protocol.ROOT_DONE or data[7]>=112){return reject(protocol.ERR_KIND_GROUP);}
+ const id=@as(u16,data[7]);const kind=protocol.root_kind(id);const group=protocol.root_group(id);
+ if(data[5]!=protocol.operation_kind(operation,kind) or data[6]!=@as(u32,group)){
+  return reject(protocol.ERR_KIND_GROUP);
+ }
+ var selected:u16=0xffff;
+ for(@range(u16,root_count))|i|{if(root_ids[i]==id){selected=i;}}
+ if(selected==0xffff){return reject(protocol.ERR_KIND_GROUP);}
+ if(states[selected]!=1){return reject(protocol.ERR_DUPLICATE);}
+ const mask=protocol.recipient_mask(kind,group);
+ if(active_count==0 or (active_mask&mask)!=mask){return reject(protocol.ERR_LEASE);}
+ if(grant_inflight and grant_tx_id==id){done_before_grant_release+=1;}
+ states[selected]=2;active_mask&=~mask;active_count-=1;done_count+=1;return true;
+}
+fn receive_ready(data:[*]u32,length:u16) bool {
+ if(length!=8){return reject(protocol.ERR_LENGTH);}
+ if(!initialized or !protocol.matches(data,&identity)){return reject(protocol.ERR_IDENTITY);}
+ if(data[0]!=10 or data[5]!=@as(u32,operation)+1 or data[6]>=24 or data[7]!=0){
+  return reject(protocol.ERR_PHASE);
+ }
+ const bit=@as(u32,1)<<@as(u16,data[6]);
+ if((expected_heads&bit)==0){return reject(protocol.ERR_RECIPIENT);}
+ if((ready_mask&bit)!=0){return reject(protocol.ERR_DUPLICATE);}
+ ready_mask|=bit;return true;
+}
+fn can_advance() bool {
+ return initialized and injected and done_count==root_count and active_count==0 and
+        active_mask==0 and ready_mask==expected_heads and !next_phase_taken;
+}
+fn take_next_phase() bool {
+ if(!can_advance()){return false;}
+ next_phase_taken=true;return true;
+}

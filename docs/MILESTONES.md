@@ -1,5 +1,25 @@
 # Accepted milestones
 
+### Original four-layer chain · Fresh full-state restore accepted · September 23, 2026 UTC
+
+Original BF16 layers 0→1→2→3 execute causal hidden handoffs entirely on one
+physical WSE-3, at positions 0 and 1 plus device reset and position-0 replay.
+All 48,084,480 conditional matrix rows and 375,660 predetermined exact FMA
+samples pass, together with operator, state, transport and parameter checks.
+A distinct physical runtime reloads original weights and the position-0
+checkpoint, then computes position 1. All 39 semantic banks, 14,378,752 native
+bytes, match uninterrupted position 1 bit-for-bit.
+
+All 36,789 raw files from both successful runs are durably preserved and hashed.
+Nominal CPU parity is not claimed: the maximum absolute hidden difference across
+the four layers is 0.0078125. Conditional operator checks are not a propagated
+whole-chain error bound. Failed compilation/runtime/audit attempts remain in
+the evidence history. The restored run's largest parent-monitor poll gap is
+60.486867 seconds, so a hard 15-second cancellation guarantee is not established.
+Full 64-layer/full-vocabulary generation and matched performance remain open.
+[Report](FOUR-LAYER-FRESH-RESTORE.md) · [Source](../examples/four_layer_chain) ·
+[Evidence](../evidence/four-layer-chain/qualification.json).
+
 ### Original vertical Layer3 · Physical attention and reset accepted · September 23, 2026
 
 The complete original-weight Layer3 executes positions 0/1/reset/0 in a

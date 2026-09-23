@@ -1,5 +1,13 @@
 # Implementation status
 
+Latest acceptance: [four original layers with fresh full-state restore](FOUR-LAYER-FRESH-RESTORE.md).
+The physical causal chain passes positions0/1/reset0 and conditional operator
+checks. A distinct runtime with reloaded original weights and checkpoint
+reproduces all39 semantic banks at position1 bit-for-bit. All36789 successful-run
+raw files are durably preserved. Full64/fullvocabulary/dependent CSL tokens are
+incomplete; subsequent historical paragraphs describe earlier milestones.
+The 60.486867-second physical monitor gap remains a disclosed limitation.
+
 The latest accepted milestone is [original vertical Layer3](LAYER3-VERTICAL.md):
 29×1160 physical positions 0/1/reset/0, original weights, all conditional operator,
 KV/state/transport/archive gates, and exact reset replay. All three final hidden

@@ -1,0 +1,152 @@
+// One query head and one of six identical replicas of its original KV head.
+// First complete-layer context<=8 only. Long-context striped softmax is separate.
+// Original Q/K norm and64-channel RoPE, attention and sigmoid gate are unchanged.
+param on_output_ready:fn()void;
+param on_error:fn(u32)void;
+param observed:bool=false;
+param on_probe:fn(u16,u32)void;
+param archive_workspace:bool=false;
+param on_archive:fn()bool=archive_noop;
+fn archive_noop() bool {return true;}
+comptime {@comptime_assert(!archive_workspace or observed);}
+const qk_kernel=@import_module("qk_kernel.csl");
+const attention_kernel=@import_module("attention_kernel.csl");
+const queries=@import_module("vector_collect.csl",.{.groups=4,.on_complete=query_complete});
+var qk_input=@zeros([512]u16);
+var qk_weights=@zeros([512]u16);
+var frequencies=@zeros([32]f32);
+var qk_control=@zeros([2]u32);
+var qk_stats=@zeros([10]f32);
+// Diagnostic heads share this write-only record with the next kernel workspace.
+var rms_stages=@zeros([if(observed) 1 else 1024]f32);
+var normalized_storage=@zeros([if(archive_workspace) 1 else 512]u16);
+var trig_storage=@zeros([if(archive_workspace) 1 else 128]f32);
+var trig_casts_storage=@zeros([if(archive_workspace) 1 else 64]u16);
+var rotary_stages_storage=@zeros([if(archive_workspace) 1 else 384]f32);
+var product_casts_storage=@zeros([if(archive_workspace) 1 else 256]u16);
+var probe_inputs=@zeros([8]f32);
+var probes_storage=@zeros([if(archive_workspace) 1 else 32]f32);
+var qk_events=@zeros([7]u32);
+var cache=@zeros([4096]u16);
+var input=@zeros([1024]u16);
+var scores=@zeros([40]f32);
+var score_casts=@zeros([24]u16);
+var stats=@zeros([3]f32);
+var stages=@zeros([1280]f32);
+// RMS writes bytes[0,4096), disjoint from normalized[4096,5120).
+// The other five views are written only after RMS finishes. Archive both
+// spans before attention reuses stages; the original math kernels are unchanged.
+// Pointer casts execute in function scope; CSL rejects comptime pointer casts.
+fn normalized_view() [*]u16 {
+ if(comptime archive_workspace){return @ptrcast([*]u16,&stages[1024]);}
+ return &normalized_storage;
+}
+fn trig_view() [*]f32 {return if(archive_workspace) &stages else &trig_storage;}
+fn rotary_view() [*]f32 {
+ if(comptime archive_workspace){return @ptrcast([*]f32,&stages[128]);}
+ return &rotary_stages_storage;
+}
+fn product_casts_view() [*]u16 {
+ if(comptime archive_workspace){return @ptrcast([*]u16,&stages[512]);}
+ return &product_casts_storage;
+}
+fn trig_casts_view() [*]u16 {
+ if(comptime archive_workspace){return @ptrcast([*]u16,&stages[640]);}
+ return &trig_casts_storage;
+}
+fn probes_view() [*]f32 {
+ if(comptime archive_workspace){return @ptrcast([*]f32,&stages[672]);}
+ return &probes_storage;
+}
+// Attention overwrites these QK diagnostics before any functional read.
+const rms_record:[*]f32=if(observed) &stages else &rms_stages;
+var casts=@zeros([768]u16);
+var attention_events=@zeros([12]u32);
+var identity=@zeros([4]u32);
+var packet_kinds=@zeros([3]u32);
+var position:u16=0;
+var head:u16=0;
+var served:u16=0;
+var have_query:bool=false;var have_key:bool=false;var have_value:bool=false;
+var active:bool=false;var ready:bool=false;
+var native_mask:u16=0;var operation:u16=0;var failure:u32=0;
+
+// Host imports the canonical BF16 KV prefix into all six replicas before this
+// call; export one replica per original head and verify replicas agree. Only
+// position valid entries participate; reset does not need to overwrite the tail.
+fn restore_position(valid:u16) void {
+ if(comptime observed){@assert(valid==0);}
+ @assert(!active and !ready and valid<=8);position=valid;
+}
+fn begin(request:u32,reset:u32,token_position:u32,stage:u32,phase:u16,
+         query_head:u16,query_kind:u32,key_kind:u32,value_kind:u32) void {
+ @assert(!active and !ready and position<8 and token_position==@as(u32,position));
+ if(comptime observed){@assert(query_head<24 and position<2 and token_position<2);}
+ @assert(query_head<24 and query_kind!=key_kind and query_kind!=value_kind and key_kind!=value_kind);
+ identity[0]=request;identity[1]=reset;identity[2]=token_position;identity[3]=stage;
+ packet_kinds[0]=query_kind;packet_kinds[1]=key_kind;packet_kinds[2]=value_kind;
+ head=query_head;served=0;active=true;have_query=false;have_key=false;have_value=false;
+ native_mask=0;operation=phase;failure=0;
+ qk_control[1]=token_position;
+ queries.begin(&input,request,reset,token_position,stage,query_kind,phase,4*head);
+ // K/V are owned by four prearmed native streams, not packet collectors.
+}
+fn receive(data:[*]u32,length:u16) void {
+ @assert(active and !ready and length>=9);
+ if(data[0]!=packet_kinds[0] or failure!=0){failure|=4;on_error(failure);return;}
+ queries.receive(data,length);
+}
+// The query collector alone owns input[0:512] until full Q/raw-gate arrival.
+// Preserve Q and gate before QK output reuses this span. K and V arrive into
+// disjoint qk_input[256:512] and input[512:768], so callback order is immaterial.
+// After compute, input retains Qrot,Krot,V,gate for the complete actual audit.
+fn query_complete() void {
+ @assert(!have_query);
+ for(@range(u16,256))|i|{qk_input[i]=input[i];input[768+i]=input[256+i];}
+ have_query=true;
+}
+// Explicit native entry: it never fabricates legacy collector counts.
+fn native_retained(request:u32,reset:u32,token_position:u32,stage:u32,phase:u16,slot:u16) bool {
+ if(!active or ready or failure!=0 or slot>=4 or phase!=operation or
+    request!=identity[0] or reset!=identity[1] or token_position!=identity[2] or stage!=identity[3]){return false;}
+ const bit=@as(u16,1)<<slot;if((native_mask&bit)!=0){return false;}
+ native_mask|=bit;if((native_mask&3)==3){have_key=true;}
+ if((native_mask&12)==12){have_value=true;}return true;
+}
+// The wrapper calls this unchanged math body exactly once, after final row
+// receipt source completion and outside the packet receive lease.
+noinline fn compute_if_ready() void {
+ if(have_query and have_key and have_value and native_mask==15 and failure==0){
+  @assert(active and !ready);
+  if(comptime observed){@assert(position<2);on_probe(5,0xffffffff);}
+  const qk_error=qk_kernel.compute(&qk_input,&qk_weights,&frequencies,&qk_control,
+   &qk_stats,rms_record,normalized_view(),trig_view(),trig_casts_view(),rotary_view(),
+   product_casts_view(),&input,&probe_inputs,probes_view(),&qk_events);
+  if(comptime observed){on_probe(6,qk_error);}
+  // Preserve actual QK failure evidence too. Failure never permits overwrite.
+  const archive_ok=if(archive_workspace) on_archive() else true;
+  if(!archive_ok){failure|=8;}
+  if(qk_error!=0){failure|=1;on_error(failure);return;}
+  if(!archive_ok){on_error(failure);return;}
+  if(comptime observed){on_probe(7,0xffffffff);}
+  const attention_error=attention_kernel.compute(&cache,&input,&scores,&score_casts,
+   &stats,&stages,&casts,position+1,&attention_events);
+  if(comptime observed){on_probe(8,attention_error);}
+  if(attention_error!=0){failure|=2;on_error(failure);return;}
+  position+=1;ready=true;on_output_ready();
+ }
+}
+fn copy_chunk(request:u32,reset:u32,token_position:u32,stage:u32,
+              offset:u16,destination:[*]u16) void {
+ @assert(active and ready and served<2 and offset==128*served);
+ @assert(request==identity[0] and reset==identity[1] and token_position==identity[2] and stage==identity[3]);
+ for(@range(u16,128))|i|{destination[i]=casts[512+offset+i];}
+ served+=1;if(served==2){active=false;ready=false;}
+}
+
+// Only the wrapper's fresh-runtime identity-checked restore entry calls this.
+// The original zero-position initialization/reset entry remains unchanged.
+noinline fn restore_fresh_position(valid:u16) void {
+ @assert(valid==1 and position==0 and !active and !ready);
+ position=valid;
+}

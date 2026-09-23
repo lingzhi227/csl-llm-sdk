@@ -1,0 +1,37 @@
+// Source-only integrated-layer primitive. Compile/numerical qualification pending.
+// Ordinary zero-centered RMS: BF16 input/output, immutable BF16 trained weights.
+// The caller preserves the residual separately and provides disjoint weight/I/O
+// storage. No host weight reconstruction or reload occurs between tokens.
+param length:u16;
+const math=@import_module("<math>");
+comptime {@comptime_assert(length>0);}
+
+fn expand(raw:u16) f32 {return @bitcast(f32,@as(u32,raw)<<16);}
+fn round_bf16(value:f32) u16 {
+  const raw=@bitcast(u32,value);@assert((raw&0x7f800000)!=0x7f800000);
+  const result=@as(u16,(raw+0x7fff+((raw>>16)&1))>>16);
+  @assert((result&0x7f80)!=0x7f80);return result;
+}
+
+fn compute(inout:[*]u16,weights:[*]u16,stats:[*]f32) void {
+  var squares:f32=0.0;
+  for(@range(u16,length))|i|{
+    const x=expand(inout[i]);squares+=x*x;
+  }
+  const mean:f32=squares/@as(f32,length);
+  const q:f32=mean+0.000001;
+  const root:f32=math.sqrt_f32(q);const inverse:f32=1.0/root;
+  stats[0]=squares;stats[1]=q;stats[2]=root;stats[3]=inverse;
+  for(@range(u16,length))|i|{
+    const x=expand(inout[i]);const gain=expand(weights[i]);
+    const normalized:f32=x*inverse;
+    const output:f32=normalized*(1.0+gain);
+    inout[i]=round_bf16(output);
+  }
+}
+
+fn residual(inout:[*]u16,saved:[*]u16) void {
+  for(@range(u16,length))|i|{
+    inout[i]=round_bf16(expand(inout[i])+expand(saved[i]));
+  }
+}

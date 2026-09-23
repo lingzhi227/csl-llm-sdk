@@ -1,0 +1,567 @@
+
+// Lowered original layer identity and physical neighbor participation.
+param layer_id:u16;param request_id:u32;param stage_id:u32;
+param chain_input:bool=false;param chain_output:bool=false;
+// Complete dense Layer0 source candidate. Not compiled, simulated or hardware-admitted.
+// Roles idle0,matrix1,pre2,post3,head4,MLP5,origin6,observer7,conv8,recurrent9.
+param memcpy_params;param role:u16;
+param ordinal:u16=0;param participants:u16=54;param matrix_kind:u16=0;param vector_kind:u16=0;
+const matrix=role==1;const root=matrix and ordinal==0;
+const linear_root=root and matrix_kind<=4;
+const pre=role==2;const post=role==3;const head=role==4;const mlp=role==5;
+const origin=role==6;const sink=role==7;const convolution=role==8;const recurrent=role==9;
+const neural=head or convolution or recurrent;const producer=linear_root or neural;
+const peer=pre or post or head or mlp;const legacy_root=root and !linear_root;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const protocol=@import_module("linear_protocol.csl",.{});
+const coordinates=@import_module("linear_coordinates.csl",.{});
+const lane=@import_module(if(matrix) "matrix_lane.csl" else "<empty>",if(matrix) .{
+ .ordinal=ordinal,.participants=participants,.phase_count=4,
+ .input_task=@get_local_task_id(11),.line_task=@get_local_task_id(10),
+ .on_output=matrix_output,.on_token_complete=matrix_complete} else .{});
+const frame=@import_module(if(origin) "frame_origin.csl" else "<empty>",if(origin) .{
+ .phase_count=4,.completion_task=@get_local_task_id(11),
+ .on_need_chunk=need_chunk,.on_frame_injected=injected} else .{});
+const norm=@import_module(if(pre or post) "norm_owner.csl" else "<empty>",if(pre or post) .{
+ .on_normalized=normalized,.on_residual=residual_ready} else .{});
+const product=@import_module(if(mlp) "mlp_owner.csl" else "<empty>",if(mlp) .{
+ .on_product_ready=product_ready,.on_error=math_failure} else .{});
+const node=@import_module(if(neural) "linear_node.csl" else "<empty>",if(neural) .{
+ .node_kind=if(convolution) @as(u16,0) else if(head) @as(u16,1) else @as(u16,2),
+ .vector_kind=vector_kind,.on_source_ready=source_ready} else .{});
+const source=@import_module(if(producer) "linear_source.csl" else "<empty>",.{});
+const receiver=@import_module(if(neural) "linear_receiver.csl" else "<empty>",if(neural) .{
+ .slots=if(head) @as(u16,10) else @as(u16,1),
+ .expected_id=expected_id,.expected_recipient=expected_recipient,
+ .write_word=write_word,.on_committed=committed} else .{});
+const credits=@import_module(if(origin) "linear_origin.csl" else "<empty>",.{});
+const packets=@import_module("packets.csl",.{.enabled=root or peer or neural or origin,
+ .sent_task_id=@get_local_task_id(12),.received_task_id=@get_local_task_id(13),
+ .on_sent=sent,.on_received=received,.on_error=packet_failure});
+const rows=@import_module(if(legacy_root or peer or origin) "row_packet.csl" else "<empty>",
+ if(legacy_root or peer or origin) .{.source_role=!origin,.send=send_row,
+ .on_source_released=row_released,.on_row_received=chunk_received} else .{});
+const observer=@import_module(if(origin or sink) "observer.csl" else "<empty>",
+ if(origin or sink) .{.sender=origin,.fill=fill_observer} else .{});
+const service_task=@get_local_task_id(17);
+const MIX:u32=4;const GATE:u32=5;const UP:u32=6;const DOWN:u32=7;
+const HIDDEN:u32=8;const CHUNK:u32=9;const READY:u32=10;const REQUEST:u32=11;
+const REQUEST_ID:u32=request_id;const STAGE_ID:u32=stage_id;
+var route=@zeros([4]u16); // matrixkind,recipientcount,support owner index,reserved
+var state=@zeros([16]u32);var identity=@zeros([4]u32);
+var tx=@zeros([31]u32);var tx_mode:u16=0;
+var retained_chunk=@zeros([if(peer) 128 else 1]u16);
+var head_parameters=@zeros([if(head) 2 else 1]u16); // original A_log,dt_bias
+var ready_seen=@zeros([if(origin) 187 else 1]u16);
+var ready_counts=@zeros([if(origin) 5 else 1]u16);
+var initialized:bool=false;var command_waiting:bool=false;var done:bool=false;
+var epoch:u16=0;var error:u32=0;var outputs_retired:bool=true;
+var root_values:[*]u16;var root_pending:bool=false;var root_phase:u16=0;var root_group:u16=0;
+var ready_pending:bool=false;var ready_phase:u16=0;var ready_owner:u16=0;var ready_tx_phase:u16=0;
+var request_pending:bool=false;var request_waiting:bool=false;
+var request_phase:u16=0;var request_group:u16=0;var requested_offset:u16=0;var request_x:u16=0;
+var forward_hidden:bool=false;var hidden_group:u16=0;var row_purpose:u16=0;
+var frame_finished:bool=false;var linear_advanced:bool=false;var head_announced:bool=false;
+noinline fn fail(code:u32) void {if(error==0){error=code;state[15]=code;}if(comptime origin){if(initialized){observer.changed();}}}
+fn packet_failure() void {fail(501);}
+fn math_failure(code:u32) void {fail(0x10000|code);}
+fn check(ok:bool,code:u32) void {if(!ok){fail(code);}}
+fn wake() void {@activate(service_task);}
+fn producer_id() u16 {
+ if(comptime linear_root){
+  if(matrix_kind==1){return lane.descriptor[1];}
+  if(matrix_kind==2){return 80+lane.descriptor[1];}return 125+matrix_kind;
+ }
+ if(comptime neural){return node.source_id();}return 450;
+}
+fn expected_id(slot:u16) u16 {if(comptime neural){return node.expected_id(slot);}return 450;}
+fn expected_recipient(slot:u16) u16 {if(comptime neural){return node.expected_recipient(slot);}return 0;}
+fn write_word(slot:u16,offset:u16,word:u32) void {if(comptime neural){node.write_word(slot,offset,word);}}
+fn committed(slot:u16) void {if(comptime neural){node.committed(slot);wake();}}
+fn source_ready() void {if(comptime producer){const ok=source.mark_output_ready();check(ok,502);wake();}}
+noinline fn local_quiescent() bool {
+ if(comptime boundary_enabled){if(!boundary.quiescent()){return false;}}
+ if(error!=0 or packets.sending or packets.receiving or tx_mode!=0 or
+    ready_pending or request_pending or request_waiting or root_pending or forward_hidden){return false;}
+ if(comptime pre or post){if(norm.math_pending){return false;}}
+ if(comptime producer){if(epoch>0 and !source.quiescent()){return false;}}
+ if(comptime neural){if(epoch>0 and (!receiver.quiescent() or !node.quiescent())){return false;}}
+ if(comptime origin){if(epoch>0 and !credits.quiescent()){return false;}}
+ if(comptime legacy_root or peer or origin){if(rows.active or rows.sending){return false;}}
+ return true;
+}
+noinline fn finish() void {
+ if(!command_waiting or !done or !local_quiescent()){return;}
+ state[0]=2*@as(u32,epoch);command_waiting=false;sys.unblock_cmd_stream();
+ if(comptime origin){observer.changed();}
+}
+fn initialize() void {
+ if(initialized or route[3]!=0){fail(503);return;}
+ if(comptime matrix){
+  const kind=route[0];const group=lane.descriptor[1];
+  if(kind<1 or kind>8 or kind!=matrix_kind or lane.descriptor[0]!=(if(kind<=4) @as(u16,0) else if(kind==5) @as(u16,1) else if(kind<=7) @as(u16,2) else @as(u16,3))){fail(504);return;}
+  if(lane.descriptor[3]!=0 or route[1]!=(if(kind==3 or kind==4) @as(u16,48) else @as(u16,1))){fail(505);return;}
+  if(kind==1){if(group>=80 or lane.descriptor[2]!=16+group){fail(506);return;}}
+  else if(kind==2){if(group>=48 or lane.descriptor[2]!=96+group){fail(507);return;}}
+  else if(kind==3 or kind==4){if(group!=0 or lane.descriptor[2]!=96 or lane.descriptor[4]!=48){fail(508);return;}}
+  else if(kind==5){if(group>=40 or lane.descriptor[2]!=1){fail(509);return;}}
+  else if(kind<=7){if(group>=136 or lane.descriptor[2]!=336+group){fail(510);return;}}
+  else{if(group>=40 or lane.descriptor[2]!=2){fail(511);return;}}
+ }
+ if(comptime neural){node.configure(route[2]);}
+ if(comptime head){node.head.A_log=head_parameters[0];node.head.dt_bias=head_parameters[1];}
+ if(comptime producer){
+  const id=producer_id();if(id>=450 or packets.config[0]!=coordinates.x(id) or packets.config[1]!=coordinates.y(id)){fail(512);return;}
+ }
+ if(comptime pre or post or mlp or origin){
+  const x:u16=if(pre) 1 else if(post) 2 else if(mlp) 336+route[2] else 0;
+  if((mlp and route[2]>=136) or packets.config[0]!=coordinates.support_x(x) or packets.config[1]!=coordinates.support_y(x)){fail(513);return;}
+ }
+ packets.init();state[4]=1;identity[0]=REQUEST_ID;identity[1]=1;identity[2]=0;identity[3]=STAGE_ID;
+ initialized=true;if(comptime origin or sink){observer.init();}if(!import_checkpoint()){return;}
+ sys.unblock_cmd_stream();
+}
+fn retire_outputs() void {
+ if(epoch==0 or outputs_retired){return;}
+ if(comptime origin){frame.retire(REQUEST_ID,identity[1],identity[2],STAGE_ID);}
+ if(comptime post){norm.retire_host_output();}outputs_retired=true;
+}
+noinline fn boundary_ready() bool {return initialized and !command_waiting and state[0]==2*@as(u32,epoch) and local_quiescent();}
+fn reset() void {
+ // Caller first verifies every PE command plus stable full transport counters.
+ // An idle local RX descriptor alone cannot certify an empty physical fabric.
+ if(!boundary_ready() or epoch!=2 or state[4]!=1 or state[5]!=2){fail(514);return;}
+ retire_outputs();state[4]+=1;state[5]=0;checkpoint_control[4]=state[4];checkpoint_control[5]=0;
+ if(comptime neural){node.reset_after_global_quiescence(state[4]);}
+ identity[1]=state[4];identity[2]=0;sys.unblock_cmd_stream();
+}
+fn prepare() void {
+ if(!boundary_ready() or epoch>=3 or state[5]>=2 or (epoch==2 and state[4]!=2)){fail(515);return;}
+ retire_outputs();epoch+=1;state[0]=2*@as(u32,epoch)-1;state[1]=@as(u32,epoch);
+ identity[1]=state[4];identity[2]=state[5];state[5]+=1;checkpoint_control[5]=state[5];
+ boundary_input_started=false;
+ if(comptime boundary_enabled){boundary.begin(identity[1],identity[2],&norm.inout);}
+done=false;outputs_retired=false;
+ frame_finished=false;linear_advanced=false;head_announced=false;
+ if(comptime matrix){lane.begin(REQUEST_ID,identity[1],identity[2],STAGE_ID);}
+ if(comptime pre){norm.prepare_loaded(REQUEST_ID,identity[1],identity[2],STAGE_ID,MIX,1,0);}
+ if(comptime post){norm.begin(REQUEST_ID,identity[1],identity[2],STAGE_ID,HIDDEN,2,DOWN,3,0);}
+ if(comptime mlp){product.begin(REQUEST_ID,identity[1],identity[2],STAGE_ID,2,route[2],GATE,UP);}
+ if(comptime neural){
+  node.begin(@as(u32,epoch),identity[1],identity[2]);
+  const ok=receiver.begin(REQUEST_ID,identity[1],identity[2],STAGE_ID,@as(u32,epoch));check(ok,516);
+ }
+ if(comptime producer){const ok=source.begin(REQUEST_ID,identity[1],identity[2],STAGE_ID,@as(u32,epoch),producer_id());check(ok,517);}
+ if(comptime origin){
+  for(@range(u16,187))|i|{ready_seen[i]=0;}for(@range(u16,5))|i|{ready_counts[i]=0;}
+  const ok=credits.begin(REQUEST_ID,identity[1],identity[2],STAGE_ID,@as(u32,epoch));check(ok,518);
+  frame.begin(REQUEST_ID,identity[1],identity[2],STAGE_ID);
+ }
+ sys.unblock_cmd_stream();
+}
+fn compute() void {
+ if(!initialized or command_waiting or state[0]!=2*@as(u32,epoch)-1){fail(519);return;}
+ command_waiting=true;if(comptime pre and !chain_input){norm.normalize_loaded();}else{service_boundary_input();}
+ if(comptime role==0 or sink){done=true;}wake();finish();
+}
+fn signal_ready(phase:u16,owner:u16) void {
+ if(ready_pending){fail(520);return;}ready_pending=true;ready_phase=phase;ready_owner=owner;wake();
+}
+fn normalized() void {if(comptime pre){signal_ready(0,0);}else if(comptime post){signal_ready(2,0);}}
+fn residual_ready() void {
+ if(comptime pre){if(forward_hidden){fail(521);return;}forward_hidden=true;hidden_group=0;wake();}
+ else if(comptime post){if(comptime chain_output){boundary.start();}signal_ready(4,0);}
+}
+fn product_ready() void {if(comptime mlp){signal_ready(3,route[2]);}}
+fn matrix_complete() void {if(comptime matrix){done=true;wake();}}
+fn matrix_output(data:[*]u16,phase:u16,group:u16) void {
+ if(comptime root){
+  if(root_pending){fail(522);return;}root_values=data;root_phase=phase;root_group=group;root_pending=true;
+  if(comptime linear_root){source_ready();}else{wake();}
+ }
+}
+fn release_linear_source() void {
+ if(comptime linear_root){if(!root_pending){fail(523);return;}root_pending=false;lane.release_output(root_phase);}
+ if(comptime neural){node.release_source();}
+}
+noinline fn linear_word(recipient:u16,offset:u16) u32 {
+ if(comptime linear_root){
+  if(matrix_kind==3 or matrix_kind==4){return @as(u32,root_values[recipient]);}
+  return @as(u32,root_values[2*offset])|(@as(u32,root_values[2*offset+1])<<16);
+ }
+ if(comptime neural){return node.source_word(recipient,offset);}return 0;
+}
+fn legacy_header(kind:u32,phase:u16,group:u16) void {
+ tx[0]=kind;tx[1]=REQUEST_ID;tx[2]=identity[1];tx[3]=identity[2];tx[4]=STAGE_ID;
+ tx[5]=@as(u32,phase);tx[6]=@as(u32,group);tx[7]=0;
+}
+fn send_row(x:u16,y:u16,data:[*]u32,length:u16) void {@assert(y==0);tx_mode=3;packets.send(coordinates.support_x(x),coordinates.support_y(x),data,length);}
+fn row_released(phase:u16) void {
+ if(comptime legacy_root){if(row_purpose!=1 or !root_pending){fail(524);return;}root_pending=false;lane.release_output(phase);}
+ if(comptime peer){
+  if(row_purpose==3){hidden_group+=1;if(hidden_group==40){forward_hidden=false;done=true;}}
+  else if(row_purpose==2){if(comptime head or mlp){done=true;}}
+  else{fail(525);return;}
+ }wake();
+}
+fn sent() void {
+ const mode=tx_mode;tx_mode=0;
+ if(mode==1){if(comptime post){if(ready_tx_phase==4){done=true;}}}
+ else if(mode==2){}
+ else if(mode==3){if(comptime legacy_root or peer){rows.sent();}else{fail(526);}}
+ else if(mode==4){if(comptime origin){const ok=credits.grant_source_complete();check(ok,527);}else{fail(528);}}
+ else if(mode==5){if(comptime producer){const ok=source.ready_source_complete();check(ok,529);}else{fail(530);}}
+ else if(mode==6){if(comptime producer){const ok=source.fragment_source_complete();check(ok,531);}else{fail(532);}}
+ else if(mode==7){if(comptime neural){const ok=receiver.receipt_source_complete();check(ok,533);}else{fail(534);}}
+ else if(mode==8){if(comptime producer){const ok=source.done_source_complete();check(ok,535);}else{fail(536);}}
+ else{fail(537);}wake();
+}
+fn pump() void {
+ if(error!=0 or packets.sending or packets.receiving or tx_mode!=0){return;}
+ if(comptime neural){
+  const take=receiver.take_receipt(&tx);
+  if(take){const id=@as(u16,receiver.ack_key&0xffff);tx_mode=7;packets.send(coordinates.x(id),coordinates.y(id),&tx,8);return;}
+ }
+ if(comptime producer){
+  const take_done=source.take_done(&tx);if(take_done){tx_mode=8;packets.send(coordinates.support_x(0),coordinates.support_y(0),&tx,8);return;}
+  const take_ready=source.take_ready(&tx);if(take_ready){tx_mode=5;packets.send(coordinates.support_x(0),coordinates.support_y(0),&tx,8);return;}
+ }
+ if(comptime origin){const take=credits.take_grant(&tx);if(take){
+  tx_mode=4;packets.send(coordinates.x(credits.grant_id),coordinates.y(credits.grant_id),&tx,8);return;
+ }}
+ if(ready_pending){ready_pending=false;ready_tx_phase=ready_phase;legacy_header(READY,ready_phase,ready_owner);tx_mode=1;packets.send(coordinates.support_x(0),coordinates.support_y(0),&tx,8);return;}
+ if(comptime legacy_root){if(root_pending){
+  const kind:u32=if(matrix_kind==5) MIX else if(matrix_kind==6) GATE else if(matrix_kind==7) UP else DOWN;
+  row_purpose=1;rows.begin(REQUEST_ID,identity[1],identity[2],STAGE_ID,kind,root_phase,root_group,lane.descriptor[4]);
+  rows.transmit(lane.descriptor[2],0,root_values);return;
+ }}
+ if(comptime origin){if(request_pending){
+  request_pending=false;legacy_header(REQUEST,request_phase,request_group);tx[7]=@as(u32,requested_offset);
+  tx_mode=2;packets.send(coordinates.support_x(request_x),coordinates.support_y(request_x),&tx,8);return;
+ }}
+ if(comptime peer){
+  if(request_pending){
+   request_pending=false;
+   if(comptime pre or post){norm.copy_chunk(REQUEST_ID,identity[1],identity[2],STAGE_ID,requested_offset,&retained_chunk);}
+   if(comptime head){node.take_gated(&retained_chunk);}
+   if(comptime mlp){product.copy_chunk(REQUEST_ID,identity[1],identity[2],STAGE_ID,route[2],&retained_chunk);}
+   row_purpose=2;rows.begin(REQUEST_ID,identity[1],identity[2],STAGE_ID,CHUNK,request_phase,request_group,128);
+   rows.transmit(0,0,&retained_chunk);return;
+  }
+  if(comptime pre){if(forward_hidden){
+   norm.copy_chunk(REQUEST_ID,identity[1],identity[2],STAGE_ID,128*hidden_group,&retained_chunk);
+   row_purpose=3;rows.begin(REQUEST_ID,identity[1],identity[2],STAGE_ID,HIDDEN,2,hidden_group,128);
+   rows.transmit(2,0,&retained_chunk);return;
+  }}
+ }
+ if(comptime producer){
+  if(source.can_start()){const ok=source.start();check(ok,538);}
+  const take=source.take_fragment(&tx);if(take){
+   for(@range(u16,23))|i|{if(i<source.packet_words){tx[8+i]=linear_word(source.fanout,source.offset+i);}}
+   tx_mode=6;packets.send(coordinates.support_x(protocol.destination_x(source.id,source.fanout)),coordinates.support_y(protocol.destination_x(source.id,source.fanout)),&tx,source.packet_words+8);
+  }
+ }
+}
+fn need_chunk(offset:u16,count:u16) void {
+ if(comptime origin){
+  if(request_pending or request_waiting or count!=128 or offset%128!=0){fail(539);return;}
+  request_waiting=true;request_pending=true;request_phase=frame.phase;request_group=offset/128;requested_offset=offset;
+  if(frame.phase==0){request_x=1;}else if(frame.phase==1){request_x=96+request_group;requested_offset=0;}
+  else if(frame.phase==2){request_x=2;}else{request_x=336+request_group;requested_offset=0;}
+  rows.begin(REQUEST_ID,identity[1],identity[2],STAGE_ID,CHUNK,request_phase,request_group,128);wake();
+ }
+}
+fn chunk_received(data:[*]u16,phase:u16,group:u16) void {
+ if(comptime origin){
+  if(!request_waiting or phase!=request_phase or group!=request_group){fail(540);return;}
+  request_waiting=false;frame.supply(group*128,data,128);rows.release_row(phase);wake();
+ }
+}
+fn injected(phase:u16) void {
+ if(comptime origin){
+  state[2]+=1;if(phase==0){const ok=credits.mark_injected();check(ok,541);}
+  if(phase==3){frame_finished=true;}wake();
+ }
+}
+noinline fn received(data:[*]u32,length:u16) void {
+ if(error!=0){return;}
+ if(length<8 or data[1]!=REQUEST_ID or data[2]!=identity[1] or data[3]!=identity[2] or data[4]!=STAGE_ID){fail(542);return;}
+ if(data[0]>=32){
+  if(comptime origin){
+   const ok=if(data[0]==protocol.SOURCE_READY) credits.receive_ready(data,length)
+    else if(data[0]==protocol.PRODUCER_DONE) credits.receive_done(data,length) else false;check(ok,543);
+  }else if(comptime producer){
+   if(data[0]==protocol.GRANT){const ok=source.receive_grant(data,length);check(ok,544);}
+   else if(data[0]==protocol.CONSUMED){const ok=source.receive_receipt(data,length);check(ok,545);}
+   else if(comptime neural){const ok=receiver.receive(data,length);check(ok,546);}
+   else{fail(547);}
+  }else{fail(548);}wake();return;
+ }
+ if(comptime origin){
+  if(data[0]==CHUNK){rows.receive(data,length);wake();return;}
+  if(data[0]!=READY or length!=8 or data[5]>4 or data[7]!=0){fail(549);return;}
+  const phase=@as(u16,data[5]);const owner=@as(u16,data[6]);
+  const expected:u16=if(phase==1) 48 else if(phase==3) 136 else 1;
+  if(data[6]>=@as(u32,expected)){fail(550);return;}
+  const index:u16=if(phase==0) 0 else if(phase==1) 1+owner else if(phase==2) 49 else if(phase==3) 50+owner else 186;
+  if(ready_seen[index]!=0){fail(551);return;}ready_seen[index]=1;ready_counts[phase]+=1;
+  if(ready_counts[phase]==expected and phase!=1 and phase<4){frame.ready(REQUEST_ID,identity[1],identity[2],STAGE_ID,phase,if(phase==3) @as(u16,17408) else @as(u16,5120));}
+ }else if(comptime peer){
+  if(data[0]==REQUEST){
+   if(length!=8 or request_pending or data[5]>=4 or data[6]>=136 or data[7]>=5120){fail(552);return;}
+   request_phase=@as(u16,data[5]);request_group=@as(u16,data[6]);requested_offset=@as(u16,data[7]);
+   if(comptime pre){if(request_phase!=0 or request_group>=40 or requested_offset!=128*request_group){fail(553);return;}}
+   if(comptime post){if(request_phase!=2 or request_group>=40 or requested_offset!=128*request_group){fail(554);return;}}
+   if(comptime head){if(request_phase!=1 or request_group!=route[2] or requested_offset!=0 or !head_announced or !node.gated_ready()){fail(555);return;}}
+   if(comptime mlp){if(request_phase!=3 or request_group!=route[2] or requested_offset!=0){fail(556);return;}}
+   request_pending=true;
+  }else{
+   if(comptime pre or post){norm.receive(data,length);}
+   else if(comptime mlp){product.receive(data,length);}else{fail(557);return;}
+  }
+ }else{fail(558);}wake();
+}
+task service() void {
+ // Actual SDK002 code also uses compiler-generated DSR1 in recurrent maps,
+ // clearing and stores. Packet TX owns that resource until its callback.
+ // A synchronous service task cannot start another TX before math returns.
+ if(error!=0 or packets.receiving or packets.sending or tx_mode!=0){return;}
+ service_boundary_input();
+ if(comptime pre or post){norm.service();}
+ if(comptime mlp){product.service();}
+ if(comptime neural){node.service();if(node.errors!=0){fail(node.errors);return;}}
+ if(comptime producer){if(source.joined()){
+  const ok=source.retire();check(ok,559);if(error!=0){return;}
+  if(source.released){release_linear_source();}
+ }}
+ if(comptime head){if(!head_announced and node.gated_ready() and source.quiescent() and receiver.quiescent()){
+  head_announced=true;signal_ready(1,route[2]);
+ }}
+ if(comptime convolution or recurrent){if(source.quiescent() and receiver.quiescent() and node.quiescent()){done=true;}}
+ if(comptime origin){
+  if(!linear_advanced and credits.quiescent() and ready_counts[1]==48){
+   linear_advanced=true;frame.ready(REQUEST_ID,identity[1],identity[2],STAGE_ID,1,6144);
+  }
+  if(frame_finished and ready_counts[4]==1 and credits.quiescent()){done=true;}
+ }
+ pump();finish();if(comptime origin){observer.changed();}
+}
+fn fill_observer(target:[*]u32) void {
+ if(comptime origin){
+  target[1]=0x4c304f31;target[2]=1;target[3]=@as(u32,epoch);
+  target[4]=state[0];target[5]=error;target[6]=state[2];target[7]=@as(u32,frame.phase);
+  target[8]=@as(u32,frame.offset);target[9]=@as(u32,frame.words);
+  target[10]=@as(u32,credits.active_count);target[11]=@as(u32,credits.ready_count);
+  for(@range(u16,5))|i|{target[12+i]=@as(u32,ready_counts[i]);}
+  target[17]=@as(u32,credits.completed_records);target[18]=@as(u32,credits.completed_producers);
+  target[19]=@as(u32,credits.maximum_active);target[20]=credits.grants;target[21]=credits.grant_completions;
+  target[22]=@as(u32,tx_mode);target[23]=0;
+  if(command_waiting){target[23]|=1;}if(done){target[23]|=2;}
+  if(frame_finished){target[23]|=4;}if(linear_advanced){target[23]|=8;}
+  for(@range(u16,5))|i|{target[24+i]=frame.counters[i];}
+  target[29]=@as(u32,request_phase);target[30]=@as(u32,request_group);
+ }
+}
+comptime {@bind_local_task(service,service_task);}
+// Typed exported pointers and common layout names are generated separately.
+var unused16=@zeros([1]u16);var unused32=@zeros([1]u32);var unusedf=@zeros([1]f32);
+const export_transport_config:[*]u16=&packets.config;
+const export_transport_status:[*]u32=&packets.status;
+const export_route:[*]u16=&route;
+const export_state:[*]u32=&state;
+const export_observer:[*]u32=if(sink) &observer.snapshot else &unused32;
+const export_weights:[*]u32=if(matrix) &lane.weight_storage else &unused32;
+const export_descriptor:[*]u16=if(matrix) &lane.descriptor else &unused16;
+const export_input:[*]f32=if(matrix) &lane.input else &unusedf;
+const export_active_input:[*]f32=if(matrix) &lane.active_input else &unusedf;
+const export_partial:[*]f32=if(matrix) &lane.partial else &unusedf;
+const export_result:[*]f32=if(matrix) &lane.result else &unusedf;
+const export_lane_counters:[*]u32=if(matrix) &lane.counters else &unused32;
+const export_rounded:[*]u16=if(root) &lane.rounded else &unused16;
+const export_hidden:[*]u16=if(pre or post) &norm.inout else &unused16;
+const export_norm_gains:[*]u16=if(pre or post) &norm.gains else &unused16;
+const export_norm_saved:[*]u16=if(pre or post) &norm.saved else &unused16;
+const export_norm_stats:[*]f32=if(pre or post) &norm.stats else &unusedf;
+const export_mlp_gate:[*]u16=if(mlp) &product.gate else &unused16;
+const export_mlp_up:[*]u16=if(mlp) &product.up else &unused16;
+const export_mlp_product:[*]u16=if(mlp) &product.product else &unused16;
+const export_mlp_silu:[*]u16=if(mlp) &product.silu else &unused16;
+const export_mlp_exponential:[*]f32=if(mlp) &product.exponential else &unusedf;
+const export_mlp_sigmoid:[*]f32=if(mlp) &product.sigmoid else &unusedf;
+const export_mlp_activation_fp32:[*]f32=if(mlp) &product.activation_fp32 else &unusedf;
+const export_mlp_product_fp32:[*]f32=if(mlp) &product.product_fp32 else &unusedf;
+const export_conv_weights:[*]u16=if(convolution) &node.conv.weights else &unused16;
+const export_conv_history:[*]u16=if(convolution) &node.conv.history else &unused16;
+const export_conv_input:[*]u16=if(convolution) &node.conv.input else &unused16;
+const export_conv_stages:[*]f32=if(convolution) &node.conv.stages else &unusedf;
+const export_conv_casts:[*]u16=if(convolution) &node.conv.casts else &unused16;
+const export_conv_unscaled:[*]f32=if(convolution) &node.conv.unscaled else &unusedf;
+const export_conv_output:[*]f32=if(convolution) &node.conv.output else &unusedf;
+const export_conv_stats:[*]f32=if(convolution) &node.conv.stats else &unusedf;
+const export_head_parameters:[*]u16=&head_parameters;
+const export_head_query:[*]f32=if(head) &node.head.query else &unusedf;
+const export_head_key:[*]f32=if(head) &node.head.key else &unusedf;
+const export_head_value:[*]f32=if(head) &node.head.value else &unusedf;
+const export_head_raw_gate:[*]u16=if(head) &node.head.raw_gate else &unused16;
+const export_head_gains:[*]u16=if(head) &node.head.gains else &unused16;
+const export_head_gate_stages:[*]f32=if(head) &node.head.gate_stages else &unusedf;
+const export_head_beta_bits:[*]u16=if(head) &node.head.beta_bits else &unused16;
+const export_head_recurrent_output:[*]u16=if(head) &node.head.recurrent_output else &unused16;
+const export_head_stages:[*]f32=if(head) &node.head.stages else &unusedf;
+const export_head_casts:[*]u16=if(head) &node.head.casts else &unused16;
+const export_head_stats:[*]f32=if(head) &node.head.stats else &unusedf;
+const export_recurrent_matrix:[*]f32=if(recurrent) &node.rec.matrix else &unusedf;
+const export_recurrent_query:[*]f32=if(recurrent) &node.rec.query else &unusedf;
+const export_recurrent_key:[*]f32=if(recurrent) &node.rec.key else &unusedf;
+const export_recurrent_value:[*]f32=if(recurrent) &node.rec.value else &unusedf;
+const export_recurrent_prediction:[*]f32=if(recurrent) &node.rec.prediction else &unusedf;
+const export_recurrent_delta:[*]f32=if(recurrent) &node.rec.delta else &unusedf;
+const export_recurrent_output:[*]f32=if(recurrent) &node.rec.output else &unusedf;
+const export_recurrent_output_bf16:[*]u16=if(recurrent) &node.rec.output_bf16 else &unused16;
+const export_linear_source_counters:[*]u32=if(producer) &source.counters else &unused32;
+const export_linear_receiver_counters:[*]u32=if(neural) &receiver.counters else &unused32;
+const export_linear_receive_offsets:[*]u16=if(neural) &receiver.offsets else &unused16;
+const export_linear_origin_seen:[*]u16=if(origin) &credits.seen else &unused16;
+const export_linear_origin_active:[*]u16=if(origin) &credits.active else &unused16;
+const export_linear_origin_next:[*]u16=if(origin) &credits.next else &unused16;
+const export_frame_counters:[*]u32=if(origin) &frame.counters else &unused32;
+comptime {
+ @export_symbol(export_transport_config,"transport_config");
+ @export_symbol(export_transport_status,"transport_status");
+ @export_symbol(export_route,"route");
+ @export_symbol(export_state,"state");
+ if(sink){@export_symbol(export_observer,"observer");}
+ if(matrix){@export_symbol(export_weights,"weights");}
+ if(matrix){@export_symbol(export_descriptor,"descriptor");}
+ if(matrix){@export_symbol(export_input,"input");}
+ if(matrix){@export_symbol(export_active_input,"active_input");}
+ if(matrix){@export_symbol(export_partial,"partial");}
+ if(matrix){@export_symbol(export_result,"result");}
+ if(matrix){@export_symbol(export_lane_counters,"lane_counters");}
+ if(root){@export_symbol(export_rounded,"rounded");}
+ if(pre or post){@export_symbol(export_hidden,"hidden");}
+ if(pre or post){@export_symbol(export_norm_gains,"norm_gains");}
+ if(pre or post){@export_symbol(export_norm_saved,"norm_saved");}
+ if(pre or post){@export_symbol(export_norm_stats,"norm_stats");}
+ if(mlp){@export_symbol(export_mlp_gate,"mlp_gate");}
+ if(mlp){@export_symbol(export_mlp_up,"mlp_up");}
+ if(mlp){@export_symbol(export_mlp_product,"mlp_product");}
+ if(mlp){@export_symbol(export_mlp_silu,"mlp_silu");}
+ if(mlp){@export_symbol(export_mlp_exponential,"mlp_exponential");}
+ if(mlp){@export_symbol(export_mlp_sigmoid,"mlp_sigmoid");}
+ if(mlp){@export_symbol(export_mlp_activation_fp32,"mlp_activation_fp32");}
+ if(mlp){@export_symbol(export_mlp_product_fp32,"mlp_product_fp32");}
+ if(convolution){@export_symbol(export_conv_weights,"conv_weights");}
+ if(convolution){@export_symbol(export_conv_history,"conv_history");}
+ if(convolution){@export_symbol(export_conv_input,"conv_input");}
+ if(convolution){@export_symbol(export_conv_stages,"conv_stages");}
+ if(convolution){@export_symbol(export_conv_casts,"conv_casts");}
+ if(convolution){@export_symbol(export_conv_unscaled,"conv_unscaled");}
+ if(convolution){@export_symbol(export_conv_output,"conv_output");}
+ if(convolution){@export_symbol(export_conv_stats,"conv_stats");}
+ if(head){@export_symbol(export_head_parameters,"head_parameters");}
+ if(head){@export_symbol(export_head_query,"head_query");}
+ if(head){@export_symbol(export_head_key,"head_key");}
+ if(head){@export_symbol(export_head_value,"head_value");}
+ if(head){@export_symbol(export_head_raw_gate,"head_raw_gate");}
+ if(head){@export_symbol(export_head_gains,"head_gains");}
+ if(head){@export_symbol(export_head_gate_stages,"head_gate_stages");}
+ if(head){@export_symbol(export_head_beta_bits,"head_beta_bits");}
+ if(head){@export_symbol(export_head_recurrent_output,"head_recurrent_output");}
+ if(head){@export_symbol(export_head_stages,"head_stages");}
+ if(head){@export_symbol(export_head_casts,"head_casts");}
+ if(head){@export_symbol(export_head_stats,"head_stats");}
+ if(recurrent){@export_symbol(export_recurrent_matrix,"recurrent_matrix");}
+ if(recurrent){@export_symbol(export_recurrent_query,"recurrent_query");}
+ if(recurrent){@export_symbol(export_recurrent_key,"recurrent_key");}
+ if(recurrent){@export_symbol(export_recurrent_value,"recurrent_value");}
+ if(recurrent){@export_symbol(export_recurrent_prediction,"recurrent_prediction");}
+ if(recurrent){@export_symbol(export_recurrent_delta,"recurrent_delta");}
+ if(recurrent){@export_symbol(export_recurrent_output,"recurrent_output");}
+ if(recurrent){@export_symbol(export_recurrent_output_bf16,"recurrent_output_bf16");}
+ if(producer){@export_symbol(export_linear_source_counters,"linear_source_counters");}
+ if(neural){@export_symbol(export_linear_receiver_counters,"linear_receiver_counters");}
+ if(neural){@export_symbol(export_linear_receive_offsets,"linear_receive_offsets");}
+ if(origin){@export_symbol(export_linear_origin_seen,"linear_origin_seen");}
+ if(origin){@export_symbol(export_linear_origin_active,"linear_origin_active");}
+ if(origin){@export_symbol(export_linear_origin_next,"linear_origin_next");}
+ if(origin){@export_symbol(export_frame_counters,"frame_counters");}
+ @export_symbol(initialize);
+ @export_symbol(prepare);
+ @export_symbol(compute);
+ @export_symbol(reset);
+}
+
+
+const boundary_enabled=(pre and chain_input) or (post and chain_output);
+const boundary=@import_module(if(boundary_enabled) "handoff.csl" else "<empty>",if(boundary_enabled) .{
+ .sender=post,.request_id=request_id,.stage_id=stage_id,
+ .source_layer=if(pre) layer_id-1 else layer_id,
+ .destination_layer=if(pre) layer_id else layer_id+1,
+ .on_complete=boundary_complete,.on_error=boundary_fail} else .{});
+var boundary_input_started:bool=false;
+var checkpoint_control=[8]u32{0x51435031,request_id,stage_id,@as(u32,layer_id),1,0,1,0};
+fn boundary_complete() void {@activate(service_task);}
+fn boundary_fail(code:u32) void {fail(code);}
+fn service_boundary_input() void {
+ if(comptime pre and chain_input){
+  if(command_waiting and boundary.complete and !boundary_input_started){
+   boundary_input_started=true;norm.normalize_loaded();
+  }
+ }
+}
+
+
+// Only initialize can call this; its existing initialized guard rejects repeats.
+noinline fn import_checkpoint() bool {
+ if(!(checkpoint_control[0]==0x51435031 and checkpoint_control[1]==request_id and
+ checkpoint_control[2]==stage_id and checkpoint_control[3]==@as(u32,layer_id) and
+ checkpoint_control[4]>0 and (checkpoint_control[5]==1 or
+ (checkpoint_control[5]==0 and checkpoint_control[4]==1)) and
+ checkpoint_control[6]==1 and checkpoint_control[7]==0)){fail(920);return false;}
+ state[4]=checkpoint_control[4];state[5]=checkpoint_control[5];
+ identity[1]=state[4];identity[2]=state[5];
+ if(state[5]==1){if(comptime neural){node.restore_fresh(checkpoint_control[4],1);}}
+ return true;
+}
+const chain_checkpoint_ptr:[*]u32=&checkpoint_control;
+const chain_boundary_ptr:[*]u32=if(boundary_enabled) &boundary.status else &unused32;
+comptime {@export_symbol(chain_checkpoint_ptr,"checkpoint_control");if(boundary_enabled){@export_symbol(chain_boundary_ptr,"handoff_status");}}
+
+// Uniform host symbols; actual bank bindings restrict all real copies.
+const chain_dummy_attention_casts:[*]u16=&unused16;
+comptime {}
+const chain_dummy_attention_input:[*]u16=&unused16;
+comptime {}
+const chain_dummy_attention_score_casts:[*]u16=&unused16;
+comptime {}
+const chain_dummy_attention_scores:[*]f32=&unusedf;
+comptime {}
+const chain_dummy_attention_stages:[*]f32=&unusedf;
+comptime {}
+const chain_dummy_attention_stats:[*]f32=&unusedf;
+comptime {}
+const chain_dummy_cache:[*]u16=&unused16;
+comptime {}
+const chain_dummy_credit_status:[*]u32=&unused32;
+comptime {}
+const chain_dummy_frequencies:[*]f32=&unusedf;
+comptime {}
+const chain_dummy_mlp_activation:[*]f32=&unusedf;
+comptime {}
+const chain_dummy_native_status:[*]u32=&unused32;
+comptime {}
+const chain_dummy_qk_archive:[*]u32=&unused32;
+comptime {}
+const chain_dummy_qk_archive_status:[*]u32=&unused32;
+comptime {}
+const chain_dummy_qk_gains:[*]u16=&unused16;
+comptime {}
+const chain_dummy_qk_input:[*]u16=&unused16;
+comptime {}
+const chain_dummy_qk_output:[*]u16=&unused16;
+comptime {}
+const chain_dummy_qk_rms_stages:[*]f32=&unusedf;
+comptime {}
+const chain_dummy_qk_stats:[*]f32=&unusedf;
+comptime {}

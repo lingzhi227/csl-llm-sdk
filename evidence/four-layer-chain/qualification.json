@@ -1,0 +1,221 @@
+{
+  "status": "accepted_original_four_layer_causal_chain_and_fresh_full_state_restore",
+  "scope": "Original pinned BF16 layers0/1/2/3, uninterrupted positions0/1 plus reset0, and distinct physical context with weight+checkpoint reload followed by logicalposition1. All39 native semantic banks bit-exact against uninterruptedposition1.",
+  "full_model": false,
+  "goal_complete": false,
+  "canonical_acceptance_sha256": "b7615b9179c86f9305dd354ea203bcddf415bed7f090cbc5bf29d15d330610b9",
+  "baseline": {
+    "manifest_sha256": "3ae24ed486464f8594e8cf597013ff23dc0764c29778bb4934efd424b6b727ac",
+    "aggregate": {
+      "bytes": 81265,
+      "sha256": "72209699987bb4b6ae096f5fe62a05a77f871f9e38e8deae43d82e92faa408c3"
+    },
+    "conditional_rows": 48084480,
+    "exact_FMA_samples": 375660,
+    "nominal_max_absolute_error": 0.0078125,
+    "whole_chain_propagated_enclosure": false
+  },
+  "restore": {
+    "candidate": "layer-chain-hw-restore-007",
+    "manifest_sha256": "d2f44963e042f1f063a1b0f358170a45a6c6b2d823a203f831c267e72a25d0ed",
+    "original_session": 3866,
+    "reaped_exit_code": 0,
+    "reap_tool": "5eb472",
+    "capture_sha256": "4768183a9dc8bcdfe515cc908e1c25c5b5e8704d4cb0e0646204dc1bba0a8b4f",
+    "normal_stop": true,
+    "release_review_sha256": "9775308ac16030a1f46ffc8eec834def6c1540d687edb69e4b16ed7607a1bcf8"
+  },
+  "offline_audit": {
+    "original_session": 5014,
+    "reaped_exit_code": 0,
+    "reap_tool": "5d6366",
+    "report_bytes": 12034,
+    "report_sha256": "d6320e4a0db7151a51a36fa57a13210a4fd89f3b8593159ad5b2f5709130b857",
+    "supervisor_bytes": 551,
+    "supervisor_sha256": "0758a75d68cf9d8372af829ba0f4169cd1772f05d7759988b0648e1bea2c73f5",
+    "exit_bytes": 197,
+    "exit_sha256": "17f7cd0518397ac57c5adef704fbfcecb4735aadf30a7ceee47b373332c40a75",
+    "independent_result_read": "a737d2",
+    "wall_seconds": 38.86620977893472,
+    "peak_RSS_bytes": 210550784,
+    "SDK": false,
+    "arithmetic_rerun": false,
+    "journal_events": 65482,
+    "full_journal_digest_verified": true,
+    "raw_files_checked": 9425,
+    "raw_file_bytes": 276357780,
+    "parameter_readbacks": 4818,
+    "execution_parameter_files": 648,
+    "every_PE_transport_and_control_passed": true,
+    "three_full_hidden_edges_passed": true,
+    "restore_H2D_bit_exact": true
+  },
+  "semantic_comparison": {
+    "tool": "b2ee50",
+    "implementation": "Separate stdlib streamed byte comparison with independently pinned baseline/newcapture/hostplan; no executor compare() import",
+    "banks": 39,
+    "native_bytes_each_run": 14378752,
+    "symbols": {
+      "conv_history": 3,
+      "recurrent_matrix": 3,
+      "hidden": 8,
+      "cache": 24,
+      "checkpoint_control": 1
+    },
+    "position": 1,
+    "generation": 1,
+    "local_serials": [
+      2,
+      1
+    ],
+    "every_byte_and_each_raw_SHA_match": true,
+    "inventory_comparison_sha256": "d0305f07335fe4f0eb8e4abb66346f158a26a84a98dae1e43f7d1ba9a454b244",
+    "seconds": 0.1940551777370274,
+    "peak_RSS_KiB": 82004
+  },
+  "successful_capture_preservation": {
+    "baseline": {
+      "parts": [
+        {
+          "kind": "baseline-full-part0",
+          "inventory": {
+            "bytes": 804645,
+            "sha256": "79fdc57202e4b6b34f34f7f192ef54f8783dde43a1ae6651b29a3b1b3de6e8ed"
+          },
+          "raw_files": 4096,
+          "raw_bytes": 189100624,
+          "full_hash_checked_at_backup": true
+        },
+        {
+          "kind": "baseline-full-part1",
+          "inventory": {
+            "bytes": 773703,
+            "sha256": "3fc15d758db054776b2b1a802c7b406c0f7df562a6dc928f5d36a2166e6fb749"
+          },
+          "raw_files": 4096,
+          "raw_bytes": 87797476,
+          "full_hash_checked_at_backup": true
+        },
+        {
+          "kind": "baseline-full-part2",
+          "inventory": {
+            "bytes": 775173,
+            "sha256": "b7293797a17a7de9c20f4fc9f346bebbd002187a0056195f625b6c358c67def5"
+          },
+          "raw_files": 4096,
+          "raw_bytes": 150559088,
+          "full_hash_checked_at_backup": true
+        },
+        {
+          "kind": "baseline-full-part3",
+          "inventory": {
+            "bytes": 773660,
+            "sha256": "f9ee8003cc3d9464643d632d2dfd3241a5e8eb6fcc112c341fbcb72837dd453d"
+          },
+          "raw_files": 4096,
+          "raw_bytes": 91593636,
+          "full_hash_checked_at_backup": true
+        },
+        {
+          "kind": "baseline-full-part4",
+          "inventory": {
+            "bytes": 776008,
+            "sha256": "9842d29418e493e1a77351262397bf31cea99cce92a74a4df520cff1934dceee"
+          },
+          "raw_files": 4096,
+          "raw_bytes": 86950720,
+          "full_hash_checked_at_backup": true
+        },
+        {
+          "kind": "baseline-full-part5",
+          "inventory": {
+            "bytes": 769052,
+            "sha256": "aa0b74825c6103fa6e57469be086aa7d00182dd603c41f191eb6c45ea842d375"
+          },
+          "raw_files": 4096,
+          "raw_bytes": 163538708,
+          "full_hash_checked_at_backup": true
+        },
+        {
+          "kind": "baseline-full-part6",
+          "inventory": {
+            "bytes": 528982,
+            "sha256": "2fb73fc199347bb775bff99f39f7ab77201399ca299d61d04488d6b9b97a826e"
+          },
+          "raw_files": 2788,
+          "raw_bytes": 13697392,
+          "full_hash_checked_at_backup": true
+        }
+      ],
+      "raw_files": 27364,
+      "raw_bytes": 783237644,
+      "unique_original_files": 27491,
+      "unique_original_bytes": 840522487,
+      "capture_sha256": "70a9370146c7427417cd431a3216a8cb246aa133ea501c28be936593e58da469",
+      "raw_union_sha256": "9e162ba0639fe51756ef409522dec6b42554fb15ae963c1621495f33dfbfebff",
+      "every_raw_file_exactly_once": true
+    },
+    "restore": {
+      "parts": [
+        {
+          "kind": "restore-full-part0",
+          "inventory": {
+            "bytes": 804340,
+            "sha256": "eaa25e3c193324c50b8913d11e64f46618e4ef65c6f7df4927649a030d361c9a"
+          },
+          "raw_files": 4096,
+          "raw_bytes": 183740592,
+          "full_hash_checked_at_backup": true
+        },
+        {
+          "kind": "restore-full-part1",
+          "inventory": {
+            "bytes": 773756,
+            "sha256": "6c65aba0876c34c67a521747eb97d4fe51a1f947e9cff400a14425e3f86962ca"
+          },
+          "raw_files": 4096,
+          "raw_bytes": 87800452,
+          "full_hash_checked_at_backup": true
+        },
+        {
+          "kind": "restore-full-part2",
+          "inventory": {
+            "bytes": 232956,
+            "sha256": "972d8debce39dea06f4b973b9660f3a387e12e2cb99807a34437e5005878bac8"
+          },
+          "raw_files": 1233,
+          "raw_bytes": 4816736,
+          "full_hash_checked_at_backup": true
+        }
+      ],
+      "raw_files": 9425,
+      "raw_bytes": 276357780,
+      "unique_original_files": 9556,
+      "unique_original_bytes": 312400369,
+      "capture_sha256": "4768183a9dc8bcdfe515cc908e1c25c5b5e8704d4cb0e0646204dc1bba0a8b4f",
+      "raw_union_sha256": "20bf14e3ac82676844433f694749a56ec349036f0ca9ea9b0384a4dc57637d13",
+      "every_raw_file_exactly_once": true
+    },
+    "status": "full_baseline_and_fresh_restore_capture_preservation_closed",
+    "raw_files": 36789,
+    "raw_bytes": 1059595424,
+    "all_per_partition_full_hash_receipts_bound": true,
+    "exact_disjoint_union": true,
+    "SDK_invocations": 0,
+    "Mac_binary_storage": false,
+    "raw_payload_rehashed_in_union": false
+  },
+  "maximum_parent_poll_gap_seconds": 60.48686693236232,
+  "hard_15_second_cancellation_guarantee": false,
+  "owned_job_assignments_cleared": true,
+  "physical_and_offline_owners_reaped": true,
+  "worker_peak_measured": false,
+  "matched_performance": false,
+  "limitations": [
+    "Only original four-layer chain, not full64 layers, finalnorm/fullvocabulary or generated model tokens.",
+    "Baseline operator errors are conditioned on actual inputs; nominal outputs not bit-exact, maxabs0.0078125; no whole-chain propagated enclosure.",
+    "Physical monitor maximumpollgap60.4868669s; no hard15s cancellation guarantee. Future fullstage timer must avoid shared-filesystem blocking and disclose OS scheduling limits.",
+    "Historical failed006 and two failed baseline CPU audit attempts remain preserved.",
+    "No throughput/bandwidth/speedup/official-billing acceptance."
+  ]
+}

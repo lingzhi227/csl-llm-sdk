@@ -1,0 +1,77 @@
+// An ordered header precedes a whole packed hidden vector on one adjacent link.
+// RX arms the payload only after validating every full-width identity field.
+param sender:bool;
+param request_id:u32;param stage_id:u32;
+param source_layer:u16;param destination_layer:u16;
+param on_complete:fn()void;param on_error:fn(u32)void;
+const queue_in=@get_input_queue(2);const queue_out=@get_output_queue(2);
+const destination=@get_dsr(dsr_dest,2);const source=@get_dsr(dsr_src1,2);
+const completed_task=@get_local_task_id(18);const error_task=@get_local_task_id(20);
+const MAGIC:u32=0x51485300|stage_id;
+var buffer=@zeros([8]u32);
+// error, issued/completed transfers, committed BF16 words, generation, position,
+// source/destination layer, phase(0 header,1 payload,2 done), prepared, active,
+// complete. Counts are cumulative within this physical runtime.
+var status=@zeros([12]u32);
+var storage:[*]u32;
+var generation:u32=0;var position:u32=0;var phase:u16=0;
+var prepared:bool=false;var active:bool=false;var complete:bool=false;
+var started:bool=false;
+noinline fn fail(code:u32) void {if(status[0]==0){status[0]=code;}on_error(code);}
+noinline fn snapshot() void {
+ status[4]=generation;status[5]=position;
+ status[6]=@as(u32,source_layer);status[7]=@as(u32,destination_layer);
+ status[8]=@as(u32,phase);status[9]=if(prepared) @as(u32,1) else @as(u32,0);
+ status[10]=if(active) @as(u32,1) else @as(u32,0);
+ status[11]=if(complete) @as(u32,1) else @as(u32,0);
+}
+noinline fn quiescent() bool {return status[0]==0 and !active and (!prepared or complete);}
+noinline fn issue() void {
+ if(!prepared or active or complete or status[0]!=0){fail(901);return;}
+ const count:u16=if(phase==0) 8 else 2560;
+ const address:[*]u32=if(phase==0) &buffer else storage;
+ const mem=@get_dsd(mem1d_dsd,.{.base_address=address,.extent=count});
+ active=true;status[1]+=1;snapshot();
+ if(comptime sender){
+  const wire=@get_dsd(fabout_dsd,.{.output_queue=queue_out,.extent=1,.simd_mode=.{.simd_off=true}});
+  @load_to_dsr(source,mem);
+  @load_to_dsr(destination,@set_dsd_length(wire,count),.{.async=true,.activate=completed_task,.ut_id=@get_ut_id(2)});
+ }else{
+  const wire=@get_dsd(fabin_dsd,.{.input_queue=queue_in,.extent=1,.simd_mode=.{.simd_off=true}});
+  @load_to_dsr(destination,mem);
+  @load_to_dsr(source,@set_dsd_length(wire,count),.{.async=true,.activate=completed_task,.on_control=.{.activate=error_task},.ut_id=@get_ut_id(2)});
+ }
+ @mov32(destination,source,.{.async=true});
+}
+noinline fn begin(next_generation:u32,next_position:u32,data:[*]u16) void {
+ if(!quiescent() or next_generation==0 or next_position>=2){fail(902);return;}
+ // ELF admission proves4-byte alignment,10240-byte extent and bank separation.
+ storage=@ptrcast([*]u32,data);generation=next_generation;position=next_position;
+ phase=0;prepared=true;complete=false;started=false;snapshot();
+ if(comptime !sender){issue();}
+}
+fn start() void {
+ if(!sender or started or !prepared or complete){fail(903);return;}
+ started=true;buffer[0]=MAGIC;buffer[1]=request_id;buffer[2]=generation;buffer[3]=position;
+ buffer[4]=@as(u32,source_layer);buffer[5]=@as(u32,destination_layer);
+ buffer[6]=0;buffer[7]=5120;issue();
+}
+task transferred() void {
+ if(status[0]!=0){return;}
+ if(!active or !prepared or complete){fail(904);return;}
+ active=false;status[2]+=1;
+ if(phase==0){
+  if(comptime !sender){
+   if(buffer[0]!=MAGIC or buffer[1]!=request_id or buffer[2]!=generation or buffer[3]!=position or
+      buffer[4]!=@as(u32,source_layer) or buffer[5]!=@as(u32,destination_layer) or buffer[6]!=0 or buffer[7]!=5120){fail(905);return;}
+  }
+  phase=1;issue();
+ }else{phase=2;status[3]+=5120;complete=true;snapshot();on_complete();}
+}
+task control_error() void {fail(906);}
+comptime {
+ @comptime_assert(destination_layer==source_layer+1 and stage_id<3);
+ if(sender){@initialize_queue(queue_out,.{.color=@get_color(13)});}
+ else{@initialize_queue(queue_in,.{.color=@get_color(13)});}
+ @bind_local_task(transferred,completed_task);@bind_local_task(control_error,error_task);
+}

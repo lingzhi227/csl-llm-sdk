@@ -1,0 +1,28 @@
+// One native multicast, borrowing the lane's immutable128-value output.
+param stream_color:color;
+param on_released:fn()void;
+param on_error:fn()void;
+const lifecycle=@import_module("native_epoch.csl",.{.expected_mask=1,.owner_limit=16});
+const oq=@get_output_queue(7);
+const dest=@get_dsr(dsr_dest,1);const source=@get_dsr(dsr_src1,1);
+const completion=@get_local_task_id(18);
+const outgoing=@get_dsd(fabout_dsd,.{.output_queue=oq,.extent=128,.simd_mode=.{.simd_off=true}});
+fn begin(request:u32,reset:u32,position:u32,stage:u32,operation:u16,stream:u16) bool {
+ return lifecycle.begin(request,reset,position,stage,operation,stream);
+}
+// Caller must have completed its line and released all local packet TX/UT6 use.
+fn send(values:[*]u16) bool {
+ const ok=lifecycle.start(1);if(!ok){return false;}
+ const mem=@get_dsd(mem1d_dsd,.{.base_address=values,.extent=128});
+ @load_to_dsr(dest,outgoing,.{.async=true,.activate=completion,.ut_id=@get_ut_id(6)});
+ @load_to_dsr(source,mem);@mov16(dest,source,.{.async=true});return true;
+}
+task released() void {
+ const ok=lifecycle.complete(0);if(!ok){on_error();return;}
+ on_released();
+}
+fn retire(request:u32,reset:u32,position:u32,stage:u32,operation:u16) bool {
+ return lifecycle.retire(request,reset,position,stage,operation);
+}
+fn quiescent() bool {return lifecycle.quiescent();}
+comptime {@initialize_queue(oq,.{.color=stream_color});@bind_local_task(released,completion);}

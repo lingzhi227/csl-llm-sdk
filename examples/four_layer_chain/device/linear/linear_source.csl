@@ -1,0 +1,92 @@
+// A producer retains its operands/output until every recipient has committed.
+// Source TX completion and destination CONSUMED are independent leases.
+// Call transitions outside assertions; a failed transition latches an error.
+const protocol=@import_module("linear_protocol.csl",.{});
+var identity=@zeros([4]u32);var serial:u32=0;var id:u16=0;
+var fanout:u16=0;var offset:u16=0;var packet_words:u16=0;
+var initialized:bool=false;var output_ready:bool=false;
+var ready_pending:bool=false;var ready_inflight:bool=false;var ready_announced:bool=false;
+var granted:bool=false;var row_active:bool=false;var data_inflight:bool=false;
+var source_done:bool=false;var receipt_done:bool=false;
+var done_pending:bool=false;var done_inflight:bool=false;var done_recipient:u16=0;
+var released:bool=false;var errors:u32=0;
+var counters=@zeros([6]u32); // ready,grants,data packets,receipts,retired,done TX
+fn reject(code:u32) bool {if(errors==0){errors=code;}return false;}
+fn quiescent() bool {
+ return initialized and errors==0 and released and fanout==protocol.recipients(id) and
+  !ready_pending and !ready_inflight and !granted and !row_active and !data_inflight and
+  !done_pending and !done_inflight;
+}
+fn begin(request:u32,generation:u32,position:u32,stage:u32,next_serial:u32,producer_id:u16) bool {
+ if(errors!=0 or producer_id>=protocol.PRODUCERS or next_serial!=serial+1){return reject(401);}
+ if(initialized and !quiescent()){return reject(402);}
+ identity[0]=request;identity[1]=generation;identity[2]=position;identity[3]=stage;
+ serial=next_serial;id=producer_id;fanout=0;offset=0;initialized=true;
+ output_ready=false;ready_pending=false;ready_inflight=false;ready_announced=false;
+ granted=false;row_active=false;data_inflight=false;source_done=false;receipt_done=false;
+ done_pending=false;done_inflight=false;released=false;
+ return true;
+}
+fn mark_output_ready() bool {
+ if(!initialized or output_ready or released or errors!=0){return reject(403);}
+ output_ready=true;ready_pending=true;return true;
+}
+fn take_ready(target:[*]u32) bool {
+ if(!ready_pending or ready_inflight or ready_announced or errors!=0){return false;}
+ protocol.pack(target,protocol.SOURCE_READY,&identity,serial,id,0,0);
+ ready_pending=false;ready_inflight=true;ready_announced=true;counters[0]+=1;return true;
+}
+fn ready_source_complete() bool {
+ if(!ready_inflight){return reject(404);}ready_inflight=false;return true;
+}
+noinline fn receive_grant(data:[*]u32,length:u16) bool {
+ if(!protocol.matches(data,length,&identity,serial) or length!=8 or
+    data[0]!=protocol.GRANT or data[6]!=protocol.key(id,fanout) or data[7]!=0){return reject(405);}
+ // A new GRANT may arrive before the preceding DONE's local source callback.
+ if(!ready_announced or !output_ready or released or granted or row_active or done_pending){return reject(406);}
+ granted=true;counters[1]+=1;return true;
+}
+fn can_start() bool {
+ return errors==0 and output_ready and granted and !released and !row_active and
+  !data_inflight and !done_pending and !done_inflight and !ready_inflight;
+}
+fn start() bool {
+ if(!can_start()){return reject(407);}
+ row_active=true;source_done=false;receipt_done=false;offset=0;return true;
+}
+// The wrapper reads exactly packet_words immutable words into target[8..].
+fn take_fragment(target:[*]u32) bool {
+ if(errors!=0 or !row_active or data_inflight or source_done or offset>=protocol.words(id)){return false;}
+ const remaining=protocol.words(id)-offset;packet_words=if(remaining<23) remaining else @as(u16,23);
+ protocol.pack(target,protocol.DATA,&identity,serial,id,fanout,offset);
+ data_inflight=true;counters[2]+=1;return true;
+}
+fn fragment_source_complete() bool {
+ if(!row_active or !data_inflight or source_done){return reject(408);}
+ data_inflight=false;offset+=packet_words;
+ if(offset==protocol.words(id)){source_done=true;}return true;
+}
+noinline fn receive_receipt(data:[*]u32,length:u16) bool {
+ if(!protocol.matches(data,length,&identity,serial) or length!=8 or
+    data[0]!=protocol.CONSUMED or data[6]!=protocol.key(id,fanout) or data[7]!=0){return reject(409);}
+ if(!row_active or receipt_done){return reject(410);}
+ receipt_done=true;counters[3]+=1;return true;
+}
+fn joined() bool {return row_active and source_done and receipt_done and !data_inflight;}
+fn retire() bool {
+ if(errors!=0 or !joined() or done_pending or done_inflight){return reject(411);}
+ done_recipient=fanout;fanout+=1;row_active=false;granted=false;
+ done_pending=true;counters[4]+=1;
+ // The wrapper releases the neural source bank on this final transition,
+ // before it calls take_done. Control metadata has an independent lifetime.
+ if(fanout==protocol.recipients(id)){released=true;output_ready=false;}
+ return true;
+}
+fn take_done(target:[*]u32) bool {
+ if(!done_pending or done_inflight or row_active or errors!=0){return false;}
+ protocol.pack(target,protocol.PRODUCER_DONE,&identity,serial,id,done_recipient,0);
+ done_pending=false;done_inflight=true;return true;
+}
+fn done_source_complete() bool {
+ if(!done_inflight){return reject(412);}done_inflight=false;counters[5]+=1;return true;
+}

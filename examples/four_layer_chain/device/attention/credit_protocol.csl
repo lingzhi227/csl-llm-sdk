@@ -1,0 +1,52 @@
+// Finite device-only QKV credit envelope. No transport or task activation here.
+const GRANT:u32=16;
+const ROW_CONSUMED:u32=17;
+const ROOT_DONE:u32=18;
+const QUERY:u16=1;
+const KEY:u16=2;
+const VALUE:u16=3;
+const ERR_IDENTITY:u32=1;
+const ERR_KIND_GROUP:u32=2;
+const ERR_ORDER:u32=4;
+const ERR_DUPLICATE:u32=8;
+const ERR_RECIPIENT:u32=16;
+const ERR_LENGTH:u32=32;
+const ERR_LEASE:u32=64;
+const ERR_PHASE:u32=128;
+const ERR_CAPACITY:u32=256;
+const ERR_PAYLOAD:u32=512;
+
+fn valid_group(kind:u16,group:u16) bool {
+ return (kind==QUERY and group<96) or ((kind==KEY or kind==VALUE) and group<8);
+}
+fn root_id(kind:u16,group:u16) u16 {
+ return if(kind==QUERY) group else if(kind==KEY) 96+group else 104+group;
+}
+fn root_kind(id:u16) u16 {return if(id<96) QUERY else if(id<104) KEY else VALUE;}
+fn root_group(id:u16) u16 {return if(id<96) id else if(id<104) id-96 else id-104;}
+fn first_head(kind:u16,group:u16) u16 {return if(kind==QUERY) group/4 else 6*(group/2);}
+fn recipient_count(kind:u16) u16 {return if(kind==QUERY) @as(u16,1) else @as(u16,6);}
+fn recipient_mask(kind:u16,group:u16) u32 {
+ return (if(kind==QUERY) @as(u32,1) else @as(u32,63))<<first_head(kind,group);
+}
+// Keep eight words while distinguishing the stage-local neural operation.
+// Data rows retain their original plain phase word. Only control word5 packs
+// operation in the high16 bits and tensor kind in the low16 bits.
+fn operation_kind(operation:u16,kind:u16) u32 {return (@as(u32,operation)<<16)|@as(u32,kind);}
+fn matches(data:[*]u32,identity:[*]u32) bool {
+ return data[1]==identity[0] and data[2]==identity[1] and
+        data[3]==identity[2] and data[4]==identity[3];
+}
+fn pack(target:[*]u32,message:u32,identity:[*]u32,operation:u16,kind:u16,group:u16,detail:u16) bool {
+ if(operation==0xffff or !valid_group(kind,group)){return false;}
+ if(message==ROW_CONSUMED){
+  const first=first_head(kind,group);
+  if(detail<first or detail>=first+recipient_count(kind)){return false;}
+ }else if(message==GRANT or message==ROOT_DONE){
+  if(detail!=root_id(kind,group)){return false;}
+ }else{return false;}
+ target[0]=message;target[1]=identity[0];target[2]=identity[1];
+ target[3]=identity[2];target[4]=identity[3];target[5]=operation_kind(operation,kind);
+ target[6]=@as(u32,group);target[7]=@as(u32,detail);
+ return true;
+}

@@ -1,0 +1,4 @@
+// Four physical colors reused only across PE-disjoint six-head regions.
+const key:[8]color=[8]color{@get_color(3),@get_color(10),@get_color(3),@get_color(10),@get_color(3),@get_color(10),@get_color(3),@get_color(10)};
+const value:[8]color=[8]color{@get_color(11),@get_color(12),@get_color(11),@get_color(12),@get_color(11),@get_color(12),@get_color(11),@get_color(12)};
+fn head_streams(head:u16) [4]color {const g:u16=2*(head/6);return [4]color{key[g],key[g+1],value[g],value[g+1]};}

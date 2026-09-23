@@ -1,0 +1,45 @@
+// Four independent direct streams into the original retained K/V slices.
+param stream_colors:[4]color;
+param on_retained:fn(u16)void;
+param on_error:fn()void;
+const lifecycle=@import_module("native_epoch.csl",.{.expected_mask=15,.owner_limit=24});
+const low_key=@import_module("native_receive.csl",.{.stream_color=stream_colors[0],.resource=2,
+ .completion_task=@get_local_task_id(8),.on_complete=key_low_complete});
+const high_key=@import_module("native_receive.csl",.{.stream_color=stream_colors[1],.resource=3,
+ .completion_task=@get_local_task_id(9),.on_complete=key_high_complete});
+const low_value=@import_module("native_receive.csl",.{.stream_color=stream_colors[2],.resource=4,
+ .completion_task=@get_local_task_id(18),.on_complete=value_low_complete});
+const high_value=@import_module("native_receive.csl",.{.stream_color=stream_colors[3],.resource=5,
+ .completion_task=@get_local_task_id(19),.on_complete=value_high_complete});
+var key_target:[*]u16;var value_target:[*]u16;
+var retained_mask:u16=0;
+fn begin(request:u32,reset:u32,position:u32,stage:u32,operation:u16,head:u16) bool {
+ const ok=lifecycle.begin(request,reset,position,stage,operation,head);
+ if(!ok){return false;}retained_mask=0;return true;
+}
+fn arm(key:[*]u16,value:[*]u16) bool {
+ const ok=lifecycle.start(15);if(!ok){return false;}
+ key_target=key;value_target=value;
+ low_key.arm(key);high_key.arm(@ptrcast([*]u16,&key[128]));
+ low_value.arm(value);high_value.arm(@ptrcast([*]u16,&value[128]));return true;
+}
+fn released(slot:u16) void {
+ // Completion retires the DSR lease even if its received payload is invalid.
+ const ok=lifecycle.complete(slot);if(!ok){on_error();return;}
+ const target=if(slot<2) key_target else value_target;
+ const offset:u16=(slot%2)*128;
+ for(@range(u16,128))|i|{if((target[offset+i]&0x7f80)==0x7f80){
+  const rejected=lifecycle.reject(512);on_error();return;
+ }}
+ retained_mask|=@as(u16,1)<<slot;on_retained(slot);
+}
+fn key_low_complete() void {released(0);}
+fn key_high_complete() void {released(1);}
+fn value_low_complete() void {released(2);}
+fn value_high_complete() void {released(3);}
+fn ready() bool {return retained_mask==15 and lifecycle.retained();}
+fn retire(request:u32,reset:u32,position:u32,stage:u32,operation:u16) bool {
+ if(retained_mask!=15){return lifecycle.reject(4);}
+ return lifecycle.retire(request,reset,position,stage,operation);
+}
+fn quiescent() bool {return retained_mask==15 and lifecycle.quiescent();}

@@ -1,0 +1,39 @@
+// Source-only Layer0 linear-attention protocol. No queue/task/DSR resources.
+// Four request words, serial, producer/recipient and offset bind every fragment.
+const SOURCE_READY:u32=32;const GRANT:u32=33;const DATA:u32=34;
+const CONSUMED:u32=35;const PRODUCER_DONE:u32=36;
+const PRODUCERS:u16=450;const RECORDS:u16=752;const WINDOW:u16=4;
+fn recipients(id:u16) u16 {
+ if(id==128 or id==129){return 48;}
+ if(id>=130 and id<162){return 3;}
+ if(id>=210 and id<258){return 4;}
+ return 1;
+}
+fn words(id:u16) u16 {
+ if(id<128){return 64;}if(id<130){return 1;}
+ if(id<210){return 128;}if(id<258){return 290;}return 16;
+}
+fn destination_x(id:u16,recipient:u16) u16 {
+ if(id<80){return 16+id;}if(id<128){return 96+id-80;}
+ if(id<130){return 96+recipient;}
+ if(id<146){return 96+3*(id-130)+recipient;}
+ if(id<162){return 96+3*(id-146)+recipient;}
+ if(id<210){return 96+id-162;}
+ if(id<258){return 144+4*(id-210)+recipient;}
+ return 96+(id-258)/4;
+}
+fn key(id:u16,recipient:u16) u32 {return @as(u32,id)|(@as(u32,recipient)<<16);}
+fn producer(data:[*]u32) u16 {return @as(u16,data[6]&0xffff);}
+fn recipient(data:[*]u32) u16 {return @as(u16,data[6]>>16);}
+noinline fn matches(data:[*]u32,length:u16,identity:[*]u32,serial:u32) bool {
+ if(length<8 or length>31){return false;}
+ if(data[1]!=identity[0] or data[2]!=identity[1] or
+    data[3]!=identity[2] or data[4]!=identity[3] or data[5]!=serial){return false;}
+ const id=producer(data);const r=recipient(data);
+ return id<PRODUCERS and r<recipients(id);
+}
+fn pack(target:[*]u32,kind:u32,identity:[*]u32,serial:u32,id:u16,r:u16,offset:u16) void {
+ target[0]=kind;target[1]=identity[0];target[2]=identity[1];
+ target[3]=identity[2];target[4]=identity[3];target[5]=serial;
+ target[6]=key(id,r);target[7]=@as(u32,offset);
+}

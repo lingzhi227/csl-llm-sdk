@@ -1,0 +1,31 @@
+// First failure only. This record never supplies control or arithmetic inputs.
+// words: reason, actual packet length, valid-header mask, eight raw header words.
+var words=@zeros([11]u32);
+var initialized:bool=false;
+
+// One admitted epoch. Initialization cannot erase an earlier failure.
+fn init() void {
+ @assert(!initialized and words[0]==0);initialized=true;
+}
+
+fn latch(reason:u32,length:u16,data:[*]u32,has_packet:bool) void {
+ if(words[0]!=0){return;}
+ @assert(reason>0 and reason<=10);
+ words[1]=if(has_packet) @as(u32,length) else @as(u32,0);
+ words[2]=0;
+ for(@range(u16,8))|i|{
+  words[3+i]=0;
+  // Short packets must never expose stale receive-buffer words.
+  if(has_packet and i<length){words[3+i]=data[i];words[2]|=@as(u32,1)<<i;}
+ }
+ words[0]=reason;
+}
+
+fn callback(reason:u32) void {latch(reason,0,&words,false);}
+
+fn fill(target:[*]u32) void {
+ @assert(words[0]!=0);
+ target[2]=5;
+ for(@range(u16,11))|i|{target[17+i]=words[i];}
+ target[28]=1; // Explicit sticky error marker, not a normal frame counter.
+}
