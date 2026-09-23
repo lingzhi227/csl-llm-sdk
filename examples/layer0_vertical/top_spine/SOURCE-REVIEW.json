@@ -1,0 +1,228 @@
+{
+  "summary": {
+    "scope": "Generated source only; not compiled fit, numerical acceptance or measured bandwidth",
+    "application": [
+      30,
+      1160
+    ],
+    "matrix_PEs": 31548,
+    "support_PEs": 460,
+    "router_PEs": 970,
+    "assigned_rectangle": 34800,
+    "idle_PEs": 1822,
+    "matrix_columns": 28,
+    "packet_endpoints": 941,
+    "linear_producers": 450,
+    "linear_point_records": 752,
+    "route_configurations": 193458,
+    "route_conflicts": 0,
+    "path_checks": 4369,
+    "up_then_down_paths": true,
+    "original_traffic_packet_counts": {
+      "CHUNK": 792,
+      "CONSUMED": 752,
+      "DOWN": 120,
+      "GATE": 408,
+      "GRANT": 752,
+      "HIDDEN": 120,
+      "LINEAR_DATA": 4032,
+      "MIX": 120,
+      "PRODUCER_DONE": 752,
+      "READY": 187,
+      "REQUEST": 264,
+      "SOURCE_READY": 450,
+      "UP": 408
+    },
+    "packet_geometric_hops": 2800753,
+    "maximum_directed_edge_packets": 3832,
+    "SDK_invocations": 0,
+    "compiled": false,
+    "full_model": false
+  },
+  "role_counts": {
+    "10": 970,
+    "6": 1,
+    "2": 1,
+    "3": 1,
+    "7": 1,
+    "8": 80,
+    "4": 48,
+    "9": 192,
+    "5": 136,
+    "1": 31548,
+    "0": 1822
+  },
+  "reuse": {
+    "convolution128.csl": {
+      "bytes": 1989,
+      "sha256": "96dcd6f9d694e1a51b5443288154cb540cde50abd6488f48de216537778d0180",
+      "exact_accepted_horizontal": true
+    },
+    "convolution_owner.csl": {
+      "bytes": 1224,
+      "sha256": "d411fa70e139ee9d72cb665b9b6a7065277f9c893d529426ca19cb3fcd563534",
+      "exact_accepted_horizontal": true
+    },
+    "exp_kernel.csl": {
+      "bytes": 855,
+      "sha256": "acd05e496140dea16a91af48fdf8f69a2e4d767aaeed675e133c0283982aca69",
+      "exact_accepted_horizontal": true
+    },
+    "frame_origin.csl": {
+      "bytes": 5492,
+      "sha256": "fef4d3836b27344c4683f923ab3b8ed278996b580de5a9f27374c2770a484c89",
+      "exact_accepted_horizontal": true
+    },
+    "gate_kernel.csl": {
+      "bytes": 1407,
+      "sha256": "a548389ac9ceb6b531f069a30ac94cdf95f6330e5d91635d6608c25356dc826c",
+      "exact_accepted_horizontal": true
+    },
+    "gated_kernel.csl": {
+      "bytes": 1593,
+      "sha256": "9d34cf760299f5147b8b84615ef40ffae35d2c01ae3e8e378d97f6207125cc6b",
+      "exact_accepted_horizontal": true
+    },
+    "gated_rms128_reference.csl": {
+      "bytes": 1534,
+      "sha256": "ee1a38c3fcbc179fbd0faa60fe8824d5693dfe5398f8aecf8cfd49c182c6f9fe",
+      "exact_accepted_horizontal": true
+    },
+    "gemv_kernel.csl": {
+      "bytes": 1387,
+      "sha256": "3e92175efe12b28065bb77934c54136db3c9287c68c81877781a0e527354304c",
+      "exact_accepted_horizontal": true
+    },
+    "head_owner.csl": {
+      "bytes": 2385,
+      "sha256": "9dfc20e18f23a795027ca84824b048130c52c31468a8e42222819bcb29920c55",
+      "exact_accepted_horizontal": true
+    },
+    "input.csl": {
+      "bytes": 709,
+      "sha256": "e9b289a13f821df69a08e58e9bf6847f4b542d94d617c60d8df143413d2a61af",
+      "exact_accepted_horizontal": true
+    },
+    "layer0_pe.csl": {
+      "bytes": 29735,
+      "sha256": "85900e11d4707f5531926fe5b27a3605682c0aa86af03a840890ecc7fa7efbd0",
+      "exact_accepted_horizontal": true
+    },
+    "layout.csl": {
+      "bytes": 607850,
+      "sha256": "28331d19762de2e97fa2816e0d67fe947482fbc0bddf3e73724e5956a7a45de3",
+      "exact_accepted_horizontal": false
+    },
+    "line.csl": {
+      "bytes": 3947,
+      "sha256": "21f8628d937c6e481c24a45747895fb27caa1bd2a6b18d7338e138d492a4a529",
+      "exact_accepted_horizontal": true
+    },
+    "linear_coordinates.csl": {
+      "bytes": 1738,
+      "sha256": "2ceb51cad6f6f5a48ec2208a10dd89933faa2a16695aab9b5614955ac959dd4d",
+      "exact_accepted_horizontal": false
+    },
+    "linear_node.csl": {
+      "bytes": 6571,
+      "sha256": "8afb5f8cf2578d6a6519592dc77ec35f986f9383d481269a30cf9e24d1457419",
+      "exact_accepted_horizontal": true
+    },
+    "linear_origin.csl": {
+      "bytes": 3271,
+      "sha256": "a681c6db4eea5d2c559e274e779fd014c93597c59f469a4f77c239ea2dcbf02e",
+      "exact_accepted_horizontal": true
+    },
+    "linear_protocol.csl": {
+      "bytes": 1759,
+      "sha256": "598bd4479e5ac55e53eb53a4abdd2942ce1d8c93a923def797d0ec7a16f31260",
+      "exact_accepted_horizontal": true
+    },
+    "linear_receiver.csl": {
+      "bytes": 3581,
+      "sha256": "476464c15cdaa4c007e2ddecf65350a2928bd7f805454244bca0aeef7c54c4f3",
+      "exact_accepted_horizontal": true
+    },
+    "linear_source.csl": {
+      "bytes": 5080,
+      "sha256": "ef5c4e841d2b5d9ae6e930a1f65e3f7c675f44f4ba4a4bad4c28687e0dc3db09",
+      "exact_accepted_horizontal": true
+    },
+    "matrix_lane.csl": {
+      "bytes": 4733,
+      "sha256": "01a3d79aa50bd7c87ae5f91320e76448b8543e3e0ab6702a259acb0d13be84d0",
+      "exact_accepted_horizontal": false
+    },
+    "mlp_owner.csl": {
+      "bytes": 2739,
+      "sha256": "779ce539c5dac3f8f72605980e38194f0f62547e049b7c5429209ede24cdc3ac",
+      "exact_accepted_horizontal": true
+    },
+    "nonlinear_kernel.csl": {
+      "bytes": 1389,
+      "sha256": "65313bf5b798ac199f76ddc3fddbbf3de438f9edb0dbd5642763b67bd190a6b0",
+      "exact_accepted_horizontal": true
+    },
+    "norm_owner.csl": {
+      "bytes": 3621,
+      "sha256": "810c4452871aebf392c51212c9f876062f3cb844de06d19407082587633fa771",
+      "exact_accepted_horizontal": true
+    },
+    "observer.csl": {
+      "bytes": 2712,
+      "sha256": "cea9243bcb0f0c033fa8f3b6fac5a39d7a6f259928353019be64c2e15e0752bf",
+      "exact_accepted_horizontal": true
+    },
+    "packets.csl": {
+      "bytes": 5071,
+      "sha256": "7ecc29ce4fbbf132e31ed04c599ec78dafcdf7be53bcadccbee68c5460406554",
+      "exact_accepted_horizontal": true
+    },
+    "preprocess384_reference.csl": {
+      "bytes": 2814,
+      "sha256": "370aa7b9b1450dcb8fe09ae93f039ba87ec149734299c2c110b3801fb2933f13",
+      "exact_accepted_horizontal": true
+    },
+    "recurrent_owner.csl": {
+      "bytes": 1681,
+      "sha256": "80f3e92cfc60723c2e2c624ceb2350b629405bd19dd5a6f489db97eb34142895",
+      "exact_accepted_horizontal": true
+    },
+    "recurrent_value32.csl": {
+      "bytes": 2527,
+      "sha256": "7c65191b58e1687ca659074357a9d4c3bc6b37e2d3cde29adb82dc1b261fb845",
+      "exact_accepted_horizontal": true
+    },
+    "rms_retained.csl": {
+      "bytes": 1399,
+      "sha256": "2df2017a0f38ec65f8f05ad98f12f55162ed996d43ea3388241d975e3052298b",
+      "exact_accepted_horizontal": true
+    },
+    "row_packet.csl": {
+      "bytes": 2882,
+      "sha256": "a30bfaa6089c261ec971234ac7fdd9bb761d4f3ac1a91da64147a89cdc1b80ba",
+      "exact_accepted_horizontal": true
+    },
+    "transport_header.csl": {
+      "bytes": 616,
+      "sha256": "fbcf37faff1db06a56bdad222902cff98f78432c8077ddaaa0cd784183b18497",
+      "exact_accepted_horizontal": true
+    },
+    "tree_port.csl": {
+      "bytes": 2385,
+      "sha256": "df1fa3ed2afe4d1e3cd88c13a063b969ee3d7af1e6de7b5ca22c3e97f49de086",
+      "exact_accepted_horizontal": true
+    },
+    "tree_router.csl": {
+      "bytes": 12104,
+      "sha256": "35de8ee234cd720197c7b4d2765a30c90ca24a48a23c86176d63d46866d9bd0d",
+      "exact_accepted_horizontal": false
+    },
+    "vector_collect.csl": {
+      "bytes": 1803,
+      "sha256": "0fc9c90dbfae6851d5c77d68e03deff173bd08d1ec2c5f69c506d547ac0b0b94",
+      "exact_accepted_horizontal": true
+    }
+  },
+  "full_layer_accepted": false
+}

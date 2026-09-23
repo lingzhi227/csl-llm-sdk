@@ -1,0 +1,58 @@
+// Four global record reservations; READY and source callbacks are asynchronous.
+// No host-driven intermediate scheduling and no inferred destination delivery.
+const protocol=@import_module("linear_protocol.csl",.{});
+var identity=@zeros([4]u32);var serial:u32=0;
+var seen=@zeros([450]u16);var active=@zeros([450]u16);var next=@zeros([450]u16);
+var active_count:u16=0;var completed_records:u16=0;var completed_producers:u16=0;
+var ready_count:u16=0;var maximum_active:u16=0;var scan:u16=0;
+var initialized:bool=false;var injected:bool=false;
+var grant_inflight:bool=false;var grant_id:u16=0;var grant_recipient:u16=0;
+var errors:u32=0;var grants:u32=0;var grant_completions:u32=0;
+fn reject(code:u32) bool {if(errors==0){errors=code;}return false;}
+fn quiescent() bool {
+ return initialized and errors==0 and injected and completed_producers==450 and
+  completed_records==752 and ready_count==450 and active_count==0 and !grant_inflight;
+}
+fn begin(request:u32,generation:u32,position:u32,stage:u32,next_serial:u32) bool {
+ if(errors!=0 or next_serial!=serial+1 or (initialized and !quiescent())){return reject(421);}
+ identity[0]=request;identity[1]=generation;identity[2]=position;identity[3]=stage;serial=next_serial;
+ for(@range(u16,450))|i|{seen[i]=0;active[i]=0;next[i]=0;}
+ active_count=0;completed_records=0;completed_producers=0;ready_count=0;maximum_active=0;scan=0;
+ initialized=true;injected=false;grant_inflight=false;return true;
+}
+fn mark_injected() bool {
+ if(!initialized or injected){return reject(422);}injected=true;return true;
+}
+noinline fn receive_ready(data:[*]u32,length:u16) bool {
+ if(!protocol.matches(data,length,&identity,serial) or length!=8 or
+    data[0]!=protocol.SOURCE_READY or protocol.recipient(data)!=0 or data[7]!=0){return reject(423);}
+ const id=protocol.producer(data);
+ if(seen[id]!=0){return reject(424);}seen[id]=1;ready_count+=1;return true;
+}
+fn take_grant(target:[*]u32) bool {
+ if(!initialized or !injected or grant_inflight or errors!=0 or active_count>=protocol.WINDOW){return false;}
+ var id:u16=450;var step:u16=0;
+ while(step<450 and id==450){
+  const candidate=(scan+step)%450;
+  if(seen[candidate]!=0 and active[candidate]==0 and next[candidate]<protocol.recipients(candidate)){id=candidate;}
+  step+=1;
+ }
+ if(id==450){return false;}
+ grant_id=id;grant_recipient=next[id];scan=(id+1)%450;
+ protocol.pack(target,protocol.GRANT,&identity,serial,id,grant_recipient,0);
+ active[id]=1;active_count+=1;grants+=1;grant_inflight=true;
+ if(active_count>maximum_active){maximum_active=active_count;}return true;
+}
+fn grant_source_complete() bool {
+ if(!grant_inflight){return reject(425);}
+ // DONE may already have retired this reservation. Do not consult active[id].
+ grant_inflight=false;grant_completions+=1;return true;
+}
+noinline fn receive_done(data:[*]u32,length:u16) bool {
+ if(!protocol.matches(data,length,&identity,serial) or length!=8 or
+    data[0]!=protocol.PRODUCER_DONE or data[7]!=0){return reject(426);}
+ const id=protocol.producer(data);const r=protocol.recipient(data);
+ if(seen[id]==0 or active[id]!=1 or r!=next[id] or active_count==0){return reject(427);}
+ active[id]=0;active_count-=1;next[id]+=1;completed_records+=1;
+ if(next[id]==protocol.recipients(id)){completed_producers+=1;}return true;
+}

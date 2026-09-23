@@ -1,0 +1,142 @@
+// Bind original convolution, head gates and four recurrent shards to records.
+// Arithmetic is synchronous; the importing wrapper owns RX/TX/service tasks.
+// node_kind0 convolution,1 full value head,2 recurrent32-value shard.
+param node_kind:u16;param vector_kind:u16=0;
+param on_source_ready:fn()void;
+const is_conv=node_kind==0;const is_head=node_kind==1;const is_rec=node_kind==2;
+const conv=@import_module(if(is_conv) "convolution_owner.csl" else "<empty>",
+ if(is_conv) .{.vector_kind=vector_kind} else .{});
+const head=@import_module(if(is_head) "head_owner.csl" else "<empty>");
+const rec=@import_module(if(is_rec) "recurrent_owner.csl" else "<empty>");
+var index:u16=0;var serial:u32=0;var generation:u32=1;var position:u32=0;
+var complete_mask:u16=0;var computed:bool=false;var source_owned:bool=false;
+var joined_mask:u16=0;var output_served:bool=false;var errors:u32=0;
+fn fail(code:u32) void {if(errors==0){errors=code;}}
+fn configure(owner_index:u16) void {
+ @assert(serial==0 and !computed and !source_owned);
+ index=owner_index;
+ if(comptime is_conv){@assert(index<80 and vector_kind==(if(index<16) @as(u16,0) else if(index<32) @as(u16,1) else @as(u16,2)));}
+ if(comptime is_head){@assert(index<48);}
+ if(comptime is_rec){@assert(index<192);}
+}
+fn source_id() u16 {return (if(is_conv) @as(u16,130) else if(is_head) @as(u16,210) else @as(u16,258))+index;}
+fn expected_id(slot:u16) u16 {
+ if(comptime is_conv){return index;}
+ if(comptime is_rec){return 210+index/4;}
+ if(slot==0){return 130+index/3;}if(slot==1){return 146+index/3;}
+ if(slot==2){return 162+index;}if(slot==3){return 80+index;}
+ if(slot==4){return 128;}if(slot==5){return 129;}return 258+4*index+slot-6;
+}
+fn expected_recipient(slot:u16) u16 {
+ if(comptime is_conv){return 0;}if(comptime is_rec){return index%4;}
+ if(slot<2){return index%3;}if(slot==4 or slot==5){return index;}return 0;
+}
+fn quiescent() bool {
+ if(errors!=0 or source_owned){return false;}
+ if(comptime is_conv){return !conv.output_owned;}
+ if(comptime is_rec){return !rec.output_owned;}
+ if(comptime is_head){return !head.active and !head.output_owned;}
+ return false;
+}
+fn begin(next_serial:u32,next_generation:u32,next_position:u32) void {
+ @assert(quiescent() and next_serial==serial+1 and next_generation==generation and next_position==position);
+ serial=next_serial;complete_mask=0;computed=false;joined_mask=0;output_served=false;
+}
+fn reset_after_global_quiescence(next_generation:u32) void {
+ @assert(quiescent() and next_generation==generation+1);
+ if(comptime is_conv){conv.reset_after_global_quiescence(next_generation);}
+ if(comptime is_head){head.reset_after_global_quiescence(next_generation);}
+ if(comptime is_rec){rec.reset_after_global_quiescence(next_generation);}
+ generation=next_generation;position=0;
+}
+fn finite_bf16(word:u32) bool {return (word&0x7f80)!=0x7f80 and ((word>>16)&0x7f80)!=0x7f80;}
+// Explicit scalar stores keep asynchronous packet DSRs out of neural copying.
+noinline fn write_word(slot:u16,offset:u16,word:u32) void {
+ if(errors!=0){return;}
+ if(comptime is_conv){
+  if(slot!=0 or offset>=64 or !finite_bf16(word)){fail(461);return;}
+  conv.input[2*offset]=@as(u16,word&0xffff);conv.input[2*offset+1]=@as(u16,word>>16);
+ }
+ if(comptime is_head){
+  if(slot<3){
+   if(offset>=128 or (word&0x7f800000)==0x7f800000){fail(462);return;}
+   if(slot==0){head.query[offset]=@bitcast(f32,word);}
+   else if(slot==1){head.key[offset]=@bitcast(f32,word);}else{head.value[offset]=@bitcast(f32,word);}
+  }else{
+   if(!finite_bf16(word)){fail(463);return;}
+   if(slot==3){
+    if(offset>=64){fail(464);return;}
+    head.raw_gate[2*offset]=@as(u16,word&0xffff);head.raw_gate[2*offset+1]=@as(u16,word>>16);
+   }else if(slot==4 or slot==5){
+    if(offset!=0 or word>>16!=0){fail(465);return;}
+    if(slot==4){head.a=@as(u16,word);}else{head.b=@as(u16,word);}
+   }else{
+    if(slot>=10 or offset>=16){fail(466);return;}
+    const i=(slot-6)*32+2*offset;
+    head.recurrent_output[i]=@as(u16,word&0xffff);head.recurrent_output[i+1]=@as(u16,word>>16);
+   }
+  }
+ }
+ if(comptime is_rec){
+  if(slot!=0 or offset>=290 or (word&0x7f800000)==0x7f800000){fail(467);return;}
+  const value=@bitcast(f32,word);
+  if(offset<128){rec.query[offset]=value;}else if(offset<256){rec.key[offset-128]=value;}
+  else if(offset<288){rec.value[offset-256]=value;}else if(offset==288){rec.beta=value;}else{rec.decay=value;}
+ }
+}
+fn committed(slot:u16) void {
+ if(errors!=0){return;}
+ const bit:u16=@as(u16,1)<<slot;
+ if((complete_mask&bit)!=0){fail(468);return;}complete_mask|=bit;
+}
+// Call only from the wrapper's finite service task after the packet callback.
+fn service() void {
+ if(errors!=0){return;}
+ if(comptime is_conv or is_rec){if(complete_mask==1 and !computed){
+  if(comptime is_conv){conv.compute(serial,generation,position);}
+  if(comptime is_rec){rec.compute(serial,generation,position);}
+  computed=true;source_owned=true;position+=1;on_source_ready();
+ }}
+ if(comptime is_head){
+  if((complete_mask&63)==63 and !computed){
+   head.begin(serial,generation,position);computed=true;source_owned=true;on_source_ready();
+  }
+  for(@range(u16,4))|i|{
+   const bit:u16=@as(u16,1)<<i;
+   if(computed and (complete_mask&(@as(u16,1)<<(6+i)))!=0 and (joined_mask&bit)==0){
+    head.commit_shard(i,serial);joined_mask|=bit;
+    if(joined_mask==15){position+=1;}
+   }
+  }
+ }
+}
+fn pair(lo:u16,hi:u16) u32 {return @as(u32,lo)|(@as(u32,hi)<<16);}
+noinline fn source_word(recipient:u16,offset:u16) u32 {
+ @assert(source_owned);
+ if(comptime is_conv){@assert(offset<128);return @bitcast(u32,conv.output[offset]);}
+ if(comptime is_head){
+  @assert(recipient<4 and offset<290);
+  if(offset<128){return @bitcast(u32,head.query[offset]);}
+  if(offset<256){return @bitcast(u32,head.key[offset-128]);}
+  if(offset<288){return @bitcast(u32,head.value[recipient*32+offset-256]);}
+  if(offset==288){return @bitcast(u32,head.gate_stages[10]);}
+  return @bitcast(u32,head.gate_stages[9]);
+ }
+ if(comptime is_rec){@assert(offset<16);return pair(rec.output_bf16[2*offset],rec.output_bf16[2*offset+1]);}
+ return 0;
+}
+fn release_source() void {
+ @assert(source_owned and computed);source_owned=false;
+ if(comptime is_conv){conv.release_output(serial);}
+ if(comptime is_rec){rec.release_output(serial);}
+}
+fn gated_ready() bool {
+ if(comptime is_head){return errors==0 and !source_owned and head.output_owned and !output_served;}
+ return false;
+}
+fn take_gated(target:[*]u16) void {
+ if(comptime is_head){
+  @assert(gated_ready());for(@range(u16,128))|i|{target[i]=head.casts[256+i];}
+  head.release_output(serial);output_served=true;
+ }
+}

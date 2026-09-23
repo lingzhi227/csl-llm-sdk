@@ -1,0 +1,255 @@
+{
+  "scope": "Byte-exact generated complete device program plus host placement, checkpoint conversion and MLP lowering source snapshot. The full placement generator dependency tree and runtime distribution are not included.",
+  "canonical_compile_acceptance_sha256": "240b158066375eb992b64242878d02d9f0006461926956213be5d623bcf30bf7",
+  "accepted_source_manifest_sha256": "7ccd72c39d5a71baca8f263e4d8bc28f37ad22a79155b00d3bd5411dba813352",
+  "files": {
+    "examples/layer0_vertical/top_spine/convolution128.csl": {
+      "bytes": 1989,
+      "sha256": "96dcd6f9d694e1a51b5443288154cb540cde50abd6488f48de216537778d0180",
+      "byte_identical": true
+    },
+    "examples/layer0_vertical/top_spine/convolution_owner.csl": {
+      "bytes": 1224,
+      "sha256": "d411fa70e139ee9d72cb665b9b6a7065277f9c893d529426ca19cb3fcd563534",
+      "byte_identical": true
+    },
+    "examples/layer0_vertical/top_spine/exp_kernel.csl": {
+      "bytes": 855,
+      "sha256": "acd05e496140dea16a91af48fdf8f69a2e4d767aaeed675e133c0283982aca69",
+      "byte_identical": true
+    },
+    "examples/layer0_vertical/top_spine/frame_origin.csl": {
+      "bytes": 5492,
+      "sha256": "fef4d3836b27344c4683f923ab3b8ed278996b580de5a9f27374c2770a484c89",
+      "byte_identical": true
+    },
+    "examples/layer0_vertical/top_spine/gate_kernel.csl": {
+      "bytes": 1407,
+      "sha256": "a548389ac9ceb6b531f069a30ac94cdf95f6330e5d91635d6608c25356dc826c",
+      "byte_identical": true
+    },
+    "examples/layer0_vertical/top_spine/gated_kernel.csl": {
+      "bytes": 1593,
+      "sha256": "9d34cf760299f5147b8b84615ef40ffae35d2c01ae3e8e378d97f6207125cc6b",
+      "byte_identical": true
+    },
+    "examples/layer0_vertical/top_spine/gated_rms128_reference.csl": {
+      "bytes": 1534,
+      "sha256": "ee1a38c3fcbc179fbd0faa60fe8824d5693dfe5398f8aecf8cfd49c182c6f9fe",
+      "byte_identical": true
+    },
+    "examples/layer0_vertical/top_spine/gemv_kernel.csl": {
+      "bytes": 1387,
+      "sha256": "3e92175efe12b28065bb77934c54136db3c9287c68c81877781a0e527354304c",
+      "byte_identical": true
+    },
+    "examples/layer0_vertical/top_spine/head_owner.csl": {
+      "bytes": 2385,
+      "sha256": "9dfc20e18f23a795027ca84824b048130c52c31468a8e42222819bcb29920c55",
+      "byte_identical": true
+    },
+    "examples/layer0_vertical/top_spine/input.csl": {
+      "bytes": 709,
+      "sha256": "e9b289a13f821df69a08e58e9bf6847f4b542d94d617c60d8df143413d2a61af",
+      "byte_identical": true
+    },
+    "examples/layer0_vertical/top_spine/layer0_pe.csl": {
+      "bytes": 29735,
+      "sha256": "85900e11d4707f5531926fe5b27a3605682c0aa86af03a840890ecc7fa7efbd0",
+      "byte_identical": true
+    },
+    "examples/layer0_vertical/top_spine/layout.csl": {
+      "bytes": 607850,
+      "sha256": "28331d19762de2e97fa2816e0d67fe947482fbc0bddf3e73724e5956a7a45de3",
+      "byte_identical": true
+    },
+    "examples/layer0_vertical/top_spine/line.csl": {
+      "bytes": 3947,
+      "sha256": "21f8628d937c6e481c24a45747895fb27caa1bd2a6b18d7338e138d492a4a529",
+      "byte_identical": true
+    },
+    "examples/layer0_vertical/top_spine/linear_coordinates.csl": {
+      "bytes": 1738,
+      "sha256": "2ceb51cad6f6f5a48ec2208a10dd89933faa2a16695aab9b5614955ac959dd4d",
+      "byte_identical": true
+    },
+    "examples/layer0_vertical/top_spine/linear_node.csl": {
+      "bytes": 6571,
+      "sha256": "8afb5f8cf2578d6a6519592dc77ec35f986f9383d481269a30cf9e24d1457419",
+      "byte_identical": true
+    },
+    "examples/layer0_vertical/top_spine/linear_origin.csl": {
+      "bytes": 3271,
+      "sha256": "a681c6db4eea5d2c559e274e779fd014c93597c59f469a4f77c239ea2dcbf02e",
+      "byte_identical": true
+    },
+    "examples/layer0_vertical/top_spine/linear_protocol.csl": {
+      "bytes": 1759,
+      "sha256": "598bd4479e5ac55e53eb53a4abdd2942ce1d8c93a923def797d0ec7a16f31260",
+      "byte_identical": true
+    },
+    "examples/layer0_vertical/top_spine/linear_receiver.csl": {
+      "bytes": 3581,
+      "sha256": "476464c15cdaa4c007e2ddecf65350a2928bd7f805454244bca0aeef7c54c4f3",
+      "byte_identical": true
+    },
+    "examples/layer0_vertical/top_spine/linear_source.csl": {
+      "bytes": 5080,
+      "sha256": "ef5c4e841d2b5d9ae6e930a1f65e3f7c675f44f4ba4a4bad4c28687e0dc3db09",
+      "byte_identical": true
+    },
+    "examples/layer0_vertical/top_spine/matrix_lane.csl": {
+      "bytes": 4733,
+      "sha256": "01a3d79aa50bd7c87ae5f91320e76448b8543e3e0ab6702a259acb0d13be84d0",
+      "byte_identical": true
+    },
+    "examples/layer0_vertical/top_spine/mlp_owner.csl": {
+      "bytes": 2739,
+      "sha256": "779ce539c5dac3f8f72605980e38194f0f62547e049b7c5429209ede24cdc3ac",
+      "byte_identical": true
+    },
+    "examples/layer0_vertical/top_spine/nonlinear_kernel.csl": {
+      "bytes": 1389,
+      "sha256": "65313bf5b798ac199f76ddc3fddbbf3de438f9edb0dbd5642763b67bd190a6b0",
+      "byte_identical": true
+    },
+    "examples/layer0_vertical/top_spine/norm_owner.csl": {
+      "bytes": 3621,
+      "sha256": "810c4452871aebf392c51212c9f876062f3cb844de06d19407082587633fa771",
+      "byte_identical": true
+    },
+    "examples/layer0_vertical/top_spine/observer.csl": {
+      "bytes": 2712,
+      "sha256": "cea9243bcb0f0c033fa8f3b6fac5a39d7a6f259928353019be64c2e15e0752bf",
+      "byte_identical": true
+    },
+    "examples/layer0_vertical/top_spine/packets.csl": {
+      "bytes": 5071,
+      "sha256": "7ecc29ce4fbbf132e31ed04c599ec78dafcdf7be53bcadccbee68c5460406554",
+      "byte_identical": true
+    },
+    "examples/layer0_vertical/top_spine/preprocess384_reference.csl": {
+      "bytes": 2814,
+      "sha256": "370aa7b9b1450dcb8fe09ae93f039ba87ec149734299c2c110b3801fb2933f13",
+      "byte_identical": true
+    },
+    "examples/layer0_vertical/top_spine/recurrent_owner.csl": {
+      "bytes": 1681,
+      "sha256": "80f3e92cfc60723c2e2c624ceb2350b629405bd19dd5a6f489db97eb34142895",
+      "byte_identical": true
+    },
+    "examples/layer0_vertical/top_spine/recurrent_value32.csl": {
+      "bytes": 2527,
+      "sha256": "7c65191b58e1687ca659074357a9d4c3bc6b37e2d3cde29adb82dc1b261fb845",
+      "byte_identical": true
+    },
+    "examples/layer0_vertical/top_spine/rms_retained.csl": {
+      "bytes": 1399,
+      "sha256": "2df2017a0f38ec65f8f05ad98f12f55162ed996d43ea3388241d975e3052298b",
+      "byte_identical": true
+    },
+    "examples/layer0_vertical/top_spine/row_packet.csl": {
+      "bytes": 2882,
+      "sha256": "a30bfaa6089c261ec971234ac7fdd9bb761d4f3ac1a91da64147a89cdc1b80ba",
+      "byte_identical": true
+    },
+    "examples/layer0_vertical/top_spine/transport_header.csl": {
+      "bytes": 616,
+      "sha256": "fbcf37faff1db06a56bdad222902cff98f78432c8077ddaaa0cd784183b18497",
+      "byte_identical": true
+    },
+    "examples/layer0_vertical/top_spine/tree_port.csl": {
+      "bytes": 2385,
+      "sha256": "df1fa3ed2afe4d1e3cd88c13a063b969ee3d7af1e6de7b5ca22c3e97f49de086",
+      "byte_identical": true
+    },
+    "examples/layer0_vertical/top_spine/tree_router.csl": {
+      "bytes": 12104,
+      "sha256": "35de8ee234cd720197c7b4d2765a30c90ca24a48a23c86176d63d46866d9bd0d",
+      "byte_identical": true
+    },
+    "examples/layer0_vertical/top_spine/vector_collect.csl": {
+      "bytes": 1803,
+      "sha256": "0fc9c90dbfae6851d5c77d68e03deff173bd08d1ec2c5f69c506d547ac0b0b94",
+      "byte_identical": true
+    },
+    "examples/layer0_vertical/top_spine/plan.json": {
+      "bytes": 426122,
+      "sha256": "e9ea63824477e329b73faf90f9f35310bc69442b45eea343b80fca8e0a5571bc",
+      "byte_identical": true
+    },
+    "examples/layer0_vertical/top_spine/transport-map.json": {
+      "bytes": 1102003,
+      "sha256": "0cea9b795d4ba068481c246f03d7238181450995d7908ae24bebf7877fb34c27",
+      "byte_identical": true
+    },
+    "examples/layer0_vertical/top_spine/host-map.json": {
+      "bytes": 1039224,
+      "sha256": "dcbb26e2f73a1a4ea1daa8d76d5660c1df5138ac5bcaef7c6608ea451b889b49",
+      "byte_identical": true
+    },
+    "examples/layer0_vertical/top_spine/EXPORTS.json": {
+      "bytes": 11736,
+      "sha256": "42749c9690c938fdba1be9caa01ceff3c39f8a25c4c1d41dc30efa817238e310",
+      "byte_identical": true
+    },
+    "examples/layer0_vertical/top_spine/SOURCE-CHECK.json": {
+      "bytes": 1580,
+      "sha256": "4bc64591ea738a0932553fed86de676a171a8bf4a300d32ff2b4eb28a0b3004d",
+      "byte_identical": true
+    },
+    "examples/layer0_vertical/top_spine/SOURCE-REVIEW.json": {
+      "bytes": 7301,
+      "sha256": "98d7846a1c7883d7c96f911093536484b793d22c2ba7e3696eafd71abc4455db",
+      "byte_identical": true
+    },
+    "examples/layer0_vertical/top_spine/IO-CHANNEL-COVERAGE.json": {
+      "bytes": 2526,
+      "sha256": "579b1336154732fda2c4b9308d503ca0239de2af221c250b6d0f716522c43ca3",
+      "byte_identical": true
+    },
+    "examples/layer0_vertical/top_spine/COMPILE-INTENT.json": {
+      "bytes": 647,
+      "sha256": "66ddea8e3abc5b5e95922feb72ee2bac2e6c6ba23e2f5ad3d16051c2594761d5",
+      "byte_identical": true
+    },
+    "examples/layer0_vertical/top_spine/host_mapping.py": {
+      "bytes": 8140,
+      "sha256": "d92560d4b7893adde5cc6795bd803b74808d3762af31324230996aa1b9e94378",
+      "byte_identical": true
+    },
+    "examples/layer0_vertical/top_spine/weight_packing.py": {
+      "bytes": 1956,
+      "sha256": "e6f0d40574c4d4ce897d95c1f7d121152769ef4a553ecdc6fcb04d0de87224c9",
+      "byte_identical": true
+    },
+    "examples/layer0_vertical/top_spine/checkpoint.py": {
+      "bytes": 1196,
+      "sha256": "11126e1d898d3fcdf5800601dc663c8d7b1f1bc530efad82dff394364a971291",
+      "byte_identical": true
+    },
+    "examples/layer0_vertical/top_spine/mlp_lowering.py": {
+      "bytes": 10317,
+      "sha256": "6c7801f3f0e5b4769178762dd39a1e10ab2bc1816b16d3916799417d0f08d7d1",
+      "byte_identical": true
+    },
+    "examples/layer0_vertical/top_spine/mlp-spec.json": {
+      "bytes": 2326,
+      "sha256": "abff725aa9e23d16cb78f656947c9a50b8a39cda793cd858b2185ab38dcc7c02",
+      "byte_identical": true
+    },
+    "examples/layer0_vertical/top_spine/MLP-LOWERING.json": {
+      "bytes": 66607,
+      "sha256": "3047bc9cbfae4812c69ca750f5b9847cf40f095f5561c665f1a2fb3d59e32a27",
+      "byte_identical": true
+    },
+    "examples/layer0_vertical/top_spine/INTEGRATION.md": {
+      "bytes": 3511,
+      "sha256": "a3ceb24bbba04bcd96856b79a356b162fa3a7a99f6397b865afc98163729123c",
+      "byte_identical": true
+    }
+  },
+  "compiled": true,
+  "runtime": false,
+  "numerically_accepted": false
+}

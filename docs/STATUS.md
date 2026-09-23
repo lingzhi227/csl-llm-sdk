@@ -2,6 +2,20 @@
 
 Updated September 23, 2026 UTC.
 
+The complete original Layer0 [top-spine vertical artifact](LAYER0-VERTICAL-TOP.md)
+has scoped actual static acceptance:30×1160/34800 PEs/401469 banks,304-byte
+remaining declared SRAM margin and16-channel peripheral identity. The first
+bottom-spine route regression is preserved and corrected in source geometry;
+no latency improvement is measured. Physical original Layer0 numerical/state
+qualification, actual adjacent-layer transfer and full-model inference remain open.
+
+The first top-spine runtime attempt timed out at the fixed 240-second startup
+limit: environment context returned at 170.13 seconds and device start began
+at 171.14 seconds without returning. It produced zero model H2D events, launches
+or neural captures. The owned job was cancelled, original processes reaped and
+system release independently verified. Original failure evidence is preserved;
+the startup cause remains unresolved. This is not a Layer0 numerical result.
+
 The [finite dense-transport fixture](DENSE-TRANSPORT-FINITE136.md) is accepted
 on physical WSE-3: 136 PEs, positions 0/1/reset/0, complete rows, retained
 parameters and stable ownership boundaries. Independent reconstruction from

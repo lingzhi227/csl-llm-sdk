@@ -1,0 +1,81 @@
+// Complete-layer normalization/residual owner. Source-only, uncompiled.
+// One instance owns either input norm plus mixer residual, or post-mixer norm
+// plus MLP residual. The two original gain banks live on distinct physical PEs.
+param on_normalized:fn()void;
+param on_residual:fn()void;
+const kernel=@import_module("rms_retained.csl",.{.length=5120});
+const collector=@import_module("vector_collect.csl",.{.groups=40,.on_complete=collected});
+var gains=@zeros([5120]u16);
+var inout=@zeros([5120]u16);
+var saved=@zeros([5120]u16);
+var stats=@zeros([4]f32);
+var identity=@zeros([4]u32);
+// 0 idle, 1 receiving hidden, 2 serving normalized chunks, 3 collecting
+// projection result, 4 serving the residual output to the next norm owner.
+var state:u16=0;
+var served:u16=0;
+var residual_kind:u32=0;
+var residual_phase:u16=0;
+var residual_first_group:u16=0;
+var normalized_tokens:u32=0;
+var residual_tokens:u32=0;
+var math_pending:bool=false;
+
+fn begin(request:u32,reset:u32,position:u32,stage:u32,hidden_kind:u32,
+         hidden_phase:u16,projection_kind:u32,projection_phase:u16,first_group:u16) void {
+ prepare_loaded(request,reset,position,stage,projection_kind,projection_phase,first_group);
+ collector.begin(&inout,request,reset,position,stage,hidden_kind,hidden_phase,0);
+}
+
+// Standalone layer input is uploaded before compute. The same owner can instead
+// receive a previous layer's residual through begin/receive in a complete stage.
+fn prepare_loaded(request:u32,reset:u32,position:u32,stage:u32,
+                  projection_kind:u32,projection_phase:u16,first_group:u16) void {
+ @assert(state==0);
+ identity[0]=request;identity[1]=reset;identity[2]=position;identity[3]=stage;
+ residual_kind=projection_kind;residual_phase=projection_phase;residual_first_group=first_group;
+ served=0;state=1;
+}
+
+fn normalize_loaded() void {@assert(state==1 and !collector.active);collected();}
+
+// The standalone output has been retained through the previous all-PE command
+// barrier and host readback. Full stages use copy_chunk to release it instead.
+fn retire_host_output() void {@assert(state==4 and served==0);state=0;}
+
+fn receive(data:[*]u32,length:u16) void {
+ @assert(state==1 or state==3);collector.receive(data,length);
+}
+
+// RX callbacks only mark completion; the wrapper schedules math after TX/RX release.
+fn collected() void {@assert(!math_pending);math_pending=true;}
+fn service() void {
+ if(!math_pending){return;}math_pending=false;
+ if(state==1){
+  for(@range(u16,5120))|i|{saved[i]=inout[i];}
+  kernel.compute(&inout,&gains,&stats);
+  served=0;state=2;normalized_tokens+=1;on_normalized();
+ }else{
+  @assert(state==3);kernel.residual(&inout,&saved);
+  served=0;state=4;residual_tokens+=1;on_residual();
+ }
+}
+
+// Synchronously copy an entire chunk into the caller's independently retained
+// buffer. Later packet source completion releases that buffer, not this vector.
+// The request envelope is checked here even when its sender was already checked
+// by the PE wrapper. Only ordered, unique chunks can release the inout lifetime.
+fn copy_chunk(request:u32,reset:u32,position:u32,stage:u32,
+              offset:u16,destination:[*]u16) void {
+ @assert((state==2 or state==4) and served<40 and offset==served*128);
+ @assert(request==identity[0] and reset==identity[1] and position==identity[2] and stage==identity[3]);
+ for(@range(u16,128))|i|{destination[i]=inout[offset+i];}
+ served+=1;
+ if(served==40){
+  if(state==2){
+   state=3;
+   collector.begin(&inout,identity[0],identity[1],identity[2],identity[3],
+                   residual_kind,residual_phase,residual_first_group);
+  }else{state=0;}
+ }
+}

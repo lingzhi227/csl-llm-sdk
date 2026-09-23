@@ -1,0 +1,45 @@
+// A complete128-value head joins four32-value recurrent outputs, then gated RMS.
+// Input completeness and static packet leases are checked by the graph wrapper.
+// No transport resources are bound here.
+const scalar=@import_module("gate_kernel.csl");
+const gated=@import_module("gated_kernel.csl");
+var query=@zeros([128]f32);var key=@zeros([128]f32);var value=@zeros([128]f32);
+var raw_gate=@zeros([128]u16);var gains=@zeros([128]u16);
+var a:u16=0;var b:u16=0;var A_log:u16=0;var dt_bias:u16=0;
+var gate_stages=@zeros([15]f32);var beta_bits=@zeros([1]u16);
+var recurrent_output=@zeros([128]u16);
+var stages=@zeros([640]f32);var casts=@zeros([384]u16);var stats=@zeros([4]f32);
+var serial:u32=0;var generation:u32=1;var position:u32=0;
+var active:bool=false;var output_owned:bool=false;var joined:u16=0;
+fn expand(raw:u16) f32 {return @bitcast(f32,@as(u32,raw)<<16);}
+fn begin(next_serial:u32,next_generation:u32,next_position:u32) void {
+ @assert(!active and !output_owned and next_serial==serial+1 and next_generation==generation and next_position==position);
+ gate_stages[11]=expand(a);gate_stages[12]=expand(b);
+ gate_stages[13]=expand(A_log);gate_stages[14]=expand(dt_bias);
+ scalar.compute_gates(&gate_stages,&beta_bits);
+ serial=next_serial;active=true;joined=0;
+}
+fn accept_shard(shard:u16,data:[*]u16,expected_serial:u32) void {
+ @assert(active and !output_owned and expected_serial==serial and shard<4);
+ const bit:u16=@as(u16,1)<<shard;@assert((joined&bit)==0);
+ for(@range(u16,32))|i|{recurrent_output[shard*32+i]=data[i];}
+ commit_shard(shard,expected_serial);
+}
+// Packet fragments have already been copied into this shard's own bank.
+// Commit metadata separately to avoid a redundant overlapping self-copy.
+fn commit_shard(shard:u16,expected_serial:u32) void {
+ @assert(active and !output_owned and expected_serial==serial and shard<4);
+ const bit:u16=@as(u16,1)<<shard;@assert((joined&bit)==0);
+ joined|=bit;
+ if(joined==15){
+  gated.compute(&recurrent_output,&gains,&raw_gate,&stages,&casts,&stats);
+  active=false;output_owned=true;position+=1;
+ }
+}
+fn release_output(expected_serial:u32) void {
+ @assert(output_owned and !active and serial==expected_serial);output_owned=false;
+}
+fn reset_after_global_quiescence(next_generation:u32) void {
+ @assert(!active and !output_owned and next_generation==generation+1);
+ generation=next_generation;position=0;joined=0;
+}

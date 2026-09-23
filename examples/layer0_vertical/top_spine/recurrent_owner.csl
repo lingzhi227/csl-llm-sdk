@@ -1,0 +1,31 @@
+// Full128-key x32-value FP32 DeltaNet owner; four concatenate per value head.
+// Explicit arithmetic DSR3/4; actual SDK002 also emits implicit DSR1 operations.
+// The wrapper must complete packet TX before math/reset, then hold TX until
+// synchronous arithmetic returns. No legacy transport/task imports.
+const kernel=@import_module("recurrent_value32.csl");
+var matrix=@zeros([4096]f32);
+var query=@zeros([128]f32);var key=@zeros([128]f32);
+var value=@zeros([32]f32);var prediction=@zeros([32]f32);
+var delta=@zeros([32]f32);var output=@zeros([32]f32);
+var output_bf16=@zeros([32]u16);
+var beta:f32=0.0;var decay:f32=1.0;
+var serial:u32=0;var generation:u32=1;var position:u32=0;
+var output_owned:bool=false;
+fn round_bf16(raw:u32) u16 {const odd:u32=(raw>>16)&1;return @as(u16,(raw+0x00007fff+odd)>>16);}
+fn compute(next_serial:u32,next_generation:u32,next_position:u32) void {
+ @assert(!output_owned and next_serial==serial+1 and next_generation==generation and next_position==position);
+ @assert(beta>=0.0 and beta<=1.0 and decay>=0.0 and decay<=1.0);
+ kernel.decay_predict(&matrix,&key,decay,&prediction);
+ kernel.correction(&value,&prediction,beta,&delta);
+ kernel.update_state(&matrix,&key,&delta);
+ kernel.reduce(&matrix,&query,&output);
+ for(@range(u16,32))|i|{output_bf16[i]=round_bf16(@bitcast(u32,output[i]));}
+ serial=next_serial;position+=1;output_owned=true;
+}
+fn release_output(expected_serial:u32) void {
+ @assert(output_owned and serial==expected_serial);output_owned=false;
+}
+fn reset_after_global_quiescence(next_generation:u32) void {
+ @assert(!output_owned and next_generation==generation+1);
+ kernel.reset(&matrix);generation=next_generation;position=0;
+}

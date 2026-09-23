@@ -1,0 +1,114 @@
+{
+  "status": "accepted_static_original_Layer0_top_spine_with_preserved_startup_failure",
+  "canonical_acceptance_sha256": "240b158066375eb992b64242878d02d9f0006461926956213be5d623bcf30bf7",
+  "source_acceptance_sha256": "83ff2ebceb3df4fe8058e2f4add97cc6480db342aa4a9603106763403ada769c",
+  "application": [
+    30,
+    1160
+  ],
+  "roles": {
+    "matrix": 31548,
+    "support": 460,
+    "router": 970,
+    "idle": 1822
+  },
+  "artifact": {
+    "bytes": 23703087,
+    "sha256": "64d9ad83ee8b6d35545f43755aaefdd36c9a45c1f383a10d2ad3299b0566e33b"
+  },
+  "compile_seconds": 354.90338574303314,
+  "actual_inventory": {
+    "application_files": 1508,
+    "application_bytes": 134283944,
+    "PEs": 34800,
+    "coordinate_banks": 401469,
+    "max_ordinary_plus4096": 47824,
+    "sram_sha256": "b650d72e89e331dd5302438d1c295795179e1cdc8cfb4b5b727c133479f7dd29",
+    "compiled_sha256": "95eef273ce313d7cbaddf36b0a7989db6e47fdb28e8b948347d32607eec1ada3"
+  },
+  "sram_ceiling_including4096": 48128,
+  "remaining_declared_margin": 304,
+  "dynamic_stack_peak_proven": false,
+  "peripheral": {
+    "members": 138,
+    "bytes": 10919669,
+    "all_bytes_equal_compile001": true,
+    "west_demux": 16,
+    "east_mux": 16,
+    "height_bands": [
+      65,
+      73,
+      73,
+      73,
+      73,
+      73,
+      73,
+      73,
+      73,
+      73,
+      73,
+      73,
+      73,
+      73,
+      73,
+      73
+    ],
+    "separate_SDK_internal_decoder_not_repeated": true
+  },
+  "actual_app_decode": {
+    "instructions": 2702073,
+    "full_report_bytes": 68208449,
+    "full_report_sha256": "d489e5aa6570eaeaac8961e5959fd4ef88ab9fe977cb89e9902b89ac8acea76d"
+  },
+  "emitted_resource_review": {
+    "bytes": 81449,
+    "sha256": "b7da6987d36e9d87b9febb150bc940e3053a15b2bda0d34d60629f0568a2a970",
+    "task_models": 14,
+    "resource_models": 15,
+    "exact_DSR_operation_signatures_vs_accepted_horizontal": true,
+    "endpoint_fence_programs": 31,
+    "endpoint_fence_PEs": 941
+  },
+  "packet_geometry": {
+    "same_scope_packets": 9157,
+    "horizontal_hops": 4134058,
+    "superseded_bottom_hops": 6287604,
+    "top_hops": 2819067,
+    "top_max_flow_hops": 1576,
+    "horizontal_max_flow_hops": 1544,
+    "measured_latency": false
+  },
+  "packet_geometry_scope": "Fixed128-byte packets, endpoint links included; excludes frame, observer and collectives; not critical path or measured latency.",
+  "superseded_bottom": {
+    "artifact_sha256": "4f40073cd4eb9cb34840304af4f33fde1cc1e591ec69b5f10c37316dffa36103",
+    "packet_hops": 6287604,
+    "static_resource_baseline_only": true,
+    "runtime": false
+  },
+  "scope": "Actual compile, SRAM plus declared4096 stack, per-PE bank extents/alignment/disjointness, actual tasks/initial masks/DSR operation inventories/endpoint entry fences and identical installed16channel peripheral programs. Not exhaustive CFG, dynamic stack/lifetime, physical progress, numerical or performance proof.",
+  "neural_epochs": 0,
+  "full_model": false,
+  "physical_runtime": true,
+  "measured_speedup": false,
+  "physical_runtime_completed": false,
+  "physical_numerical_acceptance": false,
+  "startup_failure": {
+    "canonical_failure_acceptance_sha256": "c174460fd3ee4e0d190a6950151272e8385e3b7374bdd6781a82a4a58452079a",
+    "startup_limit_seconds": 240,
+    "context_enter_return_seconds": 170.1328066936694,
+    "device_start_enter_seconds": 171.14403877872974,
+    "device_start_returned": false,
+    "model_H2D_events": 0,
+    "launch_events": 0,
+    "raw_files": 0,
+    "neural_epochs": 0,
+    "original_supervisor_exit_code": 1,
+    "original_processes_reaped": true,
+    "owned_job_cancelled": true,
+    "independent_system_assignments_empty": true,
+    "cleanup_errors": [],
+    "original_evidence_preserved": true,
+    "root_cause_established": false,
+    "scope": "Startup timed out before model copies or neural execution. No numerical failure, inherent startup duration or performance claim."
+  }
+}

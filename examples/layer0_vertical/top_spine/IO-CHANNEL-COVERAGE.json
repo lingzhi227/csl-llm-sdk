@@ -1,0 +1,178 @@
+{
+  "scope": "Installed contiguous DMA bands; source geometry only, not measured concurrency or bandwidth",
+  "channels": 16,
+  "bands_half_open": [
+    [
+      0,
+      65
+    ],
+    [
+      65,
+      138
+    ],
+    [
+      138,
+      211
+    ],
+    [
+      211,
+      284
+    ],
+    [
+      284,
+      357
+    ],
+    [
+      357,
+      430
+    ],
+    [
+      430,
+      503
+    ],
+    [
+      503,
+      576
+    ],
+    [
+      576,
+      649
+    ],
+    [
+      649,
+      722
+    ],
+    [
+      722,
+      795
+    ],
+    [
+      795,
+      868
+    ],
+    [
+      868,
+      941
+    ],
+    [
+      941,
+      1014
+    ],
+    [
+      1014,
+      1087
+    ],
+    [
+      1087,
+      1160
+    ]
+  ],
+  "families": {
+    "matrix_uploads": {
+      "calls": 190,
+      "payload_host_bytes_per_band": [
+        42147840,
+        49668096,
+        49545216,
+        49250304,
+        49717248,
+        49545216,
+        49250304,
+        49545216,
+        49717248,
+        49201152,
+        49545216,
+        49668096,
+        49078272,
+        49225728,
+        47923200,
+        42295296
+      ],
+      "bands_per_call_histogram": {
+        "1": 175,
+        "2": 15
+      },
+      "max_payload_bands_per_copy": 2
+    },
+    "parameter_uploads": {
+      "calls": 5,
+      "payload_host_bytes_per_band": [
+        165888,
+        63872,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "bands_per_call_histogram": {
+        "1": 4,
+        "2": 1
+      },
+      "max_payload_bands_per_copy": 2
+    },
+    "config_uploads": {
+      "calls": 338,
+      "payload_host_bytes_per_band": [
+        85176,
+        99528,
+        99328,
+        98848,
+        99608,
+        99328,
+        98160,
+        98160,
+        98440,
+        97600,
+        98160,
+        98360,
+        97400,
+        97640,
+        95520,
+        86360
+      ],
+      "bands_per_call_histogram": {
+        "16": 1,
+        "1": 306,
+        "2": 30,
+        "7": 1
+      },
+      "max_payload_bands_per_copy": 16
+    },
+    "persistent_exports": {
+      "calls": 2,
+      "payload_host_bytes_per_band": [
+        124928,
+        137216,
+        1196032,
+        1196032,
+        655360,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "bands_per_call_histogram": {
+        "2": 1,
+        "4": 1
+      },
+      "max_payload_bands_per_copy": 4
+    }
+  }
+}

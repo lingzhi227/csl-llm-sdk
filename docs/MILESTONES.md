@@ -1,5 +1,16 @@
 # Accepted milestones
 
+### September23,2026: complete original Layer0 vertical static qualification
+
+The top-spine30×1160 program passes actual compiled resource checks for34800 PEs
+and31548 original matrix tiles. Packet-tree hops fall from the superseded bottom
+layout6287604 to2819067 for the same messages; this is a source geometry metric,
+not measured latency. Actual SRAM plus4096-byte reserve peaks at47824/48128.
+The16-channel peripheral is independently matched byte-for-byte to the prior
+vertical compile. [Source and scope](LAYER0-VERTICAL-TOP.md) preserve the
+bottom regression and its correction. Layer0 physical numerical execution,
+checkpoint control restore and full-model inference remain open.
+
 Only accepted results are listed below. Unresolved integration work and the remaining scope are tracked in [implementation status](STATUS.md).
 
 ## Dense transport with arithmetic · Finite physical qualification accepted · September 23, 2026 (UTC)

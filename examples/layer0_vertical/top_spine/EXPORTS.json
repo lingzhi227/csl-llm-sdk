@@ -1,0 +1,601 @@
+{
+  "application": [
+    30,
+    1160
+  ],
+  "exports": [
+    {
+      "name": "transport_config",
+      "dtype": "u16",
+      "expression": "&packets.config",
+      "roles": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "count": 2
+    },
+    {
+      "name": "transport_status",
+      "dtype": "u32",
+      "expression": "&packets.status",
+      "roles": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "count": 8
+    },
+    {
+      "name": "route",
+      "dtype": "u16",
+      "expression": "&route",
+      "roles": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "count": 4
+    },
+    {
+      "name": "state",
+      "dtype": "u32",
+      "expression": "&state",
+      "roles": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "count": 16
+    },
+    {
+      "name": "observer",
+      "dtype": "u32",
+      "expression": "if(sink) &observer.snapshot else &unused32",
+      "roles": [
+        7
+      ],
+      "count": 32
+    },
+    {
+      "name": "weights",
+      "dtype": "u32",
+      "expression": "if(matrix) &lane.weight_storage else &unused32",
+      "roles": [
+        1
+      ],
+      "count": 6144
+    },
+    {
+      "name": "descriptor",
+      "dtype": "u16",
+      "expression": "if(matrix) &lane.descriptor else &unused16",
+      "roles": [
+        1
+      ],
+      "count": 6
+    },
+    {
+      "name": "input",
+      "dtype": "f32",
+      "expression": "if(matrix) &lane.input else &unusedf",
+      "roles": [
+        1
+      ],
+      "count": 96
+    },
+    {
+      "name": "active_input",
+      "dtype": "f32",
+      "expression": "if(matrix) &lane.active_input else &unusedf",
+      "roles": [
+        1
+      ],
+      "count": 96
+    },
+    {
+      "name": "partial",
+      "dtype": "f32",
+      "expression": "if(matrix) &lane.partial else &unusedf",
+      "roles": [
+        1
+      ],
+      "count": 128
+    },
+    {
+      "name": "result",
+      "dtype": "f32",
+      "expression": "if(matrix) &lane.result else &unusedf",
+      "roles": [
+        1
+      ],
+      "count": 128
+    },
+    {
+      "name": "lane_counters",
+      "dtype": "u32",
+      "expression": "if(matrix) &lane.counters else &unused32",
+      "roles": [
+        1
+      ],
+      "count": 4
+    },
+    {
+      "name": "rounded",
+      "dtype": "u16",
+      "expression": "if(root) &lane.rounded else &unused16",
+      "roles": [
+        "matrix_root"
+      ],
+      "count": 128
+    },
+    {
+      "name": "hidden",
+      "dtype": "u16",
+      "expression": "if(pre or post) &norm.inout else &unused16",
+      "roles": [
+        2,
+        3
+      ],
+      "count": 5120
+    },
+    {
+      "name": "norm_gains",
+      "dtype": "u16",
+      "expression": "if(pre or post) &norm.gains else &unused16",
+      "roles": [
+        2,
+        3
+      ],
+      "count": 5120
+    },
+    {
+      "name": "norm_saved",
+      "dtype": "u16",
+      "expression": "if(pre or post) &norm.saved else &unused16",
+      "roles": [
+        2,
+        3
+      ],
+      "count": 5120
+    },
+    {
+      "name": "norm_stats",
+      "dtype": "f32",
+      "expression": "if(pre or post) &norm.stats else &unusedf",
+      "roles": [
+        2,
+        3
+      ],
+      "count": 4
+    },
+    {
+      "name": "mlp_gate",
+      "dtype": "u16",
+      "expression": "if(mlp) &product.gate else &unused16",
+      "roles": [
+        5
+      ],
+      "count": 128
+    },
+    {
+      "name": "mlp_up",
+      "dtype": "u16",
+      "expression": "if(mlp) &product.up else &unused16",
+      "roles": [
+        5
+      ],
+      "count": 128
+    },
+    {
+      "name": "mlp_product",
+      "dtype": "u16",
+      "expression": "if(mlp) &product.product else &unused16",
+      "roles": [
+        5
+      ],
+      "count": 128
+    },
+    {
+      "name": "mlp_silu",
+      "dtype": "u16",
+      "expression": "if(mlp) &product.silu else &unused16",
+      "roles": [
+        5
+      ],
+      "count": 128
+    },
+    {
+      "name": "mlp_exponential",
+      "dtype": "f32",
+      "expression": "if(mlp) &product.exponential else &unusedf",
+      "roles": [
+        5
+      ],
+      "count": 128
+    },
+    {
+      "name": "mlp_sigmoid",
+      "dtype": "f32",
+      "expression": "if(mlp) &product.sigmoid else &unusedf",
+      "roles": [
+        5
+      ],
+      "count": 128
+    },
+    {
+      "name": "mlp_activation_fp32",
+      "dtype": "f32",
+      "expression": "if(mlp) &product.activation_fp32 else &unusedf",
+      "roles": [
+        5
+      ],
+      "count": 128
+    },
+    {
+      "name": "mlp_product_fp32",
+      "dtype": "f32",
+      "expression": "if(mlp) &product.product_fp32 else &unusedf",
+      "roles": [
+        5
+      ],
+      "count": 128
+    },
+    {
+      "name": "conv_weights",
+      "dtype": "u16",
+      "expression": "if(convolution) &node.conv.weights else &unused16",
+      "roles": [
+        8
+      ],
+      "count": 512
+    },
+    {
+      "name": "conv_history",
+      "dtype": "u16",
+      "expression": "if(convolution) &node.conv.history else &unused16",
+      "roles": [
+        8
+      ],
+      "count": 512
+    },
+    {
+      "name": "conv_input",
+      "dtype": "u16",
+      "expression": "if(convolution) &node.conv.input else &unused16",
+      "roles": [
+        8
+      ],
+      "count": 128
+    },
+    {
+      "name": "conv_stages",
+      "dtype": "f32",
+      "expression": "if(convolution) &node.conv.stages else &unusedf",
+      "roles": [
+        8
+      ],
+      "count": 384
+    },
+    {
+      "name": "conv_casts",
+      "dtype": "u16",
+      "expression": "if(convolution) &node.conv.casts else &unused16",
+      "roles": [
+        8
+      ],
+      "count": 256
+    },
+    {
+      "name": "conv_unscaled",
+      "dtype": "f32",
+      "expression": "if(convolution) &node.conv.unscaled else &unusedf",
+      "roles": [
+        8
+      ],
+      "count": 128
+    },
+    {
+      "name": "conv_output",
+      "dtype": "f32",
+      "expression": "if(convolution) &node.conv.output else &unusedf",
+      "roles": [
+        8
+      ],
+      "count": 128
+    },
+    {
+      "name": "conv_stats",
+      "dtype": "f32",
+      "expression": "if(convolution) &node.conv.stats else &unusedf",
+      "roles": [
+        8
+      ],
+      "count": 4
+    },
+    {
+      "name": "head_parameters",
+      "dtype": "u16",
+      "expression": "&head_parameters",
+      "roles": [
+        4
+      ],
+      "count": 2
+    },
+    {
+      "name": "head_query",
+      "dtype": "f32",
+      "expression": "if(head) &node.head.query else &unusedf",
+      "roles": [
+        4
+      ],
+      "count": 128
+    },
+    {
+      "name": "head_key",
+      "dtype": "f32",
+      "expression": "if(head) &node.head.key else &unusedf",
+      "roles": [
+        4
+      ],
+      "count": 128
+    },
+    {
+      "name": "head_value",
+      "dtype": "f32",
+      "expression": "if(head) &node.head.value else &unusedf",
+      "roles": [
+        4
+      ],
+      "count": 128
+    },
+    {
+      "name": "head_raw_gate",
+      "dtype": "u16",
+      "expression": "if(head) &node.head.raw_gate else &unused16",
+      "roles": [
+        4
+      ],
+      "count": 128
+    },
+    {
+      "name": "head_gains",
+      "dtype": "u16",
+      "expression": "if(head) &node.head.gains else &unused16",
+      "roles": [
+        4
+      ],
+      "count": 128
+    },
+    {
+      "name": "head_gate_stages",
+      "dtype": "f32",
+      "expression": "if(head) &node.head.gate_stages else &unusedf",
+      "roles": [
+        4
+      ],
+      "count": 15
+    },
+    {
+      "name": "head_beta_bits",
+      "dtype": "u16",
+      "expression": "if(head) &node.head.beta_bits else &unused16",
+      "roles": [
+        4
+      ],
+      "count": 1
+    },
+    {
+      "name": "head_recurrent_output",
+      "dtype": "u16",
+      "expression": "if(head) &node.head.recurrent_output else &unused16",
+      "roles": [
+        4
+      ],
+      "count": 128
+    },
+    {
+      "name": "head_stages",
+      "dtype": "f32",
+      "expression": "if(head) &node.head.stages else &unusedf",
+      "roles": [
+        4
+      ],
+      "count": 640
+    },
+    {
+      "name": "head_casts",
+      "dtype": "u16",
+      "expression": "if(head) &node.head.casts else &unused16",
+      "roles": [
+        4
+      ],
+      "count": 384
+    },
+    {
+      "name": "head_stats",
+      "dtype": "f32",
+      "expression": "if(head) &node.head.stats else &unusedf",
+      "roles": [
+        4
+      ],
+      "count": 4
+    },
+    {
+      "name": "recurrent_matrix",
+      "dtype": "f32",
+      "expression": "if(recurrent) &node.rec.matrix else &unusedf",
+      "roles": [
+        9
+      ],
+      "count": 4096
+    },
+    {
+      "name": "recurrent_query",
+      "dtype": "f32",
+      "expression": "if(recurrent) &node.rec.query else &unusedf",
+      "roles": [
+        9
+      ],
+      "count": 128
+    },
+    {
+      "name": "recurrent_key",
+      "dtype": "f32",
+      "expression": "if(recurrent) &node.rec.key else &unusedf",
+      "roles": [
+        9
+      ],
+      "count": 128
+    },
+    {
+      "name": "recurrent_value",
+      "dtype": "f32",
+      "expression": "if(recurrent) &node.rec.value else &unusedf",
+      "roles": [
+        9
+      ],
+      "count": 32
+    },
+    {
+      "name": "recurrent_prediction",
+      "dtype": "f32",
+      "expression": "if(recurrent) &node.rec.prediction else &unusedf",
+      "roles": [
+        9
+      ],
+      "count": 32
+    },
+    {
+      "name": "recurrent_delta",
+      "dtype": "f32",
+      "expression": "if(recurrent) &node.rec.delta else &unusedf",
+      "roles": [
+        9
+      ],
+      "count": 32
+    },
+    {
+      "name": "recurrent_output",
+      "dtype": "f32",
+      "expression": "if(recurrent) &node.rec.output else &unusedf",
+      "roles": [
+        9
+      ],
+      "count": 32
+    },
+    {
+      "name": "recurrent_output_bf16",
+      "dtype": "u16",
+      "expression": "if(recurrent) &node.rec.output_bf16 else &unused16",
+      "roles": [
+        9
+      ],
+      "count": 32
+    },
+    {
+      "name": "linear_source_counters",
+      "dtype": "u32",
+      "expression": "if(producer) &source.counters else &unused32",
+      "roles": [
+        "linear_matrix_root",
+        4,
+        8,
+        9
+      ],
+      "count": 6
+    },
+    {
+      "name": "linear_receiver_counters",
+      "dtype": "u32",
+      "expression": "if(neural) &receiver.counters else &unused32",
+      "roles": [
+        4,
+        8,
+        9
+      ],
+      "count": 5
+    },
+    {
+      "name": "linear_receive_offsets",
+      "dtype": "u16",
+      "expression": "if(neural) &receiver.offsets else &unused16",
+      "roles": [
+        4,
+        8,
+        9
+      ],
+      "count": {
+        "4": 10,
+        "8": 1,
+        "9": 1
+      }
+    },
+    {
+      "name": "linear_origin_seen",
+      "dtype": "u16",
+      "expression": "if(origin) &credits.seen else &unused16",
+      "roles": [
+        6
+      ],
+      "count": 450
+    },
+    {
+      "name": "linear_origin_active",
+      "dtype": "u16",
+      "expression": "if(origin) &credits.active else &unused16",
+      "roles": [
+        6
+      ],
+      "count": 450
+    },
+    {
+      "name": "linear_origin_next",
+      "dtype": "u16",
+      "expression": "if(origin) &credits.next else &unused16",
+      "roles": [
+        6
+      ],
+      "count": 450
+    },
+    {
+      "name": "frame_counters",
+      "dtype": "u32",
+      "expression": "if(origin) &frame.counters else &unused32",
+      "roles": [
+        6
+      ],
+      "count": 5
+    }
+  ],
+  "typed_exports": 60,
+  "compiled": false
+}

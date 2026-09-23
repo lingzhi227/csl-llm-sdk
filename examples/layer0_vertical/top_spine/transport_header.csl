@@ -1,0 +1,13 @@
+// New dense-stage envelope. Incompatible with the old six-bit-y header.
+// Header plus31 application words still form exactly32 ordinary u32 wavelets.
+const MAGIC:u32=0xa8000000;
+fn encode(x:u16,y:u16,length:u16) u32 {
+ @assert(x<749 and y<1160 and length>0 and length<=31);
+ return MAGIC|(@as(u32,length)<<21)|(@as(u32,y)<<10)|@as(u32,x);
+}
+fn x(word:u32) u16 {return @as(u16,word&1023);}
+fn y(word:u32) u16 {return @as(u16,(word>>10)&2047);}
+fn length(word:u32) u16 {return @as(u16,(word>>21)&31);}
+fn valid(word:u32) bool {
+ return (word&0xfc000000)==MAGIC and x(word)<749 and y(word)<1160 and length(word)>0;
+}
