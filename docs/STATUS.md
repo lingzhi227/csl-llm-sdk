@@ -1,5 +1,13 @@
 # Implementation status
 
+The latest accepted milestone is [original vertical Layer3](LAYER3-VERTICAL.md):
+29×1160 physical positions 0/1/reset/0, original weights, all conditional operator,
+KV/state/transport/archive gates, and exact reset replay. All three final hidden
+vectors are bit-exact with accepted horizontal Layer3. Nominal differences remain
+346/1,150/346 of 5,120; context8 and finite positions remain explicit. The original
+compile inspector failure is preserved and corrected inspection used the same
+artifact without recompilation. All 11,341 raw files are saved and hashed.
+
 Updated September 23, 2026 UTC.
 
 The complete original [vertical Layer0](LAYER0-VERTICAL-PHYSICAL.md) now has
@@ -12,8 +20,8 @@ preserved; the successful attempt uses an 8 GiB worker and 16 channels without
 proving an OOM cause or minimum memory requirement. No full-model, propagated
 whole-layer error or matched token-performance claim is made.
 
-Current work is original Layer3 vertical qualification, actual 0→1→2→3 hidden
-flow and full checkpoint/control restoration for one physical CS3 reused across
+Current work is actual wafer-resident 0→1→2→3 hidden flow, parameterized layer
+lowering and full checkpoint/control restoration for one physical CS3 reused across
 20/24/20 stages. All 64 layers and full-vocabulary generation remain open.
 
 The [finite dense-transport fixture](DENSE-TRANSPORT-FINITE136.md) is accepted
@@ -38,8 +46,7 @@ pass the complete conditional operator audit and independent state/transport
 reconstruction. The original outer supervisor exit 1 and missing COMPLETE remain
 preserved; a separately admitted postcapture audit passes. Nominal CPU BF16
 mismatches are 346/1,150/346 of 5,120. Bitwise parity and a propagated whole-layer
-enclosure are not established. Vertical Layer3 migration and actual 0→1→2→3
-hidden flow are next; all 64 layers, full-vocabulary logits, generated tokens and
+enclosure are not established. Actual 0→1→2→3 hidden flow and checkpoint restore are next; all 64 layers, full-vocabulary logits, generated tokens and
 three-stage checkpoint restoration remain unqualified.
 
 The following records retain the scope of earlier milestones.

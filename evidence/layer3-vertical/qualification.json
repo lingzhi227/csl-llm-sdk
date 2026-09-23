@@ -1,0 +1,193 @@
+{
+  "status": "accepted_original_vertical_Layer3_two_causal_positions_and_device_reset_under_conditional_operator_contract",
+  "canonical_acceptance_sha256": "e6c62a1f0e0a141fa3d39568d7d9f19f12352c544d781d0980a3a3db7af79221",
+  "layer": 3,
+  "application": [
+    29,
+    1160
+  ],
+  "context_cap": 8,
+  "original_weights": true,
+  "runtime_manifest_sha256": "82d09a9d5d4aaa6fad172c4836080f7ab7dd29f2d6bd503caa04f9ecfa83bc0e",
+  "numeric_report": {
+    "bytes": 287340,
+    "sha256": "3c7da066110aa092517a60bc8f971df9e351c594dd89d50a77c95691d9ac48c4"
+  },
+  "numerical": {
+    "local_conditional_rows": 11741184,
+    "exact_FMA_samples": 91728,
+    "exact_FMA_multiply_slots": 8805888,
+    "nested_passed_checks": 2592,
+    "all_operator_gates": true,
+    "control": {
+      "all_states": true,
+      "initial_full_KV_zero": true,
+      "reset_retains_all_KV_bytes": true,
+      "all_transport": true,
+      "all_lifecycle": true,
+      "all_head_archives": true,
+      "hidden_reset_replay": true
+    },
+    "nominal": [
+      {
+        "serial": 1,
+        "position": 0,
+        "reference_row": 0,
+        "words": 5120,
+        "BF16_mismatches": 346,
+        "max_absolute_error": 0.00390625,
+        "output_sha256": "b5a97052d2f4118146a6b06c33958bbe831b049aef9ae406977621997711947d"
+      },
+      {
+        "serial": 2,
+        "position": 1,
+        "reference_row": 1,
+        "words": 5120,
+        "BF16_mismatches": 1150,
+        "max_absolute_error": 0.001953125,
+        "output_sha256": "d49456a56f637cad6af49771a001ec73ec0614cdfa717394b93cdedb46e527e6"
+      },
+      {
+        "serial": 3,
+        "position": 0,
+        "reference_row": 0,
+        "words": 5120,
+        "BF16_mismatches": 346,
+        "max_absolute_error": 0.00390625,
+        "output_sha256": "b5a97052d2f4118146a6b06c33958bbe831b049aef9ae406977621997711947d"
+      }
+    ],
+    "nominal_reference_sha256": "d234e62b73b345cce52aa52e4fbc048ef43e0008cfdfda8300034f884c352788",
+    "reset_bit_exact": true,
+    "three_final_hidden_outputs_bitexact_old_accepted_horizontal": true,
+    "controller_review_scope": "Controller reviewed qualified arithmetic and geometry adapters, verified original prepared payloads and actual ELF bindings, hashed every new raw file and journal, reviewed full audit and independently decoded reference/output BF16 values. No distinct second arithmetic engine or alternate per-PE sample was run for this vertical layout.",
+    "source_propagated_whole_layer_enclosure": false
+  },
+  "capture": {
+    "raw_files": 11341,
+    "raw_bytes": 201846780,
+    "copies": 13771,
+    "host_bytes": 2463237564,
+    "launches": 8,
+    "journal_events": 54723,
+    "capture_seconds": 110.46579438634217,
+    "pin": {
+      "bytes": 2475538,
+      "sha256": "2c31681b8a3317ce1e09430f7754270b1f26acd09bf6e8771ff390dae45df1fe"
+    }
+  },
+  "weight_upload": {
+    "copies": 252,
+    "host_bytes": 751435776,
+    "batches": 66,
+    "maximum_tasks": 4,
+    "maximum_retained_bytes": 36495360,
+    "channels": 16,
+    "server_concurrency_proved": false,
+    "measured_speedup": false
+  },
+  "boundary_scope": "Pinned original CPU reference Layer3 input rows0/1/0. Actual retained device KV between positions; no host arithmetic inside the layer. Not a four-layer chain or full-model autoregressive generation.",
+  "compiled": {
+    "manifest_sha256": "2b7b56ac30ccb487c2fb01456ffd9ad4dd73ca4d0d381732652932641130a079",
+    "artifact_sha256": "f8501873de534481af53882a1e0d982d8591246869741d669d77c9312b5568d8",
+    "artifact_bytes": 18633239,
+    "PEs": 33640,
+    "matrix_PEs": 30576,
+    "coordinate_banks": 448951,
+    "maximum_ordinary_plus4096": 48336,
+    "ceiling": 48640,
+    "margin": 304,
+    "task_entries": 15502,
+    "resource_models": 14,
+    "active_validator_PEs": 259,
+    "scalar_helper_programs": 49,
+    "scalar_helper_PEs": 611,
+    "historical_failure": {
+      "original_compile_driver_exit": 1,
+      "original_measurement_sha256": "96d197fcc4d16515bdb387a817236de796973e112a0345be56d47d9a6c2fc2fe",
+      "reason": "Inspector used48128 rather than prior admitted Layer3 policy48640. Compiler succeeded. Original source, failure and report unchanged; new host-only measurement on same artifact passed.",
+      "corrected_measurement_sha256": "0e1ff3ce2a3a57f1046226583ce59015e6b568e109897434fd634b84ceffb8cd",
+      "recompiles": 0
+    }
+  },
+  "physical": {
+    "normal_stop": true,
+    "owners_reaped": true,
+    "actual_assignments_empty": true,
+    "channels": 16,
+    "worker_memory_bytes": 8589934592,
+    "worker_peak_measured": false,
+    "guard_wall_seconds": 371.87862608162686,
+    "client_peak_RSS_bytes": 305946624
+  },
+  "offline_audit": {
+    "exit_code": 0,
+    "owners_reaped": true,
+    "SDK": false,
+    "guard_wall_seconds": 93.99951646616682,
+    "peak_RSS_bytes": 421638144
+  },
+  "backup": {
+    "status": "complete_disjoint_raw_union_and_all_original_roots_preserved",
+    "bundles": {
+      "compile": {
+        "files": 1203,
+        "bytes": 193355463,
+        "inventory": {
+          "bytes": 192464,
+          "sha256": "580983acfb74d17bc50bb148736869b2c5ba0b2db8bbe047e67f6e49149cd679"
+        }
+      },
+      "runtime0": {
+        "files": 4127,
+        "bytes": 97407205,
+        "inventory": {
+          "bytes": 643113,
+          "sha256": "1ac2842049b1592ef13b8c67b27147d52164b4a860f0efc421cdcd1587cceeca"
+        }
+      },
+      "runtime1": {
+        "files": 4002,
+        "bytes": 71676101,
+        "inventory": {
+          "bytes": 623198,
+          "sha256": "52e8fa74516c67f0414ce7024ff57abf105922b8c11a9f96e35e47e8f7fafcc2"
+        }
+      },
+      "runtime2": {
+        "files": 3343,
+        "bytes": 67008773,
+        "inventory": {
+          "bytes": 519511,
+          "sha256": "873e82403a68b33e6868202e6b7a0a374d6dfa34c085f9ce15b4daca17f13328"
+        }
+      }
+    },
+    "unique_files": 12671,
+    "unique_bytes": 424481588,
+    "raw_files": 11341,
+    "raw_bytes": 201846780,
+    "all11341_capture_hashes_bound": true,
+    "duplicate_files": [
+      "runtime/capture.json",
+      "runtime/runtime-manifest.json"
+    ],
+    "duplicate_instances": 4,
+    "device": 2049,
+    "lock_free": true,
+    "original_failed_compile_preserved": true,
+    "original_failed_resource_wrapper_preserved": true,
+    "Mac_binary_storage": false,
+    "SDK_invocations": 0
+  },
+  "limitations": [
+    "Finite two-position plus reset qualification; context8 only.",
+    "Original BF16 reference output is not bitwise identical. All disclosed deviations match old accepted horizontal Layer3; no propagated whole-layer/model error bound.",
+    "No adjacent-layer device handoff or host checkpoint reload in this run.",
+    "Capture timing includes diagnostic copies and host observation; no pure-wafer latency or matched performance conclusion.",
+    "Original compile inspector failure remains preserved; corrected review used admitted Layer3 ceiling without recompilation."
+  ],
+  "full_model": false,
+  "source_propagated_whole_layer_enclosure": false,
+  "matched_performance": false
+}

@@ -1,0 +1,55 @@
+// One independent bidirectional edge. RX buffer is owned until TX at another
+// port completes. No global output lease and no hardware multi-input merge.
+param enabled:bool;
+param input_color:u16;param output_color:u16;
+param queue_id:u16;param rx_resource:u16;param tx_resource:u16;
+param rx_task:local_task_id;param tx_task:local_task_id;param error_task:local_task_id;
+param on_receive:fn()void;param on_sent:fn()void;
+param healthy:fn()bool;param fail:fn(u32)void;
+const iq=@get_input_queue(queue_id);const oq=@get_output_queue(queue_id);
+const rd=@get_dsr(dsr_dest,rx_resource);const rs=@get_dsr(dsr_src1,rx_resource);
+const td=@get_dsr(dsr_dest,tx_resource);const ts=@get_dsr(dsr_src1,tx_resource);
+var buffer=@zeros([32]u32);
+var lease:u16=0; // free0, armed1, held2, forwarding3
+var tx_busy:bool=false;
+var received_count:u32=0;var sent_count:u32=0;
+fn arm() void {
+ if(!enabled or lease!=0 or !healthy()){fail(101);return;}
+ lease=1;
+ const dst=@get_dsd(mem1d_dsd,.{.base_address=&buffer,.extent=32});
+ const src=@get_dsd(fabin_dsd,.{.input_queue=iq,.extent=32,.simd_mode=.{.simd_off=true}});
+ @load_to_dsr(rd,dst);
+ @load_to_dsr(rs,src,.{.async=true,.activate=rx_task,.on_control=.{.activate=error_task},.ut_id=@get_ut_id(rx_resource)});
+ @mov32(rd,rs,.{.async=true});
+}
+fn forward() void {if(lease!=2 or !healthy()){fail(102);return;}lease=3;}
+fn release() void {
+ if(lease!=3 or !healthy()){fail(103);return;}
+ lease=0;arm();
+}
+fn send(source:[*]u32) void {
+ if(!enabled or tx_busy or !healthy()){fail(104);return;}
+ tx_busy=true;
+ const src=@get_dsd(mem1d_dsd,.{.base_address=source,.extent=32});
+ const dst=@get_dsd(fabout_dsd,.{.output_queue=oq,.extent=32,.simd_mode=.{.simd_off=true}});
+ @load_to_dsr(ts,src);
+ @load_to_dsr(td,dst,.{.async=true,.activate=tx_task,.ut_id=@get_ut_id(tx_resource)});
+ @mov32(td,ts,.{.async=true});
+}
+task received() void {
+ if(!healthy()){return;}
+ if(lease!=1){fail(105);return;}
+ lease=2;received_count+=1;on_receive();
+}
+task sent() void {
+ if(!healthy()){return;}
+ if(!tx_busy){fail(106);return;}
+ tx_busy=false;sent_count+=1;on_sent();
+}
+task control_error() void {fail(107);}
+comptime {if(enabled){
+ @initialize_queue(iq,.{.color=@get_color(input_color)});
+ @initialize_queue(oq,.{.color=@get_color(output_color)});
+ @bind_local_task(received,rx_task);@bind_local_task(sent,tx_task);
+ @bind_local_task(control_error,error_task);
+}}

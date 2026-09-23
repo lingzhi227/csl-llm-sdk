@@ -1,0 +1,463 @@
+{
+  "application": [
+    29,
+    1160
+  ],
+  "exports": [
+    {
+      "name": "state",
+      "dtype": "u32",
+      "count": 12,
+      "roles": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "bank": "state"
+    },
+    {
+      "name": "route",
+      "dtype": "u16",
+      "count": 4,
+      "roles": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "bank": "route"
+    },
+    {
+      "name": "native_status",
+      "dtype": "u32",
+      "count": 16,
+      "roles": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "bank": "native_status"
+    },
+    {
+      "name": "credit_status",
+      "dtype": "u32",
+      "count": 16,
+      "roles": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "bank": "credit_status"
+    },
+    {
+      "name": "transport_config",
+      "dtype": "u16",
+      "count": 2,
+      "roles": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "bank": "packets.config",
+      "bank_by_role": {
+        "9": "config"
+      }
+    },
+    {
+      "name": "transport_status",
+      "dtype": "u32",
+      "count": 8,
+      "roles": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "bank": "packets.status",
+      "bank_by_role": {
+        "9": "status"
+      },
+      "count_by_role": {
+        "9": 32
+      }
+    },
+    {
+      "name": "observer",
+      "dtype": "u32",
+      "count": 32,
+      "roles": [
+        7,
+        8
+      ],
+      "bank": "observer.snapshot",
+      "bank_by_role": {
+        "8": "head_observer.snapshot"
+      }
+    },
+    {
+      "name": "qk_archive",
+      "dtype": "u32",
+      "count": 960,
+      "roles": [
+        8
+      ],
+      "bank": "head_observer.archive_storage"
+    },
+    {
+      "name": "qk_archive_status",
+      "dtype": "u32",
+      "count": 16,
+      "roles": [
+        8
+      ],
+      "bank": "head_observer.archive.status"
+    },
+    {
+      "name": "weights",
+      "dtype": "u32",
+      "count": 6144,
+      "roles": [
+        1
+      ],
+      "bank": "lane.weight_storage"
+    },
+    {
+      "name": "descriptor",
+      "dtype": "u16",
+      "count": 6,
+      "roles": [
+        1
+      ],
+      "bank": "lane.descriptor"
+    },
+    {
+      "name": "input",
+      "dtype": "f32",
+      "count": 96,
+      "roles": [
+        1
+      ],
+      "bank": "lane.input"
+    },
+    {
+      "name": "active_input",
+      "dtype": "f32",
+      "count": 96,
+      "roles": [
+        1
+      ],
+      "bank": "lane.active_input"
+    },
+    {
+      "name": "partial",
+      "dtype": "f32",
+      "count": 128,
+      "roles": [
+        1
+      ],
+      "bank": "lane.partial"
+    },
+    {
+      "name": "result",
+      "dtype": "f32",
+      "count": 128,
+      "roles": [
+        1
+      ],
+      "bank": "lane.result"
+    },
+    {
+      "name": "lane_counters",
+      "dtype": "u32",
+      "count": 4,
+      "roles": [
+        1
+      ],
+      "bank": "lane.counters"
+    },
+    {
+      "name": "rounded",
+      "dtype": "u16",
+      "count": 128,
+      "roles": [
+        "matrix_root"
+      ],
+      "bank": "lane.rounded"
+    },
+    {
+      "name": "hidden",
+      "dtype": "u16",
+      "count": 5120,
+      "roles": [
+        2,
+        3
+      ],
+      "bank": "norm.inout"
+    },
+    {
+      "name": "norm_gains",
+      "dtype": "u16",
+      "count": 5120,
+      "roles": [
+        2,
+        3
+      ],
+      "bank": "norm.gains"
+    },
+    {
+      "name": "norm_saved",
+      "dtype": "u16",
+      "count": 5120,
+      "roles": [
+        2,
+        3
+      ],
+      "bank": "norm.saved"
+    },
+    {
+      "name": "norm_stats",
+      "dtype": "f32",
+      "count": 4,
+      "roles": [
+        2,
+        3
+      ],
+      "bank": "norm.stats"
+    },
+    {
+      "name": "qk_gains",
+      "dtype": "u16",
+      "count": 512,
+      "roles": [
+        4
+      ],
+      "bank": "attn.qk_weights"
+    },
+    {
+      "name": "frequencies",
+      "dtype": "f32",
+      "count": 32,
+      "roles": [
+        4
+      ],
+      "bank": "attn.frequencies"
+    },
+    {
+      "name": "cache",
+      "dtype": "u16",
+      "count": 4096,
+      "roles": [
+        4
+      ],
+      "bank": "attn.cache"
+    },
+    {
+      "name": "qk_input",
+      "dtype": "u16",
+      "count": 512,
+      "roles": [
+        4
+      ],
+      "bank": "attn.qk_input"
+    },
+    {
+      "name": "qk_output",
+      "dtype": "u16",
+      "count": 512,
+      "roles": [
+        4
+      ],
+      "bank": "attn.input"
+    },
+    {
+      "name": "qk_stats",
+      "dtype": "f32",
+      "count": 10,
+      "roles": [
+        4
+      ],
+      "bank": "attn.qk_stats"
+    },
+    {
+      "name": "attention_input",
+      "dtype": "u16",
+      "count": 1024,
+      "roles": [
+        4
+      ],
+      "bank": "attn.input"
+    },
+    {
+      "name": "attention_scores",
+      "dtype": "f32",
+      "count": 40,
+      "roles": [
+        4
+      ],
+      "bank": "attn.scores"
+    },
+    {
+      "name": "attention_score_casts",
+      "dtype": "u16",
+      "count": 24,
+      "roles": [
+        4
+      ],
+      "bank": "attn.score_casts"
+    },
+    {
+      "name": "attention_stats",
+      "dtype": "f32",
+      "count": 3,
+      "roles": [
+        4
+      ],
+      "bank": "attn.stats"
+    },
+    {
+      "name": "attention_stages",
+      "dtype": "f32",
+      "count": 1280,
+      "roles": [
+        4
+      ],
+      "bank": "attn.stages"
+    },
+    {
+      "name": "attention_casts",
+      "dtype": "u16",
+      "count": 768,
+      "roles": [
+        4
+      ],
+      "bank": "attn.casts"
+    },
+    {
+      "name": "qk_rms_stages",
+      "dtype": "f32",
+      "count": 1,
+      "roles": [],
+      "bank": "attn.rms_record",
+      "retired": true,
+      "reason": "Historical interface only; complete QK diagnostics come from the qualified archive, never this retired pointer"
+    },
+    {
+      "name": "mlp_gate",
+      "dtype": "u16",
+      "count": 128,
+      "roles": [
+        5
+      ],
+      "bank": "product.gate"
+    },
+    {
+      "name": "mlp_up",
+      "dtype": "u16",
+      "count": 128,
+      "roles": [
+        5
+      ],
+      "bank": "product.up"
+    },
+    {
+      "name": "mlp_product",
+      "dtype": "u16",
+      "count": 128,
+      "roles": [
+        5
+      ],
+      "bank": "product.product"
+    },
+    {
+      "name": "mlp_silu",
+      "dtype": "u16",
+      "count": 128,
+      "roles": [
+        5
+      ],
+      "bank": "product.silu"
+    },
+    {
+      "name": "mlp_exponential",
+      "dtype": "f32",
+      "count": 128,
+      "roles": [
+        5
+      ],
+      "bank": "product.exponential"
+    },
+    {
+      "name": "mlp_sigmoid",
+      "dtype": "f32",
+      "count": 128,
+      "roles": [
+        5
+      ],
+      "bank": "product.sigmoid"
+    },
+    {
+      "name": "mlp_activation",
+      "dtype": "f32",
+      "count": 128,
+      "roles": [
+        5
+      ],
+      "bank": "product.activation_fp32"
+    },
+    {
+      "name": "mlp_product_fp32",
+      "dtype": "f32",
+      "count": 128,
+      "roles": [
+        5
+      ],
+      "bank": "product.product_fp32"
+    },
+    {
+      "name": "frame_counters",
+      "dtype": "u32",
+      "count": 5,
+      "roles": [
+        6
+      ],
+      "bank": "frame.counters"
+    }
+  ],
+  "scope": "Source-role export extents; actual compiled arrays remain mandatory"
+}

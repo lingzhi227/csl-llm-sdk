@@ -1,5 +1,23 @@
 # Accepted milestones
 
+### Original vertical Layer3 · Physical attention and reset accepted · September 23, 2026
+
+The complete original-weight Layer3 executes positions 0/1/reset/0 in a
+29×1160 region: 30,576 matrix PEs, 24 attention heads and 136 MLP owners.
+All 11,741,184 conditional matrix rows, 91,728 predetermined exact FMA samples,
+state, transport and head-archive checks pass. The three final hidden vectors
+are bit-exact with the earlier accepted horizontal Layer3 outputs. Original
+nominal BF16 differences remain 346/1,150/346 of 5,120 values, with maximum
+absolute errors 0.00390625/0.001953125/0.00390625. Reset replay is bit-exact.
+
+All 11,341 raw files are durably preserved. The compiler succeeded; an original
+host inspector incorrectly applied Layer0's SRAM policy and failed. Its source,
+failure and report remain preserved. Corrected inspection of the same artifact
+passes the already-admitted Layer3 policy, without recompilation. This is finite
+context-8 conditional qualification, not full-model generation or performance.
+[Report](LAYER3-VERTICAL.md) · [Source](../examples/layer3_vertical) ·
+[Evidence](../evidence/layer3-vertical/qualification.json).
+
 ### Original vertical Layer0 · Physical positions and reset accepted · September 23, 2026
 
 The complete original-weight Layer0 executes positions 0 and 1, then device

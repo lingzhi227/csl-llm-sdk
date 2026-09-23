@@ -1,0 +1,3 @@
+// Physical support-router coordinates; application labels remain logical.
+fn x(label:u16) u16 {@assert(label<=2 or (label>=16 and label<176));return if(label==0) @as(u16,0) else if(label==2) @as(u16,28) else @as(u16,1);}
+fn y(label:u16) u16 {@assert(label<=2 or (label>=16 and label<176));return if(label==0) @as(u16,0) else if(label==1) @as(u16,3) else if(label==2) @as(u16,2) else if(label<40) @as(u16,4)+220*((label-16)/6)+2*((label-16)%6) else @as(u16,84)+label-40;}
