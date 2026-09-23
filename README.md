@@ -2,24 +2,25 @@
 
 **Building inference for open language models with handwritten Cerebras Systems Language (CSL), targeting sequential execution of three model stages on WSE-3.** We implement the numerical kernels, execution control and persistent model state, and use the Cerebras SDK to compile and run the device programs. The first target is **Qwen3.8-27B text inference**; the longer-term goal is a reusable SDK for related model architectures.
 
-**Latest accepted milestone:** original layers 0→1→2→3 execute real causal hidden
-handoffs on physical WSE-3. Positions 0/1/reset/0 pass conditional operator and
-state checks. A separate runtime reloads weights and a checkpoint; every one of
-39 semantic banks then matches uninterrupted position 1 bit-for-bit. See the
-[report](docs/FOUR-LAYER-FRESH-RESTORE.md).
+**Latest accepted milestone:** all 64 original decoder layers, final normalization
+and the complete 248,320-word head have checked original-bit preparations.
+The full original 20-layer first stage also compiles and passes complete static
+program, coordinate-bank and SRAM checks. See the
+[report](docs/SEQUENTIAL-PREPARATION-STAGE0-COMPILE.md).
 
-**Numerical scope:** 48,084,480 conditional matrix rows and 375,660 exact FMA
-samples pass. Nominal CPU hidden differences reach 0.0078125; bitwise CPU parity
-and a propagated whole-chain error enclosure are not established. Earlier
-individual Layer0/Layer3 results and the separate 64-layer CPU reference remain
-in the completed log.
+**Qualification scope:** this is preparation and static compilation. Its minimum
+SRAM margin is 48 bytes; 149 earlier family-ceiling failures remain recorded.
+Dynamic stack peaks, DSR lifetimes and full-stage neural execution are unqualified.
+The previous four-layer physical chain and 39-bank fresh-restore milestone
+remain accepted. Its conditional operator checks are not a whole-model error
+bound; nominal hidden differences reach 0.0078125.
 
-**Current work:** complete all 64 original layers and the 248,320-token vocabulary
-using one physical CS3 for sequential 20/24/20 stages, with dependent generated
-tokens and host checkpoint reload. Full-stage/head compilation, original tensor
-preparation, runtime integration and matched evaluation remain open. The latest
-physical monitoring gap is disclosed; future stage deadlines must remain
-responsive during shared-filesystem stalls.
+**Current work:** bind every full-stage host transfer to the actual compiled
+arrays, qualify complete stage execution, compile the remaining two stages,
+and generate dependent tokens with host checkpoint reload on one physical CS3.
+Full 64-layer/full-vocabulary physical inference and matched performance remain
+open. Deadlines, complete capture and independent numerical validation remain
+part of each separately admitted context.
 
 ## 1. Project design
 
@@ -82,6 +83,7 @@ qualification. Complete stages and full-model inference remain open.
 | [`examples/layer0_vertical/physical_runtime/`](examples/layer0_vertical/physical_runtime) | Exact accepted Layer0 host capture, resource guards and post-release operator audit source; environment-specific inputs and admissions are excluded. |
 | [`examples/layer3_vertical/`](examples/layer3_vertical) | Exact accepted vertical Layer3 device and host/audit source, placement maps, and scoped physical evidence. |
 | [`examples/four_layer_chain/`](examples/four_layer_chain) | Exact four-layer device/runtime/audit source and scoped causal handoff, checkpoint and fresh-restore evidence. |
+| [`examples/sequential_stages/`](examples/sequential_stages) | Exact reusable original-bit preparation and bounded program-index source; first full-stage static compilation evidence. |
 | [`examples/dense_transport/finite136/`](examples/dense_transport/finite136) | Exact finite physical packet/math source, independent operand checks, reset and retained ownership evidence. |
 | [`examples/layer0_arithmetic/finite9/`](examples/layer0_arithmetic/finite9) | Exact nine-PE finite arithmetic source, state/reset coverage and preserved simulator failure history. |
 | [`csl/kernels/`](csl/kernels) | Reusable handwritten CSL arithmetic kernels. |
@@ -109,6 +111,26 @@ qualification. Complete stages and full-model inference remain open.
 **Suggested first read:** follow the two-PE example from its [layout](examples/wp02/layout.csl) to [device program](examples/wp02/pe.csl), [host driver](examples/wp02/driver.py), [report](docs/WP02-REPORT.md) and [result record](evidence/wp02.json). For the model equations and precision rules, read the [semantics contract](docs/WP04-SEMANTICS.md).
 
 ## 3. Completed development log — newest first
+
+### Original full-model parameters prepared · First 20-layer stage compiled · September 23, 2026 UTC
+
+All original decoder layers 0–63, final normalization and the complete
+248,320-word output head now have independently checked BF16 preparations.
+Original rows are packed directly into bounded transfer arrays and decoded
+against independently reread original bits, including every padded halfword.
+The original parameters and their dimensions remain unchanged.
+
+The complete original layers 0–19 compile into an actual WSE-3 artifact:
+24,743 programs cover 690,200 PEs and 8,957,066 coordinate banks. Complete
+program-index verification independently checks coverage, layer identities,
+bank addresses and static SRAM. The minimum margin is only 48 bytes against
+49,152 bytes including the declared 4,096-byte stack. All 149 failures of the
+earlier family-specific ceilings remain disclosed. Dynamic stack peaks, task
+DSR lifetimes, full-stage host-copy binding and neural execution are unqualified.
+Full 64-layer physical inference and dependent token generation remain open.
+[Report](docs/SEQUENTIAL-PREPARATION-STAGE0-COMPILE.md) ·
+[Source](examples/sequential_stages) ·
+[Evidence](evidence/sequential-stages/qualification.json).
 
 ### Original four-layer chain · Fresh full-state restore accepted · September 23, 2026 UTC
 
@@ -687,13 +709,14 @@ PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest discover -s tests -v
 
 For simulator runs, follow the milestone reports and the [development guide](docs/DEVELOPMENT.md). A separately installed Cerebras SDK 2.10.1 and Singularity are required. The repository includes source and sanitized evidence; SDK distributions, model weight payloads and private runtime artifacts are excluded.
 
-**In progress:** original full64 and full248320-vocabulary inference across
-sequential 20/24/20 stages on one physical CS3. Implement and qualify final
-normalization/head, context8 prefill and dependent decoding, complete stage
-checkpoints, bounded streamed capture metadata and filesystem-independent parent
-deadlines. The four-layer physical chain and separate fresh reload are accepted
-within their finite scope; full-model CSL generation and matched performance
-remain open. Earlier WP09 evidence remains unaccepted. See
-[status](docs/STATUS.md) and [milestones](docs/MILESTONES.md).
+**In progress:** full 64-layer and 248,320-vocabulary physical inference across
+sequential 20/24/20 stages. Original parameter preparation is complete and the
+first 20-layer stage has accepted static compilation. Remaining work includes
+actual host-copy binding, complete stage/head execution, remaining-stage
+compilation, dependent token feedback, per-context checkpoint reload, complete
+capture preservation and numerical comparison. The previous four-layer physical
+results remain scoped to their original runs. Full-model CSL generation and
+matched performance remain open. See [status](docs/STATUS.md) and
+[milestones](docs/MILESTONES.md).
 
 MIT licensed; see [LICENSE](LICENSE). This is an independent research project, not an official Cerebras inference product.

@@ -1,5 +1,25 @@
 # Accepted milestones
 
+### Original full-model parameters prepared · First 20-layer stage compiled · September 23, 2026 UTC
+
+All original decoder layers 0–63, final normalization and the complete
+248,320-word output head now have independently checked BF16 preparations.
+Original rows are packed directly into bounded transfer arrays and decoded
+against independently reread original bits, including every padded halfword.
+The original parameters and their dimensions remain unchanged.
+
+The complete original layers 0–19 compile into an actual WSE-3 artifact:
+24,743 programs cover 690,200 PEs and 8,957,066 coordinate banks. Complete
+program-index verification independently checks coverage, layer identities,
+bank addresses and static SRAM. The minimum margin is only 48 bytes against
+49,152 bytes including the declared 4,096-byte stack. All 149 failures of the
+earlier family-specific ceilings remain disclosed. Dynamic stack peaks, task
+DSR lifetimes, full-stage host-copy binding and neural execution are unqualified.
+Full 64-layer physical inference and dependent token generation remain open.
+[Report](SEQUENTIAL-PREPARATION-STAGE0-COMPILE.md) ·
+[Source](../examples/sequential_stages) ·
+[Evidence](../evidence/sequential-stages/qualification.json).
+
 ### Original four-layer chain · Fresh full-state restore accepted · September 23, 2026 UTC
 
 Original BF16 layers 0→1→2→3 execute causal hidden handoffs entirely on one

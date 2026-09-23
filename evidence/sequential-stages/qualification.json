@@ -1,0 +1,111 @@
+{
+  "model": "Qwen/Qwen3.8-27B",
+  "revision": "1d4bf0f2ff6012fd82039f2fa52739d0dd7c60c0",
+  "scope": "original parameter preparation plus stage0 static compilation only",
+  "all64_original_decoder_layers_prepared": true,
+  "original_final_norm_prepared": true,
+  "full_vocabulary": 248320,
+  "first_four_preparations_reused": true,
+  "preparations": [
+    {
+      "scope": "original layers 4..19",
+      "original_tensors": 212,
+      "original_weight_bytes": 12176598272,
+      "arrays": 2588,
+      "array_file_bytes": 12324781056,
+      "original_read_bytes": 24353196544,
+      "complete_sha256": "ea4803be32ca51bbf8a5f3188f0ff41371fa51e1a874dd3d3f29ee5c038e94ff",
+      "peak_cgroup_memory_bytes": 997101568,
+      "swap_bytes": 0,
+      "SDK_invocations": 0,
+      "model_forward": false
+    },
+    {
+      "scope": "original layers 20..43",
+      "original_tensors": 318,
+      "original_weight_bytes": 18264897408,
+      "arrays": 3882,
+      "array_file_bytes": 18487171584,
+      "original_read_bytes": 36529794816,
+      "complete_sha256": "829071359021f410565821da429c7106154bb3362c948688d3f0d64617c0efbc",
+      "peak_cgroup_memory_bytes": 1061376000,
+      "swap_bytes": 0,
+      "SDK_invocations": 0,
+      "model_forward": false
+    },
+    {
+      "scope": "original layers 44..63 and final normalization/full head",
+      "original_tensors": 267,
+      "original_weight_bytes": 17763554880,
+      "arrays": 3433,
+      "array_file_bytes": 17981850784,
+      "original_read_bytes": 35527109760,
+      "complete_sha256": "3911a56a96274f488b6ef2e69e8901b58741928838726e1692085f3103427e03",
+      "peak_cgroup_memory_bytes": 1026179072,
+      "swap_bytes": 0,
+      "SDK_invocations": 0,
+      "model_forward": false
+    }
+  ],
+  "compile": {
+    "stage_id": 0,
+    "compiled_pin": {
+      "bytes": 14289,
+      "sha256": "ede859dea9becfc2b30187dfacf95d1e2f8dd80457c6c39006f0b19484658fa1"
+    },
+    "artifact_pin": {
+      "bytes": 404552365,
+      "sha256": "55957d0cc87dece0942ed347299839c35a335aa853d1c58ec492fa611ce3f96b"
+    },
+    "release_pin": {
+      "bytes": 706,
+      "sha256": "aa244487a6403569e34264fa41c7a71fa76f42e8e918f05253b8f45d40bb8fb1"
+    },
+    "source_manifest_pin": {
+      "bytes": 15552,
+      "sha256": "c994bbe08374e18e1f8324f023c1def569321200f6f4f618e4c02148ae1083aa"
+    },
+    "snapshot_pin": {
+      "bytes": 12748,
+      "sha256": "17329382184601b454ddf314b365da98cd206cffb893df30ab5cfedc5d42c4da"
+    },
+    "programs": 24743,
+    "PEs": 690200,
+    "coordinate_banks": 8957066,
+    "minimum_physical_SRAM_margin_bytes_including_4096_stack": 48,
+    "legacy_family_ceiling_failures": 149,
+    "full_original_layers": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19
+    ],
+    "compile_wall_seconds": 5741.712709547952
+  },
+  "source_destination_snapshot_bytes": 501810468,
+  "original_files_unmodified": true,
+  "all_actual_owners_released": true,
+  "dynamic_stack_peak_proven": false,
+  "actual_task_DSR_lifetimes_qualified": false,
+  "full_stage_host_copy_binding_qualified": false,
+  "full_stage_neural_qualification": false,
+  "full_model_physical_inference": false,
+  "dependent_physical_tokens_qualified": false,
+  "matched_performance": false
+}

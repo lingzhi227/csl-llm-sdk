@@ -1,5 +1,12 @@
 # Implementation status
 
+Latest acceptance: [all original stage parameters prepared and full stage0 statically compiled](SEQUENTIAL-PREPARATION-STAGE0-COMPILE.md).
+This covers original layers 0–63, final norm and the full vocabulary head, plus
+actual static compilation of original layers 0–19. The minimum static SRAM
+margin is 48 bytes; 149 earlier family-ceiling failures are preserved. Dynamic
+stack/DSR and full-stage neural qualification remain open. Full 64-layer physical
+generation is incomplete. Historical accepted results follow unchanged.
+
 Latest acceptance: [four original layers with fresh full-state restore](FOUR-LAYER-FRESH-RESTORE.md).
 The physical causal chain passes positions0/1/reset0 and conditional operator
 checks. A distinct runtime with reloaded original weights and checkpoint
