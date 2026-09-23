@@ -1,0 +1,213 @@
+{
+  "status": "accepted_finite_physical_communication_component",
+  "accepted_at_utc": "2026-09-23T02:21:49.013150+00:00",
+  "canonical_acceptance_sha256": "e138fe691998812c82b5ad23193f7eaa4e490482b777cae5c664a31ba62e4969",
+  "scope": {
+    "synthetic_only": true,
+    "original_model_weights": false,
+    "complete_layer": false,
+    "full_stage": false,
+    "full_model": false,
+    "token_performance": false
+  },
+  "full_model": false,
+  "model_generations": 0,
+  "roles": {
+    "matrix": 32,
+    "router": 16,
+    "support": 4,
+    "idle": 84,
+    "total": 136
+  },
+  "source_map_path": "examples/dense_transport/finite136/source-map.json",
+  "compile": {
+    "canonical_acceptance_sha256": "e3cd8aee15986a844e54d1ef99198c7e5db48c361a29a9486d0a633a66c801e4",
+    "artifact_sha256": "b818136814cc46a12412bdfed9482640247d02c04d6e924686751522dcd0bf30",
+    "actual_ELFs": 22,
+    "coordinate_programs": 136,
+    "SRAM_banks": 1005,
+    "max_ordinary_bytes": 40080,
+    "stack_reserve_bytes": 4096,
+    "max_ordinary_plus_stack_bytes": 44176,
+    "ceiling_bytes": 48128,
+    "dynamic_stack_peak_proven": false,
+    "host_memcpy_channels": 1
+  },
+  "runtime": {
+    "manifest_sha256": "66aaa869915c6e996cdf949eae7b9bdfbc89c80627495c10c9e05aa313485cfc",
+    "physical_contexts": 1,
+    "exit_code": 0,
+    "normal_stop": true,
+    "cancelled": false,
+    "all_owned_jobs_terminal": true,
+    "all_owners_reaped": true,
+    "billing_ledger_verified": false
+  },
+  "capture": {
+    "copies": 309,
+    "launches": 26,
+    "host_bytes": 6115056,
+    "raw_files": 309,
+    "raw_bytes": 6083792,
+    "journal_events": 1320,
+    "journal_bytes": 290812,
+    "serial_generation_position": [
+      [
+        1,
+        1,
+        0
+      ],
+      [
+        2,
+        1,
+        1
+      ],
+      [
+        3,
+        2,
+        0
+      ]
+    ],
+    "full_snapshot_rectangles": 47,
+    "actual_exported_banks_per_snapshot": 941,
+    "stable_full_snapshot_pairs": 3,
+    "full_rows_per_serial": 8,
+    "router_directed_edges": 30
+  },
+  "capture_input_pins": {
+    "DISPATCH-EXIT.json": {
+      "sha256": "4be88e1090d840bd16199e4b19e6725b0d846355d925c7e6474f4f3346982bc5",
+      "bytes": 186
+    },
+    "run-audit.json": {
+      "sha256": "9f2b7c4e3cc981fbc4f9d66007cac0c30985c492e1f69e6da9907a5b04a3ecc1",
+      "bytes": 433
+    },
+    "runtime-lifecycle.json": {
+      "sha256": "062e0a1728b2c4efb9ebe21ea32da31116da247bbac0608a61f192285c028f44",
+      "bytes": 75
+    },
+    "capture.json": {
+      "sha256": "5e8feb0c278f75c0a83624fd14defa2574a19e067058248a85a88a3798b879a5",
+      "bytes": 70567
+    },
+    "journal.jsonl": {
+      "sha256": "241cb581cc2fc10c6d8a10df1eb1ae880a43cdaedee7107e7a4417326f248458",
+      "bytes": 290812
+    },
+    "COMPLETE.json": {
+      "sha256": "61791f33043e33e2abbabc3f81c2ba61c6fbb20cc078345a40cd91755344e930",
+      "bytes": 615
+    }
+  },
+  "arithmetic": {
+    "status": "passed_independent_actual_operand_integer_audit",
+    "source_FMAs": 1179648,
+    "ordered_collective_adds": 9216,
+    "BF16_outputs": 3072,
+    "retained_parameter_words": 590400,
+    "raw_files": 309,
+    "all_raw_hashes_verified": true,
+    "complete_snapshot_pairs": 3,
+    "reset_replay_bytes_equal": true,
+    "mismatches": 0,
+    "seconds": 1.6472853678278625,
+    "executor_numeric_or_fixture_imported": false,
+    "SDK": false,
+    "full_model": false
+  },
+  "held_ACK": {
+    "target_support": [
+      11,
+      0
+    ],
+    "root_source": [
+      1,
+      3
+    ],
+    "raw_target_state": [
+      3,
+      2,
+      1,
+      1,
+      1,
+      0,
+      0,
+      0,
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "raw_source_state": [
+      3,
+      2,
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0
+    ],
+    "meaning": "Complete targetrow held with ACK not sent; source outputlease remains held. Source ACK and complete boundary checked subsequently.",
+    "prepare_to_release_RPC_return_seconds": 0.023111348040401936,
+    "deadline_seconds": 5,
+    "actual_device_ACK_delivery_at_RPC_return_proven": false,
+    "hard_device_ACK_deadline_guaranteed": false,
+    "baseline_screen_seconds": 0.02071746764704585,
+    "baseline_maximum_small_call_seconds": 0.006095014978200197,
+    "parent_maximum_monitor_gap_seconds": 0.10531622217968106
+  },
+  "timing": {
+    "runtime_ready_seconds": 93.654614,
+    "capture_envelope_seconds": 1.983401,
+    "normal_stop_seconds": 4.455739,
+    "scope": "Diagnostic wall times including host/runtime and capture overhead; not token latency, throughput, or billing."
+  },
+  "backup": {
+    "original_runtime_files": 386,
+    "original_runtime_bytes": 7666611,
+    "runtime_inventory_bytes": 57808,
+    "runtime_transferred_files": 387,
+    "runtime_transferred_bytes": 7724419,
+    "independent_audit_files": 8,
+    "independent_audit_bytes": 22782,
+    "independent_audit_inventory_bytes": 1031,
+    "all_hashes_independently_verified": true,
+    "all_readonly": true,
+    "raw_capture_in_public_repository": false
+  },
+  "audit_records": {
+    "executor-audit.json": {
+      "path": "evidence/dense-transport/finite136/executor-audit.json",
+      "bytes": 2149,
+      "sha256": "602951ec38470728e5a4f8dbabc30923113fceeb1abea7f1d15f431b90d665ce",
+      "original_bytes": true
+    },
+    "independent-audit.json": {
+      "path": "evidence/dense-transport/finite136/independent-audit.json",
+      "bytes": 1389,
+      "sha256": "7a9d1690728205773b20f28deeaeda250588b2aec61ab3e298cc0fbb4c215a55",
+      "original_bytes": false
+    }
+  },
+  "preserved_failures": [
+    "SDK001 duplicate route-color compile failure",
+    "SDK002 signed offset type compile failure",
+    "HW001 startup180s timeout beforecapture, cancelled/released/backedup",
+    "bounded workerlog export server argument incompatibility, no archive/no retry",
+    "HW002 successful SDKenter then diagnostic reserved seconds field error; normalstop/released/backup; replaced by minimal elapsed_seconds fix and realStore tests"
+  ]
+}

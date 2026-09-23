@@ -1,0 +1,24 @@
+{
+  "representation": "Result fields extracted from the canonical acceptance; formatting differs from the original audit result.",
+  "original_result_sha256": "7a86493867942bf1d12144f866c5c533d874c3a8cb6e65654444cdd2f75422e9",
+  "audit_source_sha256": "aebb017a31a4925ac4d2131a6652023f5a0e2add9b69e0d65c4fb4d012e60711",
+  "canonical_acceptance_sha256": "e138fe691998812c82b5ad23193f7eaa4e490482b777cae5c664a31ba62e4969",
+  "result": {
+    "status": "passed_independent_actual_operand_integer_audit",
+    "source_FMAs": 1179648,
+    "ordered_collective_adds": 9216,
+    "BF16_outputs": 3072,
+    "retained_parameter_words": 590400,
+    "raw_files": 309,
+    "all_raw_hashes_verified": true,
+    "complete_snapshot_pairs": 3,
+    "reset_replay_bytes_equal": true,
+    "mismatches": 0,
+    "seconds": 1.6472853678278625,
+    "executor_numeric_or_fixture_imported": false,
+    "SDK": false,
+    "full_model": false
+  },
+  "method": "Independently decode actual BF16 weights and captured FP32 operands into exact integers/128 and/32; reconstruct ordered FMA/addition bits, BF16RNE and destinationrows. No executor numeric/fixture/SDK imports; all309raw hashes, all retained parameters, complete snapshot pairs and reset replay bytes checked.",
+  "scope": "Finite exact-dyadic domain makes each integer accumulation exactly representable; does not extend exactness to arbitrary model inputs."
+}

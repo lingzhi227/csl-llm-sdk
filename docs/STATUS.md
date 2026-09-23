@@ -1,12 +1,21 @@
 # Implementation status
 
-Updated September 22, 2026 UTC.
+Updated September 23, 2026 UTC.
+
+The [finite dense-transport fixture](DENSE-TRANSPORT-FINITE136.md) is accepted
+on physical WSE-3: 136 PEs, positions 0/1/reset/0, complete rows, retained
+parameters and stable ownership boundaries. Independent reconstruction from
+actual operands checks 1,179,648 ordered FMAs with zero mismatches. All owners
+are reaped and both evidence backups independently verified. This synthetic
+component does not qualify a complete layer or full stage. Held-ACK and capture
+wall times are diagnostic measurements, not token performance. Earlier compiler,
+startup, log-export and host diagnostic failures remain preserved.
 
 The [finite Layer0 arithmetic fixture](LAYER0-ARITHMETIC-FINITE9.md) is accepted
 in the SDK simulator: all 35,181 exp inputs, six synthetic computations, full 128
 ordered recurrence, persistent state, parameter retention, zero resets and exact
 replay pass. This is a nine-PE component result. Original-weight complete Layer0,
-dense-stage packet/math coexistence and full-model inference remain open. The
+complete dense-stage integration and full-model inference remain open. The
 original export compile failure and short-budget SIM001 timeout are preserved.
 
 The [continuous original Layer3 sequence](LAYER3-CONTINUOUS-RESET.md) now has

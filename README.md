@@ -2,11 +2,12 @@
 
 **Building inference for open language models with handwritten Cerebras Systems Language (CSL), targeting sequential execution of three model stages on WSE-3.** We implement the numerical kernels, execution control and persistent model state, and use the Cerebras SDK to compile and run the device programs. The first target is **Qwen3.8-27B text inference**; the longer-term goal is a reusable SDK for related model architectures.
 
-**Latest accepted component:** finite Layer0 arithmetic in the SDK simulator:
-35,181 exp inputs and six convolution/DeltaNet/gated-RMS computations, including
-continuation and exact reset replay. This nine-PE synthetic result keeps the
-original error budgets and does not qualify a complete Layer0 or CS-3 execution.
-See the [report](docs/LAYER0-ARITHMETIC-FINITE9.md).
+**Latest accepted component:** dense transport with arithmetic on physical
+WSE-3. A synthetic 136-PE fixture passes positions 0/1/reset/0, full row and
+buffer-ownership checks, and independent reconstruction of 1,179,648 FMAs with
+zero mismatches. This qualifies the finite communication component; complete
+original Layer0 and the full model remain open. See the
+[report](docs/DENSE-TRANSPORT-FINITE136.md).
 
 **Working today:** the complete original-weight Layer3 attention/MLP graph
 executes causal positions 0 and 1, then device reset and exact position-0 replay
@@ -22,8 +23,8 @@ samples pass. Nominal CPU BF16 mismatches are 346/1,150/346 of 5,120 across the
 three serials, with maximum absolute differences 0.00390625/0.001953125/0.00390625.
 Bitwise CPU parity and a source-propagated whole-layer enclosure are not established.
 
-**Current work:** qualify dense-stage communication alongside the accepted
-Layer0 arithmetic, integrate the complete original recurrent layer, then actual
+**Current work:** integrate the accepted finite dense-transport and Layer0
+arithmetic components into the complete original recurrent layer, then actual
 0→1→2→3 hidden flow and all 64 layers across three sequential stages with host
 checkpoint restoration. The accepted Layer3 scope is the finite
 0→1→reset→0 sequence. Full-vocabulary logits, CSL text generation and measured
@@ -87,6 +88,7 @@ and full-model inference remain open.
 
 | Path | Purpose |
 |---|---|
+| [`examples/dense_transport/finite136/`](examples/dense_transport/finite136) | Exact finite physical packet/math source, independent operand checks, reset and retained ownership evidence. |
 | [`examples/layer0_arithmetic/finite9/`](examples/layer0_arithmetic/finite9) | Exact nine-PE finite arithmetic source, state/reset coverage and preserved simulator failure history. |
 | [`csl/kernels/`](csl/kernels) | Reusable handwritten CSL arithmetic kernels. |
 | [`examples/ready_fanin/`](examples/ready_fanin) | Physical concurrent READY corruption reproduction, strict capture checks, and scoped native-control simulator qualification. |
@@ -113,6 +115,23 @@ and full-model inference remain open.
 **Suggested first read:** follow the two-PE example from its [layout](examples/wp02/layout.csl) to [device program](examples/wp02/pe.csl), [host driver](examples/wp02/driver.py), [report](docs/WP02-REPORT.md) and [result record](evidence/wp02.json). For the model equations and precision rules, read the [semantics contract](docs/WP04-SEMANTICS.md).
 
 ## 3. Completed development log — newest first
+
+### Dense transport and arithmetic: finite physical component accepted — September 23, 2026 UTC
+
+One 136-PE physical context completes positions 0 and 1 plus reset/replay. All
+three pairs of full snapshots, retained parameters, rows, leases and ACKs pass.
+An independent audit reconstructs 1,179,648 ordered FMAs, 9,216 additions and
+3,072 BF16 outputs from actual captured operands, with zero mismatches. The
+five-second held-ACK test bounds release RPC return; later source ACK and
+quiescence are checked separately. It is not a hard device ACK or token latency
+claim. All owners exit and immutable backups are independently verified.
+Duplicate-color/signed-offset compile failures, HW001 startup timeout, the
+bounded log-export failure and HW002 diagnostic-field failure remain preserved.
+The accepted scope is finite synthetic communication plus arithmetic, without
+original weights, a complete layer or full-model generation.
+[Report](docs/DENSE-TRANSPORT-FINITE136.md) ·
+[Source](examples/dense_transport/finite136) ·
+[Evidence](evidence/dense-transport/finite136/summary.json).
 
 Each **WP** or **HW** is a scoped development milestone. HW00/HW01 use physical WSE-3; earlier WP device results use the SDK simulator, and WP04 is a CPU/source audit. **BF16** means bfloat16 data, and **FP32** means 32-bit floating-point arithmetic. Reports contain numerical thresholds, failure history and reproduction details.
 

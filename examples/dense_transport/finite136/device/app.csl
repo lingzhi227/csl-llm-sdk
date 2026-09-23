@@ -1,0 +1,247 @@
+// Source-only diagnostic for dense fabric pass-through on both row parities.
+// Role0 idle, role1 matrix lane, role2 support, role3 support plus frame source.
+param memcpy_params;param role:u16;param ordinal:u16=0;
+const matrix=role==1;const root=matrix and ordinal==0;
+const support=role==2 or role==3;const origin=role==3;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const service_task=@get_local_task_id(17);
+const lane=@import_module(if(matrix) "matrix_lane.csl" else "<empty>",if(matrix) .{
+ .ordinal=ordinal,.participants=4,.phase_count=2,
+ .input_task=@get_local_task_id(11),.line_task=@get_local_task_id(10),
+ .on_output=matrix_output,.on_token_complete=matrix_complete,.on_input_pending=wake} else .{});
+const packets=@import_module("packets.csl",.{.enabled=root or support,
+ .coordinate_width=33,.coordinate_height=4,
+ .sent_task_id=@get_local_task_id(12),.received_task_id=@get_local_task_id(13),
+ .on_sent=sent,.on_received=received,.on_error=packet_error});
+const row=@import_module(if(root) "row_packet.csl" else "<empty>",if(root) .{
+ .source_role=true,.send=send_row,.on_source_released=row_sent,
+ .on_row_received=unused_row} else .{});
+// serial, generation, position, hold receiver ACK until release_acks command.
+var controls=@zeros([4]u32);var state=@zeros([16]u32);
+var received_rows=@zeros([if(support) 256 else 1]u16);
+var receive_offsets=@zeros([if(support) 2 else 1]u16);
+var ack_pending=@zeros([if(support) 2 else 1]u16);
+var tx=@zeros([8]u32);var tx_mode:u16=0;var ack_slot:u16=0;
+var serial:u32=0;var generation:u32=1;var position:u32=0;
+var initialized:bool=false;var running:bool=false;var lane_done:bool=false;
+var held:bool=false;var source_complete:bool=false;var source_ack:bool=false;
+var source_phase:u16=0;var source_pending:bool=false;var source_values:[*]u16;
+var rows_committed:u16=0;var acks_sent:u16=0;
+var frame_input=@zeros([if(origin) 768 else 1]f32);
+var frame_counters=@zeros([4]u32);
+var frame_busy:bool=false;var frames_issued:u16=0;
+const frame_oq=@get_output_queue(4);
+const frame_dst=@get_dsr(dsr_dest,5);const frame_src=@get_dsr(dsr_src1,5);
+
+fn wake() void {@activate(service_task);}
+noinline fn set_state(index:u16,value:u32) void {state[index]=value;}
+fn fail(code:u32) void {if(state[15]==0){set_state(15,code);}}
+fn packet_error() void {fail(901);}
+fn unused_row(data:[*]u16,phase:u16,group:u16) void {}
+fn local_quiet() bool {
+ if(state[15]!=0 or packets.status[0]!=0 or packets.sending or packets.receiving or tx_mode!=0 or source_pending or frame_busy){return false;}
+ if(comptime matrix){if(lane.running or lane.armed or lane.line_busy or lane.root_output_owned or lane.compute_pending){return false;}}
+ if(comptime root){if(row.active or row.sending){return false;}}
+ if(comptime support){if(ack_pending[0]!=0 or ack_pending[1]!=0){return false;}}
+ return true;
+}
+fn update_status() void {
+ set_state(1,serial);set_state(2,generation);set_state(3,position);
+ set_state(4,@as(u32,rows_committed));set_state(5,@as(u32,acks_sent));
+ set_state(6,if(packets.sending) 1 else 0);set_state(7,if(packets.receiving) 1 else 0);
+ set_state(8,if(held) 1 else 0);set_state(9,@as(u32,frames_issued));
+ if(comptime matrix){set_state(10,if(lane.compute_pending) 1 else 0);set_state(11,if(lane.line_busy) 1 else 0);}
+ set_state(12,if(source_ack) 1 else 0);set_state(13,if(source_complete) 1 else 0);
+ if(running){
+  const done=if(matrix) lane_done else if(support) rows_committed==2 and acks_sent==2 else true;
+  if(done and (!origin or frames_issued==2) and local_quiet()){
+   running=false;set_state(0,2*serial);
+  }
+ }
+}
+fn initialize() void {
+ if(initialized){fail(902);return;}
+ if(comptime root){if((packets.config[0]!=0 and packets.config[0]!=5) or packets.config[1]>=4){fail(903);return;}}
+ if(comptime support){if(packets.config[0]!=10 or packets.config[1]>=4 or (origin and packets.config[1]!=0)){fail(904);return;}}
+ packets.init();initialized=true;update_status();sys.unblock_cmd_stream();
+}
+fn prepare() void {
+ if(!initialized or running or !local_quiet() or controls[0]!=serial+1 or controls[0]>3 or controls[3]>1){fail(905);return;}
+ const next=serial+1;const expected_generation:u32=if(next==3) 2 else 1;
+ const expected_position:u32=if(next==2) 1 else 0;
+ if(controls[1]!=expected_generation or controls[2]!=expected_position or generation!=expected_generation){fail(906);return;}
+ serial=next;position=controls[2];held=controls[3]!=0;running=true;lane_done=false;
+ source_complete=false;source_ack=false;source_pending=false;rows_committed=0;acks_sent=0;frames_issued=0;
+ if(comptime support){for(@range(u16,2))|i|{receive_offsets[i]=0;ack_pending[i]=0;}}
+ set_state(0,2*serial-1);
+ if(comptime matrix){
+  if(lane.descriptor[0]>1 or lane.descriptor[4]!=128 or lane.descriptor[5]!=96){fail(907);return;}
+  if(lane.descriptor[0]!=(if(packets.config[0]<5) @as(u16,0) else @as(u16,1)) or
+     lane.descriptor[1]!=packets.config[1] or lane.descriptor[2]!=10 or
+     lane.descriptor[3]!=(packets.config[1]+lane.descriptor[0]+1)%4){fail(927);return;}
+  if(comptime root){if(lane.descriptor[0]!=(if(packets.config[0]==0) @as(u16,0) else @as(u16,1))){fail(908);return;}}
+  lane.begin(1,generation,position,0);
+ }
+ update_status();wake();sys.unblock_cmd_stream();
+}
+fn inject() void {
+ if(comptime origin){
+  if(!running or state[15]!=0){fail(909);return;}
+  if(frame_busy or frames_issued>=2){fail(910);return;}
+  const offset:u16=frames_issued*384;
+  const input=@get_dsd(mem1d_dsd,.{.base_address=&frame_input,.extent=384});
+  const output=@get_dsd(fabout_dsd,.{.output_queue=frame_oq,.extent=384});
+  frame_busy=true;frames_issued+=1;frame_counters[0]+=1;
+  @load_to_dsr(frame_src,@increment_dsd_offset(input,@as(i16,offset),f32));
+  @load_to_dsr(frame_dst,output,.{.async=true,.activate=@get_local_task_id(11)});
+  @mov32(frame_dst,frame_src,.{.async=true});
+ }
+ update_status();sys.unblock_cmd_stream();
+}
+task frame_sent() void {
+ @assert(origin and frame_busy);frame_busy=false;frame_counters[1]+=1;frame_counters[2]+=384;wake();
+}
+fn release_acks() void {
+ if(comptime support){
+  if(!initialized or serial==0 or state[15]!=0 or controls[0]!=serial or
+     controls[1]!=generation or controls[2]!=position){fail(911);return;}
+  // This is a broadcast RPC. A different support may already have completed
+  // while another is intentionally holding ACKs; that is a valid no-op here.
+  if(!running){
+   if(held or state[0]!=2*serial or rows_committed!=2 or acks_sent!=2 or !local_quiet()){fail(928);return;}
+  }else{held=false;wake();}
+ }
+ sys.unblock_cmd_stream();
+}
+fn snapshot() void {update_status();sys.unblock_cmd_stream();}
+fn reset() void {
+ if(!initialized or running or !local_quiet() or serial!=2 or generation!=1){fail(912);return;}
+ generation=2;position=0;update_status();sys.unblock_cmd_stream();
+}
+fn matrix_output(data:[*]u16,phase:u16,group:u16) void {
+ if(!root or !running or source_pending or source_complete or source_ack){fail(913);return;}
+ source_values=data;source_phase=phase;source_pending=true;wake();
+}
+fn matrix_complete() void {lane_done=true;wake();}
+fn send_row(x:u16,y:u16,data:[*]u32,count:u16) void {
+ if(packets.sending or tx_mode!=0){fail(914);return;}
+ tx_mode=1;packets.send(x,y,data,count);
+}
+fn row_sent(phase:u16) void {
+ if(phase!=source_phase or source_complete){fail(915);return;}
+ source_complete=true;wake();
+}
+noinline fn store_word(slot:u16,offset:u16,word:u32) void {
+ received_rows[slot*128+2*offset]=@as(u16,word&65535);
+ received_rows[slot*128+2*offset+1]=@as(u16,word>>16);
+}
+fn received(data:[*]u32,count:u16) void {
+ if(!running or count<8 or data[1]!=1 or data[2]!=generation or data[3]!=position or data[4]!=0 or data[5]>1 or data[6]>=4){fail(916);return;}
+ const phase=@as(u16,data[5]);const producer_y=@as(u16,data[6]);
+ if(data[0]==1){
+  if(comptime support){
+   if(count<9 or count>31 or producer_y!=(packets.config[1]+4-phase-1)%4 or
+      data[7]!=@as(u32,receive_offsets[phase]) or receive_offsets[phase]+count-8>64 or receive_offsets[phase]>=64){fail(917);return;}
+   const remaining:u16=64-receive_offsets[phase];
+   if(count!=8+(if(remaining<23) remaining else @as(u16,23))){fail(926);return;}
+   var i:u16=0;while(i<count-8){store_word(phase,receive_offsets[phase]+i,data[8+i]);i+=1;}
+   receive_offsets[phase]+=count-8;
+   if(receive_offsets[phase]==64){rows_committed+=1;ack_pending[phase]=1;}
+  }else{fail(918);return;}
+ }else if(data[0]==2){
+  if(comptime root){
+   if(count!=8 or phase!=source_phase or producer_y!=packets.config[1] or data[7]!=serial or source_ack){fail(919);return;}
+   source_ack=true;
+  }else{fail(920);return;}
+ }else{fail(921);return;}
+ wake();
+}
+fn sent() void {
+ const mode=tx_mode;tx_mode=0;
+ if(mode==1){if(comptime root){row.sent();}else{fail(922);return;}}
+ else if(mode==2){if(comptime support){
+  if(ack_pending[ack_slot]!=2){fail(923);return;}ack_pending[ack_slot]=0;acks_sent+=1;
+ }else{fail(924);return;}}
+ else{fail(925);return;}wake();
+}
+task service() void {
+ // Arithmetic/collective DSR1 and packet TX DSR1 never overlap. Idle armed
+ // packet RX uses DSR6 and is allowed. Every RX store remains scalar/noinline.
+ if(state[15]!=0 or packets.sending or packets.receiving or tx_mode!=0){return;}
+ if(comptime root){
+  if(source_complete and source_ack and lane.root_output_owned){lane.release_output(source_phase);}
+ }
+ if(comptime matrix){
+  if(lane.line_busy){return;}
+  lane.service();if(lane.line_busy){return;}
+ }
+ if(comptime root){if(source_pending){
+  source_pending=false;row.begin(1,generation,position,0,1,source_phase,packets.config[1],128);
+  row.transmit(10,(packets.config[1]+source_phase+1)%4,source_values);
+ }}
+ if(comptime support){if(!held and !packets.sending){
+  var slot:u16=0;while(slot<2 and ack_pending[slot]!=1){slot+=1;}
+  if(slot<2){
+   const source_y=(packets.config[1]+4-slot-1)%4;
+   tx[0]=2;tx[1]=1;tx[2]=generation;tx[3]=position;tx[4]=0;
+   tx[5]=@as(u32,slot);tx[6]=@as(u32,source_y);tx[7]=serial;
+   ack_slot=slot;ack_pending[slot]=2;tx_mode=2;
+   packets.send(if(slot==0) @as(u16,0) else @as(u16,5),source_y,&tx,8);
+  }
+ }}
+ update_status();
+}
+comptime {
+ @bind_local_task(service,service_task);
+ if(origin){@initialize_queue(frame_oq,.{.color=@get_color(4)});@bind_local_task(frame_sent,@get_local_task_id(11));}
+}
+// Generated typed export tail.
+var unused16=@zeros([1]u16);var unused32=@zeros([1]u32);var unusedf=@zeros([1]f32);
+const export_transport_config:[*]u16=&packets.config;
+const export_transport_status:[*]u32=&packets.status;
+const export_controls:[*]u32=&controls;
+const export_state:[*]u32=&state;
+const export_frame_counters:[*]u32=&frame_counters;
+const export_weights:[*]u32=if(matrix) &lane.weight_storage else &unused32;
+const export_descriptor:[*]u16=if(matrix) &lane.descriptor else &unused16;
+const export_input:[*]f32=if(matrix) &lane.input else &unusedf;
+const export_active_input:[*]f32=if(matrix) &lane.active_input else &unusedf;
+const export_partial:[*]f32=if(matrix) &lane.partial else &unusedf;
+const export_result:[*]f32=if(matrix) &lane.result else &unusedf;
+const export_lane_counters:[*]u32=if(matrix) &lane.counters else &unused32;
+const export_rounded:[*]u16=if(root) &lane.rounded else &unused16;
+const export_received_rows:[*]u16=&received_rows;
+const export_receive_offsets:[*]u16=&receive_offsets;
+const export_ack_pending:[*]u16=&ack_pending;
+const export_frame_input:[*]f32=&frame_input;
+const export_port0_buffer:[*]u32=&unused32;
+const export_port1_buffer:[*]u32=&unused32;
+const export_port2_buffer:[*]u32=&unused32;
+comptime {
+ @export_symbol(export_transport_config,"transport_config");
+ @export_symbol(export_transport_status,"transport_status");
+ @export_symbol(export_controls,"controls");
+ @export_symbol(export_state,"state");
+ @export_symbol(export_frame_counters,"frame_counters");
+ @export_symbol(export_weights,"weights");
+ @export_symbol(export_descriptor,"descriptor");
+ @export_symbol(export_input,"input");
+ @export_symbol(export_active_input,"active_input");
+ @export_symbol(export_partial,"partial");
+ @export_symbol(export_result,"result");
+ @export_symbol(export_lane_counters,"lane_counters");
+ @export_symbol(export_rounded,"rounded");
+ @export_symbol(export_received_rows,"received_rows");
+ @export_symbol(export_receive_offsets,"receive_offsets");
+ @export_symbol(export_ack_pending,"ack_pending");
+ @export_symbol(export_frame_input,"frame_input");
+ @export_symbol(export_port0_buffer,"port0_buffer");
+ @export_symbol(export_port1_buffer,"port1_buffer");
+ @export_symbol(export_port2_buffer,"port2_buffer");
+ @export_symbol(initialize);
+ @export_symbol(prepare);
+ @export_symbol(inject);
+ @export_symbol(release_acks);
+ @export_symbol(snapshot);
+ @export_symbol(reset);
+}

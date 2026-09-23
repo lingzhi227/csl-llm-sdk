@@ -2,6 +2,20 @@
 
 Only accepted results are listed below. Unresolved integration work and the remaining scope are tracked in [implementation status](STATUS.md).
 
+## Dense transport with arithmetic · Finite physical qualification accepted · September 23, 2026 (UTC)
+
+The synthetic 136-PE fixture passes positions 0/1/reset/0, three stable full
+snapshot pairs, retained parameters, all complete rows and buffer ownership.
+Independent reconstruction of actual operands checks 1,179,648 ordered FMAs,
+9,216 collective additions and 3,072 BF16 outputs with zero mismatches. Runtime
+and audits exit normally; resource release and immutable backups are independently
+verified. The held-ACK release RPC meets its host deadline, with later source ACK
+checked separately. Earlier compile/startup/log-export/diagnostic failures remain
+preserved. No original-weight layer, model or token-performance claim is made.
+[Report](DENSE-TRANSPORT-FINITE136.md) ·
+[Source](../examples/dense_transport/finite136) ·
+[Evidence](../evidence/dense-transport/finite136/summary.json).
+
 ## Layer0 arithmetic · Finite nine-PE simulator qualification accepted · September 22, 2026 (UTC)
 
 All 35,181 finite exp inputs and six synthetic convolution/DeltaNet/gated-RMS

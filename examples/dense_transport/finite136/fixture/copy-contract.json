@@ -1,0 +1,911 @@
+{
+  "scope": "Exact finite physical copy contract; source reviewed before separate runtime admission",
+  "application": [
+    34,
+    4
+  ],
+  "format": "SDK ROW_MAJOR [height,width,per-PE elements]",
+  "copies": {
+    "transport_config": [
+      {
+        "symbol": "transport_config",
+        "dtype": "u16",
+        "count": 2,
+        "logical_bytes": 544,
+        "host_bytes": 1088,
+        "order": "ROW_MAJOR",
+        "host_shape": [
+          4,
+          34,
+          2
+        ],
+        "x": 0,
+        "y": 0,
+        "width": 34,
+        "height": 4,
+        "host_representation": "u32 container; reject any nonzero high16 bits on D2H"
+      }
+    ],
+    "transport_status": [
+      {
+        "symbol": "transport_status",
+        "dtype": "u32",
+        "count": 8,
+        "logical_bytes": 512,
+        "host_bytes": 512,
+        "order": "ROW_MAJOR",
+        "host_shape": [
+          4,
+          4,
+          8
+        ],
+        "x": 1,
+        "y": 0,
+        "width": 4,
+        "height": 4
+      },
+      {
+        "symbol": "transport_status",
+        "dtype": "u32",
+        "count": 8,
+        "logical_bytes": 512,
+        "host_bytes": 512,
+        "order": "ROW_MAJOR",
+        "host_shape": [
+          4,
+          4,
+          8
+        ],
+        "x": 6,
+        "y": 0,
+        "width": 4,
+        "height": 4
+      },
+      {
+        "symbol": "transport_status",
+        "dtype": "u32",
+        "count": 8,
+        "logical_bytes": 2816,
+        "host_bytes": 2816,
+        "order": "ROW_MAJOR",
+        "host_shape": [
+          4,
+          22,
+          8
+        ],
+        "x": 11,
+        "y": 0,
+        "width": 22,
+        "height": 4
+      },
+      {
+        "symbol": "transport_status",
+        "dtype": "u32",
+        "count": 32,
+        "logical_bytes": 512,
+        "host_bytes": 512,
+        "order": "ROW_MAJOR",
+        "host_shape": [
+          4,
+          1,
+          32
+        ],
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 4
+      },
+      {
+        "symbol": "transport_status",
+        "dtype": "u32",
+        "count": 32,
+        "logical_bytes": 512,
+        "host_bytes": 512,
+        "order": "ROW_MAJOR",
+        "host_shape": [
+          4,
+          1,
+          32
+        ],
+        "x": 5,
+        "y": 0,
+        "width": 1,
+        "height": 4
+      },
+      {
+        "symbol": "transport_status",
+        "dtype": "u32",
+        "count": 32,
+        "logical_bytes": 512,
+        "host_bytes": 512,
+        "order": "ROW_MAJOR",
+        "host_shape": [
+          4,
+          1,
+          32
+        ],
+        "x": 10,
+        "y": 0,
+        "width": 1,
+        "height": 4
+      },
+      {
+        "symbol": "transport_status",
+        "dtype": "u32",
+        "count": 32,
+        "logical_bytes": 512,
+        "host_bytes": 512,
+        "order": "ROW_MAJOR",
+        "host_shape": [
+          4,
+          1,
+          32
+        ],
+        "x": 33,
+        "y": 0,
+        "width": 1,
+        "height": 4
+      }
+    ],
+    "controls": [
+      {
+        "symbol": "controls",
+        "dtype": "u32",
+        "count": 4,
+        "logical_bytes": 2176,
+        "host_bytes": 2176,
+        "order": "ROW_MAJOR",
+        "host_shape": [
+          4,
+          34,
+          4
+        ],
+        "x": 0,
+        "y": 0,
+        "width": 34,
+        "height": 4
+      }
+    ],
+    "state": [
+      {
+        "symbol": "state",
+        "dtype": "u32",
+        "count": 16,
+        "logical_bytes": 1024,
+        "host_bytes": 1024,
+        "order": "ROW_MAJOR",
+        "host_shape": [
+          4,
+          4,
+          16
+        ],
+        "x": 1,
+        "y": 0,
+        "width": 4,
+        "height": 4
+      },
+      {
+        "symbol": "state",
+        "dtype": "u32",
+        "count": 16,
+        "logical_bytes": 1024,
+        "host_bytes": 1024,
+        "order": "ROW_MAJOR",
+        "host_shape": [
+          4,
+          4,
+          16
+        ],
+        "x": 6,
+        "y": 0,
+        "width": 4,
+        "height": 4
+      },
+      {
+        "symbol": "state",
+        "dtype": "u32",
+        "count": 16,
+        "logical_bytes": 5632,
+        "host_bytes": 5632,
+        "order": "ROW_MAJOR",
+        "host_shape": [
+          4,
+          22,
+          16
+        ],
+        "x": 11,
+        "y": 0,
+        "width": 22,
+        "height": 4
+      }
+    ],
+    "frame_counters": [
+      {
+        "symbol": "frame_counters",
+        "dtype": "u32",
+        "count": 4,
+        "logical_bytes": 256,
+        "host_bytes": 256,
+        "order": "ROW_MAJOR",
+        "host_shape": [
+          4,
+          4,
+          4
+        ],
+        "x": 1,
+        "y": 0,
+        "width": 4,
+        "height": 4
+      },
+      {
+        "symbol": "frame_counters",
+        "dtype": "u32",
+        "count": 4,
+        "logical_bytes": 256,
+        "host_bytes": 256,
+        "order": "ROW_MAJOR",
+        "host_shape": [
+          4,
+          4,
+          4
+        ],
+        "x": 6,
+        "y": 0,
+        "width": 4,
+        "height": 4
+      },
+      {
+        "symbol": "frame_counters",
+        "dtype": "u32",
+        "count": 4,
+        "logical_bytes": 1408,
+        "host_bytes": 1408,
+        "order": "ROW_MAJOR",
+        "host_shape": [
+          4,
+          22,
+          4
+        ],
+        "x": 11,
+        "y": 0,
+        "width": 22,
+        "height": 4
+      }
+    ],
+    "weights": [
+      {
+        "symbol": "weights",
+        "dtype": "u32",
+        "count": 6144,
+        "logical_bytes": 393216,
+        "host_bytes": 393216,
+        "order": "ROW_MAJOR",
+        "host_shape": [
+          4,
+          4,
+          6144
+        ],
+        "x": 1,
+        "y": 0,
+        "width": 4,
+        "height": 4
+      },
+      {
+        "symbol": "weights",
+        "dtype": "u32",
+        "count": 6144,
+        "logical_bytes": 393216,
+        "host_bytes": 393216,
+        "order": "ROW_MAJOR",
+        "host_shape": [
+          4,
+          4,
+          6144
+        ],
+        "x": 6,
+        "y": 0,
+        "width": 4,
+        "height": 4
+      }
+    ],
+    "descriptor": [
+      {
+        "symbol": "descriptor",
+        "dtype": "u16",
+        "count": 6,
+        "logical_bytes": 192,
+        "host_bytes": 384,
+        "order": "ROW_MAJOR",
+        "host_shape": [
+          4,
+          4,
+          6
+        ],
+        "x": 1,
+        "y": 0,
+        "width": 4,
+        "height": 4,
+        "host_representation": "u32 container; reject any nonzero high16 bits on D2H"
+      },
+      {
+        "symbol": "descriptor",
+        "dtype": "u16",
+        "count": 6,
+        "logical_bytes": 192,
+        "host_bytes": 384,
+        "order": "ROW_MAJOR",
+        "host_shape": [
+          4,
+          4,
+          6
+        ],
+        "x": 6,
+        "y": 0,
+        "width": 4,
+        "height": 4,
+        "host_representation": "u32 container; reject any nonzero high16 bits on D2H"
+      }
+    ],
+    "input": [
+      {
+        "symbol": "input",
+        "dtype": "f32",
+        "count": 96,
+        "logical_bytes": 6144,
+        "host_bytes": 6144,
+        "order": "ROW_MAJOR",
+        "host_shape": [
+          4,
+          4,
+          96
+        ],
+        "x": 1,
+        "y": 0,
+        "width": 4,
+        "height": 4
+      },
+      {
+        "symbol": "input",
+        "dtype": "f32",
+        "count": 96,
+        "logical_bytes": 6144,
+        "host_bytes": 6144,
+        "order": "ROW_MAJOR",
+        "host_shape": [
+          4,
+          4,
+          96
+        ],
+        "x": 6,
+        "y": 0,
+        "width": 4,
+        "height": 4
+      }
+    ],
+    "active_input": [
+      {
+        "symbol": "active_input",
+        "dtype": "f32",
+        "count": 96,
+        "logical_bytes": 6144,
+        "host_bytes": 6144,
+        "order": "ROW_MAJOR",
+        "host_shape": [
+          4,
+          4,
+          96
+        ],
+        "x": 1,
+        "y": 0,
+        "width": 4,
+        "height": 4
+      },
+      {
+        "symbol": "active_input",
+        "dtype": "f32",
+        "count": 96,
+        "logical_bytes": 6144,
+        "host_bytes": 6144,
+        "order": "ROW_MAJOR",
+        "host_shape": [
+          4,
+          4,
+          96
+        ],
+        "x": 6,
+        "y": 0,
+        "width": 4,
+        "height": 4
+      }
+    ],
+    "partial": [
+      {
+        "symbol": "partial",
+        "dtype": "f32",
+        "count": 128,
+        "logical_bytes": 8192,
+        "host_bytes": 8192,
+        "order": "ROW_MAJOR",
+        "host_shape": [
+          4,
+          4,
+          128
+        ],
+        "x": 1,
+        "y": 0,
+        "width": 4,
+        "height": 4
+      },
+      {
+        "symbol": "partial",
+        "dtype": "f32",
+        "count": 128,
+        "logical_bytes": 8192,
+        "host_bytes": 8192,
+        "order": "ROW_MAJOR",
+        "host_shape": [
+          4,
+          4,
+          128
+        ],
+        "x": 6,
+        "y": 0,
+        "width": 4,
+        "height": 4
+      }
+    ],
+    "result": [
+      {
+        "symbol": "result",
+        "dtype": "f32",
+        "count": 128,
+        "logical_bytes": 8192,
+        "host_bytes": 8192,
+        "order": "ROW_MAJOR",
+        "host_shape": [
+          4,
+          4,
+          128
+        ],
+        "x": 1,
+        "y": 0,
+        "width": 4,
+        "height": 4
+      },
+      {
+        "symbol": "result",
+        "dtype": "f32",
+        "count": 128,
+        "logical_bytes": 8192,
+        "host_bytes": 8192,
+        "order": "ROW_MAJOR",
+        "host_shape": [
+          4,
+          4,
+          128
+        ],
+        "x": 6,
+        "y": 0,
+        "width": 4,
+        "height": 4
+      }
+    ],
+    "lane_counters": [
+      {
+        "symbol": "lane_counters",
+        "dtype": "u32",
+        "count": 4,
+        "logical_bytes": 256,
+        "host_bytes": 256,
+        "order": "ROW_MAJOR",
+        "host_shape": [
+          4,
+          4,
+          4
+        ],
+        "x": 1,
+        "y": 0,
+        "width": 4,
+        "height": 4
+      },
+      {
+        "symbol": "lane_counters",
+        "dtype": "u32",
+        "count": 4,
+        "logical_bytes": 256,
+        "host_bytes": 256,
+        "order": "ROW_MAJOR",
+        "host_shape": [
+          4,
+          4,
+          4
+        ],
+        "x": 6,
+        "y": 0,
+        "width": 4,
+        "height": 4
+      }
+    ],
+    "rounded": [
+      {
+        "symbol": "rounded",
+        "dtype": "u16",
+        "count": 128,
+        "logical_bytes": 1024,
+        "host_bytes": 2048,
+        "order": "ROW_MAJOR",
+        "host_shape": [
+          4,
+          1,
+          128
+        ],
+        "x": 1,
+        "y": 0,
+        "width": 1,
+        "height": 4,
+        "host_representation": "u32 container; reject any nonzero high16 bits on D2H"
+      },
+      {
+        "symbol": "rounded",
+        "dtype": "u16",
+        "count": 128,
+        "logical_bytes": 1024,
+        "host_bytes": 2048,
+        "order": "ROW_MAJOR",
+        "host_shape": [
+          4,
+          1,
+          128
+        ],
+        "x": 6,
+        "y": 0,
+        "width": 1,
+        "height": 4,
+        "host_representation": "u32 container; reject any nonzero high16 bits on D2H"
+      }
+    ],
+    "received_rows": [
+      {
+        "symbol": "received_rows",
+        "dtype": "u16",
+        "count": 256,
+        "logical_bytes": 2048,
+        "host_bytes": 4096,
+        "order": "ROW_MAJOR",
+        "host_shape": [
+          4,
+          1,
+          256
+        ],
+        "x": 11,
+        "y": 0,
+        "width": 1,
+        "height": 4,
+        "host_representation": "u32 container; reject any nonzero high16 bits on D2H"
+      }
+    ],
+    "receive_offsets": [
+      {
+        "symbol": "receive_offsets",
+        "dtype": "u16",
+        "count": 2,
+        "logical_bytes": 16,
+        "host_bytes": 32,
+        "order": "ROW_MAJOR",
+        "host_shape": [
+          4,
+          1,
+          2
+        ],
+        "x": 11,
+        "y": 0,
+        "width": 1,
+        "height": 4,
+        "host_representation": "u32 container; reject any nonzero high16 bits on D2H"
+      }
+    ],
+    "ack_pending": [
+      {
+        "symbol": "ack_pending",
+        "dtype": "u16",
+        "count": 2,
+        "logical_bytes": 16,
+        "host_bytes": 32,
+        "order": "ROW_MAJOR",
+        "host_shape": [
+          4,
+          1,
+          2
+        ],
+        "x": 11,
+        "y": 0,
+        "width": 1,
+        "height": 4,
+        "host_representation": "u32 container; reject any nonzero high16 bits on D2H"
+      }
+    ],
+    "frame_input": [
+      {
+        "symbol": "frame_input",
+        "dtype": "f32",
+        "count": 768,
+        "logical_bytes": 3072,
+        "host_bytes": 3072,
+        "order": "ROW_MAJOR",
+        "host_shape": [
+          1,
+          1,
+          768
+        ],
+        "x": 11,
+        "y": 0,
+        "width": 1,
+        "height": 1
+      }
+    ],
+    "port0_buffer": [
+      {
+        "symbol": "port0_buffer",
+        "dtype": "u32",
+        "count": 32,
+        "logical_bytes": 512,
+        "host_bytes": 512,
+        "order": "ROW_MAJOR",
+        "host_shape": [
+          4,
+          1,
+          32
+        ],
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 4
+      },
+      {
+        "symbol": "port0_buffer",
+        "dtype": "u32",
+        "count": 32,
+        "logical_bytes": 512,
+        "host_bytes": 512,
+        "order": "ROW_MAJOR",
+        "host_shape": [
+          4,
+          1,
+          32
+        ],
+        "x": 5,
+        "y": 0,
+        "width": 1,
+        "height": 4
+      },
+      {
+        "symbol": "port0_buffer",
+        "dtype": "u32",
+        "count": 32,
+        "logical_bytes": 512,
+        "host_bytes": 512,
+        "order": "ROW_MAJOR",
+        "host_shape": [
+          4,
+          1,
+          32
+        ],
+        "x": 10,
+        "y": 0,
+        "width": 1,
+        "height": 4
+      },
+      {
+        "symbol": "port0_buffer",
+        "dtype": "u32",
+        "count": 32,
+        "logical_bytes": 512,
+        "host_bytes": 512,
+        "order": "ROW_MAJOR",
+        "host_shape": [
+          4,
+          1,
+          32
+        ],
+        "x": 33,
+        "y": 0,
+        "width": 1,
+        "height": 4
+      }
+    ],
+    "port1_buffer": [
+      {
+        "symbol": "port1_buffer",
+        "dtype": "u32",
+        "count": 32,
+        "logical_bytes": 512,
+        "host_bytes": 512,
+        "order": "ROW_MAJOR",
+        "host_shape": [
+          4,
+          1,
+          32
+        ],
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 4
+      },
+      {
+        "symbol": "port1_buffer",
+        "dtype": "u32",
+        "count": 32,
+        "logical_bytes": 512,
+        "host_bytes": 512,
+        "order": "ROW_MAJOR",
+        "host_shape": [
+          4,
+          1,
+          32
+        ],
+        "x": 5,
+        "y": 0,
+        "width": 1,
+        "height": 4
+      },
+      {
+        "symbol": "port1_buffer",
+        "dtype": "u32",
+        "count": 32,
+        "logical_bytes": 512,
+        "host_bytes": 512,
+        "order": "ROW_MAJOR",
+        "host_shape": [
+          4,
+          1,
+          32
+        ],
+        "x": 10,
+        "y": 0,
+        "width": 1,
+        "height": 4
+      },
+      {
+        "symbol": "port1_buffer",
+        "dtype": "u32",
+        "count": 32,
+        "logical_bytes": 512,
+        "host_bytes": 512,
+        "order": "ROW_MAJOR",
+        "host_shape": [
+          4,
+          1,
+          32
+        ],
+        "x": 33,
+        "y": 0,
+        "width": 1,
+        "height": 4
+      }
+    ],
+    "port2_buffer": [
+      {
+        "symbol": "port2_buffer",
+        "dtype": "u32",
+        "count": 32,
+        "logical_bytes": 512,
+        "host_bytes": 512,
+        "order": "ROW_MAJOR",
+        "host_shape": [
+          4,
+          1,
+          32
+        ],
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 4
+      },
+      {
+        "symbol": "port2_buffer",
+        "dtype": "u32",
+        "count": 32,
+        "logical_bytes": 512,
+        "host_bytes": 512,
+        "order": "ROW_MAJOR",
+        "host_shape": [
+          4,
+          1,
+          32
+        ],
+        "x": 5,
+        "y": 0,
+        "width": 1,
+        "height": 4
+      },
+      {
+        "symbol": "port2_buffer",
+        "dtype": "u32",
+        "count": 32,
+        "logical_bytes": 512,
+        "host_bytes": 512,
+        "order": "ROW_MAJOR",
+        "host_shape": [
+          4,
+          1,
+          32
+        ],
+        "x": 10,
+        "y": 0,
+        "width": 1,
+        "height": 4
+      },
+      {
+        "symbol": "port2_buffer",
+        "dtype": "u32",
+        "count": 32,
+        "logical_bytes": 512,
+        "host_bytes": 512,
+        "order": "ROW_MAJOR",
+        "host_shape": [
+          4,
+          1,
+          32
+        ],
+        "x": 33,
+        "y": 0,
+        "width": 1,
+        "height": 4
+      }
+    ]
+  },
+  "schedule": [
+    {
+      "serial": 1,
+      "generation": 1,
+      "position": 0
+    },
+    {
+      "serial": 2,
+      "generation": 1,
+      "position": 1
+    },
+    {
+      "serial": 3,
+      "generation": 2,
+      "position": 0
+    }
+  ],
+  "fixture": {
+    "kind": "Finite synthetic transport/arithmetic operands; no model-forward replacement",
+    "weight_storage": "Per-PE [96 columns,128 output rows] BF16, adjacent rows low/high in u32",
+    "frame_storage": "Two phases, each [4 ordinals,96 FP32 inputs], 768 values at origin [11,0]",
+    "descriptor": "phase, source row y, destination x10, (y+phase+1)%4,128,96",
+    "parameters_once": true,
+    "reset_replay_uses_identical_position0_operands": true,
+    "oracle": "Accepted explicit local96 FMA order, then right-to-left FP32 addition, then BF16 RNE",
+    "source_fma_slots_per_serial": 393216,
+    "collective_adds_per_serial": 3072,
+    "outputs_per_serial": 1024
+  },
+  "boundary": {
+    "required_stable_snapshots": 2,
+    "application_state": "Every nonrouter: state[0]=2*serial; [1:4]=serial,generation,position; error[15]=0",
+    "endpoint_status": "Exact cumulative ledger; acquired=issued=completed; received=released; initialized=1; error=0",
+    "routers": "Exact cumulative port RX/TX; enabled leases=1, disabled leases=0; output owners and next hops=3; error=0",
+    "router_callback_inference": "Output owner=3 and exact TX completions establish callback retirement; tx_busy is not directly exported",
+    "matrix_counters": "[serial,serial,serial,2*serial], both row parities and all ordinals",
+    "roots": "state source ACK=1 and source complete=1; rounded rows equal their receiver slot",
+    "support": "rows_committed=2, ACKs_sent=2, offsets=[64,64], ACK pending=[0,0], held=0",
+    "origin": "Cumulative frame counters=[2*serial,2*serial,768*serial,0]; frames_issued=2",
+    "resets": "Only after stable full boundary at serial2; generation changes, cumulative counters and weights retained",
+    "reuse": "Before prepare/reset, all active role banks checked; same-name dummy exports never copied"
+  },
+  "hold": {
+    "maximum_seconds": 5,
+    "maximum_rows_per_support": 2,
+    "required_sequence": "Observe a held phase0 row, verify root awaits ACK, release before waiting for phase1 completion",
+    "deadlock_constraint": "A held phase0 root does not rearm frame RX; the second frame can backpressure. Never wait for its completion before release.",
+    "observation_deadline": "The separate driver/supervisor must bound the entire hold including RPC and D2H latency",
+    "scope": "Physical baseline screen then held release RPC return <=5s; subsequent source ACK/full boundary independently required; parent cadence sampled, no hard device deadline guarantee"
+  },
+  "runtime_driver_written": true,
+  "runtime_admitted": false,
+  "actual_bank_binding_pending": false,
+  "compile_manifest_sha256": "85f27471888eeb2ebab1d46d2e3b0a4003f03ac07acedabef0b5dcc41b2ade84"
+}
