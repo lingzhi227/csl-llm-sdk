@@ -1,5 +1,9 @@
 # Vertical Layer0: top-spine source and actual static qualification
 
+> Historical static milestone. Subsequent physical positions 0/1/reset/0 are
+> accepted within the [operator/state scope](LAYER0-VERTICAL-PHYSICAL.md).
+> Statements below about pending execution describe this earlier milestone.
+
 September23,2026 UTC. The complete original Layer0 now compiles as a30 by1160
 vertical region with west-to-east layer boundaries. Actual placement covers
 34800 PEs:31548 matrix,460 support,970 routers and1822 idle coordinates.

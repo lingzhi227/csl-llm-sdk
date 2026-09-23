@@ -2,19 +2,19 @@
 
 Updated September 23, 2026 UTC.
 
-The complete original Layer0 [top-spine vertical artifact](LAYER0-VERTICAL-TOP.md)
-has scoped actual static acceptance:30×1160/34800 PEs/401469 banks,304-byte
-remaining declared SRAM margin and16-channel peripheral identity. The first
-bottom-spine route regression is preserved and corrected in source geometry;
-no latency improvement is measured. Physical original Layer0 numerical/state
-qualification, actual adjacent-layer transfer and full-model inference remain open.
+The complete original [vertical Layer0](LAYER0-VERTICAL-PHYSICAL.md) now has
+accepted physical positions 0/1/reset/0, all conditional operator gates, exact
+recurrent replay and complete state/transport/retention/reset checks. Nominal
+BF16 differences are 0/438/0 of 5,120, with position-1 maximum absolute error
+0.0009765625. All raw evidence is preserved, owners reaped and device release
+independently verified. The 4 GiB startup timeout and HTTP502 attempts remain
+preserved; the successful attempt uses an 8 GiB worker and 16 channels without
+proving an OOM cause or minimum memory requirement. No full-model, propagated
+whole-layer error or matched token-performance claim is made.
 
-The first top-spine runtime attempt timed out at the fixed 240-second startup
-limit: environment context returned at 170.13 seconds and device start began
-at 171.14 seconds without returning. It produced zero model H2D events, launches
-or neural captures. The owned job was cancelled, original processes reaped and
-system release independently verified. Original failure evidence is preserved;
-the startup cause remains unresolved. This is not a Layer0 numerical result.
+Current work is original Layer3 vertical qualification, actual 0→1→2→3 hidden
+flow and full checkpoint/control restoration for one physical CS3 reused across
+20/24/20 stages. All 64 layers and full-vocabulary generation remain open.
 
 The [finite dense-transport fixture](DENSE-TRANSPORT-FINITE136.md) is accepted
 on physical WSE-3: 136 PEs, positions 0/1/reset/0, complete rows, retained
@@ -28,8 +28,8 @@ startup, log-export and host diagnostic failures remain preserved.
 The [finite Layer0 arithmetic fixture](LAYER0-ARITHMETIC-FINITE9.md) is accepted
 in the SDK simulator: all 35,181 exp inputs, six synthetic computations, full 128
 ordered recurrence, persistent state, parameter retention, zero resets and exact
-replay pass. This is a nine-PE component result. Original-weight complete Layer0,
-complete dense-stage integration and full-model inference remain open. The
+replay pass. This is a nine-PE component result. Original-weight complete Layer0 has since passed the scoped physical contract
+above. Complete dense-stage integration and full-model inference remain open. The
 original export compile failure and short-budget SIM001 timeout are preserved.
 
 The [continuous original Layer3 sequence](LAYER3-CONTINUOUS-RESET.md) now has
@@ -38,7 +38,7 @@ pass the complete conditional operator audit and independent state/transport
 reconstruction. The original outer supervisor exit 1 and missing COMPLETE remain
 preserved; a separately admitted postcapture audit passes. Nominal CPU BF16
 mismatches are 346/1,150/346 of 5,120. Bitwise parity and a propagated whole-layer
-enclosure are not established. Complete recurrent Layer0 and actual 0→1→2→3
+enclosure are not established. Vertical Layer3 migration and actual 0→1→2→3
 hidden flow are next; all 64 layers, full-vocabulary logits, generated tokens and
 three-stage checkpoint restoration remain unqualified.
 

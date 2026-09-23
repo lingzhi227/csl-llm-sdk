@@ -1,0 +1,110 @@
+{
+  "status": "accepted_original_vertical_Layer0_physical_0_1_reset0_operator_state_and_transport_qualification",
+  "layer": 0,
+  "application": [
+    30,
+    1160
+  ],
+  "original_weights": true,
+  "runtime_manifest_sha256": "d8fc2b4bb63cba738c38e24e66017d6f87dca0621ddf49eb091ffd7433d9f52c",
+  "numeric_audit": {
+    "bytes": 696296,
+    "sha256": "caf643edfddbe788660346caf766739e7de13870179d759e28cc8a895a6ee5c2",
+    "status": "all_operator_gates_passed",
+    "all_conditional_matrix_rows": 12114432,
+    "exact_FMA_samples": 94644,
+    "exact_sample_FMA_slots": 9085824,
+    "full128_recurrent_numeric_exact": true,
+    "heads_per_serial": [
+      48,
+      48,
+      48
+    ],
+    "passed_fields": 6048,
+    "failed_passed_fields": [],
+    "all_state_transport_lifecycle_reset_checks": true,
+    "source_propagated_whole_layer_enclosure": false
+  },
+  "nominal_original_BF16_comparison": {
+    "reference_sha256": "5b78a9c9e89a87db63cce642181a93e928f3047dfb4bcbdeab404db5502f5c54",
+    "positions": [
+      0,
+      1,
+      0
+    ],
+    "mismatches": [
+      0,
+      438,
+      0
+    ],
+    "words_per_position": 5120,
+    "max_absolute_error": [
+      0,
+      0.0009765625,
+      0
+    ],
+    "reset_bit_exact": true
+  },
+  "capture": {
+    "raw_files": 5312,
+    "raw_bytes": 179824400,
+    "journal_events": 27468,
+    "copies": 6911,
+    "host_bytes": 2512897044,
+    "launches": 8,
+    "capture_sha256": "a7b4a201583c8ee00e1f0b03a48392c6214afd973a872989776abde859096a32",
+    "reset_replay_arrays": 608
+  },
+  "physical": {
+    "terminal": "SUCCEEDED",
+    "normal_stop": true,
+    "owners_reaped": true,
+    "actual_system_assignments_empty": true,
+    "channels": 16,
+    "worker_memory_bytes": 8589934592,
+    "worker_peak_measured": false,
+    "old_OOM_proven": false,
+    "client_peak_RSS_bytes": 346419200,
+    "guard_wall_seconds": 261.56853756774217,
+    "host_capture_seconds": 68.52456459309906
+  },
+  "offline_audit": {
+    "exit_code": 0,
+    "owners_reaped": true,
+    "SDK": false,
+    "model_forward": false,
+    "guard_wall_seconds": 96.21885996777564,
+    "sampled_peak_RSS_bytes": 323047424
+  },
+  "backup": {
+    "original_files": 5427,
+    "original_bytes": 198880962,
+    "inventory": {
+      "bytes": 847249,
+      "sha256": "eb755d82a8347ec09eff60199516453ac37cd48cd3d35e62b2f5b1e5f4cbcbf1"
+    },
+    "all_hashes_verified": true,
+    "read_only": true,
+    "original_failed_partial_preserved": true
+  },
+  "preserved_failures": [
+    {
+      "attempt": "runtime001",
+      "reason": "240-second startup deadline",
+      "neural_captures": 0,
+      "released": true
+    },
+    {
+      "attempt": "runtime002",
+      "reason": "start RPC HTTP502 before device deadline",
+      "neural_captures": 0,
+      "released": true
+    }
+  ],
+  "acceptance_scope": "Original pinned Layer0 actual vertical CSL operators, exact handoffs, two original prompt positions with genuine persistent recurrence/conv state, zero reset and replay. Conditional all-matrix-row bounds plus predetermined exact per-PE samples; original nominal differences disclosed. No whole-model token acceptance or whole-layer propagated bound.",
+  "full_model": false,
+  "full_vocabulary": false,
+  "dependent_generated_tokens": false,
+  "source_propagated_whole_layer_enclosure": false,
+  "matched_performance_claim": false
+}

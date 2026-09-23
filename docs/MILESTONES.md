@@ -1,5 +1,25 @@
 # Accepted milestones
 
+### Original vertical Layer0 · Physical positions and reset accepted · September 23, 2026
+
+The complete original-weight Layer0 executes positions 0 and 1, then device
+reset and position-0 replay, in the accepted 30×1160 top-spine region. All
+12,114,432 conditional matrix-row checks, 94,644 predetermined exact FMA
+samples, full 128-wide recurrent replay and complete state/transport/reset
+checks pass. Original nominal BF16 differences are 0/438/0 of 5,120, with
+maximum absolute differences 0/0.0009765625/0. The complete 608-array neural
+reset replay is bit-exact. These are conditional operator and state results,
+not a propagated whole-layer bound, full-model generation or token benchmark.
+
+The third attempt uses 16 channels and an 8 GiB remote worker. The original
+240-second startup timeout and subsequent HTTP502 failure at 4 GiB remain
+preserved; their unique cause and a minimum worker-memory requirement are not
+established. Physical and offline owners exit normally and device release is
+independently verified. All 5,312 raw files are durably preserved and hashed.
+[Report](LAYER0-VERTICAL-PHYSICAL.md) ·
+[Host/audit source](../examples/layer0_vertical/physical_runtime) ·
+[Evidence](../evidence/layer0-vertical/physical-qualification.json).
+
 ### September23,2026: complete original Layer0 vertical static qualification
 
 The top-spine30×1160 program passes actual compiled resource checks for34800 PEs

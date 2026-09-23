@@ -2,36 +2,23 @@
 
 **Building inference for open language models with handwritten Cerebras Systems Language (CSL), targeting sequential execution of three model stages on WSE-3.** We implement the numerical kernels, execution control and persistent model state, and use the Cerebras SDK to compile and run the device programs. The first target is **Qwen3.8-27B text inference**; the longer-term goal is a reusable SDK for related model architectures.
 
-**Latest accepted milestone:** complete original Layer0 compiles in a vertical
-30×1160 region with a top packet spine and west-to-east boundaries. Actual
-1508 application programs,34800 PEs and401469 banks pass the scoped static
-resource checks; maximum ordinary SRAM plus4096-byte reserve leaves304 bytes.
-The top layout corrects the first vertical packet-hop regression. Physical
-Layer0 numerical execution remains open. Its first physical attempt reached the
-240-second startup limit before model H2D or neural capture; the owned job was
-cancelled and resource release independently verified. See the
-[report](docs/LAYER0-VERTICAL-TOP.md).
+**Latest accepted milestone:** complete original-weight Layer0 runs positions
+0 and 1 plus device reset replay on physical WSE-3 in a vertical 30×1160 region.
+All conditional operator, recurrent-state, transport and reset checks pass.
+Nominal BF16 differences are 0/438/0 of 5,120 values; position-1 maximum absolute
+error is 0.0009765625. This does not establish full-model generation or a
+propagated whole-layer bound. See the [physical report](docs/LAYER0-VERTICAL-PHYSICAL.md).
 
-**Working today:** the complete original-weight Layer3 attention/MLP graph
-executes causal positions 0 and 1, then device reset and exact position-0 replay
-on physical WSE-3. All three captures pass the conditional operator gates and
-independent transport, state, parameter and release checks. The device client
-exits normally; the original outer supervisor exit 1 and missing COMPLETE are
-preserved, and a separate postcapture audit passes. The earlier full MLP covers
-four inputs; a separate 64-layer CPU reference generates four tokens with cache
-restoration.
+**Also accepted:** the original Layer3 attention/MLP graph completes positions
+0/1/reset/0 in its earlier horizontal layout, with nominal BF16 differences
+346/1,150/346 and conditional operator qualification. A separate full 64-layer
+CPU reference produces four tokens; it is not CSL full-model execution.
 
-**Numerical scope:** Layer3 conditional operator gates and independent FMA
-samples pass. Nominal CPU BF16 mismatches are 346/1,150/346 of 5,120 across the
-three serials, with maximum absolute differences 0.00390625/0.001953125/0.00390625.
-Bitwise CPU parity and a source-propagated whole-layer enclosure are not established.
-
-**Current work:** validate original Layer0 positions0/1/reset/0 on the top-spine
-artifact, then actual0→1→2→3 hidden flow and all64 layers across three sequential
-stages on one physical CS3 with full host checkpoint restoration. The accepted
-Layer3 scope remains its finite0→1→reset→0 sequence. Full-vocabulary logits,
-CSL text generation and matched end-to-end token timing remain ahead. Earlier
-failures and superseded layouts remain in the completed log and evidence.
+**Current work:** migrate original Layer3 to vertical regions, then connect
+actual 0→1→2→3 hidden flow and all 64 layers across three sequential stages on
+one physical CS3. Full hidden/KV/recurrent/convolution/control-state restoration,
+full-vocabulary autoregressive generation and matched token timing remain open.
+Historical failures and superseded layouts remain in the completed log.
 
 ## 1. Project design
 
@@ -57,7 +44,7 @@ The execution box is what the compiled program does. We write its scheduling, bu
 | Part | What this project implements or reuses |
 |---|---|
 | **Our device code** | Matrix products, normalization, attention, recurrence and other model operations; task dependencies, communication and state updates. The completed log identifies the implemented subsets. |
-| **Our host code** | Stage weight/state loading, checkpoint coordination, tensor placement, resource limits and validation. Physical execution is qualified for the full layer-3 MLP at four module inputs and the complete Layer3 conditional operator contract at positions 0 and 1 with device reset replay; the full model remains open. |
+| **Our host code** | Stage weight/state loading, checkpoint coordination, tensor placement, resource limits and validation. Physical execution is qualified for original vertical Layer0 and earlier horizontal Layer3 conditional operator contracts at positions 0 and 1 with reset replay, and the full layer-3 MLP at four inputs; the full model remains open. |
 | **Cerebras tooling** | CSL layout/compiler, device tasks and communication primitives, host transfers and runtime launches. |
 | **Reference computation** | CPU numerical references and selected functions extracted from a pinned official implementation. GPU reference execution and applicable CS-Torch / Model Zoo integration remain future work. |
 
@@ -83,14 +70,15 @@ flowchart LR
 This diagram shows the accepted full layer-3 MLP. FP32 local accumulation and
 right-to-left reductions, BF16 casts and neural handoffs execute on device.
 The complete Layer3 full-attention path also has physical/operator qualification
-for positions 0 and 1 plus device reset replay. Recurrent layers, complete stages
-and full-model inference remain open.
+for positions 0 and 1 plus device reset replay. Original vertical Layer0 also has conditional operator and persistent-state
+qualification. Complete stages and full-model inference remain open.
 
 ## 2. Repository guide
 
 | Path | Purpose |
 |---|---|
-| [`examples/layer0_vertical/top_spine/`](examples/layer0_vertical/top_spine) | Complete generated vertical Layer0 program, exact host mapping and scoped actual static evidence; no Layer0 physical numerical acceptance. |
+| [`examples/layer0_vertical/top_spine/`](examples/layer0_vertical/top_spine) | Complete generated vertical Layer0 device program, exact host mapping and actual static qualification; physical scope is documented separately. |
+| [`examples/layer0_vertical/physical_runtime/`](examples/layer0_vertical/physical_runtime) | Exact accepted Layer0 host capture, resource guards and post-release operator audit source; environment-specific inputs and admissions are excluded. |
 | [`examples/dense_transport/finite136/`](examples/dense_transport/finite136) | Exact finite physical packet/math source, independent operand checks, reset and retained ownership evidence. |
 | [`examples/layer0_arithmetic/finite9/`](examples/layer0_arithmetic/finite9) | Exact nine-PE finite arithmetic source, state/reset coverage and preserved simulator failure history. |
 | [`csl/kernels/`](csl/kernels) | Reusable handwritten CSL arithmetic kernels. |
@@ -118,6 +106,26 @@ and full-model inference remain open.
 **Suggested first read:** follow the two-PE example from its [layout](examples/wp02/layout.csl) to [device program](examples/wp02/pe.csl), [host driver](examples/wp02/driver.py), [report](docs/WP02-REPORT.md) and [result record](evidence/wp02.json). For the model equations and precision rules, read the [semantics contract](docs/WP04-SEMANTICS.md).
 
 ## 3. Completed development log — newest first
+
+### Original vertical Layer0 · Physical positions and reset accepted · September 23, 2026
+
+The complete original-weight Layer0 executes positions 0 and 1, then device
+reset and position-0 replay, in the accepted 30×1160 top-spine region. All
+12,114,432 conditional matrix-row checks, 94,644 predetermined exact FMA
+samples, full 128-wide recurrent replay and complete state/transport/reset
+checks pass. Original nominal BF16 differences are 0/438/0 of 5,120, with
+maximum absolute differences 0/0.0009765625/0. The complete 608-array neural
+reset replay is bit-exact. These are conditional operator and state results,
+not a propagated whole-layer bound, full-model generation or token benchmark.
+
+The third attempt uses 16 channels and an 8 GiB remote worker. The original
+240-second startup timeout and subsequent HTTP502 failure at 4 GiB remain
+preserved; their unique cause and a minimum worker-memory requirement are not
+established. Physical and offline owners exit normally and device release is
+independently verified. All 5,312 raw files are durably preserved and hashed.
+[Report](docs/LAYER0-VERTICAL-PHYSICAL.md) ·
+[Host/audit source](examples/layer0_vertical/physical_runtime) ·
+[Evidence](evidence/layer0-vertical/physical-qualification.json).
 
 ### September23,2026: complete original Layer0 vertical static qualification
 
@@ -638,6 +646,14 @@ PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest discover -s tests -v
 
 For simulator runs, follow the milestone reports and the [development guide](docs/DEVELOPMENT.md). A separately installed Cerebras SDK 2.10.1 and Singularity are required. The repository includes source and sanitized evidence; SDK distributions, model weight payloads and private runtime artifacts are excluded.
 
-**In progress:** validate original Layer0 positions 0/1/reset/0 on the accepted vertical top-spine artifact, then migrate Layer3 to vertical regions and connect the real 0→1→2→3 hidden flow. Continue to all 64 layers, the full vocabulary head and multiple autoregressive tokens using one physical CS3 for the sequential 20/24/20 stages, with complete hidden, KV, recurrent, convolution and request/position/reset state restoration. Layer regions and macro flow remain vertical and west-to-east; internal routing follows the computation. The accepted Layer3 physical scope is its finite positions 0/1/reset/0 sequence. Full-model CSL generation remains open. Earlier WP09 evidence remains unaccepted. See [current status](docs/STATUS.md) and [milestone details](docs/MILESTONES.md).
+**In progress:** qualify original Layer3 in vertical regions, then connect real
+0→1→2→3 hidden flow. Continue to all 64 layers, the full vocabulary head and
+multiple autoregressive tokens using one physical CS3 for sequential 20/24/20
+stages, with complete hidden, KV, recurrent, convolution and request/position/reset
+restoration. Layer regions and macro flow remain vertical and west-to-east;
+internal routing follows the computation. Accepted Layer0 and Layer3 physical
+scopes are finite positions 0/1/reset/0. Full-model CSL generation remains open.
+Earlier WP09 evidence remains unaccepted. See [status](docs/STATUS.md) and
+[milestones](docs/MILESTONES.md).
 
 MIT licensed; see [LICENSE](LICENSE). This is an independent research project, not an official Cerebras inference product.
