@@ -1,19 +1,18 @@
-# Original sequential-stage preparation and static compilation
+# Sequential-stage source components and limited Stage0 comparison
 
-[Milestone report](../../docs/SEQUENTIAL-PREPARATION-STAGE0-COMPILE.md) ·
-[Evidence summary](../../evidence/sequential-stages/qualification.json) ·
+[Stage0 report](../../docs/STAGE0-COMPARISON-AND-PAUSE.md) ·
+[All 1,000 comparisons](../../evidence/sequential-stages/stage0-1000-comparisons.json) ·
+[Historical preparation report](../../docs/SEQUENTIAL-PREPARATION-STAGE0-COMPILE.md) ·
 [Exact source identities](source-map.json).
 
-The source directory contains the actual original-row reader, direct ROI
-packing, independent halfword decoder, complete head geometry/preparation,
-sequential context contract and bounded program-index writer used by the
-accepted preparations and first-stage compilation. Every source file is
-byte-identical to its indicated frozen candidate component.
+This archive includes exact original-bit preparation and program-index
+components, the actual observer-capacity contract and context bindings, the
+native checkpoint codec, both corrected device observers and the executed
+1,000-value comparison source. The checkpoint codec's presence is not evidence
+that physical restoration or extra checkpoint numerical validation ran.
 
-These are reusable library components, not a portable launch bundle. Original
-model data, accepted family plans, actual device bindings and deployment-specific
-resource admissions are supplied separately. The original reader also checks
-its recorded filesystem and immutable shard identity. No weights, generated
-large layouts, raw neural captures, complete program index or SDK binaries are
-included. The context contract describes intended full-model execution; only
-the preparation and stage0 static compilation scope is accepted here.
+These are reusable components, not a portable launch bundle. Pinned family
+packages, admissions, generated plans, bindings and original model data are
+supplied separately. No raw captures, weights, checkpoint arrays, compiler
+binaries or vendor SDK distributions are included. Only five-position Stage0
+physical completion and the disclosed limited comparison are claimed here.

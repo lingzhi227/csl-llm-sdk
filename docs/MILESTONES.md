@@ -1,5 +1,24 @@
 # Accepted milestones
 
+### Original 20-layer Stage0 executed · 1,000-value comparison · Checkpoint preserved · September 24, 2026 UTC
+
+Original layers 0–19 completed five continuous input positions on one physical
+CS3. At the user's request, numerical comparison was limited to exactly 1,000
+distinct hidden values: 500 from the final stage output and 500 spread across
+the preceding 19 layers and all five positions. Selection was fixed from the
+reference before actual outputs were opened. 480 of 1,000 BF16 values match
+exactly; maximum finite absolute difference is 0.5, with 0 nonfinite
+pairs. All selected values and differences are published.
+
+This is a limited comparison, with no overall numerical-pass claim or complete
+operator qualification. Five actual output rows and the full 192-bank checkpoint
+at next position 5 are preserved and checked for file and byte integrity.
+No neural-value validation or physical restore was added during preservation.
+All owners and the device were released; development is paused after Stage0.
+[Report](STAGE0-COMPARISON-AND-PAUSE.md) ·
+[1,000 comparisons](../evidence/sequential-stages/stage0-1000-comparisons.json) ·
+[Source](../examples/sequential_stages).
+
 ### Original full-model parameters prepared · First 20-layer stage compiled · September 23, 2026 UTC
 
 All original decoder layers 0–63, final normalization and the complete

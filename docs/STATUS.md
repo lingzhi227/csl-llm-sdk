@@ -1,5 +1,13 @@
 # Implementation status
 
+Latest scope: [20-layer Stage0 physical execution, exactly 1,000 comparisons and checkpoint preservation](STAGE0-COMPARISON-AND-PAUSE.md).
+All five input positions completed. Numerical comparison is deliberately limited
+to the published 1,000 points; complete operator/control numerical qualification
+and an overall numerical-pass claim are absent. The full checkpoint and five
+output rows are preserved with file/byte integrity checks. All owners and the
+device were released. Development is paused after Stage0; full-model physical
+generation remains incomplete. Historical results follow unchanged.
+
 Latest acceptance: [all original stage parameters prepared and full stage0 statically compiled](SEQUENTIAL-PREPARATION-STAGE0-COMPILE.md).
 This covers original layers 0–63, final norm and the full vocabulary head, plus
 actual static compilation of original layers 0–19. The minimum static SRAM
