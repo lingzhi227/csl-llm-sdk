@@ -1,0 +1,32 @@
+// One value head with its matching original Q/K heads. Unqualified source.
+// Inputs: Q128,K128,V128,Z128,A1,B1 in BF16. Conv is four historical samples.
+// Parameters: original384x4 BF16 conv, A_log1/dt_bias1, shared norm128.
+// Output packet is the accepted recurrent_head protocol: Q/K/V,exp(g),beta.
+const math=@import_module("<math>");
+const qwen=@import_module("qwen_math.csl");
+fn reset(history:[*]u16) void {
+  for(@range(u16,1536))|i|{history[i]=0;}
+}
+fn compute(input:[*]u16,weights:[*]u16,history:[*]u16,gate_parameters:[*]u16,packet:[*]f32) void {
+  for(@range(u16,384))|c|{
+    const base:u16=c*4;
+    for(@range(u16,3))|j|{history[base+j]=history[base+j+1];}
+    history[base+3]=input[c];
+    var sum:f32=0.0;
+    for(@range(u16,4))|j|{sum+=qwen.expand(history[base+j])*qwen.expand(weights[base+j]);}
+    const convolution=qwen.round(sum);
+    packet[c]=qwen.expand(qwen.round(qwen.silu(qwen.expand(convolution))));
+  }
+  for(@range(u16,2))|head|{
+    var square:f32=0.0;
+    for(@range(u16,128))|i|{const x=packet[head*128+i];square+=x*x;}
+    const inverse:f32=1.0/math.sqrt_f32(square+0.000001);
+    for(@range(u16,128))|i|{packet[head*128+i]*=inverse;}
+  }
+  for(@range(u16,128))|i|{packet[i]/=11.313708498984761;}
+  const a=qwen.expand(input[512]);const b=qwen.expand(input[513]);
+  const A_log=qwen.expand(gate_parameters[0]);const dt_bias=qwen.expand(gate_parameters[1]);
+  const g:f32=-qwen.exp_f32(A_log)*qwen.softplus(a+dt_bias);
+  packet[384]=qwen.exp_f32(g);
+  packet[385]=qwen.expand(qwen.round(qwen.sigmoid(b)));
+}

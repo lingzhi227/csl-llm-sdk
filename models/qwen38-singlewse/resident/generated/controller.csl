@@ -1,0 +1,411 @@
+// Candidate whole-resident protocol. This source is unqualified until compiled.
+// Coordinate/matrix identities are loaded once; only roles/routes specialize.
+param memcpy_params;param role:u16;param phase:u16;param first:bool;param last:bool;
+param west:bool;param east:bool;param north:bool;param south:bool;param parity_x:u16;param parity_y:u16;
+const is_matrix:bool=role==1 or role==2;const is_root:bool=role==14;
+const is_actor:bool=role>=6 and role<=13;
+const has_data:bool=role==4 or role==5 or role==6 or role==9;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const qwen=@import_module("qwen_math.csl");
+const kernel=@import_module("resident_matrix.csl",.{.fp8=role==1,.active=is_matrix,.row_phase=phase});
+var config=@zeros([8]u32);
+// Config: packedxy,matrix_id,k_block,row_tile,valid_rows,packed_group_root,0,weight_count.
+var frame=@zeros([70]u32);var trace=@zeros([6]u32);
+var relay_storage=@zeros([if(!is_matrix and !is_actor and !is_root) 272 else 1]f32);
+var call_pending:bool=false;var call_done:bool=false;
+const command_iq=@get_input_queue(2);const command_oq=@get_output_queue(2);
+const reduce_iq=@get_input_queue(3);const reduce_oq=@get_output_queue(3);
+const east_iq=@get_input_queue(4);const east_oq=@get_output_queue(4);
+const south_iq=@get_input_queue(5);const south_oq=@get_output_queue(5);
+const command_done=@get_local_task_id(8);const broadcast_done=@get_local_task_id(9);
+const reduce_done=@get_local_task_id(10);const reduce_sent=@get_local_task_id(11);
+const return_done=@get_local_task_id(12);const relay_done=@get_local_task_id(13);
+const command_dst=@get_dsr(dsr_dest,2);const command_src=@get_dsr(dsr_src1,2);
+const link_dst=@get_dsr(dsr_dest,5);const link_src=@get_dsr(dsr_src1,5);
+const return_dst=@get_dsr(dsr_dest,6);const return_src=@get_dsr(dsr_src1,6);
+fn arm() void {
+  const mem=@get_dsd(mem1d_dsd,.{.base_address=&frame,.extent=70});
+  const wire=@get_dsd(fabin_dsd,.{.input_queue=command_iq,.extent=70});
+  @load_to_dsr(command_dst,mem);@load_to_dsr(command_src,wire,.{.async=true,.activate=command_done});
+  @mov32(command_dst,command_src,.{.async=true});
+}
+fn scratch() [*]f32 {
+  if(comptime is_matrix){return kernel.reduction_buffer();}
+  if(comptime is_actor){return actor_scratch();}
+  if(comptime is_root){return root_buffer();}
+  return &relay_storage;
+}
+fn send_result(data:[*]f32) void {
+  var mem=@get_dsd(mem1d_dsd,.{.base_address=data,.extent=1});
+  var wire=@get_dsd(fabout_dsd,.{.output_queue=if(east) south_oq else east_oq,.extent=1});
+  mem=@set_dsd_length(mem,@as(u16,frame[3]));wire=@set_dsd_length(wire,@as(u16,frame[3]));
+  @load_to_dsr(return_src,mem);@load_to_dsr(return_dst,wire,.{.async=true,.activate=return_done});
+  @mov32(return_dst,return_src,.{.async=true});
+}
+fn relay(comptime queue:input_queue) void {
+  var mem=@get_dsd(mem1d_dsd,.{.base_address=scratch(),.extent=1});
+  var wire=@get_dsd(fabin_dsd,.{.input_queue=queue,.extent=1});
+  mem=@set_dsd_length(mem,@as(u16,frame[3]));wire=@set_dsd_length(wire,@as(u16,frame[3]));
+  @load_to_dsr(return_dst,mem);@load_to_dsr(return_src,wire,.{.async=true,.activate=relay_done});
+  @mov32(return_dst,return_src,.{.async=true});
+}
+task relayed() void {send_result(scratch());}
+fn reduced_ready() void {
+  trace[2]+=1;
+  if(comptime last){arm();}
+  else{
+    const mem=@get_dsd(mem1d_dsd,.{.base_address=matrix_output(),.extent=if(role==1) 272 else 140});
+    const wire=@get_dsd(fabout_dsd,.{.output_queue=reduce_oq,.extent=if(role==1) 272 else 140});
+    @load_to_dsr(link_src,mem);@load_to_dsr(link_dst,wire,.{.async=true,.activate=reduce_sent});
+    @mov32(link_dst,link_src,.{.async=true});
+  }
+}
+task reduction_received() void {kernel.add_previous(matrix_output());reduced_ready();}
+task reduction_sent() void {arm();}
+fn finish_call() void {
+  if(call_pending and call_done){call_pending=false;call_done=false;trace[4]+=1;sys.unblock_cmd_stream();}
+}
+fn actor_finished() void {trace[1]+=1;arm();}
+task command_received() void {
+  @assert(frame[4]==trace[5]+1);trace[5]=frame[4];trace[0]+=1;
+  if(frame[0]==1){
+    if(comptime is_matrix){if(frame[1]==config[1] and frame[2]==config[2]){
+      kernel.compute(weight_data(),scale_data(),@ptrcast([*]u32,&frame[5]),matrix_output());trace[1]+=1;
+    }}arm();
+  }else if(frame[0]==2){
+    if(comptime is_matrix){if(frame[1]==config[1]){
+      if(comptime first){reduced_ready();}
+      else{
+        const mem=@get_dsd(mem1d_dsd,.{.base_address=kernel.reduction_buffer(),.extent=if(role==1) 272 else 140});
+        const wire=@get_dsd(fabin_dsd,.{.input_queue=reduce_iq,.extent=if(role==1) 272 else 140});
+        @load_to_dsr(link_dst,mem);@load_to_dsr(link_src,wire,.{.async=true,.activate=reduce_done});
+        @mov32(link_dst,link_src,.{.async=true});
+      }return;
+    }}arm();
+  }else if(frame[0]==5){
+    if(comptime role==2){if(frame[1]==config[1] and frame[2]==config[3]){
+      kernel.embedding(weight_data(),@as(u16,frame[3]),matrix_output());trace[1]+=1;
+    }}arm();
+  }else if(frame[0]==6){
+    if(comptime has_data){if(frame[1]==config[0]){
+      @assert(frame[3]<=128 and frame[2]+frame[3]<=@as(u32,data_capacity()));
+      const p:[*]u16=data_buffer();var i:u16=0;
+      while(i<@as(u16,frame[3])){p[@as(u16,frame[2])+i]=@as(u16,frame[5+i/2]>>((i%2)*16));i+=1;}
+    }}arm();
+  }else if(frame[0]==10){
+    if(comptime role==4){if(frame[1]==config[0]){qwen.rmsnorm(data_buffer(),weight_data(),data_buffer(),5120);trace[1]+=1;}}arm();
+  }else if(frame[0]==11){
+    if(comptime is_actor){if(frame[1]==config[5]){actor_compute(@as(u16,frame[2]));return;}}arm();
+  }else if(frame[0]==12){if(comptime is_actor){actor_reset();}arm();}
+  else if(frame[0]==4){call_done=true;arm();finish_call();}
+  else{
+    @assert(frame[0]==3 and frame[3]>0 and frame[3]<=272);
+    const sx:u32=frame[1]&1023;const sy:u32=frame[1]>>10;
+    const x:u32=config[0]&1023;const y:u32=config[0]>>10;
+    if(sy==y and sx<=x){
+      if(sx==x){
+        if(frame[2]==0){if(comptime is_matrix){send_result(matrix_output());}else{@assert(false);}}
+        else{
+          const tmp:[*]f32=scratch();var i:u16=0;
+          if(frame[2]==1){
+            if(comptime has_data){
+            @assert(frame[5]+frame[3]<=@as(u32,data_capacity()));const p:[*]u16=data_buffer();
+            while(i<@as(u16,frame[3])){tmp[i]=qwen.expand(p[@as(u16,frame[5])+i]);i+=1;}
+            }else{@assert(false);}
+          }else{
+            if(comptime role==6 or role==9){
+            @assert(frame[2]==2 and is_actor and frame[5]+frame[3]<=@as(u32,actor_output_capacity()));
+            const p:[*]u16=actor_output();while(i<@as(u16,frame[3])){tmp[i]=qwen.expand(p[@as(u16,frame[5])+i]);i+=1;}
+            }else{@assert(false);}
+          }send_result(tmp);
+        }
+      }else{relay(east_iq);}
+    }else if(comptime east){if(sy<y){relay(south_iq);}else{arm();}}
+    else{arm();}
+  }
+}
+task returned() void {
+  trace[3]+=1;if(comptime is_root){root_tick();}else{arm();}
+}
+task broadcast_sent() void {root_sent();}
+fn start() void {if(comptime !is_root){arm();}sys.unblock_cmd_stream();}
+fn begin() void {
+  if(comptime is_root){root_begin();}else{call_pending=true;finish_call();}
+}
+fn step() void {
+  if(comptime is_root){root_step();}else{call_pending=true;finish_call();}
+}
+comptime {
+  if(is_root){@initialize_queue(command_oq,.{.color=@get_color(3)});@bind_local_task(broadcast_sent,broadcast_done);}
+  else{@initialize_queue(command_iq,.{.color=@get_color(3)});@bind_local_task(command_received,command_done);}
+  if(is_matrix){
+    if(!first){@initialize_queue(reduce_iq,.{.color=@get_color(4+(parity_x+1)%2)});@bind_local_task(reduction_received,reduce_done);}
+    if(!last){@initialize_queue(reduce_oq,.{.color=@get_color(4+parity_x)});@bind_local_task(reduction_sent,reduce_sent);}
+  }
+  if(!west){@initialize_queue(east_iq,.{.color=@get_color(8+(parity_x+1)%2)});}
+  if(!east){@initialize_queue(east_oq,.{.color=@get_color(8+parity_x)});}
+  if(east){
+    if(!north){@initialize_queue(south_iq,.{.color=@get_color(10+(parity_y+1)%2)});}
+    if(!south){@initialize_queue(south_oq,.{.color=@get_color(10+parity_y)});}
+  }
+  @bind_local_task(returned,return_done);if(!is_root){@bind_local_task(relayed,relay_done);}
+  @export_symbol(export_config,"config");@export_symbol(export_trace,"trace");
+  @export_symbol(export_weights,"weights");@export_symbol(export_scales,"scales");@export_symbol(export_data,"data");
+  @export_symbol(start);@export_symbol(begin);@export_symbol(step);
+}
+var stub_u16=@zeros([1]u16);var stub_u32=@zeros([1]u32);var stub_f32=@zeros([1]f32);
+var weights=@zeros([if(role==1) 17408 else if(role==2) 17920 else if(role==3) 16384 else if(role==4) 5120 else 1]u16);
+var scales=@zeros([if(role==1) 3 else 1]f32);
+var data=@zeros([if(role==4) 5120 else if(role==5) 17536 else 1]u16);
+var output=@zeros([if(role==1) 272 else if(role==2) 140 else 1]f32);
+fn weight_data() [*]u16 {return &weights;}fn scale_data() [*]f32 {return &scales;}
+fn matrix_output() [*]f32 {return &output;}fn data_buffer() [*]u16 {return &data;}
+fn data_capacity() u16 {return if(role==4) 5120 else if(role==5) 17536 else 0;}
+
+fn actor_scratch() [*]f32 {return &stub_f32;}fn actor_compute(position:u16) void {}fn actor_reset() void {}
+fn actor_output() [*]u16 {return &stub_u16;}fn actor_output_capacity() u16 {return 0;}
+fn conv_data() [*]u16 {return &stub_u16;}fn gate_data() [*]u16 {return &stub_u16;}
+fn gain_data() [*]u16 {return &stub_u16;}fn frequency_data() [*]f32 {return &stub_f32;}
+// Entire883-instruction forward pass and token feedback execute on this PE.
+const atlas=@import_module("strip_coordinates-bf16-140.csl");
+const quant=@import_module("fp8_activation.csl");
+var program=@zeros([3532]u16);var matrices=@zeros([3984]u16);var io=@zeros([290]u16);
+var prompt=@zeros([96]u32);var controls=@zeros([4]u32);var generated=@zeros([96]u32);
+// Current token,count,processed positions,request complete,head BF16 maximum.
+var result=@zeros([5]u32);
+var r_buffer=@zeros([272]f32);var r_saved=@zeros([128]f32);
+var r_codes=@zeros([128]u16);var r_scale=@zeros([1]f32);
+var r_pc:u16=0;var r_phase:u16=0;var r_chunk:u16=0;var r_group:u16=0;var r_tile:u16=0;
+var r_count:u16=0;var r_valid:u16=0;var r_head:u16=0;var r_segment:u16=0;var r_layer:u16=0;
+var r_position:u16=0;var r_generated:u16=0;var r_token:u32=0;
+var r_sequence:u32=0;var r_wait:bool=false;var r_end:bool=false;var r_issued:bool=false;var r_reset:bool=false;
+var r_best:f32=0.0;var r_winner:u32=0;
+fn root_buffer() [*]f32 {return &r_buffer;}
+fn r_xy(x:u16,y:u16) u32 {return @as(u32,x)|(@as(u32,y)<<10);}
+fn r_io(index:u16) u32 {@assert(index<145);return r_xy(io[index*2],io[index*2+1]);}
+fn r_min(a:u16,b:u16) u16 {if(a<b){return a;}return b;}
+fn r_send(wait:bool) void {
+  @assert(!r_issued);r_issued=true;r_wait=wait;r_sequence+=1;frame[4]=r_sequence;
+  const mem=@get_dsd(mem1d_dsd,.{.base_address=&frame,.extent=70});
+  const wire=@get_dsd(fabout_dsd,.{.output_queue=command_oq,.extent=70});
+  @load_to_dsr(command_src,mem);@load_to_dsr(command_dst,wire,.{.async=true,.activate=broadcast_done});
+  @mov32(command_dst,command_src,.{.async=true});
+}
+fn r_read(xy:u32,kind:u32,offset:u16,count:u16) void {
+  @assert(count>0 and count<=272);frame[0]=3;frame[1]=xy;frame[2]=kind;frame[3]=@as(u32,count);frame[5]=@as(u32,offset);r_send(true);
+}
+fn r_write(xy:u32,offset:u16,source:u16,count:u16) void {
+  @assert(count>0 and count<=128 and source+count<=272);
+  frame[0]=6;frame[1]=xy;frame[2]=@as(u32,offset);frame[3]=@as(u32,count);
+  var i:u16=0;while(i<count){
+    var bits:u32=@as(u32,qwen.round(r_buffer[source+i]));
+    if(i+1<count){bits|=@as(u32,qwen.round(r_buffer[source+i+1]))<<16;}
+    frame[5+i/2]=bits;i+=2;
+  }r_send(false);
+}
+fn r_trace_xy(index:u16) u32 {
+  @assert(index<3183);
+  if(index==0){return r_xy(748,161);}
+  if(index<1483){const n=index-1;return r_xy(747+n%2,162+n/2);}
+  if(index<1503){return r_xy(729+index-1483,903);}
+  const n=index-1503;return r_xy(720+n%29,904+n/29);
+}
+fn r_capture(base:u16,index:u32,source:u16,count:u16) void {
+  const bank_index:u16=@as(u16,index/17536)+base;const offset:u16=@as(u16,index%17536);
+  r_count=r_min(count,17536-offset);r_write(r_trace_xy(bank_index),offset,source,r_count);
+}
+fn r_finish_instruction() void {r_pc+=1;r_phase=0;}
+fn r_matrix(id:u16,source:u16,destination:u16,head:bool) void {
+  const d:u16=id*8;const width:u16=matrices[d+3];const base:u16=matrices[d+4];const rows:u16=matrices[d+5];
+  const tiles:u16=matrices[d+6];const total:u32=@as(u32,matrices[d+1])|(@as(u32,matrices[d+2])<<16);
+  if(r_phase==0){r_group=0;r_phase=1;if(head){r_best=@bitcast(f32,@as(u32,0xff800000));r_winner=0;}}
+  else if(r_phase==1){r_phase=2;r_read(r_io(source),1,r_group*128,128);}
+  else if(r_phase==2){
+    frame[0]=1;frame[1]=@as(u32,id);frame[2]=@as(u32,r_group);
+    if(matrices[d]==1){
+      quant.quantize(&r_buffer,&r_codes,&r_scale);
+      for(@range(u16,32))|i|{frame[5+i]=@as(u32,r_codes[4*i])|(@as(u32,r_codes[4*i+1])<<8)|(@as(u32,r_codes[4*i+2])<<16)|(@as(u32,r_codes[4*i+3])<<24);}
+      frame[37]=@bitcast(u32,r_scale[0]);
+    }else{
+      for(@range(u16,64))|i|{frame[5+i]=@as(u32,qwen.round(r_buffer[2*i]))|(@as(u32,qwen.round(r_buffer[2*i+1]))<<16);}
+    }
+    r_group+=1;r_phase=1;if(r_group==width){r_phase=3;}r_send(false);
+  }else if(r_phase==3){frame[0]=2;frame[1]=@as(u32,id);r_tile=0;r_phase=4;r_send(false);}
+  else if(r_phase==4){
+    var xy=@zeros([2]u16);atlas.locate(width,base+r_tile,&xy);r_phase=5;
+    r_read(r_xy(xy[0]+width-1,xy[1]),0,0,rows);
+  }else if(r_phase==5){
+    r_valid=rows;const start:u32=@as(u32,r_tile)*@as(u32,rows);
+    if(total-start<@as(u32,rows)){r_valid=@as(u16,total-start);}r_chunk=0;r_phase=6;
+    if(head){
+      var i:u16=0;while(i<r_valid){
+        const value:f32=qwen.expand(qwen.round(r_buffer[i]));const token:u32=start+@as(u32,i);
+        @assert((@bitcast(u32,value)&0x7f800000)!=0x7f800000);
+        if(value>r_best or (value==r_best and token<r_winner)){r_best=value;r_winner=token;}i+=1;
+      }
+    }
+  }else if(r_phase==6){
+    if(head and controls[3]==0){r_phase=8;}
+    else{
+      r_count=r_min(128,r_valid-r_chunk);r_phase=7;
+      if(head){r_capture(1794,@as(u32,r_position)*248320+@as(u32,r_tile)*140+@as(u32,r_chunk),r_chunk,r_count);}
+      else{r_write(r_io(destination),r_tile*rows+r_chunk,r_chunk,r_count);}
+    }
+  }else if(r_phase==7){r_chunk+=r_count;r_phase=6;if(r_chunk==r_valid){r_phase=8;}}
+  else{
+    @assert(r_phase==8);r_tile+=1;
+    if(r_tile<tiles){r_phase=4;}
+    else if(!head){r_finish_instruction();}
+    else{
+      r_position+=1;
+      if(@as(u32,r_position)<controls[0]){r_token=prompt[r_position];r_pc=0;r_phase=0;r_layer=0;}
+      else{
+        generated[r_generated]=r_winner;r_generated+=1;r_token=r_winner;
+        result[0]=r_winner;result[1]=@as(u32,r_generated);result[2]=@as(u32,r_position);result[3]=0;result[4]=@bitcast(u32,r_best);
+        if(r_winner==controls[2] or @as(u32,r_generated)>=controls[1] or r_position>=96){result[3]=1;}
+        r_end=true;frame[0]=4;r_send(false);
+      }
+    }
+  }
+}
+fn r_embedding() void {
+  const row:u16=@as(u16,r_token/140);const width:u16=matrices[3];
+  if(r_phase==0){
+    @assert(r_token<248320);frame[0]=5;frame[1]=0;frame[2]=@as(u32,row);frame[3]=r_token%140;
+    r_group=0;r_phase=1;r_send(false);
+  }else if(r_phase==1){
+    var xy=@zeros([2]u16);atlas.locate(width,matrices[4]+row,&xy);r_phase=2;r_read(r_xy(xy[0]+r_group,xy[1]),0,0,128);
+  }else if(r_phase==2){r_phase=3;r_write(r_io(0),r_group*128,0,128);}
+  else{r_group+=1;if(r_group<width){r_phase=1;}else{r_finish_instruction();}}
+}
+fn r_norm(source:u16,target:u16) void {
+  if(r_phase==0){r_chunk=0;r_phase=1;}
+  else if(r_phase==1){r_phase=2;r_read(r_io(source),1,r_chunk,128);}
+  else if(r_phase==2){r_phase=3;r_write(r_io(target),r_chunk,0,128);}
+  else if(r_phase==3){r_chunk+=128;r_phase=1;if(r_chunk==5120){r_phase=4;}}
+  else if(r_phase==4){frame[0]=10;frame[1]=r_io(target);r_phase=5;r_send(false);}
+  else if(r_phase==5){if(target==144 and controls[3]!=0){r_chunk=0;r_phase=6;}else{r_finish_instruction();}}
+  else if(r_phase==6){r_phase=7;r_read(r_io(target),1,r_chunk,128);}
+  else if(r_phase==7){r_phase=8;r_capture(3154,@as(u32,r_position)*5120+@as(u32,r_chunk),0,128);}
+  else{r_chunk+=128;r_phase=6;if(r_chunk==5120){r_finish_instruction();}}
+}
+fn r_elementwise(a:u16,b:u16,c:u16,silu:bool) void {
+  var count:u16=5120;var destination:u16=a;
+  if(silu){count=17408;destination=c;}
+  if(r_phase==0){r_chunk=0;r_phase=1;}
+  else if(r_phase==1){r_phase=2;r_read(r_io(a),1,r_chunk,128);}
+  else if(r_phase==2){for(@range(u16,128))|i|{r_saved[i]=r_buffer[i];}r_phase=3;r_read(r_io(b),1,r_chunk,128);}
+  else if(r_phase==3){
+    for(@range(u16,128))|i|{
+      if(silu){r_buffer[i]=qwen.expand(qwen.round(qwen.expand(qwen.round(qwen.silu(r_saved[i])))*r_buffer[i]));}
+      else{r_buffer[i]=qwen.expand(qwen.round(r_saved[i]+r_buffer[i]));}
+    }r_phase=4;r_write(r_io(destination),r_chunk,0,128);
+  }else if(r_phase==4){
+    r_chunk+=128;
+    if(r_chunk<count){r_phase=1;}
+    else if(!silu and b==12){
+      if(controls[3]!=0){r_chunk=0;r_phase=5;}else{r_layer+=1;r_finish_instruction();}
+    }else{r_finish_instruction();}
+  }else if(r_phase==5){r_phase=6;r_read(r_io(0),1,r_chunk,128);}
+  else if(r_phase==6){r_phase=7;r_capture(0,(@as(u32,r_position)*64+@as(u32,r_layer))*5120+@as(u32,r_chunk),0,128);}
+  else{r_chunk+=128;if(r_chunk<5120){r_phase=5;}else{r_layer+=1;r_finish_instruction();}}
+}
+fn r_actor_xy(layer:u16,head:u16,attention:bool) u32 {
+  if(attention){return r_xy(744,90+(layer/4)*4+head);}
+  const index:u16=(layer-layer/4)*48+head;
+  if(index<555){return r_xy(744,154+index);}
+  const n:u16=index-555;return r_xy(720+(n%9)*3,709+n/9);
+}
+fn r_actor(layer:u16,attention:bool) void {
+  const xy:u32=r_actor_xy(layer,r_head,attention);var segments:u16=6;var heads:u16=48;
+  if(attention){segments=28;heads=4;}
+  if(r_phase==0){r_head=0;r_segment=0;r_phase=1;}
+  else if(r_phase==1){
+    var bank:u16=3;var offset:u16=0;var count:u16=128;
+    if(attention){
+      if(r_segment<2){bank=5;offset=r_head*256+r_segment*128;}
+      else if(r_segment<4){bank=6;offset=r_head*256+(r_segment-2)*128;}
+      else if(r_segment<16){const n=r_segment-4;offset=(r_head*6+n/2)*512+(n%2)*128;}
+      else{const n=r_segment-16;offset=(r_head*6+n/2)*512+256+(n%2)*128;}
+    }else{
+      if(r_segment==0){offset=(r_head/3)*128;}
+      else if(r_segment==1){offset=2048+(r_head/3)*128;}
+      else if(r_segment==2){offset=4096+r_head*128;}
+      else if(r_segment==3){bank=4;offset=r_head*128;}
+      else{bank=r_segment+1;offset=r_head;count=1;}
+    }r_count=count;r_phase=2;r_read(r_io(bank),1,offset,count);
+  }else if(r_phase==2){
+    var offset:u16=r_segment*128;if(!attention and r_segment==5){offset=513;}
+    r_phase=3;r_write(xy,offset,0,r_count);
+  }else if(r_phase==3){r_segment+=1;r_phase=1;if(r_segment==segments){r_phase=4;}}
+  else if(r_phase==4){frame[0]=11;frame[1]=xy;frame[2]=@as(u32,r_position);r_chunk=0;r_phase=5;r_send(false);}
+  else if(r_phase==5){r_phase=6;r_read(xy,2,r_chunk,128);}
+  else if(r_phase==6){
+    var offset:u16=r_head*128;if(attention){offset=r_head*1536+r_chunk;}r_phase=7;r_write(r_io(7),offset,0,128);
+  }else{
+    r_chunk+=128;
+    if(attention and r_chunk<1536){r_phase=5;}
+    else{r_head+=1;if(r_head<heads){r_segment=0;r_phase=1;}else{r_finish_instruction();}}
+  }
+}
+fn root_tick() void {
+  r_issued=false;
+  while(!r_issued){
+    if(r_reset){r_reset=false;frame[0]=12;r_send(false);}
+    else{
+      @assert(r_pc<883 and r_position<96);const p:u16=r_pc*4;
+      const op:u16=program[p];const a:u16=program[p+1];const b:u16=program[p+2];const c:u16=program[p+3];
+      if(op==1){r_embedding();}else if(op==2){r_norm(a,b);}else if(op==3){r_matrix(a,b,c,false);}
+      else if(op==4 or op==5){r_actor(a,op==5);}else if(op==6 or op==7){r_elementwise(a,b,c,op==7);}
+      else{@assert(op==8 and r_layer==64);r_matrix(a,b,0,true);}
+    }
+  }
+}
+fn root_sent() void {
+  if(r_end){trace[4]+=1;sys.unblock_cmd_stream();}
+  else if(r_wait){
+    var mem=@get_dsd(mem1d_dsd,.{.base_address=&r_buffer,.extent=1});
+    var wire=@get_dsd(fabin_dsd,.{.input_queue=south_iq,.extent=1});
+    mem=@set_dsd_length(mem,@as(u16,frame[3]));wire=@set_dsd_length(wire,@as(u16,frame[3]));
+    @load_to_dsr(return_dst,mem);@load_to_dsr(return_src,wire,.{.async=true,.activate=return_done});
+    @mov32(return_dst,return_src,.{.async=true});
+  }else{root_tick();}
+}
+fn root_begin() void {
+  @assert(controls[0]>0 and controls[0]<=96 and controls[1]>0 and controls[1]<=96);
+  @assert(controls[0]+controls[1]-1<=96 and controls[2]==248046 and controls[3]<=1);
+  r_generated=0;r_position=0;r_token=prompt[0];r_reset=true;r_end=false;r_pc=0;r_phase=0;r_layer=0;
+  for(@range(u16,96))|i|{generated[i]=0;}for(@range(u16,5))|i|{result[i]=0;}root_tick();
+}
+fn root_step() void {
+  @assert(r_generated>0 and result[3]==0 and r_position<96);
+  r_end=false;r_pc=0;r_phase=0;r_layer=0;root_tick();
+}
+comptime {
+  @export_symbol(export_program,"program");@export_symbol(export_matrices,"matrices");
+  @export_symbol(export_io,"io");@export_symbol(export_prompt,"prompt");
+  @export_symbol(export_controls,"controls");@export_symbol(export_generated,"generated");
+  @export_symbol(export_result,"result");
+}
+
+comptime {
+ @export_symbol(export_conv,"conv");@export_symbol(export_gate,"gate");
+ @export_symbol(export_gain,"gain");@export_symbol(export_freq,"freq");
+}
+
+const export_config:[*]u32=&config;
+const export_trace:[*]u32=&trace;
+const export_weights:[*]u16=weight_data();
+const export_scales:[*]f32=scale_data();
+const export_data:[*]u16=data_buffer();
+const export_program:[*]u16=&program;
+const export_matrices:[*]u16=&matrices;
+const export_io:[*]u16=&io;
+const export_prompt:[*]u32=&prompt;
+const export_controls:[*]u32=&controls;
+const export_generated:[*]u32=&generated;
+const export_result:[*]u32=&result;
+const export_conv:[*]u16=conv_data();
+const export_gate:[*]u16=gate_data();
+const export_gain:[*]u16=gain_data();
+const export_freq:[*]f32=frequency_data();

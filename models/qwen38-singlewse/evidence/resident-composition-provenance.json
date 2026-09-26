@@ -1,0 +1,19 @@
+{
+  "source": {
+    "gdn": {
+      "path": "experiments/gdn_head/pe.csl",
+      "sha256": "7837d624a846586e97d77de4322a372a52879de81cb40a576db6bb7380ed54f8"
+    },
+    "attention": {
+      "path": "experiments/attention_group/pe.csl",
+      "sha256": "bad686e3052fb04e6ede62566f6f94a119ba6e8059c9fd74e21b9e29211536b1"
+    }
+  },
+  "qualifications": [
+    "bank-chain-hw-001",
+    "resident-bf16-hw-001",
+    "gdn-head-hw-003",
+    "attention-group-hw-001"
+  ],
+  "changes": "Global frame70 bus; runtime coordinates; local colors12/13/14,queues3/6,DSR7,tasks14..16; global receive held during complete actor request. New composition remains unqualified."
+}

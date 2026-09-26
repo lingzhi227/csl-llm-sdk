@@ -1,0 +1,10 @@
+{
+  "scope": "Original5120 norm gain; three BF16 vectors;128 fixed nonlinear probes",
+  "tensor": "model.language_model.layers.0.input_layernorm.weight",
+  "shard_sha256": "07f700e293baeaf3cd4240c3df1a948c4403f16961ea7979e86c8d6a9f8fd466",
+  "criterion": "RMSNorm FP64 gamma5200 interval followed by BF16 rounding; nonlinear relative bounds2e-6/2e-6/3e-6/5e-6 plus2*minimum FP32 normal",
+  "normal_fp32_profile": true,
+  "negative_silu_tail_test": true,
+  "fixture_sha256": "b180c8c1f192873efa280ae163193a63b1ed5030dbd929e30d5b69ef67d750bd",
+  "full_model": false
+}

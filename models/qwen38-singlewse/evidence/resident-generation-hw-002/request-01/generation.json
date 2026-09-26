@@ -1,0 +1,72 @@
+{
+  "request": 1,
+  "workload": "greeting",
+  "capture_enabled": false,
+  "physical": true,
+  "prompt_ids": [
+    248045,
+    846,
+    198,
+    44240,
+    23066,
+    303,
+    799,
+    2716,
+    11316,
+    13,
+    248046,
+    198,
+    248045,
+    74455,
+    198,
+    248068,
+    271,
+    248069,
+    271
+  ],
+  "generated_ids": [
+    9419,
+    0,
+    248046
+  ],
+  "eos_reached": true,
+  "processed_positions": 21,
+  "all_layers": 64,
+  "vocabulary": 248320,
+  "ttft_seconds": 554.969575078,
+  "end_to_end_seconds": 613.47197007,
+  "steps": [
+    {
+      "index": 0,
+      "token": 9419,
+      "position": 19,
+      "done": false,
+      "maximum_logit": 24.0,
+      "dependent_step_seconds": 554.968273676,
+      "observed_token_interval_seconds": 554.969575078,
+      "elapsed_seconds": 554.969575078
+    },
+    {
+      "index": 1,
+      "token": 0,
+      "position": 20,
+      "done": false,
+      "maximum_logit": 25.625,
+      "dependent_step_seconds": 29.248621156,
+      "observed_token_interval_seconds": 29.250774035,
+      "elapsed_seconds": 584.220349113
+    },
+    {
+      "index": 2,
+      "token": 248046,
+      "position": 21,
+      "done": true,
+      "maximum_logit": 25.25,
+      "dependent_step_seconds": 29.249806922,
+      "observed_token_interval_seconds": 29.251620957,
+      "elapsed_seconds": 613.47197007
+    }
+  ],
+  "no_hidden_or_next_token_upload": true,
+  "numerical_acceptance_pending": true
+}

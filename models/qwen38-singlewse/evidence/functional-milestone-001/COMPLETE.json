@@ -1,0 +1,143 @@
+{
+  "phase_closed": true,
+  "publication_authorized_by_user": true,
+  "scope": "Initial operator development and full-model sentence-generation functionality; further communication and speed work planned",
+  "physical": true,
+  "system_count": 1,
+  "architecture": "WSE-3",
+  "model": "Qwen/Qwen3.8-27B-FP8",
+  "revision": "017b9c7af6b5689d5dd426a76e0bc077eb5ca20a",
+  "physical_attempt": "resident-generation-hw-003",
+  "compiled_attempt": "full-resident-hw-004",
+  "reference_attempt": "reference-sequence-002",
+  "artifact_sha256": "a637f385554ba8d6b186be74a31f0d449215323b64d96955b3c51534132213da",
+  "full_model_execution_observed": true,
+  "all_layers": 64,
+  "vocabulary": 248320,
+  "text_tensors_loaded": 1251,
+  "context_capacity": 96,
+  "prompt_tokens": 28,
+  "generated_tokens_including_eos": 37,
+  "generated_ids": [
+    760,
+    7948,
+    37728,
+    8617,
+    290,
+    279,
+    13159,
+    303,
+    264,
+    20117,
+    34774,
+    11,
+    46040,
+    685,
+    279,
+    64190,
+    383,
+    279,
+    10583,
+    13,
+    92244,
+    11,
+    19053,
+    5820,
+    836,
+    67934,
+    6353,
+    53938,
+    11,
+    20621,
+    279,
+    3594,
+    440,
+    46569,
+    85949,
+    13,
+    248046
+  ],
+  "generated_text": "The warm sunlight bathed the garden in a golden glow, waking up the dew on the leaves. Nearby, birds began their cheerful morning chorus, filling the air with lively melodies.",
+  "processed_positions": 64,
+  "capture_enabled": true,
+  "ttft_seconds": 838.693552495,
+  "end_to_end_seconds": 1921.589062858,
+  "mean_dependent_step_seconds": 30.078045532222223,
+  "min_dependent_step_seconds": 30.0121205,
+  "max_dependent_step_seconds": 30.139299405,
+  "dependent_decode_tokens_per_second_including_eos": 0.03324420468594643,
+  "weight_initialization_seconds": 396.73778441455215,
+  "strict_cpu_alignment_passed": false,
+  "full_sequence_numerical_qualification_complete": false,
+  "numerical_vector_comparisons_observed": 2330,
+  "numerical_expected_comparisons": 4224,
+  "numerical_summary": {
+    "records": 2330,
+    "by_kind": {
+      "layer": {
+        "checks": 2260,
+        "all_passed": false,
+        "min_cosine": 0.9740986040262681,
+        "max_relative_l2": 0.22735747675193313,
+        "max_max_abs_error": 18.5,
+        "max_rms_abs_error": 1.0193197599766555,
+        "max_max_abs_error_over_reference_rms": 3.991732207559705
+      },
+      "final_norm": {
+        "checks": 35,
+        "all_passed": false,
+        "min_cosine": 0.9739150465360497,
+        "max_relative_l2": 0.22843094321053564,
+        "max_max_abs_error": 2.6875,
+        "max_rms_abs_error": 0.4443831990359893,
+        "max_max_abs_error_over_reference_rms": 1.4118348909933978
+      },
+      "logits": {
+        "checks": 35,
+        "all_passed": false,
+        "min_cosine": 0.9758975861810746,
+        "max_relative_l2": 0.21829447302170535,
+        "max_max_abs_error": 2.65625,
+        "max_rms_abs_error": 0.466177854400379,
+        "max_max_abs_error_over_reference_rms": 1.3950034848116992
+      }
+    },
+    "first_failure": {
+      "position": 0,
+      "kind": "layer",
+      "index": 21,
+      "relative_l2": 0.003758412438684435,
+      "cosine": 0.9999968204596179,
+      "max_abs_error": 1.0,
+      "rms_abs_error": 0.015651065656028876,
+      "max_abs_error_over_reference_rms": 0.24013779772476224,
+      "passed": false
+    }
+  },
+  "physical_session_completed_normally": false,
+  "job_cancelled_after_complete_sentence_capture": true,
+  "all_owned_physical_jobs_released": true,
+  "corrected_reset_and_replay_completed": false,
+  "small_norm_diagnostic": {
+    "baseline_vs_original": {
+      "different": 32,
+      "max_bf16_ulp": 1
+    },
+    "compensated_vs_original": {
+      "different": 3,
+      "max_bf16_ulp": 1
+    },
+    "original_vs_fp64": {
+      "different": 4,
+      "max_bf16_ulp": 1
+    },
+    "compensated_vs_fp64": {
+      "different": 3,
+      "max_bf16_ulp": 1
+    }
+  },
+  "small_norm_diagnostic_cases": 65,
+  "small_norm_scalar_values": 332800,
+  "user_closing_instruction": "Publish the initial operator-development and functional-validation milestone; retain limitations and continue communication/performance optimization in future work.",
+  "recorded_utc": "2026-09-26T10:17:46.168753+00:00"
+}

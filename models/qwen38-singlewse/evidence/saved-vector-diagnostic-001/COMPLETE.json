@@ -1,0 +1,99 @@
+{
+  "diagnostic": true,
+  "full_model_accepted": false,
+  "criteria_changed": false,
+  "compared_positions": 20,
+  "expected_full_positions": 66,
+  "summary": {
+    "layer": {
+      "checks": 1280,
+      "failed": 985,
+      "max_relative_l2": 0.07040846457407449,
+      "min_cosine": 0.9978388732738003,
+      "max_abs_error": 22.0,
+      "max_abs_over_rms": 3.755532062159625
+    },
+    "final_norm": {
+      "checks": 20,
+      "failed": 20,
+      "max_relative_l2": 0.0690955659346658,
+      "min_cosine": 0.9976214303852143,
+      "max_abs_error": 1.4375,
+      "max_abs_over_rms": 0.8050880454050217
+    },
+    "logits": {
+      "checks": 20,
+      "failed": 18,
+      "max_relative_l2": 0.03975865935373951,
+      "min_cosine": 0.9992416653238492,
+      "max_abs_error": 1.0166015625,
+      "max_abs_over_rms": 0.27527171519787064
+    }
+  },
+  "failed_vector_count": 1023,
+  "first_failure": {
+    "position": 0,
+    "kind": "layer",
+    "index": 21,
+    "relative_l2": 0.0037235382525154,
+    "cosine": 0.9999969181506159,
+    "max_abs_error": 1.0,
+    "rms_abs_error": 0.015505839929385848,
+    "max_abs_error_over_reference_rms": 0.24013779772476224,
+    "passed": false,
+    "outliers": [
+      {
+        "index": 3456,
+        "candidate": 247.0,
+        "reference": 246.0,
+        "candidate_bits": 17271,
+        "reference_bits": 17270,
+        "absolute_error": 1.0,
+        "reference_bf16_ulp": 1.0,
+        "error_in_reference_ulps": 1.0
+      },
+      {
+        "index": 4110,
+        "candidate": -7.40625,
+        "reference": -7.46875,
+        "candidate_bits": 49389,
+        "reference_bits": 49391,
+        "absolute_error": 0.0625,
+        "reference_bf16_ulp": 0.03125,
+        "error_in_reference_ulps": 2.0
+      },
+      {
+        "index": 2943,
+        "candidate": 3.921875,
+        "reference": 3.96875,
+        "candidate_bits": 16507,
+        "reference_bits": 16510,
+        "absolute_error": 0.046875,
+        "reference_bf16_ulp": 0.015625,
+        "error_in_reference_ulps": 3.0
+      },
+      {
+        "index": 2823,
+        "candidate": -2.578125,
+        "reference": -2.546875,
+        "candidate_bits": 49189,
+        "reference_bits": 49187,
+        "absolute_error": 0.03125,
+        "reference_bf16_ulp": 0.015625,
+        "error_in_reference_ulps": 2.0
+      },
+      {
+        "index": 4579,
+        "candidate": 2.828125,
+        "reference": 2.859375,
+        "candidate_bits": 16437,
+        "reference_bits": 16439,
+        "absolute_error": 0.03125,
+        "reference_bf16_ulp": 0.015625,
+        "error_in_reference_ulps": 2.0
+      }
+    ]
+  },
+  "source_sha256": "84ad41dc1bb1453757c1fd0a6499ae31869c14b9d500ba08f6a6d0557199ff8a",
+  "criteria_sha256": "5ef20bd818195a747ecf75d15e4abbefe472d0aa1bc0fb01733819833895c2a8"
+}

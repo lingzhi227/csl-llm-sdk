@@ -1,0 +1,39 @@
+{
+  "passed": true,
+  "normal_stop": true,
+  "physical": true,
+  "full_model": false,
+  "full_matrix": true,
+  "west_to_east": true,
+  "retention_pass": true,
+  "scope": "Complete original 17408x5120 layer0 gate projection; device group128 quantization, 64-row broadcast and 40-block reductions",
+  "calls": [
+    {
+      "call": 1,
+      "max_abs_error": 4.736433023566633e-07,
+      "max_abs_bound": 0.0010260010779145447,
+      "numerical_pass": true,
+      "broadcast_pass": true,
+      "counter_pass": true,
+      "host_roundtrip_seconds": 0.008891487494111061
+    },
+    {
+      "call": 2,
+      "max_abs_error": 2.5054334717999893e-07,
+      "max_abs_bound": 0.0004596211359546056,
+      "numerical_pass": true,
+      "broadcast_pass": true,
+      "counter_pass": true,
+      "host_roundtrip_seconds": 0.002970675937831402
+    },
+    {
+      "call": 3,
+      "max_abs_error": 0.0,
+      "max_abs_bound": 1.1754943508222875e-38,
+      "numerical_pass": true,
+      "broadcast_pass": true,
+      "counter_pass": true,
+      "host_roundtrip_seconds": 0.002789105288684368
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "repository": "Qwen/Qwen3.8-27B-FP8",
+  "revision": "017b9c7af6b5689d5dd426a76e0bc077eb5ca20a",
+  "tensor": "model.language_model.layers.0.mlp.gate_proj.weight",
+  "shard_sha256": "07f700e293baeaf3cd4240c3df1a948c4403f16961ea7979e86c8d6a9f8fd466",
+  "matrix_shape": [
+    17408,
+    5120
+  ],
+  "application_pes": 2600,
+  "fixture_sha256": "9ab7b881f556758bcc5dacfd7b3e33f98ea06e03c453fe6c086600881b3ddf08",
+  "criterion": "Exact device quantized packet broadcast; gamma(300)*sum(abs(products)) FP64 oracle; all weight retention; all counters",
+  "quantization_oracle": "Independent NumPy mathematical decoder and nearest-neighbor encoder with ties-to-even",
+  "full_model": false,
+  "weight_uploads": "Once, before three calls; complete original gate projection"
+}

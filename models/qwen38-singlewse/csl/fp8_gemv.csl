@@ -1,0 +1,45 @@
+// Original E4M3FN bytes remain resident; one column is expanded at a time.
+// Row-major source is packed into [column][row/2] u16 words by the loader.
+// This kernel qualifies weight decode and FP32 accumulation, not activation quantization.
+param rows: u16;
+param columns: u16;
+param row_phase: u16;
+comptime { @comptime_assert(rows % 2 == 0 and columns == 128); }
+var expanded = @zeros([rows]f32);
+const yd = @get_dsr(dsr_dest, 4);
+const ys = @get_dsr(dsr_src0, 4);
+const ws = @get_dsr(dsr_src1, 4);
+
+const magnitude_bf16 = [128]u16 {
+  0,15104,15232,15296,15360,15392,15424,15456,15488,15504,15520,15536,15552,15568,15584,15600,
+  15616,15632,15648,15664,15680,15696,15712,15728,15744,15760,15776,15792,15808,15824,15840,15856,
+  15872,15888,15904,15920,15936,15952,15968,15984,16000,16016,16032,16048,16064,16080,16096,16112,
+  16128,16144,16160,16176,16192,16208,16224,16240,16256,16272,16288,16304,16320,16336,16352,16368,
+  16384,16400,16416,16432,16448,16464,16480,16496,16512,16528,16544,16560,16576,16592,16608,16624,
+  16640,16656,16672,16688,16704,16720,16736,16752,16768,16784,16800,16816,16832,16848,16864,16880,
+  16896,16912,16928,16944,16960,16976,16992,17008,17024,17040,17056,17072,17088,17104,17120,17136,
+  17152,17168,17184,17200,17216,17232,17248,17264,17280,17296,17312,17328,17344,17360,17376,32704
+};
+
+fn decode(code: u16) f32 {
+  const bits: u16 = magnitude_bf16[code & 127] | ((code & 128) << 8);
+  return @bitcast(f32, @as(u32, bits) << 16);
+}
+
+fn compute(weights: [*]u16, scales: [*]f32, input: [*]f32, output: [*]f32) void {
+  const out_dsd = @get_dsd(mem1d_dsd, .{.base_address=output, .extent=rows});
+  const expanded_dsd = @get_dsd(mem1d_dsd, .{.base_address=&expanded, .extent=rows});
+  @fmovs(out_dsd, 0.0);
+  @load_to_dsr(yd, out_dsd, .{.save_address=false});
+  @load_to_dsr(ys, out_dsd, .{.save_address=false});
+  @load_to_dsr(ws, expanded_dsd, .{.save_address=false});
+  for (@range(u16, columns)) |c| {
+    for (@range(u16, rows / 2)) |pair| {
+      const packed_word: u16 = weights[c * (rows / 2) + pair];
+      const r: u16 = pair * 2;
+      expanded[r] = decode(packed_word & 255) * scales[(r + row_phase) / 128];
+      expanded[r+1] = decode(packed_word >> 8) * scales[(r+1+row_phase) / 128];
+    }
+    @fmacs(yd, ys, ws, input[c]);
+  }
+}

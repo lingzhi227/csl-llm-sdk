@@ -1,0 +1,73 @@
+{
+  "passed": true,
+  "error": null,
+  "artifact": "/srv/qwen38-singlewse-hardware/full-resident-hw-004/cs_6c9db02887df6a37ae55d1f504458c4a8353f86dc0471562fb8b6d671a88962a.tar.gz",
+  "artifact_sha256": "a637f385554ba8d6b186be74a31f0d449215323b64d96955b3c51534132213da",
+  "compressed_bytes": 46628612,
+  "expanded_bytes": 1159592691,
+  "members": 476,
+  "application_elfs": 434,
+  "application_pes": 870000,
+  "expected_application_pes": 870000,
+  "failed_sram_pes": 0,
+  "max_low_section_end": 43728,
+  "stack_allowance": 4096,
+  "ceiling": 48128,
+  "heaviest": [
+    {
+      "low_section_end": 43728,
+      "file": "cs_6c9db02887df6a37ae55d1f504458c4a8353f86dc0471562fb8b6d671a88962a/out/bin/out_9_9.elf"
+    },
+    {
+      "low_section_end": 43728,
+      "file": "cs_6c9db02887df6a37ae55d1f504458c4a8353f86dc0471562fb8b6d671a88962a/out/bin/out_9_8.elf"
+    },
+    {
+      "low_section_end": 43728,
+      "file": "cs_6c9db02887df6a37ae55d1f504458c4a8353f86dc0471562fb8b6d671a88962a/out/bin/out_9_7.elf"
+    },
+    {
+      "low_section_end": 43728,
+      "file": "cs_6c9db02887df6a37ae55d1f504458c4a8353f86dc0471562fb8b6d671a88962a/out/bin/out_9_6.elf"
+    },
+    {
+      "low_section_end": 43728,
+      "file": "cs_6c9db02887df6a37ae55d1f504458c4a8353f86dc0471562fb8b6d671a88962a/out/bin/out_9_5.elf"
+    },
+    {
+      "low_section_end": 43728,
+      "file": "cs_6c9db02887df6a37ae55d1f504458c4a8353f86dc0471562fb8b6d671a88962a/out/bin/out_9_4.elf"
+    },
+    {
+      "low_section_end": 43728,
+      "file": "cs_6c9db02887df6a37ae55d1f504458c4a8353f86dc0471562fb8b6d671a88962a/out/bin/out_9_3.elf"
+    },
+    {
+      "low_section_end": 43728,
+      "file": "cs_6c9db02887df6a37ae55d1f504458c4a8353f86dc0471562fb8b6d671a88962a/out/bin/out_9_2.elf"
+    },
+    {
+      "low_section_end": 43728,
+      "file": "cs_6c9db02887df6a37ae55d1f504458c4a8353f86dc0471562fb8b6d671a88962a/out/bin/out_9_12.elf"
+    },
+    {
+      "low_section_end": 43728,
+      "file": "cs_6c9db02887df6a37ae55d1f504458c4a8353f86dc0471562fb8b6d671a88962a/out/bin/out_9_11.elf"
+    },
+    {
+      "low_section_end": 43728,
+      "file": "cs_6c9db02887df6a37ae55d1f504458c4a8353f86dc0471562fb8b6d671a88962a/out/bin/out_9_10.elf"
+    },
+    {
+      "low_section_end": 43728,
+      "file": "cs_6c9db02887df6a37ae55d1f504458c4a8353f86dc0471562fb8b6d671a88962a/out/bin/out_9_1.elf"
+    }
+  ],
+  "source_files": 14,
+  "source_identity_pass": true,
+  "seconds": 9.40616952162236,
+  "scope": "Every application ELF plus declared stack reserve; not measured dynamic stack peak or full-model numerical acceptance",
+  "member_cache_cleared": true,
+  "max_elf_buffer_bytes": 8388608,
+  "hash_buffer_bytes": 1048576
+}

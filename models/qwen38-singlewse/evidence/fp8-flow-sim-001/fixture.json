@@ -1,0 +1,26 @@
+{
+  "repository": "Qwen/Qwen3.8-27B-FP8",
+  "revision": "017b9c7af6b5689d5dd426a76e0bc077eb5ca20a",
+  "source": {
+    "file": "layers-0.safetensors",
+    "bytes": 383865448,
+    "sha256": "07f700e293baeaf3cd4240c3df1a948c4403f16961ea7979e86c8d6a9f8fd466",
+    "publisher_verified": true
+  },
+  "tensor": "model.language_model.layers.0.mlp.gate_proj.weight",
+  "rows": [
+    272,
+    544
+  ],
+  "columns": [
+    0,
+    128
+  ],
+  "row_phase": 16,
+  "cases": 5,
+  "fixture_sha256": "584438729daa6db9c2d4d787b5793eeb3de1de97003f015cb3c4d4b970a1276c",
+  "criterion": "Exact quantized packet bytes/scales; FP64 block dot oracle; gamma(260)*sum(abs(products)); retention and counters",
+  "scale_order": "FP32(dot*activation_scale)*weight_scale; block partial remains FP32",
+  "full_model": false,
+  "host_neural_computation_during_candidate_run": false
+}

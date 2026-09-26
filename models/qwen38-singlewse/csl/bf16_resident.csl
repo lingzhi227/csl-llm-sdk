@@ -1,0 +1,30 @@
+// Resident original BF16 block. 272-word scratch can relay an adjacent FP8 strip.
+// DSR3 expands BF16 high halves; DSR4 performs ascending-column FP32 FMA.
+param rows:u16;
+var scratch=@zeros([272]f32);
+const pd=@get_dsr(dsr_dest,3);const ps=@get_dsr(dsr_src0,3);
+const yd=@get_dsr(dsr_dest,4);const ys=@get_dsr(dsr_src0,4);const ws=@get_dsr(dsr_src1,4);
+fn expand(bits:u16) f32 {return @bitcast(f32,@as(u32,bits)<<16);}
+fn compute(weights:[*]u16,packet:[*]u32,output:[*]f32) void {
+  const out=@get_dsd(mem1d_dsd,.{.base_address=output,.extent=rows});
+  const tmp=@get_dsd(mem1d_dsd,.{.base_address=&scratch,.extent=rows});
+  const low=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]u16,&scratch),.extent=rows,.stride=2});
+  const high=@increment_dsd_offset(low,1,u16);
+  const weight=@get_dsd(mem1d_dsd,.{.base_address=weights,.extent=rows});
+  @fmovs(out,0.0);@fmovs(tmp,0.0);
+  @load_to_dsr(pd,high,.{.save_address=false});@load_to_dsr(ps,weight,.{.save_address=true});
+  @load_to_dsr(yd,out,.{.save_address=false});@load_to_dsr(ys,out,.{.save_address=false});
+  @load_to_dsr(ws,tmp,.{.save_address=false});
+  for(@range(u16,128))|c|{
+    const bits=@as(u16,packet[c/2]>>((c%2)*16));
+    @mov16(pd,ps);@fmacs(yd,ys,ws,expand(bits));
+  }
+}
+fn embedding(weights:[*]u16,row:u16,output:[*]f32) void {
+  @assert(row<rows);
+  for(@range(u16,128))|c|{output[c]=expand(weights[c*rows+row]);}
+}
+fn reduction_buffer() [*]f32 {return &scratch;}
+fn add_previous(output:[*]f32) void {
+  for(@range(u16,rows))|r|{output[r]+=scratch[r];}
+}

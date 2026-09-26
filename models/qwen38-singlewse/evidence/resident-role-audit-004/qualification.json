@@ -1,0 +1,3224 @@
+{
+  "sdk_rectangle_equivalence_pass": true,
+  "all144_pes_covered_once": true,
+  "application_elfs": 66,
+  "all_sram_pass": false,
+  "max_low": 44112,
+  "failures": [
+    {
+      "file": "out_42_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/storage.csl",
+        "rectangles": [
+          [
+            5,
+            9,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            5,
+            9,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 44112,
+      "low_section_bytes": 44100,
+      "static_allocated_section_bytes": 44508,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": false,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_43_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/storage.csl",
+        "rectangles": [
+          [
+            6,
+            9,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            6,
+            9,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 44112,
+      "low_section_bytes": 44100,
+      "static_allocated_section_bytes": 44508,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": false,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_44_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/storage.csl",
+        "rectangles": [
+          [
+            7,
+            9,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            7,
+            9,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 44048,
+      "low_section_bytes": 44044,
+      "static_allocated_section_bytes": 44452,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": false,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    }
+  ],
+  "records": [
+    {
+      "file": "out_0_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/storage.csl",
+        "rectangles": [
+          [
+            4,
+            1,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            4,
+            1,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 43856,
+      "low_section_bytes": 43856,
+      "static_allocated_section_bytes": 44256,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_10_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/storage.csl",
+        "rectangles": [
+          [
+            7,
+            2,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            7,
+            2,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 43936,
+      "low_section_bytes": 43932,
+      "static_allocated_section_bytes": 44340,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_11_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/storage.csl",
+        "rectangles": [
+          [
+            8,
+            2,
+            1,
+            1
+          ],
+          [
+            8,
+            4,
+            1,
+            1
+          ],
+          [
+            8,
+            6,
+            1,
+            1
+          ],
+          [
+            8,
+            8,
+            1,
+            1
+          ],
+          [
+            10,
+            2,
+            1,
+            1
+          ],
+          [
+            10,
+            4,
+            1,
+            1
+          ],
+          [
+            10,
+            6,
+            1,
+            1
+          ],
+          [
+            10,
+            8,
+            1,
+            1
+          ],
+          [
+            10,
+            10,
+            1,
+            1
+          ],
+          [
+            12,
+            2,
+            1,
+            1
+          ],
+          [
+            12,
+            4,
+            1,
+            1
+          ],
+          [
+            12,
+            6,
+            1,
+            1
+          ],
+          [
+            12,
+            8,
+            1,
+            1
+          ],
+          [
+            12,
+            10,
+            1,
+            1
+          ],
+          [
+            14,
+            2,
+            1,
+            1
+          ],
+          [
+            14,
+            4,
+            1,
+            1
+          ],
+          [
+            14,
+            6,
+            1,
+            1
+          ],
+          [
+            14,
+            8,
+            1,
+            1
+          ],
+          [
+            14,
+            10,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            8,
+            2,
+            1,
+            1
+          ],
+          [
+            8,
+            4,
+            1,
+            1
+          ],
+          [
+            8,
+            6,
+            1,
+            1
+          ],
+          [
+            8,
+            8,
+            1,
+            1
+          ],
+          [
+            10,
+            2,
+            1,
+            1
+          ],
+          [
+            10,
+            4,
+            1,
+            1
+          ],
+          [
+            10,
+            6,
+            1,
+            1
+          ],
+          [
+            10,
+            8,
+            1,
+            1
+          ],
+          [
+            10,
+            10,
+            1,
+            1
+          ],
+          [
+            12,
+            2,
+            1,
+            1
+          ],
+          [
+            12,
+            4,
+            1,
+            1
+          ],
+          [
+            12,
+            6,
+            1,
+            1
+          ],
+          [
+            12,
+            8,
+            1,
+            1
+          ],
+          [
+            12,
+            10,
+            1,
+            1
+          ],
+          [
+            14,
+            2,
+            1,
+            1
+          ],
+          [
+            14,
+            4,
+            1,
+            1
+          ],
+          [
+            14,
+            6,
+            1,
+            1
+          ],
+          [
+            14,
+            8,
+            1,
+            1
+          ],
+          [
+            14,
+            10,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 7056,
+      "low_section_bytes": 7048,
+      "static_allocated_section_bytes": 7456,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_12_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/storage.csl",
+        "rectangles": [
+          [
+            9,
+            2,
+            1,
+            1
+          ],
+          [
+            9,
+            4,
+            1,
+            1
+          ],
+          [
+            9,
+            6,
+            1,
+            1
+          ],
+          [
+            9,
+            8,
+            1,
+            1
+          ],
+          [
+            11,
+            2,
+            1,
+            1
+          ],
+          [
+            11,
+            4,
+            1,
+            1
+          ],
+          [
+            11,
+            6,
+            1,
+            1
+          ],
+          [
+            11,
+            8,
+            1,
+            1
+          ],
+          [
+            11,
+            10,
+            1,
+            1
+          ],
+          [
+            13,
+            2,
+            1,
+            1
+          ],
+          [
+            13,
+            4,
+            1,
+            1
+          ],
+          [
+            13,
+            6,
+            1,
+            1
+          ],
+          [
+            13,
+            8,
+            1,
+            1
+          ],
+          [
+            13,
+            10,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            9,
+            2,
+            1,
+            1
+          ],
+          [
+            9,
+            4,
+            1,
+            1
+          ],
+          [
+            9,
+            6,
+            1,
+            1
+          ],
+          [
+            9,
+            8,
+            1,
+            1
+          ],
+          [
+            11,
+            2,
+            1,
+            1
+          ],
+          [
+            11,
+            4,
+            1,
+            1
+          ],
+          [
+            11,
+            6,
+            1,
+            1
+          ],
+          [
+            11,
+            8,
+            1,
+            1
+          ],
+          [
+            11,
+            10,
+            1,
+            1
+          ],
+          [
+            13,
+            2,
+            1,
+            1
+          ],
+          [
+            13,
+            4,
+            1,
+            1
+          ],
+          [
+            13,
+            6,
+            1,
+            1
+          ],
+          [
+            13,
+            8,
+            1,
+            1
+          ],
+          [
+            13,
+            10,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 7056,
+      "low_section_bytes": 7048,
+      "static_allocated_section_bytes": 7456,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_13_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/storage.csl",
+        "rectangles": [
+          [
+            15,
+            2,
+            1,
+            1
+          ],
+          [
+            15,
+            4,
+            1,
+            1
+          ],
+          [
+            15,
+            6,
+            1,
+            1
+          ],
+          [
+            15,
+            8,
+            1,
+            1
+          ],
+          [
+            15,
+            10,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            15,
+            2,
+            1,
+            1
+          ],
+          [
+            15,
+            4,
+            1,
+            1
+          ],
+          [
+            15,
+            6,
+            1,
+            1
+          ],
+          [
+            15,
+            8,
+            1,
+            1
+          ],
+          [
+            15,
+            10,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 7168,
+      "low_section_bytes": 7160,
+      "static_allocated_section_bytes": 7574,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_14_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/storage.csl",
+        "rectangles": [
+          [
+            4,
+            3,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            4,
+            3,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 43872,
+      "low_section_bytes": 43864,
+      "static_allocated_section_bytes": 44264,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_15_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/storage.csl",
+        "rectangles": [
+          [
+            5,
+            3,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            5,
+            3,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 43984,
+      "low_section_bytes": 43984,
+      "static_allocated_section_bytes": 44392,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_16_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/storage.csl",
+        "rectangles": [
+          [
+            6,
+            3,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            6,
+            3,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 43984,
+      "low_section_bytes": 43984,
+      "static_allocated_section_bytes": 44392,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_17_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/storage.csl",
+        "rectangles": [
+          [
+            7,
+            3,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            7,
+            3,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 43936,
+      "low_section_bytes": 43928,
+      "static_allocated_section_bytes": 44336,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_18_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/storage.csl",
+        "rectangles": [
+          [
+            8,
+            3,
+            1,
+            1
+          ],
+          [
+            8,
+            5,
+            1,
+            1
+          ],
+          [
+            8,
+            7,
+            1,
+            1
+          ],
+          [
+            8,
+            9,
+            1,
+            1
+          ],
+          [
+            10,
+            3,
+            1,
+            1
+          ],
+          [
+            10,
+            5,
+            1,
+            1
+          ],
+          [
+            10,
+            7,
+            1,
+            1
+          ],
+          [
+            10,
+            9,
+            1,
+            1
+          ],
+          [
+            12,
+            3,
+            1,
+            1
+          ],
+          [
+            12,
+            5,
+            1,
+            1
+          ],
+          [
+            12,
+            7,
+            1,
+            1
+          ],
+          [
+            12,
+            9,
+            1,
+            1
+          ],
+          [
+            14,
+            3,
+            1,
+            1
+          ],
+          [
+            14,
+            5,
+            1,
+            1
+          ],
+          [
+            14,
+            7,
+            1,
+            1
+          ],
+          [
+            14,
+            9,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            8,
+            3,
+            1,
+            1
+          ],
+          [
+            8,
+            5,
+            1,
+            1
+          ],
+          [
+            8,
+            7,
+            1,
+            1
+          ],
+          [
+            8,
+            9,
+            1,
+            1
+          ],
+          [
+            10,
+            3,
+            1,
+            1
+          ],
+          [
+            10,
+            5,
+            1,
+            1
+          ],
+          [
+            10,
+            7,
+            1,
+            1
+          ],
+          [
+            10,
+            9,
+            1,
+            1
+          ],
+          [
+            12,
+            3,
+            1,
+            1
+          ],
+          [
+            12,
+            5,
+            1,
+            1
+          ],
+          [
+            12,
+            7,
+            1,
+            1
+          ],
+          [
+            12,
+            9,
+            1,
+            1
+          ],
+          [
+            14,
+            3,
+            1,
+            1
+          ],
+          [
+            14,
+            5,
+            1,
+            1
+          ],
+          [
+            14,
+            7,
+            1,
+            1
+          ],
+          [
+            14,
+            9,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 7056,
+      "low_section_bytes": 7048,
+      "static_allocated_section_bytes": 7456,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_19_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/storage.csl",
+        "rectangles": [
+          [
+            9,
+            3,
+            1,
+            1
+          ],
+          [
+            9,
+            5,
+            1,
+            1
+          ],
+          [
+            9,
+            7,
+            1,
+            1
+          ],
+          [
+            9,
+            9,
+            1,
+            1
+          ],
+          [
+            11,
+            3,
+            1,
+            1
+          ],
+          [
+            11,
+            5,
+            1,
+            1
+          ],
+          [
+            11,
+            7,
+            1,
+            1
+          ],
+          [
+            11,
+            9,
+            1,
+            1
+          ],
+          [
+            13,
+            3,
+            1,
+            1
+          ],
+          [
+            13,
+            5,
+            1,
+            1
+          ],
+          [
+            13,
+            7,
+            1,
+            1
+          ],
+          [
+            13,
+            9,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            9,
+            3,
+            1,
+            1
+          ],
+          [
+            9,
+            5,
+            1,
+            1
+          ],
+          [
+            9,
+            7,
+            1,
+            1
+          ],
+          [
+            9,
+            9,
+            1,
+            1
+          ],
+          [
+            11,
+            3,
+            1,
+            1
+          ],
+          [
+            11,
+            5,
+            1,
+            1
+          ],
+          [
+            11,
+            7,
+            1,
+            1
+          ],
+          [
+            11,
+            9,
+            1,
+            1
+          ],
+          [
+            13,
+            3,
+            1,
+            1
+          ],
+          [
+            13,
+            5,
+            1,
+            1
+          ],
+          [
+            13,
+            7,
+            1,
+            1
+          ],
+          [
+            13,
+            9,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 7056,
+      "low_section_bytes": 7048,
+      "static_allocated_section_bytes": 7456,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_1_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/storage.csl",
+        "rectangles": [
+          [
+            5,
+            1,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            5,
+            1,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 43984,
+      "low_section_bytes": 43976,
+      "static_allocated_section_bytes": 44384,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_20_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/storage.csl",
+        "rectangles": [
+          [
+            15,
+            3,
+            1,
+            1
+          ],
+          [
+            15,
+            5,
+            1,
+            1
+          ],
+          [
+            15,
+            7,
+            1,
+            1
+          ],
+          [
+            15,
+            9,
+            1,
+            1
+          ],
+          [
+            15,
+            11,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            15,
+            3,
+            1,
+            1
+          ],
+          [
+            15,
+            5,
+            1,
+            1
+          ],
+          [
+            15,
+            7,
+            1,
+            1
+          ],
+          [
+            15,
+            9,
+            1,
+            1
+          ],
+          [
+            15,
+            11,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 7168,
+      "low_section_bytes": 7160,
+      "static_allocated_section_bytes": 7574,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_21_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/storage.csl",
+        "rectangles": [
+          [
+            4,
+            4,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            4,
+            4,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 43872,
+      "low_section_bytes": 43864,
+      "static_allocated_section_bytes": 44264,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_22_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/storage.csl",
+        "rectangles": [
+          [
+            5,
+            4,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            5,
+            4,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 43984,
+      "low_section_bytes": 43984,
+      "static_allocated_section_bytes": 44392,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_23_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/storage.csl",
+        "rectangles": [
+          [
+            6,
+            4,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            6,
+            4,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 43984,
+      "low_section_bytes": 43984,
+      "static_allocated_section_bytes": 44392,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_24_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/storage.csl",
+        "rectangles": [
+          [
+            7,
+            4,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            7,
+            4,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 43936,
+      "low_section_bytes": 43928,
+      "static_allocated_section_bytes": 44336,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_25_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/storage.csl",
+        "rectangles": [
+          [
+            4,
+            5,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            4,
+            5,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 43872,
+      "low_section_bytes": 43864,
+      "static_allocated_section_bytes": 44264,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_26_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/storage.csl",
+        "rectangles": [
+          [
+            5,
+            5,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            5,
+            5,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 43984,
+      "low_section_bytes": 43984,
+      "static_allocated_section_bytes": 44392,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_27_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/storage.csl",
+        "rectangles": [
+          [
+            6,
+            5,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            6,
+            5,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 43984,
+      "low_section_bytes": 43984,
+      "static_allocated_section_bytes": 44392,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_28_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/storage.csl",
+        "rectangles": [
+          [
+            7,
+            5,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            7,
+            5,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 43936,
+      "low_section_bytes": 43928,
+      "static_allocated_section_bytes": 44336,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_29_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/storage.csl",
+        "rectangles": [
+          [
+            4,
+            6,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            4,
+            6,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 43872,
+      "low_section_bytes": 43864,
+      "static_allocated_section_bytes": 44264,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_2_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/storage.csl",
+        "rectangles": [
+          [
+            6,
+            1,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            6,
+            1,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 43984,
+      "low_section_bytes": 43976,
+      "static_allocated_section_bytes": 44384,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_30_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/storage.csl",
+        "rectangles": [
+          [
+            5,
+            6,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            5,
+            6,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 43984,
+      "low_section_bytes": 43984,
+      "static_allocated_section_bytes": 44392,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_31_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/storage.csl",
+        "rectangles": [
+          [
+            6,
+            6,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            6,
+            6,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 43984,
+      "low_section_bytes": 43984,
+      "static_allocated_section_bytes": 44392,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_32_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/storage.csl",
+        "rectangles": [
+          [
+            7,
+            6,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            7,
+            6,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 43936,
+      "low_section_bytes": 43928,
+      "static_allocated_section_bytes": 44336,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_33_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/storage.csl",
+        "rectangles": [
+          [
+            4,
+            7,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            4,
+            7,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 43872,
+      "low_section_bytes": 43864,
+      "static_allocated_section_bytes": 44264,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_34_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/storage.csl",
+        "rectangles": [
+          [
+            5,
+            7,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            5,
+            7,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 43984,
+      "low_section_bytes": 43984,
+      "static_allocated_section_bytes": 44392,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_35_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/storage.csl",
+        "rectangles": [
+          [
+            6,
+            7,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            6,
+            7,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 43984,
+      "low_section_bytes": 43984,
+      "static_allocated_section_bytes": 44392,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_36_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/storage.csl",
+        "rectangles": [
+          [
+            7,
+            7,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            7,
+            7,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 43936,
+      "low_section_bytes": 43928,
+      "static_allocated_section_bytes": 44336,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_37_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/storage.csl",
+        "rectangles": [
+          [
+            4,
+            8,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            4,
+            8,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 43872,
+      "low_section_bytes": 43864,
+      "static_allocated_section_bytes": 44264,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_38_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/storage.csl",
+        "rectangles": [
+          [
+            5,
+            8,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            5,
+            8,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 43984,
+      "low_section_bytes": 43984,
+      "static_allocated_section_bytes": 44392,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_39_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/storage.csl",
+        "rectangles": [
+          [
+            6,
+            8,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            6,
+            8,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 43984,
+      "low_section_bytes": 43984,
+      "static_allocated_section_bytes": 44392,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_3_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/storage.csl",
+        "rectangles": [
+          [
+            7,
+            1,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            7,
+            1,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 43920,
+      "low_section_bytes": 43920,
+      "static_allocated_section_bytes": 44328,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_40_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/storage.csl",
+        "rectangles": [
+          [
+            7,
+            8,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            7,
+            8,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 43936,
+      "low_section_bytes": 43928,
+      "static_allocated_section_bytes": 44336,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_41_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/storage.csl",
+        "rectangles": [
+          [
+            4,
+            9,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            4,
+            9,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 43984,
+      "low_section_bytes": 43980,
+      "static_allocated_section_bytes": 44380,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_42_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/storage.csl",
+        "rectangles": [
+          [
+            5,
+            9,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            5,
+            9,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 44112,
+      "low_section_bytes": 44100,
+      "static_allocated_section_bytes": 44508,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": false,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_43_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/storage.csl",
+        "rectangles": [
+          [
+            6,
+            9,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            6,
+            9,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 44112,
+      "low_section_bytes": 44100,
+      "static_allocated_section_bytes": 44508,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": false,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_44_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/storage.csl",
+        "rectangles": [
+          [
+            7,
+            9,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            7,
+            9,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 44048,
+      "low_section_bytes": 44044,
+      "static_allocated_section_bytes": 44452,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": false,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_45_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/gdn.csl",
+        "rectangles": [
+          [
+            4,
+            10,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            4,
+            10,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 22640,
+      "low_section_bytes": 22628,
+      "static_allocated_section_bytes": 23044,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_46_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/gdn.csl",
+        "rectangles": [
+          [
+            5,
+            10,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            5,
+            10,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 42608,
+      "low_section_bytes": 42600,
+      "static_allocated_section_bytes": 43016,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_47_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/gdn.csl",
+        "rectangles": [
+          [
+            6,
+            10,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            6,
+            10,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 42272,
+      "low_section_bytes": 42268,
+      "static_allocated_section_bytes": 42676,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_48_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/gdn.csl",
+        "rectangles": [
+          [
+            7,
+            10,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            7,
+            10,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 22640,
+      "low_section_bytes": 22628,
+      "static_allocated_section_bytes": 23044,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_49_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/gdn.csl",
+        "rectangles": [
+          [
+            8,
+            10,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            8,
+            10,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 42608,
+      "low_section_bytes": 42600,
+      "static_allocated_section_bytes": 43016,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_4_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/storage.csl",
+        "rectangles": [
+          [
+            8,
+            1,
+            1,
+            1
+          ],
+          [
+            10,
+            1,
+            1,
+            1
+          ],
+          [
+            12,
+            1,
+            1,
+            1
+          ],
+          [
+            14,
+            1,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            8,
+            1,
+            1,
+            1
+          ],
+          [
+            10,
+            1,
+            1,
+            1
+          ],
+          [
+            12,
+            1,
+            1,
+            1
+          ],
+          [
+            14,
+            1,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 7056,
+      "low_section_bytes": 7048,
+      "static_allocated_section_bytes": 7456,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_50_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/gdn.csl",
+        "rectangles": [
+          [
+            9,
+            10,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            9,
+            10,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 42272,
+      "low_section_bytes": 42268,
+      "static_allocated_section_bytes": 42676,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_51_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/attention.csl",
+        "rectangles": [
+          [
+            4,
+            11,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            4,
+            11,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 25568,
+      "low_section_bytes": 25560,
+      "static_allocated_section_bytes": 25976,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_52_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/attention.csl",
+        "rectangles": [
+          [
+            5,
+            11,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            5,
+            11,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 34880,
+      "low_section_bytes": 34878,
+      "static_allocated_section_bytes": 35294,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_53_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/attention.csl",
+        "rectangles": [
+          [
+            6,
+            11,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            6,
+            11,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 34928,
+      "low_section_bytes": 34918,
+      "static_allocated_section_bytes": 35334,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_54_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/attention.csl",
+        "rectangles": [
+          [
+            7,
+            11,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            7,
+            11,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 34912,
+      "low_section_bytes": 34910,
+      "static_allocated_section_bytes": 35326,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_55_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/attention.csl",
+        "rectangles": [
+          [
+            8,
+            11,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            8,
+            11,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 34832,
+      "low_section_bytes": 34818,
+      "static_allocated_section_bytes": 35226,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_56_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/storage.csl",
+        "rectangles": [
+          [
+            9,
+            11,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            9,
+            11,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 28336,
+      "low_section_bytes": 28332,
+      "static_allocated_section_bytes": 28740,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_57_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/storage.csl",
+        "rectangles": [
+          [
+            10,
+            11,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            10,
+            11,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 28336,
+      "low_section_bytes": 28332,
+      "static_allocated_section_bytes": 28740,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_58_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/storage.csl",
+        "rectangles": [
+          [
+            11,
+            11,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            11,
+            11,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 42128,
+      "low_section_bytes": 42124,
+      "static_allocated_section_bytes": 42532,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_59_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/storage.csl",
+        "rectangles": [
+          [
+            12,
+            11,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            12,
+            11,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 42128,
+      "low_section_bytes": 42124,
+      "static_allocated_section_bytes": 42532,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_5_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/storage.csl",
+        "rectangles": [
+          [
+            9,
+            1,
+            1,
+            1
+          ],
+          [
+            11,
+            1,
+            1,
+            1
+          ],
+          [
+            13,
+            1,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            9,
+            1,
+            1,
+            1
+          ],
+          [
+            11,
+            1,
+            1,
+            1
+          ],
+          [
+            13,
+            1,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 7056,
+      "low_section_bytes": 7048,
+      "static_allocated_section_bytes": 7456,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_60_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/storage.csl",
+        "rectangles": [
+          [
+            13,
+            11,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            13,
+            11,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 39824,
+      "low_section_bytes": 39812,
+      "static_allocated_section_bytes": 40220,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_61_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/storage.csl",
+        "rectangles": [
+          [
+            14,
+            11,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            14,
+            11,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 39824,
+      "low_section_bytes": 39812,
+      "static_allocated_section_bytes": 40220,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_62_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/storage.csl",
+        "rectangles": [
+          [
+            4,
+            12,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            4,
+            12,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 7056,
+      "low_section_bytes": 7048,
+      "static_allocated_section_bytes": 7448,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_63_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/storage.csl",
+        "rectangles": [
+          [
+            5,
+            12,
+            1,
+            1
+          ],
+          [
+            7,
+            12,
+            1,
+            1
+          ],
+          [
+            9,
+            12,
+            1,
+            1
+          ],
+          [
+            11,
+            12,
+            1,
+            1
+          ],
+          [
+            13,
+            12,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            5,
+            12,
+            1,
+            1
+          ],
+          [
+            7,
+            12,
+            1,
+            1
+          ],
+          [
+            9,
+            12,
+            1,
+            1
+          ],
+          [
+            11,
+            12,
+            1,
+            1
+          ],
+          [
+            13,
+            12,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 7056,
+      "low_section_bytes": 7048,
+      "static_allocated_section_bytes": 7456,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_64_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/storage.csl",
+        "rectangles": [
+          [
+            6,
+            12,
+            1,
+            1
+          ],
+          [
+            8,
+            12,
+            1,
+            1
+          ],
+          [
+            10,
+            12,
+            1,
+            1
+          ],
+          [
+            12,
+            12,
+            1,
+            1
+          ],
+          [
+            14,
+            12,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            6,
+            12,
+            1,
+            1
+          ],
+          [
+            8,
+            12,
+            1,
+            1
+          ],
+          [
+            10,
+            12,
+            1,
+            1
+          ],
+          [
+            12,
+            12,
+            1,
+            1
+          ],
+          [
+            14,
+            12,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 7056,
+      "low_section_bytes": 7048,
+      "static_allocated_section_bytes": 7456,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_65_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/controller.csl",
+        "rectangles": [
+          [
+            15,
+            12,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            15,
+            12,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 35040,
+      "low_section_bytes": 35036,
+      "static_allocated_section_bytes": 35444,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_6_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/storage.csl",
+        "rectangles": [
+          [
+            15,
+            1,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            15,
+            1,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 7168,
+      "low_section_bytes": 7160,
+      "static_allocated_section_bytes": 7570,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_7_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/storage.csl",
+        "rectangles": [
+          [
+            4,
+            2,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            4,
+            2,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 43872,
+      "low_section_bytes": 43868,
+      "static_allocated_section_bytes": 44268,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_8_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/storage.csl",
+        "rectangles": [
+          [
+            5,
+            2,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            5,
+            2,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 44000,
+      "low_section_bytes": 43988,
+      "static_allocated_section_bytes": 44396,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out_9_0.elf",
+      "placement": {
+        "fabric": [
+          762,
+          1172
+        ],
+        "source": "csl/storage.csl",
+        "rectangles": [
+          [
+            6,
+            2,
+            1,
+            1
+          ]
+        ],
+        "all_load_rectangles": [
+          [
+            6,
+            2,
+            1,
+            1
+          ]
+        ]
+      },
+      "low_section_end": 44000,
+      "low_section_bytes": 43988,
+      "static_allocated_section_bytes": 44396,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    }
+  ]
+}

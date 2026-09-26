@@ -1,0 +1,24 @@
+param memcpy_params;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const codec=@import_module("fp8_codec.csl");
+const quant=@import_module("fp8_activation.csl");
+var input=@zeros([128]f32);
+var codes=@zeros([128]u16);
+var direct_codes=@zeros([128]u16);
+var scale=@zeros([1]f32);
+const xp:[*]f32=&input;
+const qp:[*]u16=&codes;
+const dp:[*]u16=&direct_codes;
+const sp:[*]f32=&scale;
+fn compute() void {
+  for(@range(u16,128))|i|{direct_codes[i]=codec.encode(input[i]);}
+  quant.quantize(xp,qp,sp);
+  sys.unblock_cmd_stream();
+}
+comptime {
+  @export_symbol(xp,"input");
+  @export_symbol(qp,"codes");
+  @export_symbol(dp,"direct_codes");
+  @export_symbol(sp,"scale");
+  @export_symbol(compute);
+}

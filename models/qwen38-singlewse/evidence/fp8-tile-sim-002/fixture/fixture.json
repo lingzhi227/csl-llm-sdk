@@ -1,0 +1,26 @@
+{
+  "repository": "Qwen/Qwen3.8-27B-FP8",
+  "revision": "017b9c7af6b5689d5dd426a76e0bc077eb5ca20a",
+  "tensor": "model.language_model.layers.0.mlp.gate_proj.weight",
+  "scale_tensor": "model.language_model.layers.0.mlp.gate_proj.weight_scale_inv",
+  "rows": [
+    0,
+    288
+  ],
+  "columns": [
+    0,
+    128
+  ],
+  "source": {
+    "file": "layers-0.safetensors",
+    "bytes": 383865448,
+    "sha256": "07f700e293baeaf3cd4240c3df1a948c4403f16961ea7979e86c8d6a9f8fd466",
+    "publisher_verified": true
+  },
+  "fixture_sha256": "f9e8c6b4b286d41c5e441948a0305f8227afe0ea810c5264c73a2e2169c5c839",
+  "all_254_finite_encodings_exact_against_torch": true,
+  "weight_storage_bytes": 36876,
+  "full_model": false,
+  "numerical_policy": "FP64 dot oracle; gamma(2*128)*sum(abs(products)); frozen before CSL output",
+  "scope": "Weight E4M3FN decode and FP32 GEMV; activation quantization not yet qualified"
+}

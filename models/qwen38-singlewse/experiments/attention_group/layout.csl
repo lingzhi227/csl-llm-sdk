@@ -1,0 +1,17 @@
+const memcpy=@import_module("<memcpy/get_params>",.{.width=5,.height=1});
+layout {
+  @set_rectangle(5,1);
+  for(@range(i16,5))|x|{
+    @set_tile_code(x,0,"pe.csl",.{.memcpy_params=memcpy.get_params(x),.role=@as(u16,x)});
+    if(x==0){@set_color_config(x,0,@get_color(3),.{.routes=.{.rx=.{RAMP},.tx=.{EAST}}});}
+    else if(x==4){@set_color_config(x,0,@get_color(3),.{.routes=.{.rx=.{WEST},.tx=.{RAMP}}});}
+    else{@set_color_config(x,0,@get_color(3),.{.routes=.{.rx=.{WEST},.tx=.{RAMP,EAST}}});}
+    if(x>0){@set_color_config(x,0,@get_color(4+@as(u16,x%2)),.{.routes=.{.rx=.{RAMP},.tx=.{WEST}}});}
+    if(x<4){@set_color_config(x,0,@get_color(4+@as(u16,(x+1)%2)),.{.routes=.{.rx=.{EAST},.tx=.{RAMP}}});}
+  }
+  @export_name("input",[*]u16,false);@export_name("gain",[*]u16,false);
+  @export_name("frequencies",[*]f32,false);@export_name("output",[*]u16,false);
+  @export_name("keys",[*]u16,false);@export_name("values",[*]u16,false);
+  @export_name("trace",[*]u32,false);
+  @export_name("start",fn()void);@export_name("compute",fn()void);@export_name("reset",fn()void);
+}

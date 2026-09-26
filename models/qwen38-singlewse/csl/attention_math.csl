@@ -1,0 +1,41 @@
+// Text-only partial RoPE, eager BF16 softmax boundaries and sigmoid gate.
+// Frequency constants must match the pinned Torch FP32 initialization.
+const math=@import_module("<math>");
+const qwen=@import_module("qwen_math.csl");
+fn rotary(input:[*]u16,frequencies:[*]f32,position:u16) void {
+  @assert(position<96);
+  for(@range(u16,32))|i|{
+    const angle=@as(f32,position)*frequencies[i];
+    const cosine=qwen.expand(qwen.round(math.cos_f32(angle)));
+    const sine=qwen.expand(qwen.round(math.sin_f32(angle)));
+    const left=qwen.expand(input[i]);const right=qwen.expand(input[i+32]);
+    const lc=qwen.expand(qwen.round(left*cosine));
+    const rs=qwen.expand(qwen.round(-right*sine));
+    const rc=qwen.expand(qwen.round(right*cosine));
+    const ls=qwen.expand(qwen.round(left*sine));
+    input[i]=qwen.round(lc+rs);input[i+32]=qwen.round(rc+ls);
+  }
+}
+fn softmax(partials:[*]f32,scores:[*]f32,probabilities:[*]u16,count:u16) void {
+  @assert(count>0 and count<=96);
+  var largest:f32=-3.402823466e38;
+  for(@range(u16,96))|t|{
+    if(t<count){
+      var dot:f32=partials[t];
+      for(@range(u16,3))|shard|{dot+=partials[(shard+1)*96+t];}
+      // Eager matmul returns BF16; scaling returns BF16 before FP32 softmax.
+      scores[t]=qwen.expand(qwen.round(qwen.expand(qwen.round(dot))*0.0625));
+      if(scores[t]>largest){largest=scores[t];}
+    }else{probabilities[t]=0;}
+  }
+  var sum:f32=0.0;
+  for(@range(u16,96))|t|{if(t<count){scores[t]=qwen.exp_f32(scores[t]-largest);sum+=scores[t];}}
+  for(@range(u16,96))|t|{if(t<count){probabilities[t]=qwen.round(scores[t]/sum);}}
+}
+fn gate(context:[*]f32,gate_input:[*]u16,output:[*]u16) void {
+  for(@range(u16,256))|i|{
+    const value=qwen.expand(qwen.round(context[i]));
+    const gate_value=qwen.expand(qwen.round(qwen.sigmoid(qwen.expand(gate_input[i]))));
+    output[i]=qwen.round(value*gate_value);
+  }
+}

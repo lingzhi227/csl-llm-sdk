@@ -1,0 +1,43 @@
+// One64-channel shard of one original256-dimensional KV head, context96.
+// Four shards jointly serve all six query heads in a Qwen3.8 attention group.
+param shard:u16;
+param active:bool;
+const qwen=@import_module("qwen_math.csl");
+var key_cache=@zeros([if(active) 6144 else 1]u16);var value_cache=@zeros([if(active) 6144 else 1]u16);
+var length:u16=0;
+fn unpack(packet:[*]u32,index:u16) u16 {return @as(u16,packet[index/2]>>((index%2)*16));}
+fn keys() [*]u16 {return &key_cache;}
+fn values() [*]u16 {return &value_cache;}
+fn reset() void {
+  const kd=@get_dsd(mem1d_dsd,.{.base_address=&key_cache,.extent=6144});
+  const vd=@get_dsd(mem1d_dsd,.{.base_address=&value_cache,.extent=6144});
+  @mov16(kd,@as(u16,0));@mov16(vd,@as(u16,0));length=0;
+}
+fn append(packet:[*]u32,position:u16) void {
+  @assert(position==length and position<96);
+  for(@range(u16,64))|i|{
+    key_cache[position*64+i]=unpack(packet,shard*64+i);
+    value_cache[position*64+i]=unpack(packet,256+shard*64+i);
+  }
+  length+=1;
+}
+fn score(packet:[*]u32,output:[*]f32) void {
+  @assert(length>0 and length<=96);
+  for(@range(u16,96))|t|{
+    var sum:f32=0.0;
+    if(t<length){for(@range(u16,64))|i|{
+      sum+=qwen.expand(unpack(packet,shard*64+i))*qwen.expand(key_cache[t*64+i]);
+    }}
+    output[t]=sum;
+  }
+}
+fn context(packet:[*]u32,output:[*]f32) void {
+  @assert(length>0 and length<=96);
+  for(@range(u16,64))|i|{
+    var sum:f32=0.0;
+    for(@range(u16,96))|t|{if(t<length){
+      sum+=qwen.expand(unpack(packet,t))*qwen.expand(value_cache[t*64+i]);
+    }}
+    output[i]=sum;
+  }
+}

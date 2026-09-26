@@ -1,0 +1,14 @@
+{
+  "scope": "Original layer0 head0 convolution/gates/norm plus full128x128 recurrent state; synthetic BF16 projected operands",
+  "shard_sha256": "07f700e293baeaf3cd4240c3df1a948c4403f16961ea7979e86c8d6a9f8fd466",
+  "seed": 380028,
+  "positions": 96,
+  "reset_replay_positions": 8,
+  "full_model": false,
+  "reference": "Pinned Transformers arithmetic; independent NumPy FP64 analytic oracle, propagated BF16/scalar/reduction/state intervals",
+  "maximum_packet_bound": 0.005878367766818049,
+  "maximum_state_bound": 0.00012369147060087112,
+  "maximum_output_bound": 8.33157247043945e-06,
+  "maximum_gated_interval_width": 0.0101318359375,
+  "fixture_sha256": "70d2f98378b4cb019dcd6512034b02db340c0c34bb3a9f6bdb09917ed2f4a294"
+}

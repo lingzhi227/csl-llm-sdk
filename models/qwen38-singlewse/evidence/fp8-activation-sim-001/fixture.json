@@ -1,0 +1,8 @@
+{
+  "fixture_sha256": "46e0d996b4f1dd3b6822c484bd9864f43d500e306090a5de041a94c54bbd3652",
+  "groups": 12,
+  "scope": "All 254 finite encodings; positive and negative midpoint ties and neighboring FP32 values; zero and tiny groups",
+  "criterion": "Exact FP8 output bytes; FP32 scales within 1 ULP; frozen before device outputs",
+  "backend": "vLLM group-128 convention, use_ue8m0=False; independent PyTorch float8_e4m3fn conversion",
+  "torch_version": "2.6.0+cpu"
+}

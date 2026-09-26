@@ -1,0 +1,35 @@
+// Interleaved real-weight strips, southeast controller, broadcast and return spines.
+const memcpy=@import_module("<memcpy/get_params>",.{.width=9,.height=5});
+layout {
+  @set_rectangle(9,5);
+  for(@range(i16,5))|y|{for(@range(i16,9))|x|{
+    const first:i16=if(y==0) 0 else if(y==1 or y==3) 4 else 1;
+    const count:i16=if(y<2) 2 else 3;
+    const weight:bool=y<4 and x>=first and x<first+count;
+    const controller:bool=x==8 and y==4;
+    @set_tile_code(x,y,"pe.csl",.{.memcpy_params=memcpy.get_params(x),
+      .x=@as(u16,x),.y=@as(u16,y),.controller=controller,.weight=weight,
+      .first=weight and x==first,.last=weight and x==first+count-1,
+      .phase=@as(u16,if(weight) (y*272)%128 else 0)});
+    if(y==4){
+      if(controller){@set_color_config(x,y,@get_color(3),.{.routes=.{.rx=.{RAMP},.tx=.{WEST,NORTH}}});}
+      else if(x==0){@set_color_config(x,y,@get_color(3),.{.routes=.{.rx=.{EAST},.tx=.{RAMP,NORTH}}});}
+      else{@set_color_config(x,y,@get_color(3),.{.routes=.{.rx=.{EAST},.tx=.{RAMP,WEST,NORTH}}});}
+    }else if(y==0){@set_color_config(x,y,@get_color(3),.{.routes=.{.rx=.{SOUTH},.tx=.{RAMP}}});}
+    else{@set_color_config(x,y,@get_color(3),.{.routes=.{.rx=.{SOUTH},.tx=.{RAMP,NORTH}}});}
+    if(weight){
+      if(x>first){@set_color_config(x,y,@get_color(4+@as(u16,(x+1)%2)),.{.routes=.{.rx=.{WEST},.tx=.{RAMP}}});}
+      if(x<first+count-1){@set_color_config(x,y,@get_color(4+@as(u16,x%2)),.{.routes=.{.rx=.{RAMP},.tx=.{EAST}}});}
+    }
+    if(x>0){@set_color_config(x,y,@get_color(8+@as(u16,(x+1)%2)),.{.routes=.{.rx=.{WEST},.tx=.{RAMP}}});}
+    if(x<8){@set_color_config(x,y,@get_color(8+@as(u16,x%2)),.{.routes=.{.rx=.{RAMP},.tx=.{EAST}}});}
+    if(x==8){
+      if(y>0){@set_color_config(x,y,@get_color(10+@as(u16,(y+1)%2)),.{.routes=.{.rx=.{NORTH},.tx=.{RAMP}}});}
+      if(y<4){@set_color_config(x,y,@get_color(10+@as(u16,y%2)),.{.routes=.{.rx=.{RAMP},.tx=.{SOUTH}}});}
+    }
+  }}
+  @export_name("weights",[*]u16,false);@export_name("scales",[*]f32,false);
+  @export_name("config",[*]u32,false);@export_name("input",[*]f32,false);
+  @export_name("results",[*]f32,false);@export_name("trace",[*]u32,false);
+  @export_name("start",fn()void);@export_name("run_test",fn()void);
+}

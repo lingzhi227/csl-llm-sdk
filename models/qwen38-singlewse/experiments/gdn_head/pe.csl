@@ -1,0 +1,83 @@
+// Controller plus two value shards; only the controller receives host operands.
+param memcpy_params;
+param role:u16;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const kernel=@import_module("recurrent_value64.csl");
+const preprocess=@import_module("gdn_preprocess.csl");
+const qwen=@import_module("qwen_math.csl");
+var state=@zeros([if(role==0) 1 else 8192]f32);
+// Preprocessed Q128, K128, V128, exp(g), BF16-expanded beta.
+var packet=@zeros([386]f32);
+var output=@zeros([if(role==2) 64 else 128]f32);
+var rounded=@zeros([if(role==0) 128 else 1]u16);
+var input=@zeros([if(role==0) 514 else 1]u16);
+var conv_weights=@zeros([if(role==0) 1536 else 1]u16);
+var history=@zeros([if(role==0) 1536 else 1]u16);
+var gate_parameters=@zeros([2]u16);
+var gain=@zeros([if(role==0) 128 else 1]u16);
+var gated=@zeros([if(role==0) 128 else 1]u16);
+const xp:[*]u16=&input;const wp:[*]u16=&conv_weights;const hp:[*]u16=&history;
+const gp:[*]u16=&gate_parameters;const np:[*]u16=&gain;const zp:[*]u16=&gated;
+var calls=@zeros([1]u32);
+const sp:[*]f32=&state;const pp:[*]f32=&packet;
+const op:[*]f32=&output;const rp:[*]u16=&rounded;const cp:[*]u32=&calls;
+const iq=@get_input_queue(2);const oq=@get_output_queue(2);
+const result_iq=@get_input_queue(3);
+const input_done=@get_local_task_id(8);const sent_done=@get_local_task_id(9);
+const result_done=@get_local_task_id(10);
+// DSR6/7 are fabric leases; recurrent arithmetic leases3/4 synchronously.
+const rx_dst=@get_dsr(dsr_dest,6);const rx_src=@get_dsr(dsr_src1,6);
+const tx_dst=@get_dsr(dsr_dest,7);const tx_src=@get_dsr(dsr_src1,7);
+fn finish() void {calls[0]+=1;sys.unblock_cmd_stream();}
+fn receive(data:[*]f32,count:u16,comptime result:bool) void {
+  const mem=@get_dsd(mem1d_dsd,.{.base_address=data,.extent=count});
+  const wire=@get_dsd(fabin_dsd,.{.input_queue=if(result) result_iq else iq,.extent=1});
+  @load_to_dsr(rx_dst,mem);
+  if(result){@load_to_dsr(rx_src,@set_dsd_length(wire,count),.{.async=true,.activate=result_done});}
+  else{@load_to_dsr(rx_src,@set_dsd_length(wire,count),.{.async=true,.activate=input_done});}
+  @mov32(rx_dst,rx_src,.{.async=true});
+}
+fn send(data:[*]f32,count:u16) void {
+  const mem=@get_dsd(mem1d_dsd,.{.base_address=data,.extent=count});
+  const wire=@get_dsd(fabout_dsd,.{.output_queue=oq,.extent=1});
+  @load_to_dsr(tx_src,mem);
+  @load_to_dsr(tx_dst,@set_dsd_length(wire,count),.{.async=true,.activate=sent_done});
+  @mov32(tx_dst,tx_src,.{.async=true});
+}
+task sent() void {
+  if(comptime role==0){receive(op,128,true);}else{finish();}
+}
+task input_received() void {
+  kernel.compute(sp,pp,@ptrcast([*]f32,&packet[128]),
+    @ptrcast([*]f32,&packet[256+64*(role-1)]),packet[384],packet[385],op);
+  if(comptime role==1){receive(@ptrcast([*]f32,&output[64]),64,true);}else{send(op,64);}
+}
+task result_received() void {
+  if(comptime role==0){
+    for(@range(u16,128))|i|{
+      const raw=@bitcast(u32,output[i]);const odd=(raw>>16)&1;
+      rounded[i]=@as(u16,(raw+0x00007fff+odd)>>16);
+    }
+    qwen.gated_rmsnorm(rp,np,@ptrcast([*]u16,&input[384]),zp);
+    finish();
+  }else{send(op,128);}
+}
+fn compute() void {
+  if(comptime role==0){preprocess.compute(xp,wp,hp,gp,pp);send(pp,386);}else{receive(pp,386,false);}
+}
+fn reset() void {
+  if(comptime role>0){kernel.reset(sp);}
+  if(comptime role==0){preprocess.reset(hp);}
+  calls[0]=0;sys.unblock_cmd_stream();
+}
+comptime {
+  @initialize_queue(oq,.{.color=@get_color(if(role==0) 3 else if(role==1) 5 else 4)});
+  @bind_local_task(sent,sent_done);
+  if(role>0){@initialize_queue(iq,.{.color=@get_color(3)});@bind_local_task(input_received,input_done);}
+  if(role<2){@initialize_queue(result_iq,.{.color=@get_color(if(role==0) 5 else 4)});@bind_local_task(result_received,result_done);}
+  @export_symbol(sp,"state");@export_symbol(pp,"packet");@export_symbol(op,"output");
+  @export_symbol(rp,"rounded");@export_symbol(cp,"calls");
+  @export_symbol(xp,"input");@export_symbol(wp,"conv_weights");@export_symbol(hp,"history");
+  @export_symbol(gp,"gate_parameters");@export_symbol(np,"gain");@export_symbol(zp,"gated");
+  @export_symbol(compute);@export_symbol(reset);
+}

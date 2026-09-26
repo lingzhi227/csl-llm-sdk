@@ -1,0 +1,11 @@
+param memcpy_params;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const kernel=@import_module("bf16_gemv.csl",.{.rows=144,.columns=128});
+var weights=@zeros([18432]u16);
+var input=@zeros([128]f32);
+var output=@zeros([144]f32);
+const wp:[*]u16=&weights;
+const xp:[*]f32=&input;
+const yp:[*]f32=&output;
+fn compute()void{kernel.compute(wp,xp,yp);sys.unblock_cmd_stream();}
+comptime{@export_symbol(wp,"weights");@export_symbol(xp,"input");@export_symbol(yp,"output");@export_symbol(compute);}

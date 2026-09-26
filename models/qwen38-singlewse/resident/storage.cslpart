@@ -1,0 +1,7 @@
+var weights=@zeros([if(role==1) 17408 else if(role==2) 17920 else if(role==3) 16384 else if(role==4) 5120 else 1]u16);
+var scales=@zeros([if(role==1) 3 else 1]f32);
+var data=@zeros([if(role==4) 5120 else if(role==5) 17536 else 1]u16);
+var output=@zeros([if(role==1) 272 else if(role==2) 140 else 1]f32);
+fn weight_data() [*]u16 {return &weights;}fn scale_data() [*]f32 {return &scales;}
+fn matrix_output() [*]f32 {return &output;}fn data_buffer() [*]u16 {return &data;}
+fn data_capacity() u16 {return if(role==4) 5120 else if(role==5) 17536 else 0;}

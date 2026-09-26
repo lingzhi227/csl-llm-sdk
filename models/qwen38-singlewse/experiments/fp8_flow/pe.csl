@@ -1,0 +1,79 @@
+// Bounded one-flight west -> quantized GEMV -> east pipeline.
+param memcpy_params;
+param rank: u16;
+const sys = @import_module("<memcpy/memcpy>",memcpy_params);
+const quant = @import_module("fp8_activation.csl");
+const kernel = @import_module("fp8_block_gemv.csl",.{.rows=272,.row_phase=16});
+var weights = @zeros([if(rank==1) 17408 else 1]u16);
+var scales = @zeros([if(rank==1) 3 else 1]f32);
+var input = @zeros([if(rank==0) 128 else 1]f32);
+var codes = @zeros([if(rank==0) 128 else 1]u16);
+var activation_scale = @zeros([1]f32);
+var packet = @zeros([if(rank<2) 33 else 1]u32);
+var output = @zeros([if(rank>0) 272 else 1]f32);
+var calls = @zeros([1]u32);
+const wp: [*]u16 = &weights;
+const sp: [*]f32 = &scales;
+const xp: [*]f32 = &input;
+const pp: [*]u32 = &packet;
+const yp: [*]f32 = &output;
+const cp: [*]u32 = &calls;
+const rx_done = @get_local_task_id(8);
+const tx_done = @get_local_task_id(9);
+const iq = @get_input_queue(if(rank==1) 2 else 3);
+const oq = @get_output_queue(if(rank==0) 2 else 3);
+const rx_dst = @get_dsr(dsr_dest,3);
+const rx_src = @get_dsr(dsr_src1,3);
+const tx_dst = @get_dsr(dsr_dest,4);
+const tx_src = @get_dsr(dsr_src1,4);
+fn send(data:[*]u32,count:u16) void {
+  const src = @get_dsd(mem1d_dsd,.{.base_address=data,.extent=count});
+  const base = @get_dsd(fabout_dsd,.{.output_queue=oq,.extent=1});
+  @load_to_dsr(tx_src,src);
+  @load_to_dsr(tx_dst,@set_dsd_length(base,count),.{.async=true,.activate=tx_done});
+  @mov32(tx_dst,tx_src,.{.async=true});
+}
+fn receive(data:[*]u32,count:u16) void {
+  const dst = @get_dsd(mem1d_dsd,.{.base_address=data,.extent=count});
+  const base = @get_dsd(fabin_dsd,.{.input_queue=iq,.extent=1});
+  @load_to_dsr(rx_dst,dst);
+  @load_to_dsr(rx_src,@set_dsd_length(base,count),.{.async=true,.activate=rx_done});
+  @mov32(rx_dst,rx_src,.{.async=true});
+}
+fn finish() void { calls[0] += 1; sys.unblock_cmd_stream(); }
+task received() void {
+  if (comptime rank==1) {
+    kernel.compute(wp,sp,pp,yp);
+    send(@ptrcast([*]u32,yp),272);
+  } else { finish(); }
+}
+task sent() void { finish(); }
+fn compute() void {
+  if (comptime rank==0) {
+    quant.quantize(xp,&codes,&activation_scale);
+    for (@range(u16,32)) |i| {
+      packet[i] = @as(u32,codes[4*i]) | (@as(u32,codes[4*i+1]) << 8)
+        | (@as(u32,codes[4*i+2]) << 16) | (@as(u32,codes[4*i+3]) << 24);
+    }
+    packet[32] = @bitcast(u32,activation_scale[0]);
+    send(pp,33);
+  } else if (comptime rank==1) { receive(pp,33); }
+  else { receive(@ptrcast([*]u32,yp),272); }
+}
+comptime {
+  if (rank>0) {
+    @initialize_queue(iq,.{.color=@get_color(if(rank==1) 3 else 4)});
+    @bind_local_task(received,rx_done);
+  }
+  if (rank<2) {
+    @initialize_queue(oq,.{.color=@get_color(if(rank==0) 3 else 4)});
+    @bind_local_task(sent,tx_done);
+  }
+  @export_symbol(wp,"weights");
+  @export_symbol(sp,"scales");
+  @export_symbol(xp,"input");
+  @export_symbol(pp,"packet");
+  @export_symbol(yp,"output");
+  @export_symbol(cp,"calls");
+  @export_symbol(compute);
+}

@@ -1,0 +1,43 @@
+{
+  "records": 2330,
+  "by_kind": {
+    "layer": {
+      "checks": 2260,
+      "all_passed": false,
+      "min_cosine": 0.9740986040262681,
+      "max_relative_l2": 0.22735747675193313,
+      "max_max_abs_error": 18.5,
+      "max_rms_abs_error": 1.0193197599766555,
+      "max_max_abs_error_over_reference_rms": 3.991732207559705
+    },
+    "final_norm": {
+      "checks": 35,
+      "all_passed": false,
+      "min_cosine": 0.9739150465360497,
+      "max_relative_l2": 0.22843094321053564,
+      "max_max_abs_error": 2.6875,
+      "max_rms_abs_error": 0.4443831990359893,
+      "max_max_abs_error_over_reference_rms": 1.4118348909933978
+    },
+    "logits": {
+      "checks": 35,
+      "all_passed": false,
+      "min_cosine": 0.9758975861810746,
+      "max_relative_l2": 0.21829447302170535,
+      "max_max_abs_error": 2.65625,
+      "max_rms_abs_error": 0.466177854400379,
+      "max_max_abs_error_over_reference_rms": 1.3950034848116992
+    }
+  },
+  "first_failure": {
+    "position": 0,
+    "kind": "layer",
+    "index": 21,
+    "relative_l2": 0.003758412438684435,
+    "cosine": 0.9999968204596179,
+    "max_abs_error": 1.0,
+    "rms_abs_error": 0.015651065656028876,
+    "max_abs_error_over_reference_rms": 0.24013779772476224,
+    "passed": false
+  }
+}

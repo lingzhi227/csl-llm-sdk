@@ -1,0 +1,40 @@
+// Combined resident matrix arithmetic; original standalone loop order retained.
+// Inactive roles allocate one word. Shared expansion scratch also serves returns.
+param fp8:bool;param active:bool;param row_phase:u16;
+const rows:u16=if(fp8) 272 else 140;
+const codec=@import_module("fp8_codec.csl");
+var scratch=@zeros([if(active) 272 else 1]f32);
+const pd=@get_dsr(dsr_dest,3);const ps=@get_dsr(dsr_src0,3);
+const yd=@get_dsr(dsr_dest,4);const ys=@get_dsr(dsr_src0,4);const ws=@get_dsr(dsr_src1,4);
+fn expand(bits:u16) f32 {return @bitcast(f32,@as(u32,bits)<<16);}
+fn reduction_buffer() [*]f32 {return &scratch;}
+fn compute(weights:[*]u16,scales:[*]f32,packet:[*]u32,output:[*]f32) void {
+  const out=@get_dsd(mem1d_dsd,.{.base_address=output,.extent=rows});
+  const tmp=@get_dsd(mem1d_dsd,.{.base_address=&scratch,.extent=rows});
+  @fmovs(out,0.0);
+  @load_to_dsr(yd,out,.{.save_address=false});@load_to_dsr(ys,out,.{.save_address=false});
+  @load_to_dsr(ws,tmp,.{.save_address=false});
+  if(comptime fp8){
+    for(@range(u16,128))|c|{
+      const code:u16=@as(u16,(packet[c/4]>>((c%4)*8))&255);
+      for(@range(u16,136))|pair|{
+        const word:u16=weights[c*136+pair];scratch[2*pair]=codec.decode(word&255);scratch[2*pair+1]=codec.decode(word>>8);
+      }
+      @fmacs(yd,ys,ws,codec.decode(code));
+    }
+    const activation_scale:f32=@bitcast(f32,packet[32]);
+    for(@range(u16,272))|r|{output[r]=(output[r]*activation_scale)*scales[(r+row_phase)/128];}
+  }else{
+    const low=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]u16,&scratch),.extent=140,.stride=2});
+    const high=@increment_dsd_offset(low,1,u16);
+    const weight=@get_dsd(mem1d_dsd,.{.base_address=weights,.extent=140});
+    @fmovs(tmp,0.0);@load_to_dsr(pd,high,.{.save_address=false});@load_to_dsr(ps,weight,.{.save_address=true});
+    for(@range(u16,128))|c|{
+      const bits=@as(u16,packet[c/2]>>((c%2)*16));@mov16(pd,ps);@fmacs(yd,ys,ws,expand(bits));
+    }
+  }
+}
+fn add_previous(output:[*]f32) void {for(@range(u16,rows))|r|{output[r]+=scratch[r];}}
+fn embedding(weights:[*]u16,row:u16,output:[*]f32) void {
+  @assert(!fp8 and row<140);for(@range(u16,128))|c|{output[c]=expand(weights[c*140+row]);}
+}

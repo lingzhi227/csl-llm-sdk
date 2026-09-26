@@ -1,0 +1,6 @@
+{
+  "cause": "systemd-oomd killed service",
+  "exit_signal": 9,
+  "complete_reference": false,
+  "mitigation": "Discard consumed file cache with POSIX_FADV_DONTNEED; release freed CPU heap after each layer. Same 6GiB hard cap and no swap; no numerical changes."
+}

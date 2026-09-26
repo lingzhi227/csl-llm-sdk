@@ -1,0 +1,33 @@
+{
+  "passed": true,
+  "normal_stop": true,
+  "physical": true,
+  "full_model": false,
+  "full_matrix": false,
+  "scope": "Four interleaved original FP8 strips; two logical submatrices, device-controlled compute/return",
+  "device_controlled": true,
+  "retention_pass": true,
+  "calls": [
+    {
+      "call": 1,
+      "max_abs_error": 3.3358478868095176e-08,
+      "numerical_pass": true,
+      "trace_pass": true,
+      "host_roundtrip_seconds": 0.0071362219750881195
+    },
+    {
+      "call": 2,
+      "max_abs_error": 1.3952241806336474e-08,
+      "numerical_pass": true,
+      "trace_pass": true,
+      "host_roundtrip_seconds": 0.007040770724415779
+    },
+    {
+      "call": 3,
+      "max_abs_error": 0.0,
+      "numerical_pass": true,
+      "trace_pass": true,
+      "host_roundtrip_seconds": 0.007097742520272732
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "scope": "Four interleaved original FP8 strips; two logical submatrices, device-controlled compute/return",
+  "original_fixture_sha256": "9ab7b881f556758bcc5dacfd7b3e33f98ea06e03c453fe6c086600881b3ddf08",
+  "tiles": [
+    {
+      "x": 0,
+      "y": 0,
+      "matrix": 1,
+      "k": 0,
+      "original_row_tile": 0
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "matrix": 1,
+      "k": 1,
+      "original_row_tile": 0
+    },
+    {
+      "x": 4,
+      "y": 1,
+      "matrix": 1,
+      "k": 0,
+      "original_row_tile": 1
+    },
+    {
+      "x": 5,
+      "y": 1,
+      "matrix": 1,
+      "k": 1,
+      "original_row_tile": 1
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "matrix": 2,
+      "k": 0,
+      "original_row_tile": 2
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "matrix": 2,
+      "k": 1,
+      "original_row_tile": 2
+    },
+    {
+      "x": 3,
+      "y": 2,
+      "matrix": 2,
+      "k": 2,
+      "original_row_tile": 2
+    },
+    {
+      "x": 4,
+      "y": 3,
+      "matrix": 2,
+      "k": 0,
+      "original_row_tile": 3
+    },
+    {
+      "x": 5,
+      "y": 3,
+      "matrix": 2,
+      "k": 1,
+      "original_row_tile": 3
+    },
+    {
+      "x": 6,
+      "y": 3,
+      "matrix": 2,
+      "k": 2,
+      "original_row_tile": 3
+    }
+  ],
+  "application_pes": 45,
+  "command_frames_per_call": 12,
+  "fixture_sha256": "49b997cb089084eee55b52fa47401a3cc85570dcc3df23bd92db3e18f5d40d88",
+  "criterion": "Frozen FP64 gamma300 product bound; all45 frame/call counters and forwarding counts; exact weight/scale retention",
+  "full_matrix": false,
+  "full_model": false
+}

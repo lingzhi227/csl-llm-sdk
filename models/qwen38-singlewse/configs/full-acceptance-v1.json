@@ -1,0 +1,154 @@
+{
+  "version": 1,
+  "frozen_utc": "2026-09-26T07:27:02.921482+00:00",
+  "candidate_full_outputs_seen": false,
+  "model": "Qwen/Qwen3.8-27B-FP8",
+  "revision": "017b9c7af6b5689d5dd426a76e0bc077eb5ca20a",
+  "reference": {
+    "arithmetic": "Pinned official Transformers non-linear layers, same original FP8 checkpoint and qualified group128 activation quantization",
+    "prefill": "One position at a time, matching device order",
+    "comparison_prefix": "CPU oracle evaluates the actual device prefix; candidate generated tokens are inputs only to offline CPU checking, never injected back into the physical request",
+    "existing_chunk_reference": "reference-full-003 is a baseline; not interchangeable with the sequential-prefix validation oracle"
+  },
+  "per_position_all64_layers_and_final_norm": {
+    "finite": true,
+    "relative_l2_max": 0.02,
+    "cosine_min": 0.9998,
+    "max_abs_error_over_reference_rms_max": 0.1,
+    "denominator_floor": 1e-08
+  },
+  "full_vocabulary_logits": {
+    "entries": 248320,
+    "finite": true,
+    "relative_l2_max": 0.02,
+    "cosine_min": 0.9998,
+    "rms_abs_error_max": 0.05,
+    "max_abs_error_max": 0.25
+  },
+  "token_selection": {
+    "device": "Exact lowest-ID argmax of captured candidate BF16 logits over all248320 entries",
+    "reference": "Reference winner required when its margin exceeds two positive BF16 ULPs at the reference maximum. Otherwise candidate ID must be within that two-ULP band of the reference maximum. The maximum allowed band is0.25.",
+    "largest_allowed_reference_gap": 0.25,
+    "non_tie_mismatch_allowed": false
+  },
+  "sequence": {
+    "device_feedback_only": true,
+    "eos_required": true,
+    "sunny_morning_min_non_eos_tokens": 16,
+    "sunny_morning_min_sentences": 2,
+    "required_topics": [
+      "sunlight",
+      "bird"
+    ],
+    "final_sentence_terminated": true,
+    "reset_replay_token_ids_bit_identical": true
+  },
+  "timing": {
+    "clock": "host monotonic_ns",
+    "ttft": "Immediately before prompt/control upload through first generated-ID readback; initialization and weights excluded",
+    "decode": "Every dependent device step through ID readback; also retain successive-token wall intervals",
+    "end_to_end": "Prompt upload through final generated-ID readback",
+    "initialization": "Separate artifact/runtime and all-weight upload timings",
+    "validation_capture": "Reported separately; headline generation timings use capture disabled; no extrapolated microkernel timings"
+  },
+  "run_order": [
+    {
+      "workload": "sunny_morning",
+      "capture": true
+    },
+    {
+      "workload": "greeting",
+      "capture": false
+    },
+    {
+      "workload": "sunny_morning",
+      "capture": false
+    },
+    {
+      "workload": "sunny_morning",
+      "capture": false
+    }
+  ],
+  "workloads": [
+    {
+      "name": "sunny_morning",
+      "input_ids": [
+        248045,
+        846,
+        198,
+        7734,
+        1330,
+        2716,
+        22157,
+        883,
+        264,
+        38383,
+        6353,
+        11,
+        42820,
+        7948,
+        37728,
+        321,
+        19053,
+        24288,
+        13,
+        248046,
+        198,
+        248045,
+        74455,
+        198,
+        248068,
+        271,
+        248069,
+        271
+      ],
+      "rendered_prompt": "<|im_start|>user\nWrite two short sentences about a sunny morning, mentioning warm sunlight and birds singing.<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Write two short sentences about a sunny morning, mentioning warm sunlight and birds singing."
+        }
+      ],
+      "max_new_tokens": 48,
+      "eos_id": 248046,
+      "context": 96,
+      "source_qualification_sha256": "584876116006d13c6ef5eb4fdae018a5243115d56eacaed447731a564ef773c2"
+    },
+    {
+      "name": "greeting",
+      "input_ids": [
+        248045,
+        846,
+        198,
+        44240,
+        23066,
+        303,
+        799,
+        2716,
+        11316,
+        13,
+        248046,
+        198,
+        248045,
+        74455,
+        198,
+        248068,
+        271,
+        248069,
+        271
+      ],
+      "rendered_prompt": "<|im_start|>user\nSay hello in one short sentence.<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say hello in one short sentence."
+        }
+      ],
+      "max_new_tokens": 24,
+      "eos_id": 248046,
+      "context": 96,
+      "source_qualification_sha256": "2eab168eced92335788ad2cda7fe66e412ccd418b5918bf732cca11390b878b5"
+    }
+  ],
+  "acceptance": "All required checks plus normal physical stop and correlated job release; candidate execution alone is not full-model acceptance"
+}

@@ -1,0 +1,39 @@
+{
+  "passed": true,
+  "normal_stop": true,
+  "physical": false,
+  "full_model": false,
+  "scope": "Original Qwen3.8 FP8 272x128 gate tile; 254 finite encodings; three calls",
+  "calls": [
+    {
+      "call": 1,
+      "max_abs_error": 1.1417867540330917e-07,
+      "max_abs_bound": 1.7349350495969656e-05,
+      "numerical_pass": true,
+      "decode_pass": true,
+      "retention_pass": true,
+      "counter_pass": true,
+      "host_launch_seconds": 2.0191073417663574e-05
+    },
+    {
+      "call": 2,
+      "max_abs_error": 5.587935447692871e-09,
+      "max_abs_bound": 8.026661967088858e-06,
+      "numerical_pass": true,
+      "decode_pass": true,
+      "retention_pass": true,
+      "counter_pass": true,
+      "host_launch_seconds": 1.9457191228866577e-05
+    },
+    {
+      "call": 3,
+      "max_abs_error": 0.0,
+      "max_abs_bound": 1.1754943508222875e-38,
+      "numerical_pass": true,
+      "decode_pass": true,
+      "retention_pass": true,
+      "counter_pass": true,
+      "host_launch_seconds": 6.45848922431469e-05
+    }
+  ]
+}

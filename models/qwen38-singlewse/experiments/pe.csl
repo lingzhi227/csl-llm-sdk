@@ -1,0 +1,36 @@
+param memcpy_params;
+const sys = @import_module("<memcpy/memcpy>", memcpy_params);
+const kernel = @import_module("fp8_gemv.csl", .{.rows=272, .columns=128, .row_phase=0});
+var weights = @zeros([17408]u16);
+var scales = @zeros([3]f32);
+var input = @zeros([128]f32);
+var output = @zeros([272]f32);
+var calls = @zeros([1]u32);
+const wp: [*]u16 = &weights;
+const sp: [*]f32 = &scales;
+const xp: [*]f32 = &input;
+const yp: [*]f32 = &output;
+const dp: [*]f32 = &output;
+const cp: [*]u32 = &calls;
+fn decode_all() void {
+  for (@range(u16,256)) |code| {
+    if ((code & 127) == 127) { output[code] = 0.0; }
+    else { output[code] = kernel.decode(code); }
+  }
+  sys.unblock_cmd_stream();
+}
+fn compute() void {
+  kernel.compute(wp, sp, xp, yp);
+  calls[0] += 1;
+  sys.unblock_cmd_stream();
+}
+comptime {
+  @export_symbol(wp, "weights");
+  @export_symbol(sp, "scales");
+  @export_symbol(xp, "input");
+  @export_symbol(yp, "output");
+  @export_symbol(dp, "decoded");
+  @export_symbol(cp, "calls");
+  @export_symbol(compute);
+  @export_symbol(decode_all);
+}

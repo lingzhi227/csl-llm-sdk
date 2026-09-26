@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "identical_and_zero_vectors": true,
+  "error_rejection": true,
+  "nonfinite_rejection": true,
+  "lowest_id_ties": true,
+  "reference_non_tie_rejection": true,
+  "two_ulp_band": true,
+  "physical": false,
+  "source_sha256": "b8d475e9ff1bdb06a8ae1e05c09d48321b9a8956a9ec0fae57a4c27c8a757b91",
+  "scope": "Extracted unmodified acceptance functions, not full CPU reference or physical model qualification",
+  "orchestration_revision_source_sha256": "84ad41dc1bb1453757c1fd0a6499ae31869c14b9d500ba08f6a6d0557199ff8a",
+  "unchanged_acceptance_function_ast_sha256": "5b6608614754d5c10e3011ccfa48e666707a119b23b3b5c0575bab733251719b",
+  "orchestration_change": "Fixed prompt may be computed before candidate arrival; every deferred layer/norm/logit comparison remains mandatory, same criteria and same functions."
+}

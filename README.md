@@ -5,7 +5,8 @@
 | Model | Implementation and accepted scope |
 |---|---|
 | **[GPT-OSS-20B](models/gpt-oss20b/)** | Complete original 24-layer MoE on one physical WSE-3; all 32 experts per layer resident, dynamic top-4, full vocabulary head, two autoregressive tokens (`Hello, World`). All weights read back unchanged; actual-input numerical qualification passed. Strict whole-prefix CPU parity did not pass. |
-| **Qwen3.8-27B** | Original layers 0–19 completed five input positions on physical CS3; exactly 1,000 hidden values compared and the full checkpoint preserved. Remaining stages and full-model generation remain open; work is paused. |
+| **[Qwen3.8-27B-FP8](models/qwen38-singlewse/)** | Complete original 64-layer text network on one physical WSE-3; resident weights, two continuous sentences and EOS (37 tokens). Initial operator/functionality milestone; strict CPU alignment did not pass. Communication and speed optimization are future work. |
+| **Qwen3.8-27B — historical staged BF16** | Original layers 0–19 completed five input positions on physical CS3; exactly 1,000 hidden values compared and the full checkpoint preserved. The earlier staged project is paused. |
 
 GPT-OSS source, reference preparation, bounded host lifecycle, compact evidence,
 [numerical contract](models/gpt-oss20b/docs/NUMERICAL-QUALIFICATION.md),
@@ -16,22 +17,30 @@ the accepted experiment covers two generated tokens, not long-context accuracy,
 corpus quality or steady-state throughput. Site launchers require local setup;
 model weights and SDK binaries are not distributed here.
 
-The existing root-level `core/`, `csl/`, `examples/` and historical reports retain
-the Qwen development line. The Qwen status and three-stage design below do not
-limit or describe the separate GPT-OSS backend.
+The complete single-WSE FP8 Qwen implementation, physical results, local checks,
+failed strict comparisons and future work are documented in
+[`models/qwen38-singlewse/`](models/qwen38-singlewse/). Its captured run measured
+838.69 s to first token and 30.08 s per dependent token; this is an initial
+functional baseline with substantial communication/scheduling work remaining.
+See its [physical report](models/qwen38-singlewse/docs/PHYSICAL-INFERENCE-RESULT.md).
 
-**Latest Qwen milestone:** original layers 0–19 completed five continuous
+The existing root-level `core/`, `csl/`, `examples/` and historical reports retain
+the earlier staged Qwen development line. The status and three-stage design
+below describe that historical project, not the separate complete-model
+implementations under `models/`.
+
+**Historical staged Qwen milestone:** original layers 0–19 completed five continuous
 input positions on one physical CS3. Exactly 1,000 reference-selected hidden
 values were compared, and all output rows plus the full checkpoint were saved.
 See the [Stage0 report](docs/STAGE0-COMPARISON-AND-PAUSE.md).
 
-**Qwen qualification scope:** physical first-stage completion and a deliberately
+**Historical staged Qwen qualification scope:** physical first-stage completion and a deliberately
 limited 1,000-value comparison. 480 values match BF16 bits exactly; maximum
 finite absolute difference is 0.5. No overall numerical pass, full operator
 coverage or whole-model error bound is claimed. Preservation checks file and
 byte integrity; it does not execute a neural or device restore validation.
 
-**Qwen work:** paused after Stage0 preservation and release. Original layers
+**Historical staged Qwen work:** paused after Stage0 preservation and release. Original layers
 20–63, final normalization, the complete vocabulary head, dependent token
 generation and physical restoration of this full checkpoint remain open.
 Later-stage work requires a subsequent instruction. Historical preparation,
@@ -95,6 +104,7 @@ qualification. Complete stages and full-model inference remain open.
 | Path | Purpose |
 |---|---|
 | [`models/gpt-oss20b/`](models/gpt-oss20b) | Complete single-WSE-3 GPT-OSS-20B source, operator experiments, original reference, full-model evidence and deployment templates. |
+| [`models/qwen38-singlewse/`](models/qwen38-singlewse) | Complete single-WSE-3 Qwen3.8 FP8 source, initial sentence-generation results, numerical limitations and future communication/performance work. |
 | [`examples/layer0_vertical/top_spine/`](examples/layer0_vertical/top_spine) | Complete generated vertical Layer0 device program, exact host mapping and actual static qualification; physical scope is documented separately. |
 | [`examples/layer0_vertical/physical_runtime/`](examples/layer0_vertical/physical_runtime) | Exact accepted Layer0 host capture, resource guards and post-release operator audit source; environment-specific inputs and admissions are excluded. |
 | [`examples/layer3_vertical/`](examples/layer3_vertical) | Exact accepted vertical Layer3 device and host/audit source, placement maps, and scoped physical evidence. |

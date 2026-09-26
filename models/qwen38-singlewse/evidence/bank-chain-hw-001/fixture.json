@@ -1,0 +1,94 @@
+{
+  "scope": "Original gate544x256 -> resident BF16 bank -> SiLU/BF16/dynamicFP8 -> original down544x384",
+  "full_model": false,
+  "full_mlp": false,
+  "shard_sha256": "07f700e293baeaf3cd4240c3df1a948c4403f16961ea7979e86c8d6a9f8fd466",
+  "tiles": [
+    {
+      "x": 0,
+      "y": 0,
+      "matrix": 1,
+      "k": 0,
+      "original_row_tile": 0,
+      "tensor": "model.language_model.layers.0.mlp.gate_proj.weight"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "matrix": 1,
+      "k": 1,
+      "original_row_tile": 0,
+      "tensor": "model.language_model.layers.0.mlp.gate_proj.weight"
+    },
+    {
+      "x": 4,
+      "y": 1,
+      "matrix": 1,
+      "k": 0,
+      "original_row_tile": 1,
+      "tensor": "model.language_model.layers.0.mlp.gate_proj.weight"
+    },
+    {
+      "x": 5,
+      "y": 1,
+      "matrix": 1,
+      "k": 1,
+      "original_row_tile": 1,
+      "tensor": "model.language_model.layers.0.mlp.gate_proj.weight"
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "matrix": 2,
+      "k": 0,
+      "original_row_tile": 0,
+      "tensor": "model.language_model.layers.0.mlp.down_proj.weight"
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "matrix": 2,
+      "k": 1,
+      "original_row_tile": 0,
+      "tensor": "model.language_model.layers.0.mlp.down_proj.weight"
+    },
+    {
+      "x": 3,
+      "y": 2,
+      "matrix": 2,
+      "k": 2,
+      "original_row_tile": 0,
+      "tensor": "model.language_model.layers.0.mlp.down_proj.weight"
+    },
+    {
+      "x": 4,
+      "y": 3,
+      "matrix": 2,
+      "k": 0,
+      "original_row_tile": 1,
+      "tensor": "model.language_model.layers.0.mlp.down_proj.weight"
+    },
+    {
+      "x": 5,
+      "y": 3,
+      "matrix": 2,
+      "k": 1,
+      "original_row_tile": 1,
+      "tensor": "model.language_model.layers.0.mlp.down_proj.weight"
+    },
+    {
+      "x": 6,
+      "y": 3,
+      "matrix": 2,
+      "k": 2,
+      "original_row_tile": 1,
+      "tensor": "model.language_model.layers.0.mlp.down_proj.weight"
+    }
+  ],
+  "application_pes": 45,
+  "command_frames_per_call": 21,
+  "bank_capacity_elements": 17536,
+  "criterion": "Frozen propagated FP64/GEMV/BF16/SiLU/FP8-scale-and-code intervals; device routes/counters; original retention; zero bank tail",
+  "maximum_output_interval_width": 0.0006512294530653835,
+  "fixture_sha256": "586327df9254b99c6ec05d1386c67953f275d759292fdc138226256fcf479a3c"
+}

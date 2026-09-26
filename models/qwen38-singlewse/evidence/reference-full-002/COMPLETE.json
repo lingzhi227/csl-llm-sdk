@@ -1,0 +1,86 @@
+{
+  "complete": true,
+  "physical": false,
+  "full_model_layers": 64,
+  "text_tensors_read": 1251,
+  "generated_ids": [
+    9419,
+    0,
+    248046
+  ],
+  "generated_text": "Hello!<|im_end|>",
+  "eos_reached": true,
+  "steps": [
+    {
+      "step": 0,
+      "input_ids": [
+        248045,
+        846,
+        198,
+        44240,
+        23066,
+        303,
+        799,
+        2716,
+        11316,
+        13,
+        248046,
+        198,
+        248045,
+        74455,
+        198,
+        248068,
+        271,
+        248069,
+        271
+      ],
+      "next_token": 9419,
+      "position": 19,
+      "top_ids": [
+        9419,
+        12675
+      ],
+      "top_logits": [
+        24.0,
+        18.125
+      ],
+      "seconds": 484.3954055821523
+    },
+    {
+      "step": 1,
+      "input_ids": [
+        9419
+      ],
+      "next_token": 0,
+      "position": 20,
+      "top_ids": [
+        0,
+        11
+      ],
+      "top_logits": [
+        25.875,
+        23.25
+      ],
+      "seconds": 79.03971978323534
+    },
+    {
+      "step": 2,
+      "input_ids": [
+        0
+      ],
+      "next_token": 248046,
+      "position": 21,
+      "top_ids": [
+        248046,
+        2500
+      ],
+      "top_logits": [
+        25.375,
+        23.0
+      ],
+      "seconds": 79.63670598017052
+    }
+  ],
+  "seconds": 643.3090104837902,
+  "scope": "Independent explicit CPU FP8 numerical reference; not CS-3 latency or physical acceptance"
+}

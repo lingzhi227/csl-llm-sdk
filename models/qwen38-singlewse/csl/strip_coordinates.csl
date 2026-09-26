@@ -1,0 +1,18 @@
+// Exact mixed-strip atlas mapping, candidate controller helper.
+// Output is application-relative x,y. Original matrix row strips are contiguous
+// within one width class, though they need not be contiguous in physical rows.
+fn locate(blocks:u16,index:u16,xy:[*]u16) void {
+  if(blocks==136){
+    @assert(index<1216);xy[0]=(index%4)*136;xy[1]=index/4;
+  }else if(blocks==48){
+    @assert(index<1216);
+    if(index==1215){xy[0]=0;xy[1]=1149;}
+    else{xy[0]=(index%3)*48;xy[1]=304+index/3;}
+  }else{
+    @assert(blocks==40 and index<15530);
+    if(index<1520){xy[0]=544+(index%5)*40;xy[1]=index/5;}
+    else if(index<7595){const n=index-1520;xy[0]=144+(n%15)*40;xy[1]=304+n/15;}
+    else if(index<15515){const n=index-7595;xy[0]=(n%18)*40;xy[1]=709+n/18;}
+    else{xy[0]=48+(index-15515)*40;xy[1]=1149;}
+  }
+}

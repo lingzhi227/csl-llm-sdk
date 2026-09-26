@@ -1,0 +1,104 @@
+{
+  "scope": "Original BF16 first/last vocabulary embedding tiles and three-K-block head submatrix; device masked argmax",
+  "model": "Qwen/Qwen3.8-27B-FP8",
+  "revision": "017b9c7af6b5689d5dd426a76e0bc077eb5ca20a",
+  "shard_sha256": "ddff1d6665a2b39f2612fce0ef955e2436724c565bfbcbc127c7ffd078b698ff",
+  "tiles": [
+    {
+      "x": 0,
+      "y": 0,
+      "matrix": 1,
+      "k": 0,
+      "tensor": "model.language_model.embed_tokens.weight",
+      "first_row": 0,
+      "valid_rows": 144
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "matrix": 1,
+      "k": 1,
+      "tensor": "model.language_model.embed_tokens.weight",
+      "first_row": 0,
+      "valid_rows": 144
+    },
+    {
+      "x": 4,
+      "y": 1,
+      "matrix": 2,
+      "k": 0,
+      "tensor": "model.language_model.embed_tokens.weight",
+      "first_row": 248256,
+      "valid_rows": 64
+    },
+    {
+      "x": 5,
+      "y": 1,
+      "matrix": 2,
+      "k": 1,
+      "tensor": "model.language_model.embed_tokens.weight",
+      "first_row": 248256,
+      "valid_rows": 64
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "matrix": 3,
+      "k": 0,
+      "tensor": "lm_head.weight",
+      "first_row": 0,
+      "valid_rows": 144
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "matrix": 3,
+      "k": 1,
+      "tensor": "lm_head.weight",
+      "first_row": 0,
+      "valid_rows": 144
+    },
+    {
+      "x": 3,
+      "y": 2,
+      "matrix": 3,
+      "k": 2,
+      "tensor": "lm_head.weight",
+      "first_row": 0,
+      "valid_rows": 144
+    },
+    {
+      "x": 4,
+      "y": 3,
+      "matrix": 3,
+      "k": 0,
+      "tensor": "lm_head.weight",
+      "first_row": 248256,
+      "valid_rows": 64
+    },
+    {
+      "x": 5,
+      "y": 3,
+      "matrix": 3,
+      "k": 1,
+      "tensor": "lm_head.weight",
+      "first_row": 248256,
+      "valid_rows": 64
+    },
+    {
+      "x": 6,
+      "y": 3,
+      "matrix": 3,
+      "k": 2,
+      "tensor": "lm_head.weight",
+      "first_row": 248256,
+      "valid_rows": 64
+    }
+  ],
+  "application_pes": 45,
+  "command_frames_per_call": 13,
+  "full_model": false,
+  "full_head": false,
+  "criterion": "Embedding bit identity; head FP64 gamma400 bound; argmax over valid BF16 rounded outputs with lowest-ID tie; winner inside frozen rounded-oracle interval candidates; all45 traces and persistent original weights",
+  "fixture_sha256": "0f3857810810ec9b7342e45f92cf7da198b79fc551de4fbd41f736d5da35696f"
+}

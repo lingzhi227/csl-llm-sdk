@@ -1,0 +1,74 @@
+// Candidate Qwen BF16 boundaries and scalar nonlinearities; unqualified source.
+// Range-reduced exp is adapted from the prior Qwen exp_kernel; see REUSE.json.
+const math=@import_module("<math>");
+fn expand(bits:u16) f32 {return @bitcast(f32,@as(u32,bits)<<16);}
+fn round(value:f32) u16 {
+  const bits=@bitcast(u32,value);const odd=(bits>>16)&1;
+  return @as(u16,(bits+0x00007fff+odd)>>16);
+}
+fn exp_f32(x:f32) f32 {
+  // WSE normal-number profile: values below the normal range flush to zero.
+  // Overflow is explicit; callers must reject nonfinite model states.
+  if(x < -87.3365447505531){return 0.0;}
+  if(x > 88.72283905206835){return @bitcast(f32,@as(u32,0x7f800000));}
+  var n:i16=0;var select:f32=x;
+  while(select < -0.34657359027997265){select+=0.6931471805599453;n-=1;}
+  while(select > 0.34657359027997265){select-=0.6931471805599453;n+=1;}
+  const nf:f32=@as(f32,n);
+  const r:f32=(x-nf*0.693145751953125)-nf*0.000001428606765330187;
+  var p:f32=0.0000248015873015873;
+  p=0.0001984126984126984+r*p;p=0.001388888888888889+r*p;
+  p=0.008333333333333333+r*p;p=0.041666666666666664+r*p;
+  p=0.16666666666666666+r*p;p=0.5+r*p;p=1.0+r*p;p=1.0+r*p;
+  // Near the upper finite boundary, n may be128 even though exp(x) is finite.
+  if(n==128){return (p*2.0)*@bitcast(f32,@as(u32,254)<<23);}
+  return p*@bitcast(f32,@as(u32,n+127)<<23);
+}
+fn sigmoid(x:f32) f32 {
+  var argument:f32=-x;if(x<0.0){argument=x;}
+  const e=exp_f32(argument);
+  if(x<0.0){return e/(1.0+e);}return 1.0/(1.0+e);
+}
+fn silu(x:f32) f32 {
+  // exp(x) may be subnormal while x*exp(x) is still normal. Rescale before
+  // multiplying to preserve that negative tail on hardware with normal-only FP32.
+  if(x < -80.0){return (x*exp_f32(x+44.3614195558365))*0.00000000000000000005421010862427522;}
+  return x*sigmoid(x);
+}
+fn softplus(x:f32) f32 {
+  if(x>20.0){return x;}
+  var negative:f32=-x;var positive:f32=x;
+  if(x<0.0){negative=x;positive=0.0;}
+  const e=exp_f32(negative);const ratio=e/(2.0+e);const square=ratio*ratio;
+  var term:f32=ratio;var sum:f32=ratio;
+  for(@range(u16,6))|i|{term*=square;sum+=term/@as(f32,2*i+3);}
+  return positive+2.0*sum;
+}
+fn rmsnorm(input:[*]u16,gain:[*]u16,output:[*]u16,comptime count:u16) void {
+  var square:f32=0.0;
+  for(@range(u16,count))|i|{const x=expand(input[i]);square+=x*x;}
+  const inverse:f32=1.0/math.sqrt_f32(square/@as(f32,count)+0.000001);
+  for(@range(u16,count))|i|{
+    const normalized:f32=expand(input[i])*inverse;
+    output[i]=round(normalized*(1.0+expand(gain[i])));
+  }
+}
+fn silu_multiply(gate:[*]u16,up:[*]u16,output:[*]u16,comptime count:u16) void {
+  for(@range(u16,count))|i|{
+    const activation=round(silu(expand(gate[i])));
+    output[i]=round(expand(activation)*expand(up[i]));
+  }
+}
+fn residual_add(left:[*]u16,right:[*]u16,output:[*]u16,comptime count:u16) void {
+  for(@range(u16,count))|i|{output[i]=round(expand(left[i])+expand(right[i]));}
+}
+fn gated_rmsnorm(input:[*]u16,gain:[*]u16,gate:[*]u16,output:[*]u16) void {
+  var square:f32=0.0;
+  for(@range(u16,128))|i|{const x=expand(input[i]);square+=x*x;}
+  const inverse:f32=1.0/math.sqrt_f32(square/128.0+0.000001);
+  for(@range(u16,128))|i|{
+    const normalized=round(expand(input[i])*inverse);
+    const gained=round(expand(normalized)*expand(gain[i]));
+    output[i]=round(expand(gained)*silu(expand(gate[i])));
+  }
+}

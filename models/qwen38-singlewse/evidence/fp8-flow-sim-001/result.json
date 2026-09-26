@@ -1,0 +1,60 @@
+{
+  "passed": true,
+  "normal_stop": true,
+  "physical": false,
+  "full_model": false,
+  "west_to_east": true,
+  "scope": "Three-PE quantization/packed transfer/FP8 block GEMV/result transfer, original 272x128 phase16 tile",
+  "calls": [
+    {
+      "call": 1,
+      "max_abs_error": 1.7703958965498146e-08,
+      "max_abs_bound": 1.6144211394450684e-05,
+      "numerical_pass": true,
+      "packet_pass": true,
+      "counter_pass": true,
+      "retention_pass": true,
+      "host_roundtrip_seconds": 15.988034297712147
+    },
+    {
+      "call": 2,
+      "max_abs_error": 6.907265648337102e-09,
+      "max_abs_bound": 7.162223667048005e-06,
+      "numerical_pass": true,
+      "packet_pass": true,
+      "counter_pass": true,
+      "retention_pass": true,
+      "host_roundtrip_seconds": 15.28694812208414
+    },
+    {
+      "call": 3,
+      "max_abs_error": 0.0,
+      "max_abs_bound": 1.1754943508222875e-38,
+      "numerical_pass": true,
+      "packet_pass": true,
+      "counter_pass": true,
+      "retention_pass": true,
+      "host_roundtrip_seconds": 15.024052974767983
+    },
+    {
+      "call": 4,
+      "max_abs_error": 1.176888962724744e-22,
+      "max_abs_bound": 1.2480006327294475e-19,
+      "numerical_pass": true,
+      "packet_pass": true,
+      "counter_pass": true,
+      "retention_pass": true,
+      "host_roundtrip_seconds": 16.54081711685285
+    },
+    {
+      "call": 5,
+      "max_abs_error": 2.86102294921875e-06,
+      "max_abs_bound": 0.005588972340728327,
+      "numerical_pass": true,
+      "packet_pass": true,
+      "counter_pass": true,
+      "retention_pass": true,
+      "host_roundtrip_seconds": 15.289016843773425
+    }
+  ]
+}

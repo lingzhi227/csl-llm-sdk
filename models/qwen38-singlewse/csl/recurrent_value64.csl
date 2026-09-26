@@ -1,0 +1,46 @@
+// One half of a full 128-key x128-value Gated DeltaNet state, split by value.
+// Adapted from layer0_vertical/recurrent_value32.csl; see docs/REUSE.json.
+// State stays FP32. Q/K normalization and gate nonlinearities are caller work.
+const state_dst=@get_dsr(dsr_dest,3);
+const state_src=@get_dsr(dsr_src0,3);
+const delta_src=@get_dsr(dsr_src1,3);
+const sum_dst=@get_dsr(dsr_dest,4);
+const sum_src=@get_dsr(dsr_src0,4);
+const matrix_src=@get_dsr(dsr_src1,4);
+var prediction=@zeros([64]f32);
+var delta=@zeros([64]f32);
+fn accumulate(value:f32) void {@fmacs(sum_dst,sum_src,matrix_src,value);}
+fn update(value:f32) void {@fmacs(state_dst,state_src,delta_src,value);}
+fn reset(matrix:[*]f32) void {
+  const all=@get_dsd(mem1d_dsd,.{.base_address=matrix,.extent=8192});
+  @fmovs(all,0.0);
+}
+fn reduce(matrix:[*]f32,vector:[*]f32,result:[*]f32) void {
+  const output=@get_dsd(mem1d_dsd,.{.base_address=result,.extent=64});
+  const row=@get_dsd(mem1d_dsd,.{.base_address=matrix,.extent=64});
+  const x=@get_dsd(mem1d_dsd,.{.base_address=vector,.extent=128});
+  @fmovs(output,0.0);
+  @load_to_dsr(sum_dst,output,.{.save_address=false});
+  @load_to_dsr(sum_src,output,.{.save_address=false});
+  @load_to_dsr(matrix_src,row,.{.save_address=true});
+  @map(accumulate,x);
+}
+fn compute(matrix:[*]f32,q:[*]f32,k:[*]f32,v:[*]f32,
+           decay:f32,beta:f32,result:[*]f32) void {
+  const all=@get_dsd(mem1d_dsd,.{.base_address=matrix,.extent=8192});
+  @load_to_dsr(state_dst,all,.{.save_address=false});
+  @load_to_dsr(state_src,all,.{.save_address=false});
+  @fmuls(state_dst,state_src,decay);
+  reduce(matrix,k,&prediction);
+  for(@range(u16,64))|i|{
+    const difference:f32=v[i]-prediction[i];delta[i]=difference*beta;
+  }
+  const row=@get_dsd(mem1d_dsd,.{.base_address=matrix,.extent=64});
+  const correction=@get_dsd(mem1d_dsd,.{.base_address=&delta,.extent=64});
+  const key=@get_dsd(mem1d_dsd,.{.base_address=k,.extent=128});
+  @load_to_dsr(state_dst,row,.{.save_address=true});
+  @load_to_dsr(state_src,row,.{.save_address=true});
+  @load_to_dsr(delta_src,correction,.{.save_address=false});
+  @map(update,key);
+  reduce(matrix,q,result);
+}

@@ -1,0 +1,114 @@
+// One KV group: six original256-wide query heads, four64-channel KV shards.
+param memcpy_params;param role:u16;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const qwen=@import_module("qwen_math.csl");
+const attn=@import_module("attention_math.csl");
+const kv=@import_module("kv_shard64.csl",.{.shard=if(role==0) 0 else role-1,.active=role>0});
+// Controller input: K256,V256,Q1536,gate1536, all original projected BF16.
+var input=@zeros([if(role==0) 3584 else 1]u16);
+var gain=@zeros([if(role==0) 512 else 1]u16);
+var frequencies=@zeros([if(role==0) 32 else 1]f32);
+var output=@zeros([if(role==0) 1536 else 1]u16);
+var frame=@zeros([260]u32);var joined=@zeros([384]f32);
+var scores=@zeros([if(role==0) 96 else 1]f32);
+var probabilities=@zeros([if(role==0) 96 else 1]u16);
+// Completed requests, appended positions, queries, contexts, sequence, KV length.
+var trace=@zeros([6]u32);
+var position:u16=0;var query:u16=0;var stage:u16=0;var count:u16=0;
+var sequence:u32=0;var pending:bool=false;var done:bool=false;
+const xp:[*]u16=&input;const gp:[*]u16=&gain;const fp:[*]f32=&frequencies;
+const op:[*]u16=&output;const tp:[*]u32=&trace;
+const kp:[*]u16=kv.keys();const vp:[*]u16=kv.values();
+const command_iq=@get_input_queue(2);const return_iq=@get_input_queue(3);
+const oq=@get_output_queue(2);
+const command_done=@get_local_task_id(8);const sent_done=@get_local_task_id(9);const return_done=@get_local_task_id(10);
+const rd=@get_dsr(dsr_dest,6);const rs=@get_dsr(dsr_src1,6);
+const td=@get_dsr(dsr_dest,7);const ts=@get_dsr(dsr_src1,7);
+fn arm() void {
+  const mem=@get_dsd(mem1d_dsd,.{.base_address=&frame,.extent=260});
+  const wire=@get_dsd(fabin_dsd,.{.input_queue=command_iq,.extent=260});
+  @load_to_dsr(rd,mem);@load_to_dsr(rs,wire,.{.async=true,.activate=command_done});
+  @mov32(rd,rs,.{.async=true});
+}
+fn send_result() void {
+  const n:u16=count*(5-role);
+  const mem=@get_dsd(mem1d_dsd,.{.base_address=&joined,.extent=n});
+  const wire=@get_dsd(fabout_dsd,.{.output_queue=oq,.extent=1});
+  @load_to_dsr(ts,mem);@load_to_dsr(td,@set_dsd_length(wire,n),.{.async=true,.activate=sent_done});
+  @mov32(td,ts,.{.async=true});
+}
+fn receive_result() void {
+  var n:u16=count*(4-role);var offset:u16=count;
+  if(comptime role==0){n=count*4;offset=0;}
+  const mem=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]f32,&joined[offset]),.extent=n});
+  const wire=@get_dsd(fabin_dsd,.{.input_queue=return_iq,.extent=1});
+  @load_to_dsr(rd,mem);@load_to_dsr(rs,@set_dsd_length(wire,n),.{.async=true,.activate=return_done});
+  @mov32(rd,rs,.{.async=true});
+}
+fn pack(data:[*]u16,n:u16) void {
+  var i:u16=0;
+  while(i<n/2){frame[4+i]=@as(u32,data[2*i])|(@as(u32,data[2*i+1])<<16);i+=1;}
+}
+fn issue() void {
+  frame[0]=@as(u32,stage+1);frame[1]=@as(u32,position);frame[2]=@as(u32,query);
+  sequence+=1;frame[3]=sequence;trace[4]=sequence;
+  if(stage==0){pack(xp,512);}
+  else if(stage==1){pack(@ptrcast([*]u16,&input[512+query*256]),256);}
+  else if(stage==2){pack(&probabilities,96);}
+  const mem=@get_dsd(mem1d_dsd,.{.base_address=&frame,.extent=260});
+  const wire=@get_dsd(fabout_dsd,.{.output_queue=oq,.extent=260});
+  @load_to_dsr(ts,mem);@load_to_dsr(td,wire,.{.async=true,.activate=sent_done});
+  @mov32(td,ts,.{.async=true});
+}
+fn finish_request() void {
+  if(pending and done){pending=false;done=false;trace[0]+=1;sys.unblock_cmd_stream();}
+}
+task sent() void {
+  if(comptime role==0){
+    if(stage==0){trace[1]+=1;trace[5]=@as(u32,position+1);stage=1;query=0;issue();}
+    else if(stage==1){count=96;receive_result();}
+    else if(stage==2){count=64;receive_result();}
+    else{position+=1;trace[0]+=1;sys.unblock_cmd_stream();}
+  }else{arm();}
+}
+task command_received() void {
+  @assert(frame[3]==trace[4]+1);trace[4]=frame[3];
+  const packet:[*]u32=@ptrcast([*]u32,&frame[4]);
+  if(frame[0]==1){kv.append(packet,@as(u16,frame[1]));trace[1]+=1;trace[5]=@as(u32,kv.length);arm();}
+  else if(frame[0]==2){kv.score(packet,&joined);trace[2]+=1;count=96;if(comptime role==4){send_result();}else{receive_result();}}
+  else if(frame[0]==3){kv.context(packet,&joined);trace[3]+=1;count=64;if(comptime role==4){send_result();}else{receive_result();}}
+  else{@assert(frame[0]==4);done=true;arm();finish_request();}
+}
+task result_received() void {
+  if(comptime role==0){
+    if(stage==1){attn.softmax(&joined,&scores,&probabilities,position+1);trace[2]+=1;stage=2;issue();}
+    else{
+      attn.gate(&joined,@ptrcast([*]u16,&input[2048+query*256]),@ptrcast([*]u16,&output[query*256]));
+      trace[3]+=1;query+=1;if(query<6){stage=1;}else{stage=3;}issue();
+    }
+  }else{send_result();}
+}
+fn start() void {if(comptime role>0){arm();}sys.unblock_cmd_stream();}
+fn compute() void {
+  if(comptime role==0){
+    @assert(position<96);
+    qwen.rmsnorm(xp,@ptrcast([*]u16,&gain[256]),xp,256);attn.rotary(xp,fp,position);
+    for(@range(u16,6))|head|{
+      const q:[*]u16=@ptrcast([*]u16,&input[512+head*256]);qwen.rmsnorm(q,gp,q,256);attn.rotary(q,fp,position);
+    }
+    stage=0;query=0;issue();
+  }else{pending=true;finish_request();}
+}
+fn reset() void {
+  if(comptime role>0){kv.reset();}
+  position=0;sequence=0;pending=false;done=false;
+  for(@range(u16,6))|i|{trace[i]=0;}sys.unblock_cmd_stream();
+}
+comptime {
+  @initialize_queue(oq,.{.color=@get_color(if(role==0) 3 else 4+role%2)});@bind_local_task(sent,sent_done);
+  if(role>0){@initialize_queue(command_iq,.{.color=@get_color(3)});@bind_local_task(command_received,command_done);}
+  if(role<4){@initialize_queue(return_iq,.{.color=@get_color(4+(role+1)%2)});@bind_local_task(result_received,return_done);}
+  @export_symbol(xp,"input");@export_symbol(gp,"gain");@export_symbol(fp,"frequencies");@export_symbol(op,"output");
+  @export_symbol(kp,"keys");@export_symbol(vp,"values");@export_symbol(tp,"trace");
+  @export_symbol(start);@export_symbol(compute);@export_symbol(reset);
+}

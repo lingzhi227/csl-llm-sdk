@@ -1,0 +1,28 @@
+param memcpy_params;param norm:bool;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const qwen=@import_module("qwen_math.csl");
+var input=@zeros([if(norm) 5120 else 1]u16);
+var gain=@zeros([if(norm) 5120 else 1]u16);
+var output=@zeros([if(norm) 5120 else 1]u16);
+var probes=@zeros([if(norm) 1 else 128]f32);
+var values=@zeros([if(norm) 1 else 512]f32);
+var calls=@zeros([1]u32);
+const xp:[*]u16=&input;const gp:[*]u16=&gain;const yp:[*]u16=&output;
+const pp:[*]f32=&probes;const vp:[*]f32=&values;const cp:[*]u32=&calls;
+fn compute() void {
+  if(comptime norm){qwen.rmsnorm(xp,gp,yp,5120);}
+  else{for(@range(u16,128))|i|{
+    values[i]=qwen.exp_f32(probes[i]);values[128+i]=qwen.sigmoid(probes[i]);
+    values[256+i]=qwen.softplus(probes[i]);values[384+i]=qwen.silu(probes[i]);
+  }}
+  calls[0]+=1;sys.unblock_cmd_stream();
+}
+fn inplace() void {
+  if(comptime norm){qwen.rmsnorm(xp,gp,xp,5120);}
+  calls[0]+=1;sys.unblock_cmd_stream();
+}
+comptime {
+  @export_symbol(xp,"input");@export_symbol(gp,"gain");@export_symbol(yp,"output");
+  @export_symbol(pp,"probes");@export_symbol(vp,"values");@export_symbol(cp,"calls");
+  @export_symbol(compute);@export_symbol(inplace);
+}

@@ -1,0 +1,20 @@
+const memcpy=@import_module("<memcpy/get_params>",.{.width=3,.height=1});
+layout {
+  @set_rectangle(3,1);
+  for(@range(i16,3))|x|{
+    @set_tile_code(x,0,"pe.csl",.{.memcpy_params=memcpy.get_params(x),.role=@as(u16,x)});
+  }
+  @set_color_config(0,0,@get_color(3),.{.routes=.{.rx=.{RAMP},.tx=.{EAST}}});
+  @set_color_config(1,0,@get_color(3),.{.routes=.{.rx=.{WEST},.tx=.{RAMP,EAST}}});
+  @set_color_config(2,0,@get_color(3),.{.routes=.{.rx=.{WEST},.tx=.{RAMP}}});
+  @set_color_config(2,0,@get_color(4),.{.routes=.{.rx=.{RAMP},.tx=.{WEST}}});
+  @set_color_config(1,0,@get_color(4),.{.routes=.{.rx=.{EAST},.tx=.{RAMP}}});
+  @set_color_config(1,0,@get_color(5),.{.routes=.{.rx=.{RAMP},.tx=.{WEST}}});
+  @set_color_config(0,0,@get_color(5),.{.routes=.{.rx=.{EAST},.tx=.{RAMP}}});
+  @export_name("state",[*]f32,false);@export_name("packet",[*]f32,false);
+  @export_name("output",[*]f32,false);@export_name("rounded",[*]u16,false);
+  @export_name("calls",[*]u32,false);
+  @export_name("input",[*]u16,false);@export_name("conv_weights",[*]u16,false);@export_name("history",[*]u16,false);
+  @export_name("gate_parameters",[*]u16,false);@export_name("gain",[*]u16,false);@export_name("gated",[*]u16,false);
+  @export_name("compute",fn()void);@export_name("reset",fn()void);
+}

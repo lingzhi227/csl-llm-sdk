@@ -1,0 +1,14 @@
+{
+  "cases": 4290,
+  "positions": 66,
+  "hidden_size": 5120,
+  "physical": false,
+  "criteria_fixed_before_candidate_outputs": true,
+  "max_bf16_ulp_from_fp64": 1,
+  "require_no_more_total_differences_than_baseline": true,
+  "scope": "Every captured pre-layer input and final-normalization input; original gains. This does not accept the full model.",
+  "candidate_source": "resident-generation-hw-002",
+  "capture_sha256": "a65d8724b04b652a8767a64811f3cd29c72c029077087345a71edf1832f53cdf",
+  "revision": "017b9c7af6b5689d5dd426a76e0bc077eb5ca20a",
+  "fixture_sha256": "8e017cb9cd59229d68d0c1cf34262e7364dee7d01cb0ea3161f97d1af3939123"
+}

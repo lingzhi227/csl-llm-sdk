@@ -1,0 +1,308 @@
+// Candidate whole-resident protocol. This source is unqualified until compiled.
+// Coordinate/matrix identities are loaded once; only roles/routes specialize.
+param memcpy_params;param role:u16;param phase:u16;param first:bool;param last:bool;
+param west:bool;param east:bool;param north:bool;param south:bool;param parity_x:u16;param parity_y:u16;
+const is_matrix:bool=role==1 or role==2;const is_root:bool=role==14;
+const is_actor:bool=role>=6 and role<=13;
+const has_data:bool=role==4 or role==5 or role==6 or role==9;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const qwen=@import_module("qwen_math.csl");
+const kernel=@import_module("resident_matrix.csl",.{.fp8=role==1,.active=is_matrix,.row_phase=phase});
+var config=@zeros([8]u32);
+// Config: packedxy,matrix_id,k_block,row_tile,valid_rows,packed_group_root,0,weight_count.
+var frame=@zeros([70]u32);var trace=@zeros([6]u32);
+var relay_storage=@zeros([if(!is_matrix and !is_actor and !is_root) 272 else 1]f32);
+var call_pending:bool=false;var call_done:bool=false;
+const command_iq=@get_input_queue(2);const command_oq=@get_output_queue(2);
+const reduce_iq=@get_input_queue(3);const reduce_oq=@get_output_queue(3);
+const east_iq=@get_input_queue(4);const east_oq=@get_output_queue(4);
+const south_iq=@get_input_queue(5);const south_oq=@get_output_queue(5);
+const command_done=@get_local_task_id(8);const broadcast_done=@get_local_task_id(9);
+const reduce_done=@get_local_task_id(10);const reduce_sent=@get_local_task_id(11);
+const return_done=@get_local_task_id(12);const relay_done=@get_local_task_id(13);
+const command_dst=@get_dsr(dsr_dest,2);const command_src=@get_dsr(dsr_src1,2);
+const link_dst=@get_dsr(dsr_dest,5);const link_src=@get_dsr(dsr_src1,5);
+const return_dst=@get_dsr(dsr_dest,6);const return_src=@get_dsr(dsr_src1,6);
+fn arm() void {
+  const mem=@get_dsd(mem1d_dsd,.{.base_address=&frame,.extent=70});
+  const wire=@get_dsd(fabin_dsd,.{.input_queue=command_iq,.extent=70});
+  @load_to_dsr(command_dst,mem);@load_to_dsr(command_src,wire,.{.async=true,.activate=command_done});
+  @mov32(command_dst,command_src,.{.async=true});
+}
+fn scratch() [*]f32 {
+  if(comptime is_matrix){return kernel.reduction_buffer();}
+  if(comptime is_actor){return actor_scratch();}
+  if(comptime is_root){return root_buffer();}
+  return &relay_storage;
+}
+fn send_result(data:[*]f32) void {
+  var mem=@get_dsd(mem1d_dsd,.{.base_address=data,.extent=1});
+  var wire=@get_dsd(fabout_dsd,.{.output_queue=if(east) south_oq else east_oq,.extent=1});
+  mem=@set_dsd_length(mem,@as(u16,frame[3]));wire=@set_dsd_length(wire,@as(u16,frame[3]));
+  @load_to_dsr(return_src,mem);@load_to_dsr(return_dst,wire,.{.async=true,.activate=return_done});
+  @mov32(return_dst,return_src,.{.async=true});
+}
+fn relay(comptime queue:input_queue) void {
+  var mem=@get_dsd(mem1d_dsd,.{.base_address=scratch(),.extent=1});
+  var wire=@get_dsd(fabin_dsd,.{.input_queue=queue,.extent=1});
+  mem=@set_dsd_length(mem,@as(u16,frame[3]));wire=@set_dsd_length(wire,@as(u16,frame[3]));
+  @load_to_dsr(return_dst,mem);@load_to_dsr(return_src,wire,.{.async=true,.activate=relay_done});
+  @mov32(return_dst,return_src,.{.async=true});
+}
+task relayed() void {send_result(scratch());}
+fn reduced_ready() void {
+  trace[2]+=1;
+  if(comptime last){arm();}
+  else{
+    const mem=@get_dsd(mem1d_dsd,.{.base_address=matrix_output(),.extent=if(role==1) 272 else 140});
+    const wire=@get_dsd(fabout_dsd,.{.output_queue=reduce_oq,.extent=if(role==1) 272 else 140});
+    @load_to_dsr(link_src,mem);@load_to_dsr(link_dst,wire,.{.async=true,.activate=reduce_sent});
+    @mov32(link_dst,link_src,.{.async=true});
+  }
+}
+task reduction_received() void {kernel.add_previous(matrix_output());reduced_ready();}
+task reduction_sent() void {arm();}
+fn finish_call() void {
+  if(call_pending and call_done){call_pending=false;call_done=false;trace[4]+=1;sys.unblock_cmd_stream();}
+}
+fn actor_finished() void {trace[1]+=1;arm();}
+task command_received() void {
+  @assert(frame[4]==trace[5]+1);trace[5]=frame[4];trace[0]+=1;
+  if(frame[0]==1){
+    if(comptime is_matrix){if(frame[1]==config[1] and frame[2]==config[2]){
+      kernel.compute(weight_data(),scale_data(),@ptrcast([*]u32,&frame[5]),matrix_output());trace[1]+=1;
+    }}arm();
+  }else if(frame[0]==2){
+    if(comptime is_matrix){if(frame[1]==config[1]){
+      if(comptime first){reduced_ready();}
+      else{
+        const mem=@get_dsd(mem1d_dsd,.{.base_address=kernel.reduction_buffer(),.extent=if(role==1) 272 else 140});
+        const wire=@get_dsd(fabin_dsd,.{.input_queue=reduce_iq,.extent=if(role==1) 272 else 140});
+        @load_to_dsr(link_dst,mem);@load_to_dsr(link_src,wire,.{.async=true,.activate=reduce_done});
+        @mov32(link_dst,link_src,.{.async=true});
+      }return;
+    }}arm();
+  }else if(frame[0]==5){
+    if(comptime role==2){if(frame[1]==config[1] and frame[2]==config[3]){
+      kernel.embedding(weight_data(),@as(u16,frame[3]),matrix_output());trace[1]+=1;
+    }}arm();
+  }else if(frame[0]==6){
+    if(comptime has_data){if(frame[1]==config[0]){
+      @assert(frame[3]<=128 and frame[2]+frame[3]<=@as(u32,data_capacity()));
+      const p:[*]u16=data_buffer();var i:u16=0;
+      while(i<@as(u16,frame[3])){p[@as(u16,frame[2])+i]=@as(u16,frame[5+i/2]>>((i%2)*16));i+=1;}
+    }}arm();
+  }else if(frame[0]==10){
+    if(comptime role==4){if(frame[1]==config[0]){qwen.rmsnorm(data_buffer(),weight_data(),data_buffer(),5120);trace[1]+=1;}}arm();
+  }else if(frame[0]==11){
+    if(comptime is_actor){if(frame[1]==config[5]){actor_compute(@as(u16,frame[2]));return;}}arm();
+  }else if(frame[0]==12){if(comptime is_actor){actor_reset();}arm();}
+  else if(frame[0]==4){call_done=true;arm();finish_call();}
+  else{
+    @assert(frame[0]==3 and frame[3]>0 and frame[3]<=272);
+    const sx:u32=frame[1]&1023;const sy:u32=frame[1]>>10;
+    const x:u32=config[0]&1023;const y:u32=config[0]>>10;
+    if(sy==y and sx<=x){
+      if(sx==x){
+        if(frame[2]==0){if(comptime is_matrix){send_result(matrix_output());}else{@assert(false);}}
+        else{
+          const tmp:[*]f32=scratch();var i:u16=0;
+          if(frame[2]==1){
+            if(comptime has_data){
+            @assert(frame[5]+frame[3]<=@as(u32,data_capacity()));const p:[*]u16=data_buffer();
+            while(i<@as(u16,frame[3])){tmp[i]=qwen.expand(p[@as(u16,frame[5])+i]);i+=1;}
+            }else{@assert(false);}
+          }else{
+            if(comptime role==6 or role==9){
+            @assert(frame[2]==2 and is_actor and frame[5]+frame[3]<=@as(u32,actor_output_capacity()));
+            const p:[*]u16=actor_output();while(i<@as(u16,frame[3])){tmp[i]=qwen.expand(p[@as(u16,frame[5])+i]);i+=1;}
+            }else{@assert(false);}
+          }send_result(tmp);
+        }
+      }else{relay(east_iq);}
+    }else if(comptime east){if(sy<y){relay(south_iq);}else{arm();}}
+    else{arm();}
+  }
+}
+task returned() void {
+  trace[3]+=1;if(comptime is_root){root_tick();}else{arm();}
+}
+task broadcast_sent() void {root_sent();}
+fn start() void {if(comptime !is_root){arm();}sys.unblock_cmd_stream();}
+fn begin() void {
+  if(comptime is_root){root_begin();}else{call_pending=true;finish_call();}
+}
+fn step() void {
+  if(comptime is_root){root_step();}else{call_pending=true;finish_call();}
+}
+comptime {
+  if(is_root){@initialize_queue(command_oq,.{.color=@get_color(3)});@bind_local_task(broadcast_sent,broadcast_done);}
+  else{@initialize_queue(command_iq,.{.color=@get_color(3)});@bind_local_task(command_received,command_done);}
+  if(is_matrix){
+    if(!first){@initialize_queue(reduce_iq,.{.color=@get_color(4+(parity_x+1)%2)});@bind_local_task(reduction_received,reduce_done);}
+    if(!last){@initialize_queue(reduce_oq,.{.color=@get_color(4+parity_x)});@bind_local_task(reduction_sent,reduce_sent);}
+  }
+  if(!west){@initialize_queue(east_iq,.{.color=@get_color(8+(parity_x+1)%2)});}
+  if(!east){@initialize_queue(east_oq,.{.color=@get_color(8+parity_x)});}
+  if(east){
+    if(!north){@initialize_queue(south_iq,.{.color=@get_color(10+(parity_y+1)%2)});}
+    if(!south){@initialize_queue(south_oq,.{.color=@get_color(10+parity_y)});}
+  }
+  @bind_local_task(returned,return_done);if(!is_root){@bind_local_task(relayed,relay_done);}
+  @export_symbol(export_config,"config");@export_symbol(export_trace,"trace");
+  @export_symbol(export_weights,"weights");@export_symbol(export_scales,"scales");@export_symbol(export_data,"data");
+  @export_symbol(start);@export_symbol(begin);@export_symbol(step);
+}
+var stub_u16=@zeros([1]u16);var stub_u32=@zeros([1]u32);var stub_f32=@zeros([1]f32);
+const a_role:u16=role-9;
+const a_attn=@import_module("attention_math.csl");
+const a_kv=@import_module("kv_shard64.csl",.{.shard=if(a_role==0) 0 else a_role-1,.active=a_role>0});
+// Controller a_input: K256,V256,Q1536,gate1536, all original projected BF16.
+var a_input=@zeros([if(a_role==0) 3584 else 1]u16);
+var a_gain=@zeros([if(a_role==0) 512 else 1]u16);
+var a_frequencies=@zeros([if(a_role==0) 32 else 1]f32);
+var a_output=@zeros([if(a_role==0) 1536 else 1]u16);
+var a_frame=@zeros([260]u32);var a_joined=@zeros([384]f32);
+var a_scores=@zeros([if(a_role==0) 96 else 1]f32);
+var a_probabilities=@zeros([if(a_role==0) 96 else 1]u16);
+// Completed requests, appended positions, queries, contexts, a_sequence, KV length.
+var a_trace=@zeros([6]u32);
+var a_position:u16=0;var a_query:u16=0;var a_stage:u16=0;var a_count:u16=0;
+var a_sequence:u32=0;var a_pending:bool=false;var a_done:bool=false;
+const a_xp:[*]u16=&a_input;const a_gp:[*]u16=&a_gain;const a_fp:[*]f32=&a_frequencies;
+const a_op:[*]u16=&a_output;const a_tp:[*]u32=&a_trace;
+const a_kp:[*]u16=a_kv.keys();const a_vp:[*]u16=a_kv.values();
+const a_command_iq=@get_input_queue(3);const a_return_iq=@get_input_queue(6);
+const a_oq=@get_output_queue(3);
+const a_command_done=@get_local_task_id(14);const a_sent_done=@get_local_task_id(15);const a_return_done=@get_local_task_id(16);
+const a_rd=@get_dsr(dsr_dest,7);const a_rs=@get_dsr(dsr_src1,7);
+const a_td=@get_dsr(dsr_dest,7);const a_ts=@get_dsr(dsr_src1,7);
+fn a_arm() void {
+  const a_mem=@get_dsd(mem1d_dsd,.{.base_address=&a_frame,.extent=260});
+  const a_wire=@get_dsd(fabin_dsd,.{.input_queue=a_command_iq,.extent=260});
+  @load_to_dsr(a_rd,a_mem);@load_to_dsr(a_rs,a_wire,.{.async=true,.activate=a_command_done});
+  @mov32(a_rd,a_rs,.{.async=true});
+}
+fn a_send_result() void {
+  const a_n:u16=a_count*(5-a_role);
+  const a_mem=@get_dsd(mem1d_dsd,.{.base_address=&a_joined,.extent=a_n});
+  const a_wire=@get_dsd(fabout_dsd,.{.output_queue=a_oq,.extent=1});
+  @load_to_dsr(a_ts,a_mem);@load_to_dsr(a_td,@set_dsd_length(a_wire,a_n),.{.async=true,.activate=a_sent_done});
+  @mov32(a_td,a_ts,.{.async=true});
+}
+fn a_receive_result() void {
+  var a_n:u16=a_count*(4-a_role);var a_offset:u16=a_count;
+  if(comptime a_role==0){a_n=a_count*4;a_offset=0;}
+  const a_mem=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]f32,&a_joined[a_offset]),.extent=a_n});
+  const a_wire=@get_dsd(fabin_dsd,.{.input_queue=a_return_iq,.extent=1});
+  @load_to_dsr(a_rd,a_mem);@load_to_dsr(a_rs,@set_dsd_length(a_wire,a_n),.{.async=true,.activate=a_return_done});
+  @mov32(a_rd,a_rs,.{.async=true});
+}
+fn a_pack(data:[*]u16,a_n:u16) void {
+  var a_i:u16=0;
+  while(a_i<a_n/2){a_frame[4+a_i]=@as(u32,data[2*a_i])|(@as(u32,data[2*a_i+1])<<16);a_i+=1;}
+}
+fn a_issue() void {
+  a_frame[0]=@as(u32,a_stage+1);a_frame[1]=@as(u32,a_position);a_frame[2]=@as(u32,a_query);
+  a_sequence+=1;a_frame[3]=a_sequence;a_trace[4]=a_sequence;
+  if(a_stage==0){a_pack(a_xp,512);}
+  else if(a_stage==1){a_pack(@ptrcast([*]u16,&a_input[512+a_query*256]),256);}
+  else if(a_stage==2){a_pack(&a_probabilities,96);}
+  const a_mem=@get_dsd(mem1d_dsd,.{.base_address=&a_frame,.extent=260});
+  const a_wire=@get_dsd(fabout_dsd,.{.output_queue=a_oq,.extent=260});
+  @load_to_dsr(a_ts,a_mem);@load_to_dsr(a_td,a_wire,.{.async=true,.activate=a_sent_done});
+  @mov32(a_td,a_ts,.{.async=true});
+}
+fn a_finish_request() void {
+  if(a_pending and a_done){a_pending=false;a_done=false;a_trace[0]+=1;actor_finished();}
+}
+task a_sent() void {
+  if(comptime a_role==0){
+    if(a_stage==0){a_trace[1]+=1;a_trace[5]=@as(u32,a_position+1);a_stage=1;a_query=0;a_issue();}
+    else if(a_stage==1){a_count=96;a_receive_result();}
+    else if(a_stage==2){a_count=64;a_receive_result();}
+    else{a_position+=1;a_trace[0]+=1;actor_finished();}
+  }else{a_arm();}
+}
+task a_command_received() void {
+  @assert(a_frame[3]==a_trace[4]+1);a_trace[4]=a_frame[3];
+  const a_packet:[*]u32=@ptrcast([*]u32,&a_frame[4]);
+  if(a_frame[0]==1){a_kv.append(a_packet,@as(u16,a_frame[1]));a_trace[1]+=1;a_trace[5]=@as(u32,a_kv.length);a_arm();}
+  else if(a_frame[0]==2){a_kv.score(a_packet,&a_joined);a_trace[2]+=1;a_count=96;if(comptime a_role==4){a_send_result();}else{a_receive_result();}}
+  else if(a_frame[0]==3){a_kv.context(a_packet,&a_joined);a_trace[3]+=1;a_count=64;if(comptime a_role==4){a_send_result();}else{a_receive_result();}}
+  else{@assert(a_frame[0]==4);a_done=true;a_finish_request();}
+}
+task a_result_received() void {
+  if(comptime a_role==0){
+    if(a_stage==1){a_attn.softmax(&a_joined,&a_scores,&a_probabilities,a_position+1);a_trace[2]+=1;a_stage=2;a_issue();}
+    else{
+      a_attn.gate(&a_joined,@ptrcast([*]u16,&a_input[2048+a_query*256]),@ptrcast([*]u16,&a_output[a_query*256]));
+      a_trace[3]+=1;a_query+=1;if(a_query<6){a_stage=1;}else{a_stage=3;}a_issue();
+    }
+  }else{a_send_result();}
+}
+fn a_compute() void {
+  if(comptime a_role==0){
+    @assert(a_position<96);
+    qwen.rmsnorm(a_xp,@ptrcast([*]u16,&a_gain[256]),a_xp,256);a_attn.rotary(a_xp,a_fp,a_position);
+    for(@range(u16,6))|head|{
+      const a_q:[*]u16=@ptrcast([*]u16,&a_input[512+head*256]);qwen.rmsnorm(a_q,a_gp,a_q,256);a_attn.rotary(a_q,a_fp,a_position);
+    }
+    a_stage=0;a_query=0;a_issue();
+  }else{a_pending=true;a_arm();}
+}
+fn a_reset() void {
+  if(comptime a_role>0){a_kv.reset();}
+  a_position=0;a_sequence=0;a_pending=false;a_done=false;
+  for(@range(u16,6))|a_i|{a_trace[a_i]=0;}
+}
+comptime {
+  @initialize_queue(a_oq,.{.color=@get_color(if(a_role==0) 12 else 13+a_role%2)});@bind_local_task(a_sent,a_sent_done);
+  if(a_role>0){@initialize_queue(a_command_iq,.{.color=@get_color(12)});@bind_local_task(a_command_received,a_command_done);}
+  if(a_role<4){@initialize_queue(a_return_iq,.{.color=@get_color(13+(a_role+1)%2)});@bind_local_task(a_result_received,a_return_done);}
+  
+  
+  
+}
+
+fn actor_scratch() [*]f32 {return &a_joined;}
+fn actor_compute(position:u16) void {if(comptime role==9){@assert(a_position==position);}a_compute();}
+fn actor_reset() void {a_reset();}
+fn actor_output() [*]u16 {return &a_output;}fn actor_output_capacity() u16 {return if(role==9) 1536 else 0;}
+fn data_buffer() [*]u16 {return &a_input;}fn data_capacity() u16 {return if(role==9) 3584 else 0;}
+fn conv_data() [*]u16 {return &stub_u16;}fn gate_data() [*]u16 {return &stub_u16;}
+fn gain_data() [*]u16 {return &a_gain;}fn frequency_data() [*]f32 {return &a_frequencies;}
+
+fn weight_data() [*]u16 {return &stub_u16;}fn scale_data() [*]f32 {return &stub_f32;}
+fn matrix_output() [*]f32 {return &stub_f32;}
+
+fn root_buffer() [*]f32 {return &stub_f32;}fn root_tick() void {}fn root_sent() void {}
+fn root_begin() void {}fn root_step() void {}
+comptime {
+  @export_symbol(export_program,"program");@export_symbol(export_matrices,"matrices");
+  @export_symbol(export_io,"io");@export_symbol(export_prompt,"prompt");
+  @export_symbol(export_controls,"controls");@export_symbol(export_generated,"generated");
+  @export_symbol(export_result,"result");
+}
+
+comptime {
+ @export_symbol(export_conv,"conv");@export_symbol(export_gate,"gate");
+ @export_symbol(export_gain,"gain");@export_symbol(export_freq,"freq");
+}
+
+const export_config:[*]u32=&config;
+const export_trace:[*]u32=&trace;
+const export_weights:[*]u16=weight_data();
+const export_scales:[*]f32=scale_data();
+const export_data:[*]u16=data_buffer();
+const export_program:[*]u16=&stub_u16;
+const export_matrices:[*]u16=&stub_u16;
+const export_io:[*]u16=&stub_u16;
+const export_prompt:[*]u32=&stub_u32;
+const export_controls:[*]u32=&stub_u32;
+const export_generated:[*]u32=&stub_u32;
+const export_result:[*]u32=&stub_u32;
+const export_conv:[*]u16=conv_data();
+const export_gate:[*]u16=gate_data();
+const export_gain:[*]u16=gain_data();
+const export_freq:[*]f32=frequency_data();

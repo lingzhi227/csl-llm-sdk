@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "physical_jobs": 0,
+  "small_original_tensors": 353,
+  "original_bytes": 5291008,
+  "gdn_groups": 2304,
+  "attention_groups": 64,
+  "full_resident_model": false,
+  "source_manifest": {
+    "weights.py": "c9100439ae9df7558886885c50640112e5877b1b0108b2ff58cb20b6d4f41b88",
+    "resident_loader.py": "82b3f187d0ff91386a23ccb2f5111e49393f9acbe356e906f9881f72a159dd72",
+    "resident_plan.py": "3dbe0cff9744c7cfae00ad8a5cab05e9a69885b37e7298a276dfc962475a24a9"
+  },
+  "role_sha256": "172b5fada17c7491fa6ab9f1a49c76c7062f474458cdfc8af95e50f25ceb81e2",
+  "config_sha256": "339614c6abd5a6841b0ca3e82290a4321589913ce9c470d3f3115046119a17f0",
+  "seconds": 20.966996188275516,
+  "scope": "Exact independent raw-header comparison of every new small-tensor read and every GDN parameter slice/actor coordinate; earlier FP8/BF16 packing and actual ELF role audit are separate gates"
+}

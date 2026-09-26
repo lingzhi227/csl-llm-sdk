@@ -1,0 +1,211 @@
+{
+  "physical": false,
+  "scope": "Offline sequential CPU oracle; no physical operands are injected",
+  "source_extraction": {
+    "activations.py:SiLUActivation": {
+      "original_ast_sha256": "c3053bd1445f3a8f77266f3647d24e7c1a431497da59d5fd728919314c4f4975",
+      "selected_ast_sha256": "0dbee1fad92ae45093ef80cd759b40f336e8c9a7d25da989a94f36c5f5380c6f",
+      "removed_decorators": [
+        "use_kernel_forward_from_hub"
+      ],
+      "torch24_register_buffer_adaptations": [],
+      "read_only_callbacks": []
+    },
+    "activations.py:ClassInstantier": {
+      "original_ast_sha256": "eca1f57c3ac76c466eb91cb14b104c8642bc228407fe048520395fbebf7ba8df",
+      "selected_ast_sha256": "eca1f57c3ac76c466eb91cb14b104c8642bc228407fe048520395fbebf7ba8df",
+      "removed_decorators": [],
+      "torch24_register_buffer_adaptations": [],
+      "read_only_callbacks": []
+    },
+    "cache_utils.py:CacheLayerMixin": {
+      "original_ast_sha256": "c6d56c730c125a557509e9f65c68cbdec31a71c9c71502fe6fc2c883be89f5f3",
+      "selected_ast_sha256": "c6d56c730c125a557509e9f65c68cbdec31a71c9c71502fe6fc2c883be89f5f3",
+      "removed_decorators": [],
+      "torch24_register_buffer_adaptations": [],
+      "read_only_callbacks": []
+    },
+    "cache_utils.py:DynamicLayer": {
+      "original_ast_sha256": "8c4c35694d0983c7ddb6fd2850905a48827dd32e2058e0b2b5f6914728a4e483",
+      "selected_ast_sha256": "37a4d50c26ed76b4f8541865a9d4b4c104e468acd69231f2b809638d4592a61b",
+      "removed_decorators": [
+        "deprecate_kwarg"
+      ],
+      "torch24_register_buffer_adaptations": [],
+      "read_only_callbacks": []
+    },
+    "cache_utils.py:LinearAttentionCacheLayerMixin": {
+      "original_ast_sha256": "a33bfc654948fce81785c58be46c7c34cae9b8dac21cef9c1121b6e320213ec3",
+      "selected_ast_sha256": "a33bfc654948fce81785c58be46c7c34cae9b8dac21cef9c1121b6e320213ec3",
+      "removed_decorators": [],
+      "torch24_register_buffer_adaptations": [],
+      "read_only_callbacks": []
+    },
+    "cache_utils.py:LinearAttentionLayer": {
+      "original_ast_sha256": "5ae073fe61f007741463194ec7130ae5abbc1d717aef6a7f18f62ac0723afa60",
+      "selected_ast_sha256": "5ae073fe61f007741463194ec7130ae5abbc1d717aef6a7f18f62ac0723afa60",
+      "removed_decorators": [],
+      "torch24_register_buffer_adaptations": [],
+      "read_only_callbacks": []
+    },
+    "cache_utils.py:Cache": {
+      "original_ast_sha256": "ef9e5528423113dd73e35302fdecc01585862a30a1b82d8560f08e37c7a81fe1",
+      "selected_ast_sha256": "ef9e5528423113dd73e35302fdecc01585862a30a1b82d8560f08e37c7a81fe1",
+      "removed_decorators": [],
+      "torch24_register_buffer_adaptations": [],
+      "read_only_callbacks": []
+    },
+    "modeling_qwen3_5.py:Qwen3_5TextRotaryEmbedding": {
+      "original_ast_sha256": "70a3ed5d4656c72cf47a65a691f20e9e30f24e6832ec2cc37a07f2d7e8373f39",
+      "selected_ast_sha256": "75544f43e18c918e87233456c9cd6f74cbf75c77f56a5d73d27bd250e70bda02",
+      "removed_decorators": [
+        "deprecate_kwarg",
+        "deprecate_kwarg",
+        "dynamic_rope_update"
+      ],
+      "torch24_register_buffer_adaptations": [
+        "inv_freq",
+        "original_inv_freq"
+      ],
+      "read_only_callbacks": []
+    },
+    "modeling_qwen3_5.py:Qwen3_5RMSNormGated": {
+      "original_ast_sha256": "d5be643b7907290adae69c7ce62e0a423a33b478fd99c9a0f0fb5dde0fa64ada",
+      "selected_ast_sha256": "65792d619461f30d056a1653b7fb2fc8937fa6e0df611d8f06edc407d92f7e3e",
+      "removed_decorators": [
+        "use_kernel_forward_from_hub"
+      ],
+      "torch24_register_buffer_adaptations": [],
+      "read_only_callbacks": []
+    },
+    "modeling_qwen3_5.py:apply_mask_to_padding_states": {
+      "original_ast_sha256": "eadd2aa95bd9015c83f22d2b68b08f84190d801f4a109c55cfd592c817e3d830",
+      "selected_ast_sha256": "eadd2aa95bd9015c83f22d2b68b08f84190d801f4a109c55cfd592c817e3d830",
+      "removed_decorators": [],
+      "torch24_register_buffer_adaptations": [],
+      "read_only_callbacks": []
+    },
+    "modeling_qwen3_5.py:causal_conv1d_update": {
+      "original_ast_sha256": "bf3d3cc947c0e34b668e14cd123ea5da8eb6248ba69e126b106b9723f3cd7449",
+      "selected_ast_sha256": "4e2ae19918722d1566814b21bb5bf1fac9d7bc59b86c349d64c3dc31bca806f1",
+      "removed_decorators": [
+        "use_kernel_func_from_hub_with_fallback"
+      ],
+      "torch24_register_buffer_adaptations": [],
+      "read_only_callbacks": []
+    },
+    "modeling_qwen3_5.py:causal_conv1d_fn": {
+      "original_ast_sha256": "a5c15f8622e314f4e5faafbd566b57c2a933c67258e2217ef8de839c5304cb7c",
+      "selected_ast_sha256": "94eae3ac47cacd5b7017368dd7335a064e6de493a5c53f7609fe1179419633df",
+      "removed_decorators": [
+        "use_kernel_func_from_hub_with_fallback"
+      ],
+      "torch24_register_buffer_adaptations": [],
+      "read_only_callbacks": []
+    },
+    "modeling_qwen3_5.py:l2norm": {
+      "original_ast_sha256": "d6d82d112c7dc91c41e080263d0cb452169401b0dd640fd1d45bd197aef80d30",
+      "selected_ast_sha256": "d6d82d112c7dc91c41e080263d0cb452169401b0dd640fd1d45bd197aef80d30",
+      "removed_decorators": [],
+      "torch24_register_buffer_adaptations": [],
+      "read_only_callbacks": []
+    },
+    "modeling_qwen3_5.py:torch_chunk_gated_delta_rule": {
+      "original_ast_sha256": "0e10c8e551cceb7136355a733f64aa6175ca8e7d464780c956e3abe9a29092a7",
+      "selected_ast_sha256": "dc30bb8fc296d6fb11a675f2d78ecd00ba8f93f0b944c556cd48bdce0c2273d1",
+      "removed_decorators": [
+        "use_kernel_func_from_hub_with_fallback"
+      ],
+      "torch24_register_buffer_adaptations": [],
+      "read_only_callbacks": []
+    },
+    "modeling_qwen3_5.py:torch_recurrent_gated_delta_rule": {
+      "original_ast_sha256": "f95efa3cce8cb51299738a343626e47a2033f40ae514dd8bdb3943f13f0cda76",
+      "selected_ast_sha256": "0cd883a17bf9a697ecbeddb5208073944e128a331a9eba67410f0d9821f4d341",
+      "removed_decorators": [
+        "use_kernel_func_from_hub_with_fallback"
+      ],
+      "torch24_register_buffer_adaptations": [],
+      "read_only_callbacks": []
+    },
+    "modeling_qwen3_5.py:Qwen3_5GatedDeltaNet": {
+      "original_ast_sha256": "2340ac8b598b6b741b5a7e4f840d93a7d10de6e61ed6119228cabd35cb840e6b",
+      "selected_ast_sha256": "c1db55a620ce7ffbc37ec786b3e33dd8678d39d250762e59ef241916fc39644b",
+      "removed_decorators": [
+        "use_kernel_forward_from_hub",
+        "use_kernelized_func",
+        "force_accelerate_hooks"
+      ],
+      "torch24_register_buffer_adaptations": [],
+      "read_only_callbacks": []
+    },
+    "modeling_qwen3_5.py:rotate_half": {
+      "original_ast_sha256": "413121047c0809919390c167c7a92c8f0e04b401ea1130ee34fbb9f5a0c29156",
+      "selected_ast_sha256": "413121047c0809919390c167c7a92c8f0e04b401ea1130ee34fbb9f5a0c29156",
+      "removed_decorators": [],
+      "torch24_register_buffer_adaptations": [],
+      "read_only_callbacks": []
+    },
+    "modeling_qwen3_5.py:apply_rotary_pos_emb": {
+      "original_ast_sha256": "63a0ddb6d0d3709523ae7eff3b9a23699f802acc8a34bfde5f0f1fce7916689d",
+      "selected_ast_sha256": "63a0ddb6d0d3709523ae7eff3b9a23699f802acc8a34bfde5f0f1fce7916689d",
+      "removed_decorators": [],
+      "torch24_register_buffer_adaptations": [],
+      "read_only_callbacks": []
+    },
+    "modeling_qwen3_5.py:repeat_kv": {
+      "original_ast_sha256": "7d4256beabb5050905499078b8227ad4a3ecac47b94e8fcf7d4f75d26561274e",
+      "selected_ast_sha256": "7d4256beabb5050905499078b8227ad4a3ecac47b94e8fcf7d4f75d26561274e",
+      "removed_decorators": [],
+      "torch24_register_buffer_adaptations": [],
+      "read_only_callbacks": []
+    },
+    "modeling_qwen3_5.py:eager_attention_forward": {
+      "original_ast_sha256": "dbcab99bd6a81c45e81ea17bf779c49d6fb62298731ee7ded603189b2940cb66",
+      "selected_ast_sha256": "dbcab99bd6a81c45e81ea17bf779c49d6fb62298731ee7ded603189b2940cb66",
+      "removed_decorators": [],
+      "torch24_register_buffer_adaptations": [],
+      "read_only_callbacks": []
+    },
+    "modeling_qwen3_5.py:Qwen3_5Attention": {
+      "original_ast_sha256": "64073b78f34bb4449110e3bb93ee91ad8d2100457c00b5716b5468b0a9169112",
+      "selected_ast_sha256": "64073b78f34bb4449110e3bb93ee91ad8d2100457c00b5716b5468b0a9169112",
+      "removed_decorators": [],
+      "torch24_register_buffer_adaptations": [],
+      "read_only_callbacks": []
+    },
+    "modeling_qwen3_5.py:Qwen3_5MLP": {
+      "original_ast_sha256": "8815198567ac3e8873b412bd6e7619d02f7425e7af59a7c72f97b34e728b6888",
+      "selected_ast_sha256": "8815198567ac3e8873b412bd6e7619d02f7425e7af59a7c72f97b34e728b6888",
+      "removed_decorators": [],
+      "torch24_register_buffer_adaptations": [],
+      "read_only_callbacks": []
+    },
+    "modeling_qwen3_5.py:Qwen3_5RMSNorm": {
+      "original_ast_sha256": "624fa13e08d67f4f11f976b27e325cdf3d8d6bea8d224ffeb538cdec5a60ff3d",
+      "selected_ast_sha256": "faf65f4546d80d44713d0addfbd9eaed459636ef10e10e49c788ae5615d57ce0",
+      "removed_decorators": [
+        "use_kernel_forward_from_hub"
+      ],
+      "torch24_register_buffer_adaptations": [],
+      "read_only_callbacks": []
+    },
+    "modeling_qwen3_5.py:Qwen3_5DecoderLayer": {
+      "original_ast_sha256": "e1e7c76d472c60e23295d398baf39f7aaf30e4a0c0fe9c04630b508a57a6883c",
+      "selected_ast_sha256": "e1e7c76d472c60e23295d398baf39f7aaf30e4a0c0fe9c04630b508a57a6883c",
+      "removed_decorators": [],
+      "torch24_register_buffer_adaptations": [],
+      "read_only_callbacks": []
+    },
+    "modeling_qwen3_5.py:Qwen3_5TextModel.forward": {
+      "body_ast_sha256": "f416d10878cb1b2ab3fab6a8b178bf5305c030d3de033d62ef44e013d2e83146",
+      "adaptation": "Function name and optional outer decorators only; body unchanged; caller provides original eager causal mask mapping and cache."
+    }
+  },
+  "acceptance_sha256": "5ef20bd818195a747ecf75d15e4abbefe472d0aa1bc0fb01733819833895c2a8",
+  "prompt_precomputation_allowed": true,
+  "candidate_generation_sha256": "8d743c08b0452f09a3d93d5cf2422c5fe044d966d71150b8fafc386eb404c3a1",
+  "positions": 64,
+  "decoded_text": "The warm sunlight bathed the garden in a golden glow, waking up the dew on the leaves. Nearby, birds began their cheerful morning chorus, filling the air with lively melodies.",
+  "prompt_positions_precomputed_before_capture_arrival": 28
+}

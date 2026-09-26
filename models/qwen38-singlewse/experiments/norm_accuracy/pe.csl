@@ -1,0 +1,10 @@
+param memcpy_params;param compensated:bool;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const norm=@import_module(if(compensated) "qwen_math.csl" else "qwen_math_baseline.csl");
+var input=@zeros([5120]u16);var gain=@zeros([5120]u16);var calls=@zeros([1]u32);
+const xp:[*]u16=&input;const gp:[*]u16=&gain;const cp:[*]u32=&calls;
+fn normalize() void {norm.rmsnorm(xp,gp,xp,5120);calls[0]+=1;sys.unblock_cmd_stream();}
+comptime {
+ @export_symbol(xp,"input");@export_symbol(gp,"gain");@export_symbol(cp,"calls");
+ @export_symbol(normalize);
+}
