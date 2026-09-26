@@ -1,0 +1,24 @@
+const memcpy=@import_module("<memcpy/get_params>",.{.width=12,.height=1});
+layout {
+  @set_rectangle(12,1);
+  for(@range(i16,12))|x|{
+    @set_tile_code(x,0,"pe.csl",.{.memcpy_params=memcpy.get_params(x),.rank=@as(u16,x)});
+  }
+  @set_color_config(0,0,@get_color(3),.{.routes=.{.rx=.{RAMP},.tx=.{EAST}}});
+  for(@range(i16,1,11,1))|x|{
+    @set_color_config(x,0,@get_color(3),.{
+      .routes=.{.rx=.{WEST},.tx=if(x==10) .{RAMP} else .{RAMP,EAST}},
+      .filter=.{.kind=.{.counter=true},.count_data=true,
+        .init_counter=@as(u16,(2880-(x-1)*288)%2880),.max_counter=287,.limit1=2879}});
+    const outgoing=@get_color(if(x%2==1) 4 else 5);
+    @set_color_config(x,0,outgoing,.{.routes=.{.rx=.{RAMP},.tx=.{EAST}}});
+    if(x>1){
+      const incoming=@get_color(if(x%2==1) 5 else 4);
+      @set_color_config(x,0,incoming,.{.routes=.{.rx=.{WEST},.tx=.{RAMP}}});
+    }
+  }
+  @set_color_config(11,0,@get_color(5),.{.routes=.{.rx=.{WEST},.tx=.{RAMP}}});
+  @export_name("weights",[*]u16,false);@export_name("scales",[*]u16,false);
+  @export_name("input",[*]f32,false);@export_name("output",[*]f32,false);
+  @export_name("calls",[*]u32,false);@export_name("compute",fn()void);
+}

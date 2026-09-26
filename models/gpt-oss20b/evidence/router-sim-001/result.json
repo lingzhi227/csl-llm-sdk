@@ -1,0 +1,48 @@
+{
+  "passed": true,
+  "physical": false,
+  "normal_stop": true,
+  "full_model": false,
+  "west_to_east": true,
+  "scope": "complete original 2880 RMSNorm, 32x2880 router projection and top4 probabilities",
+  "weights_uploaded_once": true,
+  "all_weights_retained": true,
+  "epochs": [
+    {
+      "epoch": 1,
+      "checks": {
+        "normalization": true,
+        "scatter": true,
+        "logits": true,
+        "ids": true,
+        "probabilities": true,
+        "all_pes_completed": true
+      },
+      "ids": [
+        5,
+        18,
+        9,
+        16
+      ],
+      "seconds": 163.94940869882703
+    },
+    {
+      "epoch": 2,
+      "checks": {
+        "normalization": true,
+        "scatter": true,
+        "logits": true,
+        "ids": true,
+        "probabilities": true,
+        "all_pes_completed": true
+      },
+      "ids": [
+        23,
+        10,
+        28,
+        22
+      ],
+      "seconds": 289.8606396438554
+    }
+  ]
+}

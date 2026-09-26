@@ -1,0 +1,44 @@
+{
+  "passed": true,
+  "normal_stop": true,
+  "physical": false,
+  "full_model": false,
+  "scope": "real layer-0 top-four, clamped SwiGLU and four-expert sum operators",
+  "observations": [
+    {
+      "operator": "router-0",
+      "passed": true,
+      "exact": 4,
+      "count": 4,
+      "max_abs_error": 0.0
+    },
+    {
+      "operator": "router-1",
+      "passed": true,
+      "exact": 4,
+      "count": 4,
+      "max_abs_error": 0.0
+    },
+    {
+      "operator": "router-2",
+      "passed": true,
+      "exact": 4,
+      "count": 4,
+      "max_abs_error": 0.0
+    },
+    {
+      "operator": "swiglu",
+      "passed": true,
+      "exact": 256,
+      "count": 256,
+      "max_abs_error": 0.0
+    },
+    {
+      "operator": "join4",
+      "passed": true,
+      "exact": 160,
+      "count": 160,
+      "max_abs_error": 0.0
+    }
+  ]
+}

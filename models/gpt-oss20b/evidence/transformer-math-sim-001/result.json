@@ -1,0 +1,65 @@
+{
+  "passed": true,
+  "normal_stop": true,
+  "physical": false,
+  "full_model": false,
+  "scope": "original RMSNorm, YaRN RoPE, GQA learned-sink attention and persistent two-token KV",
+  "observations": [
+    {
+      "operator": "norm-0",
+      "passed": true,
+      "exact": 2880,
+      "count": 2880,
+      "max_abs_error": 0.0
+    },
+    {
+      "operator": "rope-q-0",
+      "passed": true,
+      "exact": 64,
+      "count": 64,
+      "max_abs_error": 0.0
+    },
+    {
+      "operator": "rope-k-0",
+      "passed": true,
+      "exact": 64,
+      "count": 64,
+      "max_abs_error": 0.0
+    },
+    {
+      "operator": "attention-0",
+      "passed": true,
+      "exact": 512,
+      "count": 512,
+      "max_abs_error": 0.0
+    },
+    {
+      "operator": "norm-1",
+      "passed": true,
+      "exact": 2880,
+      "count": 2880,
+      "max_abs_error": 0.0
+    },
+    {
+      "operator": "rope-q-1",
+      "passed": true,
+      "exact": 64,
+      "count": 64,
+      "max_abs_error": 0.0
+    },
+    {
+      "operator": "rope-k-1",
+      "passed": true,
+      "exact": 64,
+      "count": 64,
+      "max_abs_error": 0.0
+    },
+    {
+      "operator": "attention-1",
+      "passed": true,
+      "exact": 512,
+      "count": 512,
+      "max_abs_error": 0.0
+    }
+  ]
+}

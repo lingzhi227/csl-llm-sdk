@@ -1,0 +1,93 @@
+// Full original attention, controlled only by fixed host phase/index commands.
+param memcpy_params;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const norm=@import_module("normalization_rope.csl");const math=@import_module("moe_math.csl");
+var identity=@zeros([4]u32);var counters=@zeros([6]u32);
+var hidden=@zeros([1440]u32);var gain=@zeros([2880]u16);var frequencies=@zeros([32]f32);
+var workspace=@zeros([4128]u32);var frame=@zeros([322]u32);
+var phase:u16=0;var request_index:u16=0;var tx_done:bool=false;var rx_done:bool=false;
+const ip:[*]u32=&identity;const cp:[*]u32=&counters;const hp:[*]u32=&hidden;
+const gp:[*]u16=&gain;const fp:[*]f32=&frequencies;const wp:[*]u32=&workspace;
+const hidden_iq=@get_input_queue(2);const local_kv_iq=@get_input_queue(4);const vertical_iq=@get_input_queue(5);
+const qkv_oq=@get_output_queue(2);const o_oq=@get_output_queue(3);const kv_oq=@get_output_queue(5);const hidden_oq=@get_output_queue(6);
+const rx_dst=@get_dsr(dsr_dest,3);const rx_src=@get_dsr(dsr_src1,3);
+const tx_dst=@get_dsr(dsr_dest,4);const tx_src=@get_dsr(dsr_src1,4);
+const recv_task=@get_local_task_id(8);const sent_task=@get_local_task_id(9);
+fn send(data:[*]u32,count:u16,comptime queue:output_queue) void {
+  const mem=@get_dsd(mem1d_dsd,.{.base_address=data,.extent=count});
+  const wire=@get_dsd(fabout_dsd,.{.output_queue=queue,.extent=1});
+  @load_to_dsr(tx_src,mem);@load_to_dsr(tx_dst,@set_dsd_length(wire,count),.{.async=true,.activate=sent_task,.ut_id=@get_ut_id(4)});
+  @mov32(tx_dst,tx_src,.{.async=true});
+}
+fn receive(data:[*]u32,count:u16,comptime queue:input_queue) void {
+  const mem=@get_dsd(mem1d_dsd,.{.base_address=data,.extent=count});
+  const wire=@get_dsd(fabin_dsd,.{.input_queue=queue,.extent=1});
+  @load_to_dsr(rx_dst,mem);@load_to_dsr(rx_src,@set_dsd_length(wire,count),.{.async=true,.activate=recv_task,.ut_id=@get_ut_id(3)});
+  @mov32(rx_dst,rx_src,.{.async=true});
+}
+fn complete_kv() void {
+  if(tx_done and rx_done){counters[3]+=1;sys.unblock_cmd_stream();}
+}
+task received() void {
+  if(phase==3){
+    const packed_values:[*]u16=@ptrcast([*]u16,&workspace);const expanded:[*]f32=@ptrcast([*]f32,&workspace);
+    norm.normalize(@ptrcast([*]u16,&hidden),gp,packed_values);
+    var i:u16=2880;while(i>0){i-=1;expanded[i]=math.f32_from_bf16(packed_values[i]);}
+    send(wp,2880,qkv_oq);
+  }else if(phase==6){rx_done=true;complete_kv();}
+  else{
+    if(phase==4){counters[1]+=1;}else if(phase==8){counters[2]+=1;}else{@assert(false);}
+    sys.unblock_cmd_stream();
+  }
+}
+task sent() void {
+  if(phase==6){tx_done=true;complete_kv();}
+  else{if(phase==9){counters[4]+=1;}sys.unblock_cmd_stream();}
+}
+fn step(requested:u16,layer:u16,index:u16) void {
+  if(identity[0]!=@as(u32,layer)){sys.unblock_cmd_stream();return;}
+  phase=requested;request_index=index;
+  if(phase==3){
+    @assert(counters[0]==counters[4] and counters[0]<96);counters[0]+=1;
+    receive(hp,1440,hidden_iq);
+  }else if(phase==4 or phase==8){
+    if(phase==4){@assert(index<40 and counters[1]==(counters[0]-1)*40+@as(u32,index));}
+    else{@assert(index<23 and counters[2]==(counters[0]-1)*23+@as(u32,index));}
+    receive(@ptrcast([*]u32,&workspace[index*64]),64,vertical_iq);
+  }else if(phase==5){
+    @assert(counters[1]==counters[0]*40);const packed_values:[*]u16=@ptrcast([*]u16,&workspace);
+    for(@range(u16,72))|head|{
+      const at:[*]u16=@ptrcast([*]u16,&packed_values[head*64]);norm.rotate(at,fp,counters[0]-1,at);
+    }
+    counters[5]+=1;sys.unblock_cmd_stream();
+  }else if(phase==6){
+    @assert(index<8 and counters[3]==(counters[0]-1)*8+@as(u32,index));
+    frame[0]=counters[0]-1;frame[1]=@as(u32,index);
+    const source:[*]u16=@ptrcast([*]u16,&workspace);const packet:[*]u16=@ptrcast([*]u16,&frame[2]);
+    for(@range(u16,512))|i|{packet[i]=source[index*512+i];}
+    for(@range(u16,64))|i|{packet[512+i]=source[4096+index*64+i];packet[576+i]=source[4608+index*64+i];}
+    tx_done=false;rx_done=false;
+    if(index==0){receive(@ptrcast([*]u32,&workspace[index*256]),256,local_kv_iq);}
+    else{receive(@ptrcast([*]u32,&workspace[index*256]),256,vertical_iq);}
+    send(&frame,322,kv_oq);
+  }else if(phase==7){
+    @assert(counters[3]==counters[0]*8);
+    const packed_values:[*]u16=@ptrcast([*]u16,&workspace);const expanded:[*]f32=@ptrcast([*]f32,&workspace);
+    var i:u16=4096;while(i>0){i-=1;expanded[i]=math.f32_from_bf16(packed_values[i]);}
+    for(@range(u16,4096,4128,1))|j|{expanded[j]=0.0;}send(wp,4128,o_oq);
+  }else if(phase==9){
+    @assert(counters[2]==counters[0]*23);
+    const residual:[*]u16=@ptrcast([*]u16,&hidden);const projected:[*]u16=@ptrcast([*]u16,&workspace);
+    for(@range(u16,2880))|i|{residual[i]=math.round_bf16(math.f32_from_bf16(residual[i])+math.f32_from_bf16(projected[i]));}
+    send(hp,1440,hidden_oq);
+  }else{sys.unblock_cmd_stream();}
+}
+comptime {
+  @initialize_queue(hidden_iq,.{.color=@get_color(12)});@initialize_queue(local_kv_iq,.{.color=@get_color(11)});
+  @initialize_queue(vertical_iq,.{.color=@get_color(4)});
+  @initialize_queue(qkv_oq,.{.color=@get_color(3)});@initialize_queue(o_oq,.{.color=@get_color(7)});
+  @initialize_queue(kv_oq,.{.color=@get_color(10)});@initialize_queue(hidden_oq,.{.color=@get_color(17)});
+  @bind_local_task(received,recv_task);@bind_local_task(sent,sent_task);
+  @export_symbol(ip,"identity");@export_symbol(cp,"counters");@export_symbol(hp,"hidden");
+  @export_symbol(gp,"gain");@export_symbol(fp,"frequencies");@export_symbol(wp,"workspace");@export_symbol(step);
+}

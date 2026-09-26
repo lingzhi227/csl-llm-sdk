@@ -1,0 +1,21 @@
+const memcpy=@import_module("<memcpy/get_params>",.{.width=3,.height=30});
+layout {
+  @set_rectangle(3,30);
+  for(@range(i16,3))|x|{for(@range(i16,30))|y|{
+    @set_tile_code(x,y,"pe.csl",.{.memcpy_params=memcpy.get_params(x),.x=@as(u16,x),.y=@as(u16,y)});
+  }}
+  @set_color_config(0,0,@get_color(3),.{.routes=.{.rx=.{RAMP},.tx=.{EAST}}});
+  for(@range(i16,30))|y|{
+    @set_color_config(1,y,@get_color(3),.{.routes=.{.rx=if(y==0) .{WEST} else .{NORTH},
+      .tx=if(y==29) .{RAMP} else .{RAMP,SOUTH}},.filter=.{.kind=.{.counter=true},.count_data=true,
+      .init_counter=@as(u16,(2880-y*96)%2880),.max_counter=95,.limit1=2879}});
+    @set_color_config(1,y,@get_color(if(y%2==0) 4 else 5),.{.routes=.{.rx=.{RAMP},.tx=if(y==29) .{EAST} else .{SOUTH}}});
+    if(y>0){@set_color_config(1,y,@get_color(if(y%2==1) 4 else 5),.{.routes=.{.rx=.{NORTH},.tx=.{RAMP}}});}
+  }
+  @set_color_config(2,29,@get_color(5),.{.routes=.{.rx=.{WEST},.tx=.{RAMP}}});
+  @export_name("weights",[*]u16,false);@export_name("bias",[*]u16,false);
+  @export_name("hidden",[*]u16,false);@export_name("gain",[*]u16,false);
+  @export_name("input",[*]f32,false);@export_name("logits",[*]u16,false);
+  @export_name("ids",[*]u16,false);@export_name("probabilities",[*]u16,false);
+  @export_name("calls",[*]u32,false);@export_name("compute",fn()void);
+}

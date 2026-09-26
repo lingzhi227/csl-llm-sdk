@@ -1,0 +1,16 @@
+{
+  "model": "openai/gpt-oss-20b",
+  "layer": 0,
+  "real_forward_reproduced_bitwise": true,
+  "source_reference": "runs/reference-001",
+  "fixture_sha256": "165e6c259ea976b140877d3e3fecfe59860f6e19279dc8b9d5dd9d55bf3bfe25",
+  "real_router_top4": [
+    5,
+    18,
+    9,
+    16
+  ],
+  "top4_tie_policy": "ascending expert ID for exact ties in CSL",
+  "nonlinear_absolute_exp_tail_bound": 1.81e-35,
+  "full_model": false
+}

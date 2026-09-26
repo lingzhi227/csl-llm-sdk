@@ -1,0 +1,47 @@
+{
+  "full_geometry_compile": null,
+  "full_model_simulated": false,
+  "cluster_compile_first": true,
+  "pre_allocation_gate": "physical-fabric compilation, embedded source identity and every actual ELF SRAM must pass before runtime allocation",
+  "prerequisite_hardware": [
+    "attention-prefix-hw-001",
+    "moe-layer-hw-001"
+  ],
+  "scope": "bounded complete-original-model integration diagnostic; no full-model success claimed by staging",
+  "physical_requirements": "all original weights once; two greedy tokens with persistent KV; post-token all-layer reference and all-PE counters; exhaustive weight retention; normal stop; owned-job release",
+  "bounds": {
+    "compile_seconds": 2400,
+    "run_seconds": 1800,
+    "client_address_space_bytes": 8589934592,
+    "client_rss_bytes": 2147483648,
+    "artifact_bytes": 536870912
+  },
+  "source_hashes": {
+    "bf16_gemv.csl": "010085f1382f05d608de520f17b4ffb0e39366f0ca224382dbef74703fb65277",
+    "moe_math.csl": "a8b32fda6be568278c26501e803c4a4f38b89c86d0d067dd1319342da1f7949f",
+    "rotary_trig.csl": "d0d0f9317692ae58ac472f3d3370ee29f54f1c9c4af49a069f9d68666cc30f1e",
+    "attention96.csl": "fca19d0999f7eb97fb883109ef3f05084b006e527e6dd6893e531a643505e199",
+    "normalization_rope.csl": "a4d06d7d81a7832076656b7f74443c4a9473bdba87b41e845a68c3bc2225c5eb",
+    "mxfp4_gemv.csl": "3db4f124f4930a3c90e29fb679c0995ef087818cba6f9af6229af0cc89fb9fe7",
+    "embedding.csl": "fae7103058a75fd0656a7fad489061f0975a8e360e6e4e6558111895169aad98",
+    "moe_controller_full.csl": "48a6f47d54fb74e652c405f0416f67815adcbdd26d467eca812005e3e1539c08",
+    "expert_join.csl": "30a704d42ff6a3c2b5fc405c7acd2a0b4928bc85c70d32a156d5003d80a203b8",
+    "expert.csl": "5992dd30a03458311201ce5572723e21d42bbd4572a152380171c9cc87de4ad9",
+    "head_controller.csl": "2e61bb7edc9f01d4a6df73c04a91066516b233336d4e91b19d10968c29016e51",
+    "projection.csl": "d2cc8acfec714ded0f5a2567e40b57f4933eaef4545a87b6e5d66ea97bfe56de",
+    "projection_full.csl": "7d72eaed729d0ebda9af162d0ddb584c3b7f29305899471a4d926516e6a8ffae",
+    "head.csl": "857e332bb1ce6e33723790fcdeee35c4a19dd902ec450bcc0dec78c2f0ef2825",
+    "router.csl": "9ded966f2f8a88ffb3c62e6e88e87a7309dffbdb57c3749ae638d87eb65e7bc8",
+    "idle.csl": "8ec6c6cafd546d74ea7c4902729423c324b75d13116b32c666ba2439f27d3df0",
+    "attention_controller.csl": "5957fdb0717537b1725892259894ccb332a4ddaa6f51a6603a03ce15690630fc",
+    "token_endpoint.csl": "763e58e429169888ccb04611c295e0f3bf8dded6d17b86acab0880c27686c218",
+    "kv.csl": "5fec5692dae3957bef447f47cb6254496c76971d60ca69ec18f71c302df09106",
+    "attention_controller_full.csl": "8ac6752ac58fd6e0b26e7f57b57e58e77a9302fca78b08292e923ea033a42f73",
+    "expert_join_full.csl": "d2a3196d0b388898c18d9ee2e38267007c17fd7e4b43f9afd31725f6bab2facb",
+    "head_collector.csl": "3b9ffbfd63bcfc9cb2b24a19f8890e88e7bd3112b4fce9be52c1021e75d6a7ce",
+    "prefix_collector.csl": "8ee796e4d7ccb6e46d26b2972fb1f5d2403bd0178ef3f1135773e108de9642bd",
+    "moe_controller.csl": "5cd4494aab5ceecebb020fae6362e5b461e3124a18079e2afce0e3597542de16",
+    "layout.csl": "8e484bc2adb8d8618d15fa945b749924bcf6913a3212b09762c26a969b7c0fe8"
+  },
+  "sram": null
+}

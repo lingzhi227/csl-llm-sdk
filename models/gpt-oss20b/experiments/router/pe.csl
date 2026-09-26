@@ -1,0 +1,89 @@
+// Original 2880 RMSNorm -> full 32x2880 router -> top4, all on wafer.
+param memcpy_params;param x:u16;param y:u16;
+const west:bool=x==0 and y==0;
+const matrix:bool=x==1;
+const east:bool=x==2 and y==29;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const kernel=@import_module("bf16_gemv.csl",.{.rows=32,.columns=96});
+const norm=@import_module("normalization_rope.csl");
+const math=@import_module("moe_math.csl");
+var weights=@zeros([if(matrix) 3072 else 1]u16);
+var bias=@zeros([if(matrix and y==29) 32 else 1]u16);
+var hidden=@zeros([if(west) 2880 else 1]u16);
+var gain=@zeros([if(west) 2880 else 1]u16);
+var input=@zeros([if(west) 2880 else if(matrix) 96 else 1]f32);
+var partial=@zeros([if(matrix or east) 32 else 1]f32);
+var previous=@zeros([if(matrix and y>0) 32 else 1]f32);
+var logits=@zeros([if(east) 32 else 1]u16);
+var ids=@zeros([4]u16);var probabilities=@zeros([4]u16);
+var calls=@zeros([1]u32);
+const wp:[*]u16=&weights;const bp:[*]u16=&bias;const hp:[*]u16=&hidden;
+const gp:[*]u16=&gain;const xp:[*]f32=&input;const lp:[*]u16=&logits;
+const ip:[*]u16=&ids;const pp:[*]u16=&probabilities;const cp:[*]u32=&calls;
+const iq=@get_input_queue(2);const rq=@get_input_queue(3);
+const oq=@get_output_queue(if(west) 2 else 3);
+const rx_dst=@get_dsr(dsr_dest,3);const rx_src=@get_dsr(dsr_src1,3);
+const tx_dst=@get_dsr(dsr_dest,4);const tx_src=@get_dsr(dsr_src1,4);
+const reduce_dst=@get_dsr(dsr_dest,5);const reduce_src=@get_dsr(dsr_src1,5);
+const input_done=@get_local_task_id(8);const reduction_done=@get_local_task_id(9);const send_done=@get_local_task_id(10);
+fn finish() void {calls[0]+=1;sys.unblock_cmd_stream();}
+fn send(data:[*]f32,count:u16) void {
+  const mem=@get_dsd(mem1d_dsd,.{.base_address=data,.extent=count});
+  const wire=@get_dsd(fabout_dsd,.{.output_queue=oq,.extent=1});
+  @load_to_dsr(tx_src,mem);
+  @load_to_dsr(tx_dst,@set_dsd_length(wire,count),.{.async=true,.activate=send_done,.ut_id=@get_ut_id(4)});
+  @mov32(tx_dst,tx_src,.{.async=true});
+}
+fn receive_sum(data:[*]f32) void {
+  const mem=@get_dsd(mem1d_dsd,.{.base_address=data,.extent=32});
+  const wire=@get_dsd(fabin_dsd,.{.input_queue=rq,.extent=32});
+  @load_to_dsr(reduce_dst,mem);
+  @load_to_dsr(reduce_src,wire,.{.async=true,.activate=reduction_done,.ut_id=@get_ut_id(5)});
+  @mov32(reduce_dst,reduce_src,.{.async=true});
+}
+task input_received() void {
+  kernel.compute(wp,xp,&partial);
+  if(comptime y==0){send(&partial,32);}else{receive_sum(&previous);}
+}
+task sum_received() void {
+  if(comptime east){
+    for(@range(u16,32))|i|{logits[i]=math.round_bf16(partial[i]);}
+    math.top4(lp,ip,pp);finish();
+  }else{
+    for(@range(u16,32))|i|{
+      partial[i]+=previous[i];
+      if(comptime y==29){partial[i]=math.rounded(partial[i]+math.f32_from_bf16(bias[i]));}
+    }
+    send(&partial,32);
+  }
+}
+task sent() void {finish();}
+fn compute() void {
+  if(comptime west){
+    const packed_norm:[*]u16=@ptrcast([*]u16,&input);
+    norm.normalize(hp,gp,packed_norm);
+    var i:u16=2880;while(i>0){i-=1;input[i]=math.f32_from_bf16(packed_norm[i]);}
+    send(xp,2880);
+  }else if(comptime matrix){
+    const mem=@get_dsd(mem1d_dsd,.{.base_address=xp,.extent=96});
+    const wire=@get_dsd(fabin_dsd,.{.input_queue=iq,.extent=96});
+    @load_to_dsr(rx_dst,mem);
+    @load_to_dsr(rx_src,wire,.{.async=true,.activate=input_done,.ut_id=@get_ut_id(3)});
+    @mov32(rx_dst,rx_src,.{.async=true});
+  }else if(comptime east){receive_sum(&partial);}
+  else{finish();}
+}
+comptime {
+  if(matrix){@initialize_queue(iq,.{.color=@get_color(3)});@bind_local_task(input_received,input_done);}
+  if((matrix and y>0) or east){
+    @initialize_queue(rq,.{.color=@get_color(if(east) 5 else if(y%2==1) 4 else 5)});
+    @bind_local_task(sum_received,reduction_done);
+  }
+  if(west or matrix){
+    @initialize_queue(oq,.{.color=@get_color(if(west) 3 else if(y%2==0) 4 else 5)});
+    @bind_local_task(sent,send_done);
+  }
+  @export_symbol(wp,"weights");@export_symbol(bp,"bias");@export_symbol(hp,"hidden");@export_symbol(gp,"gain");
+  @export_symbol(xp,"input");@export_symbol(lp,"logits");@export_symbol(ip,"ids");@export_symbol(pp,"probabilities");
+  @export_symbol(cp,"calls");@export_symbol(compute);
+}

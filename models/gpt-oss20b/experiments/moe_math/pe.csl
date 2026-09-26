@@ -1,0 +1,26 @@
+param memcpy_params;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const math=@import_module("moe_math.csl",.{});
+var logits=@zeros([32]u16);
+var ids=@zeros([4]u16);
+var probabilities=@zeros([4]u16);
+var interleaved=@zeros([512]u16);
+var activation=@zeros([256]u16);
+var experts=@zeros([640]u16);
+var joined=@zeros([160]u16);
+const lp:[*]u16=&logits;
+const ip:[*]u16=&ids;
+const pp:[*]u16=&probabilities;
+const xp:[*]u16=&interleaved;
+const ap:[*]u16=&activation;
+const ep:[*]u16=&experts;
+const jp:[*]u16=&joined;
+fn route() void {math.top4(lp,ip,pp);sys.unblock_cmd_stream();}
+fn activate() void {math.swiglu(xp,ap,256);sys.unblock_cmd_stream();}
+fn join() void {math.join4(ep,pp,jp,160);sys.unblock_cmd_stream();}
+comptime {
+  @export_symbol(lp,"logits");@export_symbol(ip,"ids");@export_symbol(pp,"probabilities");
+  @export_symbol(xp,"interleaved");@export_symbol(ap,"activation");
+  @export_symbol(ep,"experts");@export_symbol(jp,"joined");
+  @export_symbol(route);@export_symbol(activate);@export_symbol(join);
+}

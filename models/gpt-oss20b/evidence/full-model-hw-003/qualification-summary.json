@@ -1,0 +1,72 @@
+{
+  "passed": true,
+  "layer_steps": 48,
+  "selected_expert_invocations": 192,
+  "attention_max_relative_update_l2": 0.00013342782167069577,
+  "attention_max_relative_output_l2": 5.1976177970486945e-05,
+  "norm_max_bf16_ulp": 1,
+  "swiglu_max_bf16_ulp": 0,
+  "expert_matmul_values": 1658880,
+  "expert_matmul_interval_violations": 0,
+  "router_interval_violations": 0,
+  "join_interval_violations": 0,
+  "max_attention_bf16_ulp": 4,
+  "exact_cutoff_ties": [
+    {
+      "step": 0,
+      "layer": 10,
+      "ids": [
+        7,
+        30
+      ]
+    }
+  ],
+  "strict_original_reference_passed": false,
+  "head": {
+    "passed": true,
+    "top_ids": [
+      [
+        11,
+        416,
+        0,
+        787,
+        6,
+        13046,
+        1,
+        2375
+      ],
+      [
+        5922,
+        2375,
+        495,
+        357,
+        354,
+        44045,
+        392,
+        922
+      ]
+    ],
+    "top_logits": [
+      [
+        13.0625,
+        11.5625,
+        11.5,
+        11.0625,
+        11.0,
+        10.9375,
+        10.875,
+        10.8125
+      ],
+      [
+        13.625,
+        13.125,
+        11.1875,
+        10.625,
+        10.625,
+        10.375,
+        10.125,
+        10.125
+      ]
+    ]
+  }
+}

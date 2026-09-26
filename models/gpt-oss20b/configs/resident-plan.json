@@ -1,0 +1,6230 @@
+{
+  "status": "complete storage assignment; not a compiled or routed full-model implementation",
+  "model": "openai/gpt-oss-20b",
+  "revision": "6cee5e81ee83917806bbde320786a8fb61efebee",
+  "application": [
+    750,
+    1160
+  ],
+  "physical_fabric": [
+    762,
+    1172
+  ],
+  "offset": [
+    4,
+    1
+  ],
+  "context": 8192,
+  "batch": 1,
+  "tensor_count": 459,
+  "original_weight_payload_bytes": 13761264768,
+  "assigned_unique_weight_pes": 562429,
+  "kv_pes": 8448,
+  "scalar_kernel_actual_sram_with_stack": 35200,
+  "scalar_kernel_scope": "one MXFP4 160x288 tile; full expert communication code is not included",
+  "regions": [
+    {
+      "name": "west_ingress",
+      "x": 0,
+      "y": 0,
+      "width": 4,
+      "height": 1160
+    },
+    {
+      "name": "embedding",
+      "x": 4,
+      "y": 0,
+      "width": 42,
+      "height": 1160
+    },
+    {
+      "name": "layer_0",
+      "x": 46,
+      "y": 0,
+      "width": 26,
+      "height": 1160
+    },
+    {
+      "name": "layer_1",
+      "x": 72,
+      "y": 0,
+      "width": 26,
+      "height": 1160
+    },
+    {
+      "name": "layer_2",
+      "x": 98,
+      "y": 0,
+      "width": 26,
+      "height": 1160
+    },
+    {
+      "name": "layer_3",
+      "x": 124,
+      "y": 0,
+      "width": 26,
+      "height": 1160
+    },
+    {
+      "name": "layer_4",
+      "x": 150,
+      "y": 0,
+      "width": 26,
+      "height": 1160
+    },
+    {
+      "name": "layer_5",
+      "x": 176,
+      "y": 0,
+      "width": 26,
+      "height": 1160
+    },
+    {
+      "name": "layer_6",
+      "x": 202,
+      "y": 0,
+      "width": 26,
+      "height": 1160
+    },
+    {
+      "name": "layer_7",
+      "x": 228,
+      "y": 0,
+      "width": 26,
+      "height": 1160
+    },
+    {
+      "name": "layer_8",
+      "x": 254,
+      "y": 0,
+      "width": 26,
+      "height": 1160
+    },
+    {
+      "name": "layer_9",
+      "x": 280,
+      "y": 0,
+      "width": 26,
+      "height": 1160
+    },
+    {
+      "name": "layer_10",
+      "x": 306,
+      "y": 0,
+      "width": 26,
+      "height": 1160
+    },
+    {
+      "name": "layer_11",
+      "x": 332,
+      "y": 0,
+      "width": 26,
+      "height": 1160
+    },
+    {
+      "name": "layer_12",
+      "x": 358,
+      "y": 0,
+      "width": 26,
+      "height": 1160
+    },
+    {
+      "name": "layer_13",
+      "x": 384,
+      "y": 0,
+      "width": 26,
+      "height": 1160
+    },
+    {
+      "name": "layer_14",
+      "x": 410,
+      "y": 0,
+      "width": 26,
+      "height": 1160
+    },
+    {
+      "name": "layer_15",
+      "x": 436,
+      "y": 0,
+      "width": 26,
+      "height": 1160
+    },
+    {
+      "name": "layer_16",
+      "x": 462,
+      "y": 0,
+      "width": 26,
+      "height": 1160
+    },
+    {
+      "name": "layer_17",
+      "x": 488,
+      "y": 0,
+      "width": 26,
+      "height": 1160
+    },
+    {
+      "name": "layer_18",
+      "x": 514,
+      "y": 0,
+      "width": 26,
+      "height": 1160
+    },
+    {
+      "name": "layer_19",
+      "x": 540,
+      "y": 0,
+      "width": 26,
+      "height": 1160
+    },
+    {
+      "name": "layer_20",
+      "x": 566,
+      "y": 0,
+      "width": 26,
+      "height": 1160
+    },
+    {
+      "name": "layer_21",
+      "x": 592,
+      "y": 0,
+      "width": 26,
+      "height": 1160
+    },
+    {
+      "name": "layer_22",
+      "x": 618,
+      "y": 0,
+      "width": 26,
+      "height": 1160
+    },
+    {
+      "name": "layer_23",
+      "x": 644,
+      "y": 0,
+      "width": 26,
+      "height": 1160
+    },
+    {
+      "name": "lm_head",
+      "x": 670,
+      "y": 0,
+      "width": 42,
+      "height": 1160
+    },
+    {
+      "name": "east_control",
+      "x": 712,
+      "y": 0,
+      "width": 4,
+      "height": 1160
+    },
+    {
+      "name": "east_egress_and_route_reserve",
+      "x": 716,
+      "y": 0,
+      "width": 34,
+      "height": 1160
+    }
+  ],
+  "layers": [
+    {
+      "layer": 0,
+      "region": {
+        "name": "layer_0",
+        "x": 46,
+        "y": 0,
+        "width": 26,
+        "height": 1160
+      },
+      "support_pes_used": 2371,
+      "dense_and_vector_pes": 2227,
+      "kv": {
+        "role": "bf16_kv",
+        "support_linear_begin": 2227,
+        "pes": 16,
+        "slots_per_pe": 96,
+        "bytes_per_pe": 24576,
+        "head_dimension": 64,
+        "context": 128,
+        "ring": true
+      },
+      "attention_control": {
+        "support_linear_begin": 2243,
+        "pes": 128
+      },
+      "experts": {
+        "count": 32,
+        "selected": 4,
+        "stripe_height": 36,
+        "gate_x_offset": 4,
+        "activation_x_offset": 14,
+        "down_x_offset": 15,
+        "join_x_offset": 25
+      },
+      "remaining_support_pes": 2269
+    },
+    {
+      "layer": 1,
+      "region": {
+        "name": "layer_1",
+        "x": 72,
+        "y": 0,
+        "width": 26,
+        "height": 1160
+      },
+      "support_pes_used": 3043,
+      "dense_and_vector_pes": 2227,
+      "kv": {
+        "role": "bf16_kv",
+        "support_linear_begin": 2227,
+        "pes": 688,
+        "slots_per_pe": 96,
+        "bytes_per_pe": 24576,
+        "head_dimension": 64,
+        "context": 8192,
+        "ring": false
+      },
+      "attention_control": {
+        "support_linear_begin": 2915,
+        "pes": 128
+      },
+      "experts": {
+        "count": 32,
+        "selected": 4,
+        "stripe_height": 36,
+        "gate_x_offset": 4,
+        "activation_x_offset": 14,
+        "down_x_offset": 15,
+        "join_x_offset": 25
+      },
+      "remaining_support_pes": 1597
+    },
+    {
+      "layer": 2,
+      "region": {
+        "name": "layer_2",
+        "x": 98,
+        "y": 0,
+        "width": 26,
+        "height": 1160
+      },
+      "support_pes_used": 2371,
+      "dense_and_vector_pes": 2227,
+      "kv": {
+        "role": "bf16_kv",
+        "support_linear_begin": 2227,
+        "pes": 16,
+        "slots_per_pe": 96,
+        "bytes_per_pe": 24576,
+        "head_dimension": 64,
+        "context": 128,
+        "ring": true
+      },
+      "attention_control": {
+        "support_linear_begin": 2243,
+        "pes": 128
+      },
+      "experts": {
+        "count": 32,
+        "selected": 4,
+        "stripe_height": 36,
+        "gate_x_offset": 4,
+        "activation_x_offset": 14,
+        "down_x_offset": 15,
+        "join_x_offset": 25
+      },
+      "remaining_support_pes": 2269
+    },
+    {
+      "layer": 3,
+      "region": {
+        "name": "layer_3",
+        "x": 124,
+        "y": 0,
+        "width": 26,
+        "height": 1160
+      },
+      "support_pes_used": 3043,
+      "dense_and_vector_pes": 2227,
+      "kv": {
+        "role": "bf16_kv",
+        "support_linear_begin": 2227,
+        "pes": 688,
+        "slots_per_pe": 96,
+        "bytes_per_pe": 24576,
+        "head_dimension": 64,
+        "context": 8192,
+        "ring": false
+      },
+      "attention_control": {
+        "support_linear_begin": 2915,
+        "pes": 128
+      },
+      "experts": {
+        "count": 32,
+        "selected": 4,
+        "stripe_height": 36,
+        "gate_x_offset": 4,
+        "activation_x_offset": 14,
+        "down_x_offset": 15,
+        "join_x_offset": 25
+      },
+      "remaining_support_pes": 1597
+    },
+    {
+      "layer": 4,
+      "region": {
+        "name": "layer_4",
+        "x": 150,
+        "y": 0,
+        "width": 26,
+        "height": 1160
+      },
+      "support_pes_used": 2371,
+      "dense_and_vector_pes": 2227,
+      "kv": {
+        "role": "bf16_kv",
+        "support_linear_begin": 2227,
+        "pes": 16,
+        "slots_per_pe": 96,
+        "bytes_per_pe": 24576,
+        "head_dimension": 64,
+        "context": 128,
+        "ring": true
+      },
+      "attention_control": {
+        "support_linear_begin": 2243,
+        "pes": 128
+      },
+      "experts": {
+        "count": 32,
+        "selected": 4,
+        "stripe_height": 36,
+        "gate_x_offset": 4,
+        "activation_x_offset": 14,
+        "down_x_offset": 15,
+        "join_x_offset": 25
+      },
+      "remaining_support_pes": 2269
+    },
+    {
+      "layer": 5,
+      "region": {
+        "name": "layer_5",
+        "x": 176,
+        "y": 0,
+        "width": 26,
+        "height": 1160
+      },
+      "support_pes_used": 3043,
+      "dense_and_vector_pes": 2227,
+      "kv": {
+        "role": "bf16_kv",
+        "support_linear_begin": 2227,
+        "pes": 688,
+        "slots_per_pe": 96,
+        "bytes_per_pe": 24576,
+        "head_dimension": 64,
+        "context": 8192,
+        "ring": false
+      },
+      "attention_control": {
+        "support_linear_begin": 2915,
+        "pes": 128
+      },
+      "experts": {
+        "count": 32,
+        "selected": 4,
+        "stripe_height": 36,
+        "gate_x_offset": 4,
+        "activation_x_offset": 14,
+        "down_x_offset": 15,
+        "join_x_offset": 25
+      },
+      "remaining_support_pes": 1597
+    },
+    {
+      "layer": 6,
+      "region": {
+        "name": "layer_6",
+        "x": 202,
+        "y": 0,
+        "width": 26,
+        "height": 1160
+      },
+      "support_pes_used": 2371,
+      "dense_and_vector_pes": 2227,
+      "kv": {
+        "role": "bf16_kv",
+        "support_linear_begin": 2227,
+        "pes": 16,
+        "slots_per_pe": 96,
+        "bytes_per_pe": 24576,
+        "head_dimension": 64,
+        "context": 128,
+        "ring": true
+      },
+      "attention_control": {
+        "support_linear_begin": 2243,
+        "pes": 128
+      },
+      "experts": {
+        "count": 32,
+        "selected": 4,
+        "stripe_height": 36,
+        "gate_x_offset": 4,
+        "activation_x_offset": 14,
+        "down_x_offset": 15,
+        "join_x_offset": 25
+      },
+      "remaining_support_pes": 2269
+    },
+    {
+      "layer": 7,
+      "region": {
+        "name": "layer_7",
+        "x": 228,
+        "y": 0,
+        "width": 26,
+        "height": 1160
+      },
+      "support_pes_used": 3043,
+      "dense_and_vector_pes": 2227,
+      "kv": {
+        "role": "bf16_kv",
+        "support_linear_begin": 2227,
+        "pes": 688,
+        "slots_per_pe": 96,
+        "bytes_per_pe": 24576,
+        "head_dimension": 64,
+        "context": 8192,
+        "ring": false
+      },
+      "attention_control": {
+        "support_linear_begin": 2915,
+        "pes": 128
+      },
+      "experts": {
+        "count": 32,
+        "selected": 4,
+        "stripe_height": 36,
+        "gate_x_offset": 4,
+        "activation_x_offset": 14,
+        "down_x_offset": 15,
+        "join_x_offset": 25
+      },
+      "remaining_support_pes": 1597
+    },
+    {
+      "layer": 8,
+      "region": {
+        "name": "layer_8",
+        "x": 254,
+        "y": 0,
+        "width": 26,
+        "height": 1160
+      },
+      "support_pes_used": 2371,
+      "dense_and_vector_pes": 2227,
+      "kv": {
+        "role": "bf16_kv",
+        "support_linear_begin": 2227,
+        "pes": 16,
+        "slots_per_pe": 96,
+        "bytes_per_pe": 24576,
+        "head_dimension": 64,
+        "context": 128,
+        "ring": true
+      },
+      "attention_control": {
+        "support_linear_begin": 2243,
+        "pes": 128
+      },
+      "experts": {
+        "count": 32,
+        "selected": 4,
+        "stripe_height": 36,
+        "gate_x_offset": 4,
+        "activation_x_offset": 14,
+        "down_x_offset": 15,
+        "join_x_offset": 25
+      },
+      "remaining_support_pes": 2269
+    },
+    {
+      "layer": 9,
+      "region": {
+        "name": "layer_9",
+        "x": 280,
+        "y": 0,
+        "width": 26,
+        "height": 1160
+      },
+      "support_pes_used": 3043,
+      "dense_and_vector_pes": 2227,
+      "kv": {
+        "role": "bf16_kv",
+        "support_linear_begin": 2227,
+        "pes": 688,
+        "slots_per_pe": 96,
+        "bytes_per_pe": 24576,
+        "head_dimension": 64,
+        "context": 8192,
+        "ring": false
+      },
+      "attention_control": {
+        "support_linear_begin": 2915,
+        "pes": 128
+      },
+      "experts": {
+        "count": 32,
+        "selected": 4,
+        "stripe_height": 36,
+        "gate_x_offset": 4,
+        "activation_x_offset": 14,
+        "down_x_offset": 15,
+        "join_x_offset": 25
+      },
+      "remaining_support_pes": 1597
+    },
+    {
+      "layer": 10,
+      "region": {
+        "name": "layer_10",
+        "x": 306,
+        "y": 0,
+        "width": 26,
+        "height": 1160
+      },
+      "support_pes_used": 2371,
+      "dense_and_vector_pes": 2227,
+      "kv": {
+        "role": "bf16_kv",
+        "support_linear_begin": 2227,
+        "pes": 16,
+        "slots_per_pe": 96,
+        "bytes_per_pe": 24576,
+        "head_dimension": 64,
+        "context": 128,
+        "ring": true
+      },
+      "attention_control": {
+        "support_linear_begin": 2243,
+        "pes": 128
+      },
+      "experts": {
+        "count": 32,
+        "selected": 4,
+        "stripe_height": 36,
+        "gate_x_offset": 4,
+        "activation_x_offset": 14,
+        "down_x_offset": 15,
+        "join_x_offset": 25
+      },
+      "remaining_support_pes": 2269
+    },
+    {
+      "layer": 11,
+      "region": {
+        "name": "layer_11",
+        "x": 332,
+        "y": 0,
+        "width": 26,
+        "height": 1160
+      },
+      "support_pes_used": 3043,
+      "dense_and_vector_pes": 2227,
+      "kv": {
+        "role": "bf16_kv",
+        "support_linear_begin": 2227,
+        "pes": 688,
+        "slots_per_pe": 96,
+        "bytes_per_pe": 24576,
+        "head_dimension": 64,
+        "context": 8192,
+        "ring": false
+      },
+      "attention_control": {
+        "support_linear_begin": 2915,
+        "pes": 128
+      },
+      "experts": {
+        "count": 32,
+        "selected": 4,
+        "stripe_height": 36,
+        "gate_x_offset": 4,
+        "activation_x_offset": 14,
+        "down_x_offset": 15,
+        "join_x_offset": 25
+      },
+      "remaining_support_pes": 1597
+    },
+    {
+      "layer": 12,
+      "region": {
+        "name": "layer_12",
+        "x": 358,
+        "y": 0,
+        "width": 26,
+        "height": 1160
+      },
+      "support_pes_used": 2371,
+      "dense_and_vector_pes": 2227,
+      "kv": {
+        "role": "bf16_kv",
+        "support_linear_begin": 2227,
+        "pes": 16,
+        "slots_per_pe": 96,
+        "bytes_per_pe": 24576,
+        "head_dimension": 64,
+        "context": 128,
+        "ring": true
+      },
+      "attention_control": {
+        "support_linear_begin": 2243,
+        "pes": 128
+      },
+      "experts": {
+        "count": 32,
+        "selected": 4,
+        "stripe_height": 36,
+        "gate_x_offset": 4,
+        "activation_x_offset": 14,
+        "down_x_offset": 15,
+        "join_x_offset": 25
+      },
+      "remaining_support_pes": 2269
+    },
+    {
+      "layer": 13,
+      "region": {
+        "name": "layer_13",
+        "x": 384,
+        "y": 0,
+        "width": 26,
+        "height": 1160
+      },
+      "support_pes_used": 3043,
+      "dense_and_vector_pes": 2227,
+      "kv": {
+        "role": "bf16_kv",
+        "support_linear_begin": 2227,
+        "pes": 688,
+        "slots_per_pe": 96,
+        "bytes_per_pe": 24576,
+        "head_dimension": 64,
+        "context": 8192,
+        "ring": false
+      },
+      "attention_control": {
+        "support_linear_begin": 2915,
+        "pes": 128
+      },
+      "experts": {
+        "count": 32,
+        "selected": 4,
+        "stripe_height": 36,
+        "gate_x_offset": 4,
+        "activation_x_offset": 14,
+        "down_x_offset": 15,
+        "join_x_offset": 25
+      },
+      "remaining_support_pes": 1597
+    },
+    {
+      "layer": 14,
+      "region": {
+        "name": "layer_14",
+        "x": 410,
+        "y": 0,
+        "width": 26,
+        "height": 1160
+      },
+      "support_pes_used": 2371,
+      "dense_and_vector_pes": 2227,
+      "kv": {
+        "role": "bf16_kv",
+        "support_linear_begin": 2227,
+        "pes": 16,
+        "slots_per_pe": 96,
+        "bytes_per_pe": 24576,
+        "head_dimension": 64,
+        "context": 128,
+        "ring": true
+      },
+      "attention_control": {
+        "support_linear_begin": 2243,
+        "pes": 128
+      },
+      "experts": {
+        "count": 32,
+        "selected": 4,
+        "stripe_height": 36,
+        "gate_x_offset": 4,
+        "activation_x_offset": 14,
+        "down_x_offset": 15,
+        "join_x_offset": 25
+      },
+      "remaining_support_pes": 2269
+    },
+    {
+      "layer": 15,
+      "region": {
+        "name": "layer_15",
+        "x": 436,
+        "y": 0,
+        "width": 26,
+        "height": 1160
+      },
+      "support_pes_used": 3043,
+      "dense_and_vector_pes": 2227,
+      "kv": {
+        "role": "bf16_kv",
+        "support_linear_begin": 2227,
+        "pes": 688,
+        "slots_per_pe": 96,
+        "bytes_per_pe": 24576,
+        "head_dimension": 64,
+        "context": 8192,
+        "ring": false
+      },
+      "attention_control": {
+        "support_linear_begin": 2915,
+        "pes": 128
+      },
+      "experts": {
+        "count": 32,
+        "selected": 4,
+        "stripe_height": 36,
+        "gate_x_offset": 4,
+        "activation_x_offset": 14,
+        "down_x_offset": 15,
+        "join_x_offset": 25
+      },
+      "remaining_support_pes": 1597
+    },
+    {
+      "layer": 16,
+      "region": {
+        "name": "layer_16",
+        "x": 462,
+        "y": 0,
+        "width": 26,
+        "height": 1160
+      },
+      "support_pes_used": 2371,
+      "dense_and_vector_pes": 2227,
+      "kv": {
+        "role": "bf16_kv",
+        "support_linear_begin": 2227,
+        "pes": 16,
+        "slots_per_pe": 96,
+        "bytes_per_pe": 24576,
+        "head_dimension": 64,
+        "context": 128,
+        "ring": true
+      },
+      "attention_control": {
+        "support_linear_begin": 2243,
+        "pes": 128
+      },
+      "experts": {
+        "count": 32,
+        "selected": 4,
+        "stripe_height": 36,
+        "gate_x_offset": 4,
+        "activation_x_offset": 14,
+        "down_x_offset": 15,
+        "join_x_offset": 25
+      },
+      "remaining_support_pes": 2269
+    },
+    {
+      "layer": 17,
+      "region": {
+        "name": "layer_17",
+        "x": 488,
+        "y": 0,
+        "width": 26,
+        "height": 1160
+      },
+      "support_pes_used": 3043,
+      "dense_and_vector_pes": 2227,
+      "kv": {
+        "role": "bf16_kv",
+        "support_linear_begin": 2227,
+        "pes": 688,
+        "slots_per_pe": 96,
+        "bytes_per_pe": 24576,
+        "head_dimension": 64,
+        "context": 8192,
+        "ring": false
+      },
+      "attention_control": {
+        "support_linear_begin": 2915,
+        "pes": 128
+      },
+      "experts": {
+        "count": 32,
+        "selected": 4,
+        "stripe_height": 36,
+        "gate_x_offset": 4,
+        "activation_x_offset": 14,
+        "down_x_offset": 15,
+        "join_x_offset": 25
+      },
+      "remaining_support_pes": 1597
+    },
+    {
+      "layer": 18,
+      "region": {
+        "name": "layer_18",
+        "x": 514,
+        "y": 0,
+        "width": 26,
+        "height": 1160
+      },
+      "support_pes_used": 2371,
+      "dense_and_vector_pes": 2227,
+      "kv": {
+        "role": "bf16_kv",
+        "support_linear_begin": 2227,
+        "pes": 16,
+        "slots_per_pe": 96,
+        "bytes_per_pe": 24576,
+        "head_dimension": 64,
+        "context": 128,
+        "ring": true
+      },
+      "attention_control": {
+        "support_linear_begin": 2243,
+        "pes": 128
+      },
+      "experts": {
+        "count": 32,
+        "selected": 4,
+        "stripe_height": 36,
+        "gate_x_offset": 4,
+        "activation_x_offset": 14,
+        "down_x_offset": 15,
+        "join_x_offset": 25
+      },
+      "remaining_support_pes": 2269
+    },
+    {
+      "layer": 19,
+      "region": {
+        "name": "layer_19",
+        "x": 540,
+        "y": 0,
+        "width": 26,
+        "height": 1160
+      },
+      "support_pes_used": 3043,
+      "dense_and_vector_pes": 2227,
+      "kv": {
+        "role": "bf16_kv",
+        "support_linear_begin": 2227,
+        "pes": 688,
+        "slots_per_pe": 96,
+        "bytes_per_pe": 24576,
+        "head_dimension": 64,
+        "context": 8192,
+        "ring": false
+      },
+      "attention_control": {
+        "support_linear_begin": 2915,
+        "pes": 128
+      },
+      "experts": {
+        "count": 32,
+        "selected": 4,
+        "stripe_height": 36,
+        "gate_x_offset": 4,
+        "activation_x_offset": 14,
+        "down_x_offset": 15,
+        "join_x_offset": 25
+      },
+      "remaining_support_pes": 1597
+    },
+    {
+      "layer": 20,
+      "region": {
+        "name": "layer_20",
+        "x": 566,
+        "y": 0,
+        "width": 26,
+        "height": 1160
+      },
+      "support_pes_used": 2371,
+      "dense_and_vector_pes": 2227,
+      "kv": {
+        "role": "bf16_kv",
+        "support_linear_begin": 2227,
+        "pes": 16,
+        "slots_per_pe": 96,
+        "bytes_per_pe": 24576,
+        "head_dimension": 64,
+        "context": 128,
+        "ring": true
+      },
+      "attention_control": {
+        "support_linear_begin": 2243,
+        "pes": 128
+      },
+      "experts": {
+        "count": 32,
+        "selected": 4,
+        "stripe_height": 36,
+        "gate_x_offset": 4,
+        "activation_x_offset": 14,
+        "down_x_offset": 15,
+        "join_x_offset": 25
+      },
+      "remaining_support_pes": 2269
+    },
+    {
+      "layer": 21,
+      "region": {
+        "name": "layer_21",
+        "x": 592,
+        "y": 0,
+        "width": 26,
+        "height": 1160
+      },
+      "support_pes_used": 3043,
+      "dense_and_vector_pes": 2227,
+      "kv": {
+        "role": "bf16_kv",
+        "support_linear_begin": 2227,
+        "pes": 688,
+        "slots_per_pe": 96,
+        "bytes_per_pe": 24576,
+        "head_dimension": 64,
+        "context": 8192,
+        "ring": false
+      },
+      "attention_control": {
+        "support_linear_begin": 2915,
+        "pes": 128
+      },
+      "experts": {
+        "count": 32,
+        "selected": 4,
+        "stripe_height": 36,
+        "gate_x_offset": 4,
+        "activation_x_offset": 14,
+        "down_x_offset": 15,
+        "join_x_offset": 25
+      },
+      "remaining_support_pes": 1597
+    },
+    {
+      "layer": 22,
+      "region": {
+        "name": "layer_22",
+        "x": 618,
+        "y": 0,
+        "width": 26,
+        "height": 1160
+      },
+      "support_pes_used": 2371,
+      "dense_and_vector_pes": 2227,
+      "kv": {
+        "role": "bf16_kv",
+        "support_linear_begin": 2227,
+        "pes": 16,
+        "slots_per_pe": 96,
+        "bytes_per_pe": 24576,
+        "head_dimension": 64,
+        "context": 128,
+        "ring": true
+      },
+      "attention_control": {
+        "support_linear_begin": 2243,
+        "pes": 128
+      },
+      "experts": {
+        "count": 32,
+        "selected": 4,
+        "stripe_height": 36,
+        "gate_x_offset": 4,
+        "activation_x_offset": 14,
+        "down_x_offset": 15,
+        "join_x_offset": 25
+      },
+      "remaining_support_pes": 2269
+    },
+    {
+      "layer": 23,
+      "region": {
+        "name": "layer_23",
+        "x": 644,
+        "y": 0,
+        "width": 26,
+        "height": 1160
+      },
+      "support_pes_used": 3043,
+      "dense_and_vector_pes": 2227,
+      "kv": {
+        "role": "bf16_kv",
+        "support_linear_begin": 2227,
+        "pes": 688,
+        "slots_per_pe": 96,
+        "bytes_per_pe": 24576,
+        "head_dimension": 64,
+        "context": 8192,
+        "ring": false
+      },
+      "attention_control": {
+        "support_linear_begin": 2915,
+        "pes": 128
+      },
+      "experts": {
+        "count": 32,
+        "selected": 4,
+        "stripe_height": 36,
+        "gate_x_offset": 4,
+        "activation_x_offset": 14,
+        "down_x_offset": 15,
+        "join_x_offset": 25
+      },
+      "remaining_support_pes": 1597
+    }
+  ],
+  "assignments": {
+    "model.layers.0.input_layernorm.weight": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_0",
+      "support_linear_begin": 0,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.0.mlp.router.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 64,
+      "region": "layer_0",
+      "support_linear_begin": 1,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.0.mlp.router.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_0",
+      "support_linear_begin": 2,
+      "pes": 30,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.0.post_attention_layernorm.weight": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_0",
+      "support_linear_begin": 32,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.0.self_attn.k_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 1024,
+      "region": "layer_0",
+      "support_linear_begin": 33,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.0.self_attn.k_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_0",
+      "support_linear_begin": 34,
+      "pes": 120,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.0.self_attn.o_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_0",
+      "support_linear_begin": 154,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.0.self_attn.o_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_0",
+      "support_linear_begin": 155,
+      "pes": 989,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.0.self_attn.q_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 8192,
+      "region": "layer_0",
+      "support_linear_begin": 1144,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.0.self_attn.q_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_0",
+      "support_linear_begin": 1145,
+      "pes": 960,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.0.self_attn.sinks": {
+      "role": "bf16_vector",
+      "tensor_bytes": 128,
+      "region": "layer_0",
+      "support_linear_begin": 2105,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.0.self_attn.v_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 1024,
+      "region": "layer_0",
+      "support_linear_begin": 2106,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.0.self_attn.v_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_0",
+      "support_linear_begin": 2107,
+      "pes": 120,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.0.mlp.experts.gate_up_proj_blocks": {
+      "role": "mxfp4_matrix",
+      "region": "layer_0",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 36,
+      "contraction_tiles": 10,
+      "pes": 11520,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 4,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_nibbles"
+    },
+    "model.layers.0.mlp.experts.gate_up_proj_scales": {
+      "role": "mxfp4_matrix",
+      "region": "layer_0",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 36,
+      "contraction_tiles": 10,
+      "pes": 11520,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 4,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_scale_bytes",
+      "shares_pes_with": "model.layers.0.mlp.experts.gate_up_proj_blocks"
+    },
+    "model.layers.0.mlp.experts.gate_up_proj_bias": {
+      "role": "expert_bias",
+      "region": "layer_0",
+      "shares_pes_with": "model.layers.0.mlp.experts.gate_up_proj_blocks",
+      "contraction_tile": 9,
+      "bytes_per_owner_pe": 320,
+      "pes": 1152,
+      "owners": "one original bias slice at the final contraction PE"
+    },
+    "model.layers.0.mlp.experts.down_proj_blocks": {
+      "role": "mxfp4_matrix",
+      "region": "layer_0",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 18,
+      "contraction_tiles": 10,
+      "pes": 5760,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 15,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_nibbles"
+    },
+    "model.layers.0.mlp.experts.down_proj_scales": {
+      "role": "mxfp4_matrix",
+      "region": "layer_0",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 18,
+      "contraction_tiles": 10,
+      "pes": 5760,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 15,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_scale_bytes",
+      "shares_pes_with": "model.layers.0.mlp.experts.down_proj_blocks"
+    },
+    "model.layers.0.mlp.experts.down_proj_bias": {
+      "role": "expert_bias",
+      "region": "layer_0",
+      "shares_pes_with": "model.layers.0.mlp.experts.down_proj_blocks",
+      "contraction_tile": 9,
+      "bytes_per_owner_pe": 320,
+      "pes": 576,
+      "owners": "one original bias slice at the final contraction PE"
+    },
+    "model.layers.1.input_layernorm.weight": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_1",
+      "support_linear_begin": 0,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.1.mlp.router.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 64,
+      "region": "layer_1",
+      "support_linear_begin": 1,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.1.mlp.router.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_1",
+      "support_linear_begin": 2,
+      "pes": 30,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.1.post_attention_layernorm.weight": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_1",
+      "support_linear_begin": 32,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.1.self_attn.k_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 1024,
+      "region": "layer_1",
+      "support_linear_begin": 33,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.1.self_attn.k_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_1",
+      "support_linear_begin": 34,
+      "pes": 120,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.1.self_attn.o_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_1",
+      "support_linear_begin": 154,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.1.self_attn.o_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_1",
+      "support_linear_begin": 155,
+      "pes": 989,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.1.self_attn.q_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 8192,
+      "region": "layer_1",
+      "support_linear_begin": 1144,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.1.self_attn.q_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_1",
+      "support_linear_begin": 1145,
+      "pes": 960,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.1.self_attn.sinks": {
+      "role": "bf16_vector",
+      "tensor_bytes": 128,
+      "region": "layer_1",
+      "support_linear_begin": 2105,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.1.self_attn.v_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 1024,
+      "region": "layer_1",
+      "support_linear_begin": 2106,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.1.self_attn.v_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_1",
+      "support_linear_begin": 2107,
+      "pes": 120,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.1.mlp.experts.gate_up_proj_blocks": {
+      "role": "mxfp4_matrix",
+      "region": "layer_1",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 36,
+      "contraction_tiles": 10,
+      "pes": 11520,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 4,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_nibbles"
+    },
+    "model.layers.1.mlp.experts.gate_up_proj_scales": {
+      "role": "mxfp4_matrix",
+      "region": "layer_1",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 36,
+      "contraction_tiles": 10,
+      "pes": 11520,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 4,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_scale_bytes",
+      "shares_pes_with": "model.layers.1.mlp.experts.gate_up_proj_blocks"
+    },
+    "model.layers.1.mlp.experts.gate_up_proj_bias": {
+      "role": "expert_bias",
+      "region": "layer_1",
+      "shares_pes_with": "model.layers.1.mlp.experts.gate_up_proj_blocks",
+      "contraction_tile": 9,
+      "bytes_per_owner_pe": 320,
+      "pes": 1152,
+      "owners": "one original bias slice at the final contraction PE"
+    },
+    "model.layers.1.mlp.experts.down_proj_blocks": {
+      "role": "mxfp4_matrix",
+      "region": "layer_1",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 18,
+      "contraction_tiles": 10,
+      "pes": 5760,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 15,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_nibbles"
+    },
+    "model.layers.1.mlp.experts.down_proj_scales": {
+      "role": "mxfp4_matrix",
+      "region": "layer_1",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 18,
+      "contraction_tiles": 10,
+      "pes": 5760,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 15,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_scale_bytes",
+      "shares_pes_with": "model.layers.1.mlp.experts.down_proj_blocks"
+    },
+    "model.layers.1.mlp.experts.down_proj_bias": {
+      "role": "expert_bias",
+      "region": "layer_1",
+      "shares_pes_with": "model.layers.1.mlp.experts.down_proj_blocks",
+      "contraction_tile": 9,
+      "bytes_per_owner_pe": 320,
+      "pes": 576,
+      "owners": "one original bias slice at the final contraction PE"
+    },
+    "model.layers.2.input_layernorm.weight": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_2",
+      "support_linear_begin": 0,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.2.mlp.router.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 64,
+      "region": "layer_2",
+      "support_linear_begin": 1,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.2.mlp.router.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_2",
+      "support_linear_begin": 2,
+      "pes": 30,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.2.post_attention_layernorm.weight": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_2",
+      "support_linear_begin": 32,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.2.self_attn.k_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 1024,
+      "region": "layer_2",
+      "support_linear_begin": 33,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.2.self_attn.k_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_2",
+      "support_linear_begin": 34,
+      "pes": 120,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.2.self_attn.o_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_2",
+      "support_linear_begin": 154,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.2.self_attn.o_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_2",
+      "support_linear_begin": 155,
+      "pes": 989,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.2.self_attn.q_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 8192,
+      "region": "layer_2",
+      "support_linear_begin": 1144,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.2.self_attn.q_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_2",
+      "support_linear_begin": 1145,
+      "pes": 960,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.2.self_attn.sinks": {
+      "role": "bf16_vector",
+      "tensor_bytes": 128,
+      "region": "layer_2",
+      "support_linear_begin": 2105,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.2.self_attn.v_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 1024,
+      "region": "layer_2",
+      "support_linear_begin": 2106,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.2.self_attn.v_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_2",
+      "support_linear_begin": 2107,
+      "pes": 120,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.2.mlp.experts.gate_up_proj_blocks": {
+      "role": "mxfp4_matrix",
+      "region": "layer_2",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 36,
+      "contraction_tiles": 10,
+      "pes": 11520,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 4,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_nibbles"
+    },
+    "model.layers.2.mlp.experts.gate_up_proj_scales": {
+      "role": "mxfp4_matrix",
+      "region": "layer_2",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 36,
+      "contraction_tiles": 10,
+      "pes": 11520,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 4,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_scale_bytes",
+      "shares_pes_with": "model.layers.2.mlp.experts.gate_up_proj_blocks"
+    },
+    "model.layers.2.mlp.experts.gate_up_proj_bias": {
+      "role": "expert_bias",
+      "region": "layer_2",
+      "shares_pes_with": "model.layers.2.mlp.experts.gate_up_proj_blocks",
+      "contraction_tile": 9,
+      "bytes_per_owner_pe": 320,
+      "pes": 1152,
+      "owners": "one original bias slice at the final contraction PE"
+    },
+    "model.layers.2.mlp.experts.down_proj_blocks": {
+      "role": "mxfp4_matrix",
+      "region": "layer_2",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 18,
+      "contraction_tiles": 10,
+      "pes": 5760,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 15,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_nibbles"
+    },
+    "model.layers.2.mlp.experts.down_proj_scales": {
+      "role": "mxfp4_matrix",
+      "region": "layer_2",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 18,
+      "contraction_tiles": 10,
+      "pes": 5760,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 15,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_scale_bytes",
+      "shares_pes_with": "model.layers.2.mlp.experts.down_proj_blocks"
+    },
+    "model.layers.2.mlp.experts.down_proj_bias": {
+      "role": "expert_bias",
+      "region": "layer_2",
+      "shares_pes_with": "model.layers.2.mlp.experts.down_proj_blocks",
+      "contraction_tile": 9,
+      "bytes_per_owner_pe": 320,
+      "pes": 576,
+      "owners": "one original bias slice at the final contraction PE"
+    },
+    "model.layers.3.input_layernorm.weight": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_3",
+      "support_linear_begin": 0,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.3.mlp.router.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 64,
+      "region": "layer_3",
+      "support_linear_begin": 1,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.3.mlp.router.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_3",
+      "support_linear_begin": 2,
+      "pes": 30,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.3.post_attention_layernorm.weight": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_3",
+      "support_linear_begin": 32,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.3.self_attn.k_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 1024,
+      "region": "layer_3",
+      "support_linear_begin": 33,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.3.self_attn.k_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_3",
+      "support_linear_begin": 34,
+      "pes": 120,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.3.self_attn.o_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_3",
+      "support_linear_begin": 154,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.3.self_attn.o_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_3",
+      "support_linear_begin": 155,
+      "pes": 989,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.3.self_attn.q_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 8192,
+      "region": "layer_3",
+      "support_linear_begin": 1144,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.3.self_attn.q_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_3",
+      "support_linear_begin": 1145,
+      "pes": 960,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.3.self_attn.sinks": {
+      "role": "bf16_vector",
+      "tensor_bytes": 128,
+      "region": "layer_3",
+      "support_linear_begin": 2105,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.3.self_attn.v_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 1024,
+      "region": "layer_3",
+      "support_linear_begin": 2106,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.3.self_attn.v_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_3",
+      "support_linear_begin": 2107,
+      "pes": 120,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.3.mlp.experts.gate_up_proj_blocks": {
+      "role": "mxfp4_matrix",
+      "region": "layer_3",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 36,
+      "contraction_tiles": 10,
+      "pes": 11520,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 4,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_nibbles"
+    },
+    "model.layers.3.mlp.experts.gate_up_proj_scales": {
+      "role": "mxfp4_matrix",
+      "region": "layer_3",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 36,
+      "contraction_tiles": 10,
+      "pes": 11520,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 4,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_scale_bytes",
+      "shares_pes_with": "model.layers.3.mlp.experts.gate_up_proj_blocks"
+    },
+    "model.layers.3.mlp.experts.gate_up_proj_bias": {
+      "role": "expert_bias",
+      "region": "layer_3",
+      "shares_pes_with": "model.layers.3.mlp.experts.gate_up_proj_blocks",
+      "contraction_tile": 9,
+      "bytes_per_owner_pe": 320,
+      "pes": 1152,
+      "owners": "one original bias slice at the final contraction PE"
+    },
+    "model.layers.3.mlp.experts.down_proj_blocks": {
+      "role": "mxfp4_matrix",
+      "region": "layer_3",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 18,
+      "contraction_tiles": 10,
+      "pes": 5760,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 15,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_nibbles"
+    },
+    "model.layers.3.mlp.experts.down_proj_scales": {
+      "role": "mxfp4_matrix",
+      "region": "layer_3",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 18,
+      "contraction_tiles": 10,
+      "pes": 5760,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 15,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_scale_bytes",
+      "shares_pes_with": "model.layers.3.mlp.experts.down_proj_blocks"
+    },
+    "model.layers.3.mlp.experts.down_proj_bias": {
+      "role": "expert_bias",
+      "region": "layer_3",
+      "shares_pes_with": "model.layers.3.mlp.experts.down_proj_blocks",
+      "contraction_tile": 9,
+      "bytes_per_owner_pe": 320,
+      "pes": 576,
+      "owners": "one original bias slice at the final contraction PE"
+    },
+    "model.layers.4.input_layernorm.weight": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_4",
+      "support_linear_begin": 0,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.4.mlp.router.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 64,
+      "region": "layer_4",
+      "support_linear_begin": 1,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.4.mlp.router.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_4",
+      "support_linear_begin": 2,
+      "pes": 30,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.4.post_attention_layernorm.weight": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_4",
+      "support_linear_begin": 32,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.4.self_attn.k_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 1024,
+      "region": "layer_4",
+      "support_linear_begin": 33,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.4.self_attn.k_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_4",
+      "support_linear_begin": 34,
+      "pes": 120,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.4.self_attn.o_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_4",
+      "support_linear_begin": 154,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.4.self_attn.o_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_4",
+      "support_linear_begin": 155,
+      "pes": 989,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.4.self_attn.q_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 8192,
+      "region": "layer_4",
+      "support_linear_begin": 1144,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.4.self_attn.q_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_4",
+      "support_linear_begin": 1145,
+      "pes": 960,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.4.self_attn.sinks": {
+      "role": "bf16_vector",
+      "tensor_bytes": 128,
+      "region": "layer_4",
+      "support_linear_begin": 2105,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.4.self_attn.v_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 1024,
+      "region": "layer_4",
+      "support_linear_begin": 2106,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.4.self_attn.v_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_4",
+      "support_linear_begin": 2107,
+      "pes": 120,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.4.mlp.experts.gate_up_proj_blocks": {
+      "role": "mxfp4_matrix",
+      "region": "layer_4",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 36,
+      "contraction_tiles": 10,
+      "pes": 11520,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 4,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_nibbles"
+    },
+    "model.layers.4.mlp.experts.gate_up_proj_scales": {
+      "role": "mxfp4_matrix",
+      "region": "layer_4",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 36,
+      "contraction_tiles": 10,
+      "pes": 11520,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 4,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_scale_bytes",
+      "shares_pes_with": "model.layers.4.mlp.experts.gate_up_proj_blocks"
+    },
+    "model.layers.4.mlp.experts.gate_up_proj_bias": {
+      "role": "expert_bias",
+      "region": "layer_4",
+      "shares_pes_with": "model.layers.4.mlp.experts.gate_up_proj_blocks",
+      "contraction_tile": 9,
+      "bytes_per_owner_pe": 320,
+      "pes": 1152,
+      "owners": "one original bias slice at the final contraction PE"
+    },
+    "model.layers.4.mlp.experts.down_proj_blocks": {
+      "role": "mxfp4_matrix",
+      "region": "layer_4",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 18,
+      "contraction_tiles": 10,
+      "pes": 5760,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 15,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_nibbles"
+    },
+    "model.layers.4.mlp.experts.down_proj_scales": {
+      "role": "mxfp4_matrix",
+      "region": "layer_4",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 18,
+      "contraction_tiles": 10,
+      "pes": 5760,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 15,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_scale_bytes",
+      "shares_pes_with": "model.layers.4.mlp.experts.down_proj_blocks"
+    },
+    "model.layers.4.mlp.experts.down_proj_bias": {
+      "role": "expert_bias",
+      "region": "layer_4",
+      "shares_pes_with": "model.layers.4.mlp.experts.down_proj_blocks",
+      "contraction_tile": 9,
+      "bytes_per_owner_pe": 320,
+      "pes": 576,
+      "owners": "one original bias slice at the final contraction PE"
+    },
+    "model.layers.5.input_layernorm.weight": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_5",
+      "support_linear_begin": 0,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.5.mlp.router.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 64,
+      "region": "layer_5",
+      "support_linear_begin": 1,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.5.mlp.router.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_5",
+      "support_linear_begin": 2,
+      "pes": 30,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.5.post_attention_layernorm.weight": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_5",
+      "support_linear_begin": 32,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.5.self_attn.k_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 1024,
+      "region": "layer_5",
+      "support_linear_begin": 33,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.5.self_attn.k_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_5",
+      "support_linear_begin": 34,
+      "pes": 120,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.5.self_attn.o_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_5",
+      "support_linear_begin": 154,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.5.self_attn.o_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_5",
+      "support_linear_begin": 155,
+      "pes": 989,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.5.self_attn.q_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 8192,
+      "region": "layer_5",
+      "support_linear_begin": 1144,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.5.self_attn.q_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_5",
+      "support_linear_begin": 1145,
+      "pes": 960,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.5.self_attn.sinks": {
+      "role": "bf16_vector",
+      "tensor_bytes": 128,
+      "region": "layer_5",
+      "support_linear_begin": 2105,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.5.self_attn.v_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 1024,
+      "region": "layer_5",
+      "support_linear_begin": 2106,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.5.self_attn.v_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_5",
+      "support_linear_begin": 2107,
+      "pes": 120,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.5.mlp.experts.gate_up_proj_blocks": {
+      "role": "mxfp4_matrix",
+      "region": "layer_5",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 36,
+      "contraction_tiles": 10,
+      "pes": 11520,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 4,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_nibbles"
+    },
+    "model.layers.5.mlp.experts.gate_up_proj_scales": {
+      "role": "mxfp4_matrix",
+      "region": "layer_5",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 36,
+      "contraction_tiles": 10,
+      "pes": 11520,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 4,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_scale_bytes",
+      "shares_pes_with": "model.layers.5.mlp.experts.gate_up_proj_blocks"
+    },
+    "model.layers.5.mlp.experts.gate_up_proj_bias": {
+      "role": "expert_bias",
+      "region": "layer_5",
+      "shares_pes_with": "model.layers.5.mlp.experts.gate_up_proj_blocks",
+      "contraction_tile": 9,
+      "bytes_per_owner_pe": 320,
+      "pes": 1152,
+      "owners": "one original bias slice at the final contraction PE"
+    },
+    "model.layers.5.mlp.experts.down_proj_blocks": {
+      "role": "mxfp4_matrix",
+      "region": "layer_5",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 18,
+      "contraction_tiles": 10,
+      "pes": 5760,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 15,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_nibbles"
+    },
+    "model.layers.5.mlp.experts.down_proj_scales": {
+      "role": "mxfp4_matrix",
+      "region": "layer_5",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 18,
+      "contraction_tiles": 10,
+      "pes": 5760,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 15,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_scale_bytes",
+      "shares_pes_with": "model.layers.5.mlp.experts.down_proj_blocks"
+    },
+    "model.layers.5.mlp.experts.down_proj_bias": {
+      "role": "expert_bias",
+      "region": "layer_5",
+      "shares_pes_with": "model.layers.5.mlp.experts.down_proj_blocks",
+      "contraction_tile": 9,
+      "bytes_per_owner_pe": 320,
+      "pes": 576,
+      "owners": "one original bias slice at the final contraction PE"
+    },
+    "model.layers.6.input_layernorm.weight": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_6",
+      "support_linear_begin": 0,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.6.mlp.router.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 64,
+      "region": "layer_6",
+      "support_linear_begin": 1,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.6.mlp.router.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_6",
+      "support_linear_begin": 2,
+      "pes": 30,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.6.post_attention_layernorm.weight": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_6",
+      "support_linear_begin": 32,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.6.self_attn.k_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 1024,
+      "region": "layer_6",
+      "support_linear_begin": 33,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.6.self_attn.k_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_6",
+      "support_linear_begin": 34,
+      "pes": 120,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.6.self_attn.o_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_6",
+      "support_linear_begin": 154,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.6.self_attn.o_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_6",
+      "support_linear_begin": 155,
+      "pes": 989,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.6.self_attn.q_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 8192,
+      "region": "layer_6",
+      "support_linear_begin": 1144,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.6.self_attn.q_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_6",
+      "support_linear_begin": 1145,
+      "pes": 960,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.6.self_attn.sinks": {
+      "role": "bf16_vector",
+      "tensor_bytes": 128,
+      "region": "layer_6",
+      "support_linear_begin": 2105,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.6.self_attn.v_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 1024,
+      "region": "layer_6",
+      "support_linear_begin": 2106,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.6.self_attn.v_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_6",
+      "support_linear_begin": 2107,
+      "pes": 120,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.6.mlp.experts.gate_up_proj_blocks": {
+      "role": "mxfp4_matrix",
+      "region": "layer_6",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 36,
+      "contraction_tiles": 10,
+      "pes": 11520,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 4,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_nibbles"
+    },
+    "model.layers.6.mlp.experts.gate_up_proj_scales": {
+      "role": "mxfp4_matrix",
+      "region": "layer_6",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 36,
+      "contraction_tiles": 10,
+      "pes": 11520,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 4,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_scale_bytes",
+      "shares_pes_with": "model.layers.6.mlp.experts.gate_up_proj_blocks"
+    },
+    "model.layers.6.mlp.experts.gate_up_proj_bias": {
+      "role": "expert_bias",
+      "region": "layer_6",
+      "shares_pes_with": "model.layers.6.mlp.experts.gate_up_proj_blocks",
+      "contraction_tile": 9,
+      "bytes_per_owner_pe": 320,
+      "pes": 1152,
+      "owners": "one original bias slice at the final contraction PE"
+    },
+    "model.layers.6.mlp.experts.down_proj_blocks": {
+      "role": "mxfp4_matrix",
+      "region": "layer_6",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 18,
+      "contraction_tiles": 10,
+      "pes": 5760,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 15,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_nibbles"
+    },
+    "model.layers.6.mlp.experts.down_proj_scales": {
+      "role": "mxfp4_matrix",
+      "region": "layer_6",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 18,
+      "contraction_tiles": 10,
+      "pes": 5760,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 15,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_scale_bytes",
+      "shares_pes_with": "model.layers.6.mlp.experts.down_proj_blocks"
+    },
+    "model.layers.6.mlp.experts.down_proj_bias": {
+      "role": "expert_bias",
+      "region": "layer_6",
+      "shares_pes_with": "model.layers.6.mlp.experts.down_proj_blocks",
+      "contraction_tile": 9,
+      "bytes_per_owner_pe": 320,
+      "pes": 576,
+      "owners": "one original bias slice at the final contraction PE"
+    },
+    "model.layers.7.input_layernorm.weight": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_7",
+      "support_linear_begin": 0,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.7.mlp.router.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 64,
+      "region": "layer_7",
+      "support_linear_begin": 1,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.7.mlp.router.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_7",
+      "support_linear_begin": 2,
+      "pes": 30,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.7.post_attention_layernorm.weight": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_7",
+      "support_linear_begin": 32,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.7.self_attn.k_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 1024,
+      "region": "layer_7",
+      "support_linear_begin": 33,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.7.self_attn.k_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_7",
+      "support_linear_begin": 34,
+      "pes": 120,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.7.self_attn.o_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_7",
+      "support_linear_begin": 154,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.7.self_attn.o_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_7",
+      "support_linear_begin": 155,
+      "pes": 989,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.7.self_attn.q_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 8192,
+      "region": "layer_7",
+      "support_linear_begin": 1144,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.7.self_attn.q_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_7",
+      "support_linear_begin": 1145,
+      "pes": 960,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.7.self_attn.sinks": {
+      "role": "bf16_vector",
+      "tensor_bytes": 128,
+      "region": "layer_7",
+      "support_linear_begin": 2105,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.7.self_attn.v_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 1024,
+      "region": "layer_7",
+      "support_linear_begin": 2106,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.7.self_attn.v_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_7",
+      "support_linear_begin": 2107,
+      "pes": 120,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.7.mlp.experts.gate_up_proj_blocks": {
+      "role": "mxfp4_matrix",
+      "region": "layer_7",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 36,
+      "contraction_tiles": 10,
+      "pes": 11520,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 4,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_nibbles"
+    },
+    "model.layers.7.mlp.experts.gate_up_proj_scales": {
+      "role": "mxfp4_matrix",
+      "region": "layer_7",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 36,
+      "contraction_tiles": 10,
+      "pes": 11520,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 4,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_scale_bytes",
+      "shares_pes_with": "model.layers.7.mlp.experts.gate_up_proj_blocks"
+    },
+    "model.layers.7.mlp.experts.gate_up_proj_bias": {
+      "role": "expert_bias",
+      "region": "layer_7",
+      "shares_pes_with": "model.layers.7.mlp.experts.gate_up_proj_blocks",
+      "contraction_tile": 9,
+      "bytes_per_owner_pe": 320,
+      "pes": 1152,
+      "owners": "one original bias slice at the final contraction PE"
+    },
+    "model.layers.7.mlp.experts.down_proj_blocks": {
+      "role": "mxfp4_matrix",
+      "region": "layer_7",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 18,
+      "contraction_tiles": 10,
+      "pes": 5760,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 15,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_nibbles"
+    },
+    "model.layers.7.mlp.experts.down_proj_scales": {
+      "role": "mxfp4_matrix",
+      "region": "layer_7",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 18,
+      "contraction_tiles": 10,
+      "pes": 5760,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 15,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_scale_bytes",
+      "shares_pes_with": "model.layers.7.mlp.experts.down_proj_blocks"
+    },
+    "model.layers.7.mlp.experts.down_proj_bias": {
+      "role": "expert_bias",
+      "region": "layer_7",
+      "shares_pes_with": "model.layers.7.mlp.experts.down_proj_blocks",
+      "contraction_tile": 9,
+      "bytes_per_owner_pe": 320,
+      "pes": 576,
+      "owners": "one original bias slice at the final contraction PE"
+    },
+    "model.layers.8.input_layernorm.weight": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_8",
+      "support_linear_begin": 0,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.8.mlp.router.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 64,
+      "region": "layer_8",
+      "support_linear_begin": 1,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.8.mlp.router.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_8",
+      "support_linear_begin": 2,
+      "pes": 30,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.8.post_attention_layernorm.weight": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_8",
+      "support_linear_begin": 32,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.8.self_attn.k_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 1024,
+      "region": "layer_8",
+      "support_linear_begin": 33,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.8.self_attn.k_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_8",
+      "support_linear_begin": 34,
+      "pes": 120,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.8.self_attn.o_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_8",
+      "support_linear_begin": 154,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.8.self_attn.o_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_8",
+      "support_linear_begin": 155,
+      "pes": 989,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.8.self_attn.q_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 8192,
+      "region": "layer_8",
+      "support_linear_begin": 1144,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.8.self_attn.q_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_8",
+      "support_linear_begin": 1145,
+      "pes": 960,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.8.self_attn.sinks": {
+      "role": "bf16_vector",
+      "tensor_bytes": 128,
+      "region": "layer_8",
+      "support_linear_begin": 2105,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.8.self_attn.v_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 1024,
+      "region": "layer_8",
+      "support_linear_begin": 2106,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.8.self_attn.v_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_8",
+      "support_linear_begin": 2107,
+      "pes": 120,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.8.mlp.experts.gate_up_proj_blocks": {
+      "role": "mxfp4_matrix",
+      "region": "layer_8",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 36,
+      "contraction_tiles": 10,
+      "pes": 11520,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 4,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_nibbles"
+    },
+    "model.layers.8.mlp.experts.gate_up_proj_scales": {
+      "role": "mxfp4_matrix",
+      "region": "layer_8",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 36,
+      "contraction_tiles": 10,
+      "pes": 11520,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 4,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_scale_bytes",
+      "shares_pes_with": "model.layers.8.mlp.experts.gate_up_proj_blocks"
+    },
+    "model.layers.8.mlp.experts.gate_up_proj_bias": {
+      "role": "expert_bias",
+      "region": "layer_8",
+      "shares_pes_with": "model.layers.8.mlp.experts.gate_up_proj_blocks",
+      "contraction_tile": 9,
+      "bytes_per_owner_pe": 320,
+      "pes": 1152,
+      "owners": "one original bias slice at the final contraction PE"
+    },
+    "model.layers.8.mlp.experts.down_proj_blocks": {
+      "role": "mxfp4_matrix",
+      "region": "layer_8",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 18,
+      "contraction_tiles": 10,
+      "pes": 5760,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 15,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_nibbles"
+    },
+    "model.layers.8.mlp.experts.down_proj_scales": {
+      "role": "mxfp4_matrix",
+      "region": "layer_8",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 18,
+      "contraction_tiles": 10,
+      "pes": 5760,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 15,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_scale_bytes",
+      "shares_pes_with": "model.layers.8.mlp.experts.down_proj_blocks"
+    },
+    "model.layers.8.mlp.experts.down_proj_bias": {
+      "role": "expert_bias",
+      "region": "layer_8",
+      "shares_pes_with": "model.layers.8.mlp.experts.down_proj_blocks",
+      "contraction_tile": 9,
+      "bytes_per_owner_pe": 320,
+      "pes": 576,
+      "owners": "one original bias slice at the final contraction PE"
+    },
+    "model.layers.9.input_layernorm.weight": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_9",
+      "support_linear_begin": 0,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.9.mlp.router.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 64,
+      "region": "layer_9",
+      "support_linear_begin": 1,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.9.mlp.router.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_9",
+      "support_linear_begin": 2,
+      "pes": 30,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.9.post_attention_layernorm.weight": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_9",
+      "support_linear_begin": 32,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.9.self_attn.k_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 1024,
+      "region": "layer_9",
+      "support_linear_begin": 33,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.9.self_attn.k_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_9",
+      "support_linear_begin": 34,
+      "pes": 120,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.9.self_attn.o_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_9",
+      "support_linear_begin": 154,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.9.self_attn.o_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_9",
+      "support_linear_begin": 155,
+      "pes": 989,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.9.self_attn.q_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 8192,
+      "region": "layer_9",
+      "support_linear_begin": 1144,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.9.self_attn.q_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_9",
+      "support_linear_begin": 1145,
+      "pes": 960,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.9.self_attn.sinks": {
+      "role": "bf16_vector",
+      "tensor_bytes": 128,
+      "region": "layer_9",
+      "support_linear_begin": 2105,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.9.self_attn.v_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 1024,
+      "region": "layer_9",
+      "support_linear_begin": 2106,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.9.self_attn.v_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_9",
+      "support_linear_begin": 2107,
+      "pes": 120,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.9.mlp.experts.gate_up_proj_blocks": {
+      "role": "mxfp4_matrix",
+      "region": "layer_9",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 36,
+      "contraction_tiles": 10,
+      "pes": 11520,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 4,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_nibbles"
+    },
+    "model.layers.9.mlp.experts.gate_up_proj_scales": {
+      "role": "mxfp4_matrix",
+      "region": "layer_9",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 36,
+      "contraction_tiles": 10,
+      "pes": 11520,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 4,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_scale_bytes",
+      "shares_pes_with": "model.layers.9.mlp.experts.gate_up_proj_blocks"
+    },
+    "model.layers.9.mlp.experts.gate_up_proj_bias": {
+      "role": "expert_bias",
+      "region": "layer_9",
+      "shares_pes_with": "model.layers.9.mlp.experts.gate_up_proj_blocks",
+      "contraction_tile": 9,
+      "bytes_per_owner_pe": 320,
+      "pes": 1152,
+      "owners": "one original bias slice at the final contraction PE"
+    },
+    "model.layers.9.mlp.experts.down_proj_blocks": {
+      "role": "mxfp4_matrix",
+      "region": "layer_9",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 18,
+      "contraction_tiles": 10,
+      "pes": 5760,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 15,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_nibbles"
+    },
+    "model.layers.9.mlp.experts.down_proj_scales": {
+      "role": "mxfp4_matrix",
+      "region": "layer_9",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 18,
+      "contraction_tiles": 10,
+      "pes": 5760,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 15,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_scale_bytes",
+      "shares_pes_with": "model.layers.9.mlp.experts.down_proj_blocks"
+    },
+    "model.layers.9.mlp.experts.down_proj_bias": {
+      "role": "expert_bias",
+      "region": "layer_9",
+      "shares_pes_with": "model.layers.9.mlp.experts.down_proj_blocks",
+      "contraction_tile": 9,
+      "bytes_per_owner_pe": 320,
+      "pes": 576,
+      "owners": "one original bias slice at the final contraction PE"
+    },
+    "model.layers.10.input_layernorm.weight": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_10",
+      "support_linear_begin": 0,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.10.mlp.router.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 64,
+      "region": "layer_10",
+      "support_linear_begin": 1,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.10.mlp.router.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_10",
+      "support_linear_begin": 2,
+      "pes": 30,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.10.post_attention_layernorm.weight": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_10",
+      "support_linear_begin": 32,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.10.self_attn.k_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 1024,
+      "region": "layer_10",
+      "support_linear_begin": 33,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.10.self_attn.k_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_10",
+      "support_linear_begin": 34,
+      "pes": 120,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.10.self_attn.o_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_10",
+      "support_linear_begin": 154,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.10.self_attn.o_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_10",
+      "support_linear_begin": 155,
+      "pes": 989,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.10.self_attn.q_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 8192,
+      "region": "layer_10",
+      "support_linear_begin": 1144,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.10.self_attn.q_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_10",
+      "support_linear_begin": 1145,
+      "pes": 960,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.10.self_attn.sinks": {
+      "role": "bf16_vector",
+      "tensor_bytes": 128,
+      "region": "layer_10",
+      "support_linear_begin": 2105,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.10.self_attn.v_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 1024,
+      "region": "layer_10",
+      "support_linear_begin": 2106,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.10.self_attn.v_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_10",
+      "support_linear_begin": 2107,
+      "pes": 120,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.10.mlp.experts.gate_up_proj_blocks": {
+      "role": "mxfp4_matrix",
+      "region": "layer_10",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 36,
+      "contraction_tiles": 10,
+      "pes": 11520,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 4,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_nibbles"
+    },
+    "model.layers.10.mlp.experts.gate_up_proj_scales": {
+      "role": "mxfp4_matrix",
+      "region": "layer_10",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 36,
+      "contraction_tiles": 10,
+      "pes": 11520,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 4,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_scale_bytes",
+      "shares_pes_with": "model.layers.10.mlp.experts.gate_up_proj_blocks"
+    },
+    "model.layers.10.mlp.experts.gate_up_proj_bias": {
+      "role": "expert_bias",
+      "region": "layer_10",
+      "shares_pes_with": "model.layers.10.mlp.experts.gate_up_proj_blocks",
+      "contraction_tile": 9,
+      "bytes_per_owner_pe": 320,
+      "pes": 1152,
+      "owners": "one original bias slice at the final contraction PE"
+    },
+    "model.layers.10.mlp.experts.down_proj_blocks": {
+      "role": "mxfp4_matrix",
+      "region": "layer_10",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 18,
+      "contraction_tiles": 10,
+      "pes": 5760,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 15,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_nibbles"
+    },
+    "model.layers.10.mlp.experts.down_proj_scales": {
+      "role": "mxfp4_matrix",
+      "region": "layer_10",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 18,
+      "contraction_tiles": 10,
+      "pes": 5760,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 15,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_scale_bytes",
+      "shares_pes_with": "model.layers.10.mlp.experts.down_proj_blocks"
+    },
+    "model.layers.10.mlp.experts.down_proj_bias": {
+      "role": "expert_bias",
+      "region": "layer_10",
+      "shares_pes_with": "model.layers.10.mlp.experts.down_proj_blocks",
+      "contraction_tile": 9,
+      "bytes_per_owner_pe": 320,
+      "pes": 576,
+      "owners": "one original bias slice at the final contraction PE"
+    },
+    "model.layers.11.input_layernorm.weight": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_11",
+      "support_linear_begin": 0,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.11.mlp.router.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 64,
+      "region": "layer_11",
+      "support_linear_begin": 1,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.11.mlp.router.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_11",
+      "support_linear_begin": 2,
+      "pes": 30,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.11.post_attention_layernorm.weight": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_11",
+      "support_linear_begin": 32,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.11.self_attn.k_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 1024,
+      "region": "layer_11",
+      "support_linear_begin": 33,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.11.self_attn.k_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_11",
+      "support_linear_begin": 34,
+      "pes": 120,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.11.self_attn.o_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_11",
+      "support_linear_begin": 154,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.11.self_attn.o_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_11",
+      "support_linear_begin": 155,
+      "pes": 989,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.11.self_attn.q_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 8192,
+      "region": "layer_11",
+      "support_linear_begin": 1144,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.11.self_attn.q_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_11",
+      "support_linear_begin": 1145,
+      "pes": 960,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.11.self_attn.sinks": {
+      "role": "bf16_vector",
+      "tensor_bytes": 128,
+      "region": "layer_11",
+      "support_linear_begin": 2105,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.11.self_attn.v_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 1024,
+      "region": "layer_11",
+      "support_linear_begin": 2106,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.11.self_attn.v_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_11",
+      "support_linear_begin": 2107,
+      "pes": 120,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.11.mlp.experts.gate_up_proj_blocks": {
+      "role": "mxfp4_matrix",
+      "region": "layer_11",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 36,
+      "contraction_tiles": 10,
+      "pes": 11520,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 4,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_nibbles"
+    },
+    "model.layers.11.mlp.experts.gate_up_proj_scales": {
+      "role": "mxfp4_matrix",
+      "region": "layer_11",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 36,
+      "contraction_tiles": 10,
+      "pes": 11520,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 4,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_scale_bytes",
+      "shares_pes_with": "model.layers.11.mlp.experts.gate_up_proj_blocks"
+    },
+    "model.layers.11.mlp.experts.gate_up_proj_bias": {
+      "role": "expert_bias",
+      "region": "layer_11",
+      "shares_pes_with": "model.layers.11.mlp.experts.gate_up_proj_blocks",
+      "contraction_tile": 9,
+      "bytes_per_owner_pe": 320,
+      "pes": 1152,
+      "owners": "one original bias slice at the final contraction PE"
+    },
+    "model.layers.11.mlp.experts.down_proj_blocks": {
+      "role": "mxfp4_matrix",
+      "region": "layer_11",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 18,
+      "contraction_tiles": 10,
+      "pes": 5760,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 15,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_nibbles"
+    },
+    "model.layers.11.mlp.experts.down_proj_scales": {
+      "role": "mxfp4_matrix",
+      "region": "layer_11",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 18,
+      "contraction_tiles": 10,
+      "pes": 5760,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 15,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_scale_bytes",
+      "shares_pes_with": "model.layers.11.mlp.experts.down_proj_blocks"
+    },
+    "model.layers.11.mlp.experts.down_proj_bias": {
+      "role": "expert_bias",
+      "region": "layer_11",
+      "shares_pes_with": "model.layers.11.mlp.experts.down_proj_blocks",
+      "contraction_tile": 9,
+      "bytes_per_owner_pe": 320,
+      "pes": 576,
+      "owners": "one original bias slice at the final contraction PE"
+    },
+    "model.layers.12.input_layernorm.weight": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_12",
+      "support_linear_begin": 0,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.12.mlp.router.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 64,
+      "region": "layer_12",
+      "support_linear_begin": 1,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.12.mlp.router.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_12",
+      "support_linear_begin": 2,
+      "pes": 30,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.12.post_attention_layernorm.weight": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_12",
+      "support_linear_begin": 32,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.12.self_attn.k_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 1024,
+      "region": "layer_12",
+      "support_linear_begin": 33,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.12.self_attn.k_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_12",
+      "support_linear_begin": 34,
+      "pes": 120,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.12.self_attn.o_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_12",
+      "support_linear_begin": 154,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.12.self_attn.o_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_12",
+      "support_linear_begin": 155,
+      "pes": 989,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.12.self_attn.q_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 8192,
+      "region": "layer_12",
+      "support_linear_begin": 1144,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.12.self_attn.q_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_12",
+      "support_linear_begin": 1145,
+      "pes": 960,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.12.self_attn.sinks": {
+      "role": "bf16_vector",
+      "tensor_bytes": 128,
+      "region": "layer_12",
+      "support_linear_begin": 2105,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.12.self_attn.v_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 1024,
+      "region": "layer_12",
+      "support_linear_begin": 2106,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.12.self_attn.v_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_12",
+      "support_linear_begin": 2107,
+      "pes": 120,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.12.mlp.experts.gate_up_proj_blocks": {
+      "role": "mxfp4_matrix",
+      "region": "layer_12",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 36,
+      "contraction_tiles": 10,
+      "pes": 11520,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 4,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_nibbles"
+    },
+    "model.layers.12.mlp.experts.gate_up_proj_scales": {
+      "role": "mxfp4_matrix",
+      "region": "layer_12",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 36,
+      "contraction_tiles": 10,
+      "pes": 11520,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 4,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_scale_bytes",
+      "shares_pes_with": "model.layers.12.mlp.experts.gate_up_proj_blocks"
+    },
+    "model.layers.12.mlp.experts.gate_up_proj_bias": {
+      "role": "expert_bias",
+      "region": "layer_12",
+      "shares_pes_with": "model.layers.12.mlp.experts.gate_up_proj_blocks",
+      "contraction_tile": 9,
+      "bytes_per_owner_pe": 320,
+      "pes": 1152,
+      "owners": "one original bias slice at the final contraction PE"
+    },
+    "model.layers.12.mlp.experts.down_proj_blocks": {
+      "role": "mxfp4_matrix",
+      "region": "layer_12",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 18,
+      "contraction_tiles": 10,
+      "pes": 5760,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 15,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_nibbles"
+    },
+    "model.layers.12.mlp.experts.down_proj_scales": {
+      "role": "mxfp4_matrix",
+      "region": "layer_12",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 18,
+      "contraction_tiles": 10,
+      "pes": 5760,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 15,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_scale_bytes",
+      "shares_pes_with": "model.layers.12.mlp.experts.down_proj_blocks"
+    },
+    "model.layers.12.mlp.experts.down_proj_bias": {
+      "role": "expert_bias",
+      "region": "layer_12",
+      "shares_pes_with": "model.layers.12.mlp.experts.down_proj_blocks",
+      "contraction_tile": 9,
+      "bytes_per_owner_pe": 320,
+      "pes": 576,
+      "owners": "one original bias slice at the final contraction PE"
+    },
+    "model.layers.13.input_layernorm.weight": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_13",
+      "support_linear_begin": 0,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.13.mlp.router.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 64,
+      "region": "layer_13",
+      "support_linear_begin": 1,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.13.mlp.router.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_13",
+      "support_linear_begin": 2,
+      "pes": 30,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.13.post_attention_layernorm.weight": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_13",
+      "support_linear_begin": 32,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.13.self_attn.k_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 1024,
+      "region": "layer_13",
+      "support_linear_begin": 33,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.13.self_attn.k_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_13",
+      "support_linear_begin": 34,
+      "pes": 120,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.13.self_attn.o_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_13",
+      "support_linear_begin": 154,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.13.self_attn.o_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_13",
+      "support_linear_begin": 155,
+      "pes": 989,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.13.self_attn.q_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 8192,
+      "region": "layer_13",
+      "support_linear_begin": 1144,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.13.self_attn.q_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_13",
+      "support_linear_begin": 1145,
+      "pes": 960,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.13.self_attn.sinks": {
+      "role": "bf16_vector",
+      "tensor_bytes": 128,
+      "region": "layer_13",
+      "support_linear_begin": 2105,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.13.self_attn.v_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 1024,
+      "region": "layer_13",
+      "support_linear_begin": 2106,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.13.self_attn.v_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_13",
+      "support_linear_begin": 2107,
+      "pes": 120,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.13.mlp.experts.gate_up_proj_blocks": {
+      "role": "mxfp4_matrix",
+      "region": "layer_13",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 36,
+      "contraction_tiles": 10,
+      "pes": 11520,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 4,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_nibbles"
+    },
+    "model.layers.13.mlp.experts.gate_up_proj_scales": {
+      "role": "mxfp4_matrix",
+      "region": "layer_13",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 36,
+      "contraction_tiles": 10,
+      "pes": 11520,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 4,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_scale_bytes",
+      "shares_pes_with": "model.layers.13.mlp.experts.gate_up_proj_blocks"
+    },
+    "model.layers.13.mlp.experts.gate_up_proj_bias": {
+      "role": "expert_bias",
+      "region": "layer_13",
+      "shares_pes_with": "model.layers.13.mlp.experts.gate_up_proj_blocks",
+      "contraction_tile": 9,
+      "bytes_per_owner_pe": 320,
+      "pes": 1152,
+      "owners": "one original bias slice at the final contraction PE"
+    },
+    "model.layers.13.mlp.experts.down_proj_blocks": {
+      "role": "mxfp4_matrix",
+      "region": "layer_13",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 18,
+      "contraction_tiles": 10,
+      "pes": 5760,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 15,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_nibbles"
+    },
+    "model.layers.13.mlp.experts.down_proj_scales": {
+      "role": "mxfp4_matrix",
+      "region": "layer_13",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 18,
+      "contraction_tiles": 10,
+      "pes": 5760,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 15,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_scale_bytes",
+      "shares_pes_with": "model.layers.13.mlp.experts.down_proj_blocks"
+    },
+    "model.layers.13.mlp.experts.down_proj_bias": {
+      "role": "expert_bias",
+      "region": "layer_13",
+      "shares_pes_with": "model.layers.13.mlp.experts.down_proj_blocks",
+      "contraction_tile": 9,
+      "bytes_per_owner_pe": 320,
+      "pes": 576,
+      "owners": "one original bias slice at the final contraction PE"
+    },
+    "model.layers.14.input_layernorm.weight": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_14",
+      "support_linear_begin": 0,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.14.mlp.router.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 64,
+      "region": "layer_14",
+      "support_linear_begin": 1,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.14.mlp.router.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_14",
+      "support_linear_begin": 2,
+      "pes": 30,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.14.post_attention_layernorm.weight": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_14",
+      "support_linear_begin": 32,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.14.self_attn.k_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 1024,
+      "region": "layer_14",
+      "support_linear_begin": 33,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.14.self_attn.k_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_14",
+      "support_linear_begin": 34,
+      "pes": 120,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.14.self_attn.o_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_14",
+      "support_linear_begin": 154,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.14.self_attn.o_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_14",
+      "support_linear_begin": 155,
+      "pes": 989,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.14.self_attn.q_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 8192,
+      "region": "layer_14",
+      "support_linear_begin": 1144,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.14.self_attn.q_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_14",
+      "support_linear_begin": 1145,
+      "pes": 960,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.14.self_attn.sinks": {
+      "role": "bf16_vector",
+      "tensor_bytes": 128,
+      "region": "layer_14",
+      "support_linear_begin": 2105,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.14.self_attn.v_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 1024,
+      "region": "layer_14",
+      "support_linear_begin": 2106,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.14.self_attn.v_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_14",
+      "support_linear_begin": 2107,
+      "pes": 120,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.14.mlp.experts.gate_up_proj_blocks": {
+      "role": "mxfp4_matrix",
+      "region": "layer_14",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 36,
+      "contraction_tiles": 10,
+      "pes": 11520,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 4,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_nibbles"
+    },
+    "model.layers.14.mlp.experts.gate_up_proj_scales": {
+      "role": "mxfp4_matrix",
+      "region": "layer_14",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 36,
+      "contraction_tiles": 10,
+      "pes": 11520,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 4,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_scale_bytes",
+      "shares_pes_with": "model.layers.14.mlp.experts.gate_up_proj_blocks"
+    },
+    "model.layers.14.mlp.experts.gate_up_proj_bias": {
+      "role": "expert_bias",
+      "region": "layer_14",
+      "shares_pes_with": "model.layers.14.mlp.experts.gate_up_proj_blocks",
+      "contraction_tile": 9,
+      "bytes_per_owner_pe": 320,
+      "pes": 1152,
+      "owners": "one original bias slice at the final contraction PE"
+    },
+    "model.layers.14.mlp.experts.down_proj_blocks": {
+      "role": "mxfp4_matrix",
+      "region": "layer_14",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 18,
+      "contraction_tiles": 10,
+      "pes": 5760,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 15,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_nibbles"
+    },
+    "model.layers.14.mlp.experts.down_proj_scales": {
+      "role": "mxfp4_matrix",
+      "region": "layer_14",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 18,
+      "contraction_tiles": 10,
+      "pes": 5760,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 15,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_scale_bytes",
+      "shares_pes_with": "model.layers.14.mlp.experts.down_proj_blocks"
+    },
+    "model.layers.14.mlp.experts.down_proj_bias": {
+      "role": "expert_bias",
+      "region": "layer_14",
+      "shares_pes_with": "model.layers.14.mlp.experts.down_proj_blocks",
+      "contraction_tile": 9,
+      "bytes_per_owner_pe": 320,
+      "pes": 576,
+      "owners": "one original bias slice at the final contraction PE"
+    },
+    "model.layers.15.input_layernorm.weight": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_15",
+      "support_linear_begin": 0,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.15.mlp.router.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 64,
+      "region": "layer_15",
+      "support_linear_begin": 1,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.15.mlp.router.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_15",
+      "support_linear_begin": 2,
+      "pes": 30,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.15.post_attention_layernorm.weight": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_15",
+      "support_linear_begin": 32,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.15.self_attn.k_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 1024,
+      "region": "layer_15",
+      "support_linear_begin": 33,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.15.self_attn.k_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_15",
+      "support_linear_begin": 34,
+      "pes": 120,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.15.self_attn.o_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_15",
+      "support_linear_begin": 154,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.15.self_attn.o_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_15",
+      "support_linear_begin": 155,
+      "pes": 989,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.15.self_attn.q_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 8192,
+      "region": "layer_15",
+      "support_linear_begin": 1144,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.15.self_attn.q_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_15",
+      "support_linear_begin": 1145,
+      "pes": 960,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.15.self_attn.sinks": {
+      "role": "bf16_vector",
+      "tensor_bytes": 128,
+      "region": "layer_15",
+      "support_linear_begin": 2105,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.15.self_attn.v_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 1024,
+      "region": "layer_15",
+      "support_linear_begin": 2106,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.15.self_attn.v_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_15",
+      "support_linear_begin": 2107,
+      "pes": 120,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.15.mlp.experts.gate_up_proj_blocks": {
+      "role": "mxfp4_matrix",
+      "region": "layer_15",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 36,
+      "contraction_tiles": 10,
+      "pes": 11520,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 4,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_nibbles"
+    },
+    "model.layers.15.mlp.experts.gate_up_proj_scales": {
+      "role": "mxfp4_matrix",
+      "region": "layer_15",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 36,
+      "contraction_tiles": 10,
+      "pes": 11520,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 4,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_scale_bytes",
+      "shares_pes_with": "model.layers.15.mlp.experts.gate_up_proj_blocks"
+    },
+    "model.layers.15.mlp.experts.gate_up_proj_bias": {
+      "role": "expert_bias",
+      "region": "layer_15",
+      "shares_pes_with": "model.layers.15.mlp.experts.gate_up_proj_blocks",
+      "contraction_tile": 9,
+      "bytes_per_owner_pe": 320,
+      "pes": 1152,
+      "owners": "one original bias slice at the final contraction PE"
+    },
+    "model.layers.15.mlp.experts.down_proj_blocks": {
+      "role": "mxfp4_matrix",
+      "region": "layer_15",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 18,
+      "contraction_tiles": 10,
+      "pes": 5760,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 15,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_nibbles"
+    },
+    "model.layers.15.mlp.experts.down_proj_scales": {
+      "role": "mxfp4_matrix",
+      "region": "layer_15",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 18,
+      "contraction_tiles": 10,
+      "pes": 5760,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 15,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_scale_bytes",
+      "shares_pes_with": "model.layers.15.mlp.experts.down_proj_blocks"
+    },
+    "model.layers.15.mlp.experts.down_proj_bias": {
+      "role": "expert_bias",
+      "region": "layer_15",
+      "shares_pes_with": "model.layers.15.mlp.experts.down_proj_blocks",
+      "contraction_tile": 9,
+      "bytes_per_owner_pe": 320,
+      "pes": 576,
+      "owners": "one original bias slice at the final contraction PE"
+    },
+    "model.layers.16.input_layernorm.weight": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_16",
+      "support_linear_begin": 0,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.16.mlp.router.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 64,
+      "region": "layer_16",
+      "support_linear_begin": 1,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.16.mlp.router.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_16",
+      "support_linear_begin": 2,
+      "pes": 30,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.16.post_attention_layernorm.weight": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_16",
+      "support_linear_begin": 32,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.16.self_attn.k_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 1024,
+      "region": "layer_16",
+      "support_linear_begin": 33,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.16.self_attn.k_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_16",
+      "support_linear_begin": 34,
+      "pes": 120,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.16.self_attn.o_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_16",
+      "support_linear_begin": 154,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.16.self_attn.o_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_16",
+      "support_linear_begin": 155,
+      "pes": 989,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.16.self_attn.q_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 8192,
+      "region": "layer_16",
+      "support_linear_begin": 1144,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.16.self_attn.q_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_16",
+      "support_linear_begin": 1145,
+      "pes": 960,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.16.self_attn.sinks": {
+      "role": "bf16_vector",
+      "tensor_bytes": 128,
+      "region": "layer_16",
+      "support_linear_begin": 2105,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.16.self_attn.v_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 1024,
+      "region": "layer_16",
+      "support_linear_begin": 2106,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.16.self_attn.v_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_16",
+      "support_linear_begin": 2107,
+      "pes": 120,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.16.mlp.experts.gate_up_proj_blocks": {
+      "role": "mxfp4_matrix",
+      "region": "layer_16",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 36,
+      "contraction_tiles": 10,
+      "pes": 11520,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 4,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_nibbles"
+    },
+    "model.layers.16.mlp.experts.gate_up_proj_scales": {
+      "role": "mxfp4_matrix",
+      "region": "layer_16",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 36,
+      "contraction_tiles": 10,
+      "pes": 11520,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 4,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_scale_bytes",
+      "shares_pes_with": "model.layers.16.mlp.experts.gate_up_proj_blocks"
+    },
+    "model.layers.16.mlp.experts.gate_up_proj_bias": {
+      "role": "expert_bias",
+      "region": "layer_16",
+      "shares_pes_with": "model.layers.16.mlp.experts.gate_up_proj_blocks",
+      "contraction_tile": 9,
+      "bytes_per_owner_pe": 320,
+      "pes": 1152,
+      "owners": "one original bias slice at the final contraction PE"
+    },
+    "model.layers.16.mlp.experts.down_proj_blocks": {
+      "role": "mxfp4_matrix",
+      "region": "layer_16",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 18,
+      "contraction_tiles": 10,
+      "pes": 5760,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 15,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_nibbles"
+    },
+    "model.layers.16.mlp.experts.down_proj_scales": {
+      "role": "mxfp4_matrix",
+      "region": "layer_16",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 18,
+      "contraction_tiles": 10,
+      "pes": 5760,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 15,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_scale_bytes",
+      "shares_pes_with": "model.layers.16.mlp.experts.down_proj_blocks"
+    },
+    "model.layers.16.mlp.experts.down_proj_bias": {
+      "role": "expert_bias",
+      "region": "layer_16",
+      "shares_pes_with": "model.layers.16.mlp.experts.down_proj_blocks",
+      "contraction_tile": 9,
+      "bytes_per_owner_pe": 320,
+      "pes": 576,
+      "owners": "one original bias slice at the final contraction PE"
+    },
+    "model.layers.17.input_layernorm.weight": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_17",
+      "support_linear_begin": 0,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.17.mlp.router.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 64,
+      "region": "layer_17",
+      "support_linear_begin": 1,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.17.mlp.router.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_17",
+      "support_linear_begin": 2,
+      "pes": 30,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.17.post_attention_layernorm.weight": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_17",
+      "support_linear_begin": 32,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.17.self_attn.k_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 1024,
+      "region": "layer_17",
+      "support_linear_begin": 33,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.17.self_attn.k_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_17",
+      "support_linear_begin": 34,
+      "pes": 120,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.17.self_attn.o_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_17",
+      "support_linear_begin": 154,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.17.self_attn.o_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_17",
+      "support_linear_begin": 155,
+      "pes": 989,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.17.self_attn.q_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 8192,
+      "region": "layer_17",
+      "support_linear_begin": 1144,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.17.self_attn.q_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_17",
+      "support_linear_begin": 1145,
+      "pes": 960,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.17.self_attn.sinks": {
+      "role": "bf16_vector",
+      "tensor_bytes": 128,
+      "region": "layer_17",
+      "support_linear_begin": 2105,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.17.self_attn.v_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 1024,
+      "region": "layer_17",
+      "support_linear_begin": 2106,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.17.self_attn.v_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_17",
+      "support_linear_begin": 2107,
+      "pes": 120,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.17.mlp.experts.gate_up_proj_blocks": {
+      "role": "mxfp4_matrix",
+      "region": "layer_17",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 36,
+      "contraction_tiles": 10,
+      "pes": 11520,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 4,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_nibbles"
+    },
+    "model.layers.17.mlp.experts.gate_up_proj_scales": {
+      "role": "mxfp4_matrix",
+      "region": "layer_17",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 36,
+      "contraction_tiles": 10,
+      "pes": 11520,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 4,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_scale_bytes",
+      "shares_pes_with": "model.layers.17.mlp.experts.gate_up_proj_blocks"
+    },
+    "model.layers.17.mlp.experts.gate_up_proj_bias": {
+      "role": "expert_bias",
+      "region": "layer_17",
+      "shares_pes_with": "model.layers.17.mlp.experts.gate_up_proj_blocks",
+      "contraction_tile": 9,
+      "bytes_per_owner_pe": 320,
+      "pes": 1152,
+      "owners": "one original bias slice at the final contraction PE"
+    },
+    "model.layers.17.mlp.experts.down_proj_blocks": {
+      "role": "mxfp4_matrix",
+      "region": "layer_17",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 18,
+      "contraction_tiles": 10,
+      "pes": 5760,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 15,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_nibbles"
+    },
+    "model.layers.17.mlp.experts.down_proj_scales": {
+      "role": "mxfp4_matrix",
+      "region": "layer_17",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 18,
+      "contraction_tiles": 10,
+      "pes": 5760,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 15,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_scale_bytes",
+      "shares_pes_with": "model.layers.17.mlp.experts.down_proj_blocks"
+    },
+    "model.layers.17.mlp.experts.down_proj_bias": {
+      "role": "expert_bias",
+      "region": "layer_17",
+      "shares_pes_with": "model.layers.17.mlp.experts.down_proj_blocks",
+      "contraction_tile": 9,
+      "bytes_per_owner_pe": 320,
+      "pes": 576,
+      "owners": "one original bias slice at the final contraction PE"
+    },
+    "model.layers.18.input_layernorm.weight": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_18",
+      "support_linear_begin": 0,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.18.mlp.router.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 64,
+      "region": "layer_18",
+      "support_linear_begin": 1,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.18.mlp.router.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_18",
+      "support_linear_begin": 2,
+      "pes": 30,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.18.post_attention_layernorm.weight": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_18",
+      "support_linear_begin": 32,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.18.self_attn.k_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 1024,
+      "region": "layer_18",
+      "support_linear_begin": 33,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.18.self_attn.k_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_18",
+      "support_linear_begin": 34,
+      "pes": 120,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.18.self_attn.o_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_18",
+      "support_linear_begin": 154,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.18.self_attn.o_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_18",
+      "support_linear_begin": 155,
+      "pes": 989,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.18.self_attn.q_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 8192,
+      "region": "layer_18",
+      "support_linear_begin": 1144,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.18.self_attn.q_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_18",
+      "support_linear_begin": 1145,
+      "pes": 960,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.18.self_attn.sinks": {
+      "role": "bf16_vector",
+      "tensor_bytes": 128,
+      "region": "layer_18",
+      "support_linear_begin": 2105,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.18.self_attn.v_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 1024,
+      "region": "layer_18",
+      "support_linear_begin": 2106,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.18.self_attn.v_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_18",
+      "support_linear_begin": 2107,
+      "pes": 120,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.18.mlp.experts.gate_up_proj_blocks": {
+      "role": "mxfp4_matrix",
+      "region": "layer_18",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 36,
+      "contraction_tiles": 10,
+      "pes": 11520,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 4,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_nibbles"
+    },
+    "model.layers.18.mlp.experts.gate_up_proj_scales": {
+      "role": "mxfp4_matrix",
+      "region": "layer_18",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 36,
+      "contraction_tiles": 10,
+      "pes": 11520,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 4,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_scale_bytes",
+      "shares_pes_with": "model.layers.18.mlp.experts.gate_up_proj_blocks"
+    },
+    "model.layers.18.mlp.experts.gate_up_proj_bias": {
+      "role": "expert_bias",
+      "region": "layer_18",
+      "shares_pes_with": "model.layers.18.mlp.experts.gate_up_proj_blocks",
+      "contraction_tile": 9,
+      "bytes_per_owner_pe": 320,
+      "pes": 1152,
+      "owners": "one original bias slice at the final contraction PE"
+    },
+    "model.layers.18.mlp.experts.down_proj_blocks": {
+      "role": "mxfp4_matrix",
+      "region": "layer_18",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 18,
+      "contraction_tiles": 10,
+      "pes": 5760,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 15,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_nibbles"
+    },
+    "model.layers.18.mlp.experts.down_proj_scales": {
+      "role": "mxfp4_matrix",
+      "region": "layer_18",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 18,
+      "contraction_tiles": 10,
+      "pes": 5760,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 15,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_scale_bytes",
+      "shares_pes_with": "model.layers.18.mlp.experts.down_proj_blocks"
+    },
+    "model.layers.18.mlp.experts.down_proj_bias": {
+      "role": "expert_bias",
+      "region": "layer_18",
+      "shares_pes_with": "model.layers.18.mlp.experts.down_proj_blocks",
+      "contraction_tile": 9,
+      "bytes_per_owner_pe": 320,
+      "pes": 576,
+      "owners": "one original bias slice at the final contraction PE"
+    },
+    "model.layers.19.input_layernorm.weight": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_19",
+      "support_linear_begin": 0,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.19.mlp.router.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 64,
+      "region": "layer_19",
+      "support_linear_begin": 1,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.19.mlp.router.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_19",
+      "support_linear_begin": 2,
+      "pes": 30,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.19.post_attention_layernorm.weight": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_19",
+      "support_linear_begin": 32,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.19.self_attn.k_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 1024,
+      "region": "layer_19",
+      "support_linear_begin": 33,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.19.self_attn.k_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_19",
+      "support_linear_begin": 34,
+      "pes": 120,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.19.self_attn.o_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_19",
+      "support_linear_begin": 154,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.19.self_attn.o_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_19",
+      "support_linear_begin": 155,
+      "pes": 989,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.19.self_attn.q_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 8192,
+      "region": "layer_19",
+      "support_linear_begin": 1144,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.19.self_attn.q_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_19",
+      "support_linear_begin": 1145,
+      "pes": 960,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.19.self_attn.sinks": {
+      "role": "bf16_vector",
+      "tensor_bytes": 128,
+      "region": "layer_19",
+      "support_linear_begin": 2105,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.19.self_attn.v_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 1024,
+      "region": "layer_19",
+      "support_linear_begin": 2106,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.19.self_attn.v_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_19",
+      "support_linear_begin": 2107,
+      "pes": 120,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.19.mlp.experts.gate_up_proj_blocks": {
+      "role": "mxfp4_matrix",
+      "region": "layer_19",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 36,
+      "contraction_tiles": 10,
+      "pes": 11520,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 4,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_nibbles"
+    },
+    "model.layers.19.mlp.experts.gate_up_proj_scales": {
+      "role": "mxfp4_matrix",
+      "region": "layer_19",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 36,
+      "contraction_tiles": 10,
+      "pes": 11520,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 4,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_scale_bytes",
+      "shares_pes_with": "model.layers.19.mlp.experts.gate_up_proj_blocks"
+    },
+    "model.layers.19.mlp.experts.gate_up_proj_bias": {
+      "role": "expert_bias",
+      "region": "layer_19",
+      "shares_pes_with": "model.layers.19.mlp.experts.gate_up_proj_blocks",
+      "contraction_tile": 9,
+      "bytes_per_owner_pe": 320,
+      "pes": 1152,
+      "owners": "one original bias slice at the final contraction PE"
+    },
+    "model.layers.19.mlp.experts.down_proj_blocks": {
+      "role": "mxfp4_matrix",
+      "region": "layer_19",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 18,
+      "contraction_tiles": 10,
+      "pes": 5760,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 15,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_nibbles"
+    },
+    "model.layers.19.mlp.experts.down_proj_scales": {
+      "role": "mxfp4_matrix",
+      "region": "layer_19",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 18,
+      "contraction_tiles": 10,
+      "pes": 5760,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 15,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_scale_bytes",
+      "shares_pes_with": "model.layers.19.mlp.experts.down_proj_blocks"
+    },
+    "model.layers.19.mlp.experts.down_proj_bias": {
+      "role": "expert_bias",
+      "region": "layer_19",
+      "shares_pes_with": "model.layers.19.mlp.experts.down_proj_blocks",
+      "contraction_tile": 9,
+      "bytes_per_owner_pe": 320,
+      "pes": 576,
+      "owners": "one original bias slice at the final contraction PE"
+    },
+    "model.layers.20.input_layernorm.weight": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_20",
+      "support_linear_begin": 0,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.20.mlp.router.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 64,
+      "region": "layer_20",
+      "support_linear_begin": 1,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.20.mlp.router.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_20",
+      "support_linear_begin": 2,
+      "pes": 30,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.20.post_attention_layernorm.weight": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_20",
+      "support_linear_begin": 32,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.20.self_attn.k_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 1024,
+      "region": "layer_20",
+      "support_linear_begin": 33,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.20.self_attn.k_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_20",
+      "support_linear_begin": 34,
+      "pes": 120,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.20.self_attn.o_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_20",
+      "support_linear_begin": 154,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.20.self_attn.o_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_20",
+      "support_linear_begin": 155,
+      "pes": 989,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.20.self_attn.q_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 8192,
+      "region": "layer_20",
+      "support_linear_begin": 1144,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.20.self_attn.q_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_20",
+      "support_linear_begin": 1145,
+      "pes": 960,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.20.self_attn.sinks": {
+      "role": "bf16_vector",
+      "tensor_bytes": 128,
+      "region": "layer_20",
+      "support_linear_begin": 2105,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.20.self_attn.v_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 1024,
+      "region": "layer_20",
+      "support_linear_begin": 2106,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.20.self_attn.v_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_20",
+      "support_linear_begin": 2107,
+      "pes": 120,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.20.mlp.experts.gate_up_proj_blocks": {
+      "role": "mxfp4_matrix",
+      "region": "layer_20",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 36,
+      "contraction_tiles": 10,
+      "pes": 11520,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 4,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_nibbles"
+    },
+    "model.layers.20.mlp.experts.gate_up_proj_scales": {
+      "role": "mxfp4_matrix",
+      "region": "layer_20",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 36,
+      "contraction_tiles": 10,
+      "pes": 11520,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 4,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_scale_bytes",
+      "shares_pes_with": "model.layers.20.mlp.experts.gate_up_proj_blocks"
+    },
+    "model.layers.20.mlp.experts.gate_up_proj_bias": {
+      "role": "expert_bias",
+      "region": "layer_20",
+      "shares_pes_with": "model.layers.20.mlp.experts.gate_up_proj_blocks",
+      "contraction_tile": 9,
+      "bytes_per_owner_pe": 320,
+      "pes": 1152,
+      "owners": "one original bias slice at the final contraction PE"
+    },
+    "model.layers.20.mlp.experts.down_proj_blocks": {
+      "role": "mxfp4_matrix",
+      "region": "layer_20",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 18,
+      "contraction_tiles": 10,
+      "pes": 5760,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 15,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_nibbles"
+    },
+    "model.layers.20.mlp.experts.down_proj_scales": {
+      "role": "mxfp4_matrix",
+      "region": "layer_20",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 18,
+      "contraction_tiles": 10,
+      "pes": 5760,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 15,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_scale_bytes",
+      "shares_pes_with": "model.layers.20.mlp.experts.down_proj_blocks"
+    },
+    "model.layers.20.mlp.experts.down_proj_bias": {
+      "role": "expert_bias",
+      "region": "layer_20",
+      "shares_pes_with": "model.layers.20.mlp.experts.down_proj_blocks",
+      "contraction_tile": 9,
+      "bytes_per_owner_pe": 320,
+      "pes": 576,
+      "owners": "one original bias slice at the final contraction PE"
+    },
+    "model.layers.21.input_layernorm.weight": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_21",
+      "support_linear_begin": 0,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.21.mlp.router.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 64,
+      "region": "layer_21",
+      "support_linear_begin": 1,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.21.mlp.router.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_21",
+      "support_linear_begin": 2,
+      "pes": 30,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.21.post_attention_layernorm.weight": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_21",
+      "support_linear_begin": 32,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.21.self_attn.k_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 1024,
+      "region": "layer_21",
+      "support_linear_begin": 33,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.21.self_attn.k_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_21",
+      "support_linear_begin": 34,
+      "pes": 120,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.21.self_attn.o_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_21",
+      "support_linear_begin": 154,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.21.self_attn.o_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_21",
+      "support_linear_begin": 155,
+      "pes": 989,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.21.self_attn.q_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 8192,
+      "region": "layer_21",
+      "support_linear_begin": 1144,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.21.self_attn.q_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_21",
+      "support_linear_begin": 1145,
+      "pes": 960,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.21.self_attn.sinks": {
+      "role": "bf16_vector",
+      "tensor_bytes": 128,
+      "region": "layer_21",
+      "support_linear_begin": 2105,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.21.self_attn.v_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 1024,
+      "region": "layer_21",
+      "support_linear_begin": 2106,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.21.self_attn.v_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_21",
+      "support_linear_begin": 2107,
+      "pes": 120,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.21.mlp.experts.gate_up_proj_blocks": {
+      "role": "mxfp4_matrix",
+      "region": "layer_21",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 36,
+      "contraction_tiles": 10,
+      "pes": 11520,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 4,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_nibbles"
+    },
+    "model.layers.21.mlp.experts.gate_up_proj_scales": {
+      "role": "mxfp4_matrix",
+      "region": "layer_21",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 36,
+      "contraction_tiles": 10,
+      "pes": 11520,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 4,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_scale_bytes",
+      "shares_pes_with": "model.layers.21.mlp.experts.gate_up_proj_blocks"
+    },
+    "model.layers.21.mlp.experts.gate_up_proj_bias": {
+      "role": "expert_bias",
+      "region": "layer_21",
+      "shares_pes_with": "model.layers.21.mlp.experts.gate_up_proj_blocks",
+      "contraction_tile": 9,
+      "bytes_per_owner_pe": 320,
+      "pes": 1152,
+      "owners": "one original bias slice at the final contraction PE"
+    },
+    "model.layers.21.mlp.experts.down_proj_blocks": {
+      "role": "mxfp4_matrix",
+      "region": "layer_21",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 18,
+      "contraction_tiles": 10,
+      "pes": 5760,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 15,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_nibbles"
+    },
+    "model.layers.21.mlp.experts.down_proj_scales": {
+      "role": "mxfp4_matrix",
+      "region": "layer_21",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 18,
+      "contraction_tiles": 10,
+      "pes": 5760,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 15,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_scale_bytes",
+      "shares_pes_with": "model.layers.21.mlp.experts.down_proj_blocks"
+    },
+    "model.layers.21.mlp.experts.down_proj_bias": {
+      "role": "expert_bias",
+      "region": "layer_21",
+      "shares_pes_with": "model.layers.21.mlp.experts.down_proj_blocks",
+      "contraction_tile": 9,
+      "bytes_per_owner_pe": 320,
+      "pes": 576,
+      "owners": "one original bias slice at the final contraction PE"
+    },
+    "model.layers.22.input_layernorm.weight": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_22",
+      "support_linear_begin": 0,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.22.mlp.router.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 64,
+      "region": "layer_22",
+      "support_linear_begin": 1,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.22.mlp.router.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_22",
+      "support_linear_begin": 2,
+      "pes": 30,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.22.post_attention_layernorm.weight": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_22",
+      "support_linear_begin": 32,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.22.self_attn.k_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 1024,
+      "region": "layer_22",
+      "support_linear_begin": 33,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.22.self_attn.k_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_22",
+      "support_linear_begin": 34,
+      "pes": 120,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.22.self_attn.o_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_22",
+      "support_linear_begin": 154,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.22.self_attn.o_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_22",
+      "support_linear_begin": 155,
+      "pes": 989,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.22.self_attn.q_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 8192,
+      "region": "layer_22",
+      "support_linear_begin": 1144,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.22.self_attn.q_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_22",
+      "support_linear_begin": 1145,
+      "pes": 960,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.22.self_attn.sinks": {
+      "role": "bf16_vector",
+      "tensor_bytes": 128,
+      "region": "layer_22",
+      "support_linear_begin": 2105,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.22.self_attn.v_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 1024,
+      "region": "layer_22",
+      "support_linear_begin": 2106,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.22.self_attn.v_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_22",
+      "support_linear_begin": 2107,
+      "pes": 120,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.22.mlp.experts.gate_up_proj_blocks": {
+      "role": "mxfp4_matrix",
+      "region": "layer_22",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 36,
+      "contraction_tiles": 10,
+      "pes": 11520,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 4,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_nibbles"
+    },
+    "model.layers.22.mlp.experts.gate_up_proj_scales": {
+      "role": "mxfp4_matrix",
+      "region": "layer_22",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 36,
+      "contraction_tiles": 10,
+      "pes": 11520,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 4,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_scale_bytes",
+      "shares_pes_with": "model.layers.22.mlp.experts.gate_up_proj_blocks"
+    },
+    "model.layers.22.mlp.experts.gate_up_proj_bias": {
+      "role": "expert_bias",
+      "region": "layer_22",
+      "shares_pes_with": "model.layers.22.mlp.experts.gate_up_proj_blocks",
+      "contraction_tile": 9,
+      "bytes_per_owner_pe": 320,
+      "pes": 1152,
+      "owners": "one original bias slice at the final contraction PE"
+    },
+    "model.layers.22.mlp.experts.down_proj_blocks": {
+      "role": "mxfp4_matrix",
+      "region": "layer_22",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 18,
+      "contraction_tiles": 10,
+      "pes": 5760,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 15,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_nibbles"
+    },
+    "model.layers.22.mlp.experts.down_proj_scales": {
+      "role": "mxfp4_matrix",
+      "region": "layer_22",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 18,
+      "contraction_tiles": 10,
+      "pes": 5760,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 15,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_scale_bytes",
+      "shares_pes_with": "model.layers.22.mlp.experts.down_proj_blocks"
+    },
+    "model.layers.22.mlp.experts.down_proj_bias": {
+      "role": "expert_bias",
+      "region": "layer_22",
+      "shares_pes_with": "model.layers.22.mlp.experts.down_proj_blocks",
+      "contraction_tile": 9,
+      "bytes_per_owner_pe": 320,
+      "pes": 576,
+      "owners": "one original bias slice at the final contraction PE"
+    },
+    "model.layers.23.input_layernorm.weight": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_23",
+      "support_linear_begin": 0,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.23.mlp.router.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 64,
+      "region": "layer_23",
+      "support_linear_begin": 1,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.23.mlp.router.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_23",
+      "support_linear_begin": 2,
+      "pes": 30,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.23.post_attention_layernorm.weight": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_23",
+      "support_linear_begin": 32,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.23.self_attn.k_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 1024,
+      "region": "layer_23",
+      "support_linear_begin": 33,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.23.self_attn.k_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_23",
+      "support_linear_begin": 34,
+      "pes": 120,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.23.self_attn.o_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 5760,
+      "region": "layer_23",
+      "support_linear_begin": 154,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.23.self_attn.o_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_23",
+      "support_linear_begin": 155,
+      "pes": 989,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.23.self_attn.q_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 8192,
+      "region": "layer_23",
+      "support_linear_begin": 1144,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.23.self_attn.q_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_23",
+      "support_linear_begin": 1145,
+      "pes": 960,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.23.self_attn.sinks": {
+      "role": "bf16_vector",
+      "tensor_bytes": 128,
+      "region": "layer_23",
+      "support_linear_begin": 2105,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.23.self_attn.v_proj.bias": {
+      "role": "bf16_vector",
+      "tensor_bytes": 1024,
+      "region": "layer_23",
+      "support_linear_begin": 2106,
+      "pes": 1,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.23.self_attn.v_proj.weight": {
+      "role": "bf16_matrix",
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "region": "layer_23",
+      "support_linear_begin": 2107,
+      "pes": 120,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.layers.23.mlp.experts.gate_up_proj_blocks": {
+      "role": "mxfp4_matrix",
+      "region": "layer_23",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 36,
+      "contraction_tiles": 10,
+      "pes": 11520,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 4,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_nibbles"
+    },
+    "model.layers.23.mlp.experts.gate_up_proj_scales": {
+      "role": "mxfp4_matrix",
+      "region": "layer_23",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 36,
+      "contraction_tiles": 10,
+      "pes": 11520,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 4,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_scale_bytes",
+      "shares_pes_with": "model.layers.23.mlp.experts.gate_up_proj_blocks"
+    },
+    "model.layers.23.mlp.experts.gate_up_proj_bias": {
+      "role": "expert_bias",
+      "region": "layer_23",
+      "shares_pes_with": "model.layers.23.mlp.experts.gate_up_proj_blocks",
+      "contraction_tile": 9,
+      "bytes_per_owner_pe": 320,
+      "pes": 1152,
+      "owners": "one original bias slice at the final contraction PE"
+    },
+    "model.layers.23.mlp.experts.down_proj_blocks": {
+      "role": "mxfp4_matrix",
+      "region": "layer_23",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 18,
+      "contraction_tiles": 10,
+      "pes": 5760,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 15,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_nibbles"
+    },
+    "model.layers.23.mlp.experts.down_proj_scales": {
+      "role": "mxfp4_matrix",
+      "region": "layer_23",
+      "experts": 32,
+      "logical_tile": [
+        160,
+        288
+      ],
+      "rows_per_expert": 18,
+      "contraction_tiles": 10,
+      "pes": 5760,
+      "packed_bytes_per_pe": 24480,
+      "x_offset": 15,
+      "expert_row_stride": 36,
+      "coordinate_formula": "(region.x + x_offset + k_tile, 36*expert + row_tile)",
+      "component": "packed_scale_bytes",
+      "shares_pes_with": "model.layers.23.mlp.experts.down_proj_blocks"
+    },
+    "model.layers.23.mlp.experts.down_proj_bias": {
+      "role": "expert_bias",
+      "region": "layer_23",
+      "shares_pes_with": "model.layers.23.mlp.experts.down_proj_blocks",
+      "contraction_tile": 9,
+      "bytes_per_owner_pe": 320,
+      "pes": 576,
+      "owners": "one original bias slice at the final contraction PE"
+    },
+    "model.embed_tokens.weight": {
+      "role": "bf16_matrix",
+      "region": "embedding",
+      "support_linear_begin": 0,
+      "pes": 47130,
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "lm_head.weight": {
+      "role": "bf16_matrix",
+      "region": "lm_head",
+      "support_linear_begin": 0,
+      "pes": 47130,
+      "logical_tile": [
+        128,
+        96
+      ],
+      "padded_weight_bytes_per_pe": 24576,
+      "coordinate_formula": "(region.x + i//1160, i%1160)"
+    },
+    "model.norm.weight": {
+      "role": "bf16_vector",
+      "region": "east_control",
+      "pes": 1,
+      "tensor_bytes": 5760
+    }
+  },
+  "runtime_contract": {
+    "weight_uploads": "once at initialization, all 32 experts in all 24 layers",
+    "request": "token ID and position enter west; all neural operands remain on wafer",
+    "expert_dispatch": "broadcast activation plus top-4 mask; only selected experts compute",
+    "expert_join": "four distinct selected expert results per output tile and request epoch",
+    "output": "east-side vocabulary projection and greedy token selection; D2H at east edge",
+    "persistent_state": "all parameters plus per-layer KV caches survive request release"
+  },
+  "remaining_gates": [
+    "actual whole-layout compiler task/queue/color ownership",
+    "all role ELF sections and dynamic buffer/stack bounds",
+    "complete attention and expert transpose/reduction routes",
+    "on-wafer all-layer continuous generation and numerical comparison"
+  ]
+}

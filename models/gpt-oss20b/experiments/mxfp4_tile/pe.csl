@@ -1,0 +1,26 @@
+param memcpy_params;
+const sys = @import_module("<memcpy/memcpy>", memcpy_params);
+const kernel = @import_module("mxfp4_gemv.csl", .{.rows=160, .columns=288});
+var weights = @zeros([11520]u16);
+var scales = @zeros([720]u16);
+var input = @zeros([288]f32);
+var output = @zeros([160]f32);
+var calls = @zeros([1]u32);
+const wp: [*]u16 = &weights;
+const sp: [*]u16 = &scales;
+const xp: [*]f32 = &input;
+const yp: [*]f32 = &output;
+const cp: [*]u32 = &calls;
+fn compute() void {
+  kernel.compute(wp, sp, xp, yp);
+  calls[0] += 1;
+  sys.unblock_cmd_stream();
+}
+comptime {
+  @export_symbol(wp, "weights");
+  @export_symbol(sp, "scales");
+  @export_symbol(xp, "input");
+  @export_symbol(yp, "output");
+  @export_symbol(cp, "calls");
+  @export_symbol(compute);
+}

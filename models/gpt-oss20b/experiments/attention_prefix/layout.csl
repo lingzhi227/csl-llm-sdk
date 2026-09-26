@@ -1,0 +1,89 @@
+// Complete layer-0 attention, original dimensions, persistent KV on eight PEs.
+const memcpy=@import_module("<memcpy/get_params>",.{.width=4,.height=1160});
+fn is_node(y:i16) bool {return y<8 or (y<1140 and y%30==29) or (y>=106 and y<=1052 and (y-106)%43==0);}
+fn node_index(y:i16) u16 {
+  var result:u16=0;for(@range(i16,y))|i|{if(is_node(i)){result+=1;}}return result;
+}
+layout {
+  @set_rectangle(4,1160);
+  for(@range(i16,4))|x|{for(@range(i16,1160))|y|{
+    if((x==0 and y<1140) or (x==1 and y<60)){
+      @set_tile_code(x,y,"projection.csl",.{.memcpy_params=memcpy.get_params(x),.kind=@as(u16,x),
+        .first=y%30==0,.last=y%30==29,.parity=@as(u16,(y%30)%2)});
+    }else if(x==1 and y>=64 and y<1053){
+      @set_tile_code(x,y,"projection.csl",.{.memcpy_params=memcpy.get_params(x),.kind=@as(u16,2),
+        .first=(y-64)%43==0,.last=(y-64)%43==42,.parity=@as(u16,((y-64)%43)%2)});
+    }else if(x==2 and y==0){
+      @set_tile_code(x,y,"attention_controller.csl",.{.memcpy_params=memcpy.get_params(x)});
+    }else if(x==2 and is_node(y)){
+      @set_tile_code(x,y,"prefix_collector.csl",.{.memcpy_params=memcpy.get_params(x),.parity=node_index(y)%2,.tail=y==1139});
+    }else if(x==3 and y<8){
+      @set_tile_code(x,y,"kv.csl",.{.memcpy_params=memcpy.get_params(x)});
+    }else{
+      @set_tile_code(x,y,"endpoint.csl",.{.memcpy_params=memcpy.get_params(x),.ingress=x==0 and y==1158,.egress=x==3 and y==1159});
+    }
+  }}
+  // West original residual travels north then east to the attention controller.
+  @set_color_config(0,1158,@get_color(12),.{.routes=.{.rx=.{RAMP},.tx=.{NORTH}}});
+  for(@range(i16,1,1158,1))|y|{@set_color_config(0,y,@get_color(12),.{.routes=.{.rx=.{SOUTH},.tx=.{NORTH}}});}
+  @set_color_config(0,0,@get_color(12),.{.routes=.{.rx=.{SOUTH},.tx=.{EAST}}});
+  @set_color_config(1,0,@get_color(12),.{.routes=.{.rx=.{WEST},.tx=.{EAST}}});
+  @set_color_config(2,0,@get_color(12),.{.routes=.{.rx=.{WEST},.tx=.{RAMP}}});
+  // Normalized input fans south across both original Q/K/V matrix banks.
+  @set_color_config(2,0,@get_color(3),.{.routes=.{.rx=.{RAMP},.tx=.{WEST}}});
+  for(@range(i16,2))|x|{
+    const height:i16=if(x==0) 1140 else 60;
+    for(@range(i16,height))|y|{
+      const k:i16=y%30;
+      @set_color_config(x,y,@get_color(3),.{.routes=.{.rx=if(y==0) .{EAST} else .{NORTH},
+        .tx=if(x==1 and y==0) .{RAMP,WEST,SOUTH} else if(y==height-1) .{RAMP} else .{RAMP,SOUTH}},
+        .filter=.{.kind=.{.counter=true},.count_data=true,.init_counter=@as(u16,(2880-k*96)%2880),.max_counter=95,.limit1=2879}});
+      if(k<29){@set_color_config(x,y,@get_color(if(k%2==0) 4 else 5),.{.routes=.{.rx=.{RAMP},.tx=.{SOUTH}}});}
+      if(k>0){@set_color_config(x,y,@get_color(if(k%2==1) 4 else 5),.{.routes=.{.rx=.{NORTH},.tx=.{RAMP}}});}
+      if(k==29){
+        const route_color=@get_color(if(x==0) 6 else 8);
+        @set_color_config(x,y,route_color,.{.routes=.{.rx=.{RAMP},.tx=.{EAST}}});
+        if(x==0){@set_color_config(1,y,route_color,.{.routes=.{.rx=.{WEST},.tx=.{EAST}}});}
+        @set_color_config(2,y,route_color,.{.routes=.{.rx=.{WEST},.tx=.{RAMP}}});
+      }
+    }
+  }
+  // Padded 4128-contraction O projection, with no truncation of 4096 real inputs.
+  @set_color_config(2,0,@get_color(7),.{.routes=.{.rx=.{RAMP},.tx=.{WEST}}});
+  @set_color_config(1,0,@get_color(7),.{.routes=.{.rx=.{EAST},.tx=.{SOUTH}}});
+  for(@range(i16,1,64,1))|y|{@set_color_config(1,y,@get_color(7),.{.routes=.{.rx=.{NORTH},.tx=.{SOUTH}}});}
+  for(@range(i16,64,1053,1))|y|{
+    const k:i16=(y-64)%43;
+    @set_color_config(1,y,@get_color(7),.{.routes=.{.rx=.{NORTH},.tx=if(y==1052) .{RAMP} else .{RAMP,SOUTH}},
+      .filter=.{.kind=.{.counter=true},.count_data=true,.init_counter=@as(u16,(4128-k*96)%4128),.max_counter=95,.limit1=4127}});
+    if(k<42){@set_color_config(1,y,@get_color(if(k%2==0) 4 else 5),.{.routes=.{.rx=.{RAMP},.tx=.{SOUTH}}});}
+    if(k>0){@set_color_config(1,y,@get_color(if(k%2==1) 4 else 5),.{.routes=.{.rx=.{NORTH},.tx=.{RAMP}}});}
+    if(k==42){
+      @set_color_config(1,y,@get_color(16),.{.routes=.{.rx=.{RAMP},.tx=.{EAST}}});
+      @set_color_config(2,y,@get_color(16),.{.routes=.{.rx=.{WEST},.tx=.{RAMP}}});
+    }
+  }
+  // Each collector node has one physical RX direction per color.
+  var previous:i16=0;
+  for(@range(i16,1,1140,1))|y|{if(is_node(y)){
+    const route_color=@get_color(if(node_index(y)%2==1) 4 else 5);
+    @set_color_config(2,y,route_color,.{.routes=.{.rx=.{RAMP},.tx=.{NORTH}}});
+    for(@range(i16,previous+1,y,1))|middle|{@set_color_config(2,middle,route_color,.{.routes=.{.rx=.{SOUTH},.tx=.{NORTH}}});}
+    @set_color_config(2,previous,route_color,.{.routes=.{.rx=.{SOUTH},.tx=.{RAMP}}});previous=y;
+  }}
+  @set_color_config(2,0,@get_color(10),.{.routes=.{.rx=.{RAMP},.tx=.{EAST}}});
+  for(@range(i16,8))|y|{
+    @set_color_config(3,y,@get_color(10),.{.routes=.{.rx=if(y==0) .{WEST} else .{NORTH},.tx=if(y==7) .{RAMP} else .{RAMP,SOUTH}}});
+    @set_color_config(3,y,@get_color(11),.{.routes=.{.rx=.{RAMP},.tx=.{WEST}}});
+    @set_color_config(2,y,@get_color(11),.{.routes=.{.rx=.{EAST},.tx=.{RAMP}}});
+  }
+  @set_color_config(2,0,@get_color(17),.{.routes=.{.rx=.{RAMP},.tx=.{EAST}}});
+  @set_color_config(3,0,@get_color(17),.{.routes=.{.rx=.{WEST},.tx=.{SOUTH}}});
+  for(@range(i16,1,1160,1))|y|{@set_color_config(3,y,@get_color(17),.{.routes=.{.rx=.{NORTH},.tx=if(y==1159) .{RAMP} else .{SOUTH}}});}
+  @export_name("identity",[*]u32,false);@export_name("counters",[*]u32,false);
+  @export_name("weights",[*]u16,false);@export_name("bias",[*]u16,false);@export_name("gain",[*]u16,false);
+  @export_name("hidden",[*]u32,false);@export_name("workspace",[*]u32,false);@export_name("frequencies",[*]f32,false);
+  @export_name("input",[*]f32,false);@export_name("output",[*]u32,false);
+  @export_name("keys",[*]u16,false);@export_name("values",[*]u16,false);@export_name("sinks",[*]u16,false);
+  @export_name("step",fn(u16,u16,u16)void);
+}

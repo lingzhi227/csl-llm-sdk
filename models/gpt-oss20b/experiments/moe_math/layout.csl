@@ -1,0 +1,10 @@
+const memcpy=@import_module("<memcpy/get_params>",.{.width=1,.height=1});
+layout {
+  @set_rectangle(1,1);
+  @set_tile_code(0,0,"pe.csl",.{.memcpy_params=memcpy.get_params(0)});
+  @export_name("logits",[*]u16,false);@export_name("ids",[*]u16,false);
+  @export_name("probabilities",[*]u16,false);@export_name("interleaved",[*]u16,false);
+  @export_name("activation",[*]u16,false);@export_name("experts",[*]u16,false);
+  @export_name("joined",[*]u16,false);
+  @export_name("route",fn()void);@export_name("activate",fn()void);@export_name("join",fn()void);
+}

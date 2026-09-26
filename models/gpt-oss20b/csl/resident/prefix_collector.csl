@@ -1,0 +1,50 @@
+// Fixed phase/index chooses one producer; higher nodes forward its packet north.
+param memcpy_params;param parity:u16;param tail:bool;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+var identity=@zeros([4]u32);var counters=@zeros([6]u32);var frame=@zeros([256]u32);
+const ip:[*]u32=&identity;const cp:[*]u32=&counters;
+const q0=@get_input_queue(2);const q1=@get_input_queue(3);const o=@get_input_queue(4);
+const vertical=@get_input_queue(5);const kv=@get_input_queue(6);const oq=@get_output_queue(2);
+const rx_dst=@get_dsr(dsr_dest,3);const rx_src=@get_dsr(dsr_src1,3);
+const tx_dst=@get_dsr(dsr_dest,4);const tx_src=@get_dsr(dsr_src1,4);
+const recv_task=@get_local_task_id(8);const sent_task=@get_local_task_id(9);
+var length:u16=64;
+fn receive(comptime queue:input_queue) void {
+  const mem=@get_dsd(mem1d_dsd,.{.base_address=&frame,.extent=1});
+  const wire=@get_dsd(fabin_dsd,.{.input_queue=queue,.extent=1});
+  @load_to_dsr(rx_dst,@set_dsd_length(mem,length));
+  @load_to_dsr(rx_src,@set_dsd_length(wire,length),.{.async=true,.activate=recv_task,.ut_id=@get_ut_id(3)});
+  @mov32(rx_dst,rx_src,.{.async=true});
+}
+task received() void {
+  counters[1]+=1;
+  const mem=@get_dsd(mem1d_dsd,.{.base_address=&frame,.extent=1});
+  const wire=@get_dsd(fabout_dsd,.{.output_queue=oq,.extent=1});
+  @load_to_dsr(tx_src,@set_dsd_length(mem,length));
+  @load_to_dsr(tx_dst,@set_dsd_length(wire,length),.{.async=true,.activate=sent_task,.ut_id=@get_ut_id(4)});
+  @mov32(tx_dst,tx_src,.{.async=true});
+}
+task sent() void {counters[2]+=1;sys.unblock_cmd_stream();}
+fn step(phase:u16,layer:u16,index:u16) void {
+  if(identity[0]!=@as(u32,layer)){sys.unblock_cmd_stream();return;}
+  if(phase==4 or phase==8 or phase==6){
+    const target:u32=if(phase==4) @as(u32,29+30*(index%38)) else if(phase==8) @as(u32,106+43*index) else @as(u32,index);
+    length=if(phase==6) 256 else 64;
+    if(identity[1]>target){sys.unblock_cmd_stream();}
+    else if(identity[1]<target){receive(vertical);}
+    else if(phase==6){receive(kv);}
+    else if(phase==8){receive(o);}
+    else if(index<38){receive(q0);}else{receive(q1);}
+  }else{
+    if(phase==9){counters[0]+=1;counters[4]+=1;}
+    sys.unblock_cmd_stream();
+  }
+}
+comptime {
+  @initialize_queue(q0,.{.color=@get_color(6)});@initialize_queue(q1,.{.color=@get_color(8)});
+  @initialize_queue(o,.{.color=@get_color(16)});@initialize_queue(kv,.{.color=@get_color(11)});
+  if(!tail){@initialize_queue(vertical,.{.color=@get_color(if(parity==0) 4 else 5)});}
+  @initialize_queue(oq,.{.color=@get_color(if(parity==1) 4 else 5)});
+  @bind_local_task(received,recv_task);@bind_local_task(sent,sent_task);
+  @export_symbol(ip,"identity");@export_symbol(cp,"counters");@export_symbol(step);
+}

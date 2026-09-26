@@ -1,0 +1,95 @@
+// Complete vocabulary projection and deterministic distributed greedy argmax.
+param memcpy_params;param valid:bool;param first:bool;param last:bool;param parity:u16;param column:u16;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const kernel=@import_module("bf16_gemv.csl",.{.rows=128,.columns=96});
+const math=@import_module("moe_math.csl");
+var identity=@zeros([4]u32);var counters=@zeros([6]u32);
+var weights=@zeros([if(valid) 12288 else 1]u16);var input=@zeros([if(valid) 96 else 1]f32);
+var partial=@zeros([if(valid) 128 else 1]f32);var previous=@zeros([if(valid and !first) 128 else 1]f32);
+var best=@zeros([3]u32);var western=@zeros([3]u32);var gathering:bool=false;
+const ip:[*]u32=&identity;const cp:[*]u32=&counters;const wp:[*]u16=&weights;const xp:[*]f32=&input;
+const iq=@get_input_queue(2);const rq=@get_input_queue(3);const horizontal_iq=@get_input_queue(4);
+const oq=@get_output_queue(3);const horizontal_oq=@get_output_queue(4);
+const rx_dst=@get_dsr(dsr_dest,3);const rx_src=@get_dsr(dsr_src1,3);
+const tx_dst=@get_dsr(dsr_dest,4);const tx_src=@get_dsr(dsr_src1,4);
+const sum_dst=@get_dsr(dsr_dest,5);const sum_src=@get_dsr(dsr_src1,5);
+const input_task=@get_local_task_id(8);const reduction_task=@get_local_task_id(9);
+const sent_task=@get_local_task_id(10);const horizontal_task=@get_local_task_id(11);
+fn send(data:[*]u32,count:u16,comptime queue:output_queue) void {
+  const mem=@get_dsd(mem1d_dsd,.{.base_address=data,.extent=count});
+  const wire=@get_dsd(fabout_dsd,.{.output_queue=queue,.extent=1});
+  @load_to_dsr(tx_src,mem);@load_to_dsr(tx_dst,@set_dsd_length(wire,count),.{.async=true,.activate=sent_task,.ut_id=@get_ut_id(4)});
+  @mov32(tx_dst,tx_src,.{.async=true});
+}
+fn ready() void {
+  if(comptime last){
+    best[0]=counters[0];best[1]=0xffffffff;best[2]=0xff800000;
+    if(comptime valid){
+      var maximum:f32=@bitcast(f32,best[2]);
+      for(@range(u16,128))|i|{
+        const score:f32=math.rounded(partial[i]);const token:u32=identity[2]*128+@as(u32,i);@assert(score==score);
+        if(score>maximum or (score==maximum and token<best[1])){maximum=score;best[1]=token;}
+      }
+      best[2]=@bitcast(u32,maximum);
+    }
+    counters[4]+=1;sys.unblock_cmd_stream();
+  }else{send(@ptrcast([*]u32,&partial),128,oq);}
+}
+task received() void {
+  kernel.compute(wp,xp,&partial);counters[1]+=1;
+  if(comptime first){ready();}
+  else{
+    const mem=@get_dsd(mem1d_dsd,.{.base_address=&previous,.extent=128});
+    const wire=@get_dsd(fabin_dsd,.{.input_queue=rq,.extent=128});
+    @load_to_dsr(sum_dst,mem);@load_to_dsr(sum_src,wire,.{.async=true,.activate=reduction_task,.ut_id=@get_ut_id(5)});
+    @mov32(sum_dst,sum_src,.{.async=true});
+  }
+}
+task reduced() void {for(@range(u16,128))|i|{partial[i]+=previous[i];}ready();}
+task horizontal_received() void {
+  @assert(western[0]==best[0]);const a:f32=@bitcast(f32,western[2]);const b:f32=@bitcast(f32,best[2]);
+  if(a>b or (a==b and western[1]<best[1])){best[1]=western[1];best[2]=western[2];}
+  send(&best,3,horizontal_oq);
+}
+task sent() void {if(gathering){counters[5]+=1;}else{counters[4]+=1;}sys.unblock_cmd_stream();}
+fn step(phase:u16,layer:u16,index:u16) void {
+  if(phase==15){
+    @assert(counters[0]==counters[4]);counters[0]+=1;gathering=false;
+    if(comptime valid){
+      const mem=@get_dsd(mem1d_dsd,.{.base_address=&input,.extent=96});
+      const wire=@get_dsd(fabin_dsd,.{.input_queue=iq,.extent=96});
+      @load_to_dsr(rx_dst,mem);@load_to_dsr(rx_src,wire,.{.async=true,.activate=input_task,.ut_id=@get_ut_id(3)});
+      @mov32(rx_dst,rx_src,.{.async=true});
+    }else{
+      if(comptime last){ready();}else{counters[4]+=1;sys.unblock_cmd_stream();}
+    }
+  }else if(phase==16){
+    if(comptime last){
+      if(identity[2]%38==@as(u32,index)){
+        @assert(counters[4]==counters[5]+1);gathering=true;
+        if(comptime column==0){send(&best,3,horizontal_oq);}
+        else{
+          const mem=@get_dsd(mem1d_dsd,.{.base_address=&western,.extent=3});
+          const wire=@get_dsd(fabin_dsd,.{.input_queue=horizontal_iq,.extent=3});
+          @load_to_dsr(rx_dst,mem);@load_to_dsr(rx_src,wire,.{.async=true,.activate=horizontal_task,.ut_id=@get_ut_id(3)});
+          @mov32(rx_dst,rx_src,.{.async=true});
+        }
+        return;
+      }
+    }
+    sys.unblock_cmd_stream();
+  }else{sys.unblock_cmd_stream();}
+}
+comptime {
+  if(valid){
+    @initialize_queue(iq,.{.color=@get_color(3)});@bind_local_task(received,input_task);
+    if(!first){@initialize_queue(rq,.{.color=@get_color(if(parity==1) 4 else 5)});@bind_local_task(reduced,reduction_task);}
+    if(!last){@initialize_queue(oq,.{.color=@get_color(if(parity==0) 4 else 5)});}
+  }
+  if(last){
+    if(column>0){@initialize_queue(horizontal_iq,.{.color=@get_color(if(column%2==1) 14 else 15)});}
+    @initialize_queue(horizontal_oq,.{.color=@get_color(if(column%2==0) 14 else 15)});@bind_local_task(horizontal_received,horizontal_task);
+  }
+  @bind_local_task(sent,sent_task);@export_symbol(ip,"identity");@export_symbol(cp,"counters");
+  @export_symbol(wp,"weights");@export_symbol(xp,"input");@export_symbol(step);
+}

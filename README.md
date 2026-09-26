@@ -1,25 +1,43 @@
 # CSL-LLM SDK
 
-**Building inference for open language models with handwritten Cerebras Systems Language (CSL), targeting sequential execution of three model stages on WSE-3.** We implement the numerical kernels, execution control and persistent model state, and use the Cerebras SDK to compile and run the device programs. The first target is **Qwen3.8-27B text inference**; the longer-term goal is a reusable SDK for related model architectures.
+**Handwritten Cerebras Systems Language (CSL) inference for open language models on WSE-3.** We implement numerical kernels, host control, placement, on-wafer communication and persistent model state, using the Cerebras SDK to compile and execute the device programs.
 
-**Latest accepted milestone:** original layers 0–19 completed five continuous
+| Model | Implementation and accepted scope |
+|---|---|
+| **[GPT-OSS-20B](models/gpt-oss20b/)** | Complete original 24-layer MoE on one physical WSE-3; all 32 experts per layer resident, dynamic top-4, full vocabulary head, two autoregressive tokens (`Hello, World`). All weights read back unchanged; actual-input numerical qualification passed. Strict whole-prefix CPU parity did not pass. |
+| **Qwen3.8-27B** | Original layers 0–19 completed five input positions on physical CS3; exactly 1,000 hidden values compared and the full checkpoint preserved. Remaining stages and full-model generation remain open; work is paused. |
+
+GPT-OSS source, reference preparation, bounded host lifecycle, compact evidence,
+[numerical contract](models/gpt-oss20b/docs/NUMERICAL-QUALIFICATION.md),
+[physical result report](models/gpt-oss20b/docs/PHYSICAL-INFERENCE-RESULT.md) and
+[reproduction guide](models/gpt-oss20b/docs/REPRODUCING-FULL-INFERENCE.md) are
+self-contained under `models/gpt-oss20b/`. Its initial KV capacity is 96 tokens;
+the accepted experiment covers two generated tokens, not long-context accuracy,
+corpus quality or steady-state throughput. Site launchers require local setup;
+model weights and SDK binaries are not distributed here.
+
+The existing root-level `core/`, `csl/`, `examples/` and historical reports retain
+the Qwen development line. The Qwen status and three-stage design below do not
+limit or describe the separate GPT-OSS backend.
+
+**Latest Qwen milestone:** original layers 0–19 completed five continuous
 input positions on one physical CS3. Exactly 1,000 reference-selected hidden
 values were compared, and all output rows plus the full checkpoint were saved.
 See the [Stage0 report](docs/STAGE0-COMPARISON-AND-PAUSE.md).
 
-**Qualification scope:** physical first-stage completion and a deliberately
+**Qwen qualification scope:** physical first-stage completion and a deliberately
 limited 1,000-value comparison. 480 values match BF16 bits exactly; maximum
 finite absolute difference is 0.5. No overall numerical pass, full operator
 coverage or whole-model error bound is claimed. Preservation checks file and
 byte integrity; it does not execute a neural or device restore validation.
 
-**Current work:** paused after Stage0 preservation and release. Original layers
+**Qwen work:** paused after Stage0 preservation and release. Original layers
 20–63, final normalization, the complete vocabulary head, dependent token
 generation and physical restoration of this full checkpoint remain open.
 Later-stage work requires a subsequent instruction. Historical preparation,
 static compilation and four-layer results retain their original scope.
 
-## 1. Project design
+## 1. Qwen project design
 
 Qwen3.8 combines recurrent DeltaNet layers with full-attention layers. This requires two forms of state that survive between token calls: recurrent matrices and attention key/value (KV) caches. Our research focuses on mapping that computation, state and communication explicitly onto the wafer's processing elements (PEs).
 
@@ -76,6 +94,7 @@ qualification. Complete stages and full-model inference remain open.
 
 | Path | Purpose |
 |---|---|
+| [`models/gpt-oss20b/`](models/gpt-oss20b) | Complete single-WSE-3 GPT-OSS-20B source, operator experiments, original reference, full-model evidence and deployment templates. |
 | [`examples/layer0_vertical/top_spine/`](examples/layer0_vertical/top_spine) | Complete generated vertical Layer0 device program, exact host mapping and actual static qualification; physical scope is documented separately. |
 | [`examples/layer0_vertical/physical_runtime/`](examples/layer0_vertical/physical_runtime) | Exact accepted Layer0 host capture, resource guards and post-release operator audit source; environment-specific inputs and admissions are excluded. |
 | [`examples/layer3_vertical/`](examples/layer3_vertical) | Exact accepted vertical Layer3 device and host/audit source, placement maps, and scoped physical evidence. |
@@ -108,6 +127,25 @@ qualification. Complete stages and full-model inference remain open.
 **Suggested first read:** follow the two-PE example from its [layout](examples/wp02/layout.csl) to [device program](examples/wp02/pe.csl), [host driver](examples/wp02/driver.py), [report](docs/WP02-REPORT.md) and [result record](evidence/wp02.json). For the model equations and precision rules, read the [semantics contract](docs/WP04-SEMANTICS.md).
 
 ## 3. Completed development log — newest first
+
+### GPT-OSS-20B · Complete resident MoE, two physical tokens · September 26, 2026 (UTC)
+
+The original 459 tensors (13,761,264,768 payload bytes) were loaded once across
+870,000 application PEs. All 24 layers, 32 resident experts per layer and the full
+201,088-entry vocabulary head generated `Hello` -> `,` -> ` World`, with persistent
+KV, on-wafer neural operands and unchanged exhaustive weight readback. All 2009
+programs passed SRAM checks; the largest ordinary section end plus declared
+4 KiB stack allowance was 43,056 bytes. The runtime stopped normally and released
+all owned jobs.
+
+The predeclared actual-input qualification passed 48 layer-step cases and 192
+selected-expert invocations. All 1,658,880 expert projection values satisfy their
+FP32 accumulation bounds, and all 552,960 SwiGLU values match the original
+operation exactly. Strict global CPU comparisons remain false; final hidden
+relative L2 differences were 0.9225% and 1.2884%. Recorded 0.883/0.896-second
+host-observed forwards are two bring-up observations, not a throughput benchmark.
+
+[Source](models/gpt-oss20b/) · [Report](models/gpt-oss20b/docs/PHYSICAL-INFERENCE-RESULT.md) · [Acceptance](models/gpt-oss20b/evidence/full-model-hw-003/COMPLETE.json) · [Publication provenance](models/gpt-oss20b/SOURCE_EXPORT.json)
 
 ### Original 20-layer Stage0 executed · 1,000-value comparison · Checkpoint preserved · September 24, 2026 UTC
 
@@ -725,10 +763,10 @@ PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest discover -s tests -v
 
 For simulator runs, follow the milestone reports and the [development guide](docs/DEVELOPMENT.md). A separately installed Cerebras SDK 2.10.1 and Singularity are required. The repository includes source and sanitized evidence; SDK distributions, model weight payloads and private runtime artifacts are excluded.
 
-**Paused after Stage0:** original layers 0–19 have completed five-position
+**Qwen paused after Stage0:** original layers 0–19 have completed five-position
 physical execution, the requested 1,000-value comparison and checkpoint file
 preservation. Complete numerical qualification, remaining stages, the full
 vocabulary head, dependent tokens and physical checkpoint restoration remain
 open. See [status](docs/STATUS.md) and [milestones](docs/MILESTONES.md).
 
-MIT licensed; see [LICENSE](LICENSE). This is an independent research project, not an official Cerebras inference product.
+Our project code is MIT licensed; see [LICENSE](LICENSE). The bundled original OpenAI reference retains its [Apache-2.0 license](models/gpt-oss20b/reference/upstream/LICENSE) and [provenance](models/gpt-oss20b/reference/PROVENANCE.md). This is an independent research project, not an official Cerebras inference product.

@@ -1,0 +1,30 @@
+const math=@import_module("<math>");
+const codec=@import_module("moe_math.csl",.{});
+const trig=@import_module("rotary_trig.csl",.{});
+
+fn normalize(input:[*]u16,gain:[*]u16,output:[*]u16) void {
+  // Large outlier channels otherwise absorb small squared terms in a serial
+  // FP32 sum. Keep the rounding residual without changing model precision.
+  var sum:f32=0.0;var correction:f32=0.0;
+  for(@range(u16,2880))|i|{
+    const x=codec.f32_from_bf16(input[i]);const adjusted:f32=x*x-correction;
+    const next:f32=sum+adjusted;correction=(next-sum)-adjusted;sum=next;
+  }
+  const inverse:f32=1.0/math.sqrt_f32(sum/2880.0+0.00001);
+  for(@range(u16,2880))|i|{
+    output[i]=codec.round_bf16((codec.f32_from_bf16(input[i])*inverse)*codec.f32_from_bf16(gain[i]));
+  }
+}
+
+fn rotate(input:[*]u16,frequency:[*]f32,position:u32,output:[*]u16) void {
+  var pair:[2]f32=@zeros([2]f32);
+  for(@range(u16,32))|i|{
+    trig.sincos(@as(f32,position)*frequency[i],&pair);
+    const s:f32=codec.rounded(pair[0]*1.3465735902799727);
+    const c:f32=codec.rounded(pair[1]*1.3465735902799727);
+    const a:f32=codec.f32_from_bf16(input[i]);
+    const b:f32=codec.f32_from_bf16(input[i+32]);
+    output[i]=codec.round_bf16(codec.rounded(a*c)-codec.rounded(b*s));
+    output[i+32]=codec.round_bf16(codec.rounded(b*c)+codec.rounded(a*s));
+  }
+}

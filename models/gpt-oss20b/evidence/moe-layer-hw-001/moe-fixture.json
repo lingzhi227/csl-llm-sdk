@@ -1,0 +1,28 @@
+{
+  "model": "openai/gpt-oss-20b",
+  "revision": "6cee5e81ee83917806bbde320786a8fb61efebee",
+  "layer": 0,
+  "experts": 32,
+  "top_k": 4,
+  "application_pes": 31320,
+  "full_moe_layer": true,
+  "full_model": false,
+  "fixture_sha256": "cd5ff4a4edd08dc24e5bf81873ee77c2cd543db85dd34e2acf6d050053813e2b",
+  "bytes": 423796014,
+  "scope": "complete original layer-0 MoE: RMSNorm, router, all 32 resident experts, top4 weighted join and residual",
+  "expected_ids": [
+    [
+      5,
+      18,
+      9,
+      16
+    ],
+    [
+      23,
+      10,
+      28,
+      22
+    ]
+  ],
+  "numerical_policy": "exact routing and normalization; at most one BF16 ULP in final layer output"
+}

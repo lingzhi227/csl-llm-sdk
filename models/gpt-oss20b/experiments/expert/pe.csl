@@ -1,0 +1,199 @@
+// One original resident expert. A smaller row count qualifies the same protocol.
+param memcpy_params;
+param x:u16;param y:u16;param gate_rows:u16;param down_rows:u16;
+const ingress:bool=x==0 and y==0;
+const middle:bool=x==11 and y==0;
+const egress:bool=x==22 and y==0;
+const gate:bool=x>=1 and x<=10;
+const down:bool=x>=12 and x<=21 and y<down_rows;
+const matrix:bool=gate or down;
+const controller:bool=middle or egress;
+const relay:bool=(x==11 and y>0) or (x==22 and y>0 and y<down_rows);
+const contraction:u16=if(gate) x-1 else if(down) x-12 else 0;
+const last:bool=matrix and contraction==9;
+const row_count:u16=if(gate or x==11) gate_rows else down_rows;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const kernel=@import_module("mxfp4_gemv.csl",.{.rows=160,.columns=288});
+const math=@import_module("moe_math.csl");
+var weights=@zeros([if(matrix) 11520 else 1]u16);
+var scales=@zeros([if(matrix) 720 else 1]u16);
+var bias=@zeros([if(last) 160 else 1]u16);
+var input=@zeros([if(ingress or middle) 2880 else if(matrix) 288 else 1]f32);
+var partial=@zeros([if(matrix) 160 else 1]f32);
+var previous=@zeros([if(matrix and contraction>0) 160 else 1]f32);
+var frame=@zeros([if(last or controller or relay) 82 else 1]u32);
+var control=@zeros([2]u32);
+var output=@zeros([if(egress) 2880 else 1]u16);
+var gate_debug=@zeros([if(middle) gate_rows*160 else 1]u16);
+var activation_debug=@zeros([if(middle) 2880 else 1]u16);
+var counters=@zeros([5]u32);
+var ready:bool=false;var requested:bool=false;var reply_started:bool=false;
+var reply_sent:bool=false;var tx_idle:bool=true;var rx_idle:bool=true;
+var down_sending:bool=false;
+var cursor:u16=0;
+const wp:[*]u16=&weights;const sp:[*]u16=&scales;const bp:[*]u16=&bias;
+const xp:[*]f32=&input;const op:[*]u16=&output;const cp:[*]u32=&counters;
+const gp:[*]u16=&gate_debug;const ap:[*]u16=&activation_debug;
+const iq_input=@get_input_queue(2);const iq_reduce=@get_input_queue(3);
+const iq_control=@get_input_queue(4);const iq_reply=@get_input_queue(3);
+const iq_vertical=@get_input_queue(5);const oq_vertical=@get_output_queue(5);
+const oq_input=@get_output_queue(2);const oq_reduce=@get_output_queue(3);
+const oq_control=@get_output_queue(4);const oq_reply=@get_output_queue(4);
+const rx_input_dst=@get_dsr(dsr_dest,3);const rx_input_src=@get_dsr(dsr_src1,3);
+const tx_dst=@get_dsr(dsr_dest,4);const tx_src=@get_dsr(dsr_src1,4);
+const rx_reduce_dst=@get_dsr(dsr_dest,5);const rx_reduce_src=@get_dsr(dsr_src1,5);
+const rx_control_dst=@get_dsr(dsr_dest,6);const rx_control_src=@get_dsr(dsr_src1,6);
+const task_input=@get_local_task_id(8);const task_reduce=@get_local_task_id(9);
+const task_sent=@get_local_task_id(10);const task_control=@get_local_task_id(11);
+const task_reply=@get_local_task_id(12);
+
+fn finish() void { @assert(counters[4]+1==counters[0]);counters[4]+=1;sys.unblock_cmd_stream(); }
+fn transmit(data:[*]u32,count:u16,comptime queue:output_queue) void {
+  const mem=@get_dsd(mem1d_dsd,.{.base_address=data,.extent=count});
+  const wire=@get_dsd(fabout_dsd,.{.output_queue=queue,.extent=1});
+  @load_to_dsr(tx_src,mem);
+  @load_to_dsr(tx_dst,@set_dsd_length(wire,count),.{.async=true,.activate=task_sent,.ut_id=@get_ut_id(4)});
+  @mov32(tx_dst,tx_src,.{.async=true});
+}
+fn receive_control() void {
+  const mem=@get_dsd(mem1d_dsd,.{.base_address=&control,.extent=2});
+  const wire=@get_dsd(fabin_dsd,.{.input_queue=iq_control,.extent=2});
+  @load_to_dsr(rx_control_dst,mem);
+  @load_to_dsr(rx_control_src,wire,.{.async=true,.activate=task_control,.ut_id=@get_ut_id(6)});
+  @mov32(rx_control_dst,rx_control_src,.{.async=true});
+}
+fn maybe_reply() void {
+  if(ready and requested and !reply_started){
+    reply_started=true;frame[0]=counters[0];frame[1]=@as(u32,y);
+    transmit(&frame,82,oq_reply);
+  }
+}
+fn maybe_finish_last() void {
+  if(reply_sent and counters[3]==@as(u32,row_count)){finish();}
+}
+fn projection_ready() void {
+  if(comptime last){
+    const packed_result:[*]u16=@ptrcast([*]u16,&frame[2]);
+    for(@range(u16,160))|i|{
+      packed_result[i]=math.round_bf16(math.rounded(partial[i])+math.f32_from_bf16(bias[i]));
+    }
+    ready=true;maybe_reply();
+  }else{transmit(@ptrcast([*]u32,&partial),160,oq_reduce);}
+}
+task input_received() void {
+  counters[1]+=1;kernel.compute(wp,sp,xp,&partial);
+  if(comptime contraction==0){projection_ready();}
+  else{
+    const mem=@get_dsd(mem1d_dsd,.{.base_address=&previous,.extent=160});
+    const wire=@get_dsd(fabin_dsd,.{.input_queue=iq_reduce,.extent=160});
+    @load_to_dsr(rx_reduce_dst,mem);
+    @load_to_dsr(rx_reduce_src,wire,.{.async=true,.activate=task_reduce,.ut_id=@get_ut_id(5)});
+    @mov32(rx_reduce_dst,rx_reduce_src,.{.async=true});
+  }
+}
+task reduction_received() void {
+  counters[2]+=1;
+  for(@range(u16,160))|i|{partial[i]+=previous[i];}
+  projection_ready();
+}
+task control_received() void {
+  @assert(control[0]==counters[0]);
+  @assert(control[1]==counters[3]);
+  counters[3]+=1;
+  if(control[1]==@as(u32,y)){@assert(!requested);requested=true;}
+  if(counters[3]<@as(u32,row_count)){receive_control();}
+  maybe_reply();maybe_finish_last();
+}
+fn request_row() void {
+  tx_idle=false;rx_idle=false;
+  control[0]=counters[0];control[1]=@as(u32,cursor);
+  if(cursor==0){receive_reply(iq_reply);}else{receive_reply(iq_vertical);}
+  transmit(&control,2,oq_control);
+}
+fn receive_reply(comptime queue:input_queue) void {
+  const mem=@get_dsd(mem1d_dsd,.{.base_address=&frame,.extent=82});
+  const wire=@get_dsd(fabin_dsd,.{.input_queue=queue,.extent=82});
+  @load_to_dsr(rx_reduce_dst,mem);
+  @load_to_dsr(rx_reduce_src,wire,.{.async=true,.activate=task_reply,.ut_id=@get_ut_id(5)});
+  @mov32(rx_reduce_dst,rx_reduce_src,.{.async=true});
+}
+fn advance() void {
+  if(!tx_idle or !rx_idle){return;}
+  if(cursor<row_count){request_row();}
+  else if(comptime middle){
+    const packed_input:[*]u16=@ptrcast([*]u16,&input);
+    math.swiglu(packed_input,packed_input,gate_rows*80);
+    for(@range(u16,2880))|i|{
+      if(i>=gate_rows*80){packed_input[i]=0;}
+      activation_debug[i]=packed_input[i];
+    }
+    var n:u16=2880;
+    while(n>0){n-=1;input[n]=math.f32_from_bf16(packed_input[n]);}
+    down_sending=true;tx_idle=false;transmit(@ptrcast([*]u32,&input),2880,oq_input);
+  }else{finish();}
+}
+task reply_received() void {
+  @assert(frame[0]==counters[0]);@assert(frame[1]==@as(u32,cursor));
+  if(comptime relay){counters[2]+=1;transmit(&frame,82,oq_vertical);return;}
+  const src:[*]u16=@ptrcast([*]u16,&frame[2]);
+  if(comptime middle){
+    const dest:[*]u16=@ptrcast([*]u16,&input);
+    for(@range(u16,160))|i|{dest[cursor*160+i]=src[i];gate_debug[cursor*160+i]=src[i];}
+  }else{for(@range(u16,160))|i|{output[cursor*160+i]=src[i];}}
+  cursor+=1;counters[2]+=1;rx_idle=true;advance();
+}
+task sent() void {
+  if(comptime controller){
+    tx_idle=true;
+    // The final middle transmit is the down input, following all row replies.
+    if(comptime middle){if(down_sending){finish();return;}}
+    advance();
+  }else if(comptime relay){
+    cursor+=1;if(cursor<row_count){receive_reply(iq_vertical);}else{finish();}
+  }else if(comptime last){reply_sent=true;maybe_finish_last();}
+  else{finish();}
+}
+fn compute() void {
+  @assert(counters[0]==counters[4]);counters[0]+=1;
+  ready=false;requested=false;reply_started=false;reply_sent=false;
+  tx_idle=true;rx_idle=true;down_sending=false;cursor=0;counters[3]=0;
+  if(comptime ingress){transmit(@ptrcast([*]u32,&input),2880,oq_input);}
+  else if(comptime matrix){
+    if(comptime last){receive_control();}
+    const mem=@get_dsd(mem1d_dsd,.{.base_address=xp,.extent=288});
+    const wire=@get_dsd(fabin_dsd,.{.input_queue=iq_input,.extent=288});
+    @load_to_dsr(rx_input_dst,mem);
+    @load_to_dsr(rx_input_src,wire,.{.async=true,.activate=task_input,.ut_id=@get_ut_id(3)});
+    @mov32(rx_input_dst,rx_input_src,.{.async=true});
+  }else if(comptime controller){request_row();}
+  else if(comptime relay){cursor=y;receive_reply(iq_reply);}
+  else{finish();}
+}
+comptime {
+  if(matrix){
+    @initialize_queue(iq_input,.{.color=@get_color(3)});@bind_local_task(input_received,task_input);
+    if(contraction>0){
+      @initialize_queue(iq_reduce,.{.color=@get_color(if(contraction%2==1) 4 else 5)});
+      @bind_local_task(reduction_received,task_reduce);
+    }
+    if(last){
+      @initialize_queue(iq_control,.{.color=@get_color(if(gate) 6 else 8)});
+      @initialize_queue(oq_reply,.{.color=@get_color(if(gate) 7 else 9)});
+      @bind_local_task(control_received,task_control);
+    }else{@initialize_queue(oq_reduce,.{.color=@get_color(if(contraction%2==0) 4 else 5)});}
+  }
+  if(ingress or middle){@initialize_queue(oq_input,.{.color=@get_color(3)});}
+  if(controller or relay){
+    @initialize_queue(iq_reply,.{.color=@get_color(if(x==11) 7 else 9)});
+    if(y+1<row_count){@initialize_queue(iq_vertical,.{.color=@get_color(if(y%2==0) 10 else 11)});}
+    @bind_local_task(reply_received,task_reply);
+  }
+  if(controller){
+    @initialize_queue(oq_control,.{.color=@get_color(if(middle) 6 else 8)});
+  }
+  if(relay){@initialize_queue(oq_vertical,.{.color=@get_color(if(y%2==1) 10 else 11)});}
+  if(ingress or matrix or controller or relay){@bind_local_task(sent,task_sent);}
+  @export_symbol(wp,"weights");@export_symbol(sp,"scales");@export_symbol(bp,"bias");
+  @export_symbol(xp,"input");@export_symbol(op,"output");@export_symbol(cp,"counters");
+  @export_symbol(gp,"gate_debug");@export_symbol(ap,"activation_debug");@export_symbol(compute);
+}

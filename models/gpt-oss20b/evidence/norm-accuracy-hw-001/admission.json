@@ -1,0 +1,47 @@
+{
+  "scope": "bounded physical RMSNorm precision diagnostic, 144 real inputs",
+  "full_simulator_acceptance": false,
+  "partial_simulator_cases_at_least": 24,
+  "limitation": "serial simulation is too slow for all 144 cases in its declared budget; no complete simulator claim",
+  "oracle_correction": "one of 414720 initial FP64 oracle conversions double-rounded; new fixture quantizes directly on the BF16 lattice",
+  "physical_requirements": "all 144 new/old comparisons, new <=1 BF16 ULP from direct FP64 rounding, all counts, normal stop and release",
+  "csl_hashes": {
+    "bf16_gemv.csl": "010085f1382f05d608de520f17b4ffb0e39366f0ca224382dbef74703fb65277",
+    "moe_math.csl": "a8b32fda6be568278c26501e803c4a4f38b89c86d0d067dd1319342da1f7949f",
+    "rotary_trig.csl": "d0d0f9317692ae58ac472f3d3370ee29f54f1c9c4af49a069f9d68666cc30f1e",
+    "attention96.csl": "fca19d0999f7eb97fb883109ef3f05084b006e527e6dd6893e531a643505e199",
+    "normalization_rope.csl": "01e6adfdaf5da64ebd8037c3504e76cf93cccc8c6ce94fedd65577d427ca579b",
+    "mxfp4_gemv.csl": "3db4f124f4930a3c90e29fb679c0995ef087818cba6f9af6229af0cc89fb9fe7",
+    "layout.csl": "2c93567f71a039b6c27f29039c2b4d9253a7f6eeb0ff01f1b8482c4005d48e4e",
+    "pe.csl": "61b3489ac095fae2e4814aeb2d6d7c7a66418783a637848a9a1c29c293a52031",
+    "legacy_norm.csl": "a4d06d7d81a7832076656b7f74443c4a9473bdba87b41e845a68c3bc2225c5eb"
+  },
+  "sram": {
+    "passed": true,
+    "application_pes": 2,
+    "records": [
+      {
+        "file": "out/bin/out_0_0.elf",
+        "sha256": "a503d79238cc74f4ad1d26751e30b6944126be69dbd2c5a5719202abf07e3489",
+        "low_section_end": 22320,
+        "low_section_bytes": 22308,
+        "static_allocated_section_bytes": 22696,
+        "stack_allowance_bytes": 4096,
+        "ordinary_address_ceiling": 48128,
+        "passed": true,
+        "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+      },
+      {
+        "file": "out/bin/out_1_0.elf",
+        "sha256": "f24c1befd105c0290a26fc4463ad49247f802a3e3d26d65f6893bb847e998c82",
+        "low_section_end": 22336,
+        "low_section_bytes": 22328,
+        "static_allocated_section_bytes": 22716,
+        "stack_allowance_bytes": 4096,
+        "ordinary_address_ceiling": 48128,
+        "passed": true,
+        "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+      }
+    ]
+  }
+}

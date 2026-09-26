@@ -1,0 +1,20 @@
+{
+  "mini_numerical_sim": "/srv/model-storage/gpt-oss20b/runs/expert-mini-sim-002",
+  "full_compile_and_sram": "/srv/model-storage/gpt-oss20b/runs/expert-full-sim-001",
+  "full_expert_simulated": false,
+  "simulator": {
+    "simulator_complete": false,
+    "numerical_and_protocol_epochs": 2,
+    "final_weight_readback_completed": false,
+    "unit_state": "MainPID=0\nResult=timeout\nActiveState=failed\n"
+  },
+  "source_hashes": {
+    "layout.csl": "a50cb8de44de7d9f371103ed4205d75b87201db502c0267cc7732bc362799087",
+    "pe.csl": "f2e08963a053bb4e6d77de36b527766d33b9609cc975b694d6f5503713b0f000",
+    "run.py": "417053f72ed1623630f178348a4af3e00a0b0680441f03b0528316e8d5666201",
+    "mxfp4_gemv.csl": "3db4f124f4930a3c90e29fb679c0995ef087818cba6f9af6229af0cc89fb9fe7",
+    "moe_math.csl": "a8b32fda6be568278c26501e803c4a4f38b89c86d0d067dd1319342da1f7949f",
+    "backend.py": "8679330f257363a6bb518803534fd2944572e5f3e97a6aee251256d6b67e3dfd"
+  },
+  "physical_requirements": "two full-expert numerical epochs, every PE completed, exhaustive original weights/scales/bias readback, normal SDK stop and owned-job release"
+}

@@ -1,4 +1,16 @@
-# Implementation status
+# Model implementation status
+
+**GPT-OSS-20B (September 26):** complete 24-layer, resident 32-expert-per-layer
+physical inference generated two autoregressive tokens on one WSE-3. All
+parameters were retained and resources released. Actual-input operator
+qualification passed; strict whole-prefix CPU parity did not. See the
+[model status](../models/gpt-oss20b/STATUS.md) and
+[physical report](../models/gpt-oss20b/docs/PHYSICAL-INFERENCE-RESULT.md).
+The accepted scope is two-token bring-up with 96-token KV capacity.
+
+## Qwen3.8-27B status and history
+
+The remaining entries describe Qwen; its paused state is unchanged.
 
 Latest scope: [20-layer Stage0 physical execution, exactly 1,000 comparisons and checkpoint preservation](STAGE0-COMPARISON-AND-PAUSE.md).
 All five input positions completed. Numerical comparison is deliberately limited

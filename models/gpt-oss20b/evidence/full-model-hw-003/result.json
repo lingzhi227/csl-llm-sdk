@@ -1,0 +1,1876 @@
+{
+  "passed": false,
+  "strict_original_reference_passed": false,
+  "physical_capture_complete": true,
+  "numerical_qualification_pending": true,
+  "full_model": true,
+  "model": "openai/gpt-oss-20b",
+  "revision": "6cee5e81ee83917806bbde320786a8fb61efebee",
+  "tokens": [
+    13225,
+    11,
+    5922
+  ],
+  "scope": "complete original 24-layer, 32-expert GPT-OSS-20B inference on one WSE-3; 96-token runtime KV capacity",
+  "weights_uploaded_once": true,
+  "all_weights_retained": true,
+  "west_to_east": true,
+  "host_intermediate_neural_computation": false,
+  "diagnostic_layer_reads": "after each complete token only; never forwarded back into computation",
+  "records": [
+    {
+      "position": 0,
+      "input_token": 13225,
+      "generated_token": 11,
+      "expected_token": 11,
+      "token_exact": true,
+      "every_active_pe_completed": true,
+      "layers": [
+        {
+          "layer": 0,
+          "checks": {
+            "attention": {
+              "passed": true,
+              "finite": true,
+              "max_bf16_ulp": 0,
+              "bit_exact": 2880,
+              "values": 2880,
+              "max_abs_error": 0.0,
+              "rms_error": 0.0,
+              "relative_l2": 0.0
+            },
+            "output": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 16,
+              "bit_exact": 2729,
+              "values": 2880,
+              "max_abs_error": 0.015625,
+              "rms_error": 0.000858089843434955,
+              "relative_l2": 0.00026710098142260365
+            }
+          },
+          "selected_ids": [
+            5,
+            18,
+            9,
+            16
+          ],
+          "original_ids": [
+            5,
+            18,
+            9,
+            16
+          ],
+          "ids_exact": true
+        },
+        {
+          "layer": 1,
+          "checks": {
+            "attention": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 29248,
+              "bit_exact": 2305,
+              "values": 2880,
+              "max_abs_error": 0.0625,
+              "rms_error": 0.0028401272763251503,
+              "relative_l2": 0.0007797560062258291
+            },
+            "output": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 30016,
+              "bit_exact": 1617,
+              "values": 2880,
+              "max_abs_error": 0.125,
+              "rms_error": 0.006352559283759704,
+              "relative_l2": 0.00163735639625896
+            }
+          },
+          "selected_ids": [
+            28,
+            22,
+            5,
+            4
+          ],
+          "original_ids": [
+            28,
+            22,
+            5,
+            4
+          ],
+          "ids_exact": true
+        },
+        {
+          "layer": 2,
+          "checks": {
+            "attention": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 29928,
+              "bit_exact": 1448,
+              "values": 2880,
+              "max_abs_error": 0.125,
+              "rms_error": 0.007637127157761237,
+              "relative_l2": 0.001806902218408568
+            },
+            "output": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 15296,
+              "bit_exact": 1270,
+              "values": 2880,
+              "max_abs_error": 0.125,
+              "rms_error": 0.010036796420443564,
+              "relative_l2": 0.002355202665133899
+            }
+          },
+          "selected_ids": [
+            26,
+            20,
+            11,
+            21
+          ],
+          "original_ids": [
+            26,
+            20,
+            11,
+            21
+          ],
+          "ids_exact": true
+        },
+        {
+          "layer": 3,
+          "checks": {
+            "attention": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 30464,
+              "bit_exact": 1064,
+              "values": 2880,
+              "max_abs_error": 0.25,
+              "rms_error": 0.012877279648634972,
+              "relative_l2": 0.0026698724182607895
+            },
+            "output": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 30496,
+              "bit_exact": 905,
+              "values": 2880,
+              "max_abs_error": 0.5,
+              "rms_error": 0.019616462470293396,
+              "relative_l2": 0.0038745584124044792
+            }
+          },
+          "selected_ids": [
+            1,
+            21,
+            30,
+            23
+          ],
+          "original_ids": [
+            1,
+            21,
+            30,
+            23
+          ],
+          "ids_exact": true
+        },
+        {
+          "layer": 4,
+          "checks": {
+            "attention": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 31104,
+              "bit_exact": 857,
+              "values": 2880,
+              "max_abs_error": 1.0,
+              "rms_error": 0.02962152458837987,
+              "relative_l2": 0.004907323229449516
+            },
+            "output": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 30784,
+              "bit_exact": 801,
+              "values": 2880,
+              "max_abs_error": 1.0,
+              "rms_error": 0.02925623653656669,
+              "relative_l2": 0.004730808152744344
+            }
+          },
+          "selected_ids": [
+            6,
+            2,
+            23,
+            9
+          ],
+          "original_ids": [
+            6,
+            2,
+            23,
+            9
+          ],
+          "ids_exact": true
+        },
+        {
+          "layer": 5,
+          "checks": {
+            "attention": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 31492,
+              "bit_exact": 663,
+              "values": 2880,
+              "max_abs_error": 1.0,
+              "rms_error": 0.03371790517238051,
+              "relative_l2": 0.005141908035745366
+            },
+            "output": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 31424,
+              "bit_exact": 819,
+              "values": 2880,
+              "max_abs_error": 0.5,
+              "rms_error": 0.03536265481698158,
+              "relative_l2": 0.005179698818569888
+            }
+          },
+          "selected_ids": [
+            24,
+            11,
+            5,
+            9
+          ],
+          "original_ids": [
+            24,
+            11,
+            5,
+            9
+          ],
+          "ids_exact": true
+        },
+        {
+          "layer": 6,
+          "checks": {
+            "attention": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 31376,
+              "bit_exact": 775,
+              "values": 2880,
+              "max_abs_error": 0.5,
+              "rms_error": 0.04048801787392432,
+              "relative_l2": 0.005329334696046795
+            },
+            "output": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 31568,
+              "bit_exact": 938,
+              "values": 2880,
+              "max_abs_error": 0.75,
+              "rms_error": 0.0721452186766943,
+              "relative_l2": 9.260422150972066e-05
+            }
+          },
+          "selected_ids": [
+            5,
+            27,
+            2,
+            9
+          ],
+          "original_ids": [
+            5,
+            27,
+            2,
+            9
+          ],
+          "ids_exact": true
+        },
+        {
+          "layer": 7,
+          "checks": {
+            "attention": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 31264,
+              "bit_exact": 1026,
+              "values": 2880,
+              "max_abs_error": 0.75,
+              "rms_error": 0.07269734040500307,
+              "relative_l2": 9.331000239309954e-05
+            },
+            "output": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 31548,
+              "bit_exact": 1037,
+              "values": 2880,
+              "max_abs_error": 0.75,
+              "rms_error": 0.07300940091826237,
+              "relative_l2": 9.370882720407136e-05
+            }
+          },
+          "selected_ids": [
+            8,
+            26,
+            23,
+            22
+          ],
+          "original_ids": [
+            8,
+            26,
+            23,
+            22
+          ],
+          "ids_exact": true
+        },
+        {
+          "layer": 8,
+          "checks": {
+            "attention": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 30976,
+              "bit_exact": 984,
+              "values": 2880,
+              "max_abs_error": 0.75,
+              "rms_error": 0.07709098318305083,
+              "relative_l2": 9.891623937681726e-05
+            },
+            "output": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 31732,
+              "bit_exact": 996,
+              "values": 2880,
+              "max_abs_error": 0.75,
+              "rms_error": 0.07932071807562933,
+              "relative_l2": 0.00010119802817371042
+            }
+          },
+          "selected_ids": [
+            24,
+            17,
+            9,
+            18
+          ],
+          "original_ids": [
+            24,
+            17,
+            9,
+            18
+          ],
+          "ids_exact": true
+        },
+        {
+          "layer": 9,
+          "checks": {
+            "attention": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 31751,
+              "bit_exact": 1236,
+              "values": 2880,
+              "max_abs_error": 1.0,
+              "rms_error": 0.08617003653609386,
+              "relative_l2": 0.00010990602951620623
+            },
+            "output": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 31648,
+              "bit_exact": 1471,
+              "values": 2880,
+              "max_abs_error": 1.0,
+              "rms_error": 0.09405429341004579,
+              "relative_l2": 0.00012146857101255256
+            }
+          },
+          "selected_ids": [
+            31,
+            14,
+            1,
+            18
+          ],
+          "original_ids": [
+            31,
+            14,
+            1,
+            18
+          ],
+          "ids_exact": true
+        },
+        {
+          "layer": 10,
+          "checks": {
+            "attention": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 31032,
+              "bit_exact": 1454,
+              "values": 2880,
+              "max_abs_error": 1.0,
+              "rms_error": 0.09648358539476136,
+              "relative_l2": 0.00012460425600888773
+            },
+            "output": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 31984,
+              "bit_exact": 625,
+              "values": 2880,
+              "max_abs_error": 4.0,
+              "rms_error": 0.27439446731902006,
+              "relative_l2": 0.00035432585448139277
+            }
+          },
+          "selected_ids": [
+            28,
+            9,
+            6,
+            7
+          ],
+          "original_ids": [
+            28,
+            9,
+            6,
+            30
+          ],
+          "ids_exact": false
+        },
+        {
+          "layer": 11,
+          "checks": {
+            "attention": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 32048,
+              "bit_exact": 661,
+              "values": 2880,
+              "max_abs_error": 4.0,
+              "rms_error": 0.2782599495611903,
+              "relative_l2": 0.00035931069459235374
+            },
+            "output": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 31986,
+              "bit_exact": 672,
+              "values": 2880,
+              "max_abs_error": 4.0,
+              "rms_error": 0.2688402172333772,
+              "relative_l2": 0.0003471570442322739
+            }
+          },
+          "selected_ids": [
+            25,
+            5,
+            15,
+            10
+          ],
+          "original_ids": [
+            25,
+            5,
+            15,
+            10
+          ],
+          "ids_exact": true
+        },
+        {
+          "layer": 12,
+          "checks": {
+            "attention": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 32005,
+              "bit_exact": 683,
+              "values": 2880,
+              "max_abs_error": 4.0,
+              "rms_error": 0.26936969015385975,
+              "relative_l2": 0.0003478429515417193
+            },
+            "output": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 31934,
+              "bit_exact": 671,
+              "values": 2880,
+              "max_abs_error": 4.0,
+              "rms_error": 0.26922069948640553,
+              "relative_l2": 0.00034766206803919623
+            }
+          },
+          "selected_ids": [
+            26,
+            9,
+            15,
+            23
+          ],
+          "original_ids": [
+            26,
+            9,
+            15,
+            23
+          ],
+          "ids_exact": true
+        },
+        {
+          "layer": 13,
+          "checks": {
+            "attention": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 32064,
+              "bit_exact": 692,
+              "values": 2880,
+              "max_abs_error": 4.0,
+              "rms_error": 0.27062496887649307,
+              "relative_l2": 0.00034946917908030623
+            },
+            "output": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 32004,
+              "bit_exact": 703,
+              "values": 2880,
+              "max_abs_error": 4.0,
+              "rms_error": 0.2705713791875447,
+              "relative_l2": 0.0003494196705375898
+            }
+          },
+          "selected_ids": [
+            4,
+            9,
+            27,
+            25
+          ],
+          "original_ids": [
+            4,
+            9,
+            27,
+            25
+          ],
+          "ids_exact": true
+        },
+        {
+          "layer": 14,
+          "checks": {
+            "attention": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 31960,
+              "bit_exact": 704,
+              "values": 2880,
+              "max_abs_error": 4.0,
+              "rms_error": 0.27097768329634625,
+              "relative_l2": 0.0003499445587177868
+            },
+            "output": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 31736,
+              "bit_exact": 765,
+              "values": 2880,
+              "max_abs_error": 4.0,
+              "rms_error": 0.2760739543013792,
+              "relative_l2": 0.00035655962778581536
+            }
+          },
+          "selected_ids": [
+            18,
+            30,
+            14,
+            16
+          ],
+          "original_ids": [
+            18,
+            30,
+            14,
+            16
+          ],
+          "ids_exact": true
+        },
+        {
+          "layer": 15,
+          "checks": {
+            "attention": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 31712,
+              "bit_exact": 707,
+              "values": 2880,
+              "max_abs_error": 4.0,
+              "rms_error": 0.2797281985090116,
+              "relative_l2": 0.00036126996645496196
+            },
+            "output": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 32016,
+              "bit_exact": 710,
+              "values": 2880,
+              "max_abs_error": 6.0,
+              "rms_error": 0.2982116612537448,
+              "relative_l2": 0.0003851394821510003
+            }
+          },
+          "selected_ids": [
+            21,
+            13,
+            17,
+            24
+          ],
+          "original_ids": [
+            21,
+            13,
+            17,
+            24
+          ],
+          "ids_exact": true
+        },
+        {
+          "layer": 16,
+          "checks": {
+            "attention": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 31660,
+              "bit_exact": 704,
+              "values": 2880,
+              "max_abs_error": 6.0,
+              "rms_error": 0.29845450931474315,
+              "relative_l2": 0.0003854415160725919
+            },
+            "output": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 32024,
+              "bit_exact": 836,
+              "values": 2880,
+              "max_abs_error": 8.0,
+              "rms_error": 0.3680781049638469,
+              "relative_l2": 0.0004747601291404067
+            }
+          },
+          "selected_ids": [
+            4,
+            24,
+            13,
+            31
+          ],
+          "original_ids": [
+            4,
+            24,
+            13,
+            31
+          ],
+          "ids_exact": true
+        },
+        {
+          "layer": 17,
+          "checks": {
+            "attention": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 31952,
+              "bit_exact": 800,
+              "values": 2880,
+              "max_abs_error": 8.0,
+              "rms_error": 0.3894978244118414,
+              "relative_l2": 0.0005022696688551253
+            },
+            "output": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 32064,
+              "bit_exact": 786,
+              "values": 2880,
+              "max_abs_error": 8.0,
+              "rms_error": 0.42564313789218616,
+              "relative_l2": 0.005343475546715134
+            }
+          },
+          "selected_ids": [
+            5,
+            15,
+            21,
+            4
+          ],
+          "original_ids": [
+            5,
+            15,
+            21,
+            4
+          ],
+          "ids_exact": true
+        },
+        {
+          "layer": 18,
+          "checks": {
+            "attention": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 31872,
+              "bit_exact": 689,
+              "values": 2880,
+              "max_abs_error": 8.0,
+              "rms_error": 0.5158727403932285,
+              "relative_l2": 0.005979917356325229
+            },
+            "output": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 32152,
+              "bit_exact": 654,
+              "values": 2880,
+              "max_abs_error": 16.0,
+              "rms_error": 0.6436207113710243,
+              "relative_l2": 0.004722993822222516
+            }
+          },
+          "selected_ids": [
+            1,
+            17,
+            29,
+            25
+          ],
+          "original_ids": [
+            1,
+            17,
+            29,
+            25
+          ],
+          "ids_exact": true
+        },
+        {
+          "layer": 19,
+          "checks": {
+            "attention": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 31872,
+              "bit_exact": 583,
+              "values": 2880,
+              "max_abs_error": 16.0,
+              "rms_error": 0.6880311445858798,
+              "relative_l2": 0.005983188195879676
+            },
+            "output": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 32448,
+              "bit_exact": 559,
+              "values": 2880,
+              "max_abs_error": 32.0,
+              "rms_error": 1.0477962053048728,
+              "relative_l2": 0.0061687169683489595
+            }
+          },
+          "selected_ids": [
+            27,
+            24,
+            21,
+            19
+          ],
+          "original_ids": [
+            27,
+            24,
+            21,
+            19
+          ],
+          "ids_exact": true
+        },
+        {
+          "layer": 20,
+          "checks": {
+            "attention": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 32308,
+              "bit_exact": 532,
+              "values": 2880,
+              "max_abs_error": 16.0,
+              "rms_error": 1.074842594910945,
+              "relative_l2": 0.006926081553549811
+            },
+            "output": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 32384,
+              "bit_exact": 543,
+              "values": 2880,
+              "max_abs_error": 32.0,
+              "rms_error": 1.3120052091248282,
+              "relative_l2": 0.005298834769462672
+            }
+          },
+          "selected_ids": [
+            19,
+            10,
+            23,
+            12
+          ],
+          "original_ids": [
+            19,
+            10,
+            23,
+            12
+          ],
+          "ids_exact": true
+        },
+        {
+          "layer": 21,
+          "checks": {
+            "attention": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 32468,
+              "bit_exact": 493,
+              "values": 2880,
+              "max_abs_error": 32.0,
+              "rms_error": 1.4966615029538346,
+              "relative_l2": 0.007589096826600337
+            },
+            "output": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 32384,
+              "bit_exact": 508,
+              "values": 2880,
+              "max_abs_error": 64.0,
+              "rms_error": 1.896846804967041,
+              "relative_l2": 0.006600969174286662
+            }
+          },
+          "selected_ids": [
+            23,
+            17,
+            3,
+            25
+          ],
+          "original_ids": [
+            23,
+            17,
+            3,
+            25
+          ],
+          "ids_exact": true
+        },
+        {
+          "layer": 22,
+          "checks": {
+            "attention": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 32688,
+              "bit_exact": 470,
+              "values": 2880,
+              "max_abs_error": 32.0,
+              "rms_error": 1.8990295716579684,
+              "relative_l2": 0.007300870217629464
+            },
+            "output": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 32784,
+              "bit_exact": 501,
+              "values": 2880,
+              "max_abs_error": 64.0,
+              "rms_error": 2.8138706063007914,
+              "relative_l2": 0.0062912167736987904
+            }
+          },
+          "selected_ids": [
+            7,
+            13,
+            27,
+            26
+          ],
+          "original_ids": [
+            7,
+            13,
+            27,
+            26
+          ],
+          "ids_exact": true
+        },
+        {
+          "layer": 23,
+          "checks": {
+            "attention": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 32760,
+              "bit_exact": 455,
+              "values": 2880,
+              "max_abs_error": 96.0,
+              "rms_error": 3.100706236046648,
+              "relative_l2": 0.007969149443803418
+            },
+            "output": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 32558,
+              "bit_exact": 428,
+              "values": 2880,
+              "max_abs_error": 96.0,
+              "rms_error": 3.4030198066083455,
+              "relative_l2": 0.009225394513858261
+            }
+          },
+          "selected_ids": [
+            16,
+            7,
+            15,
+            20
+          ],
+          "original_ids": [
+            16,
+            7,
+            15,
+            20
+          ],
+          "ids_exact": true
+        }
+      ],
+      "forward_command_count": 1990,
+      "forward_host_seconds": 0.8828378245234489,
+      "persistent_kv_tokens": 1,
+      "strict_all_layer_checks_passed": false
+    },
+    {
+      "position": 1,
+      "input_token": 11,
+      "generated_token": 5922,
+      "expected_token": 5922,
+      "token_exact": true,
+      "every_active_pe_completed": true,
+      "layers": [
+        {
+          "layer": 0,
+          "checks": {
+            "attention": {
+              "passed": true,
+              "finite": true,
+              "max_bf16_ulp": 0,
+              "bit_exact": 2880,
+              "values": 2880,
+              "max_abs_error": 0.0,
+              "rms_error": 0.0,
+              "relative_l2": 0.0
+            },
+            "output": {
+              "passed": true,
+              "finite": true,
+              "max_bf16_ulp": 0,
+              "bit_exact": 2880,
+              "values": 2880,
+              "max_abs_error": 0.0,
+              "rms_error": 0.0,
+              "relative_l2": 0.0
+            }
+          },
+          "selected_ids": [
+            23,
+            10,
+            28,
+            22
+          ],
+          "original_ids": [
+            23,
+            10,
+            28,
+            22
+          ],
+          "ids_exact": true
+        },
+        {
+          "layer": 1,
+          "checks": {
+            "attention": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 29504,
+              "bit_exact": 1665,
+              "values": 2880,
+              "max_abs_error": 0.25,
+              "rms_error": 0.006384430001741204,
+              "relative_l2": 0.0022544996461367627
+            },
+            "output": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 30080,
+              "bit_exact": 1134,
+              "values": 2880,
+              "max_abs_error": 0.25,
+              "rms_error": 0.012402663152212163,
+              "relative_l2": 0.003127116213846383
+            }
+          },
+          "selected_ids": [
+            26,
+            18,
+            13,
+            5
+          ],
+          "original_ids": [
+            26,
+            18,
+            13,
+            5
+          ],
+          "ids_exact": true
+        },
+        {
+          "layer": 2,
+          "checks": {
+            "attention": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 30400,
+              "bit_exact": 1012,
+              "values": 2880,
+              "max_abs_error": 0.25,
+              "rms_error": 0.01537060319973266,
+              "relative_l2": 0.003551059926501421
+            },
+            "output": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 30288,
+              "bit_exact": 912,
+              "values": 2880,
+              "max_abs_error": 0.25,
+              "rms_error": 0.018780594538620268,
+              "relative_l2": 0.003687452749776706
+            }
+          },
+          "selected_ids": [
+            29,
+            23,
+            8,
+            4
+          ],
+          "original_ids": [
+            29,
+            23,
+            8,
+            4
+          ],
+          "ids_exact": true
+        },
+        {
+          "layer": 3,
+          "checks": {
+            "attention": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 30944,
+              "bit_exact": 851,
+              "values": 2880,
+              "max_abs_error": 0.5,
+              "rms_error": 0.023162219268559648,
+              "relative_l2": 0.004089574436482649
+            },
+            "output": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 30478,
+              "bit_exact": 729,
+              "values": 2880,
+              "max_abs_error": 0.5,
+              "rms_error": 0.026062459740819183,
+              "relative_l2": 0.004489525266631455
+            }
+          },
+          "selected_ids": [
+            1,
+            25,
+            19,
+            0
+          ],
+          "original_ids": [
+            1,
+            25,
+            19,
+            0
+          ],
+          "ids_exact": true
+        },
+        {
+          "layer": 4,
+          "checks": {
+            "attention": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 30656,
+              "bit_exact": 720,
+              "values": 2880,
+              "max_abs_error": 0.5,
+              "rms_error": 0.028799784655126,
+              "relative_l2": 0.004401359318236006
+            },
+            "output": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 30696,
+              "bit_exact": 621,
+              "values": 2880,
+              "max_abs_error": 0.5,
+              "rms_error": 0.031751421058723375,
+              "relative_l2": 0.004573574637517043
+            }
+          },
+          "selected_ids": [
+            6,
+            23,
+            9,
+            0
+          ],
+          "original_ids": [
+            6,
+            23,
+            9,
+            0
+          ],
+          "ids_exact": true
+        },
+        {
+          "layer": 5,
+          "checks": {
+            "attention": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 31328,
+              "bit_exact": 654,
+              "values": 2880,
+              "max_abs_error": 0.5,
+              "rms_error": 0.037653917974931124,
+              "relative_l2": 0.0050495573442720584
+            },
+            "output": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 30936,
+              "bit_exact": 727,
+              "values": 2880,
+              "max_abs_error": 0.5,
+              "rms_error": 0.04283605676633296,
+              "relative_l2": 0.004899845734781253
+            }
+          },
+          "selected_ids": [
+            24,
+            14,
+            11,
+            4
+          ],
+          "original_ids": [
+            24,
+            14,
+            11,
+            4
+          ],
+          "ids_exact": true
+        },
+        {
+          "layer": 6,
+          "checks": {
+            "attention": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 31064,
+              "bit_exact": 666,
+              "values": 2880,
+              "max_abs_error": 1.0,
+              "rms_error": 0.052706491590665906,
+              "relative_l2": 0.005421864311398164
+            },
+            "output": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 31664,
+              "bit_exact": 611,
+              "values": 2880,
+              "max_abs_error": 2.0,
+              "rms_error": 0.07666286563607447,
+              "relative_l2": 0.006045763502450954
+            }
+          },
+          "selected_ids": [
+            5,
+            9,
+            2,
+            24
+          ],
+          "original_ids": [
+            5,
+            9,
+            2,
+            24
+          ],
+          "ids_exact": true
+        },
+        {
+          "layer": 7,
+          "checks": {
+            "attention": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 31024,
+              "bit_exact": 580,
+              "values": 2880,
+              "max_abs_error": 1.0,
+              "rms_error": 0.06911112320712233,
+              "relative_l2": 0.005616845493577108
+            },
+            "output": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 31168,
+              "bit_exact": 674,
+              "values": 2880,
+              "max_abs_error": 2.0,
+              "rms_error": 0.08509185127212997,
+              "relative_l2": 0.006120705285271132
+            }
+          },
+          "selected_ids": [
+            5,
+            23,
+            29,
+            20
+          ],
+          "original_ids": [
+            5,
+            23,
+            29,
+            20
+          ],
+          "ids_exact": true
+        },
+        {
+          "layer": 8,
+          "checks": {
+            "attention": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 31168,
+              "bit_exact": 643,
+              "values": 2880,
+              "max_abs_error": 1.5,
+              "rms_error": 0.08291464532472226,
+              "relative_l2": 0.005849362219290429
+            },
+            "output": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 15616,
+              "bit_exact": 619,
+              "values": 2880,
+              "max_abs_error": 1.0,
+              "rms_error": 0.08805334369707794,
+              "relative_l2": 0.005392051979917392
+            }
+          },
+          "selected_ids": [
+            4,
+            27,
+            17,
+            20
+          ],
+          "original_ids": [
+            4,
+            27,
+            17,
+            20
+          ],
+          "ids_exact": true
+        },
+        {
+          "layer": 9,
+          "checks": {
+            "attention": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 31480,
+              "bit_exact": 563,
+              "values": 2880,
+              "max_abs_error": 1.0,
+              "rms_error": 0.09082125090156416,
+              "relative_l2": 0.005909866286936431
+            },
+            "output": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 31592,
+              "bit_exact": 584,
+              "values": 2880,
+              "max_abs_error": 2.0,
+              "rms_error": 0.126342042930076,
+              "relative_l2": 0.006355199575383421
+            }
+          },
+          "selected_ids": [
+            31,
+            16,
+            15,
+            14
+          ],
+          "original_ids": [
+            31,
+            16,
+            15,
+            14
+          ],
+          "ids_exact": true
+        },
+        {
+          "layer": 10,
+          "checks": {
+            "attention": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 31584,
+              "bit_exact": 571,
+              "values": 2880,
+              "max_abs_error": 1.0,
+              "rms_error": 0.13010461180872698,
+              "relative_l2": 0.006845031726501239
+            },
+            "output": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 31520,
+              "bit_exact": 616,
+              "values": 2880,
+              "max_abs_error": 4.0,
+              "rms_error": 0.16508340158457904,
+              "relative_l2": 0.005786393370158781
+            }
+          },
+          "selected_ids": [
+            6,
+            10,
+            7,
+            19
+          ],
+          "original_ids": [
+            6,
+            10,
+            7,
+            19
+          ],
+          "ids_exact": true
+        },
+        {
+          "layer": 11,
+          "checks": {
+            "attention": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 31825,
+              "bit_exact": 564,
+              "values": 2880,
+              "max_abs_error": 4.0,
+              "rms_error": 0.17308389300284358,
+              "relative_l2": 0.006988742673392033
+            },
+            "output": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 31824,
+              "bit_exact": 546,
+              "values": 2880,
+              "max_abs_error": 2.0,
+              "rms_error": 0.17447619293297797,
+              "relative_l2": 0.006085124291301044
+            }
+          },
+          "selected_ids": [
+            16,
+            30,
+            1,
+            19
+          ],
+          "original_ids": [
+            16,
+            30,
+            1,
+            19
+          ],
+          "ids_exact": true
+        },
+        {
+          "layer": 12,
+          "checks": {
+            "attention": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 31680,
+              "bit_exact": 517,
+              "values": 2880,
+              "max_abs_error": 4.0,
+              "rms_error": 0.1944738540850057,
+              "relative_l2": 0.00668310429097643
+            },
+            "output": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 32895,
+              "bit_exact": 72,
+              "values": 2880,
+              "max_abs_error": 20.0,
+              "rms_error": 1.8792393509622558,
+              "relative_l2": 0.04786461363934856
+            }
+          },
+          "selected_ids": [
+            21,
+            14,
+            5,
+            9
+          ],
+          "original_ids": [
+            21,
+            14,
+            5,
+            8
+          ],
+          "ids_exact": false
+        },
+        {
+          "layer": 13,
+          "checks": {
+            "attention": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 32841,
+              "bit_exact": 68,
+              "values": 2880,
+              "max_abs_error": 18.0,
+              "rms_error": 1.8793505595138624,
+              "relative_l2": 0.05597379937918536
+            },
+            "output": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 32904,
+              "bit_exact": 76,
+              "values": 2880,
+              "max_abs_error": 24.0,
+              "rms_error": 2.0068547072916023,
+              "relative_l2": 0.05126706369380307
+            }
+          },
+          "selected_ids": [
+            3,
+            1,
+            4,
+            9
+          ],
+          "original_ids": [
+            3,
+            1,
+            4,
+            9
+          ],
+          "ids_exact": true
+        },
+        {
+          "layer": 14,
+          "checks": {
+            "attention": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 32810,
+              "bit_exact": 72,
+              "values": 2880,
+              "max_abs_error": 24.0,
+              "rms_error": 2.0111177383280583,
+              "relative_l2": 0.049870190254049165
+            },
+            "output": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 32791,
+              "bit_exact": 85,
+              "values": 2880,
+              "max_abs_error": 20.0,
+              "rms_error": 2.057479754835407,
+              "relative_l2": 0.042022605975320766
+            }
+          },
+          "selected_ids": [
+            0,
+            18,
+            6,
+            12
+          ],
+          "original_ids": [
+            0,
+            18,
+            6,
+            12
+          ],
+          "ids_exact": true
+        },
+        {
+          "layer": 15,
+          "checks": {
+            "attention": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 32920,
+              "bit_exact": 82,
+              "values": 2880,
+              "max_abs_error": 28.0,
+              "rms_error": 2.2097599067154707,
+              "relative_l2": 0.042947917442294634
+            },
+            "output": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 32854,
+              "bit_exact": 85,
+              "values": 2880,
+              "max_abs_error": 24.0,
+              "rms_error": 2.2763973031165046,
+              "relative_l2": 0.04063022731291069
+            }
+          },
+          "selected_ids": [
+            29,
+            11,
+            7,
+            17
+          ],
+          "original_ids": [
+            29,
+            11,
+            7,
+            17
+          ],
+          "ids_exact": true
+        },
+        {
+          "layer": 16,
+          "checks": {
+            "attention": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 32904,
+              "bit_exact": 82,
+              "values": 2880,
+              "max_abs_error": 32.0,
+              "rms_error": 2.364754512657316,
+              "relative_l2": 0.04789288883726735
+            },
+            "output": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 33092,
+              "bit_exact": 104,
+              "values": 2880,
+              "max_abs_error": 21.5,
+              "rms_error": 2.9437015154306585,
+              "relative_l2": 0.034525599729032075
+            }
+          },
+          "selected_ids": [
+            31,
+            13,
+            14,
+            4
+          ],
+          "original_ids": [
+            31,
+            13,
+            14,
+            4
+          ],
+          "ids_exact": true
+        },
+        {
+          "layer": 17,
+          "checks": {
+            "attention": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 32960,
+              "bit_exact": 90,
+              "values": 2880,
+              "max_abs_error": 24.0,
+              "rms_error": 3.008491928185701,
+              "relative_l2": 0.03476566816942913
+            },
+            "output": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 33366,
+              "bit_exact": 131,
+              "values": 2880,
+              "max_abs_error": 29.5,
+              "rms_error": 3.2908575858314615,
+              "relative_l2": 0.03176923832356818
+            }
+          },
+          "selected_ids": [
+            10,
+            14,
+            4,
+            31
+          ],
+          "original_ids": [
+            14,
+            10,
+            4,
+            31
+          ],
+          "ids_exact": false
+        },
+        {
+          "layer": 18,
+          "checks": {
+            "attention": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 33236,
+              "bit_exact": 108,
+              "values": 2880,
+              "max_abs_error": 32.0,
+              "rms_error": 3.4964063686256748,
+              "relative_l2": 0.03392994722887671
+            },
+            "output": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 33541,
+              "bit_exact": 130,
+              "values": 2880,
+              "max_abs_error": 48.0,
+              "rms_error": 4.0858641385068575,
+              "relative_l2": 0.026581348115444138
+            }
+          },
+          "selected_ids": [
+            18,
+            5,
+            3,
+            1
+          ],
+          "original_ids": [
+            18,
+            5,
+            1,
+            3
+          ],
+          "ids_exact": false
+        },
+        {
+          "layer": 19,
+          "checks": {
+            "attention": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 33262,
+              "bit_exact": 115,
+              "values": 2880,
+              "max_abs_error": 48.0,
+              "rms_error": 4.202431079380799,
+              "relative_l2": 0.026929778529967207
+            },
+            "output": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 33144,
+              "bit_exact": 132,
+              "values": 2880,
+              "max_abs_error": 64.0,
+              "rms_error": 4.546861906203927,
+              "relative_l2": 0.023155657430539083
+            }
+          },
+          "selected_ids": [
+            24,
+            7,
+            19,
+            17
+          ],
+          "original_ids": [
+            24,
+            7,
+            19,
+            17
+          ],
+          "ids_exact": true
+        },
+        {
+          "layer": 20,
+          "checks": {
+            "attention": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 33122,
+              "bit_exact": 127,
+              "values": 2880,
+              "max_abs_error": 48.0,
+              "rms_error": 4.586957440816268,
+              "relative_l2": 0.02427470967417403
+            },
+            "output": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 33160,
+              "bit_exact": 141,
+              "values": 2880,
+              "max_abs_error": 64.0,
+              "rms_error": 5.26290412533086,
+              "relative_l2": 0.01819052597920163
+            }
+          },
+          "selected_ids": [
+            30,
+            7,
+            12,
+            10
+          ],
+          "original_ids": [
+            30,
+            7,
+            12,
+            10
+          ],
+          "ids_exact": true
+        },
+        {
+          "layer": 21,
+          "checks": {
+            "attention": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 33232,
+              "bit_exact": 133,
+              "values": 2880,
+              "max_abs_error": 96.0,
+              "rms_error": 5.373931526348415,
+              "relative_l2": 0.019562356610570857
+            },
+            "output": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 33190,
+              "bit_exact": 182,
+              "values": 2880,
+              "max_abs_error": 128.0,
+              "rms_error": 6.069157023235612,
+              "relative_l2": 0.0174922015798709
+            }
+          },
+          "selected_ids": [
+            3,
+            25,
+            9,
+            5
+          ],
+          "original_ids": [
+            3,
+            25,
+            9,
+            5
+          ],
+          "ids_exact": true
+        },
+        {
+          "layer": 22,
+          "checks": {
+            "attention": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 33081,
+              "bit_exact": 173,
+              "values": 2880,
+              "max_abs_error": 96.0,
+              "rms_error": 5.944242262843333,
+              "relative_l2": 0.01809371342710502
+            },
+            "output": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 33144,
+              "bit_exact": 179,
+              "values": 2880,
+              "max_abs_error": 128.0,
+              "rms_error": 6.644572305175601,
+              "relative_l2": 0.013322460924863753
+            }
+          },
+          "selected_ids": [
+            7,
+            21,
+            14,
+            26
+          ],
+          "original_ids": [
+            7,
+            21,
+            14,
+            26
+          ],
+          "ids_exact": true
+        },
+        {
+          "layer": 23,
+          "checks": {
+            "attention": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 33228,
+              "bit_exact": 173,
+              "values": 2880,
+              "max_abs_error": 128.0,
+              "rms_error": 6.875295638076108,
+              "relative_l2": 0.013420692321650126
+            },
+            "output": {
+              "passed": false,
+              "finite": true,
+              "max_bf16_ulp": 33200,
+              "bit_exact": 201,
+              "values": 2880,
+              "max_abs_error": 128.0,
+              "rms_error": 7.482442011493958,
+              "relative_l2": 0.012884262018185072
+            }
+          },
+          "selected_ids": [
+            22,
+            15,
+            7,
+            14
+          ],
+          "original_ids": [
+            22,
+            15,
+            14,
+            7
+          ],
+          "ids_exact": false
+        }
+      ],
+      "forward_command_count": 1990,
+      "forward_host_seconds": 0.8957306472584605,
+      "persistent_kv_tokens": 2,
+      "strict_all_layer_checks_passed": false
+    }
+  ],
+  "physical": true,
+  "normal_stop": true
+}

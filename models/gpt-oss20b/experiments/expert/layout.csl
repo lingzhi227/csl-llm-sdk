@@ -1,0 +1,45 @@
+param gate_rows:i16=2;
+param down_rows:i16=1;
+const memcpy=@import_module("<memcpy/get_params>",.{.width=23,.height=gate_rows});
+layout {
+  @comptime_assert(gate_rows>0 and gate_rows<=36 and gate_rows%2==0);
+  @comptime_assert(down_rows>0 and down_rows<=18 and down_rows<=gate_rows);
+  @set_rectangle(23,gate_rows);
+  for(@range(i16,23))|x|{for(@range(i16,gate_rows))|y|{
+    @set_tile_code(x,y,"pe.csl",.{.memcpy_params=memcpy.get_params(x),.x=@as(u16,x),.y=@as(u16,y),
+      .gate_rows=@as(u16,gate_rows),.down_rows=@as(u16,down_rows)});
+  }}
+  for(@range(i16,2))|bank|{
+    const base:i16=bank*11;
+    const rows:i16=if(bank==0) gate_rows else down_rows;
+    const collector:i16=base+11;
+    const go=@get_color(if(bank==0) 6 else 8);
+    const reply=@get_color(if(bank==0) 7 else 9);
+    for(@range(i16,rows))|y|{
+      @set_color_config(base,y,@get_color(3),.{.routes=.{
+        .rx=if(y==0) .{RAMP} else .{NORTH},.tx=if(y==rows-1) .{EAST} else .{EAST,SOUTH}}});
+      for(@range(i16,10))|c|{
+        const x:i16=base+c+1;
+        @set_color_config(x,y,@get_color(3),.{.routes=.{.rx=.{WEST},.tx=if(c==9) .{RAMP} else .{RAMP,EAST}},
+          .filter=.{.kind=.{.counter=true},.count_data=true,.init_counter=@as(u16,(2880-c*288)%2880),
+            .max_counter=287,.limit1=2879}});
+        if(c<9){@set_color_config(x,y,@get_color(if(c%2==0) 4 else 5),.{.routes=.{.rx=.{RAMP},.tx=.{EAST}}});}
+        if(c>0){@set_color_config(x,y,@get_color(if(c%2==1) 4 else 5),.{.routes=.{.rx=.{WEST},.tx=.{RAMP}}});}
+      }
+      @set_color_config(collector,y,go,.{.routes=.{.rx=if(y==0) .{RAMP} else .{NORTH},
+        .tx=if(y==rows-1) .{WEST} else .{WEST,SOUTH}}});
+      @set_color_config(collector-1,y,go,.{.routes=.{.rx=.{EAST},.tx=.{RAMP}}});
+      @set_color_config(collector-1,y,reply,.{.routes=.{.rx=.{RAMP},.tx=.{EAST}}});
+      @set_color_config(collector,y,reply,.{.routes=.{.rx=.{WEST},.tx=.{RAMP}}});
+      if(y>0){@set_color_config(collector,y,@get_color(if(y%2==1) 10 else 11),
+        .{.routes=.{.rx=.{RAMP},.tx=.{NORTH}}});}
+      if(y+1<rows){@set_color_config(collector,y,@get_color(if(y%2==0) 10 else 11),
+        .{.routes=.{.rx=.{SOUTH},.tx=.{RAMP}}});}
+    }
+  }
+  @export_name("weights",[*]u16,false);@export_name("scales",[*]u16,false);
+  @export_name("bias",[*]u16,false);@export_name("input",[*]f32,false);
+  @export_name("output",[*]u16,false);@export_name("counters",[*]u32,false);
+  @export_name("gate_debug",[*]u16,false);@export_name("activation_debug",[*]u16,false);
+  @export_name("compute",fn()void);
+}

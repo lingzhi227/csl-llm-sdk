@@ -1,0 +1,35 @@
+{
+  "model": "openai/gpt-oss-20b",
+  "revision": "6cee5e81ee83917806bbde320786a8fb61efebee",
+  "layer": 0,
+  "expert": 0,
+  "rows": [
+    0,
+    160
+  ],
+  "columns": [
+    0,
+    288
+  ],
+  "sources": {
+    "model.layers.0.mlp.experts.gate_up_proj_blocks": {
+      "file": "model-00000-of-00002.safetensors",
+      "bytes": 4792272488,
+      "sha256": "16d0f997dcfc4462089d536bffe51b4bcea2f872f5c430be09ef8ed392312427",
+      "publisher_verified": true
+    },
+    "model.layers.0.mlp.experts.gate_up_proj_scales": {
+      "file": "model-00000-of-00002.safetensors",
+      "bytes": 4792272488,
+      "sha256": "16d0f997dcfc4462089d536bffe51b4bcea2f872f5c430be09ef8ed392312427",
+      "publisher_verified": true
+    }
+  },
+  "fixture_sha256": "1492c3e03799cf1b2dbaf7de4bd69320849795084ba883031d9caee41f791f43",
+  "scale_min": 120,
+  "scale_max": 123,
+  "packed_weight_bytes": 24480,
+  "all_256_packed_bytes_decode_exact": true,
+  "full_model": false,
+  "numerical_policy": "FP64 dot oracle; gamma(2*288)*sum(abs(products)) absolute bound"
+}

@@ -1,0 +1,37 @@
+// Original MXFP4: consecutive low/high nibbles, 32 values per E8M0 scale.
+// Weight storage stays packed. Only a scalar is expanded at any instant.
+param rows: u16;
+param columns: u16;
+comptime { @comptime_assert(columns % 32 == 0); }
+const groups: u16 = columns / 32;
+const lut = [16]f32 {0.0,0.5,1.0,1.5,2.0,3.0,4.0,6.0,
+                    -0.0,-0.5,-1.0,-1.5,-2.0,-3.0,-4.0,-6.0};
+
+fn compute(weights: [*]u16, scales: [*]u16, input: [*]f32,
+           output: [*]f32) void {
+  // All checkpoint scales are independently audited and weights are finite.
+  // Preserve the fabric/epoch protocol while avoiding unnecessary zero-block work.
+  var nonzero:bool=false;
+  for(@range(u16,columns))|c|{if(input[c]!=0.0){nonzero=true;break;}}
+  if(!nonzero){for(@range(u16,rows))|r|{output[r]=0.0;}return;}
+  for (@range(u16, rows)) |r| {
+    var acc: f32 = 0.0;
+    for (@range(u16, groups)) |g| {
+      const block: u16 = r * groups + g;
+      const shift: u16 = (block % 2) * 8;
+      const exponent: u16 = (scales[block / 2] >> shift) & 255;
+      // Qualified normal-float domain; host verifies original scales before use.
+      @assert(exponent >= 4 and exponent <= 249);
+      const factor: f32 = @bitcast(f32, @as(u32, exponent) << 23);
+      for (@range(u16, 8)) |w| {
+        const packed_word: u16 = weights[block * 8 + w];
+        for (@range(u16, 4)) |n| {
+          const code: u16 = (packed_word >> (n * 4)) & 15;
+          const weight: f32 = lut[code] * factor;
+          acc += weight * input[g * 32 + w * 4 + n];
+        }
+      }
+    }
+    output[r] = acc;
+  }
+}

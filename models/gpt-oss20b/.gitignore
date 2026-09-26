@@ -1,0 +1,25 @@
+__pycache__/
+.pytest_cache/
+*.pyc
+*.safetensors
+*.bin
+*.npz
+out/
+simfab_traces/
+*.elf
+*.tar.gz
+
+# Keep source experiments visible under the parent repository's ignore rules.
+!experiments/
+!experiments/**
+.env
+.env.*
+.venv/
+model/
+weights/
+*.partial
+*.npy
+*.sif
+*.core
+*.log
+.DS_Store

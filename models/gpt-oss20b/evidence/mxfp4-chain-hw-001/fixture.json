@@ -1,0 +1,20 @@
+{
+  "model": "openai/gpt-oss-20b",
+  "revision": "6cee5e81ee83917806bbde320786a8fb61efebee",
+  "layer": 0,
+  "expert": 5,
+  "rows": [
+    0,
+    160
+  ],
+  "columns": [
+    0,
+    2880
+  ],
+  "weight_pes": 10,
+  "packed_weight_bytes": 244800,
+  "fixture_sha256": "db28df7b83c13450e6861d5ab8839920fed38987c3f9797d287346b0f93c3123",
+  "scope": "full hidden-dimension gate/up projection before bias; two real normalized hidden states plus zero",
+  "numerical_policy": "FP64 dot oracle; gamma(5780) absolute summation bound",
+  "full_model": false
+}

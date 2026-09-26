@@ -1,0 +1,927 @@
+[
+  {
+    "position": 0,
+    "input_token": 13225,
+    "generated_token": 11,
+    "expected_token": 11,
+    "token_exact": true,
+    "every_active_pe_completed": true,
+    "layers": [
+      {
+        "layer": 0,
+        "checks": {
+          "attention": {
+            "passed": true,
+            "finite": true,
+            "max_bf16_ulp": 0,
+            "bit_exact": 2880,
+            "values": 2880,
+            "max_abs_error": 0.0,
+            "rms_error": 0.0,
+            "relative_l2": 0.0
+          },
+          "output": {
+            "passed": true,
+            "finite": true,
+            "max_bf16_ulp": 0,
+            "bit_exact": 2880,
+            "values": 2880,
+            "max_abs_error": 0.0,
+            "rms_error": 0.0,
+            "relative_l2": 0.0
+          }
+        },
+        "selected_ids": [
+          5,
+          18,
+          9,
+          16
+        ],
+        "original_ids": [
+          5,
+          18,
+          9,
+          16
+        ],
+        "ids_exact": true
+      },
+      {
+        "layer": 1,
+        "checks": {
+          "attention": {
+            "passed": true,
+            "finite": true,
+            "max_bf16_ulp": 1,
+            "bit_exact": 2879,
+            "values": 2880,
+            "max_abs_error": 0.0078125,
+            "rms_error": 0.00014557734228514256,
+            "relative_l2": 3.996821127119009e-05
+          },
+          "output": {
+            "passed": false,
+            "finite": true,
+            "max_bf16_ulp": 15488,
+            "bit_exact": 2419,
+            "values": 2880,
+            "max_abs_error": 0.0625,
+            "rms_error": 0.002340576166481202,
+            "relative_l2": 0.0006032777005193294
+          }
+        },
+        "selected_ids": [
+          28,
+          22,
+          5,
+          4
+        ],
+        "original_ids": [
+          28,
+          22,
+          5,
+          4
+        ],
+        "ids_exact": true
+      },
+      {
+        "layer": 2,
+        "checks": {
+          "attention": {
+            "passed": false,
+            "finite": true,
+            "max_bf16_ulp": 15360,
+            "bit_exact": 1842,
+            "values": 2880,
+            "max_abs_error": 0.0625,
+            "rms_error": 0.004213585967592148,
+            "relative_l2": 0.000996911230495907
+          },
+          "output": {
+            "passed": false,
+            "finite": true,
+            "max_bf16_ulp": 15360,
+            "bit_exact": 1454,
+            "values": 2880,
+            "max_abs_error": 0.125,
+            "rms_error": 0.007985235645100317,
+            "relative_l2": 0.0018737899510201815
+          }
+        },
+        "selected_ids": [
+          26,
+          20,
+          11,
+          21
+        ],
+        "original_ids": [
+          26,
+          20,
+          11,
+          21
+        ],
+        "ids_exact": true
+      },
+      {
+        "layer": 3,
+        "checks": {
+          "attention": {
+            "passed": false,
+            "finite": true,
+            "max_bf16_ulp": 30592,
+            "bit_exact": 1023,
+            "values": 2880,
+            "max_abs_error": 0.5,
+            "rms_error": 0.014531509662786938,
+            "relative_l2": 0.0030128472707725666
+          },
+          "output": {
+            "passed": false,
+            "finite": true,
+            "max_bf16_ulp": 30656,
+            "bit_exact": 963,
+            "values": 2880,
+            "max_abs_error": 0.5,
+            "rms_error": 0.01800626145512406,
+            "relative_l2": 0.0035565185059516983
+          }
+        },
+        "selected_ids": [
+          1,
+          21,
+          30,
+          23
+        ],
+        "original_ids": [
+          1,
+          21,
+          30,
+          23
+        ],
+        "ids_exact": true
+      },
+      {
+        "layer": 4,
+        "checks": {
+          "attention": {
+            "passed": false,
+            "finite": true,
+            "max_bf16_ulp": 30848,
+            "bit_exact": 838,
+            "values": 2880,
+            "max_abs_error": 1.0,
+            "rms_error": 0.028693385757597053,
+            "relative_l2": 0.004753560811486689
+          },
+          "output": {
+            "passed": false,
+            "finite": true,
+            "max_bf16_ulp": 30880,
+            "bit_exact": 773,
+            "values": 2880,
+            "max_abs_error": 1.0,
+            "rms_error": 0.028508432361558696,
+            "relative_l2": 0.004609886308153623
+          }
+        },
+        "selected_ids": [
+          6,
+          2,
+          23,
+          9
+        ],
+        "original_ids": [
+          6,
+          2,
+          23,
+          9
+        ],
+        "ids_exact": true
+      },
+      {
+        "layer": 5,
+        "checks": {
+          "attention": {
+            "passed": false,
+            "finite": true,
+            "max_bf16_ulp": 30624,
+            "bit_exact": 745,
+            "values": 2880,
+            "max_abs_error": 1.0,
+            "rms_error": 0.03072761532402102,
+            "relative_l2": 0.004685895263840357
+          },
+          "output": {
+            "passed": false,
+            "finite": true,
+            "max_bf16_ulp": 30848,
+            "bit_exact": 803,
+            "values": 2880,
+            "max_abs_error": 1.5,
+            "rms_error": 0.04224914438714118,
+            "relative_l2": 0.006188388411454198
+          }
+        },
+        "selected_ids": [
+          24,
+          11,
+          5,
+          9
+        ],
+        "original_ids": [
+          24,
+          11,
+          5,
+          9
+        ],
+        "ids_exact": true
+      },
+      {
+        "layer": 6,
+        "checks": {
+          "attention": {
+            "passed": false,
+            "finite": true,
+            "max_bf16_ulp": 30720,
+            "bit_exact": 770,
+            "values": 2880,
+            "max_abs_error": 1.0,
+            "rms_error": 0.041572802123672335,
+            "relative_l2": 0.005472122084599851
+          },
+          "output": {
+            "passed": false,
+            "finite": true,
+            "max_bf16_ulp": 31648,
+            "bit_exact": 925,
+            "values": 2880,
+            "max_abs_error": 0.5,
+            "rms_error": 0.0747154624464253,
+            "relative_l2": 9.590333720653172e-05
+          }
+        },
+        "selected_ids": [
+          5,
+          27,
+          2,
+          9
+        ],
+        "original_ids": [
+          5,
+          27,
+          2,
+          9
+        ],
+        "ids_exact": true
+      },
+      {
+        "layer": 7,
+        "checks": {
+          "attention": {
+            "passed": false,
+            "finite": true,
+            "max_bf16_ulp": 31232,
+            "bit_exact": 1016,
+            "values": 2880,
+            "max_abs_error": 0.5,
+            "rms_error": 0.0762010002424907,
+            "relative_l2": 9.780709274054888e-05
+          },
+          "output": {
+            "passed": false,
+            "finite": true,
+            "max_bf16_ulp": 30912,
+            "bit_exact": 1022,
+            "values": 2880,
+            "max_abs_error": 0.515625,
+            "rms_error": 0.07657810106834693,
+            "relative_l2": 9.828931549052937e-05
+          }
+        },
+        "selected_ids": [
+          8,
+          26,
+          23,
+          22
+        ],
+        "original_ids": [
+          8,
+          26,
+          23,
+          22
+        ],
+        "ids_exact": true
+      },
+      {
+        "layer": 8,
+        "checks": {
+          "attention": {
+            "passed": false,
+            "finite": true,
+            "max_bf16_ulp": 31872,
+            "bit_exact": 1102,
+            "values": 2880,
+            "max_abs_error": 0.515625,
+            "rms_error": 0.07976526224799246,
+            "relative_l2": 0.0001023476345572375
+          },
+          "output": {
+            "passed": false,
+            "finite": true,
+            "max_bf16_ulp": 31784,
+            "bit_exact": 1052,
+            "values": 2880,
+            "max_abs_error": 0.515625,
+            "rms_error": 0.08193060084279535,
+            "relative_l2": 0.00010452773819411045
+          }
+        },
+        "selected_ids": [
+          24,
+          17,
+          9,
+          18
+        ],
+        "original_ids": [
+          24,
+          17,
+          9,
+          18
+        ],
+        "ids_exact": true
+      },
+      {
+        "layer": 9,
+        "checks": {
+          "attention": {
+            "passed": false,
+            "finite": true,
+            "max_bf16_ulp": 31801,
+            "bit_exact": 1299,
+            "values": 2880,
+            "max_abs_error": 0.53125,
+            "rms_error": 0.08658167685159324,
+            "relative_l2": 0.00011043105833694236
+          },
+          "output": {
+            "passed": false,
+            "finite": true,
+            "max_bf16_ulp": 31432,
+            "bit_exact": 1225,
+            "values": 2880,
+            "max_abs_error": 1.0,
+            "rms_error": 0.10653310998792555,
+            "relative_l2": 0.00013758462443963523
+          }
+        },
+        "selected_ids": [
+          31,
+          14,
+          1,
+          18
+        ],
+        "original_ids": [
+          31,
+          14,
+          1,
+          18
+        ],
+        "ids_exact": true
+      },
+      {
+        "layer": 10,
+        "checks": {
+          "attention": {
+            "passed": false,
+            "finite": true,
+            "max_bf16_ulp": 31168,
+            "bit_exact": 1259,
+            "values": 2880,
+            "max_abs_error": 1.0,
+            "rms_error": 0.10916091861497695,
+            "relative_l2": 0.00014097646758890524
+          },
+          "output": {
+            "passed": false,
+            "finite": true,
+            "max_bf16_ulp": 31984,
+            "bit_exact": 621,
+            "values": 2880,
+            "max_abs_error": 4.0,
+            "rms_error": 0.2769540499474618,
+            "relative_l2": 0.00035763104613047923
+          }
+        },
+        "selected_ids": [
+          28,
+          9,
+          6,
+          7
+        ],
+        "original_ids": [
+          28,
+          9,
+          6,
+          30
+        ],
+        "ids_exact": false
+      },
+      {
+        "layer": 11,
+        "checks": {
+          "attention": {
+            "passed": false,
+            "finite": true,
+            "max_bf16_ulp": 32048,
+            "bit_exact": 633,
+            "values": 2880,
+            "max_abs_error": 4.0,
+            "rms_error": 0.28070454864041844,
+            "relative_l2": 0.0003624673493482482
+          },
+          "output": {
+            "passed": false,
+            "finite": true,
+            "max_bf16_ulp": 31976,
+            "bit_exact": 652,
+            "values": 2880,
+            "max_abs_error": 4.0,
+            "rms_error": 0.2722021589919495,
+            "relative_l2": 0.00035149836554125737
+          }
+        },
+        "selected_ids": [
+          25,
+          5,
+          15,
+          10
+        ],
+        "original_ids": [
+          25,
+          5,
+          15,
+          10
+        ],
+        "ids_exact": true
+      },
+      {
+        "layer": 12,
+        "checks": {
+          "attention": {
+            "passed": false,
+            "finite": true,
+            "max_bf16_ulp": 31952,
+            "bit_exact": 661,
+            "values": 2880,
+            "max_abs_error": 4.0,
+            "rms_error": 0.2725272861640025,
+            "relative_l2": 0.0003519204240862995
+          },
+          "output": {
+            "passed": false,
+            "finite": true,
+            "max_bf16_ulp": 31933,
+            "bit_exact": 662,
+            "values": 2880,
+            "max_abs_error": 4.0,
+            "rms_error": 0.27384963244561045,
+            "relative_l2": 0.0003536397079772919
+          }
+        },
+        "selected_ids": [
+          26,
+          9,
+          15,
+          23
+        ],
+        "original_ids": [
+          26,
+          9,
+          15,
+          23
+        ],
+        "ids_exact": true
+      },
+      {
+        "layer": 13,
+        "checks": {
+          "attention": {
+            "passed": false,
+            "finite": true,
+            "max_bf16_ulp": 32038,
+            "bit_exact": 660,
+            "values": 2880,
+            "max_abs_error": 4.0,
+            "rms_error": 0.2792031493237731,
+            "relative_l2": 0.0003605465371354745
+          },
+          "output": {
+            "passed": false,
+            "finite": true,
+            "max_bf16_ulp": 31880,
+            "bit_exact": 672,
+            "values": 2880,
+            "max_abs_error": 4.0,
+            "rms_error": 0.27965958540033786,
+            "relative_l2": 0.00036115630739174396
+          }
+        },
+        "selected_ids": [
+          4,
+          9,
+          27,
+          25
+        ],
+        "original_ids": [
+          4,
+          9,
+          27,
+          25
+        ],
+        "ids_exact": true
+      },
+      {
+        "layer": 14,
+        "checks": {
+          "attention": {
+            "passed": false,
+            "finite": true,
+            "max_bf16_ulp": 31960,
+            "bit_exact": 675,
+            "values": 2880,
+            "max_abs_error": 4.0,
+            "rms_error": 0.2800278147449716,
+            "relative_l2": 0.00036163203134505716
+          },
+          "output": {
+            "passed": false,
+            "finite": true,
+            "max_bf16_ulp": 31706,
+            "bit_exact": 679,
+            "values": 2880,
+            "max_abs_error": 4.0,
+            "rms_error": 0.2861317530045696,
+            "relative_l2": 0.00036954964334533934
+          }
+        },
+        "selected_ids": [
+          18,
+          30,
+          14,
+          16
+        ],
+        "original_ids": [
+          18,
+          30,
+          14,
+          16
+        ],
+        "ids_exact": true
+      },
+      {
+        "layer": 15,
+        "checks": {
+          "attention": {
+            "passed": false,
+            "finite": true,
+            "max_bf16_ulp": 31829,
+            "bit_exact": 660,
+            "values": 2880,
+            "max_abs_error": 4.0,
+            "rms_error": 0.28081378133404916,
+            "relative_l2": 0.00036267200054689773
+          },
+          "output": {
+            "passed": false,
+            "finite": true,
+            "max_bf16_ulp": 31792,
+            "bit_exact": 662,
+            "values": 2880,
+            "max_abs_error": 4.0,
+            "rms_error": 0.29286853121650175,
+            "relative_l2": 0.0003782388454456562
+          }
+        },
+        "selected_ids": [
+          21,
+          13,
+          17,
+          24
+        ],
+        "original_ids": [
+          21,
+          13,
+          17,
+          24
+        ],
+        "ids_exact": true
+      },
+      {
+        "layer": 16,
+        "checks": {
+          "attention": {
+            "passed": false,
+            "finite": true,
+            "max_bf16_ulp": 31536,
+            "bit_exact": 667,
+            "values": 2880,
+            "max_abs_error": 4.0,
+            "rms_error": 0.29383794007050223,
+            "relative_l2": 0.0003794794099793052
+          },
+          "output": {
+            "passed": false,
+            "finite": true,
+            "max_bf16_ulp": 32152,
+            "bit_exact": 789,
+            "values": 2880,
+            "max_abs_error": 8.0,
+            "rms_error": 0.4080245881390337,
+            "relative_l2": 0.0005262845128383165
+          }
+        },
+        "selected_ids": [
+          4,
+          24,
+          13,
+          31
+        ],
+        "original_ids": [
+          4,
+          24,
+          13,
+          31
+        ],
+        "ids_exact": true
+      },
+      {
+        "layer": 17,
+        "checks": {
+          "attention": {
+            "passed": false,
+            "finite": true,
+            "max_bf16_ulp": 32000,
+            "bit_exact": 753,
+            "values": 2880,
+            "max_abs_error": 8.0,
+            "rms_error": 0.42432119632383286,
+            "relative_l2": 0.0005471754998570483
+          },
+          "output": {
+            "passed": false,
+            "finite": true,
+            "max_bf16_ulp": 32144,
+            "bit_exact": 812,
+            "values": 2880,
+            "max_abs_error": 8.0,
+            "rms_error": 0.4714174301939687,
+            "relative_l2": 0.005918120806577682
+          }
+        },
+        "selected_ids": [
+          5,
+          15,
+          21,
+          4
+        ],
+        "original_ids": [
+          5,
+          15,
+          21,
+          4
+        ],
+        "ids_exact": true
+      },
+      {
+        "layer": 18,
+        "checks": {
+          "attention": {
+            "passed": false,
+            "finite": true,
+            "max_bf16_ulp": 32032,
+            "bit_exact": 655,
+            "values": 2880,
+            "max_abs_error": 8.0,
+            "rms_error": 0.5714920179021566,
+            "relative_l2": 0.006624647455202682
+          },
+          "output": {
+            "passed": false,
+            "finite": true,
+            "max_bf16_ulp": 32144,
+            "bit_exact": 607,
+            "values": 2880,
+            "max_abs_error": 16.0,
+            "rms_error": 0.6971067606760457,
+            "relative_l2": 0.005115483181218736
+          }
+        },
+        "selected_ids": [
+          1,
+          17,
+          29,
+          25
+        ],
+        "original_ids": [
+          1,
+          17,
+          29,
+          25
+        ],
+        "ids_exact": true
+      },
+      {
+        "layer": 19,
+        "checks": {
+          "attention": {
+            "passed": false,
+            "finite": true,
+            "max_bf16_ulp": 31984,
+            "bit_exact": 558,
+            "values": 2880,
+            "max_abs_error": 16.0,
+            "rms_error": 0.7579017981999666,
+            "relative_l2": 0.006590790443585805
+          },
+          "output": {
+            "passed": false,
+            "finite": true,
+            "max_bf16_ulp": 32384,
+            "bit_exact": 533,
+            "values": 2880,
+            "max_abs_error": 32.0,
+            "rms_error": 1.1198139892245735,
+            "relative_l2": 0.00659270908002022
+          }
+        },
+        "selected_ids": [
+          27,
+          24,
+          21,
+          19
+        ],
+        "original_ids": [
+          27,
+          24,
+          21,
+          19
+        ],
+        "ids_exact": true
+      },
+      {
+        "layer": 20,
+        "checks": {
+          "attention": {
+            "passed": false,
+            "finite": true,
+            "max_bf16_ulp": 32256,
+            "bit_exact": 494,
+            "values": 2880,
+            "max_abs_error": 32.0,
+            "rms_error": 1.2951972384798558,
+            "relative_l2": 0.008346005028194138
+          },
+          "output": {
+            "passed": false,
+            "finite": true,
+            "max_bf16_ulp": 32640,
+            "bit_exact": 486,
+            "values": 2880,
+            "max_abs_error": 16.0,
+            "rms_error": 1.2958416537061683,
+            "relative_l2": 0.005233554533641304
+          }
+        },
+        "selected_ids": [
+          19,
+          10,
+          23,
+          12
+        ],
+        "original_ids": [
+          19,
+          10,
+          23,
+          12
+        ],
+        "ids_exact": true
+      },
+      {
+        "layer": 21,
+        "checks": {
+          "attention": {
+            "passed": false,
+            "finite": true,
+            "max_bf16_ulp": 32950,
+            "bit_exact": 470,
+            "values": 2880,
+            "max_abs_error": 32.0,
+            "rms_error": 1.6088634303402456,
+            "relative_l2": 0.008158037291352118
+          },
+          "output": {
+            "passed": false,
+            "finite": true,
+            "max_bf16_ulp": 32704,
+            "bit_exact": 428,
+            "values": 2880,
+            "max_abs_error": 64.0,
+            "rms_error": 2.134607844810479,
+            "relative_l2": 0.007428370359634441
+          }
+        },
+        "selected_ids": [
+          23,
+          17,
+          3,
+          25
+        ],
+        "original_ids": [
+          23,
+          17,
+          3,
+          25
+        ],
+        "ids_exact": true
+      },
+      {
+        "layer": 22,
+        "checks": {
+          "attention": {
+            "passed": false,
+            "finite": true,
+            "max_bf16_ulp": 32720,
+            "bit_exact": 414,
+            "values": 2880,
+            "max_abs_error": 64.0,
+            "rms_error": 2.3298797854291164,
+            "relative_l2": 0.008957285441977329
+          },
+          "output": {
+            "passed": false,
+            "finite": true,
+            "max_bf16_ulp": 32768,
+            "bit_exact": 430,
+            "values": 2880,
+            "max_abs_error": 64.0,
+            "rms_error": 3.37223252302381,
+            "relative_l2": 0.007539595376615603
+          }
+        },
+        "selected_ids": [
+          7,
+          13,
+          27,
+          26
+        ],
+        "original_ids": [
+          7,
+          13,
+          27,
+          26
+        ],
+        "ids_exact": true
+      },
+      {
+        "layer": 23,
+        "checks": {
+          "attention": {
+            "passed": false,
+            "finite": true,
+            "max_bf16_ulp": 32912,
+            "bit_exact": 409,
+            "values": 2880,
+            "max_abs_error": 64.0,
+            "rms_error": 2.8910257220952764,
+            "relative_l2": 0.007430247908499493
+          },
+          "output": {
+            "passed": false,
+            "finite": true,
+            "max_bf16_ulp": 32916,
+            "bit_exact": 394,
+            "values": 2880,
+            "max_abs_error": 64.0,
+            "rms_error": 3.1356728560000455,
+            "relative_l2": 0.00850063202888857
+          }
+        },
+        "selected_ids": [
+          16,
+          7,
+          15,
+          20
+        ],
+        "original_ids": [
+          16,
+          7,
+          15,
+          20
+        ],
+        "ids_exact": true
+      }
+    ],
+    "forward_command_count": 1990,
+    "forward_host_seconds": 1.0155043313279748,
+    "persistent_kv_tokens": 1
+  }
+]

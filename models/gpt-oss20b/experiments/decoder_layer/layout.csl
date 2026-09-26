@@ -1,0 +1,204 @@
+// Generated single original decoder-layer diagnostic; no full-model claim.
+const memcpy=@import_module("<memcpy/get_params>",.{.width=27,.height=1160});
+fn is_node(y:i16) bool {return y<8 or (y<1140 and y%30==29) or (y>=106 and y<=1052 and (y-106)%43==0);}
+// Rank in {0..7} union {29+30r} union {106+43r}; y=149 is the sole overlap.
+fn node_index(y:i16) u16 {
+  const first:i16=if(y<8) y else 8;
+  const q:i16=if(y/30<38) y/30 else 38;
+  const o:i16=if(y<=106) 0 else if((y-64)/43<23) (y-64)/43 else 23;
+  return @as(u16,first+q+o-(if(y>149) 1 else 0));
+}
+layout {
+  @set_rectangle(27,1160);
+  for(@range(i16,1))|layer|{
+    const b:i16=0;
+    for(@range(i16,27))|x|{for(@range(i16,1160))|y|{
+
+    const row:i16=y%36;const expert:i16=y/36;
+    if((x==0 and y<1140) or (x==1 and y<60)){
+      @set_tile_code(b+x,y,"projection_full.csl",.{.memcpy_params=memcpy.get_params(b+x),.kind=@as(u16,x),
+        .first=y%30==0,.last=y%30==29,.parity=@as(u16,(y%30)%2),.embedding_return=false,.return_root=y==0});
+    }else if(x==1 and y>=64 and y<1053){
+      @set_tile_code(b+x,y,"projection_full.csl",.{.memcpy_params=memcpy.get_params(b+x),.kind=@as(u16,2),
+        .first=(y-64)%43==0,.last=(y-64)%43==42,.parity=@as(u16,((y-64)%43)%2),.embedding_return=false,.return_root=false});
+    }else if(x==2 and y==0){
+      @set_tile_code(b+x,y,"attention_controller.csl",.{.memcpy_params=memcpy.get_params(b+x)});
+    }else if(x==2 and is_node(y)){
+      @set_tile_code(b+x,y,"prefix_collector.csl",.{.memcpy_params=memcpy.get_params(b+x),.parity=node_index(y)%2,.tail=y==1139});
+    }else if(x==3 and y<8){
+      @set_tile_code(b+x,y,"kv.csl",.{.memcpy_params=memcpy.get_params(b+x)});
+    }else if(x==0 and y==1158){
+      @set_tile_code(b+x,y,"endpoint.csl",.{.memcpy_params=memcpy.get_params(b+x),.ingress=true,.egress=false});
+    }else if(x==1 and y>=1054 and y<1084){
+      @set_tile_code(b+x,y,"router.csl",.{.memcpy_params=memcpy.get_params(b+x),.first=y==1054,.last=y==1083,.parity=@as(u16,(y-1054)%2)});
+    }else if(x==3 and y==1159){
+      @set_tile_code(b+x,y,"moe_controller_full.csl",.{.memcpy_params=memcpy.get_params(b+x)});
+    }else if(y<1152 and ((x>=4 and x<=13) or (x>=15 and x<=24 and row<18))){
+      const gate:bool=x<=13;
+      @set_tile_code(b+x,y,"expert.csl",.{.memcpy_params=memcpy.get_params(b+x),.kind=@as(u16,if(gate) 1 else 2),
+        .contraction=@as(u16,if(gate) x-4 else x-15),.parity=@as(u16,0),.tail=false});
+    }else if(y<1152 and (x==14 or (x==25 and row<18))){
+      const gate:bool=x==14;
+      @set_tile_code(b+x,y,"expert.csl",.{.memcpy_params=memcpy.get_params(b+x),
+        .kind=@as(u16,if(row==0) (if(gate) 3 else 4) else (if(gate) 5 else 6)),
+        .contraction=@as(u16,0),.parity=@as(u16,row%2),.tail=row==(if(gate) 35 else 17)});
+    }else if(x==26 and y<1152 and row==0){
+      @set_tile_code(b+x,y,"expert_join_full.csl",.{.memcpy_params=memcpy.get_params(b+x),.root=expert==0,
+        .parity=@as(u16,expert%2),.tail=expert==31});
+    }else{
+      @set_tile_code(b+x,y,"idle.csl",.{.memcpy_params=memcpy.get_params(b+x),.ingress=false,.metadata=x>=4 and y<1152});
+    }
+  }}
+  // Normalized input fans south across both original Q/K/V matrix banks.
+  @set_color_config(b+(2),0,@get_color(3),.{.routes=.{.rx=.{RAMP},.tx=.{WEST}}});
+  for(@range(i16,2))|x|{
+    const height:i16=if(x==0) 1140 else 60;
+    for(@range(i16,height))|y|{
+      const k:i16=y%30;
+      @set_color_config(b+(x),y,@get_color(3),.{.routes=.{.rx=if(y==0) .{EAST} else .{NORTH},
+        .tx=if(x==1 and y==0) .{RAMP,WEST,SOUTH} else if(y==height-1) .{RAMP} else .{RAMP,SOUTH}},
+        .filter=.{.kind=.{.counter=true},.count_data=true,.init_counter=@as(u16,(2880-k*96)%2880),.max_counter=95,.limit1=2879}});
+      if(k<29){@set_color_config(b+(x),y,@get_color(if(k%2==0) 4 else 5),.{.routes=.{.rx=.{RAMP},.tx=.{SOUTH}}});}
+      if(k>0){@set_color_config(b+(x),y,@get_color(if(k%2==1) 4 else 5),.{.routes=.{.rx=.{NORTH},.tx=.{RAMP}}});}
+      if(k==29){
+        const route_color=@get_color(if(x==0) 6 else 8);
+        @set_color_config(b+(x),y,route_color,.{.routes=.{.rx=.{RAMP},.tx=.{EAST}}});
+        if(x==0){@set_color_config(b+(1),y,route_color,.{.routes=.{.rx=.{WEST},.tx=.{EAST}}});}
+        @set_color_config(b+(2),y,route_color,.{.routes=.{.rx=.{WEST},.tx=.{RAMP}}});
+      }
+    }
+  }
+  // Padded 4128-contraction O projection, with no truncation of 4096 real inputs.
+  @set_color_config(b+(2),0,@get_color(7),.{.routes=.{.rx=.{RAMP},.tx=.{WEST}}});
+  @set_color_config(b+(1),0,@get_color(7),.{.routes=.{.rx=.{EAST},.tx=.{SOUTH}}});
+  for(@range(i16,1,64,1))|y|{@set_color_config(b+(1),y,@get_color(7),.{.routes=.{.rx=.{NORTH},.tx=.{SOUTH}}});}
+  for(@range(i16,64,1053,1))|y|{
+    const k:i16=(y-64)%43;
+    @set_color_config(b+(1),y,@get_color(7),.{.routes=.{.rx=.{NORTH},.tx=if(y==1052) .{RAMP} else .{RAMP,SOUTH}},
+      .filter=.{.kind=.{.counter=true},.count_data=true,.init_counter=@as(u16,(4128-k*96)%4128),.max_counter=95,.limit1=4127}});
+    if(k<42){@set_color_config(b+(1),y,@get_color(if(k%2==0) 4 else 5),.{.routes=.{.rx=.{RAMP},.tx=.{SOUTH}}});}
+    if(k>0){@set_color_config(b+(1),y,@get_color(if(k%2==1) 4 else 5),.{.routes=.{.rx=.{NORTH},.tx=.{RAMP}}});}
+    if(k==42){
+      @set_color_config(b+(1),y,@get_color(16),.{.routes=.{.rx=.{RAMP},.tx=.{EAST}}});
+      @set_color_config(b+(2),y,@get_color(16),.{.routes=.{.rx=.{WEST},.tx=.{RAMP}}});
+    }
+  }
+  // Each collector node has one physical RX direction per color.
+  var previous:i16=0;
+  for(@range(i16,1,1140,1))|y|{if(is_node(y)){
+    const route_color=@get_color(if(node_index(y)%2==1) 4 else 5);
+    @set_color_config(b+(2),y,route_color,.{.routes=.{.rx=.{RAMP},.tx=.{NORTH}}});
+    for(@range(i16,previous+1,y,1))|middle|{@set_color_config(b+(2),middle,route_color,.{.routes=.{.rx=.{SOUTH},.tx=.{NORTH}}});}
+    @set_color_config(b+(2),previous,route_color,.{.routes=.{.rx=.{SOUTH},.tx=.{RAMP}}});previous=y;
+  }}
+  @set_color_config(b+(2),0,@get_color(10),.{.routes=.{.rx=.{RAMP},.tx=.{EAST}}});
+  for(@range(i16,8))|y|{
+    @set_color_config(b+(3),y,@get_color(10),.{.routes=.{.rx=if(y==0) .{WEST} else .{NORTH},.tx=if(y==7) .{RAMP} else .{RAMP,SOUTH}}});
+    @set_color_config(b+(3),y,@get_color(11),.{.routes=.{.rx=.{RAMP},.tx=.{WEST}}});
+    @set_color_config(b+(2),y,@get_color(11),.{.routes=.{.rx=.{EAST},.tx=.{RAMP}}});
+  }
+  @set_color_config(b+(2),0,@get_color(17),.{.routes=.{.rx=.{RAMP},.tx=.{EAST}}});
+  @set_color_config(b+(3),0,@get_color(17),.{.routes=.{.rx=.{WEST},.tx=.{SOUTH}}});
+  for(@range(i16,1,1160,1))|y|{@set_color_config(b+(3),y,@get_color(17),.{.routes=.{.rx=.{NORTH},.tx=if(y==1159) .{RAMP} else .{SOUTH}}});}
+  // Full router: 30 contraction tiles, southward reduction after northward input.
+  @set_color_config(b+(3),1159,@get_color(15),.{.routes=.{.rx=.{RAMP},.tx=.{WEST}}});
+  @set_color_config(b+(2),1159,@get_color(15),.{.routes=.{.rx=.{EAST},.tx=.{WEST}}});
+  @set_color_config(b+(1),1159,@get_color(15),.{.routes=.{.rx=.{EAST},.tx=.{NORTH}}});
+  for(@range(i16,1084,1159,1))|y|{@set_color_config(b+(1),y,@get_color(15),.{.routes=.{.rx=.{SOUTH},.tx=.{NORTH}}});}
+  for(@range(i16,1054,1084,1))|y|{
+    const c:i16=y-1054;
+    @set_color_config(b+(1),y,@get_color(15),.{.routes=.{.rx=.{SOUTH},.tx=if(c==0) .{RAMP} else .{RAMP,NORTH}},
+      .filter=.{.kind=.{.counter=true},.count_data=true,.init_counter=@as(u16,(2880-c*96)%2880),.max_counter=95,.limit1=2879}});
+    @set_color_config(b+(1),y,@get_color(if(c==29) 16 else if(c%2==0) 4 else 5),
+      .{.routes=.{.rx=.{RAMP},.tx=if(c==29) .{EAST} else .{SOUTH}}});
+    if(c>0){@set_color_config(b+(1),y,@get_color(if(c%2==1) 4 else 5),.{.routes=.{.rx=.{NORTH},.tx=.{RAMP}}});}
+  }
+  @set_color_config(b+(2),1083,@get_color(16),.{.routes=.{.rx=.{WEST},.tx=.{EAST}}});
+  @set_color_config(b+(3),1083,@get_color(16),.{.routes=.{.rx=.{WEST},.tx=.{SOUTH}}});
+  for(@range(i16,1084,1160,1))|y|{
+    @set_color_config(b+(3),y,@get_color(16),.{.routes=.{.rx=.{NORTH},.tx=if(y==1159) .{RAMP} else .{SOUTH}}});
+  }
+  // Northbound metadata and activation trunks; expert progress then goes east.
+  for(@range(u16,2))|which|{
+    const route_color=@get_color(if(which==0) 19 else 3);
+    @set_color_config(b+(3),1159,route_color,.{.routes=.{.rx=.{RAMP},.tx=.{NORTH}}});
+    for(@range(i16,1160-1))|y|{
+      @set_color_config(b+(3),y,route_color,.{.routes=.{.rx=.{SOUTH},.tx=if(y>=1152) .{NORTH} else if(y==0) .{EAST} else .{NORTH,EAST}}});
+    }
+  }
+  for(@range(i16,1152))|y|{
+    for(@range(i16,4,27,1))|x|{
+      @set_color_config(b+(x),y,@get_color(19),.{.routes=.{.rx=.{WEST},.tx=if(x==26) .{RAMP} else .{RAMP,EAST}}});
+    }
+  }
+  // Independent full-width gate/up and down banks in each of 32 resident stripes.
+  for(@range(i16,32))|expert|{for(@range(i16,2))|bank|{
+    const rows:i16=if(bank==0) 36 else 18;
+    const base:i16=if(bank==0) 3 else 14;const collector:i16=base+11;
+    const go=@get_color(if(bank==0) 6 else 8);const reply=@get_color(if(bank==0) 7 else 9);
+    for(@range(i16,rows))|row|{
+      const y:i16=36*expert+row;
+      if(bank==1){@set_color_config(b+(base),y,@get_color(3),.{.routes=.{.rx=if(row==0) .{RAMP} else .{NORTH},
+        .tx=if(row==rows-1) .{EAST} else .{EAST,SOUTH}}});}
+      for(@range(i16,10))|c|{
+        const x:i16=base+c+1;
+        @set_color_config(b+(x),y,@get_color(3),.{.routes=.{.rx=.{WEST},.tx=if(c==9) .{RAMP} else .{RAMP,EAST}},
+          .filter=.{.kind=.{.counter=true},.count_data=true,.init_counter=@as(u16,(2880-c*288)%2880),.max_counter=287,.limit1=2879}});
+        if(c<9){@set_color_config(b+(x),y,@get_color(if(c%2==0) 4 else 5),.{.routes=.{.rx=.{RAMP},.tx=.{EAST}}});}
+        if(c>0){@set_color_config(b+(x),y,@get_color(if(c%2==1) 4 else 5),.{.routes=.{.rx=.{WEST},.tx=.{RAMP}}});}
+      }
+      @set_color_config(b+(collector),y,go,.{.routes=.{.rx=if(row==0) .{RAMP} else .{NORTH},
+        .tx=if(row==rows-1) .{WEST} else .{WEST,SOUTH}}});
+      @set_color_config(b+(collector-1),y,go,.{.routes=.{.rx=.{EAST},.tx=.{RAMP}}});
+      @set_color_config(b+(collector-1),y,reply,.{.routes=.{.rx=.{RAMP},.tx=.{EAST}}});
+      @set_color_config(b+(collector),y,reply,.{.routes=.{.rx=.{WEST},.tx=.{RAMP}}});
+      if(row>0){@set_color_config(b+(collector),y,@get_color(if(row%2==1) 10 else 11),.{.routes=.{.rx=.{RAMP},.tx=.{NORTH}}});}
+      if(row+1<rows){@set_color_config(b+(collector),y,@get_color(if(row%2==0) 10 else 11),.{.routes=.{.rx=.{SOUTH},.tx=.{RAMP}}});}
+    }
+  }}
+  // Global selected-expert request path and distinct local/vertical reply paths.
+  for(@range(i16,1117))|y|{
+    if(y==0){@set_color_config(b+(26),y,@get_color(13),.{.routes=.{.rx=.{RAMP},.tx=.{WEST,SOUTH}}});}
+    else if(y%36==0){@set_color_config(b+(26),y,@get_color(13),.{.routes=.{.rx=.{NORTH},.tx=if(y==1116) .{WEST,RAMP} else .{WEST,SOUTH,RAMP}}});}
+    else{@set_color_config(b+(26),y,@get_color(13),.{.routes=.{.rx=.{NORTH},.tx=.{SOUTH}}});}
+  }
+  for(@range(i16,32))|expert|{
+    const y:i16=36*expert;
+    @set_color_config(b+(25),y,@get_color(13),.{.routes=.{.rx=.{EAST},.tx=.{RAMP}}});
+    @set_color_config(b+(25),y,@get_color(14),.{.routes=.{.rx=.{RAMP},.tx=.{EAST}}});
+    @set_color_config(b+(26),y,@get_color(14),.{.routes=.{.rx=.{WEST},.tx=.{RAMP}}});
+    if(expert>0){
+      const route_color=@get_color(if(expert%2==1) 10 else 11);
+      @set_color_config(b+(26),y,route_color,.{.routes=.{.rx=.{RAMP},.tx=.{NORTH}}});
+      for(@range(i16,1,36,1))|distance|{@set_color_config(b+(26),y-distance,route_color,.{.routes=.{.rx=.{SOUTH},.tx=.{NORTH}}});}
+      @set_color_config(b+(26),y-36,route_color,.{.routes=.{.rx=.{SOUTH},.tx=.{RAMP}}});
+    }
+  }
+  // Original residual travels north, then east to the global weighted join.
+  @set_color_config(b+(3),1159,@get_color(18),.{.routes=.{.rx=.{RAMP},.tx=.{NORTH}}});
+  for(@range(i16,1,1159,1))|y|{@set_color_config(b+(3),y,@get_color(18),.{.routes=.{.rx=.{SOUTH},.tx=.{NORTH}}});}
+  @set_color_config(b+(3),0,@get_color(18),.{.routes=.{.rx=.{SOUTH},.tx=.{EAST}}});
+  for(@range(i16,4,27,1))|x|{@set_color_config(b+(x),0,@get_color(18),.{.routes=.{.rx=.{WEST},.tx=if(x==26) .{RAMP} else .{EAST}}});}
+
+
+    if(layer>0){
+      for(@range(i16,2))|x|{@set_color_config(b+x,0,@get_color(12),.{.routes=.{.rx=.{WEST},.tx=.{EAST}}});}
+      @set_color_config(b+2,0,@get_color(12),.{.routes=.{.rx=.{WEST},.tx=.{RAMP}}});
+    }
+  }
+
+  // West original residual travels north then east to the attention controller.
+  @set_color_config(0,1158,@get_color(12),.{.routes=.{.rx=.{RAMP},.tx=.{NORTH}}});
+  for(@range(i16,1,1158,1))|y|{@set_color_config(0,y,@get_color(12),.{.routes=.{.rx=.{SOUTH},.tx=.{NORTH}}});}
+  @set_color_config(0,0,@get_color(12),.{.routes=.{.rx=.{SOUTH},.tx=.{EAST}}});
+  @set_color_config(1,0,@get_color(12),.{.routes=.{.rx=.{WEST},.tx=.{EAST}}});
+  @set_color_config(2,0,@get_color(12),.{.routes=.{.rx=.{WEST},.tx=.{RAMP}}});
+  @export_name("identity",[*]u32,false);@export_name("counters",[*]u32,false);
+  @export_name("weights",[*]u16,false);@export_name("scales",[*]u16,false);@export_name("bias",[*]u16,false);@export_name("gain",[*]u16,false);
+  @export_name("hidden",[*]u32,false);@export_name("workspace",[*]u32,false);@export_name("frequencies",[*]f32,false);
+  @export_name("input",[*]f32,false);@export_name("output",[*]u32,false);@export_name("token",[*]u32,false);
+  @export_name("keys",[*]u16,false);@export_name("values",[*]u16,false);@export_name("sinks",[*]u16,false);
+  @export_name("logits",[*]u16,false);@export_name("ids",[*]u16,false);@export_name("probabilities",[*]u16,false);
+  @export_name("routing",[*]u32,false);@export_name("gate_debug",[*]u16,false);@export_name("activation_debug",[*]u16,false);
+  @export_name("step",fn(u16,u16,u16)void);
+}

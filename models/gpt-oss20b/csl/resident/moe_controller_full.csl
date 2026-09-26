@@ -1,0 +1,89 @@
+param memcpy_params;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const norm=@import_module("normalization_rope.csl");
+const math=@import_module("moe_math.csl");
+var identity=@zeros([4]u32);var counters=@zeros([6]u32);
+var hidden_words=@zeros([1440]u32);const hidden:[*]u32=&hidden_words;
+var gain=@zeros([2880]u16);var input=@zeros([2880]f32);
+var router_values=@zeros([32]f32);var logits=@zeros([32]u16);
+var ids=@zeros([4]u16);var probabilities=@zeros([4]u16);var routing=@zeros([8]u32);
+var header=@zeros([2]u32);var phase:u16=0;var body:bool=false;
+var hidden_ready:bool=false;
+var tx_done:bool=false;var router_done:bool=false;
+const ip:[*]u32=&identity;const cp:[*]u32=&counters;const gp:[*]u16=&gain;
+const xp:[*]f32=&input;const lp:[*]u16=&logits;const ids_ptr:[*]u16=&ids;
+const pp:[*]u16=&probabilities;const mp:[*]u32=&routing;
+const hidden_iq=@get_input_queue(2);const router_iq=@get_input_queue(3);
+const router_oq=@get_output_queue(2);const metadata_oq=@get_output_queue(3);
+const activation_oq=@get_output_queue(4);const residual_oq=@get_output_queue(5);
+const rx_dst=@get_dsr(dsr_dest,3);const rx_src=@get_dsr(dsr_src1,3);
+const tx_dst=@get_dsr(dsr_dest,4);const tx_src=@get_dsr(dsr_src1,4);
+const sum_dst=@get_dsr(dsr_dest,5);const sum_src=@get_dsr(dsr_src1,5);
+const hidden_task=@get_local_task_id(8);const router_task=@get_local_task_id(9);const sent_task=@get_local_task_id(10);
+
+fn send(data:[*]u32,count:u16,comptime queue:output_queue) void {
+  const mem=@get_dsd(mem1d_dsd,.{.base_address=data,.extent=count});
+  const base=@get_dsd(fabout_dsd,.{.output_queue=queue,.extent=1});
+  @load_to_dsr(tx_src,mem);
+  @load_to_dsr(tx_dst,@set_dsd_length(base,count),.{.async=true,.activate=sent_task,.ut_id=@get_ut_id(4)});
+  @mov32(tx_dst,tx_src,.{.async=true});
+}
+fn maybe_finish_router() void {
+  if(tx_done and router_done){counters[1]+=1;sys.unblock_cmd_stream();}
+}
+task hidden_received() void {
+  if(phase==9){hidden_ready=true;sys.unblock_cmd_stream();return;}
+  const packed_norm:[*]u16=@ptrcast([*]u16,&input);
+  norm.normalize(@ptrcast([*]u16,&hidden_words),gp,packed_norm);
+  var i:u16=2880;while(i>0){i-=1;input[i]=math.f32_from_bf16(packed_norm[i]);}
+  const mem=@get_dsd(mem1d_dsd,.{.base_address=&router_values,.extent=32});
+  const wire=@get_dsd(fabin_dsd,.{.input_queue=router_iq,.extent=32});
+  @load_to_dsr(sum_dst,mem);
+  @load_to_dsr(sum_src,wire,.{.async=true,.activate=router_task,.ut_id=@get_ut_id(5)});
+  @mov32(sum_dst,sum_src,.{.async=true});
+  send(@ptrcast([*]u32,&input),2880,router_oq);
+}
+task router_received() void {
+  for(@range(u16,32))|i|{logits[i]=math.round_bf16(router_values[i]);}
+  math.top4(lp,ids_ptr,pp);
+  routing[0]=counters[0];routing[7]=0;
+  for(@range(u16,4))|i|{routing[i+1]=@as(u32,ids[i]);routing[7]|=@as(u32,1)<<ids[i];}
+  routing[5]=@as(u32,probabilities[0])|(@as(u32,probabilities[1])<<16);
+  routing[6]=@as(u32,probabilities[2])|(@as(u32,probabilities[3])<<16);
+  router_done=true;maybe_finish_router();
+}
+task sent() void {
+  if(phase==10){tx_done=true;maybe_finish_router();}
+  else if(phase==13 and !body){body=true;send(&hidden_words,1440,residual_oq);}
+  else{
+    if(phase==12){counters[4]+=1;}
+    if(phase==13){counters[5]+=1;}
+    sys.unblock_cmd_stream();
+  }
+}
+fn step(requested:u16,layer:u16,index:u16) void {
+  if(identity[0]!=@as(u32,layer)){sys.unblock_cmd_stream();return;}
+  phase=requested;
+  if(phase==9){
+    @assert(counters[0]==counters[5] and !hidden_ready);
+    const mem=@get_dsd(mem1d_dsd,.{.base_address=&hidden_words,.extent=1440});
+    const wire=@get_dsd(fabin_dsd,.{.input_queue=hidden_iq,.extent=1440});
+    @load_to_dsr(rx_dst,mem);
+    @load_to_dsr(rx_src,wire,.{.async=true,.activate=hidden_task,.ut_id=@get_ut_id(3)});
+    @mov32(rx_dst,rx_src,.{.async=true});
+  }else if(phase==10){
+    @assert(hidden_ready and counters[0]==counters[5]);hidden_ready=false;counters[0]+=1;tx_done=false;router_done=false;@activate(hidden_task);
+  }else if(phase==11){send(&routing,8,metadata_oq);}
+  else if(phase==12){send(@ptrcast([*]u32,&input),2880,activation_oq);}
+  else if(phase==13){body=false;header[0]=counters[0];header[1]=2880;send(&header,2,residual_oq);}
+  else{sys.unblock_cmd_stream();}
+}
+comptime {
+  @initialize_queue(hidden_iq,.{.color=@get_color(17)});@initialize_queue(router_iq,.{.color=@get_color(16)});
+  @initialize_queue(router_oq,.{.color=@get_color(15)});@initialize_queue(metadata_oq,.{.color=@get_color(19)});
+  @initialize_queue(activation_oq,.{.color=@get_color(3)});@initialize_queue(residual_oq,.{.color=@get_color(18)});
+  @bind_local_task(hidden_received,hidden_task);@bind_local_task(router_received,router_task);@bind_local_task(sent,sent_task);
+  @export_symbol(ip,"identity");@export_symbol(cp,"counters");@export_symbol(hidden,"hidden");@export_symbol(gp,"gain");
+  @export_symbol(xp,"input");@export_symbol(lp,"logits");@export_symbol(ids_ptr,"ids");@export_symbol(pp,"probabilities");
+  @export_symbol(mp,"routing");@export_symbol(step);
+}

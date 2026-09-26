@@ -1,0 +1,4 @@
+param memcpy_params;const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+var state=@zeros([4]u32);const p:[*]u32=&state;
+fn compute() void {state[0]+=1;sys.unblock_cmd_stream();}
+comptime {@export_symbol(p,"state");@export_symbol(compute);}

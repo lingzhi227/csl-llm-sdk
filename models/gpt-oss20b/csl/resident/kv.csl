@@ -1,0 +1,43 @@
+// One original KV head, eight query heads, and a persistent 96-token cache.
+param memcpy_params;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const attention=@import_module("attention96.csl");
+var identity=@zeros([4]u32);var counters=@zeros([6]u32);
+var keys=@zeros([6144]u16);var values=@zeros([6144]u16);var sinks=@zeros([8]u16);
+var frame=@zeros([322]u32);var output=@zeros([256]u32);var index:u16=0;
+const ip:[*]u32=&identity;const cp:[*]u32=&counters;const sp:[*]u16=&sinks;
+const kp:[*]u16=&keys;const vp:[*]u16=&values;const op:[*]u32=&output;
+const iq=@get_input_queue(2);const oq=@get_output_queue(2);
+const rx_dst=@get_dsr(dsr_dest,3);const rx_src=@get_dsr(dsr_src1,3);
+const tx_dst=@get_dsr(dsr_dest,4);const tx_src=@get_dsr(dsr_src1,4);
+const recv_task=@get_local_task_id(8);const sent_task=@get_local_task_id(9);
+fn finish() void {
+  if(index==7){counters[4]+=1;@assert(counters[0]==counters[4]);}sys.unblock_cmd_stream();
+}
+task received() void {
+  @assert(frame[1]==@as(u32,index));@assert(frame[0]<96);counters[1]+=1;
+  if(identity[2]!=frame[1]){finish();return;}
+  @assert(frame[0]==counters[0]);
+  const packed_values:[*]u16=@ptrcast([*]u16,&frame[2]);const at:u16=@as(u16,frame[0])*64;
+  for(@range(u16,64))|i|{keys[at+i]=packed_values[512+i];values[at+i]=packed_values[576+i];}
+  attention.compute(packed_values,kp,vp,sp,@as(u16,frame[0])+1,@ptrcast([*]u16,&output));counters[0]+=1;
+  const mem=@get_dsd(mem1d_dsd,.{.base_address=&output,.extent=256});
+  const wire=@get_dsd(fabout_dsd,.{.output_queue=oq,.extent=256});
+  @load_to_dsr(tx_src,mem);@load_to_dsr(tx_dst,wire,.{.async=true,.activate=sent_task,.ut_id=@get_ut_id(4)});
+  @mov32(tx_dst,tx_src,.{.async=true});
+}
+task sent() void {counters[2]+=1;finish();}
+fn step(phase:u16,layer:u16,head:u16) void {
+  if(phase!=6 or identity[0]!=@as(u32,layer)){sys.unblock_cmd_stream();return;}
+  @assert(head<8);index=head;
+  const mem=@get_dsd(mem1d_dsd,.{.base_address=&frame,.extent=322});
+  const wire=@get_dsd(fabin_dsd,.{.input_queue=iq,.extent=322});
+  @load_to_dsr(rx_dst,mem);@load_to_dsr(rx_src,wire,.{.async=true,.activate=recv_task,.ut_id=@get_ut_id(3)});
+  @mov32(rx_dst,rx_src,.{.async=true});
+}
+comptime {
+  @initialize_queue(iq,.{.color=@get_color(10)});@initialize_queue(oq,.{.color=@get_color(11)});
+  @bind_local_task(received,recv_task);@bind_local_task(sent,sent_task);
+  @export_symbol(ip,"identity");@export_symbol(cp,"counters");@export_symbol(sp,"sinks");
+  @export_symbol(kp,"keys");@export_symbol(vp,"values");@export_symbol(op,"output");@export_symbol(step);
+}

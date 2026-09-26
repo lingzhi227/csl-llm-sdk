@@ -1,0 +1,3 @@
+const memcpy=@import_module("<memcpy/get_params>",.{.width=1,.height=32});
+layout {@set_rectangle(1,32);for(@range(i16,32))|y|{@set_tile_code(0,y,"pe.csl",.{.memcpy_params=memcpy.get_params(0)});}
+@export_name("state",[*]u32,false);@export_name("compute",fn()void);}

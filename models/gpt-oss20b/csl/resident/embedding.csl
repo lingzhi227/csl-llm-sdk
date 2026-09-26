@@ -1,0 +1,55 @@
+// All original embedding rows remain resident; one 96-element slice moves east.
+param memcpy_params;param valid:bool;param column:u16;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+var identity=@zeros([4]u32);var counters=@zeros([6]u32);var token_header=@zeros([2]u32);
+var weights=@zeros([if(valid) 12288 else 1]u16);var frame=@zeros([48]u32);
+var phase:u16=0;
+const ip:[*]u32=&identity;const cp:[*]u32=&counters;const wp:[*]u16=&weights;
+const metadata_iq=@get_input_queue(2);const reply_iq=@get_input_queue(3);const oq=@get_output_queue(2);
+const rx_dst=@get_dsr(dsr_dest,3);const rx_src=@get_dsr(dsr_src1,3);
+const tx_dst=@get_dsr(dsr_dest,4);const tx_src=@get_dsr(dsr_src1,4);
+const recv_task=@get_local_task_id(8);const sent_task=@get_local_task_id(9);
+fn send() void {
+  const mem=@get_dsd(mem1d_dsd,.{.base_address=&frame,.extent=48});
+  const wire=@get_dsd(fabout_dsd,.{.output_queue=oq,.extent=48});
+  @load_to_dsr(tx_src,mem);@load_to_dsr(tx_dst,wire,.{.async=true,.activate=sent_task,.ut_id=@get_ut_id(4)});
+  @mov32(tx_dst,tx_src,.{.async=true});
+}
+task received() void {
+  if(phase==1){
+    @assert(token_header[0]==counters[0]+1 and token_header[1]<201088);counters[0]+=1;counters[4]+=1;
+    sys.unblock_cmd_stream();
+  }else{send();}
+}
+task sent() void {counters[2]+=1;sys.unblock_cmd_stream();}
+fn step(requested:u16,layer:u16,index:u16) void {
+  phase=requested;
+  if(phase==1){
+    const mem=@get_dsd(mem1d_dsd,.{.base_address=&token_header,.extent=2});
+    const wire=@get_dsd(fabin_dsd,.{.input_queue=metadata_iq,.extent=2});
+    @load_to_dsr(rx_dst,mem);@load_to_dsr(rx_src,wire,.{.async=true,.activate=recv_task,.ut_id=@get_ut_id(3)});
+    @mov32(rx_dst,rx_src,.{.async=true});
+  }else if(phase==2){
+    @assert(index<30);const tile:u32=token_header[1]/128;
+    const selected_y:u32=30*(tile%38)+@as(u32,index);const owner:u32=tile/38;
+    if(identity[1]!=selected_y or @as(u32,column)<owner){sys.unblock_cmd_stream();return;}
+    if(@as(u32,column)==owner){
+      if(comptime valid){
+        const values:[*]u16=@ptrcast([*]u16,&frame);const row:u16=@as(u16,token_header[1]%128);
+        for(@range(u16,96))|i|{values[i]=weights[i*128+row];}counters[1]+=1;send();
+      }else{@assert(false);}
+    }else{
+      const mem=@get_dsd(mem1d_dsd,.{.base_address=&frame,.extent=48});
+      const wire=@get_dsd(fabin_dsd,.{.input_queue=reply_iq,.extent=48});
+      @load_to_dsr(rx_dst,mem);@load_to_dsr(rx_src,wire,.{.async=true,.activate=recv_task,.ut_id=@get_ut_id(3)});
+      @mov32(rx_dst,rx_src,.{.async=true});
+    }
+  }else{sys.unblock_cmd_stream();}
+}
+comptime {
+  @initialize_queue(metadata_iq,.{.color=@get_color(13)});
+  if(column>0){@initialize_queue(reply_iq,.{.color=@get_color(if(column%2==1) 14 else 15)});}
+  @initialize_queue(oq,.{.color=@get_color(if(column%2==0) 14 else 15)});
+  @bind_local_task(received,recv_task);@bind_local_task(sent,sent_task);
+  @export_symbol(ip,"identity");@export_symbol(cp,"counters");@export_symbol(wp,"weights");@export_symbol(step);
+}

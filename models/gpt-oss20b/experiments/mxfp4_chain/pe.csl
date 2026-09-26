@@ -1,0 +1,79 @@
+param memcpy_params;
+param rank:u16;
+const matrix:bool=rank>0 and rank<11;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const kernel=@import_module("mxfp4_gemv.csl",.{.rows=160,.columns=288});
+var weights=@zeros([if(matrix) 11520 else 1]u16);
+var scales=@zeros([if(matrix) 720 else 1]u16);
+var input=@zeros([if(rank==0) 2880 else if(matrix) 288 else 1]f32);
+var output=@zeros([if(rank>0) 160 else 1]f32);
+var previous=@zeros([if(rank>1 and matrix) 160 else 1]f32);
+var calls=@zeros([1]u32);
+const wp:[*]u16=&weights;const sp:[*]u16=&scales;
+const xp:[*]f32=&input;const yp:[*]f32=&output;const cp:[*]u32=&calls;
+const input_done=@get_local_task_id(8);
+const reduction_done=@get_local_task_id(9);
+const send_done=@get_local_task_id(10);
+const scatter_iq=@get_input_queue(2);
+const reduction_iq=@get_input_queue(3);
+const oq=@get_output_queue(if(rank==0) 2 else 3);
+const input_dst=@get_dsr(dsr_dest,3);const input_src=@get_dsr(dsr_src1,3);
+const send_dst=@get_dsr(dsr_dest,4);const send_src=@get_dsr(dsr_src1,4);
+const reduction_dst=@get_dsr(dsr_dest,5);const reduction_src=@get_dsr(dsr_src1,5);
+
+fn finish() void {calls[0]+=1;sys.unblock_cmd_stream();}
+fn send(data:[*]f32,count:u16) void {
+  const mem=@get_dsd(mem1d_dsd,.{.base_address=data,.extent=count});
+  const base=@get_dsd(fabout_dsd,.{.output_queue=oq,.extent=1});
+  @load_to_dsr(send_src,mem);
+  @load_to_dsr(send_dst,@set_dsd_length(base,count),.{.async=true,.activate=send_done});
+  @mov32(send_dst,send_src,.{.async=true});
+}
+fn receive_reduction(data:[*]f32) void {
+  const mem=@get_dsd(mem1d_dsd,.{.base_address=data,.extent=160});
+  const wire=@get_dsd(fabin_dsd,.{.input_queue=reduction_iq,.extent=160});
+  @load_to_dsr(reduction_dst,mem);
+  @load_to_dsr(reduction_src,wire,.{.async=true,.activate=reduction_done});
+  @mov32(reduction_dst,reduction_src,.{.async=true});
+}
+task input_received() void {
+  kernel.compute(wp,sp,xp,yp);
+  if(comptime rank==1){send(yp,160);}
+  else{receive_reduction(&previous);}
+}
+task reduction_received() void {
+  if(comptime rank==11){finish();}
+  else{
+    for(@range(u16,160))|i|{output[i]+=previous[i];}
+    send(yp,160);
+  }
+}
+task sent() void {finish();}
+fn compute() void {
+  if(comptime rank==0){send(xp,2880);}
+  else if(comptime rank==11){receive_reduction(yp);}
+  else{
+    const mem=@get_dsd(mem1d_dsd,.{.base_address=xp,.extent=288});
+    const wire=@get_dsd(fabin_dsd,.{.input_queue=scatter_iq,.extent=288});
+    @load_to_dsr(input_dst,mem);
+    @load_to_dsr(input_src,wire,.{.async=true,.activate=input_done});
+    @mov32(input_dst,input_src,.{.async=true});
+  }
+}
+comptime {
+  if(matrix){
+    @initialize_queue(scatter_iq,.{.color=@get_color(3)});
+    @bind_local_task(input_received,input_done);
+  }
+  if(rank>1){
+    @initialize_queue(reduction_iq,.{.color=@get_color(if(rank%2==1) 5 else 4)});
+    @bind_local_task(reduction_received,reduction_done);
+  }
+  if(rank<11){
+    @initialize_queue(oq,.{.color=@get_color(if(rank==0) 3 else if(rank%2==1) 4 else 5)});
+    @bind_local_task(sent,send_done);
+  }
+  @export_symbol(wp,"weights");@export_symbol(sp,"scales");
+  @export_symbol(xp,"input");@export_symbol(yp,"output");@export_symbol(cp,"calls");
+  @export_symbol(compute);
+}

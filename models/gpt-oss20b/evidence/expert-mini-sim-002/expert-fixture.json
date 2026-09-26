@@ -1,0 +1,14 @@
+{
+  "model": "openai/gpt-oss-20b",
+  "revision": "6cee5e81ee83917806bbde320786a8fb61efebee",
+  "layer": 0,
+  "expert": 5,
+  "gate_rows": 2,
+  "down_rows": 1,
+  "full_expert": false,
+  "full_model": false,
+  "application_pes": 46,
+  "fixture_sha256": "42f07d646ef3ff6120584569364adb4d30866392f78ad78fabe06046fb296cf2",
+  "scope": "protocol fragment: 320 gate/up rows, 160 activated values zero-padded to 2880, 160 down rows",
+  "numerical_policy": "at most one BF16 ULP against original PyTorch expert operations; finite values required"
+}

@@ -1,0 +1,37 @@
+// One KV head and its eight query heads. Original BF16 score/probability
+// boundaries; the learned sink contributes once to the softmax denominator.
+const codec=@import_module("moe_math.csl",.{});
+var scores=@zeros([96]u16);
+var exponentials=@zeros([96]f32);
+var probabilities=@zeros([96]u16);
+
+fn compute(query:[*]u16,keys:[*]u16,values:[*]u16,sinks:[*]u16,
+           valid:u16,output:[*]u16) void {
+  @assert(valid>0 and valid<=96);
+  for(@range(u16,8))|head|{
+    var maximum:f32=codec.f32_from_bf16(sinks[head]);
+    for(@range(u16,valid))|slot|{
+      var dot:f32=0.0;
+      for(@range(u16,64))|c|{
+        dot+=codec.f32_from_bf16(query[head*64+c])*codec.f32_from_bf16(keys[slot*64+c]);
+      }
+      scores[slot]=codec.round_bf16(codec.rounded(dot)*0.125);
+      const score:f32=codec.f32_from_bf16(scores[slot]);
+      if(score>maximum){maximum=score;}
+    }
+    var denominator:f32=0.0;
+    for(@range(u16,valid))|slot|{
+      exponentials[slot]=codec.exp_negative(codec.f32_from_bf16(scores[slot])-maximum);
+      denominator+=exponentials[slot];
+    }
+    denominator+=codec.exp_negative(codec.f32_from_bf16(sinks[head])-maximum);
+    for(@range(u16,valid))|slot|{probabilities[slot]=codec.round_bf16(exponentials[slot]/denominator);}
+    for(@range(u16,64))|c|{
+      var sum:f32=0.0;
+      for(@range(u16,valid))|slot|{
+        sum+=codec.f32_from_bf16(probabilities[slot])*codec.f32_from_bf16(values[slot*64+c]);
+      }
+      output[head*64+c]=codec.round_bf16(sum);
+    }
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "passed": true,
+  "physical": true,
+  "normal_stop": true,
+  "full_attention": true,
+  "full_model": false,
+  "scope": "complete original layer-0 RMSNorm, QKV, YaRN, 64-query/8-KV-head attention with learned sinks, O projection and residual; persistent 96-token cache",
+  "west_to_east": true,
+  "weights_uploaded_once": true,
+  "all_weights_retained": true,
+  "host_intermediate_neural_computation": false,
+  "epochs": [
+    {
+      "epoch": 1,
+      "checks": {
+        "output": {
+          "passed": true,
+          "max_bf16_ulp": 0,
+          "bit_exact": 2880,
+          "values": 2880,
+          "max_abs_error": 0.0
+        },
+        "keys": {
+          "passed": true,
+          "max_bf16_ulp": 0,
+          "bit_exact": 49152,
+          "values": 49152,
+          "max_abs_error": 0.0
+        },
+        "values": {
+          "passed": true,
+          "max_bf16_ulp": 1,
+          "bit_exact": 49151,
+          "values": 49152,
+          "max_abs_error": 3.0517578125e-05
+        }
+      },
+      "every_pe_completed": true,
+      "persistent_kv_tokens": 1
+    },
+    {
+      "epoch": 2,
+      "checks": {
+        "output": {
+          "passed": true,
+          "max_bf16_ulp": 0,
+          "bit_exact": 2880,
+          "values": 2880,
+          "max_abs_error": 0.0
+        },
+        "keys": {
+          "passed": true,
+          "max_bf16_ulp": 0,
+          "bit_exact": 49152,
+          "values": 49152,
+          "max_abs_error": 0.0
+        },
+        "values": {
+          "passed": true,
+          "max_bf16_ulp": 1,
+          "bit_exact": 49151,
+          "values": 49152,
+          "max_abs_error": 3.0517578125e-05
+        }
+      },
+      "every_pe_completed": true,
+      "persistent_kv_tokens": 2
+    }
+  ]
+}

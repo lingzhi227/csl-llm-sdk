@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "scope": "packing and logical byte coverage; no full-model CSL execution",
+  "tensors": 459,
+  "original_bytes": 13761264768,
+  "host_slot_bytes": 27556745472,
+  "largest_buffer_bytes": 921600,
+  "transfers": 73893,
+  "by_symbol": {
+    "weights": 30644,
+    "bias": 22272,
+    "gain": 49,
+    "sinks": 192,
+    "scales": 20736
+  },
+  "weight_residency": "requires successful device loading; not proven by this packing audit",
+  "unique_matrix_owners": 562236,
+  "transfer_stream_sha256": "6b3510ba49be639fae705fd1f3552ae3a144c9b45dba280279fd555a3b4e514e",
+  "seconds": 124.47428198670968,
+  "geometry": "27 columns per layer, all 24 layers; full original parameters; first runtime KV capacity 96"
+}

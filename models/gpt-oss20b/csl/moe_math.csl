@@ -1,0 +1,77 @@
+// GPT-OSS BF16 boundaries: selected softmax, interleaved clamped SwiGLU,
+// and weighted expert reduction. BF16 round-to-nearest, ties-to-even.
+fn f32_from_bf16(x:u16) f32 { return @bitcast(f32,@as(u32,x)<<16); }
+fn round_bf16(x:f32) u16 {
+  const bits:u32=@bitcast(u32,x);
+  return @as(u16,(bits+0x7fff+((bits>>16)&1))>>16);
+}
+fn rounded(x:f32) f32 { return f32_from_bf16(round_bf16(x)); }
+
+// Degree-eight exp with split-ln2 reduction. Below -80 the contribution
+// is dropped (absolute exp error < 1.81e-35); no unbounded reduction loop.
+fn exp_negative(x:f32) f32 {
+  @assert(x<=0.0);
+  if(x < -80.0){return 0.0;}
+  var n:i16=0;
+  var select:f32=x;
+  while(select < -0.34657359027997265){select+=0.6931471805599453;n-=1;}
+  const nf:f32=@as(f32,n);
+  const r:f32=(x-nf*0.693145751953125)-nf*0.000001428606765330187;
+  var p:f32=0.0000248015873015873;
+  p=0.0001984126984126984+r*p;
+  p=0.001388888888888889+r*p;
+  p=0.008333333333333333+r*p;
+  p=0.041666666666666664+r*p;
+  p=0.16666666666666666+r*p;
+  p=0.5+r*p;p=1.0+r*p;p=1.0+r*p;
+  return p*@bitcast(f32,@as(u32,n+127)<<23);
+}
+
+fn top4(logits:[*]u16, ids:[*]u16, probabilities:[*]u16) void {
+  var chosen:[4]f32=@zeros([4]f32);
+  for(@range(u16,4))|rank|{
+    var best:f32=-3.4028234663852886e38;
+    var best_id:u16=0;
+    for(@range(u16,32))|expert|{
+      var used:bool=false;
+      for(@range(u16,4))|old|{
+        if(old<rank and ids[old]==expert){used=true;}
+      }
+      const value:f32=f32_from_bf16(logits[expert]);
+      if(!used and value>best){best=value;best_id=expert;}
+    }
+    ids[rank]=best_id;chosen[rank]=best;
+  }
+  var exponentials:[4]f32=@zeros([4]f32);
+  var total:f32=0.0;
+  for(@range(u16,4))|rank|{
+    exponentials[rank]=exp_negative(chosen[rank]-chosen[0]);
+    total+=exponentials[rank];
+  }
+  for(@range(u16,4))|rank|{probabilities[rank]=round_bf16(exponentials[rank]/total);}
+}
+
+fn swiglu(interleaved:[*]u16, output:[*]u16, count:u16) void {
+  for(@range(u16,count))|i|{
+    var gate:f32=f32_from_bf16(interleaved[2*i]);
+    var linear:f32=f32_from_bf16(interleaved[2*i+1]);
+    if(gate>7.0){gate=7.0;}
+    if(linear>7.0){linear=7.0;}else if(linear < -7.0){linear=-7.0;}
+    const z:f32=rounded(1.702*gate);
+    const e:f32=exp_negative(if(z<0.0) z else -z);
+    const sigmoid:f32=rounded(if(z<0.0) e/(1.0+e) else 1.0/(1.0+e));
+    const glu:f32=rounded(gate*sigmoid);
+    const shifted:f32=rounded(linear+1.0);
+    output[i]=round_bf16(glu*shifted);
+  }
+}
+
+fn join4(experts:[*]u16, probabilities:[*]u16, output:[*]u16, count:u16) void {
+  for(@range(u16,count))|i|{
+    var sum:f32=0.0;
+    for(@range(u16,4))|rank|{
+      sum+=f32_from_bf16(experts[rank*count+i])*f32_from_bf16(probabilities[rank]);
+    }
+    output[i]=round_bf16(sum);
+  }
+}

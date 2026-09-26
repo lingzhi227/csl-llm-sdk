@@ -1,0 +1,34 @@
+param memcpy_params;param ingress:bool;param egress:bool;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+var identity=@zeros([4]u32);var counters=@zeros([6]u32);var hidden=@zeros([if(ingress or egress) 1440 else 1]u32);
+const ip:[*]u32=&identity;const cp:[*]u32=&counters;const hp:[*]u32=&hidden;
+const iq=@get_input_queue(2);const oq=@get_output_queue(2);
+const dest=@get_dsr(dsr_dest,3);const src=@get_dsr(dsr_src1,3);const done=@get_local_task_id(8);
+task completed() void {counters[4]+=1;sys.unblock_cmd_stream();}
+fn step(phase:u16,layer:u16,index:u16) void {
+  if(phase==3){
+    if(comptime ingress){
+      counters[0]+=1;
+      const mem=@get_dsd(mem1d_dsd,.{.base_address=&hidden,.extent=1440});
+      const wire=@get_dsd(fabout_dsd,.{.output_queue=oq,.extent=1440});
+      @load_to_dsr(src,mem);@load_to_dsr(dest,wire,.{.async=true,.activate=done,.ut_id=@get_ut_id(3)});
+      @mov32(dest,src,.{.async=true});return;
+    }
+  }else if(phase==9){
+    if(comptime egress){
+      counters[0]+=1;
+      const mem=@get_dsd(mem1d_dsd,.{.base_address=&hidden,.extent=1440});
+      const wire=@get_dsd(fabin_dsd,.{.input_queue=iq,.extent=1440});
+      @load_to_dsr(dest,mem);@load_to_dsr(src,wire,.{.async=true,.activate=done,.ut_id=@get_ut_id(3)});
+      @mov32(dest,src,.{.async=true});return;
+    }
+    if(comptime !ingress){counters[0]+=1;counters[4]+=1;}
+  }
+  sys.unblock_cmd_stream();
+}
+comptime {
+  if(ingress){@initialize_queue(oq,.{.color=@get_color(12)});}
+  if(egress){@initialize_queue(iq,.{.color=@get_color(17)});}
+  @bind_local_task(completed,done);@export_symbol(ip,"identity");@export_symbol(cp,"counters");
+  @export_symbol(hp,"hidden");@export_symbol(step);
+}

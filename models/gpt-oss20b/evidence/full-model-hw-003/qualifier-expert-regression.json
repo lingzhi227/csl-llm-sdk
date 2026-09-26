@@ -1,0 +1,42 @@
+{
+  "passed": true,
+  "scope": "FP32 interval verifier applied to independent original two-input expert reference, previously bit-exact on hardware",
+  "checks": [
+    {
+      "step": 0,
+      "kind": "gate_up",
+      "passed": true,
+      "values": 5760,
+      "outside": 0,
+      "max_interval_violation": 0.0,
+      "max_accumulation_bound": 0.0008015873143273356
+    },
+    {
+      "step": 0,
+      "kind": "down",
+      "passed": true,
+      "values": 2880,
+      "outside": 0,
+      "max_interval_violation": 0.0,
+      "max_accumulation_bound": 0.0036078262540125126
+    },
+    {
+      "step": 1,
+      "kind": "gate_up",
+      "passed": true,
+      "values": 5760,
+      "outside": 0,
+      "max_interval_violation": 0.0,
+      "max_accumulation_bound": 0.0008326298717048818
+    },
+    {
+      "step": 1,
+      "kind": "down",
+      "passed": true,
+      "values": 2880,
+      "outside": 0,
+      "max_interval_violation": 0.0,
+      "max_accumulation_bound": 0.0031591751309163934
+    }
+  ]
+}

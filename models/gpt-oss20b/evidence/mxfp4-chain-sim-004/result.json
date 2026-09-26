@@ -1,0 +1,43 @@
+{
+  "passed": true,
+  "normal_stop": true,
+  "physical": false,
+  "full_model": false,
+  "west_to_east": true,
+  "scope": "original 160x2880 expert projection, ten resident weight PEs, two real hidden states and zero",
+  "calls": [
+    {
+      "call": 1,
+      "checks": {
+        "numerical": true,
+        "scatter_exact": true,
+        "every_pe_completed": true,
+        "weights_retained": true
+      },
+      "max_abs_error": 1.1920928955078125e-07,
+      "max_abs_bound": 0.015605014737271494
+    },
+    {
+      "call": 2,
+      "checks": {
+        "numerical": true,
+        "scatter_exact": true,
+        "every_pe_completed": true,
+        "weights_retained": true
+      },
+      "max_abs_error": 1.9371509552001953e-07,
+      "max_abs_bound": 0.016209340126035553
+    },
+    {
+      "call": 3,
+      "checks": {
+        "numerical": true,
+        "scatter_exact": true,
+        "every_pe_completed": true,
+        "weights_retained": true
+      },
+      "max_abs_error": 0.0,
+      "max_abs_bound": 1.1754943508222875e-38
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+param memcpy_params;param rank:u16;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const norm_rope=@import_module("normalization_rope.csl",.{});
+const attn=@import_module("attention96.csl",.{});
+var hidden=@zeros([if(rank==0) 2880 else 1]u16);
+var gain=@zeros([if(rank==0) 2880 else 1]u16);
+var normalized=@zeros([if(rank==0) 2880 else 1]u16);
+var rotary_input=@zeros([64]u16);var rotary_output=@zeros([64]u16);
+var frequencies=@zeros([32]f32);var position=@zeros([1]u32);
+var query=@zeros([if(rank==1) 512 else 1]u16);
+var new_key=@zeros([64]u16);var new_value=@zeros([64]u16);
+var keys=@zeros([if(rank==1) 6144 else 1]u16);
+var values=@zeros([if(rank==1) 6144 else 1]u16);
+var sinks=@zeros([8]u16);
+var attention=@zeros([if(rank==1) 512 else 1]u16);
+var calls=@zeros([3]u32);
+const hp:[*]u16=&hidden;const gp:[*]u16=&gain;const np:[*]u16=&normalized;
+const ri:[*]u16=&rotary_input;const ro:[*]u16=&rotary_output;
+const fp:[*]f32=&frequencies;const pp:[*]u32=&position;
+const qp:[*]u16=&query;const nk:[*]u16=&new_key;const nv:[*]u16=&new_value;
+const kp:[*]u16=&keys;const vp:[*]u16=&values;const sp:[*]u16=&sinks;
+const ap:[*]u16=&attention;const cp:[*]u32=&calls;
+fn normalize() void {
+  if(comptime rank==0){norm_rope.normalize(hp,gp,np);calls[0]+=1;}
+  sys.unblock_cmd_stream();
+}
+fn rotate() void {
+  if(comptime rank==0){norm_rope.rotate(ri,fp,position[0],ro);calls[1]+=1;}
+  sys.unblock_cmd_stream();
+}
+fn step() void {
+  if(comptime rank==1){
+    @assert(position[0]==calls[2] and position[0]<96);
+    const at:u16=@as(u16,position[0])*64;
+    for(@range(u16,64))|i|{keys[at+i]=new_key[i];values[at+i]=new_value[i];}
+    attn.compute(qp,kp,vp,sp,@as(u16,position[0])+1,ap);calls[2]+=1;
+  }
+  sys.unblock_cmd_stream();
+}
+comptime {
+  @export_symbol(hp,"hidden");@export_symbol(gp,"gain");@export_symbol(np,"normalized");
+  @export_symbol(ri,"rotary_input");@export_symbol(ro,"rotary_output");
+  @export_symbol(fp,"frequencies");@export_symbol(pp,"position");
+  @export_symbol(qp,"query");@export_symbol(nk,"new_key");@export_symbol(nv,"new_value");
+  @export_symbol(kp,"keys");@export_symbol(vp,"values");@export_symbol(sp,"sinks");
+  @export_symbol(ap,"attention");@export_symbol(cp,"calls");
+  @export_symbol(normalize);@export_symbol(rotate);@export_symbol(step);
+}

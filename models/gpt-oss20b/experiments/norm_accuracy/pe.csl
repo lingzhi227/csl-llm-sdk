@@ -1,0 +1,14 @@
+param memcpy_params;param compensated:bool;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const norm=@import_module("normalization_rope.csl");const legacy=@import_module("legacy_norm.csl");
+var hidden=@zeros([2880]u16);var gain=@zeros([2880]u16);var output=@zeros([2880]u16);
+var calls=@zeros([1]u32);
+const hp:[*]u16=&hidden;const gp:[*]u16=&gain;const op:[*]u16=&output;const cp:[*]u32=&calls;
+fn normalize() void {
+  if(comptime compensated){norm.normalize(hp,gp,op);}else{legacy.normalize(hp,gp,op);}
+  calls[0]+=1;sys.unblock_cmd_stream();
+}
+comptime {
+  @export_symbol(hp,"hidden");@export_symbol(gp,"gain");@export_symbol(op,"output");
+  @export_symbol(cp,"calls");@export_symbol(normalize);
+}

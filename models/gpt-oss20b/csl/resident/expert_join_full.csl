@@ -1,0 +1,143 @@
+// Four serialized original-router-rank replies, with explicit relay ownership.
+param memcpy_params;param root:bool;param parity:u16;param tail:bool;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const math=@import_module("moe_math.csl");
+var identity=@zeros([4]u32);var routing=@zeros([8]u32);var counters=@zeros([6]u32);
+var control=@zeros([2]u32);var frame=@zeros([if(root) 2 else 1442]u32);
+var residual=@zeros([if(root) 1440 else 1]u32);var slots=@zeros([if(root) 5760 else 1]u32);
+var cursor:u16=0;var control_count:u16=0;var reply_body:bool=false;var residual_body:bool=false;
+var handing_off:bool=false;
+var tx_idle:bool=true;var rx_idle:bool=true;
+const ip:[*]u32=&identity;const mp:[*]u32=&routing;const cp:[*]u32=&counters;
+const output_ptr:[*]u32=&slots;
+const metadata_iq=@get_input_queue(6);const control_iq=@get_input_queue(4);
+const local_iq=@get_input_queue(3);const vertical_iq=@get_input_queue(5);const residual_iq=@get_input_queue(2);
+const handoff_oq=@get_output_queue(6);
+const control_oq=@get_output_queue(4);const vertical_oq=@get_output_queue(5);
+const residual_dst=@get_dsr(dsr_dest,3);const residual_src=@get_dsr(dsr_src1,3);
+const tx_dst=@get_dsr(dsr_dest,4);const tx_src=@get_dsr(dsr_src1,4);
+const reply_dst=@get_dsr(dsr_dest,5);const reply_src=@get_dsr(dsr_src1,5);
+const control_dst=@get_dsr(dsr_dest,6);const control_src=@get_dsr(dsr_src1,6);
+const residual_task=@get_local_task_id(8);const reply_task=@get_local_task_id(9);
+const sent_task=@get_local_task_id(10);const control_task=@get_local_task_id(11);const metadata_task=@get_local_task_id(13);
+
+fn send(data:[*]u32,count:u16,comptime queue:output_queue) void {
+  const mem=@get_dsd(mem1d_dsd,.{.base_address=data,.extent=count});
+  const base=@get_dsd(fabout_dsd,.{.output_queue=queue,.extent=1});
+  @load_to_dsr(tx_src,mem);
+  @load_to_dsr(tx_dst,@set_dsd_length(base,count),.{.async=true,.activate=sent_task,.ut_id=@get_ut_id(4)});
+  @mov32(tx_dst,tx_src,.{.async=true});
+}
+fn receive_control() void {
+  const mem=@get_dsd(mem1d_dsd,.{.base_address=&control,.extent=2});
+  const wire=@get_dsd(fabin_dsd,.{.input_queue=control_iq,.extent=2});
+  @load_to_dsr(control_dst,mem);
+  @load_to_dsr(control_src,wire,.{.async=true,.activate=control_task,.ut_id=@get_ut_id(6)});
+  @mov32(control_dst,control_src,.{.async=true});
+}
+fn receive_reply(data:[*]u32,count:u16,comptime queue:input_queue) void {
+  const mem=@get_dsd(mem1d_dsd,.{.base_address=data,.extent=count});
+  const base=@get_dsd(fabin_dsd,.{.input_queue=queue,.extent=1});
+  @load_to_dsr(reply_dst,mem);
+  @load_to_dsr(reply_src,@set_dsd_length(base,count),.{.async=true,.activate=reply_task,.ut_id=@get_ut_id(5)});
+  @mov32(reply_dst,reply_src,.{.async=true});
+}
+fn receive_residual(data:[*]u32,count:u16) void {
+  const mem=@get_dsd(mem1d_dsd,.{.base_address=data,.extent=count});
+  const base=@get_dsd(fabin_dsd,.{.input_queue=residual_iq,.extent=1});
+  @load_to_dsr(residual_dst,mem);
+  @load_to_dsr(residual_src,@set_dsd_length(base,count),.{.async=true,.activate=residual_task,.ut_id=@get_ut_id(3)});
+  @mov32(residual_dst,residual_src,.{.async=true});
+}
+fn finish() void {
+  @assert(counters[4]+1==counters[0]);counters[4]+=1;sys.unblock_cmd_stream();
+}
+fn request() void {
+  tx_idle=false;rx_idle=false;reply_body=false;
+  control[0]=routing[0];control[1]=routing[cursor+1];
+  if(control[1]==0){receive_reply(&frame,2,local_iq);}else{receive_reply(&frame,2,vertical_iq);}
+  send(&control,2,control_oq);
+}
+fn advance() void {
+  if(!tx_idle or !rx_idle){return;}
+  if(cursor<4){request();}
+  else{
+    const output:[*]u16=@ptrcast([*]u16,&slots);
+    const probabilities:[*]u16=@ptrcast([*]u16,&routing[5]);
+    const original:[*]u16=@ptrcast([*]u16,&residual);
+    math.join4(output,probabilities,output,2880);
+    for(@range(u16,2880))|i|{output[i]=math.round_bf16(math.f32_from_bf16(output[i])+math.f32_from_bf16(original[i]));}
+    finish();
+  }
+}
+task metadata_received() void {
+  @assert(routing[0]==counters[4]+1);counters[0]=routing[0];
+  var mask:u32=0;
+  for(@range(u16,4))|i|{
+    @assert(routing[i+1]<32);
+    const bit:u32=@as(u32,1)<<@as(u16,routing[i+1]);@assert((mask&bit)==0);mask|=bit;
+  }
+  @assert(mask==routing[7]);sys.unblock_cmd_stream();
+}
+task residual_received() void {
+  if(!residual_body){
+    @assert(frame[0]==routing[0] and frame[1]==2880);residual_body=true;receive_residual(&residual,1440);
+  }else{request();}
+}
+task control_received() void {
+  @assert(control[0]==routing[0]);@assert(control[1]==routing[control_count+1]);control_count+=1;
+  if(control[1]<identity[3]){
+    if(control_count==4){finish();}else{receive_control();}
+  }else if(control[1]==identity[3]){receive_reply(&frame,1442,local_iq);}
+  else{receive_reply(&frame,1442,vertical_iq);}
+}
+task reply_received() void {
+  if(comptime root){
+    if(!reply_body){
+      @assert(frame[0]==routing[0] and frame[1]==routing[cursor+1]);reply_body=true;
+      if(control[1]==0){receive_reply(@ptrcast([*]u32,&slots[cursor*1440]),1440,local_iq);}
+      else{receive_reply(@ptrcast([*]u32,&slots[cursor*1440]),1440,vertical_iq);}
+    }else{cursor+=1;counters[2]+=1;rx_idle=true;advance();}
+  }else{
+    @assert(frame[0]==routing[0] and frame[1]==control[1]);counters[2]+=1;send(&frame,1442,vertical_oq);
+  }
+}
+task sent() void {
+  if(comptime root){if(handing_off){counters[5]+=1;sys.unblock_cmd_stream();}else{tx_idle=true;advance();}}
+  else{if(control_count==4){finish();}else{receive_control();}}
+}
+fn step(phase:u16,layer:u16,index:u16) void {
+  if(identity[0]!=@as(u32,layer)){sys.unblock_cmd_stream();return;}
+  if(phase==11){
+    handing_off=false;
+    const mem=@get_dsd(mem1d_dsd,.{.base_address=&routing,.extent=8});
+    const wire=@get_dsd(fabin_dsd,.{.input_queue=metadata_iq,.extent=8});
+    @load_to_dsr(control_dst,mem);
+    @load_to_dsr(control_src,wire,.{.async=true,.activate=metadata_task,.ut_id=@get_ut_id(6)});
+    @mov32(control_dst,control_src,.{.async=true});
+  }else if(phase==13){
+    @assert(counters[0]==routing[0] and counters[4]+1==counters[0]);
+    cursor=0;control_count=0;tx_idle=true;rx_idle=true;residual_body=false;
+    if(comptime root){receive_residual(&frame,2);}else{receive_control();}
+  }else if(phase==14){
+    if(comptime root){
+      @assert(counters[4]==routing[0] and counters[5]+1==routing[0]);handing_off=true;send(output_ptr,1440,handoff_oq);
+    }else{sys.unblock_cmd_stream();}
+  }else{sys.unblock_cmd_stream();}
+}
+comptime {
+  @initialize_queue(metadata_iq,.{.color=@get_color(19)});@bind_local_task(metadata_received,metadata_task);
+  @initialize_queue(local_iq,.{.color=@get_color(14)});
+  if(!tail){@initialize_queue(vertical_iq,.{.color=@get_color(if(parity==0) 10 else 11)});}
+  if(root){
+    @initialize_queue(handoff_oq,.{.color=@get_color(12)});
+    @initialize_queue(residual_iq,.{.color=@get_color(18)});@initialize_queue(control_oq,.{.color=@get_color(13)});
+    @bind_local_task(residual_received,residual_task);
+  }else{
+    @initialize_queue(control_iq,.{.color=@get_color(13)});@initialize_queue(vertical_oq,.{.color=@get_color(if(parity==1) 10 else 11)});
+    @bind_local_task(control_received,control_task);
+  }
+  @bind_local_task(reply_received,reply_task);@bind_local_task(sent,sent_task);
+  @export_symbol(ip,"identity");@export_symbol(cp,"counters");@export_symbol(mp,"routing");@export_symbol(output_ptr,"output");
+  @export_symbol(step);
+}
