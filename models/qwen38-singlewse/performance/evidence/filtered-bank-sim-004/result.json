@@ -1,0 +1,141 @@
+{
+  "passed": true,
+  "normal_stop": true,
+  "physical": false,
+  "application": [
+    4,
+    5
+  ],
+  "full_model": false,
+  "scope": "Three horizontal pair selectors and twelve vertical packet selectors, then original FP8/BF16 native dots in representative maximum mixed banks. Independent host-provided operands; no complete matrix, autonomous neural feedback or model speed claim.",
+  "fixture_sha256": "d12ee9e3695faf63f593b56612bf401d93a8303353ca048181dbfacaaa3d109a",
+  "cases": [
+    {
+      "case": 0,
+      "kind": "fp8",
+      "mode": "mixed",
+      "period_words": 260,
+      "pair_offsets_words": [
+        0,
+        130,
+        0
+      ],
+      "replay_of": null,
+      "max_abs_fp64_error": 4.831235855817795e-09,
+      "received_to_dot_done_cycles": [
+        999,
+        999,
+        999,
+        999,
+        999,
+        999,
+        999,
+        999,
+        999,
+        999,
+        999,
+        999
+      ],
+      "host_upload_and_arm_seconds": 0.0002034129574894905,
+      "host_start_seconds": 2.3831147700548172e-05
+    },
+    {
+      "case": 1,
+      "kind": "bf16",
+      "mode": "mixed",
+      "period_words": 260,
+      "pair_offsets_words": [
+        130,
+        0,
+        130
+      ],
+      "replay_of": null,
+      "max_abs_fp64_error": 1.30385160446167e-08,
+      "received_to_dot_done_cycles": [
+        985,
+        985,
+        985,
+        985,
+        985,
+        985,
+        985,
+        985,
+        985,
+        985,
+        985,
+        985
+      ],
+      "host_upload_and_arm_seconds": 0.00010140892118215561,
+      "host_start_seconds": 1.2243632227182388e-05
+    },
+    {
+      "case": 6,
+      "kind": "fp8",
+      "mode": "boundary",
+      "period_words": 780,
+      "pair_offsets_words": [
+        0,
+        130,
+        260
+      ],
+      "replay_of": null,
+      "max_abs_fp64_error": 2.86102294921875e-06,
+      "received_to_dot_done_cycles": [
+        999,
+        999,
+        999,
+        999,
+        999,
+        999,
+        999,
+        999,
+        999,
+        999,
+        999,
+        999
+      ],
+      "host_upload_and_arm_seconds": 9.562214836478233e-05,
+      "host_start_seconds": 1.2464355677366257e-05
+    },
+    {
+      "case": 7,
+      "kind": "bf16",
+      "mode": "boundary",
+      "period_words": 780,
+      "pair_offsets_words": [
+        390,
+        520,
+        650
+      ],
+      "replay_of": null,
+      "max_abs_fp64_error": 0.00146484375,
+      "received_to_dot_done_cycles": [
+        985,
+        985,
+        985,
+        985,
+        985,
+        985,
+        985,
+        985,
+        985,
+        985,
+        985,
+        985
+      ],
+      "host_upload_and_arm_seconds": 9.899400174617767e-05,
+      "host_start_seconds": 1.1918134987354279e-05
+    }
+  ],
+  "all_weights_retained": true,
+  "original_weights": true,
+  "weight_uploads": 1,
+  "bank_transfer_bytes": 423072,
+  "retained_padding_bytes": 1512,
+  "counter_windows_exact": true,
+  "all_packet_and_teardown_counters_exact": true,
+  "host_initialization_seconds": 0.0014126640744507313,
+  "timing_note": "Per worker receipt callback to local native dot completion only; excludes upstream delivery. Host start timing includes host/SDK latency. No cross-PE clock subtraction, end-to-end cycle or model rate claim.",
+  "clock_hz": null,
+  "full_model_speed_target_achieved": false
+}

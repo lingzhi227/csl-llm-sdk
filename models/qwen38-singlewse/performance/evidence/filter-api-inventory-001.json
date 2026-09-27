@@ -1,0 +1,16 @@
+{
+  "utc": "2026-09-27T16:52:35.810537+00:00",
+  "sdk": "2.10.1",
+  "files": {
+    "tile_config/filters/wse3.csl": "b7ef892044f23166ecab7e71b9db01267f7120e2fa2129d57ba7aceb94a11917",
+    "tile_config/filters/common.csl": "82877d440ed6f1732b5bae53b9837b4287a3efa39a981f73d6871a29a4f01efc",
+    "tile_config/input_queue_config.csl": "5b0cc10758a45ece9410af39086fc05fcc829e0581d788dac78777a14a5d2c43"
+  },
+  "scope": "Read-only installed SDK filter API identity; physical qualification recorded separately.",
+  "window_program": [
+    "set_max_counter(id,count-1)",
+    "set_active_limit(id,period-1)",
+    "set_counter(id,offset==0 ? 0 : period-offset)"
+  ],
+  "queue": "Compiler-associated @get_filter_id(color) and @initialize_queue input color; count_data=true,count_control=false"
+}

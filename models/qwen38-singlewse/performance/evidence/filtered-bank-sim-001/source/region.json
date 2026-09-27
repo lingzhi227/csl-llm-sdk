@@ -1,0 +1,110 @@
+{
+  "schema": "wse-filtered-bank-component-v1",
+  "application": [
+    4,
+    5
+  ],
+  "full_model": false,
+  "colors": {
+    "horizontal": 2,
+    "vertical": 20
+  },
+  "input_queue": 2,
+  "output_queue": 2,
+  "input_microthread": 2,
+  "output_microthread": 3,
+  "workers": [
+    {
+      "x": 1,
+      "y": 1,
+      "rank": 0,
+      "fp8_slots": 110,
+      "bf16_slots": 13
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "rank": 1,
+      "fp8_slots": 110,
+      "bf16_slots": 13
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "rank": 2,
+      "fp8_slots": 110,
+      "bf16_slots": 13
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "rank": 3,
+      "fp8_slots": 111,
+      "bf16_slots": 12
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "rank": 4,
+      "fp8_slots": 111,
+      "bf16_slots": 12
+    },
+    {
+      "x": 3,
+      "y": 2,
+      "rank": 5,
+      "fp8_slots": 111,
+      "bf16_slots": 12
+    },
+    {
+      "x": 1,
+      "y": 3,
+      "rank": 6,
+      "fp8_slots": 110,
+      "bf16_slots": 13
+    },
+    {
+      "x": 2,
+      "y": 3,
+      "rank": 7,
+      "fp8_slots": 110,
+      "bf16_slots": 13
+    },
+    {
+      "x": 3,
+      "y": 3,
+      "rank": 8,
+      "fp8_slots": 110,
+      "bf16_slots": 13
+    },
+    {
+      "x": 1,
+      "y": 4,
+      "rank": 9,
+      "fp8_slots": 111,
+      "bf16_slots": 12
+    },
+    {
+      "x": 2,
+      "y": 4,
+      "rank": 10,
+      "fp8_slots": 111,
+      "bf16_slots": 12
+    },
+    {
+      "x": 3,
+      "y": 4,
+      "rank": 11,
+      "fp8_slots": 111,
+      "bf16_slots": 12
+    }
+  ],
+  "cases": 10,
+  "packet_words": 65,
+  "pair_words": 130,
+  "horizontal_periods": [
+    260,
+    780
+  ],
+  "scope": "Three horizontal pair selectors and twelve vertical packet selectors, then original FP8/BF16 native dots in representative maximum mixed banks. Independent host-provided operands; no complete matrix, autonomous neural feedback or model speed claim."
+}

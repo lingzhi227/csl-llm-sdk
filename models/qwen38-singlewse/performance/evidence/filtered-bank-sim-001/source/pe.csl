@@ -1,0 +1,65 @@
+param memcpy_params;param role:u16;param fp8_slots:u16;param bf16_slots:u16;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);const clock=@import_module("<time>");
+const tile=@import_module("<tile_config>");const window=@import_module("counter_window.csl");
+const switches=@import_module("<memcpy/memcpy_switches>");
+const unpacker=@import_module("fp8_unpack.csl",.{.max_pairs=128});const fp8=@import_module("fp8_dot.csl",.{.rows=2});const bf_dot=@import_module("bf16_dot.csl",.{.rows=2});
+const hc=@get_color(2);const vc=@get_color(20);const iq=@get_input_queue(2);const oq=@get_output_queue(2);
+const rt=@get_local_task_id(8);const st=@get_local_task_id(9);const ct=@get_local_task_id(10);
+const rd=@get_dsr(dsr_dest,2);const rs=@get_dsr(dsr_src0,2);const sd=@get_dsr(dsr_dest,3);const ss=@get_dsr(dsr_src0,3);
+var weights=@zeros([if(role==2) fp8_slots*64 else 1]u32);var scale=@zeros([if(role==2) fp8_slots else 1]f32);
+var bfweights=@zeros([if(role==2) bf16_slots*128 else 1]u32);
+var packet=@zeros([if(role==0) 780 else if(role==1) 130 else if(role==2) 65 else 1]u32);
+var decoded=@zeros([if(role==2) 256 else 1]u16);var control=@zeros([4]u16);
+var local_result=@zeros([2]f32);var audit=@zeros([9]u32);var ticks=@zeros([6]u16);
+const wp:[*]u32=&weights;const sp:[*]f32=&scale;const bp:[*]u32=&bfweights;const pp:[*]u32=&packet;const cp:[*]u16=&control;
+const lp:[*]f32=&local_result;const ap:[*]u32=&audit;const tp:[*]u16=&ticks;
+const td=[1]u32{switches.ctrl(switches.teardown_cmd_1())};
+var armed:bool=false;var started:bool=false;var complete:bool=false;var ht:bool=false;var vt:bool=false;
+fn finish() void {
+ if(started and complete and ht and vt){started=false;armed=false;audit[7]=1;clock.disable_tsc();sys.unblock_cmd_stream();}
+}
+fn send_data() void {
+ const count:u16=if(comptime role==0) control[0] else 130;
+ const m=@get_dsd(mem1d_dsd,.{.base_address=&packet,.extent=if(role==0) 780 else 130});
+ const f=@get_dsd(fabout_dsd,.{.output_queue=oq,.extent=if(role==0) 780 else 130});
+ @load_to_dsr(ss,@set_dsd_length(m,count));@load_to_dsr(sd,@set_dsd_length(f,count),.{.async=true,.ut_id=@get_ut_id(3),.activate=st});@mov32(sd,ss,.{.async=true});
+}
+task received() void {
+ audit[1]+=1;
+ if(comptime role==1){send_data();}
+ else if(comptime role==2){
+  clock.get_timestamp(@ptrcast(*[3]u16,&ticks[0]));const slot=control[3];
+  if(control[2]==0){unpacker.decode(@ptrcast([*]u16,&weights[slot*64]),&decoded,128);fp8.compute(&decoded,@ptrcast([*]u16,pp),lp,@bitcast(f32,packet[64]),scale[slot]);}
+  else{bf_dot.compute(@ptrcast([*]u16,&bfweights[slot*128]),@ptrcast([*]u16,pp),lp);}
+  clock.get_timestamp(@ptrcast(*[3]u16,&ticks[3]));audit[2]+=1;complete=true;finish();
+ }
+}
+task sent_data() void {
+ audit[3]+=1;const m=@get_dsd(mem1d_dsd,.{.tensor_access=|i|{1}->td[i]});const f=@get_dsd(fabout_dsd,.{.extent=1,.control=true,.output_queue=oq});
+ @load_to_dsr(ss,m);@load_to_dsr(sd,f,.{.async=true,.ut_id=@get_ut_id(3),.activate=ct});@mov32(sd,ss,.{.async=true});
+}
+task sent_control() void {audit[4]+=1;complete=true;finish();}
+fn torn_h() void {if(!armed or ht){audit[8]|=1;}ht=true;audit[5]+=1;finish();}
+fn torn_v() void {if(!armed or vt){audit[8]|=2;}vt=true;audit[6]+=1;finish();}
+fn arm() void {
+ @assert(!armed and !started);for(@range(u16,9))|i|{audit[i]=0;}audit[0]=1;armed=true;
+ ht=role==2 or role==3;vt=role==0 or role==3;complete=role==3;
+ if(comptime role==1){window.configure(hc,control[0],control[1],130);}
+ if(comptime role==2){
+  @assert(control[2]<=1);if(control[2]==0){@assert(control[3]<fp8_slots);}else{@assert(control[3]<bf16_slots);}
+  window.configure(vc,130,control[1],65);clock.enable_tsc();
+ }
+ if(comptime role==0 or role==1){tile.teardown.exit(hc);}
+ if(comptime role==1 or role==2){tile.teardown.exit(vc);}
+ if(comptime role==1 or role==2){
+  const n:u16=if(role==1) 130 else 65;const m=@get_dsd(mem1d_dsd,.{.base_address=&packet,.extent=n});const f=@get_dsd(fabin_dsd,.{.input_queue=iq,.extent=n});
+  @load_to_dsr(rd,m);@load_to_dsr(rs,f,.{.async=true,.ut_id=@get_ut_id(2),.activate=rt});@mov32(rd,rs,.{.async=true});
+ }
+ sys.unblock_cmd_stream();
+}
+fn start() void {@assert(armed and !started);started=true;if(comptime role==0){send_data();}finish();}
+comptime {
+ if(role==0 or role==1){@initialize_queue(oq,.{.color=if(role==0) hc else vc});@bind_local_task(sent_data,st);@bind_local_task(sent_control,ct);@set_teardown_handler(torn_h,hc);}
+ if(role==1 or role==2){@initialize_queue(iq,.{.color=if(role==1) hc else vc});@bind_local_task(received,rt);@set_teardown_handler(torn_v,vc);}
+ @export_symbol(wp,"weights");@export_symbol(sp,"scale");@export_symbol(bp,"bfweights");@export_symbol(pp,"packet");@export_symbol(cp,"control");@export_symbol(lp,"local_result");@export_symbol(ap,"audit");@export_symbol(tp,"ticks");@export_symbol(arm);@export_symbol(start);
+}

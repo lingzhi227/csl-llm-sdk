@@ -1,0 +1,68 @@
+{
+  "schema": "wse-filtered-bank-qualification-v1",
+  "physical": true,
+  "full_model": false,
+  "attempt": "filtered-bank-hw-001",
+  "application": [
+    4,
+    5
+  ],
+  "original_model": "Qwen/Qwen3.8-27B-FP8",
+  "original_revision": "017b9c7af6b5689d5dd426a76e0bc077eb5ca20a",
+  "fixture_sha256": "d12ee9e3695faf63f593b56612bf401d93a8303353ca048181dbfacaaa3d109a",
+  "epochs": 10,
+  "native_dot_values": 240,
+  "exact_worker_packet_words": 7800,
+  "exact_relay_pair_words": 3900,
+  "full_original_bank_readback_bytes": 421560,
+  "full_transfer_readback_bytes": 423072,
+  "retained_padding_bytes": 1512,
+  "maximum_bank_payload_bytes": 35256,
+  "max_compiled_sram_plus_stack": 47328,
+  "sram_margin_bytes": 800,
+  "all_original_weights_retained": true,
+  "counter_windows_exact": true,
+  "all_jobs_released": true,
+  "windows": {
+    "horizontal_periods": [
+      260,
+      780
+    ],
+    "horizontal_counts": [
+      130
+    ],
+    "horizontal_offsets": [
+      0,
+      130,
+      260,
+      390,
+      520,
+      650
+    ],
+    "vertical_period": 130,
+    "vertical_count": 65,
+    "vertical_offsets": [
+      0,
+      65
+    ]
+  },
+  "local_received_to_dot_done_cycles": {
+    "fp8": {
+      "samples": 60,
+      "min": 1026,
+      "median": 1026.0,
+      "max": 1026
+    },
+    "bf16": {
+      "samples": 60,
+      "min": 992,
+      "median": 992.0,
+      "max": 992
+    }
+  },
+  "timing_note": "Per worker receipt callback to local native dot completion only; excludes upstream delivery. Host start timing includes host/SDK latency. No cross-PE clock subtraction, end-to-end cycle or model rate claim.",
+  "clock_hz": null,
+  "full_model_speed_target_achieved": false,
+  "artifact_sha256": "7d891743442d9539ff2e968c4572ac9436b47962362090419ea850ab3fbe5cb4",
+  "scope": "Three horizontal pair selectors and twelve vertical packet selectors, then original FP8/BF16 native dots in representative maximum mixed banks. Independent host-provided operands; no complete matrix, autonomous neural feedback or model speed claim."
+}

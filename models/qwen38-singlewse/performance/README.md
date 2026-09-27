@@ -102,3 +102,13 @@ dependent send/return latency is 1,132–1,141 cycles; this is not model through
 The component's 48,112-byte SRAM footprint leaves only 16 bytes, so combined
 neural-kernel admission remains open. See [PROJECTION-LOWERING.md](docs/PROJECTION-LOWERING.md)
 and [ROUTE-WORD-QUALIFICATION.md](docs/ROUTE-WORD-QUALIFICATION.md).
+
+P15 adds a complete paired-column input/storage overlay: all 498 original
+matrices and 105,052,160 tiles pass independent address/route audits while the
+maximum bank payload remains 35,256 bytes. A two-stage hardware counter window
+feeds original FP8/BF16 native dots in representative maximum resident banks;
+all ten physical window/precision/replay cases and complete original-bank
+retention pass, with 47,328-byte SRAM including the declared stack. Both jobs
+succeed and release normally.
+See [COLUMNAR-INPUT.md](docs/COLUMNAR-INPUT.md) for the tested scope and remaining
+whole-matrix integration. The full-model speed target remains unmet.

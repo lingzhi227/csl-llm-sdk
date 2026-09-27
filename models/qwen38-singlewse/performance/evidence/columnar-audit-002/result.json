@@ -1,0 +1,154 @@
+{
+  "schema": "wse-paired-column-audit-v1",
+  "passed": true,
+  "physical": false,
+  "weights_read": false,
+  "plan_sha256": "9461459fe8e0da74396018cbd112d6cc66fa8cca291f61188309a76e0b47e767",
+  "base_atlas_sha256": "19830e61b881f592c92710fc59e6af8d40f1b3afad70d8905ebbedda461f21db",
+  "original_matrices": 498,
+  "original_tiles_checked": {
+    "fp8-main": 72744960,
+    "fp8-wide": 22282240,
+    "bf16": 10024960
+  },
+  "padding_tiles": {
+    "fp8-main": 1920,
+    "fp8-wide": 0,
+    "bf16": 0
+  },
+  "maximum_bank_data_bytes": 35256,
+  "maximum_fp8_slots": 111,
+  "maximum_bf16_slots": 13,
+  "resident_matrix_bytes": 29840350720,
+  "bank_profiles": [
+    {
+      "fp8_slots": 84,
+      "bf16_slots": 0,
+      "state_bytes": 4096,
+      "pes": 48
+    },
+    {
+      "fp8_slots": 84,
+      "bf16_slots": 12,
+      "state_bytes": 0,
+      "pes": 2103
+    },
+    {
+      "fp8_slots": 84,
+      "bf16_slots": 13,
+      "state_bytes": 0,
+      "pes": 366
+    },
+    {
+      "fp8_slots": 85,
+      "bf16_slots": 0,
+      "state_bytes": 4096,
+      "pes": 48
+    },
+    {
+      "fp8_slots": 85,
+      "bf16_slots": 12,
+      "state_bytes": 0,
+      "pes": 1107
+    },
+    {
+      "fp8_slots": 109,
+      "bf16_slots": 12,
+      "state_bytes": 0,
+      "pes": 5168
+    },
+    {
+      "fp8_slots": 110,
+      "bf16_slots": 0,
+      "state_bytes": 4096,
+      "pes": 18384
+    },
+    {
+      "fp8_slots": 110,
+      "bf16_slots": 12,
+      "state_bytes": 0,
+      "pes": 265257
+    },
+    {
+      "fp8_slots": 110,
+      "bf16_slots": 13,
+      "state_bytes": 0,
+      "pes": 136594
+    },
+    {
+      "fp8_slots": 111,
+      "bf16_slots": 0,
+      "state_bytes": 4096,
+      "pes": 18400
+    },
+    {
+      "fp8_slots": 111,
+      "bf16_slots": 12,
+      "state_bytes": 0,
+      "pes": 413405
+    }
+  ],
+  "input_profiles": [
+    {
+      "k_blocks": 40,
+      "input_planes": 3,
+      "bank_consumers": 860880,
+      "actor_ingress_pes": 1500,
+      "router_entries_checked": 2610000,
+      "max_horizontal_payload_words": 260,
+      "max_column_payload_words": 260,
+      "source_buffer_bytes": 520,
+      "bank_input_buffer_bytes": 260,
+      "sources_and_original_blocks_exact": true,
+      "all_neighbor_links_checked": true,
+      "artifact": {
+        "name": "input-k40.npy",
+        "bytes": 5220128,
+        "sha256": "ba6a8116075762592f8db1ae768c2904f4b605c27764a1f19a803b1864f39029"
+      }
+    },
+    {
+      "k_blocks": 48,
+      "input_planes": 5,
+      "bank_consumers": 860880,
+      "actor_ingress_pes": 3000,
+      "router_entries_checked": 4350000,
+      "max_horizontal_payload_words": 260,
+      "max_column_payload_words": 520,
+      "source_buffer_bytes": 520,
+      "bank_input_buffer_bytes": 260,
+      "sources_and_original_blocks_exact": true,
+      "all_neighbor_links_checked": true,
+      "artifact": {
+        "name": "input-k48.npy",
+        "bytes": 8700128,
+        "sha256": "7990b1f3e7dd7a2031d7fd3b2b85619ca53f700171847ced67f45ad31cda4c97"
+      }
+    },
+    {
+      "k_blocks": 136,
+      "input_planes": 2,
+      "bank_consumers": 857208,
+      "actor_ingress_pes": 748,
+      "router_entries_checked": 1740000,
+      "max_horizontal_payload_words": 780,
+      "max_column_payload_words": 130,
+      "source_buffer_bytes": 520,
+      "bank_input_buffer_bytes": 260,
+      "sources_and_original_blocks_exact": true,
+      "all_neighbor_links_checked": true,
+      "artifact": {
+        "name": "input-k136.npy",
+        "bytes": 3480128,
+        "sha256": "107173a34ed9179b1cbe8927589d06d28eb6d9a60297c5210f68ab9ef1a7bb5b"
+      }
+    }
+  ],
+  "duration_seconds": 9.307461471296847,
+  "max_rss_kib": 528744,
+  "compiled_sram_admitted": false,
+  "counter_filter_backend_qualified": false,
+  "full_model_executable": false,
+  "full_model_speed_target_achieved": false,
+  "scope": "Complete original storage addressing and all FP8 input source/consumer identities and neighbor routes. Filter windows are abstract; upstream value/quant delivery, BF16 inputs, result scatter, route transitions and numerical runtime remain unqualified."
+}

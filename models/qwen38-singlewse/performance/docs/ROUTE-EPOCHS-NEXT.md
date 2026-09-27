@@ -54,3 +54,21 @@ Proposed lowering obligations, inferred for this model:
 Separately, the scalar-per-value division in qualified spatial FP8 quantization
 remains a latency target. `GUARDED-QUANTIZATION-NEXT.md` is still unimplemented;
 the original bit-exact gate must precede use of any reciprocal approximation.
+
+## P15 columnar candidate follow-up
+
+The paired-column overlay in `COLUMNAR-INPUT.md` changes the K136 storage ring
+and BF16 phase while preserving all state/value coordinates. Before executing a
+full matrix, regenerate shared-input bundle segment descriptors and all four
+reduction forests against these new storage classes; do not reuse P14's old
+owner addresses. Independently verify the K136 748-column serpentine bridges,
+exact row/K owners, BF16 exclusions/phase and every concurrent input/reduction
+color and endpoint. The new input route format contains a TX bitmask and is not
+compatible with the existing single-TX `route_word.csl` encoding.
+
+Then connect original quant/value actors to horizontal producers and roots back
+to the value arena, qualify bidirectional vertical forwarding and generic epoch
+readiness, and compile the combined neural/input/reduction worker under the same
+48,128-byte ceiling and 4,096-byte declared stack. Only a complete matrix with
+actual original operands, exact owner coverage and full output/error/retention
+checks can close this next integration gate.

@@ -554,3 +554,36 @@ released and 32 source tests pass. See ROUTE-WORD-QUALIFICATION.md.
 
 General forest transition readiness, complete operand multicast/output scatter,
 combined neural-kernel SRAM and full-model 2,000 dependent tokens/s remain unmet.
+
+## P15: paired column input and physical original mixed-bank consumers
+
+A new complete overlay retains all498 original matrices and105,052,160 real
+tiles. K40/K48 use the existing860,880-bank ring; K136 uses857,208 banks in a
+748-column subring. The BF16 ring is unchanged except its aligned phase. Every
+state/KV/value/canonical owner stays fixed. Maximum bank payload remains35,256B.
+Independent audit002 checks all addresses and8,700,000 dense input PE/color
+entries in9.307seconds at528,744KiB RSS. The preserved001 dead-end failure leads
+to terminating horizontal routes at their last recipient. Payload counts for
+K40/48/136 are260/520/780words at the busiest direction, not measured latency.
+
+A20-PE two-stage counter-window component passes physically: horizontal streams
+select130-word pairs, vertical bank filters select65-word operands, and arrivals
+trigger unchanged original FP8/BF16 native dots. Twelve full mixed banks exercise
+110FP8/13BF16 and111/12 profiles. Ten cases cover both horizontal periods, every
+pair offset, both vertical offsets, zero/tiny/boundary operands, first/middle/last
+slots and reset/replay. All240 native values,11,700 delivered packet words,
+callback/teardown counts and421,560 original payload bytes pass exact gates and
+independent FP64 bounds. The unified transfer also verifies1,512 padding bytes.
+
+Physical SRAM with4,096-byte declared stack is47,328bytes, margin800. Local
+receive-to-dot completion is1,026cycles FP8 and992BF16; upstream delivery and
+reduction are excluded and no model rate is claimed. Compile/runtime both
+succeed and release; an independent system audit confirms zero own allocations.
+The accepted simulator completes in132.991seconds; one earlier readback timeout
+and two pointer compile errors remain preserved. All36 source tests pass.
+See COLUMNAR-INPUT.md and filtered-bank-summary-001.json.
+
+Full-matrix routes and output return, source quant/value delivery, bidirectional
+vertical execution, new-class reduction forests and combined runtime SRAM remain
+the next gates. P14 owner descriptors cannot be reused unchanged with this
+overlay. Complete original model2,000 dependent tokens/s is still unmet.
