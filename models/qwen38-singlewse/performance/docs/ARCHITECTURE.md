@@ -184,3 +184,58 @@ rectangle cohosted with maximum111-slot FP8 banks. Native vector sums/delta and
 exclusive state/dot scratch leases leave1,344bytes after actual code/stack. The
 full model's routing transitions and producer integration are still unimplemented;
 ROUTE-EPOCHS-NEXT.md records the required coordinate/color/queue/quiescence gates.
+
+
+## Next complete-matrix spatial comparison
+
+P17 and the P18 retile comparison retain the same631x2 strip for a controlled
+local-shape comparison. This does not solve two-dimensional partitioning. The
+next candidate must place the same complete original matrix into compact PE
+regions, and compare a generated input distribution and physically embedded
+reduction against the strip using the same complete-input/complete-output timing
+boundary. Hardware express forwarding can pipeline; path length alone is neither
+a software serialization count nor a latency measurement.
+
+The implementation should converge repeated communication into shared protocols
+and generation, retaining the qualified hand-written native kernels. Its explicit
+manual controls are region shape, M/K splits, input owners/entrances, tree
+embedding, routes, buffers and permitted overlap. Lower model/value dependencies
+and lifetimes to partitions, distribution, local/cross-region reductions, output
+owners and direct consumers, then to routes, queue/DSR/microthread leases, buffers
+and completion events. Reject mismatched packet extents or simultaneously
+conflicting resources before compilation. This is a planned extension, not a
+claim that the current specialized probes form a general dataflow compiler.
+
+Record each directed link's bytes and maximum load, longest causal path,
+fan-in/fan-out points, readiness/credit waits and measured overlap as well as
+actual SRAM and physical complete-matrix latency. Total word-hops and local FMA
+speed alone cannot choose the placement. Original tensor identity and state
+locations must remain explicit when ownership changes; the earlier atlas is a
+reference to revise with new evidence, not a permanent address restriction.
+
+Development priority update (P18): finish the already running bounded strip
+simulation and preserve it, but do not dispatch its separate physical retile
+trial. Mainline development now requires the compact physical2D/shared-lowering
+path above. P17 supplies the existing physical baseline. Another strip experiment
+requires a specific future controlled-comparison purpose, not continuation of
+the old sequence. All candidate regions/owners remain revisable design choices.
+
+The first executable shared2D candidate is described in COMPACT-PROJECTION.md.
+Treat its40x24 workers as one tested hypothesis. Proactively revise placement,
+interfaces, ownership and scheduling when whole-matrix/layer latency or resource
+evidence demands it. Local improvements need a demonstrated critical-path role.
+Do not wait for user intervention to abandon a limiting topology, and do not
+build a general framework at the expense of complete-model integration.
+
+The next architectural acceptance boundary is a real multi-operator subgraph,
+not another isolated matrix topology. The selected planning scope is layer0
+post-attention RMS -> shared exact input quantization -> gate/up fork -> BF16
+SiLU/multiply -> output quantization -> down -> residual (original graph nodes
+13..18, full5120/17408 dimensions). Derive regions/value owners and direct
+producer-consumer streams from those semantic dependencies, including necessary
+redistribution, completion/credit and cross-operator buffer lifetimes. Preserve
+the residual input until the final add. Keep the original BF16 rounding points
+and explicitly qualify any altered reduction order. Explain the full-dimensional
+resource/critical-path design before selecting bounded execution. Current host
+prepositioned40-ingress inputs and the(0,0)sink do not solve upstream production
+or downstream consumption. This extension is required and not yet executable.

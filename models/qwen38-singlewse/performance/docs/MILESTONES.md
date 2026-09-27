@@ -669,3 +669,38 @@ The exact earlier stall cause remains unproven; its unchanged first-case device
 interval shows that one-channel host transport is a reliability change, not
 arithmetic acceleration. See FULL-MATRIX.md and full-matrix-summary-001.json.
 Complete-model2,000dependenttokens/s remains unmet.
+
+
+## P18: physical compact2D complete matrix and shared projection lowering
+
+The first8x32 retile keeps the old631x2 strip and passes all simulator/retention
+gates, but worsens its interval from9328 to10242cycles. A retained-fixture audit
+proves identical full BF16 matrix/inputs and unchanged background slots. This
+negative result is preserved; the independent strip hardware trial is deferred.
+
+The mainline now has parameterized physical K/M axes, explicit input/output
+owners, stream/completion/buffer/resource documents, an independent route/traffic
+audit and a shared matrix-epoch CSL protocol.40x24 workers plus40 edge input
+owners/controller form41x25 PEs. Static maximum input distance is24hops and
+maximum directed-link traffic66words including teardown. These counts are not
+a complete credit-critical-path model or a performance prediction.
+
+Simulator001 passes; physical001 exposes pair reordering on the third epoch
+although native/subtree/counter checks pass. The queue retains its previous final
+gather color. Resetting the first color during arm is qualified with two nonzero
+simulator epochs and physical002's complete six-case/replay/full-bank run.
+All11520 local and11520 subtree values,288 returned values,374400 input words,
+producer packets, callback/teardown counts and33845760 bank/padding bytes pass.
+All five full BF16 cases measure3898physicalcycles vs10824:2.77681x,63.99% lower
+latency. The matched FP8 smoke measures3694cycles; it remains representative
+cohost data, not a complete original FP8 projection. All jobs release normally.
+Actual maximum SRAM plus4KiB stack is48112bytes;109 images cover1025PEs exactly.
+All55 source tests pass. Failed attempts and source hashes remain preserved.
+
+This is a restricted single-projection backend. Input operands are pre-positioned
+at40 owners before the timed kick, and48 outputs go to a qualification sink.
+The next boundary is a real complete-dimensional multi-region model subgraph,
+not further isolated matrix tuning. The initial importer binds real layer0 MLP
+nodes13..18, shared quantization, actual successor interfaces and cross-operator
+lifetimes, but has no admitted physical placement/routes/executable schedule.
+Complete original model, correct sentences and>=2000dependenttokens/s remain unmet.

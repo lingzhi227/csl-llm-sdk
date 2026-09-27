@@ -1,0 +1,26 @@
+{
+  "schema": "wse-retiled-matrix-routing-audit-v1",
+  "passed": true,
+  "physical": false,
+  "weights_read": false,
+  "matrix_shape": [
+    48,
+    5120
+  ],
+  "all_original_tiles": 960,
+  "contraction_edges": 954,
+  "gather_edges": 5,
+  "route_entries": 7544,
+  "input_recipients": 960,
+  "input_forwarders": 1261,
+  "input_words": 2720,
+  "source_to_input_farthest_hops": 1260,
+  "contraction_and_gather_word_hops": 65886,
+  "all_routes_reachable": true,
+  "all_intermediate_router_ports_checked": true,
+  "reference_coordinates_and_new_tile_partition_checked": true,
+  "compiled_sram_admitted": false,
+  "full_model_executable": false,
+  "scope": "Complete original matrix retiled partition at reference coordinates; static input/contraction/ordered-output routing only. Abstract graph traversal is not executable queue/thread/numerical qualification.",
+  "plan_sha256": "1613ddf0dcef5a0d065f8c0365f505bf51c8b736002e3d7544034d29f49edb75"
+}

@@ -1,0 +1,14 @@
+{
+  "schema": "wse-projection-flow-cost-scope-v1",
+  "affected": [
+    "projection-flow-plan-001.json",
+    "compact-projection-sim-001/source/region.json"
+  ],
+  "frozen_field": "max_causal_transport_hops",
+  "value": 128,
+  "actual_meaning": "Maximum hops followed by one input/native/gather contribution, excluding credit serialization and callback/compute waits.",
+  "full_credit_critical_path_modeled": false,
+  "current_source_field": "max_contribution_transport_hops",
+  "source_csl_changed": false,
+  "scope": "Clarify static metric naming without rewriting frozen source documents. Actual full timed protocol is validated and measured separately."
+}

@@ -1,0 +1,24 @@
+{
+  "application_pes": 1025,
+  "application": [
+    41,
+    25
+  ],
+  "matrix_shape": [
+    48,
+    5120
+  ],
+  "fabric_offset": [
+    123,
+    706
+  ],
+  "complete_original_matrix": true,
+  "full_model": false,
+  "memcpy_channels": 1,
+  "simulation_memcpy_channels": 2,
+  "artifact_single_message_limit": 8388608,
+  "compiler_timeout_seconds": 600,
+  "run_timeout_seconds": 300,
+  "simulation_protocol_source": "compact-projection-sim-001",
+  "scope": "Complete original48x5120 BF16 matrix on compact2D distributed-ingress projection backend,960 original native tiles and40 input owners. Same P17 fixture bytes and ordered oracle; supplementary representative FP8 smoke only. Host-owned initial operands; not model inference."
+}

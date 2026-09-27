@@ -1,0 +1,17 @@
+{
+  "origins": {
+    "run.py": {
+      "source": "probes/full_bf16_matrix/run.py",
+      "sha256": "0e700fce0b474d40eaeeef5c0bee26227bd201fadb710c2d178b8946bab503a6"
+    },
+    "tools/stage_compact_projection_hw.py": {
+      "source": "tools/stage_retiled_matrix_hw.py",
+      "sha256": "b13ab8842392dd063c2579cfde38be506a53afd907464cc31d9252d3cf3fc721"
+    },
+    "runtime/compile_compact_projection.py": {
+      "source": "runtime/compile_full_matrix_component.py",
+      "sha256": "d95a266c7e947501c7a3cc0e81ded786982aaa7966457a2ad65f2a04a8cf22da"
+    }
+  },
+  "fixture": "Bit-identical P17 original fixture and oracle, with explicitly replaced coordinate metadata."
+}

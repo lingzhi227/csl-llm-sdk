@@ -1,0 +1,135 @@
+{
+  "schema": "wse-compact-projection-summary-v1",
+  "passed": true,
+  "physical": true,
+  "full_model": false,
+  "full_model_speed_target_achieved": false,
+  "model": "Qwen/Qwen3.8-27B-FP8",
+  "revision": "017b9c7af6b5689d5dd426a76e0bc077eb5ca20a",
+  "matrix_shape": [
+    48,
+    5120
+  ],
+  "tile_shape": [
+    2,
+    128
+  ],
+  "physical_application": [
+    41,
+    25
+  ],
+  "workers": 960,
+  "input_owners": 40,
+  "physical_attempt": "compact-projection-hw-002",
+  "simulation_attempt": "compact-projection-sim-002",
+  "artifact_sha256": "280caec384e70dc908d3c4856b62a2ffe87314964241f22898384185ce73586f",
+  "fixture_sha256": "b9fc3fa2e6150f2de1e017cc5f0490ec4374ca527e25bc1e22e4250e9f646f1c",
+  "matched_cases": [
+    {
+      "case": 0,
+      "kind": "bf16",
+      "mode": "mixed",
+      "complete_original_matrix": true,
+      "reference_cycles": 10824,
+      "candidate_cycles": 3898,
+      "speedup": 2.776808619805028,
+      "latency_reduction_fraction": 0.6398743532889875
+    },
+    {
+      "case": 1,
+      "kind": "bf16",
+      "mode": "zero",
+      "complete_original_matrix": true,
+      "reference_cycles": 10824,
+      "candidate_cycles": 3898,
+      "speedup": 2.776808619805028,
+      "latency_reduction_fraction": 0.6398743532889875
+    },
+    {
+      "case": 2,
+      "kind": "bf16",
+      "mode": "tiny",
+      "complete_original_matrix": true,
+      "reference_cycles": 10824,
+      "candidate_cycles": 3898,
+      "speedup": 2.776808619805028,
+      "latency_reduction_fraction": 0.6398743532889875
+    },
+    {
+      "case": 3,
+      "kind": "bf16",
+      "mode": "boundary",
+      "complete_original_matrix": true,
+      "reference_cycles": 10824,
+      "candidate_cycles": 3898,
+      "speedup": 2.776808619805028,
+      "latency_reduction_fraction": 0.6398743532889875
+    },
+    {
+      "case": 4,
+      "kind": "fp8",
+      "mode": "fp8_cohost_smoke",
+      "complete_original_matrix": false,
+      "reference_cycles": 10633,
+      "candidate_cycles": 3694,
+      "speedup": 2.878451543042772,
+      "latency_reduction_fraction": 0.6525909903131759
+    },
+    {
+      "case": 5,
+      "kind": "bf16",
+      "mode": "mixed",
+      "complete_original_matrix": true,
+      "reference_cycles": 10824,
+      "candidate_cycles": 3898,
+      "speedup": 2.776808619805028,
+      "latency_reduction_fraction": 0.6398743532889875
+    }
+  ],
+  "median_matched_bf16_speedup": 2.776808619805028,
+  "native_output_values_checked": 11520,
+  "subtree_output_values_checked": 11520,
+  "returned_output_values_checked": 288,
+  "input_packet_words_checked": 374400,
+  "retained_bank_bytes": 33845760,
+  "original_bank_bytes": 33832240,
+  "sram_with_stack": 48112,
+  "sram_margin": 16,
+  "compiled_application_images": 109,
+  "all_owned_jobs_released": true,
+  "jobs": [
+    {
+      "cancelled": false,
+      "id": "wsjob-kf6kurzauxzhz7mdybla2e",
+      "phase": "SUCCEEDED",
+      "released": true
+    },
+    {
+      "cancelled": false,
+      "id": "wsjob-rpkxqi5ydwgwrhsgbse8fr",
+      "phase": "SUCCEEDED",
+      "released": true
+    }
+  ],
+  "static_max_input_hops": 24,
+  "static_max_link_words_including_teardown": 66,
+  "host_resident_upload_alias_fence_seconds": 0.2896661115810275,
+  "initialization_note": "This upload/alias/fence interval starts after SDK runtime is ready; artifact upload, scheduling and runtime startup are excluded.",
+  "timing_boundary": "Controller kick through complete48-output delivery, includes40 distributed K input transfers/native/reductions/gather. P17 starts with the same input at one controller; current input is pre-positioned at40 ingress owners. Both exclude prior host operand placement/arm; one physical SDK host channel. Early-finished PE validation copies may overlap remaining work; no time is subtracted.",
+  "numerical_comparison": "Bit-identical P17 original fixture, full bank payloads, all inputs and the same ordered FP32/independent FP64 oracle. Only coordinate metadata changes; the supplementary FP8 case remains representative smoke, not a whole original FP8 projection.",
+  "limitation": "Component-only compact coordinates, host-provided initial operands and centralized48-row qualification sink. Main matrix shapes, adjacent consumers, production scheduler/state placement, full model/token feedback and>=2000dependenttps are not qualified.",
+  "evidence_sha256": {
+    "evidence/compact-projection-sim-002/COMPLETE.json": "30a451630bc8111088c3a13bce3f99e003c0cfe9b1956fe22cbce1f1167d6cdb",
+    "evidence/compact-projection-sim-002/workstation-release.json": "2dd7c7a3f0f8d1f7b0cbd13052dbb3354905b69434df500f46c2170514989015",
+    "evidence/compact-projection-hw-002/COMPLETE.json": "c040fe60f808817c80247abd4d002d4a281189d728f6c8034c1aa3230223deaa",
+    "evidence/compact-projection-hw-002/result.json": "d4e186fc5ed9996b9d65302925f967c89843865c46810c7e059181b970a6aa0c",
+    "evidence/compact-projection-hw-002/fixture.json": "535dfdb3571d23e3732a3d9055e5cc5038ba1a3ac9229983d02f1fda0e9d9a86",
+    "evidence/full-bf16-matrix-hw-003/result.json": "bbf58d9c3a5f9f590b6ffd9972413b5a0db3a16411a16a8aeb511522e5c27afe",
+    "evidence/compact-projection-hw-002/source/region.json": "38d6c768949811bbabaab1fe6ad602d444f215518e90636a5f85226449e88407",
+    "evidence/compact-projection-hw-002/source/flow-audit.json": "18958815e14ba28ab7b5a87fd7626ed3bc5546ec2f8d32407ad8b6091d520ee2",
+    "evidence/compact-projection-hw-002/artifact.json": "bfd3cb09f5d5c4a46805e6906147894a23a8e364252ba4d7c4aea89eda85a20b",
+    "evidence/compact-projection-hw-002/sram.json": "cfa06defef3efd4d1b78d3b627cc9fab55b63fdfd52a3ce67f5351d2183eb5ab",
+    "evidence/compact-projection-hw-002/compile-audit.json": "beb7e2002a8c58cd093e49814a1eb68332215652f6b4ba8382eb059250aace06",
+    "evidence/compact-projection-hw-002/run-audit.json": "09067d44ee2898705b9fd4709c470b97dd8da7d05bdc1c54d087e32280ee93e7"
+  }
+}

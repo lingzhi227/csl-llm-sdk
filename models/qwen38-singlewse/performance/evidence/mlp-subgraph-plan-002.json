@@ -1,0 +1,742 @@
+{
+  "schema": "wse-real-mlp-subgraph-v1",
+  "model": "Qwen/Qwen3.8-27B-FP8",
+  "revision": "017b9c7af6b5689d5dd426a76e0bc077eb5ca20a",
+  "layer": 0,
+  "original_nodes": [
+    {
+      "id": 13,
+      "op": "zero_centered_rmsnorm",
+      "inputs": [
+        "v16"
+      ],
+      "outputs": [
+        "v17"
+      ],
+      "weights": [
+        "model.language_model.layers.0.post_attention_layernorm.weight"
+      ],
+      "attributes": {
+        "epsilon": 1e-06,
+        "arithmetic": "FP32 norm and multiply by (1+FP32 weight), then BF16"
+      }
+    },
+    {
+      "id": 14,
+      "op": "fp8_projection",
+      "inputs": [
+        "v17"
+      ],
+      "outputs": [
+        "v18"
+      ],
+      "weights": [
+        "model.language_model.layers.0.mlp.gate_proj.weight",
+        "model.language_model.layers.0.mlp.gate_proj.weight_scale_inv"
+      ],
+      "attributes": {
+        "activation_group": 128,
+        "weight_block": [
+          128,
+          128
+        ],
+        "activation": "E4M3FN nearest even; max(absmax,1e-10)/448",
+        "accumulation": "FP32 ascending128-wide contraction blocks; BF16 only after complete projection"
+      }
+    },
+    {
+      "id": 15,
+      "op": "fp8_projection",
+      "inputs": [
+        "v17"
+      ],
+      "outputs": [
+        "v19"
+      ],
+      "weights": [
+        "model.language_model.layers.0.mlp.up_proj.weight",
+        "model.language_model.layers.0.mlp.up_proj.weight_scale_inv"
+      ],
+      "attributes": {
+        "activation_group": 128,
+        "weight_block": [
+          128,
+          128
+        ],
+        "activation": "E4M3FN nearest even; max(absmax,1e-10)/448",
+        "accumulation": "FP32 ascending128-wide contraction blocks; BF16 only after complete projection"
+      }
+    },
+    {
+      "id": 16,
+      "op": "silu_multiply",
+      "inputs": [
+        "v18",
+        "v19"
+      ],
+      "outputs": [
+        "v20"
+      ],
+      "weights": [],
+      "attributes": {
+        "arithmetic": "SiLU(gate) to BF16; multiply up to BF16"
+      }
+    },
+    {
+      "id": 17,
+      "op": "fp8_projection",
+      "inputs": [
+        "v20"
+      ],
+      "outputs": [
+        "v21"
+      ],
+      "weights": [
+        "model.language_model.layers.0.mlp.down_proj.weight",
+        "model.language_model.layers.0.mlp.down_proj.weight_scale_inv"
+      ],
+      "attributes": {
+        "activation_group": 128,
+        "weight_block": [
+          128,
+          128
+        ],
+        "activation": "E4M3FN nearest even; max(absmax,1e-10)/448",
+        "accumulation": "FP32 ascending128-wide contraction blocks; BF16 only after complete projection"
+      }
+    },
+    {
+      "id": 18,
+      "op": "residual_add",
+      "inputs": [
+        "v16",
+        "v21"
+      ],
+      "outputs": [
+        "v22"
+      ],
+      "weights": [],
+      "attributes": {
+        "arithmetic": "BF16 output"
+      }
+    }
+  ],
+  "lowered_semantic_nodes": [
+    {
+      "id": 13,
+      "op": "zero_centered_rmsnorm",
+      "inputs": [
+        "v16"
+      ],
+      "outputs": [
+        "v17"
+      ],
+      "weights": [
+        "model.language_model.layers.0.post_attention_layernorm.weight"
+      ],
+      "attributes": {
+        "epsilon": 1e-06,
+        "arithmetic": "FP32 norm and multiply by (1+FP32 weight), then BF16"
+      }
+    },
+    {
+      "id": 14,
+      "op": "fp8_native_projection",
+      "inputs": [
+        "quantized:v17"
+      ],
+      "outputs": [
+        "v18"
+      ],
+      "weights": [
+        "model.language_model.layers.0.mlp.gate_proj.weight",
+        "model.language_model.layers.0.mlp.gate_proj.weight_scale_inv"
+      ],
+      "attributes": {
+        "activation_group": 128,
+        "weight_block": [
+          128,
+          128
+        ],
+        "activation": "E4M3FN nearest even; max(absmax,1e-10)/448",
+        "accumulation": "FP32 ascending128-wide contraction blocks; BF16 only after complete projection",
+        "input_quantization_producer": "quantize:shared_input"
+      },
+      "source_op": "fp8_projection"
+    },
+    {
+      "id": 15,
+      "op": "fp8_native_projection",
+      "inputs": [
+        "quantized:v17"
+      ],
+      "outputs": [
+        "v19"
+      ],
+      "weights": [
+        "model.language_model.layers.0.mlp.up_proj.weight",
+        "model.language_model.layers.0.mlp.up_proj.weight_scale_inv"
+      ],
+      "attributes": {
+        "activation_group": 128,
+        "weight_block": [
+          128,
+          128
+        ],
+        "activation": "E4M3FN nearest even; max(absmax,1e-10)/448",
+        "accumulation": "FP32 ascending128-wide contraction blocks; BF16 only after complete projection",
+        "input_quantization_producer": "quantize:shared_input"
+      },
+      "source_op": "fp8_projection"
+    },
+    {
+      "id": 16,
+      "op": "silu_multiply",
+      "inputs": [
+        "v18",
+        "v19"
+      ],
+      "outputs": [
+        "v20"
+      ],
+      "weights": [],
+      "attributes": {
+        "arithmetic": "SiLU(gate) to BF16; multiply up to BF16"
+      }
+    },
+    {
+      "id": 17,
+      "op": "fp8_native_projection",
+      "inputs": [
+        "quantized:v20"
+      ],
+      "outputs": [
+        "v21"
+      ],
+      "weights": [
+        "model.language_model.layers.0.mlp.down_proj.weight",
+        "model.language_model.layers.0.mlp.down_proj.weight_scale_inv"
+      ],
+      "attributes": {
+        "activation_group": 128,
+        "weight_block": [
+          128,
+          128
+        ],
+        "activation": "E4M3FN nearest even; max(absmax,1e-10)/448",
+        "accumulation": "FP32 ascending128-wide contraction blocks; BF16 only after complete projection",
+        "input_quantization_producer": "quantize:down_input"
+      },
+      "source_op": "fp8_projection"
+    },
+    {
+      "id": 18,
+      "op": "residual_add",
+      "inputs": [
+        "v16",
+        "v21"
+      ],
+      "outputs": [
+        "v22"
+      ],
+      "weights": [],
+      "attributes": {
+        "arithmetic": "BF16 output"
+      }
+    },
+    {
+      "id": "quantize:shared_input",
+      "op": "dynamic_group128_quantization",
+      "inputs": [
+        "v17"
+      ],
+      "outputs": [
+        "quantized:v17"
+      ],
+      "weights": [],
+      "attributes": {
+        "source_dtype": "BF16",
+        "group": 128,
+        "convention": "E4M3FN nearest even; max(absmax,1e-10)/448",
+        "native_packet": "128 FP16 encodings of FP8/256 plus one original FP32 activation scale"
+      }
+    },
+    {
+      "id": "quantize:down_input",
+      "op": "dynamic_group128_quantization",
+      "inputs": [
+        "v20"
+      ],
+      "outputs": [
+        "quantized:v20"
+      ],
+      "weights": [],
+      "attributes": {
+        "source_dtype": "BF16",
+        "group": 128,
+        "convention": "E4M3FN nearest even; max(absmax,1e-10)/448",
+        "native_packet": "128 FP16 encodings of FP8/256 plus one original FP32 activation scale"
+      }
+    }
+  ],
+  "input_values": [
+    "v16"
+  ],
+  "output_values": [
+    "v22"
+  ],
+  "real_successor_interfaces": [
+    {
+      "node": 19,
+      "op": "zero_centered_rmsnorm",
+      "inputs": [
+        "v22"
+      ]
+    },
+    {
+      "node": 30,
+      "op": "residual_add",
+      "inputs": [
+        "v22",
+        "v36"
+      ]
+    }
+  ],
+  "values": {
+    "v16": {
+      "shape": [
+        5120
+      ],
+      "dtype": "BF16"
+    },
+    "v17": {
+      "shape": [
+        5120
+      ],
+      "dtype": "BF16"
+    },
+    "v18": {
+      "shape": [
+        17408
+      ],
+      "dtype": "BF16"
+    },
+    "v19": {
+      "shape": [
+        17408
+      ],
+      "dtype": "BF16"
+    },
+    "v20": {
+      "shape": [
+        17408
+      ],
+      "dtype": "BF16"
+    },
+    "v21": {
+      "shape": [
+        5120
+      ],
+      "dtype": "BF16"
+    },
+    "v22": {
+      "shape": [
+        5120
+      ],
+      "dtype": "BF16"
+    },
+    "quantized:v17": {
+      "shape": [
+        40,
+        65
+      ],
+      "dtype": "packed-u32-native-packet",
+      "bytes": 10400
+    },
+    "quantized:v20": {
+      "shape": [
+        136,
+        65
+      ],
+      "dtype": "packed-u32-native-packet",
+      "bytes": 35360
+    }
+  },
+  "completion_dependencies": {
+    "13": [
+      "interface:input:v16"
+    ],
+    "14": [
+      "quantize:shared_input"
+    ],
+    "15": [
+      "quantize:shared_input"
+    ],
+    "16": [
+      "14",
+      "15"
+    ],
+    "17": [
+      "quantize:down_input"
+    ],
+    "18": [
+      "interface:input:v16",
+      "17"
+    ],
+    "quantize:shared_input": [
+      "13"
+    ],
+    "quantize:down_input": [
+      "16"
+    ],
+    "interface:input:v16": [],
+    "interface:output:v22": [
+      "18"
+    ]
+  },
+  "topological_order": [
+    "interface:input:v16",
+    "13",
+    "quantize:shared_input",
+    "14",
+    "15",
+    "16",
+    "quantize:down_input",
+    "17",
+    "18",
+    "interface:output:v22"
+  ],
+  "buffer_lifetimes": {
+    "v16": {
+      "producer": "external-predecessor",
+      "consumers": [
+        13,
+        18
+      ],
+      "release_after_consumers_complete": [
+        13,
+        18
+      ],
+      "shape": [
+        5120
+      ],
+      "dtype": "BF16"
+    },
+    "v17": {
+      "producer": 13,
+      "consumers": [
+        "quantize:shared_input"
+      ],
+      "release_after_consumers_complete": [
+        "quantize:shared_input"
+      ],
+      "shape": [
+        5120
+      ],
+      "dtype": "BF16"
+    },
+    "v18": {
+      "producer": 14,
+      "consumers": [
+        16
+      ],
+      "release_after_consumers_complete": [
+        16
+      ],
+      "shape": [
+        17408
+      ],
+      "dtype": "BF16"
+    },
+    "v19": {
+      "producer": 15,
+      "consumers": [
+        16
+      ],
+      "release_after_consumers_complete": [
+        16
+      ],
+      "shape": [
+        17408
+      ],
+      "dtype": "BF16"
+    },
+    "v20": {
+      "producer": 16,
+      "consumers": [
+        "quantize:down_input"
+      ],
+      "release_after_consumers_complete": [
+        "quantize:down_input"
+      ],
+      "shape": [
+        17408
+      ],
+      "dtype": "BF16"
+    },
+    "v21": {
+      "producer": 17,
+      "consumers": [
+        18
+      ],
+      "release_after_consumers_complete": [
+        18
+      ],
+      "shape": [
+        5120
+      ],
+      "dtype": "BF16"
+    },
+    "v22": {
+      "producer": 18,
+      "consumers": [
+        "interface:output:v22"
+      ],
+      "release_after_consumers_complete": [
+        "interface:output:v22"
+      ],
+      "shape": [
+        5120
+      ],
+      "dtype": "BF16"
+    },
+    "quantized:v17": {
+      "producer": "quantize:shared_input",
+      "consumers": [
+        14,
+        15
+      ],
+      "release_after_consumers_complete": [
+        14,
+        15
+      ],
+      "shape": [
+        40,
+        65
+      ],
+      "dtype": "packed-u32-native-packet"
+    },
+    "quantized:v20": {
+      "producer": "quantize:down_input",
+      "consumers": [
+        17
+      ],
+      "release_after_consumers_complete": [
+        17
+      ],
+      "shape": [
+        136,
+        65
+      ],
+      "dtype": "packed-u32-native-packet"
+    }
+  },
+  "original_weights": {
+    "model.language_model.layers.0.post_attention_layernorm.weight": {
+      "dtype": "BF16",
+      "shape": [
+        5120
+      ],
+      "data_offsets": [
+        1122368,
+        1132608
+      ],
+      "shard": "layers-0.safetensors",
+      "data_start": 2600,
+      "bytes": 10240
+    },
+    "model.language_model.layers.0.mlp.gate_proj.weight": {
+      "dtype": "F8_E4M3",
+      "shape": [
+        17408,
+        5120
+      ],
+      "data_offsets": [
+        205604928,
+        294733888
+      ],
+      "shard": "layers-0.safetensors",
+      "data_start": 2600,
+      "bytes": 89128960
+    },
+    "model.language_model.layers.0.mlp.gate_proj.weight_scale_inv": {
+      "dtype": "BF16",
+      "shape": [
+        136,
+        40
+      ],
+      "data_offsets": [
+        1100608,
+        1111488
+      ],
+      "shard": "layers-0.safetensors",
+      "data_start": 2600,
+      "bytes": 10880
+    },
+    "model.language_model.layers.0.mlp.up_proj.weight": {
+      "dtype": "F8_E4M3",
+      "shape": [
+        17408,
+        5120
+      ],
+      "data_offsets": [
+        294733888,
+        383862848
+      ],
+      "shard": "layers-0.safetensors",
+      "data_start": 2600,
+      "bytes": 89128960
+    },
+    "model.language_model.layers.0.mlp.up_proj.weight_scale_inv": {
+      "dtype": "BF16",
+      "shape": [
+        136,
+        40
+      ],
+      "data_offsets": [
+        1111488,
+        1122368
+      ],
+      "shard": "layers-0.safetensors",
+      "data_start": 2600,
+      "bytes": 10880
+    },
+    "model.language_model.layers.0.mlp.down_proj.weight": {
+      "dtype": "F8_E4M3",
+      "shape": [
+        5120,
+        17408
+      ],
+      "data_offsets": [
+        116475968,
+        205604928
+      ],
+      "shard": "layers-0.safetensors",
+      "data_start": 2600,
+      "bytes": 89128960
+    },
+    "model.language_model.layers.0.mlp.down_proj.weight_scale_inv": {
+      "dtype": "BF16",
+      "shape": [
+        40,
+        136
+      ],
+      "data_offsets": [
+        1089728,
+        1100608
+      ],
+      "shard": "layers-0.safetensors",
+      "data_start": 2600,
+      "bytes": 10880
+    }
+  },
+  "projections": [
+    {
+      "node": 14,
+      "tensor": "model.language_model.layers.0.mlp.gate_proj.weight",
+      "shape": [
+        17408,
+        5120
+      ],
+      "tile_shape": [
+        2,
+        128
+      ],
+      "native_tiles": 348160,
+      "original_quantization": {
+        "activation_group": 128,
+        "weight_block": [
+          128,
+          128
+        ],
+        "activation": "E4M3FN nearest even; max(absmax,1e-10)/448",
+        "accumulation": "FP32 ascending128-wide contraction blocks; BF16 only after complete projection"
+      },
+      "new_reduction_order_qualified": false
+    },
+    {
+      "node": 15,
+      "tensor": "model.language_model.layers.0.mlp.up_proj.weight",
+      "shape": [
+        17408,
+        5120
+      ],
+      "tile_shape": [
+        2,
+        128
+      ],
+      "native_tiles": 348160,
+      "original_quantization": {
+        "activation_group": 128,
+        "weight_block": [
+          128,
+          128
+        ],
+        "activation": "E4M3FN nearest even; max(absmax,1e-10)/448",
+        "accumulation": "FP32 ascending128-wide contraction blocks; BF16 only after complete projection"
+      },
+      "new_reduction_order_qualified": false
+    },
+    {
+      "node": 17,
+      "tensor": "model.language_model.layers.0.mlp.down_proj.weight",
+      "shape": [
+        5120,
+        17408
+      ],
+      "tile_shape": [
+        2,
+        128
+      ],
+      "native_tiles": 348160,
+      "original_quantization": {
+        "activation_group": 128,
+        "weight_block": [
+          128,
+          128
+        ],
+        "activation": "E4M3FN nearest even; max(absmax,1e-10)/448",
+        "accumulation": "FP32 ascending128-wide contraction blocks; BF16 only after complete projection"
+      },
+      "new_reduction_order_qualified": false
+    }
+  ],
+  "resource_counts": {
+    "original_weight_bytes": 267429760,
+    "native_tiles_total": 1044480,
+    "gate_up_workers_if_fully_parallel": 696320,
+    "down_workers_if_one_tile_per_pe": 348160,
+    "per_tile_fp32_scale_bytes": 4177920,
+    "note": "Arithmetic population only. Interface/quantization/state/code/stack and global27B bank capacity are not admitted; down may reuse released compute/scratch while original weights stay resident."
+  },
+  "critical_path_terms": [
+    "external predecessor delivery",
+    "global RMS reduction and normalized value production",
+    "shared group128 quantization and fork distribution",
+    "max(gate input/native/reduction/delivery, up input/native/reduction/delivery)",
+    "per-output BF16 SiLU then BF16 multiply",
+    "group128 redistribution and quantization",
+    "down input/native/full-K reduction/delivery",
+    "retained residual BF16 add",
+    "actual successor consumption"
+  ],
+  "required_streams": [
+    "normalized value to shared quantizer",
+    "shared native packets to both gate and up regions",
+    "gate/up BF16 rows directly to paired SiLU/multiply consumers",
+    "multiply BF16 output groups to down quantizer/owners",
+    "quantized groups to down native regions",
+    "down BF16 output and retained residual directly to add/next-layer consumer"
+  ],
+  "physical_placement_complete": false,
+  "all_routes_lowered": false,
+  "compiled_sram_qualified": false,
+  "executable": false,
+  "physical": false,
+  "full_model": false,
+  "scope": "Real complete-dimensional semantic fork/join, quantization sharing, successor interfaces and cross-operator lifetimes. This does not execute the subgraph or count host-prepositioned inputs as upstream production.",
+  "source_sha256": {
+    "configs/model-graph.json": "c6b031b2dbbda10f318210d48f0c71f95782e12459a27459f29d053a4cd67ad1",
+    "configs/tensors.json": "35ee74a4b6941612aaa7b08ecf7fd17f301afb0f4797801fa47e1c152d150781"
+  }
+}

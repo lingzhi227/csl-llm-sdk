@@ -8,7 +8,7 @@ import subprocess
 
 ROOT = Path(__file__).resolve().parents[1]
 parser = argparse.ArgumentParser(); parser.add_argument('attempt'); args = parser.parse_args()
-if not re.fullmatch('(?:[a-z][a-z0-9-]*-sim|projection-audit|atlas-audit|columnar-audit|coupled-audit)-[0-9]{3}', args.attempt):
+if not re.fullmatch('(?:[a-z][a-z0-9-]*-sim|projection-audit|atlas-audit|columnar-audit|coupled-audit|retiled-comparison-audit)-[0-9]{3}', args.attempt):
     raise ValueError('Simulator or metadata-audit attempt required')
 destination = ROOT / 'evidence' / args.attempt / 'workstation-release.json'
 if destination.exists():
@@ -21,7 +21,7 @@ status=dict(line.split('=',1) for line in result.splitlines() if '=' in line)
 with open('/srv/cerebras-workstation/heavy.lock','a') as f:
  try:fcntl.flock(f,fcntl.LOCK_EX|fcntl.LOCK_NB);free=True
  except BlockingIOError:free=False
-active=subprocess.run(['systemctl','--user','list-units','--type=service','--state=running','--no-legend','qwen38-single-*'],capture_output=True,text=True,check=True,timeout=10).stdout.strip()
+active=subprocess.run(['systemctl','--user','list-units','--type=service','--state=active,activating,deactivating','--no-legend','qwen38-single-*'],capture_output=True,text=True,check=True,timeout=10).stdout.strip()
 root=Path('/srv/model-storage/qwen38-singlewse/runs')/name
 logs={}
 for name in ['prepare.log','compile.log','run.log','sim.log']:

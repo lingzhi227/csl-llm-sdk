@@ -1,0 +1,45 @@
+{
+  "scope": "P18 component development; frozen P17 evidence and global atlas unchanged.",
+  "origins": {
+    "spatial/retiled_matrix.py": {
+      "source": "spatial/full_bf16_matrix.py",
+      "sha256": "72398bad1ee05775946b3de2bcb594658d74d8bea794125489c58c693e7c8c21"
+    },
+    "probes/retiled_matrix/pe.csl": {
+      "source": "probes/full_bf16_matrix/pe.csl",
+      "sha256": "c5e4bd53d4243338e520e8c2640060b82f1a3362ad08d772f03eccf34674c62d"
+    },
+    "probes/retiled_matrix/bf16_shape.csl": {
+      "source": "probes/native_shapes/bf16_shape.csl",
+      "sha256": "522bf6960f2a3042232d3ff8df9bf995579cda18cc137bacdcdc889ae4b0455f"
+    },
+    "probes/retiled_matrix/fp8_shape.csl": {
+      "source": "probes/native_shapes/fp8_shape.csl",
+      "sha256": "b9869927f2afebc6f48d4e680ace6e1f458713db8c3c5895465e7d5652e8d301"
+    },
+    "probes/retiled_matrix/run.py": {
+      "source": "probes/full_bf16_matrix/run.py",
+      "sha256": "0e700fce0b474d40eaeeef5c0bee26227bd201fadb710c2d178b8946bab503a6"
+    },
+    "tools/stage_retiled_matrix_sim.py": {
+      "source": "tools/stage_full_matrix_sim.py",
+      "sha256": "da6b8a51a007b037e6e29b6e290995b224dd2aa02ce8ce2d7652818aee300b69"
+    },
+    "probes/retiled_matrix/prepare.py": {
+      "source": "probes/full_bf16_matrix/prepare.py",
+      "sha256": "6fb3046816167aa47516fdb9bb7c9d9f0e5caffd1c5113abb8e71efad0bc76f0"
+    },
+    "tools/stage_retiled_matrix_hw.py": {
+      "source": "tools/stage_full_matrix_hw.py",
+      "sha256": "8b1b2c9cab09276fd89431c935f9e2bdca2f48a4186cc70613aa69eb608bfd14"
+    },
+    "tools/audit_retiled_matrix_plan.py": {
+      "source": "tools/audit_full_matrix_plan.py",
+      "sha256": "c48958357c9a8804862f4ff409b7a344472ff49645cc54adfed8ccc80e7c92c6"
+    },
+    "tools/stage_retiled_comparison.py": {
+      "source": "tools/stage_columnar_audit.py",
+      "sha256": "bb5975bf82c890867b26a83814930ef9484823d859d7c0b35e7b5c421fce8ce1"
+    }
+  }
+}

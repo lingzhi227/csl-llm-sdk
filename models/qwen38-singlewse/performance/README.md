@@ -137,3 +137,18 @@ earlier two-channel host-transport stall and successful one-channel qualificatio
 are preserved in [FULL-MATRIX.md](docs/FULL-MATRIX.md).
 These are component results. Complete dependent model inference at2,000tokens/s
 remains unmet.
+
+
+P18 moves the complete original48x5120 matrix to40x24 compute PEs with40 parallel
+input owners, using a shared stream/completion/resource representation and one
+CSL epoch protocol. Physical all-case/replay/full-bank validation passes at3898
+cycles versus10824 in P17:2.77681x, including complete communication and output
+delivery. The weights/inputs/oracle are identical; input storage is distributed
+instead of concentrated at one controller. The first physical attempt's warm
+output-order failure is preserved and fixed by resetting the gather queue binding
+before the next kick. Actual SRAM plus stack is48112bytes, leaving16bytes.
+The inferior8x32 strip simulation is retained without its proposed physical trial.
+See [COMPACT-PROJECTION.md](docs/COMPACT-PROJECTION.md) and
+[RETILED-MATRIX.md](docs/RETILED-MATRIX.md). The next acceptance boundary is a real
+multi-operator MLP graph with direct consumers and cross-operator lifetimes;
+its semantic importer is not executable. Complete-model2000tokens/s remains unmet.

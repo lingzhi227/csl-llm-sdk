@@ -1,0 +1,25 @@
+{
+  "physical": false,
+  "seconds": 0.3990319473668933,
+  "result": {
+    "schema": "wse-retiled-fixture-comparison-v1",
+    "passed": true,
+    "physical": false,
+    "reference_fixture_sha256": "b9fc3fa2e6150f2de1e017cc5f0490ec4374ca527e25bc1e22e4250e9f646f1c",
+    "candidate_fixture_sha256": "ffb99d80c43310e186b8e0063bd4bf6fadb153e3449f8e3d8cbbe9d45ca913ef",
+    "original_bf16_matrix_sha256": "ff9e6d0a05fc85c2a61e5f73200d6778c84d76df3df2ce6c80e1e9a4c99c0ce1",
+    "all_original_bf16_weights_identical": true,
+    "all_bf16_operands_identical": true,
+    "bf16_operand_sha256": {
+      "0": "cbff9faa29438f97fbb2065868b17a1ca9c37978709679b7138368602b40ae8e",
+      "1": "d9dda5f3b08d832eef9729a37d8963bb976052148446fe51e6f7915218f0c9a0",
+      "2": "26df5639e5b38b7f5cbbcb7210c36bf5389d523d285da473062a2e934aaef405",
+      "3": "31b6a73e6a95794098672d12b00f499e56b02e4a3e927f3394e66536aeb600fc",
+      "5": "cbff9faa29438f97fbb2065868b17a1ca9c37978709679b7138368602b40ae8e"
+    },
+    "unchanged_background_and_padding_words": 8276160,
+    "coordinates_and_bank_capacities_identical": true,
+    "fp8_smoke_comparable": false,
+    "scope": "Same complete original BF16 matrix and global inputs, same coordinates/capacities/background. Tile packing and ordered FP32 grouping differ. FP8 smoke weights differ and are not a performance pair."
+  }
+}
