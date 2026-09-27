@@ -1,0 +1,17 @@
+// Single-RX/single-TX abstract port codec. Encodings come from installed SDK.
+// Caller owns an empty queue and a completed local operation. The color must
+// remain in teardown while its routes/switches are changed.
+const tile=@import_module("<tile_config>");const target=tile.target;const io=target.fabric_io;
+const rx=[6]u16{@get_int(io.RX_DISABLE),@get_int(io.RX_RAMP),@get_int(io.RX_NORTH),@get_int(io.RX_SOUTH),@get_int(io.RX_WEST),@get_int(io.RX_EAST)};
+const tx=[6]u16{0,@get_int(io.TX_RAMP),@get_int(io.TX_NORTH),@get_int(io.TX_SOUTH),@get_int(io.TX_WEST),@get_int(io.TX_EAST)};
+fn read(c:color) u16 {return @get_config(tile.color_config.get_color_config_addr(c),target.color_addr_range);}
+fn apply(c:color,word:u16) bool {
+ const r:u16=word&7;const t:u16=word>>3;
+ if(word!=0 and (r==0 or r>5 or t==0 or t>5)){return false;}
+ const address=tile.color_config.get_color_config_addr(c);const old=read(c);
+ if((old&(@as(u16,1)<<target.teardown_in_progress_offset))==0){return false;}
+ const value:u16=(old&@get_int(io.CLEAR_MASK))|rx[r]|tx[t];
+ @set_config(address,value,target.color_addr_range);
+ tile.switch_config.clear_current_position(c);tile.switch_config.set_invalid_for_all_switch_positions(c);
+ return read(c)==value;
+}

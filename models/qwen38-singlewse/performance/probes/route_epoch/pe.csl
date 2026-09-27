@@ -1,0 +1,86 @@
+param memcpy_params;param rank:u16;param forward_word:u16;param reverse_word:u16;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);const clock=@import_module("<time>");
+const tile=@import_module("<tile_config>");const codec=@import_module("route_word.csl");
+const switches=@import_module("<memcpy/memcpy_switches>");const endpoint=rank==0 or rank==19;
+const c3=@get_color(3);const c4=@get_color(4);const c5=@get_color(5);
+const recv_task=@get_local_task_id(8);const send_task=@get_local_task_id(9);const control_task=@get_local_task_id(10);const advance_task=@get_local_task_id(11);
+const iq=@get_input_queue(2);const oq=@get_output_queue(2);
+const rd=@get_dsr(dsr_dest,2);const rs=@get_dsr(dsr_src0,2);const sd=@get_dsr(dsr_dest,3);const ss=@get_dsr(dsr_src0,3);
+var bank=@zeros([8814]u32);var packet=@zeros([if(endpoint) 257 else 1]u32);
+var audit=@zeros([12]u32);var ticks=@zeros([if(endpoint) 64*3 else 1]u16);
+const bp:[*]u32=&bank;const pp:[*]u32=&packet;const ap:[*]u32=&audit;const tp:[*]u16=&ticks;
+const teardown_packet=[1]u32{switches.ctrl(switches.teardown_cmd_1())};
+var phase:u16=0;var limit:u16=0;var running:bool=false;var complete:bool=false;var torn:bool=false;var queued:bool=false;
+fn source() bool {return rank==if((phase&1)==0) @as(u16,0) else @as(u16,19);}
+fn destination() bool {return rank==if((phase&1)==0) @as(u16,19) else @as(u16,0);}
+fn maybe_advance() void {
+ if(running and complete and torn and !queued){queued=true;@activate(advance_task);}
+}
+fn configure(comptime c:color) void {
+ const word:u16=if((phase&1)==0) forward_word else reverse_word;
+ if(!codec.apply(c,word)){audit[11]|=1;}
+ tile.input_queue_config.encode_input_queue(2,@get_int(c),false);
+ tile.output_queue_config.encode_output_queue(2,@get_int(c));
+ tile.teardown.exit(c);audit[0]+=1;
+}
+fn configure_phase() void {
+ complete=!endpoint;torn=false;queued=false;
+ if((phase&1)==0){configure(c3);}else{configure(c4);}
+}
+fn begin() void {
+ if(comptime endpoint){
+  const memory=@get_dsd(mem1d_dsd,.{.tensor_access=|i|{257}->packet[i]});
+  if(source()){
+   clock.get_timestamp(@ptrcast(*[3]u16,&ticks[phase*3]));
+   const fabric=@get_dsd(fabout_dsd,.{.extent=257,.output_queue=oq});
+   @load_to_dsr(ss,memory);@load_to_dsr(sd,fabric,.{.async=true,.ut_id=@get_ut_id(3),.activate=send_task});@mov32(sd,ss,.{.async=true});
+  }else{
+   const fabric=@get_dsd(fabin_dsd,.{.extent=257,.input_queue=iq});
+   @load_to_dsr(rd,memory);@load_to_dsr(rs,fabric,.{.async=true,.ut_id=@get_ut_id(2),.activate=recv_task});@mov32(rd,rs,.{.async=true});
+  }
+ }
+}
+task received() void {
+ clock.get_timestamp(@ptrcast(*[3]u16,&ticks[phase*3]));
+ if(!destination() or packet[0]!=@as(u32,phase)){audit[11]|=2;}
+ packet[0]=@as(u32,phase)+1;audit[2]+=1;complete=true;maybe_advance();
+}
+task sent_data() void {
+ audit[3]+=1;
+ const memory=@get_dsd(mem1d_dsd,.{.tensor_access=|i|{1}->teardown_packet[i]});
+ const fabric=@get_dsd(fabout_dsd,.{.extent=1,.control=true,.output_queue=oq});
+ @load_to_dsr(ss,memory);@load_to_dsr(sd,fabric,.{.async=true,.ut_id=@get_ut_id(3),.activate=control_task});@mov32(sd,ss,.{.async=true});
+}
+task sent_control() void {audit[4]+=1;complete=true;maybe_advance();}
+fn teardown_color(comptime id:u16) void {
+ if(running){
+  const expected:bool=id==3+(phase&1);
+  if(!expected or torn){audit[11]|=4;}else{torn=true;audit[1]+=1;maybe_advance();}
+ }
+}
+fn teardown3() void {teardown_color(3);}fn teardown4() void {teardown_color(4);}
+task advance() void {
+ if(!complete or !torn){audit[11]|=8;}audit[5]+=1;phase+=1;
+ if(phase==limit){running=false;audit[6]=1;clock.disable_tsc();sys.unblock_cmd_stream();}
+ else{configure_phase();begin();}
+}
+fn initialize(rounds:u16) void {
+ @assert(!running and rounds>1 and rounds<=64 and (rounds&1)==0);
+ for(@range(u16,12))|i|{audit[i]=0;}phase=0;limit=rounds;packet[0]=0;
+ if(!codec.apply(c5,0)){audit[11]|=16;}
+ const before=codec.read(c5);
+ if(codec.apply(c5,63) or codec.read(c5)!=before){audit[11]|=32;}
+ audit[7]=@as(u32,before&0xff);configure_phase();
+ // Active routes must reject changes outside teardown without changing state.
+ const active=codec.read(c3);
+ if(codec.apply(c3,forward_word) or codec.read(c3)!=active){audit[11]|=64;}
+ audit[8]=1;sys.unblock_cmd_stream();
+}
+fn start() void {running=true;clock.enable_tsc();begin();}
+comptime {
+ @initialize_queue(iq,.{.color=c3});@initialize_queue(oq,.{.color=c3});
+ @bind_local_task(received,recv_task);@bind_local_task(sent_data,send_task);@bind_local_task(sent_control,control_task);
+ @bind_local_task(advance,advance_task);@set_teardown_handler(teardown3,c3);@set_teardown_handler(teardown4,c4);
+ @export_symbol(bp,"bank");@export_symbol(pp,"packet");@export_symbol(ap,"audit");@export_symbol(tp,"ticks");
+ @export_symbol(initialize);@export_symbol(start);
+}

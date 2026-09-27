@@ -92,3 +92,13 @@ weight retention pass. Physical component latency is6,755–6,758cycles; actual
 maxSRAM46,784bytes includes4KiB stack. Both jobs release normally. This does not
 include preprocessing or full-model/token feedback; see
 [COHOST-RECURRENCE.md](docs/COHOST-RECURRENCE.md).
+
+P14 lowers all 498 matrices to 306 shared-input bundles and 980 events, adding
+18 memory completion edges to protect every reused arena range. An independent
+audit checks all 44,766,384 entries of four complete abstract reduction forests.
+A separate physical 20-PE experiment passes 72 autonomous route/color/queue
+epochs with all 705,120 bytes of synthetic bank storage retained. Same-endpoint
+dependent send/return latency is 1,132–1,141 cycles; this is not model throughput.
+The component's 48,112-byte SRAM footprint leaves only 16 bytes, so combined
+neural-kernel admission remains open. See [PROJECTION-LOWERING.md](docs/PROJECTION-LOWERING.md)
+and [ROUTE-WORD-QUALIFICATION.md](docs/ROUTE-WORD-QUALIFICATION.md).

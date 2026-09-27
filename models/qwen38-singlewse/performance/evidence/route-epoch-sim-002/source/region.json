@@ -1,0 +1,402 @@
+{
+  "schema": "wse-route-epoch-component-v1",
+  "application": [
+    4,
+    5
+  ],
+  "physical": false,
+  "full_model": false,
+  "bank_bytes_per_pe": 35256,
+  "bank_payload": "Synthetic retention sentinel with maximum P12 mixed-bank byte capacity; not original weights or a neural kernel.",
+  "maximum_rounds": 64,
+  "simulation_rounds": 16,
+  "packet_words": 257,
+  "colors": [
+    3,
+    4
+  ],
+  "disabled_test_color": 5,
+  "input_queue": 2,
+  "output_queue": 2,
+  "input_microthread": 2,
+  "output_microthread": 3,
+  "local_tasks": [
+    8,
+    9,
+    10,
+    11
+  ],
+  "teardown_task": 29,
+  "dsrs": [
+    2,
+    3
+  ],
+  "profiles": [
+    [
+      {
+        "xy": [
+          0,
+          0
+        ],
+        "rx": "RAMP",
+        "tx": "EAST",
+        "word": 41
+      },
+      {
+        "xy": [
+          1,
+          0
+        ],
+        "rx": "WEST",
+        "tx": "EAST",
+        "word": 44
+      },
+      {
+        "xy": [
+          2,
+          0
+        ],
+        "rx": "WEST",
+        "tx": "EAST",
+        "word": 44
+      },
+      {
+        "xy": [
+          3,
+          0
+        ],
+        "rx": "WEST",
+        "tx": "SOUTH",
+        "word": 28
+      },
+      {
+        "xy": [
+          3,
+          1
+        ],
+        "rx": "NORTH",
+        "tx": "WEST",
+        "word": 34
+      },
+      {
+        "xy": [
+          2,
+          1
+        ],
+        "rx": "EAST",
+        "tx": "WEST",
+        "word": 37
+      },
+      {
+        "xy": [
+          1,
+          1
+        ],
+        "rx": "EAST",
+        "tx": "WEST",
+        "word": 37
+      },
+      {
+        "xy": [
+          0,
+          1
+        ],
+        "rx": "EAST",
+        "tx": "SOUTH",
+        "word": 29
+      },
+      {
+        "xy": [
+          0,
+          2
+        ],
+        "rx": "NORTH",
+        "tx": "EAST",
+        "word": 42
+      },
+      {
+        "xy": [
+          1,
+          2
+        ],
+        "rx": "WEST",
+        "tx": "EAST",
+        "word": 44
+      },
+      {
+        "xy": [
+          2,
+          2
+        ],
+        "rx": "WEST",
+        "tx": "EAST",
+        "word": 44
+      },
+      {
+        "xy": [
+          3,
+          2
+        ],
+        "rx": "WEST",
+        "tx": "SOUTH",
+        "word": 28
+      },
+      {
+        "xy": [
+          3,
+          3
+        ],
+        "rx": "NORTH",
+        "tx": "WEST",
+        "word": 34
+      },
+      {
+        "xy": [
+          2,
+          3
+        ],
+        "rx": "EAST",
+        "tx": "WEST",
+        "word": 37
+      },
+      {
+        "xy": [
+          1,
+          3
+        ],
+        "rx": "EAST",
+        "tx": "WEST",
+        "word": 37
+      },
+      {
+        "xy": [
+          0,
+          3
+        ],
+        "rx": "EAST",
+        "tx": "SOUTH",
+        "word": 29
+      },
+      {
+        "xy": [
+          0,
+          4
+        ],
+        "rx": "NORTH",
+        "tx": "EAST",
+        "word": 42
+      },
+      {
+        "xy": [
+          1,
+          4
+        ],
+        "rx": "WEST",
+        "tx": "EAST",
+        "word": 44
+      },
+      {
+        "xy": [
+          2,
+          4
+        ],
+        "rx": "WEST",
+        "tx": "EAST",
+        "word": 44
+      },
+      {
+        "xy": [
+          3,
+          4
+        ],
+        "rx": "WEST",
+        "tx": "RAMP",
+        "word": 12
+      }
+    ],
+    [
+      {
+        "xy": [
+          0,
+          0
+        ],
+        "rx": "EAST",
+        "tx": "RAMP",
+        "word": 13
+      },
+      {
+        "xy": [
+          1,
+          0
+        ],
+        "rx": "EAST",
+        "tx": "WEST",
+        "word": 37
+      },
+      {
+        "xy": [
+          2,
+          0
+        ],
+        "rx": "EAST",
+        "tx": "WEST",
+        "word": 37
+      },
+      {
+        "xy": [
+          3,
+          0
+        ],
+        "rx": "SOUTH",
+        "tx": "WEST",
+        "word": 35
+      },
+      {
+        "xy": [
+          3,
+          1
+        ],
+        "rx": "WEST",
+        "tx": "NORTH",
+        "word": 20
+      },
+      {
+        "xy": [
+          2,
+          1
+        ],
+        "rx": "WEST",
+        "tx": "EAST",
+        "word": 44
+      },
+      {
+        "xy": [
+          1,
+          1
+        ],
+        "rx": "WEST",
+        "tx": "EAST",
+        "word": 44
+      },
+      {
+        "xy": [
+          0,
+          1
+        ],
+        "rx": "SOUTH",
+        "tx": "EAST",
+        "word": 43
+      },
+      {
+        "xy": [
+          0,
+          2
+        ],
+        "rx": "EAST",
+        "tx": "NORTH",
+        "word": 21
+      },
+      {
+        "xy": [
+          1,
+          2
+        ],
+        "rx": "EAST",
+        "tx": "WEST",
+        "word": 37
+      },
+      {
+        "xy": [
+          2,
+          2
+        ],
+        "rx": "EAST",
+        "tx": "WEST",
+        "word": 37
+      },
+      {
+        "xy": [
+          3,
+          2
+        ],
+        "rx": "SOUTH",
+        "tx": "WEST",
+        "word": 35
+      },
+      {
+        "xy": [
+          3,
+          3
+        ],
+        "rx": "WEST",
+        "tx": "NORTH",
+        "word": 20
+      },
+      {
+        "xy": [
+          2,
+          3
+        ],
+        "rx": "WEST",
+        "tx": "EAST",
+        "word": 44
+      },
+      {
+        "xy": [
+          1,
+          3
+        ],
+        "rx": "WEST",
+        "tx": "EAST",
+        "word": 44
+      },
+      {
+        "xy": [
+          0,
+          3
+        ],
+        "rx": "SOUTH",
+        "tx": "EAST",
+        "word": 43
+      },
+      {
+        "xy": [
+          0,
+          4
+        ],
+        "rx": "EAST",
+        "tx": "NORTH",
+        "word": 21
+      },
+      {
+        "xy": [
+          1,
+          4
+        ],
+        "rx": "EAST",
+        "tx": "WEST",
+        "word": 37
+      },
+      {
+        "xy": [
+          2,
+          4
+        ],
+        "rx": "EAST",
+        "tx": "WEST",
+        "word": 37
+      },
+      {
+        "xy": [
+          3,
+          4
+        ],
+        "rx": "RAMP",
+        "tx": "WEST",
+        "word": 33
+      }
+    ]
+  ],
+  "readiness": "Strict alternating path reversal. Next source was previous destination and waits for full packet plus teardown. Every next-path router is either already configured or held in teardown on the alternating color. This is not a general arbitrary-forest transition barrier.",
+  "timing": "Same-endpoint send in epoch e through receive in epoch e+1. Includes one intervening route transition and packet feedback; excludes host arm/readback. No cross-PE clock subtraction or model throughput claim."
+}

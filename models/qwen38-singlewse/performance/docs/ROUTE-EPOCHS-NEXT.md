@@ -1,7 +1,11 @@
 # Full-model route epochs: next integration gate
 
-Status: design notes, not generated or admitted routes. P12 owns all model data;
-P13's cohost state component does not supply full-matrix communications.
+Status: full-model integration remains unfinished. P14 now generates and audits
+complete abstract reduction forests and memory completion edges; see
+[PROJECTION-LOWERING.md](PROJECTION-LOWERING.md). The route-word backend and a
+bounded alternating-path teardown/rebind experiment are implemented. Neither
+that experiment nor P13's cohost state component supplies full-matrix operand
+multicast, output return or arbitrary-forest epoch transitions.
 
 The atlas reuses physical banks for different matrices and K widths. Static routes
 for one contraction therefore cannot silently stand in for the complete model.
@@ -21,7 +25,13 @@ arrival. This establishes an API candidate, not qualification of our route plan.
 Installed SDK 2.10.1 contains these APIs; their module hashes and signatures are
 recorded in `evidence/route-api-inventory-001.json`. The route description argument
 to `reset_routes` is compile-time even though the call executes at runtime.
-A compact route-word backend and a bounded actual experiment remain required.
+`csl/route_word.csl` now provides a compact single-RX/single-TX backend using SDK
+enum values and masked register writes; `route-api-inventory-002.json` records
+the installed definitions. SDK 2.10.1 requires per-color
+`@set_teardown_handler` callbacks to compose with memcpy's shared dispatcher.
+Binding task 29 directly conflicts with that dispatcher. Input/output queue
+color rebinding APIs are available and are exercised by the bounded experiment.
+Their admission to a complete matrix schedule remains required.
 
 Proposed lowering obligations, inferred for this model:
 

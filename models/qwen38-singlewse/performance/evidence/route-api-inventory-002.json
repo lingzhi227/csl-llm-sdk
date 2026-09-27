@@ -1,0 +1,22 @@
+{
+  "utc": "2026-09-27T16:09:20.843040+00:00",
+  "sdk": "2.10.1",
+  "files": {
+    "target/wse3.csl": "d87d4fa66ad80c22bc4b83cea9f92e7ceeefbbf56458efeba2531606508c2126",
+    "tile_config/color_config.csl": "e6e203d80968df5f9f8dd49c6877e1eb3d0be195dbc21b26f0fa1b628c2ae90e",
+    "tile_config/input_queue_config.csl": "5b0cc10758a45ece9410af39086fc05fcc829e0581d788dac78777a14a5d2c43",
+    "tile_config/output_queue_config.csl": "5fd25fe3dd6bd3d502f443958b3478135067756a9e93cc7a8fba043f2e223095",
+    "tile_config/teardown.csl": "9cca28a4fc8395a0192574d4ca1a13cdf6eb8de7808abdbd3c34aa2f49386f3b",
+    "memcpy/wse3/memcpy.csl": "4a5b6b699cfe7ffc699e9e8824cf569f14532eedfcad1ae0d5c3fcca42a38c52",
+    "memcpy/memcpy_switches.csl": "618a555a4465557105afd1cc835fcfab6782a22b283c61ce3bc3482f206a33c8"
+  },
+  "scope": "Read-only installed SDK inventory, not physical qualification",
+  "observed_apis": [
+    "@set_teardown_handler(fn()void,color) composes per-color callbacks with memcpy dispatcher; direct task29 binding conflicts",
+    "input_queue_config.encode_input_queue(qid,color,false)",
+    "output_queue_config.encode_output_queue(qid,color)",
+    "target.fabric_io provides RX/TX encoding and route CLEAR_MASK",
+    "get_pending must not be reread within per-color handler after the dispatcher has consumed it"
+  ],
+  "candidate": "route_word.csl uses SDK enum values and masked config write, rejects malformed words and changes outside teardown; runtime qualification pending"
+}

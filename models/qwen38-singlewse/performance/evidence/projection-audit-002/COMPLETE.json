@@ -1,0 +1,99 @@
+{
+  "physical": false,
+  "seconds": 2.9010063242167234,
+  "result": {
+    "schema": "wse-projection-forest-audit-v1",
+    "passed": true,
+    "physical": false,
+    "weights_read": false,
+    "graph": {
+      "nodes": 1172,
+      "events": 980,
+      "original_matrices": 498,
+      "bundles": 306,
+      "original_matrix_tiles": 105052160,
+      "complete_segments": 428,
+      "reused_storage_pairs": 192736,
+      "all_reused_storage_ordered": true,
+      "memory_completion_edges": 18
+    },
+    "profiles": [
+      {
+        "name": "fp8-k40",
+        "contributing_pes": 860880,
+        "independent_trees": 21522,
+        "tree_edges": 839358,
+        "route_entries_checked": 11191596,
+        "active_pe_color_entries": 3228324,
+        "forwarding_hole_entries": 24,
+        "maximum_single_edge_physical_hops": 22,
+        "abstract_routes_match": true
+      },
+      {
+        "name": "fp8-k48",
+        "contributing_pes": 860880,
+        "independent_trees": 17935,
+        "tree_edges": 842945,
+        "route_entries_checked": 11191596,
+        "active_pe_color_entries": 3228330,
+        "forwarding_hole_entries": 30,
+        "maximum_single_edge_physical_hops": 26,
+        "abstract_routes_match": true
+      },
+      {
+        "name": "fp8-k136",
+        "contributing_pes": 860880,
+        "independent_trees": 6330,
+        "tree_edges": 854550,
+        "route_entries_checked": 11191596,
+        "active_pe_color_entries": 4000602,
+        "forwarding_hole_entries": 42,
+        "maximum_single_edge_physical_hops": 70,
+        "abstract_routes_match": true
+      },
+      {
+        "name": "bf16-k40",
+        "contributing_pes": 824000,
+        "independent_trees": 20600,
+        "tree_edges": 803400,
+        "route_entries_checked": 11191596,
+        "active_pe_color_entries": 3184930,
+        "forwarding_hole_entries": 94930,
+        "maximum_single_edge_physical_hops": 797,
+        "abstract_routes_match": true
+      }
+    ],
+    "physical_path_pes": 860892,
+    "actor_bridge_pes": 12,
+    "dense_abstract_route_files": {
+      "fp8-k40.npy": {
+        "bytes": 22383320,
+        "sha256": "94976b33acd84d8c1d57eea4122ebb1b95884ec01912bc56e9a903fb997a44a4"
+      },
+      "fp8-k48.npy": {
+        "bytes": 22383320,
+        "sha256": "82a6280176a816b33189ca407f99c43982edae9c4d6096c6058d6e4e1a20d306"
+      },
+      "fp8-k136.npy": {
+        "bytes": 22383320,
+        "sha256": "f46c87bbb2dc97de88f732be99a49bef3ea14767b3d8f911f495154d996444c0"
+      },
+      "bf16-k40.npy": {
+        "bytes": 22383320,
+        "sha256": "1e371eaa192ae6eeea0cb73cc7a42352320acd11fe76c034eb0b9a565a5f46e7"
+      }
+    },
+    "atlas_sha256": "19830e61b881f592c92710fc59e6af8d40f1b3afad70d8905ebbedda461f21db",
+    "bundles_sha256": "6b158e0402ee48979ce8260af2653d33e6eaa0902d60a67c936a115293826aab",
+    "forests_sha256": "a6f03e56a6a8e48f2e6fd5a9ad543372a87be8477ff331e290a2d4470a12fb1a",
+    "duration_seconds": 2.86675449507311,
+    "max_rss_kib": 197320,
+    "input_multicast_admitted": false,
+    "output_scatter_admitted": false,
+    "route_epochs_admitted": false,
+    "compiled_sram_admitted": false,
+    "full_model_executable": false,
+    "full_model_speed_target_achieved": false,
+    "scope": "Complete original projection identities and arena-safe event DAG; four collision-free abstract reduction forests. No operand/return transport, runtime route changes, numerical execution or model throughput qualified."
+  }
+}

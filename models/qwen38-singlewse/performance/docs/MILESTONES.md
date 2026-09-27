@@ -522,3 +522,35 @@ and release normally (41.374/81.434seconds stage wall). Workstation service/lock
 and physical account/system release are verified. All failed/partial attempts
 remain frozen;27 source tests pass. See COHOST-RECURRENCE.md. Full-model2,000tokens/s
 and complete route/state/nonlinear integration remain unfinished.
+
+## P14: complete projection lowering and physical route-word transitions
+
+All 498 original matrices lower into 306 shared-input bundles and 980 events.
+FP8 input preparations decrease from 400 to 256; all tensor identities and rows
+remain present. Transitive reduction retains 18 additional memory completion
+edges, independently protecting all 192,736 overlapping-storage value pairs.
+Four complete abstract reduction forests cover FP8 K40/48/136 and BF16 K40.
+The independent full audit checks 44,766,384 PE/color entries, compact profile
+masks, all physical holes and exact matrix dispatch. `projection-audit-003`
+passes in 2.873 seconds at 197,256 KiB peak RSS without reading weights or
+allocating hardware. BF16's longest single tree edge is 797 physical hops, an
+explicit unoptimized layout cost. See PROJECTION-LOWERING.md.
+
+`route-epoch-hw-001` separately qualifies the SDK-derived compact route backend,
+per-color teardown/completion latches and input/output queue rebinding. A packet
+feeds back across a reversing 20-PE path for 64+8 autonomous epochs. Every payload,
+tag and counter gate passes, as does full 705,120-byte synthetic sentinel-bank
+readback. Same-endpoint send/return measures 1,132–1,141 cycles, median 1,139;
+this includes two traversals and a transition, not isolated switching or model
+throughput. Max compiled SRAM plus declared stack is 48,112 bytes, only 16 bytes
+below the unchanged ceiling. It does not include neural arithmetic code.
+
+One earlier simulator compile failed because direct task-29 binding conflicts
+with SDK2.10.1's shared memcpy teardown dispatcher. The accepted simulator uses
+per-color handlers, with unchanged packet/storage gates. Sources, failure and
+release receipts are retained. Both physical jobs succeeded and released; the
+fresh job/system audit finds no own allocation. All workstation resources are
+released and 32 source tests pass. See ROUTE-WORD-QUALIFICATION.md.
+
+General forest transition readiness, complete operand multicast/output scatter,
+combined neural-kernel SRAM and full-model 2,000 dependent tokens/s remain unmet.
