@@ -53,3 +53,20 @@ operand bytes. This motivates predecoding only the next small resident weight
 tile, and multicasting an already converted operand when appropriate. Such work
 can move off the dependency path only after buffer/event ownership and overlap
 are implemented and measured. No overlap is inferred from these synchronous tests.
+
+## Direct encoder and full group convention
+
+P6 now physically qualifies the complementary FP32-to-E4M3FN direction. Normal
+finite values use IEEE exponent/mantissa rounding with an explicit ties-to-even
+bit. Subnormal FP8 values use an exact fixed-grid FP32 addition before extracting
+the rounded grid index; signed zero and finite saturation follow the original
+codec. All53,725 frozen direct cases match the independent oracles. This is scalar
+CSL bit manipulation, not yet a vector encoding instruction.
+
+`fp8_quantize.csl` preserves the original group128 maximum, lower clamp1e-10,
+scale multiplication by1/448 and per-value division. All44 frozen physical group
+cases give identical FP8 bytes and scale bits to the original kernel and PyTorch.
+The approximately2x group improvement still leaves a roughly22,800-cycle serial
+critical path. A spatial producer must reduce the maximum, distribute the same
+scale, encode partitioned values and assemble its operand packet on device before
+it can replace P5's already-quantized input fixture.

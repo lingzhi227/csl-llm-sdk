@@ -1,0 +1,12 @@
+{
+  "base": "performance/probes/regional_gemv/pe.csl",
+  "base_sha256": "b64ece636f1b1f7cac1ff0874f6f6b838c4b1c30d4bda85a9eb976257c856204",
+  "changes": [
+    "Variable compressed banks and scales",
+    "Dynamic slot address with bound",
+    "Retained BF16/descriptor capacity arrays",
+    "Identical P5 transport and numerical dot path",
+    "Root-only total timing; remove unused per-PE stage timestamps after combined SRAM rejection"
+  ],
+  "full_model": false
+}

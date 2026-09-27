@@ -1,0 +1,13 @@
+// Per-token group-128 quantization, finite FP32 inputs, E4M3FN nearest-even.
+// VLLM-SOURCE.json pins the independent convention: clamp(absmax,1e-10)/448.
+// This module requires simulator and hardware qualification before integration.
+const codec = @import_module("fp8_codec.csl");
+fn quantize(input: [*]f32, codes: [*]u16, scale: [*]f32) void {
+  var maximum: f32 = 0.0000000001;
+  for (@range(u16,128)) |i| {
+    const magnitude: f32 = @bitcast(f32, @bitcast(u32,input[i]) & 2147483647);
+    if (magnitude > maximum) { maximum = magnitude; }
+  }
+  scale[0] = maximum * 0.002232142857142857;
+  for (@range(u16,128)) |i| { codes[i] = codec.encode(input[i] / scale[0]); }
+}

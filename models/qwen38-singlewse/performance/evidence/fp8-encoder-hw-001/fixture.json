@@ -1,0 +1,12 @@
+{
+  "fixture_sha256": "f7351fae5e2fed6ce8267cd0717a5ac0dc65b63cff7f6ce1349c898d9356658b",
+  "direct_words": 53725,
+  "sim_direct_words": 8008,
+  "critical_words": 3912,
+  "quant_groups": 44,
+  "torch_version": "2.6.0+cpu",
+  "full_model": false,
+  "simulation_scope": "Every boundary/exponent critical input plus fixed4096 random-input subset; physical run uses all53725 inputs",
+  "scope": "All finite FP8 centers and midpoint neighbors, FP32 exponent extremes,50000 seeded random draws;44 group128 vectors with unchanged max/448 and division convention",
+  "criterion": "Exact direct bytes vs independent mathematical and Torch oracle; exact group bytes vs Torch, scale within1ULP; optimized/original device outputs/scales bit-identical; all inputs and untouched output tails retained"
+}

@@ -1,0 +1,316 @@
+{
+  "schema": "wse-banked-regional-gemv-v1",
+  "plan": {
+    "width": 2,
+    "height": 3,
+    "operand_color": 3,
+    "sum_colors": [
+      4,
+      5
+    ],
+    "return_color": 6,
+    "ack_colors": [
+      7,
+      8
+    ],
+    "input_queues": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "output_queues": [
+      2,
+      3,
+      4
+    ],
+    "tasks": [
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "dsrs": [
+      3,
+      4,
+      5,
+      6,
+      7
+    ]
+  },
+  "resources": {
+    "passed": true,
+    "pes": 6,
+    "physical_links_across_planes": 12,
+    "input_words": 65,
+    "weight_rows": 2,
+    "k_block": 128,
+    "source_quantization": false,
+    "stack_allowance": 4096,
+    "sram_ceiling": 48128,
+    "compiled_sram_admitted": false,
+    "full_model": false,
+    "dsr_lifetimes": {
+      "3": "operand receive",
+      "4": "dot after operand complete",
+      "5": "sum receive on x>0 OR final row receive on x=0",
+      "6": "column producer transmit",
+      "7": "partial/result send, then completion ack only after send callback"
+    },
+    "completion": "sum ready AND local dot ready; source packet and local result sends must complete before buffer reuse; root joins all row results",
+    "limitations": [
+      "Fixed restricted geometry/routes",
+      "One host-launched region epoch; launch-entry skew included",
+      "No full-model bank placement or general deadlock proof"
+    ],
+    "bank_counts": [
+      [
+        108,
+        110
+      ],
+      [
+        110,
+        112
+      ],
+      [
+        110,
+        112
+      ]
+    ],
+    "bf16_tiles": 12,
+    "bank_bytes": [
+      [
+        34704,
+        35232
+      ],
+      [
+        35232,
+        35760
+      ],
+      [
+        35232,
+        35760
+      ]
+    ],
+    "limitation": "BF16 and descriptor-sized arrays are retained capacity buffers; no BF16 execution or complete matrix scheduler",
+    "admission": "Combined ELF plus unchanged4096-byte stack must be <=48128; do not add separate fits"
+  },
+  "routes": [
+    {
+      "x": 0,
+      "y": 0,
+      "color": 3,
+      "rx": "RAMP",
+      "tx": [
+        "SOUTH"
+      ]
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "color": 4,
+      "rx": "RAMP",
+      "tx": [
+        "EAST"
+      ]
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "color": 6,
+      "rx": "EAST",
+      "tx": [
+        "RAMP"
+      ]
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "color": 8,
+      "rx": "SOUTH",
+      "tx": [
+        "RAMP"
+      ]
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "color": 3,
+      "rx": "RAMP",
+      "tx": [
+        "SOUTH"
+      ]
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "color": 4,
+      "rx": "WEST",
+      "tx": [
+        "RAMP"
+      ]
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "color": 6,
+      "rx": "RAMP",
+      "tx": [
+        "WEST"
+      ]
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "color": 3,
+      "rx": "NORTH",
+      "tx": [
+        "RAMP",
+        "SOUTH"
+      ]
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "color": 4,
+      "rx": "RAMP",
+      "tx": [
+        "EAST"
+      ]
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "color": 6,
+      "rx": "EAST",
+      "tx": [
+        "RAMP"
+      ]
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "color": 8,
+      "rx": "RAMP",
+      "tx": [
+        "NORTH"
+      ]
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "color": 7,
+      "rx": "SOUTH",
+      "tx": [
+        "RAMP"
+      ]
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "color": 3,
+      "rx": "NORTH",
+      "tx": [
+        "RAMP",
+        "SOUTH"
+      ]
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "color": 4,
+      "rx": "WEST",
+      "tx": [
+        "RAMP"
+      ]
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "color": 6,
+      "rx": "RAMP",
+      "tx": [
+        "WEST"
+      ]
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "color": 3,
+      "rx": "NORTH",
+      "tx": [
+        "RAMP"
+      ]
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "color": 4,
+      "rx": "RAMP",
+      "tx": [
+        "EAST"
+      ]
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "color": 6,
+      "rx": "EAST",
+      "tx": [
+        "RAMP"
+      ]
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "color": 7,
+      "rx": "RAMP",
+      "tx": [
+        "NORTH"
+      ]
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "color": 3,
+      "rx": "NORTH",
+      "tx": [
+        "RAMP"
+      ]
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "color": 4,
+      "rx": "WEST",
+      "tx": [
+        "RAMP"
+      ]
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "color": 6,
+      "rx": "RAMP",
+      "tx": [
+        "WEST"
+      ]
+    }
+  ],
+  "bank_counts": [
+    [
+      108,
+      110
+    ],
+    [
+      110,
+      112
+    ],
+    [
+      110,
+      112
+    ]
+  ]
+}

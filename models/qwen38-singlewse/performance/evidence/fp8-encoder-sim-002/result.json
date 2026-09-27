@@ -1,0 +1,422 @@
+{
+  "passed": true,
+  "normal_stop": true,
+  "physical": false,
+  "full_model": false,
+  "scope": "All finite FP8 centers and midpoint neighbors, FP32 exponent extremes,50000 seeded random draws;44 group128 vectors with unchanged max/448 and division convention",
+  "fixture_sha256": "f7351fae5e2fed6ce8267cd0717a5ac0dc65b63cff7f6ce1349c898d9356658b",
+  "direct_words": 8008,
+  "fixture_direct_words": 53725,
+  "simulator_subset": true,
+  "direct_batches": [
+    {
+      "first_word": 0,
+      "count": 512,
+      "original_cycles": 127484,
+      "candidate_cycles": 26659
+    },
+    {
+      "first_word": 512,
+      "count": 512,
+      "original_cycles": 127522,
+      "candidate_cycles": 26659
+    },
+    {
+      "first_word": 1024,
+      "count": 512,
+      "original_cycles": 127522,
+      "candidate_cycles": 26659
+    },
+    {
+      "first_word": 1536,
+      "count": 512,
+      "original_cycles": 127522,
+      "candidate_cycles": 26659
+    },
+    {
+      "first_word": 2048,
+      "count": 512,
+      "original_cycles": 127522,
+      "candidate_cycles": 26659
+    },
+    {
+      "first_word": 2560,
+      "count": 512,
+      "original_cycles": 127522,
+      "candidate_cycles": 26659
+    },
+    {
+      "first_word": 3072,
+      "count": 512,
+      "original_cycles": 127522,
+      "candidate_cycles": 26659
+    },
+    {
+      "first_word": 3584,
+      "count": 512,
+      "original_cycles": 127522,
+      "candidate_cycles": 26659
+    },
+    {
+      "first_word": 4096,
+      "count": 512,
+      "original_cycles": 127522,
+      "candidate_cycles": 26659
+    },
+    {
+      "first_word": 4608,
+      "count": 512,
+      "original_cycles": 127135,
+      "candidate_cycles": 29771
+    },
+    {
+      "first_word": 5120,
+      "count": 512,
+      "original_cycles": 90952,
+      "candidate_cycles": 25922
+    },
+    {
+      "first_word": 5632,
+      "count": 512,
+      "original_cycles": 42644,
+      "candidate_cycles": 18679
+    },
+    {
+      "first_word": 6144,
+      "count": 512,
+      "original_cycles": 127499,
+      "candidate_cycles": 26659
+    },
+    {
+      "first_word": 6656,
+      "count": 512,
+      "original_cycles": 127078,
+      "candidate_cycles": 30507
+    },
+    {
+      "first_word": 7168,
+      "count": 512,
+      "original_cycles": 72448,
+      "candidate_cycles": 23438
+    },
+    {
+      "first_word": 7680,
+      "count": 328,
+      "original_cycles": 15450,
+      "candidate_cycles": 10859
+    }
+  ],
+  "quant_groups": [
+    {
+      "group": 0,
+      "original_cycles": 47840,
+      "candidate_cycles": 22165,
+      "scale_ulp": 0,
+      "bit_exact": true
+    },
+    {
+      "group": 1,
+      "original_cycles": 48078,
+      "candidate_cycles": 22321,
+      "scale_ulp": 0,
+      "bit_exact": true
+    },
+    {
+      "group": 2,
+      "original_cycles": 48148,
+      "candidate_cycles": 22312,
+      "scale_ulp": 0,
+      "bit_exact": true
+    },
+    {
+      "group": 3,
+      "original_cycles": 48148,
+      "candidate_cycles": 22312,
+      "scale_ulp": 0,
+      "bit_exact": true
+    },
+    {
+      "group": 4,
+      "original_cycles": 48339,
+      "candidate_cycles": 22334,
+      "scale_ulp": 0,
+      "bit_exact": true
+    },
+    {
+      "group": 5,
+      "original_cycles": 48148,
+      "candidate_cycles": 22330,
+      "scale_ulp": 0,
+      "bit_exact": true
+    },
+    {
+      "group": 6,
+      "original_cycles": 48148,
+      "candidate_cycles": 22330,
+      "scale_ulp": 0,
+      "bit_exact": true
+    },
+    {
+      "group": 7,
+      "original_cycles": 46771,
+      "candidate_cycles": 21206,
+      "scale_ulp": 0,
+      "bit_exact": true
+    },
+    {
+      "group": 8,
+      "original_cycles": 33945,
+      "candidate_cycles": 11288,
+      "scale_ulp": 0,
+      "bit_exact": true
+    },
+    {
+      "group": 9,
+      "original_cycles": 47540,
+      "candidate_cycles": 22337,
+      "scale_ulp": 0,
+      "bit_exact": true
+    },
+    {
+      "group": 10,
+      "original_cycles": 48479,
+      "candidate_cycles": 22028,
+      "scale_ulp": 0,
+      "bit_exact": true
+    },
+    {
+      "group": 11,
+      "original_cycles": 47843,
+      "candidate_cycles": 22380,
+      "scale_ulp": 0,
+      "bit_exact": true
+    },
+    {
+      "group": 12,
+      "original_cycles": 48048,
+      "candidate_cycles": 22402,
+      "scale_ulp": 0,
+      "bit_exact": true
+    },
+    {
+      "group": 13,
+      "original_cycles": 47999,
+      "candidate_cycles": 22402,
+      "scale_ulp": 0,
+      "bit_exact": true
+    },
+    {
+      "group": 14,
+      "original_cycles": 48054,
+      "candidate_cycles": 22402,
+      "scale_ulp": 0,
+      "bit_exact": true
+    },
+    {
+      "group": 15,
+      "original_cycles": 48201,
+      "candidate_cycles": 22424,
+      "scale_ulp": 0,
+      "bit_exact": true
+    },
+    {
+      "group": 16,
+      "original_cycles": 48247,
+      "candidate_cycles": 22424,
+      "scale_ulp": 0,
+      "bit_exact": true
+    },
+    {
+      "group": 17,
+      "original_cycles": 48323,
+      "candidate_cycles": 22424,
+      "scale_ulp": 0,
+      "bit_exact": true
+    },
+    {
+      "group": 18,
+      "original_cycles": 48045,
+      "candidate_cycles": 22402,
+      "scale_ulp": 0,
+      "bit_exact": true
+    },
+    {
+      "group": 19,
+      "original_cycles": 47935,
+      "candidate_cycles": 22402,
+      "scale_ulp": 0,
+      "bit_exact": true
+    },
+    {
+      "group": 20,
+      "original_cycles": 48263,
+      "candidate_cycles": 22424,
+      "scale_ulp": 0,
+      "bit_exact": true
+    },
+    {
+      "group": 21,
+      "original_cycles": 48219,
+      "candidate_cycles": 22424,
+      "scale_ulp": 0,
+      "bit_exact": true
+    },
+    {
+      "group": 22,
+      "original_cycles": 48206,
+      "candidate_cycles": 22424,
+      "scale_ulp": 0,
+      "bit_exact": true
+    },
+    {
+      "group": 23,
+      "original_cycles": 48148,
+      "candidate_cycles": 22424,
+      "scale_ulp": 0,
+      "bit_exact": true
+    },
+    {
+      "group": 24,
+      "original_cycles": 48225,
+      "candidate_cycles": 22424,
+      "scale_ulp": 0,
+      "bit_exact": true
+    },
+    {
+      "group": 25,
+      "original_cycles": 48077,
+      "candidate_cycles": 22424,
+      "scale_ulp": 0,
+      "bit_exact": true
+    },
+    {
+      "group": 26,
+      "original_cycles": 48106,
+      "candidate_cycles": 22402,
+      "scale_ulp": 0,
+      "bit_exact": true
+    },
+    {
+      "group": 27,
+      "original_cycles": 48228,
+      "candidate_cycles": 22424,
+      "scale_ulp": 0,
+      "bit_exact": true
+    },
+    {
+      "group": 28,
+      "original_cycles": 48225,
+      "candidate_cycles": 22424,
+      "scale_ulp": 0,
+      "bit_exact": true
+    },
+    {
+      "group": 29,
+      "original_cycles": 48051,
+      "candidate_cycles": 22402,
+      "scale_ulp": 0,
+      "bit_exact": true
+    },
+    {
+      "group": 30,
+      "original_cycles": 47961,
+      "candidate_cycles": 22402,
+      "scale_ulp": 0,
+      "bit_exact": true
+    },
+    {
+      "group": 31,
+      "original_cycles": 48039,
+      "candidate_cycles": 22402,
+      "scale_ulp": 0,
+      "bit_exact": true
+    },
+    {
+      "group": 32,
+      "original_cycles": 48091,
+      "candidate_cycles": 22402,
+      "scale_ulp": 0,
+      "bit_exact": true
+    },
+    {
+      "group": 33,
+      "original_cycles": 48253,
+      "candidate_cycles": 22424,
+      "scale_ulp": 0,
+      "bit_exact": true
+    },
+    {
+      "group": 34,
+      "original_cycles": 48199,
+      "candidate_cycles": 22424,
+      "scale_ulp": 0,
+      "bit_exact": true
+    },
+    {
+      "group": 35,
+      "original_cycles": 47999,
+      "candidate_cycles": 22402,
+      "scale_ulp": 0,
+      "bit_exact": true
+    },
+    {
+      "group": 36,
+      "original_cycles": 48042,
+      "candidate_cycles": 22402,
+      "scale_ulp": 0,
+      "bit_exact": true
+    },
+    {
+      "group": 37,
+      "original_cycles": 48346,
+      "candidate_cycles": 22424,
+      "scale_ulp": 0,
+      "bit_exact": true
+    },
+    {
+      "group": 38,
+      "original_cycles": 48268,
+      "candidate_cycles": 22424,
+      "scale_ulp": 0,
+      "bit_exact": true
+    },
+    {
+      "group": 39,
+      "original_cycles": 48164,
+      "candidate_cycles": 22424,
+      "scale_ulp": 0,
+      "bit_exact": true
+    },
+    {
+      "group": 40,
+      "original_cycles": 47981,
+      "candidate_cycles": 22402,
+      "scale_ulp": 0,
+      "bit_exact": true
+    },
+    {
+      "group": 41,
+      "original_cycles": 48225,
+      "candidate_cycles": 22424,
+      "scale_ulp": 0,
+      "bit_exact": true
+    },
+    {
+      "group": 42,
+      "original_cycles": 48135,
+      "candidate_cycles": 22402,
+      "scale_ulp": 0,
+      "bit_exact": true
+    },
+    {
+      "group": 43,
+      "original_cycles": 48075,
+      "candidate_cycles": 22402,
+      "scale_ulp": 0,
+      "bit_exact": true
+    }
+  ],
+  "all_inputs_and_output_tails_retained": true,
+  "clock_hz": null,
+  "timing_note": "Same-PE cycles for matched inputs. Group timing includes maximum, scale, division and encoding. No network or full-model token rate."
+}

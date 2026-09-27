@@ -1,4 +1,4 @@
-// Direct IEEE-bit finite E4M3FN RNE encoder candidate, not yet device-qualified.
+// Direct IEEE-bit finite E4M3FN RNE encoder; tested scope is recorded in P6 evidence.
 // Input already scaled; does not implement dynamic scale selection/division.
 fn encode(value:f32) u16 {
   const word:u32=@bitcast(u32,value);const magnitude:u32=word&2147483647;

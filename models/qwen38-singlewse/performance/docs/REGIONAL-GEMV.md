@@ -53,9 +53,9 @@ for resource release and measurement scope.
 
 This is exact encoding of already quantized FP8 input bytes, not dynamic FP32 to
 FP8 quantization. `source_quantization=false` records that boundary. The direct
-IEEE encoder in `csl/fp8_encode.csl` is a separate uncompiled candidate, with a
-host-only midpoint/neighbor/random-input identity check. It is not part of the
-qualified P5 artifact and does not yet qualify the scale/division convention.
+IEEE encoder and unchanged group-scale/division convention are now separately
+physically qualified in P6. They are not part of the frozen P5 artifact. A spatial
+FP32 input producer and its integration into the complete model remain required.
 
 The generated plan records manual colors, queues, tasks and DSR leases. DSRs0:2
 remain available to compiler/memcpy; dot owns4. DSR5 receives either incoming row
@@ -71,3 +71,10 @@ some roles (up to48,732 bytes before composition/alignment changes). This is a
 warning from separate-component accounting, not a failed combined compile.
 The next placement must use actual role budgets and repeat combined compilation;
 it must not assume that two separately fitting components also fit together.
+
+P7 composes these routes with dynamic resident slots in the same executable, after
+role-specific capacities and removal of unused stage profiling. Its simulator
+covers2x3 roles and all24 first/middle/last paired selections, with complete storage
+readback. The maximum actual SRAM-plus-stack is48,080 bytes. Only48 bytes remain:
+the full model must not inherit an assumed uniform weight-bank capacity while
+adding more code. See MILESTONES.md for the preserved rejected compile and limits.

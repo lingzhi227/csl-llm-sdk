@@ -1,0 +1,22 @@
+// Matched original and direct-bit encoders; identical dynamic scale/division.
+param memcpy_params;param fast:bool;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);const clock=@import_module("<time>");
+const original=@import_module("fp8_codec.csl");const candidate=@import_module("fp8_encode.csl");
+const original_quant=@import_module("fp8_activation.csl");const candidate_quant=@import_module("fp8_quantize.csl");
+var input=@zeros([512]f32);var output=@zeros([512]u16);var scale=@zeros([1]f32);
+var ticks=@zeros([6]u16);var calls=@zeros([2]u32);
+const ip:[*]f32=&input;const op:[*]u16=&output;const sp:[*]f32=&scale;const tp:[*]u16=&ticks;const cp:[*]u32=&calls;
+fn encode(count:u16) void {
+  @assert(count>0 and count<=512);clock.enable_tsc();clock.get_timestamp(@ptrcast(*[3]u16,&ticks[0]));
+  for(@range(u16,count))|i|{if(comptime fast){output[i]=candidate.encode(input[i]);}else{output[i]=original.encode(input[i]);}}
+  clock.get_timestamp(@ptrcast(*[3]u16,&ticks[3]));clock.disable_tsc();calls[0]+=1;sys.unblock_cmd_stream();
+}
+fn quantize() void {
+  clock.enable_tsc();clock.get_timestamp(@ptrcast(*[3]u16,&ticks[0]));
+  if(comptime fast){candidate_quant.quantize(ip,op,sp);}else{original_quant.quantize(ip,op,sp);}
+  clock.get_timestamp(@ptrcast(*[3]u16,&ticks[3]));clock.disable_tsc();calls[1]+=1;sys.unblock_cmd_stream();
+}
+comptime {
+  @export_symbol(ip,"input");@export_symbol(op,"output");@export_symbol(sp,"scale");
+  @export_symbol(tp,"ticks");@export_symbol(cp,"calls");@export_symbol(encode);@export_symbol(quantize);
+}

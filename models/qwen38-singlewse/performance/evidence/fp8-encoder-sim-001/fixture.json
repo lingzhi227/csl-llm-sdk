@@ -1,0 +1,9 @@
+{
+  "fixture_sha256": "bfbe2924e9eb0280b00f464a7db59ff17ac37b048aa583c2b4ec48ed32970414",
+  "direct_words": 53725,
+  "quant_groups": 44,
+  "torch_version": "2.6.0+cpu",
+  "full_model": false,
+  "scope": "All finite FP8 centers and midpoint neighbors, FP32 exponent extremes,50000 seeded random draws;44 group128 vectors with unchanged max/448 and division convention",
+  "criterion": "Exact direct bytes vs independent mathematical and Torch oracle; exact group bytes vs Torch, scale within1ULP; optimized/original device outputs/scales bit-identical; all inputs and untouched output tails retained"
+}

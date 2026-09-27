@@ -1,0 +1,14 @@
+// Direct IEEE-bit finite E4M3FN RNE encoder candidate, not yet device-qualified.
+// Input already scaled; does not implement dynamic scale selection/division.
+fn encode(value:f32) u16 {
+  const word:u32=@bitcast(u32,value);const magnitude:u32=word&2147483647;
+  @assert(magnitude<2139095040);
+  const sign:u16=@as(u16,(word>>24)&128);
+  if(magnitude>=@bitcast(u32,@as(f32,448.0))){return sign|126;}
+  if(magnitude<@bitcast(u32,@as(f32,0.015625))){
+    const rounded:u32=@bitcast(u32,@bitcast(f32,magnitude)+16384.0)-@bitcast(u32,@as(f32,16384.0));
+    return sign|@as(u16,rounded);
+  }
+  const rounded:u32=((magnitude+524287+((magnitude>>20)&1))>>20)-960;
+  return sign|@as(u16,rounded);
+}

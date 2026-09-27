@@ -127,3 +127,13 @@ comparison without changing arithmetic. Its source/resource details and measured
 limits are in REGIONAL-GEMV.md. Full bank placement and dynamic activation scale
 production remain separate compiler boundaries, not implicitly supplied by the
 host fixture used for component qualification.
+
+P7 adds a role-aware composed bank plan (`spatial/banked_region.py`). Root and
+boundary roles have explicitly smaller local tile capacities, while ordinary
+compute roles retain112 FP8 tiles. All retain12 BF16-sized slots in this component.
+The full model's1,251 tensors are not assigned to these role capacities yet. A
+future allocator must preserve broad matrix parallelism and short routes as well
+as total byte capacity; merely packing the remaining tiles into fewer active PEs
+would undo the latency objective. The six-role component passes actual compiled
+SRAM after removing unused profiling, but its48-byte minimum margin rules out
+assuming additional scheduler/BF16 paths fit without another admission step.

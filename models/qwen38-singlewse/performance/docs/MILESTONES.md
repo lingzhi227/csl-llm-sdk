@@ -210,3 +210,75 @@ The supplementary `fp8-encoder-identity-001` checks53,725 finite FP32 bit patter
 all finite FP8 centers and midpoint neighbors against an independent nearest-level
 oracle. The direct-bit CSL encoder is explicitly uncompiled and unqualified on
 device. This host mathematical check alone establishes no inference speedup.
+
+## P6: physical direct encoding and unchanged dynamic quantization
+
+`fp8-encoder-hw-001` passes all53,725 finite IEEE input patterns against both an
+independent nearest-level oracle and PyTorch FP8 conversion. Coverage includes all
+finite FP8 centers, midpoint ties and neighboring FP32 values, exponent extremes,
+signed zeros and50,000 seeded random draws (duplicates/nonfinite draws excluded).
+It also passes44 complete group128 quantizations. The maximum, scale multiplication
+and input/scale division convention are unchanged; only the scalar binary search
+encoder becomes direct IEEE rounding. Every output byte matches the original CSL
+implementation and PyTorch, and every tested scale is bit-identical (0 ULP).
+Inputs and untouched output tails are retained, and normal stop succeeds.
+
+For the complete direct-encoding workload, measured original/candidate cycles sum
+to7,713,018 /2,164,536 (3.56336x). This mixture includes clipped, tiny and normal
+values and is not a model activation distribution. Complete group timing includes
+maximum, scale, division and encoding. Across44 groups, the median changes from
+46,315.5 to22,790 cycles; ranges are31,644–46,624 versus10,524–22,811. The ratio of
+summed group cycles is2.04512x. No clock frequency or model token rate is inferred.
+The remaining roughly22,800-cycle serial group cost motivates distributing
+quantization across PEs rather than assuming the direct encoder meets the final
+per-projection latency budget.
+
+The first simulator attempt001 hit its240-second run deadline after successful
+partial batches; no accepted completion is claimed for it. Attempt002 retains all
+3,912 boundary/exponent critical patterns and a fixed4,096-input subset of the
+random-draw set (the smallest bit patterns), totaling8,008, plus all44 groups. It
+completes in152.410 seconds. Its exact same driver runs all53,725 direct patterns
+on physical hardware. The numerical criteria and complete physical coverage were
+not reduced to accommodate simulator throughput. Both snapshots remain frozen.
+
+Physical compile `wsjob-pk88wvexelreoahsyr7rrp` and run
+`wsjob-b78vfftydotk2wgwx8udpn` succeeded and released normally without cleanup
+errors. Stage wall times were41.370 and202.087 seconds, including initialization;
+they are not compute latency or provider billing. Maximum compiled SRAM including
+the unchanged4,096-byte stack allowance is13,248 bytes. A fresh account/system
+audit confirms no owned active job or assignment. The reusable encoder's header
+now points to P6; the executed source is retained verbatim in its evidence snapshot.
+
+## P7: composed resident banks and communication (simulator)
+
+`regional-bank-sim-002` combines compressed resident banks, dynamic slot addressing
+and the P5 communication/arithmetic protocol in one executable. The2x3 region
+covers root, producer, row-root and ordinary compute roles. Their FP8 capacities
+are108,110 and112 tiles, each with12 BF16-sized capacity buffers and corresponding
+32-bit descriptor-sized slots. Role-specific capacity is explicit in the plan;
+this is not yet a full-model ownership/routing assignment.
+
+The first composed compile001 failed the unchanged SRAM gate: root48,176 bytes
+and ordinary compute48,272, including the4,096-byte stack allowance. It was stopped
+before simulation and never used hardware. Attempt002 removes unused per-stage
+profiling and retains same-root whole-region timing. No weight capacity, stack
+reserve or SRAM ceiling was reduced/raised to make this repair pass.
+
+All six actual compiled PEs now fit:47,696–48,080 bytes including stack, only48
+bytes of minimum remaining margin. This cannot be treated as space for uncompiled
+BF16 execution or a complete scheduler. Those paths require their own actual
+admission and potentially a different bank/role assignment.
+
+First, middle and last bank selections across four original projection fixtures
+pass in both schedules,24 epochs total. All K-prefix outputs match the independent
+ordered FP32 emulator exactly and the FP64 bounds. The complete compressed weight,
+scale, BF16-reserve and descriptor buffers are read back and verified, alongside
+packet/slot/raw input checks and all protocol counters. BF16/descriptor buffers
+are retained capacity sentinels; their computation/dispatch is not implemented.
+Normal shutdown and workstation lock release are verified. Total bounded run time
+is232.622 seconds; no new hardware allocation is used for this milestone.
+
+Simulator root timings retain the first serialized9,882-cycle observation, with
+other serialized observations1,752 and overlapped1,567. Launch-entry skew remains
+in scope; no outlier is removed or full-model rate extrapolated. P7 is chiefly a
+combined SRAM/lifecycle qualification, not a physical performance claim.

@@ -37,3 +37,11 @@ encoding, multicast, local dots, ordered sums and completion. All four paired
 original-weight fixtures pass exactly. This is a partial projection component;
 full-model2,000 tokens/s remains unmet. See `docs/REGIONAL-GEMV.md` and the frozen
 `regional-gemv-hw-001` evidence for what is and is not included.
+
+P6 qualifies the direct encoder on53,725 physical inputs and complete dynamic
+quantization on44 groups, with identical bytes/scales and about2.045x reduction
+in summed group cycles. P7 composes resident FP8 banks and regional communication
+in the simulator:24 epochs and full storage readback pass, with48,080 bytes maximum
+SRAM including stack. Its48-byte margin leaves full scheduler/BF16 integration
+unqualified. Both results retain their exact tested scope; the original complete
+model and2,000 tokens/s acceptance target are unchanged.

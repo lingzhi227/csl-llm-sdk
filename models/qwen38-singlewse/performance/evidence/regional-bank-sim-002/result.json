@@ -1,0 +1,559 @@
+{
+  "passed": true,
+  "normal_stop": true,
+  "physical": false,
+  "full_model": false,
+  "scope": "Combined resident original-weight FP8 banks and P5 regional communication; variable role capacities; BF16/metadata arrays retained sentinels, no BF16 execution or full-model scheduler",
+  "application": [
+    2,
+    3
+  ],
+  "bank_counts": [
+    [
+      108,
+      110
+    ],
+    [
+      110,
+      112
+    ],
+    [
+      110,
+      112
+    ]
+  ],
+  "fixture_sha256": "ae433ee7ba765a4f807cdb30e5a5e77d215dac44403f7058dae5499c986a783b",
+  "cases": [
+    {
+      "band": "first",
+      "case": 0,
+      "overlapped": false,
+      "root_region_cycles": 9882,
+      "host_launch_through_result_audit_seconds": 7.623271882999688,
+      "selected_slots": [
+        [
+          3,
+          1
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          1,
+          3
+        ]
+      ],
+      "bit_exact": true
+    },
+    {
+      "band": "first",
+      "case": 0,
+      "overlapped": true,
+      "root_region_cycles": 1567,
+      "host_launch_through_result_audit_seconds": 0.267713509965688,
+      "selected_slots": [
+        [
+          3,
+          1
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          1,
+          3
+        ]
+      ],
+      "bit_exact": true
+    },
+    {
+      "band": "first",
+      "case": 1,
+      "overlapped": false,
+      "root_region_cycles": 1752,
+      "host_launch_through_result_audit_seconds": 0.39681340381503105,
+      "selected_slots": [
+        [
+          2,
+          0
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          2
+        ]
+      ],
+      "bit_exact": true
+    },
+    {
+      "band": "first",
+      "case": 1,
+      "overlapped": true,
+      "root_region_cycles": 1567,
+      "host_launch_through_result_audit_seconds": 0.268386937212199,
+      "selected_slots": [
+        [
+          2,
+          0
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          2
+        ]
+      ],
+      "bit_exact": true
+    },
+    {
+      "band": "first",
+      "case": 2,
+      "overlapped": false,
+      "root_region_cycles": 1752,
+      "host_launch_through_result_audit_seconds": 0.39701419323682785,
+      "selected_slots": [
+        [
+          1,
+          3
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          1
+        ]
+      ],
+      "bit_exact": true
+    },
+    {
+      "band": "first",
+      "case": 2,
+      "overlapped": true,
+      "root_region_cycles": 1567,
+      "host_launch_through_result_audit_seconds": 0.2684485549107194,
+      "selected_slots": [
+        [
+          1,
+          3
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          1
+        ]
+      ],
+      "bit_exact": true
+    },
+    {
+      "band": "first",
+      "case": 3,
+      "overlapped": false,
+      "root_region_cycles": 1752,
+      "host_launch_through_result_audit_seconds": 0.4917044430039823,
+      "selected_slots": [
+        [
+          0,
+          2
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          0
+        ]
+      ],
+      "bit_exact": true
+    },
+    {
+      "band": "first",
+      "case": 3,
+      "overlapped": true,
+      "root_region_cycles": 1567,
+      "host_launch_through_result_audit_seconds": 0.26837257109582424,
+      "selected_slots": [
+        [
+          0,
+          2
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          0
+        ]
+      ],
+      "bit_exact": true
+    },
+    {
+      "band": "middle",
+      "case": 0,
+      "overlapped": false,
+      "root_region_cycles": 1752,
+      "host_launch_through_result_audit_seconds": 0.3965625581331551,
+      "selected_slots": [
+        [
+          51,
+          53
+        ],
+        [
+          53,
+          55
+        ],
+        [
+          53,
+          55
+        ]
+      ],
+      "bit_exact": true
+    },
+    {
+      "band": "middle",
+      "case": 0,
+      "overlapped": true,
+      "root_region_cycles": 1567,
+      "host_launch_through_result_audit_seconds": 0.26763339480385184,
+      "selected_slots": [
+        [
+          51,
+          53
+        ],
+        [
+          53,
+          55
+        ],
+        [
+          53,
+          55
+        ]
+      ],
+      "bit_exact": true
+    },
+    {
+      "band": "middle",
+      "case": 1,
+      "overlapped": false,
+      "root_region_cycles": 1752,
+      "host_launch_through_result_audit_seconds": 0.3969044187106192,
+      "selected_slots": [
+        [
+          54,
+          52
+        ],
+        [
+          52,
+          54
+        ],
+        [
+          52,
+          54
+        ]
+      ],
+      "bit_exact": true
+    },
+    {
+      "band": "middle",
+      "case": 1,
+      "overlapped": true,
+      "root_region_cycles": 1567,
+      "host_launch_through_result_audit_seconds": 0.2678727558813989,
+      "selected_slots": [
+        [
+          54,
+          52
+        ],
+        [
+          52,
+          54
+        ],
+        [
+          52,
+          54
+        ]
+      ],
+      "bit_exact": true
+    },
+    {
+      "band": "middle",
+      "case": 2,
+      "overlapped": false,
+      "root_region_cycles": 1752,
+      "host_launch_through_result_audit_seconds": 0.397008522413671,
+      "selected_slots": [
+        [
+          53,
+          55
+        ],
+        [
+          55,
+          53
+        ],
+        [
+          55,
+          53
+        ]
+      ],
+      "bit_exact": true
+    },
+    {
+      "band": "middle",
+      "case": 2,
+      "overlapped": true,
+      "root_region_cycles": 1567,
+      "host_launch_through_result_audit_seconds": 0.2683193990960717,
+      "selected_slots": [
+        [
+          53,
+          55
+        ],
+        [
+          55,
+          53
+        ],
+        [
+          55,
+          53
+        ]
+      ],
+      "bit_exact": true
+    },
+    {
+      "band": "middle",
+      "case": 3,
+      "overlapped": false,
+      "root_region_cycles": 1752,
+      "host_launch_through_result_audit_seconds": 0.40766674699261785,
+      "selected_slots": [
+        [
+          52,
+          54
+        ],
+        [
+          54,
+          56
+        ],
+        [
+          54,
+          56
+        ]
+      ],
+      "bit_exact": true
+    },
+    {
+      "band": "middle",
+      "case": 3,
+      "overlapped": true,
+      "root_region_cycles": 1567,
+      "host_launch_through_result_audit_seconds": 0.26835049921646714,
+      "selected_slots": [
+        [
+          52,
+          54
+        ],
+        [
+          54,
+          56
+        ],
+        [
+          54,
+          56
+        ]
+      ],
+      "bit_exact": true
+    },
+    {
+      "band": "last",
+      "case": 0,
+      "overlapped": false,
+      "root_region_cycles": 1752,
+      "host_launch_through_result_audit_seconds": 0.4008711758069694,
+      "selected_slots": [
+        [
+          107,
+          109
+        ],
+        [
+          109,
+          111
+        ],
+        [
+          109,
+          111
+        ]
+      ],
+      "bit_exact": true
+    },
+    {
+      "band": "last",
+      "case": 0,
+      "overlapped": true,
+      "root_region_cycles": 1567,
+      "host_launch_through_result_audit_seconds": 0.2753814090974629,
+      "selected_slots": [
+        [
+          107,
+          109
+        ],
+        [
+          109,
+          111
+        ],
+        [
+          109,
+          111
+        ]
+      ],
+      "bit_exact": true
+    },
+    {
+      "band": "last",
+      "case": 1,
+      "overlapped": false,
+      "root_region_cycles": 1752,
+      "host_launch_through_result_audit_seconds": 0.3972273850813508,
+      "selected_slots": [
+        [
+          106,
+          108
+        ],
+        [
+          108,
+          110
+        ],
+        [
+          108,
+          110
+        ]
+      ],
+      "bit_exact": true
+    },
+    {
+      "band": "last",
+      "case": 1,
+      "overlapped": true,
+      "root_region_cycles": 1567,
+      "host_launch_through_result_audit_seconds": 0.26829780684784055,
+      "selected_slots": [
+        [
+          106,
+          108
+        ],
+        [
+          108,
+          110
+        ],
+        [
+          108,
+          110
+        ]
+      ],
+      "bit_exact": true
+    },
+    {
+      "band": "last",
+      "case": 2,
+      "overlapped": false,
+      "root_region_cycles": 1752,
+      "host_launch_through_result_audit_seconds": 0.39637043699622154,
+      "selected_slots": [
+        [
+          105,
+          107
+        ],
+        [
+          107,
+          109
+        ],
+        [
+          107,
+          109
+        ]
+      ],
+      "bit_exact": true
+    },
+    {
+      "band": "last",
+      "case": 2,
+      "overlapped": true,
+      "root_region_cycles": 1567,
+      "host_launch_through_result_audit_seconds": 0.2679351922124624,
+      "selected_slots": [
+        [
+          105,
+          107
+        ],
+        [
+          107,
+          109
+        ],
+        [
+          107,
+          109
+        ]
+      ],
+      "bit_exact": true
+    },
+    {
+      "band": "last",
+      "case": 3,
+      "overlapped": false,
+      "root_region_cycles": 1752,
+      "host_launch_through_result_audit_seconds": 0.42828215891495347,
+      "selected_slots": [
+        [
+          104,
+          106
+        ],
+        [
+          106,
+          108
+        ],
+        [
+          106,
+          108
+        ]
+      ],
+      "bit_exact": true
+    },
+    {
+      "band": "last",
+      "case": 3,
+      "overlapped": true,
+      "root_region_cycles": 1567,
+      "host_launch_through_result_audit_seconds": 0.267789623234421,
+      "selected_slots": [
+        [
+          104,
+          106
+        ],
+        [
+          106,
+          108
+        ],
+        [
+          106,
+          108
+        ]
+      ],
+      "bit_exact": true
+    }
+  ],
+  "all_storage_retained": true,
+  "clock_hz": null,
+  "timing_note": "Source encoding, weight decode, multicast, local dot, ordered reduction and root completion; same root timestamp, host launch-entry skew included. Not full-model timing."
+}
