@@ -72,3 +72,28 @@ readiness, and compile the combined neural/input/reduction worker under the same
 48,128-byte ceiling and 4,096-byte declared stack. Only a complete matrix with
 actual original operands, exact owner coverage and full output/error/retention
 checks can close this next integration gate.
+
+## P16 progress and next executable boundary
+
+`coupled-plan-002` and `coupled-audit-002` now perform the required new-class
+bundle/forest regeneration, complete address checks and concurrent FP8 input
+color checks. Old P14 owners remain superseded. The materialized atlas drops the
+old bank census and recomputes class-dependent aggregate metadata; plan/audit001
+remain frozen with identical graph and route outputs. See COUPLED-BANK.md.
+
+The physical coupled-bank component now qualifies filtered input, native dots,
+a twelve-participant ordered tree and controller return in one program. It uses
+the exact shift decoder and distinct child receive buffers; the earlier aliased
+buffer failures remain recorded. Its 48,032-byte maximum includes stack and
+leaves only 96 bytes. Existing source cannot simply absorb generic routing and
+control without a new SRAM check.
+
+The next required execution is a complete original matrix with actual K and
+all output rows, followed by device-produced operands and dependent layers.
+BF16 eligible-ring holes require an explicit operand distribution plan. All
+forest roots need a collision-free output return/arena write plan; the tested
+single-root return cannot stand in for it. In particular, enabling multiple
+RX directions on a color does not implement safe simultaneous merge arbitration.
+Bidirectional vertical input, epoch quiescence, exact arena ownership and
+combined compiler footprint remain open. Any ownership change requires new
+complete-model address/lifetime audits rather than modifying frozen atlases.

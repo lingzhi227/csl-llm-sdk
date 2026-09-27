@@ -1,0 +1,146 @@
+{
+  "physical": false,
+  "seconds": 3.6623339098878205,
+  "result": {
+    "schema": "wse-coupled-input-forest-audit-v1",
+    "passed": true,
+    "physical": false,
+    "weights_read": false,
+    "graph": {
+      "nodes": 1172,
+      "events": 980,
+      "original_matrices": 498,
+      "bundles": 306,
+      "original_matrix_tiles": 105052160,
+      "complete_segments": 427,
+      "reused_storage_pairs": 192736,
+      "all_reused_storage_ordered": true,
+      "memory_completion_edges": 18
+    },
+    "profiles": [
+      {
+        "name": "fp8-k40",
+        "storage_class": "fp8-main",
+        "physical_path_pes": 860892,
+        "actor_bridges": 12,
+        "contributing_pes": 860880,
+        "independent_trees": 21522,
+        "tree_edges": 839358,
+        "route_entries": 11191596,
+        "active_pe_color_entries": 3228324,
+        "forwarding_hole_entries": 24,
+        "maximum_single_edge_physical_hops": 22,
+        "original_dispatch_tiles": 64880640,
+        "original_dispatch_row_pairs": 1622016,
+        "input_coexistence": {
+          "colors": [
+            2,
+            19,
+            20
+          ],
+          "route_entries": 2610000,
+          "exact_consumers": 860880,
+          "simultaneous_colors_disjoint": true
+        }
+      },
+      {
+        "name": "fp8-k48",
+        "storage_class": "fp8-main",
+        "physical_path_pes": 860892,
+        "actor_bridges": 12,
+        "contributing_pes": 860880,
+        "independent_trees": 17935,
+        "tree_edges": 842945,
+        "route_entries": 11191596,
+        "active_pe_color_entries": 3228330,
+        "forwarding_hole_entries": 30,
+        "maximum_single_edge_physical_hops": 26,
+        "original_dispatch_tiles": 7864320,
+        "original_dispatch_row_pairs": 163840,
+        "input_coexistence": {
+          "colors": [
+            2,
+            17,
+            18,
+            19,
+            20
+          ],
+          "route_entries": 4350000,
+          "exact_consumers": 860880,
+          "simultaneous_colors_disjoint": true
+        }
+      },
+      {
+        "name": "fp8-k136",
+        "storage_class": "fp8-wide",
+        "physical_path_pes": 857220,
+        "actor_bridges": 12,
+        "contributing_pes": 857208,
+        "independent_trees": 6303,
+        "tree_edges": 850905,
+        "route_entries": 11143860,
+        "active_pe_color_entries": 3983508,
+        "forwarding_hole_entries": 12,
+        "maximum_single_edge_physical_hops": 70,
+        "original_dispatch_tiles": 22282240,
+        "original_dispatch_row_pairs": 163840,
+        "input_coexistence": {
+          "colors": [
+            2,
+            20
+          ],
+          "route_entries": 1740000,
+          "exact_consumers": 857208,
+          "simultaneous_colors_disjoint": true
+        }
+      },
+      {
+        "name": "bf16-k40",
+        "storage_class": "bf16",
+        "physical_path_pes": 860892,
+        "actor_bridges": 12,
+        "contributing_pes": 824000,
+        "independent_trees": 20600,
+        "tree_edges": 803400,
+        "route_entries": 11191596,
+        "active_pe_color_entries": 3184930,
+        "forwarding_hole_entries": 94930,
+        "maximum_single_edge_physical_hops": 797,
+        "original_dispatch_tiles": 10024960,
+        "original_dispatch_row_pairs": 250624,
+        "input_coexistence": null
+      }
+    ],
+    "dense_forest_files": {
+      "fp8-k40.npy": {
+        "bytes": 22383320,
+        "sha256": "94976b33acd84d8c1d57eea4122ebb1b95884ec01912bc56e9a903fb997a44a4"
+      },
+      "fp8-k48.npy": {
+        "bytes": 22383320,
+        "sha256": "82a6280176a816b33189ca407f99c43982edae9c4d6096c6058d6e4e1a20d306"
+      },
+      "fp8-k136.npy": {
+        "bytes": 22287848,
+        "sha256": "848f2e3de482aecde48d124503557073bfe522c6e2d6f7d6ed785318c0c6357d"
+      },
+      "bf16-k40.npy": {
+        "bytes": 22383320,
+        "sha256": "1e371eaa192ae6eeea0cb73cc7a42352320acd11fe76c034eb0b9a565a5f46e7"
+      }
+    },
+    "bundles_sha256": "64915a002ad80c59d5054eaea10c70f35bb2558bf34a566729c594497da87d7b",
+    "forests_sha256": "6e248925f60af25137fcfad23b212df6bbfd38de1ae61a7b7d2b16a57d030d49",
+    "base_atlas_sha256": "19830e61b881f592c92710fc59e6af8d40f1b3afad70d8905ebbedda461f21db",
+    "overlay_sha256": "9461459fe8e0da74396018cbd112d6cc66fa8cca291f61188309a76e0b47e767",
+    "duration_seconds": 3.6127941319718957,
+    "max_rss_kib": 241900,
+    "bf16_input_routes_admitted": false,
+    "output_scatter_admitted": false,
+    "route_epochs_admitted": false,
+    "compiled_sram_admitted": false,
+    "full_model_executable": false,
+    "full_model_speed_target_achieved": false,
+    "scope": "All original graph/bundles bind new storage-class owners and complete forests. FP8 input endpoint and color coexistence checked across entire model geometry. No runtime queue/UT/SRAM, result return or physical execution admission."
+  }
+}

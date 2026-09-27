@@ -1,0 +1,95 @@
+{
+  "passed": true,
+  "normal_stop": true,
+  "physical": false,
+  "application": [
+    4,
+    5
+  ],
+  "full_model": false,
+  "scope": "Two-stage counter windows -> twelve original maximum mixed banks -> ordered twelve-participant tree -> source-controller return. Independent host-provided operands; not a complete original K width/matrix or autonomous model feedback.",
+  "fixture_sha256": "f12a863122fa0b2dc4824e4c6cf0f00daad8b8bbe46d04408f818300dc9c7484",
+  "cases": [
+    {
+      "case": 0,
+      "kind": "fp8",
+      "mode": "mixed",
+      "period_words": 260,
+      "pair_offsets_words": [
+        0,
+        130,
+        0
+      ],
+      "replay_of": null,
+      "max_abs_fp64_error": 4.831235855817795e-09,
+      "source_send_to_result_return_cycles": 1755,
+      "max_tree_abs_fp64_error": 1.0809344530571252e-08,
+      "host_upload_and_arm_seconds": 0.00010904902592301369,
+      "host_start_seconds": 1.1404044926166534e-05
+    },
+    {
+      "case": 1,
+      "kind": "bf16",
+      "mode": "mixed",
+      "period_words": 260,
+      "pair_offsets_words": [
+        130,
+        0,
+        130
+      ],
+      "replay_of": null,
+      "max_abs_fp64_error": 1.30385160446167e-08,
+      "source_send_to_result_return_cycles": 1853,
+      "max_tree_abs_fp64_error": 4.98257577419281e-08,
+      "host_upload_and_arm_seconds": 9.825918823480606e-05,
+      "host_start_seconds": 1.2413132935762405e-05
+    },
+    {
+      "case": 6,
+      "kind": "fp8",
+      "mode": "boundary",
+      "period_words": 780,
+      "pair_offsets_words": [
+        0,
+        130,
+        260
+      ],
+      "replay_of": null,
+      "max_abs_fp64_error": 2.86102294921875e-06,
+      "source_send_to_result_return_cycles": 1901,
+      "max_tree_abs_fp64_error": 1.9073486328125e-05,
+      "host_upload_and_arm_seconds": 9.977910667657852e-05,
+      "host_start_seconds": 1.1926982551813126e-05
+    },
+    {
+      "case": 7,
+      "kind": "bf16",
+      "mode": "boundary",
+      "period_words": 780,
+      "pair_offsets_words": [
+        390,
+        520,
+        650
+      ],
+      "replay_of": null,
+      "max_abs_fp64_error": 0.00146484375,
+      "source_send_to_result_return_cycles": 2343,
+      "max_tree_abs_fp64_error": 0.0048351287841796875,
+      "host_upload_and_arm_seconds": 9.154714643955231e-05,
+      "host_start_seconds": 1.1817086488008499e-05
+    }
+  ],
+  "all_weights_retained": true,
+  "original_weights": true,
+  "weight_uploads": 1,
+  "bank_transfer_bytes": 423072,
+  "retained_padding_bytes": 1512,
+  "counter_windows_exact": true,
+  "all_packet_and_teardown_counters_exact": true,
+  "all_subtrees_exact": true,
+  "controller_result_exact": true,
+  "host_initialization_seconds": 0.001216741744428873,
+  "timing_note": "Same source-controller timestamp from horizontal send to full twelve-participant result return. Includes two-stage input, native dots, ordered tree and return; excludes host upload/arm, final send callbacks and retention. Independent operands and partial K; no full-matrix/model rate claim.",
+  "clock_hz": null,
+  "full_model_speed_target_achieved": false
+}

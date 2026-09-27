@@ -1,0 +1,318 @@
+{
+  "schema": "wse-coupled-bank-component-v1",
+  "application": [
+    4,
+    5
+  ],
+  "full_model": false,
+  "colors": {
+    "horizontal": 2,
+    "vertical": 20
+  },
+  "input_queue": 2,
+  "output_queue": 2,
+  "input_microthread": 2,
+  "output_microthread": 3,
+  "workers": [
+    {
+      "x": 1,
+      "y": 1,
+      "rank": 0,
+      "fp8_slots": 110,
+      "bf16_slots": 13
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "rank": 1,
+      "fp8_slots": 110,
+      "bf16_slots": 13
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "rank": 2,
+      "fp8_slots": 110,
+      "bf16_slots": 13
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "rank": 3,
+      "fp8_slots": 111,
+      "bf16_slots": 12
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "rank": 4,
+      "fp8_slots": 111,
+      "bf16_slots": 12
+    },
+    {
+      "x": 3,
+      "y": 2,
+      "rank": 5,
+      "fp8_slots": 111,
+      "bf16_slots": 12
+    },
+    {
+      "x": 1,
+      "y": 3,
+      "rank": 6,
+      "fp8_slots": 110,
+      "bf16_slots": 13
+    },
+    {
+      "x": 2,
+      "y": 3,
+      "rank": 7,
+      "fp8_slots": 110,
+      "bf16_slots": 13
+    },
+    {
+      "x": 3,
+      "y": 3,
+      "rank": 8,
+      "fp8_slots": 110,
+      "bf16_slots": 13
+    },
+    {
+      "x": 1,
+      "y": 4,
+      "rank": 9,
+      "fp8_slots": 111,
+      "bf16_slots": 12
+    },
+    {
+      "x": 2,
+      "y": 4,
+      "rank": 10,
+      "fp8_slots": 111,
+      "bf16_slots": 12
+    },
+    {
+      "x": 3,
+      "y": 4,
+      "rank": 11,
+      "fp8_slots": 111,
+      "bf16_slots": 12
+    }
+  ],
+  "cases": 10,
+  "packet_words": 65,
+  "pair_words": 130,
+  "horizontal_periods": [
+    260,
+    780
+  ],
+  "scope": "Two-stage counter windows -> twelve original maximum mixed banks -> ordered twelve-participant tree -> source-controller return. Independent host-provided operands; not a complete original K width/matrix or autonomous model feedback.",
+  "tree": [
+    {
+      "rank": 0,
+      "size": 12,
+      "depth": 0,
+      "parent": null,
+      "side": null,
+      "children": [
+        1,
+        7
+      ],
+      "xy": [
+        1,
+        1
+      ],
+      "color": 16
+    },
+    {
+      "rank": 1,
+      "size": 6,
+      "depth": 1,
+      "parent": 0,
+      "side": 0,
+      "children": [
+        2,
+        5
+      ],
+      "xy": [
+        2,
+        1
+      ],
+      "color": 3
+    },
+    {
+      "rank": 2,
+      "size": 3,
+      "depth": 2,
+      "parent": 1,
+      "side": 0,
+      "children": [
+        3,
+        4
+      ],
+      "xy": [
+        3,
+        1
+      ],
+      "color": 5
+    },
+    {
+      "rank": 3,
+      "size": 1,
+      "depth": 3,
+      "parent": 2,
+      "side": 0,
+      "children": [],
+      "xy": [
+        3,
+        2
+      ],
+      "color": 7
+    },
+    {
+      "rank": 4,
+      "size": 1,
+      "depth": 3,
+      "parent": 2,
+      "side": 1,
+      "children": [],
+      "xy": [
+        2,
+        2
+      ],
+      "color": 8
+    },
+    {
+      "rank": 5,
+      "size": 2,
+      "depth": 2,
+      "parent": 1,
+      "side": 1,
+      "children": [
+        6
+      ],
+      "xy": [
+        1,
+        2
+      ],
+      "color": 6
+    },
+    {
+      "rank": 6,
+      "size": 1,
+      "depth": 3,
+      "parent": 5,
+      "side": 0,
+      "children": [],
+      "xy": [
+        1,
+        3
+      ],
+      "color": 7
+    },
+    {
+      "rank": 7,
+      "size": 5,
+      "depth": 1,
+      "parent": 0,
+      "side": 1,
+      "children": [
+        8,
+        10
+      ],
+      "xy": [
+        2,
+        3
+      ],
+      "color": 4
+    },
+    {
+      "rank": 8,
+      "size": 2,
+      "depth": 2,
+      "parent": 7,
+      "side": 0,
+      "children": [
+        9
+      ],
+      "xy": [
+        3,
+        3
+      ],
+      "color": 5
+    },
+    {
+      "rank": 9,
+      "size": 1,
+      "depth": 3,
+      "parent": 8,
+      "side": 0,
+      "children": [],
+      "xy": [
+        3,
+        4
+      ],
+      "color": 7
+    },
+    {
+      "rank": 10,
+      "size": 2,
+      "depth": 2,
+      "parent": 7,
+      "side": 1,
+      "children": [
+        11
+      ],
+      "xy": [
+        2,
+        4
+      ],
+      "color": 6
+    },
+    {
+      "rank": 11,
+      "size": 1,
+      "depth": 3,
+      "parent": 10,
+      "side": 0,
+      "children": [],
+      "xy": [
+        1,
+        4
+      ],
+      "color": 7
+    }
+  ],
+  "return_color": 16,
+  "leases": {
+    "input": {
+      "iq": 2,
+      "ut": 2,
+      "dsr": 2
+    },
+    "left": {
+      "iq": 3,
+      "ut": 3,
+      "dsr": 3
+    },
+    "right": {
+      "iq": 4,
+      "ut": 4,
+      "dsr": 5
+    },
+    "send": {
+      "oq": 2,
+      "ut": 5,
+      "dsr": 6
+    },
+    "native_dsrs": [
+      4,
+      7
+    ],
+    "controller_return": {
+      "iq": 3,
+      "ut": 4,
+      "dsr": 3
+    }
+  }
+}

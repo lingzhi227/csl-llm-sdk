@@ -1,0 +1,130 @@
+{
+  "schema": "wse-coupled-bank-qualification-v1",
+  "physical": true,
+  "full_model": false,
+  "attempt": "coupled-bank-hw-001",
+  "application": [
+    4,
+    5
+  ],
+  "original_model": "Qwen/Qwen3.8-27B-FP8",
+  "original_revision": "017b9c7af6b5689d5dd426a76e0bc077eb5ca20a",
+  "fixture_sha256": "f12a863122fa0b2dc4824e4c6cf0f00daad8b8bbe46d04408f818300dc9c7484",
+  "epochs": 10,
+  "native_dot_values": 240,
+  "subtree_values": 240,
+  "controller_values": 20,
+  "exact_worker_packet_words": 7800,
+  "exact_relay_pair_words": 3900,
+  "full_original_bank_readback_bytes": 421560,
+  "full_transfer_readback_bytes": 423072,
+  "retained_padding_bytes": 1512,
+  "maximum_bank_payload_bytes": 35256,
+  "max_compiled_sram_plus_stack": 48032,
+  "sram_margin_bytes": 96,
+  "all_original_weights_retained": true,
+  "all_subtrees_and_controller_results_exact": true,
+  "counter_windows_exact": true,
+  "all_jobs_released": true,
+  "exhaustive_decoder": {
+    "packed_patterns": 65536,
+    "mismatches": 0,
+    "reference_decode_cycles": [
+      62727,
+      62771,
+      62299,
+      62766
+    ],
+    "shift_decode_cycles": [
+      32434,
+      32690,
+      32684,
+      32690
+    ],
+    "reference_total_cycles": 250563,
+    "shift_total_cycles": 130498,
+    "matched_decoder_speedup": 1.9200524145963922
+  },
+  "source_send_to_result_return_cycles": {
+    "min": 1685,
+    "median": 1911.0,
+    "max": 2499,
+    "cases": [
+      {
+        "case": 0,
+        "kind": "fp8",
+        "mode": "mixed",
+        "period": 260,
+        "cycles": 1685
+      },
+      {
+        "case": 1,
+        "kind": "bf16",
+        "mode": "mixed",
+        "period": 260,
+        "cycles": 1915
+      },
+      {
+        "case": 2,
+        "kind": "fp8",
+        "mode": "zero",
+        "period": 780,
+        "cycles": 1906
+      },
+      {
+        "case": 3,
+        "kind": "bf16",
+        "mode": "zero",
+        "period": 780,
+        "cycles": 2499
+      },
+      {
+        "case": 4,
+        "kind": "fp8",
+        "mode": "tiny",
+        "period": 780,
+        "cycles": 1907
+      },
+      {
+        "case": 5,
+        "kind": "bf16",
+        "mode": "tiny",
+        "period": 780,
+        "cycles": 2499
+      },
+      {
+        "case": 6,
+        "kind": "fp8",
+        "mode": "boundary",
+        "period": 780,
+        "cycles": 1907
+      },
+      {
+        "case": 7,
+        "kind": "bf16",
+        "mode": "boundary",
+        "period": 780,
+        "cycles": 2499
+      },
+      {
+        "case": 8,
+        "kind": "fp8",
+        "mode": "mixed",
+        "period": 260,
+        "cycles": 1685
+      },
+      {
+        "case": 9,
+        "kind": "bf16",
+        "mode": "mixed",
+        "period": 260,
+        "cycles": 1915
+      }
+    ]
+  },
+  "timing_note": "Same source-controller timestamp from horizontal send to full twelve-participant result return. Includes two-stage input, native dots, ordered tree and return; excludes host upload/arm, final send callbacks and retention. Independent operands and partial K; no full-matrix/model rate claim.",
+  "clock_hz": null,
+  "full_model_speed_target_achieved": false,
+  "artifact_sha256": "e26e6b0f496760ee5d043503780bad252e901c5df3408a2ab1f4435f90b19265",
+  "scope": "Two-stage counter windows -> twelve original maximum mixed banks -> ordered twelve-participant tree -> source-controller return. Independent host-provided operands; not a complete original K width/matrix or autonomous model feedback."
+}

@@ -1,0 +1,213 @@
+{
+  "passed": true,
+  "normal_stop": true,
+  "physical": true,
+  "application": [
+    4,
+    5
+  ],
+  "full_model": false,
+  "scope": "Two-stage counter windows -> twelve original maximum mixed banks -> ordered twelve-participant tree -> source-controller return. Independent host-provided operands; not a complete original K width/matrix or autonomous model feedback.",
+  "fixture_sha256": "f12a863122fa0b2dc4824e4c6cf0f00daad8b8bbe46d04408f818300dc9c7484",
+  "cases": [
+    {
+      "case": 0,
+      "kind": "fp8",
+      "mode": "mixed",
+      "period_words": 260,
+      "pair_offsets_words": [
+        0,
+        130,
+        0
+      ],
+      "replay_of": null,
+      "max_abs_fp64_error": 4.831235855817795e-09,
+      "source_send_to_result_return_cycles": 1685,
+      "max_tree_abs_fp64_error": 1.0809344530571252e-08,
+      "host_upload_and_arm_seconds": 0.006910520605742931,
+      "host_start_seconds": 0.0014169830828905106
+    },
+    {
+      "case": 1,
+      "kind": "bf16",
+      "mode": "mixed",
+      "period_words": 260,
+      "pair_offsets_words": [
+        130,
+        0,
+        130
+      ],
+      "replay_of": null,
+      "max_abs_fp64_error": 1.30385160446167e-08,
+      "source_send_to_result_return_cycles": 1915,
+      "max_tree_abs_fp64_error": 4.98257577419281e-08,
+      "host_upload_and_arm_seconds": 0.0018446054309606552,
+      "host_start_seconds": 0.00048697367310523987
+    },
+    {
+      "case": 2,
+      "kind": "fp8",
+      "mode": "zero",
+      "period_words": 780,
+      "pair_offsets_words": [
+        0,
+        130,
+        260
+      ],
+      "replay_of": null,
+      "max_abs_fp64_error": 0.0,
+      "source_send_to_result_return_cycles": 1906,
+      "max_tree_abs_fp64_error": 0.0,
+      "host_upload_and_arm_seconds": 0.0017841244116425514,
+      "host_start_seconds": 0.0004891743883490562
+    },
+    {
+      "case": 3,
+      "kind": "bf16",
+      "mode": "zero",
+      "period_words": 780,
+      "pair_offsets_words": [
+        390,
+        520,
+        650
+      ],
+      "replay_of": null,
+      "max_abs_fp64_error": 0.0,
+      "source_send_to_result_return_cycles": 2499,
+      "max_tree_abs_fp64_error": 0.0,
+      "host_upload_and_arm_seconds": 0.0017363950610160828,
+      "host_start_seconds": 0.00047079287469387054
+    },
+    {
+      "case": 4,
+      "kind": "fp8",
+      "mode": "tiny",
+      "period_words": 780,
+      "pair_offsets_words": [
+        0,
+        130,
+        260
+      ],
+      "replay_of": null,
+      "max_abs_fp64_error": 2.2620794126737565e-15,
+      "source_send_to_result_return_cycles": 1907,
+      "max_tree_abs_fp64_error": 5.963111948670274e-15,
+      "host_upload_and_arm_seconds": 0.0016931043937802315,
+      "host_start_seconds": 0.000482373870909214
+    },
+    {
+      "case": 5,
+      "kind": "bf16",
+      "mode": "tiny",
+      "period_words": 780,
+      "pair_offsets_words": [
+        390,
+        520,
+        650
+      ],
+      "replay_of": null,
+      "max_abs_fp64_error": 1.2116903504194741e-27,
+      "source_send_to_result_return_cycles": 2499,
+      "max_tree_abs_fp64_error": 3.99952478947053e-27,
+      "host_upload_and_arm_seconds": 0.0017934851348400116,
+      "host_start_seconds": 0.00047902390360832214
+    },
+    {
+      "case": 6,
+      "kind": "fp8",
+      "mode": "boundary",
+      "period_words": 780,
+      "pair_offsets_words": [
+        0,
+        130,
+        260
+      ],
+      "replay_of": null,
+      "max_abs_fp64_error": 2.86102294921875e-06,
+      "source_send_to_result_return_cycles": 1907,
+      "max_tree_abs_fp64_error": 1.9073486328125e-05,
+      "host_upload_and_arm_seconds": 0.001721484586596489,
+      "host_start_seconds": 0.00048192404210567474
+    },
+    {
+      "case": 7,
+      "kind": "bf16",
+      "mode": "boundary",
+      "period_words": 780,
+      "pair_offsets_words": [
+        390,
+        520,
+        650
+      ],
+      "replay_of": null,
+      "max_abs_fp64_error": 0.00146484375,
+      "source_send_to_result_return_cycles": 2499,
+      "max_tree_abs_fp64_error": 0.0048351287841796875,
+      "host_upload_and_arm_seconds": 0.0019007958471775055,
+      "host_start_seconds": 0.0004931939765810966
+    },
+    {
+      "case": 8,
+      "kind": "fp8",
+      "mode": "mixed",
+      "period_words": 260,
+      "pair_offsets_words": [
+        0,
+        130,
+        0
+      ],
+      "replay_of": 0,
+      "max_abs_fp64_error": 4.831235855817795e-09,
+      "source_send_to_result_return_cycles": 1685,
+      "max_tree_abs_fp64_error": 1.0809344530571252e-08,
+      "host_upload_and_arm_seconds": 0.0016300445422530174,
+      "host_start_seconds": 0.0004769144579768181
+    },
+    {
+      "case": 9,
+      "kind": "bf16",
+      "mode": "mixed",
+      "period_words": 260,
+      "pair_offsets_words": [
+        130,
+        0,
+        130
+      ],
+      "replay_of": 1,
+      "max_abs_fp64_error": 1.30385160446167e-08,
+      "source_send_to_result_return_cycles": 1915,
+      "max_tree_abs_fp64_error": 4.98257577419281e-08,
+      "host_upload_and_arm_seconds": 0.0016808640211820602,
+      "host_start_seconds": 0.00048044417053461075
+    }
+  ],
+  "all_weights_retained": true,
+  "original_weights": true,
+  "weight_uploads": 1,
+  "bank_transfer_bytes": 423072,
+  "retained_padding_bytes": 1512,
+  "counter_windows_exact": true,
+  "all_packet_and_teardown_counters_exact": true,
+  "all_subtrees_exact": true,
+  "controller_result_exact": true,
+  "exhaustive_decoder": {
+    "packed_patterns": 65536,
+    "mismatches": 0,
+    "reference_decode_cycles": [
+      62727,
+      62771,
+      62299,
+      62766
+    ],
+    "shift_decode_cycles": [
+      32434,
+      32690,
+      32684,
+      32690
+    ]
+  },
+  "host_initialization_seconds": 0.007526523433625698,
+  "timing_note": "Same source-controller timestamp from horizontal send to full twelve-participant result return. Includes two-stage input, native dots, ordered tree and return; excludes host upload/arm, final send callbacks and retention. Independent operands and partial K; no full-matrix/model rate claim.",
+  "clock_hz": null,
+  "full_model_speed_target_achieved": false
+}

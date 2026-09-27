@@ -1,0 +1,15 @@
+{
+  "schema": "fp8-shift-exhaustive-proof-v1",
+  "passed": true,
+  "physical": false,
+  "packed_patterns": 65536,
+  "embedded_half_values": 131072,
+  "finite_codes_independently_checked": 254,
+  "half_bitstream_sha256": "68af03756b45ac2014cacb15479bf0fc01573ee949a236288a2d729386b1f6f2",
+  "temporary_bytes_removed_at128pairs": 256,
+  "old_vector_operations": 9,
+  "new_vector_operations": 5,
+  "native_instruction": "@sar16",
+  "source": "https://cerebras-sdk-docs-130.netlify.app/csl/language/builtins#sar16",
+  "scope": "Exhaustive host integer identity and independent finite IEEE half encoding. Device instruction, native-dot and compiled-SRAM checks remain separately required; no speed claim."
+}

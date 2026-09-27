@@ -8,7 +8,7 @@ import shlex
 import subprocess
 
 ROOT = Path(__file__).resolve().parents[1]
-p = argparse.ArgumentParser(); p.add_argument('attempt'); p.add_argument('--kind',choices=['projection','columnar'],default='projection'); a = p.parse_args()
+p = argparse.ArgumentParser(); p.add_argument('attempt'); p.add_argument('--kind',choices=['projection','columnar','coupled'],default='projection'); a = p.parse_args()
 if len(a.attempt) != 3 or not a.attempt.isdigit():
     raise ValueError('Three-digit attempt required')
 name = a.kind + '-audit-' + a.attempt

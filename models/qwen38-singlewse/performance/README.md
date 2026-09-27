@@ -112,3 +112,15 @@ retention pass, with 47,328-byte SRAM including the declared stack. Both jobs
 succeed and release normally.
 See [COLUMNAR-INPUT.md](docs/COLUMNAR-INPUT.md) for the tested scope and remaining
 whole-matrix integration. The full-model speed target remains unmet.
+
+P16 binds all original projections and four complete forests to those new
+storage classes, independently checking 44,718,648 PE/color entries. A physical
+20-PE component now composes input filtering, original FP8/BF16 native dots,
+ordered reduction and controller return. All ten cases and complete bank
+retention pass; the same-controller interval is 1,685–2,499 cycles. An exact
+five-operation FP8 decoder passes all 65,536 packed patterns on hardware and
+measures 1.920x faster than the original decoder in matched local intervals.
+Compiled SRAM including stack is 48,032 bytes, leaving 96 bytes. Both hardware
+jobs and workstation services release. See [COUPLED-BANK.md](docs/COUPLED-BANK.md).
+This is partial-K component execution; complete matrices, all-layer feedback and
+the 2,000 dependent tokens/s target remain unqualified.

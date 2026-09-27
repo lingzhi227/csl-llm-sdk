@@ -1,0 +1,123 @@
+param memcpy_params;param role:u16;param fp8_slots:u16;param bf16_slots:u16;
+param test_first:u16;param rank:u16;param children:u16;param subtree:u16;param left_color:u16;param right_color:u16;param out_color:u16;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);const clock=@import_module("<time>");
+const tile=@import_module("<tile_config>");const window=@import_module("counter_window.csl");const switches=@import_module("<memcpy/memcpy_switches>");
+const original_unpacker=@import_module("fp8_unpack.csl",.{.max_pairs=128});const unpacker=@import_module("fp8_unpack_shift.csl",.{.max_pairs=128});const fp8=@import_module("fp8_dot.csl",.{.rows=2});const bf_dot=@import_module("bf16_dot.csl",.{.rows=2});
+const hc=@get_color(2);const vc=@get_color(20);const iq=@get_input_queue(2);const oq=@get_output_queue(2);const liq=@get_input_queue(3);const riq=@get_input_queue(4);
+const rt=@get_local_task_id(8);const st=@get_local_task_id(9);const ct=@get_local_task_id(10);const lt=@get_local_task_id(11);const jt=@get_local_task_id(12);const bt=@get_local_task_id(13);
+const rd=@get_dsr(dsr_dest,2);const rs=@get_dsr(dsr_src0,2);const sd=@get_dsr(dsr_dest,6);const ss=@get_dsr(dsr_src0,6);
+const ld=@get_dsr(dsr_dest,3);const ls=@get_dsr(dsr_src0,3);const jd=@get_dsr(dsr_dest,5);const js=@get_dsr(dsr_src0,5);
+var bank=@zeros([if(role==2) 8814 else 1]u32);
+var packet=@zeros([if(role==0) 780 else if(role==1) 130 else if(role==2) 65 else 1]u32);
+// Weight decoding completes before reduction. Child DMA buffers stay separate
+// from decoded weight storage; the outgoing aggregate reuses scratch bytes24:36.
+var probe=@zeros([4]u32);var probe_words=@zeros([if(role==3) 128 else 1]u16);var probe_gold=@zeros([if(role==3) 256 else 1]u16);var probe_fast=@zeros([if(role==3) 256 else 1]u16);
+var left=@zeros([3]u32);var right=@zeros([3]u32);var scratch=@zeros([if(role==2) 128 else 9]u32);var control=@zeros([4]u16);
+var local_result=@zeros([2]f32);var audit=@zeros([14]u16);var ticks=@zeros([6]u16);
+const probep:[*]u32=&probe;const leftp:[*]u32=&left;const rightp:[*]u32=&right;const scratchp:[*]u32=&scratch;const wp:[*]u32=&bank;const pp:[*]u32=&packet;const cp:[*]u16=&control;const lp:[*]f32=&local_result;const ap:[*]u16=&audit;const tp:[*]u16=&ticks;
+const td=[1]u32{switches.ctrl(switches.teardown_cmd_1())};
+var armed:bool=false;var started:bool=false;var complete:bool=false;var ht:bool=false;var vt:bool=false;var joined:bool=false;var left_ready:bool=false;var right_ready:bool=false;
+fn finish() void {
+ if(started and complete and ht and vt and (role!=0 or joined)){started=false;armed=false;audit[7]=1;clock.disable_tsc();sys.unblock_cmd_stream();}
+}
+fn send_data() void {
+ const count:u16=if(comptime role==0) control[0] else 130;
+ const m=@get_dsd(mem1d_dsd,.{.base_address=&packet,.extent=if(role==0) 780 else 130});const f=@get_dsd(fabout_dsd,.{.output_queue=oq,.extent=if(role==0) 780 else 130});
+ @load_to_dsr(ss,@set_dsd_length(m,count));@load_to_dsr(sd,@set_dsd_length(f,count),.{.async=true,.ut_id=@get_ut_id(3),.activate=st});@mov32(sd,ss,.{.async=true});
+}
+fn join() void {
+ if(left_ready and right_ready and !joined){joined=true;
+  const a:[*]u32=&left;const b:[*]u32=&right;const out=@ptrcast([*]u32,&scratch[6]);
+  var x:f32=local_result[0];var y:f32=local_result[1];var count:u32=1;
+  if(comptime children>0){x+=@bitcast(f32,a[0]);y+=@bitcast(f32,a[1]);count+=a[2];}
+  if(comptime children>1){x+=@bitcast(f32,b[0]);y+=@bitcast(f32,b[1]);count+=b[2];}
+  out[0]=@bitcast(u32,x);out[1]=@bitcast(u32,y);out[2]=count;audit[11]+=1;if(count!=@as(u32,subtree)){audit[8]|=4;}
+  const m=@get_dsd(mem1d_dsd,.{.base_address=out,.extent=3});const f=@get_dsd(fabout_dsd,.{.output_queue=oq,.extent=3});
+  @load_to_dsr(ss,m);@load_to_dsr(sd,f,.{.async=true,.ut_id=@get_ut_id(5),.activate=st});@mov32(sd,ss,.{.async=true});
+ }
+}
+fn children_arm() void {
+ left_ready=children==0;right_ready=children<2;
+ if(comptime children>0){
+  const m=@get_dsd(mem1d_dsd,.{.base_address=&left,.extent=3});const f=@get_dsd(fabin_dsd,.{.input_queue=liq,.extent=3});
+  @load_to_dsr(ld,m);@load_to_dsr(ls,f,.{.async=true,.ut_id=@get_ut_id(3),.activate=lt});@mov32(ld,ls,.{.async=true});
+ }
+ if(comptime children>1){
+  const m=@get_dsd(mem1d_dsd,.{.base_address=&right,.extent=3});const f=@get_dsd(fabin_dsd,.{.input_queue=riq,.extent=3});
+  @load_to_dsr(jd,m);@load_to_dsr(js,f,.{.async=true,.ut_id=@get_ut_id(4),.activate=jt});@mov32(jd,js,.{.async=true});
+ }
+ join();
+}
+task received() void {
+ audit[1]+=1;
+ if(comptime role==1){send_data();}
+ else if(comptime role==2){
+  const slot=control[3];
+  if(control[2]==0){const decoded=@ptrcast([*]u16,&scratch);const scale=@ptrcast([*]f32,&bank[fp8_slots*64]);unpacker.decode(@ptrcast([*]u16,&wp[slot*64]),decoded,128);fp8.compute(decoded,@ptrcast([*]u16,pp),lp,@bitcast(f32,packet[64]),scale[slot]);}
+  else{bf_dot.compute(@ptrcast([*]u16,&bank[fp8_slots*65+slot*128]),@ptrcast([*]u16,pp),lp);}
+  audit[2]+=1;children_arm();
+ }
+}
+task received_left() void {left_ready=true;audit[9]+=1;join();}
+task received_right() void {right_ready=true;audit[10]+=1;join();}
+task returned() void {clock.get_timestamp(@ptrcast(*[3]u16,&ticks[3]));joined=true;audit[13]+=1;finish();}
+task sent_data() void {
+ if(comptime role==2){audit[12]+=1;complete=true;finish();}
+ else{
+  audit[3]+=1;const m=@get_dsd(mem1d_dsd,.{.tensor_access=|i|{1}->td[i]});const f=@get_dsd(fabout_dsd,.{.extent=1,.control=true,.output_queue=oq});
+  @load_to_dsr(ss,m);@load_to_dsr(sd,f,.{.async=true,.ut_id=@get_ut_id(3),.activate=ct});@mov32(sd,ss,.{.async=true});
+ }
+}
+task sent_control() void {audit[4]+=1;complete=true;finish();}
+fn torn_h() void {if(!armed or ht){audit[8]|=1;}ht=true;audit[5]+=1;finish();}
+fn torn_v() void {if(!armed or vt){audit[8]|=2;}vt=true;audit[6]+=1;finish();}
+fn arm() void {
+ @assert(!armed and !started);for(@range(u16,14))|i|{audit[i]=0;}audit[0]=1;armed=true;joined=false;
+ ht=role==2 or role==3;vt=role==0 or role==3;complete=role==3;
+ if(comptime role==1){window.configure(hc,control[0],control[1],130);}
+ if(comptime role==2){
+  @assert(control[2]<=1);if(control[2]==0){@assert(control[3]<fp8_slots);}else{@assert(control[3]<bf16_slots);}
+  window.configure(vc,130,control[1],65);
+ }
+ if(comptime role==0 or role==1){tile.teardown.exit(hc);}
+ if(comptime role==1 or role==2){tile.teardown.exit(vc);}
+ if(comptime role==1 or role==2){
+  const n:u16=if(role==1) 130 else 65;const m=@get_dsd(mem1d_dsd,.{.base_address=&packet,.extent=n});const f=@get_dsd(fabin_dsd,.{.input_queue=iq,.extent=n});
+  @load_to_dsr(rd,m);@load_to_dsr(rs,f,.{.async=true,.ut_id=@get_ut_id(2),.activate=rt});@mov32(rd,rs,.{.async=true});
+ }
+ if(comptime role==0){
+  const m=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]u32,&scratch[6]),.extent=3});const f=@get_dsd(fabin_dsd,.{.input_queue=liq,.extent=3});
+  @load_to_dsr(ld,m);@load_to_dsr(ls,f,.{.async=true,.ut_id=@get_ut_id(4),.activate=bt});@mov32(ld,ls,.{.async=true});clock.enable_tsc();
+ }
+ sys.unblock_cmd_stream();
+}
+fn start() void {@assert(armed and !started);started=true;if(comptime role==0){clock.get_timestamp(@ptrcast(*[3]u16,&ticks[0]));send_data();}finish();}
+fn test_unpack() void {
+ for(@range(u16,4))|i|{probe[i]=0;}
+ if(comptime role==3){
+  clock.enable_tsc();
+  for(@range(u16,128))|chunk|{
+   for(@range(u16,128))|i|{probe_words[i]=test_first+chunk*128+i;}
+   clock.get_timestamp(@ptrcast(*[3]u16,&ticks[0]));original_unpacker.decode(&probe_words,&probe_gold,128);clock.get_timestamp(@ptrcast(*[3]u16,&ticks[3]));
+   probe[2]+=(@as(u32,ticks[3])|(@as(u32,ticks[4])<<16))-(@as(u32,ticks[0])|(@as(u32,ticks[1])<<16));
+   clock.get_timestamp(@ptrcast(*[3]u16,&ticks[0]));unpacker.decode(&probe_words,&probe_fast,128);clock.get_timestamp(@ptrcast(*[3]u16,&ticks[3]));
+   probe[3]+=(@as(u32,ticks[3])|(@as(u32,ticks[4])<<16))-(@as(u32,ticks[0])|(@as(u32,ticks[1])<<16));
+   for(@range(u16,256))|i|{if(probe_gold[i]!=probe_fast[i]){probe[1]+=1;}}
+   probe[0]+=128;
+  }
+  clock.disable_tsc();
+ }
+ sys.unblock_cmd_stream();
+}
+comptime {
+ if(role==0 or role==1){@initialize_queue(oq,.{.color=if(role==0) hc else vc});@bind_local_task(sent_data,st);@bind_local_task(sent_control,ct);@set_teardown_handler(torn_h,hc);}
+ if(role==1 or role==2){@initialize_queue(iq,.{.color=if(role==1) hc else vc});@bind_local_task(received,rt);@set_teardown_handler(torn_v,vc);}
+ if(role==2){
+  @initialize_queue(oq,.{.color=@get_color(out_color)});@bind_local_task(sent_data,st);
+  if(children>0){@initialize_queue(liq,.{.color=@get_color(left_color)});@bind_local_task(received_left,lt);}
+  if(children>1){@initialize_queue(riq,.{.color=@get_color(right_color)});@bind_local_task(received_right,jt);}
+ }
+ if(role==0){@initialize_queue(liq,.{.color=@get_color(16)});@bind_local_task(returned,bt);}
+ @export_symbol(wp,"bank");@export_symbol(pp,"packet");@export_symbol(cp,"control");@export_symbol(lp,"local_result");@export_symbol(ap,"audit");@export_symbol(tp,"ticks");
+ @export_symbol(probep,"probe");@export_symbol(test_unpack);@export_symbol(leftp,"left");@export_symbol(rightp,"right");@export_symbol(scratchp,"aggregate");@export_symbol(arm);@export_symbol(start);
+}

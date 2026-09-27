@@ -36,3 +36,32 @@ class ColumnarTests(unittest.TestCase):
         profiles={(w['fp8_slots'],w['bf16_slots']) for w in workers}
         self.assertEqual(profiles,{(110,13),(111,12)})
         self.assertEqual(max(f*260+b*512 for f,b in profiles),35256)
+
+
+class CoupledLeaseTests(unittest.TestCase):
+    def test_overlay_does_not_inherit_superseded_bank_census(self):
+        from spatial.columnar import materialize
+        import json
+        evidence=Path(__file__).resolve().parents[1]/'evidence'
+        base=evidence/'model-atlas-001.json';overlay=evidence/'columnar-plan-001.json'
+        original=base.read_bytes();atlas=materialize(base,overlay)
+        self.assertNotIn('bank_profiles',atlas)
+        self.assertEqual(atlas['metrics']['resident_matrix_bytes_including_padding_scales'],29840350720)
+        self.assertEqual(atlas['metrics']['segment_descriptors'],619)
+        self.assertEqual(atlas['value_arena'],json.loads(original)['value_arena'])
+        self.assertFalse(atlas['compiled_sram_admitted'])
+        self.assertFalse(atlas['full_model_executable'])
+        self.assertEqual(base.read_bytes(),original)
+
+    def test_tree_input_and_return_routes_have_unique_pe_color_owners(self):
+        from spatial.coupled_bank import CoupledBankPlan
+        import re
+        plan=CoupledBankPlan();text=plan.emit_layout()
+        configs=[tuple(map(int,m)) for m in re.findall(r'@set_color_config\((\d+),(\d+),@get_color\((\d+)\)',text)]
+        self.assertEqual(len(configs),len(set(configs)))
+        self.assertEqual({c for _,_,c in configs}&{2,16,20},{2,16,20})
+        self.assertEqual(len({tuple(n['xy']) for n in plan.nodes()}),12)
+        # Native dot DSRs cannot share a descriptor register with live transport.
+        leases=plan.document()['leases'];native=set(leases['native_dsrs'])
+        self.assertFalse(native&{leases[n]['dsr'] for n in ['input','left','right','send']})
+        self.assertEqual(len({leases[n]['ut'] for n in ['input','left','right','send']}),4)

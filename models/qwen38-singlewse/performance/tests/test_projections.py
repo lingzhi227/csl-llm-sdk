@@ -45,6 +45,14 @@ class ProjectionTests(unittest.TestCase):
             self.assertEqual(p['events'][1]['original_nodes'], [1])
             self.assertEqual(p['events'][2]['original_nodes'], [2])
 
+    def test_storage_class_identity_prevents_cross_class_fusion(self):
+        graph,atlas=fixture();atlas['classes']['fp8-other']=dict(pes=120,phase=0)
+        atlas['matrices'][2]['storage_class']='fp8-other'
+        p=bundle_graph(graph,atlas)
+        self.assertEqual(p['events'][1]['original_nodes'],[1])
+        self.assertEqual(p['events'][2]['original_nodes'],[2])
+        self.assertEqual(p['bundles'][2]['storage_class'],'fp8-other')
+
     def test_live_storage_alias_is_rejected(self):
         graph, atlas = fixture(); atlas['value_arena']['values']['d']['base_cell'] = 96
         with self.assertRaisesRegex(ValueError, 'live storage alias'):

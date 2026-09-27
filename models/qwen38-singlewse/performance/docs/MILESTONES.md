@@ -587,3 +587,41 @@ Full-matrix routes and output return, source quant/value delivery, bidirectional
 vertical execution, new-class reduction forests and combined runtime SRAM remain
 the next gates. P14 owner descriptors cannot be reused unchanged with this
 overlay. Complete original model2,000 dependent tokens/s is still unmet.
+
+## P16: complete class binding, physical composed bank and exact shift decoder
+
+All original projection dispatch descriptors now explicitly name the P15
+storage classes. Four regenerated forests independently pass 44,718,648 PE/color
+entries, all 105,052,160 original tiles, graph/arena dependencies and FP8 input
+consumer/color checks. Final audit002 completes in 3.613 seconds at 241,900 KiB
+RSS. Plan002 corrects inherited base census/aggregate metadata without changing
+any graph, dispatch or dense route output; earlier plan/audit001 remain frozen.
+No full-matrix route execution is implied by these metadata checks.
+
+`coupled-bank-hw-001` composes two-stage operand filtering, original native
+FP8/BF16 arithmetic in twelve maximum mixed banks, ordered subtree reduction
+and return to the source controller. All ten cases pass 240 local values,
+240 subtree values, 20 returned values, full packet/callback/teardown checks,
+421,560 original payload bytes and 1,512 padding bytes. Same-controller complete
+component intervals are 1,685–2,499 cycles (median 1,911), excluding host arming
+and final audit callbacks. This is partial-K independent-operand execution,
+not a complete matrix or model throughput measurement.
+
+The no-temporary FP8 decoder reduces nine vector operations to five. Exhaustive
+host and physical comparison checks all 65,536 packed patterns with no bit
+mismatch, plus the original native-dot and tree numerical gates. Matched physical
+decoder intervals are 250,563 versus 130,498 total cycles, a 1.92005x local gain.
+Both original and new decoder sources remain available. Actual compiled SRAM
+including the declared 4,096-byte stack is 48,032 bytes, leaving 96 bytes.
+
+Two early simulator attempts expose stale reads when child DMA buffers alias
+decoded scratch; separate receive buffers pass without relaxing the numerical
+gate. The exact cause is not established. All five attempts and diagnostic
+receipts remain frozen. Final simulation passes in 205.996 seconds. Both
+physical jobs succeed and release normally, and fresh account/system and
+workstation-lock audits show no owned allocation. All 39 source tests pass.
+See COUPLED-BANK.md and coupled-bank-summary-001.json.
+
+Full matrices, real quant/value delivery, BF16 input distribution, many-root
+output return, generic epochs, all-layer feedback and complete-model correctness
+and 2,000 dependent tokens/s measurement remain the integration objective.
