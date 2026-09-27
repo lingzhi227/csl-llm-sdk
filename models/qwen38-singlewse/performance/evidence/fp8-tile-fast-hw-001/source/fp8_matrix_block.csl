@@ -1,0 +1,39 @@
+// One K=128 block. Original FP8 weights stay resident; activation codes arrive
+// packed four per u32, followed by their FP32 dynamic scale as the last word.
+// Output is FP32 for the subsequent cross-block reduction; no BF16 cast here.
+param rows: u16;
+param row_phase: u16;
+const codec = @import_module("fp8_codec.csl");
+comptime { @comptime_assert(rows % 2 == 0 and row_phase < 128); }
+var expanded = @zeros([rows]f32);
+const yd = @get_dsr(dsr_dest,4);
+const ys = @get_dsr(dsr_src0,4);
+const ws = @get_dsr(dsr_src1,4);
+
+fn compute(weights:[*]u16, scales:[*]f32, packet:[*]u32, output:[*]f32) void {
+  const out_dsd = @get_dsd(mem1d_dsd,.{.base_address=output,.extent=rows});
+  const expanded_dsd = @get_dsd(mem1d_dsd,.{.base_address=&expanded,.extent=rows});
+  @fmovs(out_dsd,0.0);
+  @load_to_dsr(yd,out_dsd,.{.save_address=false});
+  @load_to_dsr(ys,out_dsd,.{.save_address=false});
+  @load_to_dsr(ws,expanded_dsd,.{.save_address=false});
+  for (@range(u16,128)) |c| {
+    const code: u16 = @as(u16,(packet[c/4] >> ((c%4)*8)) & 255);
+    for (@range(u16,rows/2)) |pair| {
+      const word: u16 = weights[c*(rows/2)+pair];
+      expanded[2*pair] = codec.decode(word & 255);
+      expanded[2*pair+1] = codec.decode(word >> 8);
+    }
+    @fmacs(yd,ys,ws,codec.decode(code));
+  }
+  const activation_scale: f32 = @bitcast(f32,packet[32]);
+  for (@range(u16,rows)) |r| {
+    output[r] = (output[r] * activation_scale) * scales[(r+row_phase)/128];
+  }
+}
+
+// Reuse expansion scratch after compute for the row-reduction receive.
+fn reduction_buffer() [*]f32 { return &expanded; }
+fn add_previous(output:[*]f32) void {
+  for (@range(u16,rows)) |r| { output[r] += expanded[r]; }
+}

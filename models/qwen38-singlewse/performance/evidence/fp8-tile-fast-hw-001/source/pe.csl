@@ -1,0 +1,49 @@
+// Compare unchanged scalar FP8 arithmetic with packed-vector native arithmetic.
+param memcpy_params;param fast:bool;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const clock=@import_module("<time>");
+const legacy=@import_module("fp8_matrix_block.csl",.{.rows=2,.row_phase=0});
+const unpacker=@import_module("fp8_unpack.csl",.{.max_pairs=1024});
+var weights=@zeros([1024]u16);var packet=@zeros([33]u32);var scales=@zeros([3]f32);
+var decoded=@zeros([2048]u16);var operand=@zeros([128]u16);
+var output=@zeros([2]f32);var ticks=@zeros([12]u16);var calls=@zeros([2]u32);
+const wp:[*]u16=&weights;const pp:[*]u32=&packet;const sp:[*]f32=&scales;
+const dp:[*]u16=&decoded;const yp:[*]f32=&output;const tp:[*]u16=&ticks;const cp:[*]u32=&calls;
+const yd=@get_dsr(dsr_dest,4);const ys=@get_dsr(dsr_src0,4);const ws=@get_dsr(dsr_src1,4);
+fn step(value:f16) void {@fmachs(yd,ys,ws,value);}
+fn unpack() void {
+  clock.enable_tsc();clock.get_timestamp(@ptrcast(*[3]u16,&ticks[0]));
+  if(comptime fast){unpacker.decode(wp,dp,1024);}
+  else{
+    for(@range(u16,1024))|i|{
+      const v:u16=weights[i];
+      decoded[2*i]=((v&127)<<7)|((v&128)<<8);
+      decoded[2*i+1]=((v&32512)>>1)|(v&32768);
+    }
+  }
+  clock.get_timestamp(@ptrcast(*[3]u16,&ticks[9]));clock.disable_tsc();calls[0]+=1;sys.unblock_cmd_stream();
+}
+fn compute() void {
+  clock.enable_tsc();clock.get_timestamp(@ptrcast(*[3]u16,&ticks[0]));
+  if(comptime fast){
+    unpacker.decode(wp,dp,128);unpacker.decode(@ptrcast([*]u16,pp),&operand,64);
+    clock.get_timestamp(@ptrcast(*[3]u16,&ticks[3]));
+    const out=@get_dsd(mem1d_dsd,.{.base_address=yp,.extent=2});
+    const w=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]f16,dp),.extent=2});
+    const x=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]f16,&operand),.extent=128});
+    @fmovs(out,0.0);@load_to_dsr(yd,out,.{.save_address=false});@load_to_dsr(ys,out,.{.save_address=false});
+    @load_to_dsr(ws,w,.{.save_address=true});@map(step,x);
+    clock.get_timestamp(@ptrcast(*[3]u16,&ticks[6]));
+    const activation_scale:f32=@bitcast(f32,packet[32]);
+    for(@range(u16,2))|i|{output[i]=((output[i]*65536.0)*activation_scale)*scales[0];}
+  }else{
+    clock.get_timestamp(@ptrcast(*[3]u16,&ticks[3]));legacy.compute(wp,sp,pp,yp);
+    clock.get_timestamp(@ptrcast(*[3]u16,&ticks[6]));
+  }
+  clock.get_timestamp(@ptrcast(*[3]u16,&ticks[9]));clock.disable_tsc();calls[1]+=1;sys.unblock_cmd_stream();
+}
+comptime {
+  @export_symbol(wp,"weights");@export_symbol(pp,"packet");@export_symbol(sp,"scales");
+  @export_symbol(dp,"decoded");@export_symbol(yp,"output");@export_symbol(tp,"ticks");
+  @export_symbol(cp,"calls");@export_symbol(unpack);@export_symbol(compute);
+}

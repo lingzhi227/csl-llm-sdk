@@ -1,4 +1,4 @@
-# Candidate exact FP8 lowering (not yet a device kernel)
+# Exact FP8 lowering and physical qualification
 
 The baseline decodes each weight through a scalar table before a vector FP32 FMA.
 The official installed SDK `dsd_ops.csl` exposes `@fmachs` for native FP16 inputs
@@ -21,12 +21,12 @@ can preserve the original FP32 result: multiplication by a power of two commutes
 with rounding in the safe exponent range of these bounded 128-term products.
 This needs explicit accumulation and boundary tests, not just the encoding proof.
 
-The critical outstanding condition is **device FP16 subnormal input handling**.
+An essential qualification condition is **device FP16 subnormal input handling**.
 Small FP8 magnitudes map to FP16 subnormals. A flush-to-zero input policy would
-invalidate the transformation. The next bounded kernel probe must test every
+invalidate the transformation. The bounded kernel probe must test every
 finite encoding (including signed zero), mixed products and actual original-weight
 tiles before measuring its cycles. Packed bit extraction also needs a compiled,
-measured vector implementation. No speedup or device correctness is asserted here.
+measured vector implementation. The physical results below supply the tested scope; this derivation alone is not device evidence.
 
 `fp8-native-sim-001` has now passed all 64,516 ordered finite products through
 `@fmachs`, including FP16 subnormal inputs, followed by two 128-repeat accumulations
@@ -40,3 +40,16 @@ the two repeated-accumulation cases and retention with normal resource release.
 This establishes the required subnormal behavior for the tested multiply path.
 Packed decode, variable-sign dot sums with original model tiles, overlap and
 full-model output qualification remain outstanding.
+
+P3 now adds `fp8_unpack.csl`: nine synchronous vector bitwise/shift/add operations
+extract interleaved half values without a scalar table or whole-weight expansion.
+`fp8-tile-fast-hw-001` proves all 65,536 packed pairs transform as specified, and
+32 original-weight 2x128 cases retain exact scalar FP32 outputs after rescaling.
+See MILESTONES.md for scope, independent bounds, physical timings and release.
+All transformations retain the pinned original weights; no recalibration occurs.
+
+The measured critical path still spends 829 of 1,286 cycles decoding weight and
+operand bytes. This motivates predecoding only the next small resident weight
+tile, and multicasting an already converted operand when appropriate. Such work
+can move off the dependency path only after buffer/event ownership and overlap
+are implemented and measured. No overlap is inferred from these synchronous tests.

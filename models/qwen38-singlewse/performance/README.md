@@ -17,3 +17,11 @@ same-PE cycle timing before adding model computation. It is not model inference.
 Run the source checks with `python3 -m unittest discover -s performance/tests`.
 Run `python3 performance/tools/build_mesh.py --output <new-directory>` to lower
 a checked mesh plan into CSL. See `docs/MILESTONES.md`, `docs/ARCHITECTURE.md` and `docs/MEASUREMENT.md`.
+
+P3 qualifies packed-vector FP8 decoding and original-weight 2x128 native dot
+products on real WSE-3: 1,286 cycles versus 11,316 for the unchanged scalar tile,
+with exact matched outputs for the frozen cases. This is a local operator speedup;
+complete model performance is still unqualified. `spatial/banks.py` supplies a
+compact all-matrix ownership/storage candidate with explicit unproven placement
+and SRAM gates. Run `performance/tools/plan_banks.py --output <fresh-json>` to
+reproduce the estimate without loading checkpoint payloads.

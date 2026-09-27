@@ -1,0 +1,28 @@
+{
+  "passed": true,
+  "application_pes": 2,
+  "records": [
+    {
+      "file": "out/bin/out_0_0.elf",
+      "sha256": "aabbd08a95b9bb825654f7473f6e236d4053eae0aff62c7848eb6656fb1246dc",
+      "low_section_end": 11824,
+      "low_section_bytes": 11822,
+      "static_allocated_section_bytes": 12210,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out/bin/out_1_0.elf",
+      "sha256": "646fcd8ef9c8342ff91678a0c41b4bdd7d698d0af9a958761fbb38af235e5077",
+      "low_section_end": 14112,
+      "low_section_bytes": 14102,
+      "static_allocated_section_bytes": 14490,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    }
+  ]
+}

@@ -40,12 +40,6 @@ thread creation failure without raising the 64-task limit. Simulator fatal-log
 monitoring now terminates a halted simulator promptly. Hard memory/no-swap,
 CPU/runtime and shared-lock limits remain in force.
 
-## Next evidence
-
-Physical 256 PE transport cycles and normal allocation release; then native
-mixed FP16/FP32 operator qualification, packed vector decode, regional GEMV and
-reduction scheduling. Full-model speed claims require full-model evidence.
-
 ## P1: physical 256 PE stream qualification
 
 `mesh-transport-hw-001` completed all five physical cases on one WSE-3. Every
@@ -86,3 +80,50 @@ owned active hardware jobs or system assignments.
 
 The compiled one-PE program uses 10,128 bytes including the declared
 4,096-byte stack allowance, below the 48,128-byte application ceiling.
+
+## P3: physical packed FP8 original-weight tiles and bank ownership plan
+
+`fp8-tile-fast-hw-001` passes all 65,536 packed two-byte patterns through the
+vector bit insertion transform, and 32 dot cases built from eight original
+layer-0 matrix tiles and four fixed activation patterns. NaN encodings participate
+only in the bit-transform test; numerical fixtures contain finite original FP8.
+The original shard and fixture are hash pinned. Both PEs receive identical inputs:
+one executes unchanged scalar FP8 arithmetic, the other vector decoding followed
+by native mixed FP16/FP32 arithmetic in the original 128-term order.
+
+All optimized outputs are bit-identical to the scalar outputs (zero signs
+canonicalized), finite, and within the frozen independent FP64 absolute-product
+bound. The maximum observed FP64 error is 3.814697265625e-6. All weights, scales,
+packets and call counts pass retention checks; normal stop completes.
+
+Physical 2x128 tile totals are **11,316 scalar cycles versus 1,286 vector/native
+cycles**, an 8.799x local speedup. The latter includes 829 cycles decoding weights
+and activations, 424 GEMV cycles and 33 finalization cycles. These boundaries include
+timestamp overhead; there is no assumed clock frequency. Standalone extraction
+of 2,048 bytes takes 3,070–3,071 vector cycles versus 30,734 scalar cycles.
+This is not a complete projection, inter-PE reduction, overlap or model token rate.
+
+Both jobs succeeded and released normally without cleanup errors: compile
+`wsjob-hwtzlyzcypfouevqvpgjxb` (41.416 seconds stage wall) and runtime
+`wsjob-jgkalcjj5cwrnfhdbym5u2` (71.417 seconds stage wall). Maximum compiled SRAM
+plus the unchanged 4,096-byte stack allowance is 18,208 bytes. A fresh account and
+system audit confirms no owned active job or assignment. Simulator failure 001
+(reserved parameter name) and complete simulator 002 remain frozen.
+
+The separate compact weight-bank planner binds all 1,251 original tensors,
+including 498 matrices and 400 FP8 scale aliases. Under the explicit rows=2 policy,
+853,616 PEs hold compressed matrix banks and 16,384 PEs are reserved for other
+actors. The bank estimate includes replicated FP32 scales, four descriptor bytes
+per tile, 6,144 code bytes, 4,096 stack bytes and 1,536 scratch bytes. Its maximum is
+47,536 bytes under the 48,128-byte ceiling, leaving only 592 bytes. **This is an
+estimated ownership/storage result, not compiled whole-model SRAM admission.**
+Actual routes, descriptor encoding, code size, non-matrix state and complete
+execution remain to be implemented. Ten source tests pass, including independent
+cyclic-ownership enumeration and cross-matrix local-offset uniqueness.
+
+## Next evidence
+
+Compile a resident bank actor with actual buffer/code extents; expose tile
+predecode and operand receive as separate readiness events. Then measure regional
+GEMV, numerically qualified reduction and overlap before complete-model integration.
+No component milestone satisfies the full-model 2,000 tokens/s target.
