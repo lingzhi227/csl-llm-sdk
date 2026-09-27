@@ -1,0 +1,32 @@
+{
+  "phase": "P2",
+  "passed": true,
+  "physical": true,
+  "full_model": false,
+  "exhaustive_ordered_products": 64516,
+  "completed_cases": 256,
+  "timing": [
+    {
+      "input_code": 1,
+      "repeats": 128,
+      "elements": 254,
+      "cycles": 17320,
+      "cycles_per_fma_vector": 135.3125,
+      "physical": true,
+      "clock_hz": null
+    },
+    {
+      "input_code": 126,
+      "repeats": 128,
+      "elements": 254,
+      "cycles": 17321,
+      "cycles_per_fma_vector": 135.3203125,
+      "physical": true,
+      "clock_hz": null
+    }
+  ],
+  "max_sram_bytes_with_declared_stack": 10128,
+  "artifact_sha256": "f16ce520fdf8f69680f23b1408baa5693f8f03cac5723be3b1b8612fad0cbc17",
+  "all_owned_jobs_released": true,
+  "scope": "Exact scaledFP8 finite products and repeated nativeFP16/FP32 accumulation, not packed FP8 GEMV or whole-model inference"
+}

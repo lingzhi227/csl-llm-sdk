@@ -64,3 +64,25 @@ hours. A fresh account/system audit found no owned active jobs or assignments.
 
 All 256 compiled application ELFs passed the local SRAM gate; maximum low-section
 end plus the declared 4,096-byte stack allowance is 10,752 bytes, below 48,128.
+
+## P2: exact native mixed-precision products on WSE-3
+
+`fp8-native-hw-001` passed all 64,516 ordered products of finite FP8 encodings,
+including encodings that become FP16 subnormals, plus two 128-repeat accumulation
+cases and weight retention. Actual FP32 outputs equal the independent expected
+finite values exactly, with zero signs canonicalized by the positive-zero FMA
+accumulator. Original tensor weights, packed extraction and complete GEMV are not
+yet part of this probe.
+
+A 254-element native mixed FP16/FP32 FMA vector takes 135.3125 to 135.3203125 cycles
+per iteration in this loop. This is an operator measurement, not a model token
+rate. These results motivate smaller per-PE matrix tiles and interleaved weight
+banks, rather than assuming a large resident tile can meet the per-stage budget.
+
+Compile `wsjob-6knikeasu8pkw2bv6p3gzg` and execute
+`wsjob-btccu78jtevwtjzupy3y5h` both succeeded and released normally. Their stage wall
+times were 41.464 seconds and 71.394 seconds. A fresh resource audit confirms no
+owned active hardware jobs or system assignments.
+
+The compiled one-PE program uses 10,128 bytes including the declared
+4,096-byte stack allowance, below the 48,128-byte application ceiling.

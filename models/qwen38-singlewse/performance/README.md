@@ -8,7 +8,7 @@ The acceptance target is **one physical WSE-3, the complete pinned original
 Qwen3.8-27B-FP8 text model, correct dependent sentence generation, at least
 2,000 output tokens/s per request**. Batched throughput, simulated time,
 partial layers, projected operator rates and commercial serving claims cannot
-satisfy that target. No performance success is claimed yet.
+satisfy that target. The full-model speed target remains unmet; qualified component milestones are recorded below.
 
 The first executable slice is a compiler-generated 2D multicast / acknowledgement
 microbenchmark, now qualified on 256 physical WSE-3 PEs. It establishes explicit routes, queues, event ownership and

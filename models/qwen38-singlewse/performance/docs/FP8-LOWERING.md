@@ -34,3 +34,9 @@ and weight retention. This is WSE-3 simulator evidence. Each 254-element repeate
 FMA vector took 135.09375 simulator cycles including its loop. The physical probe
 is staged separately; these observations are not physical timing or a packed
 FP8 GEMV result.
+
+The subsequent `fp8-native-hw-001` physical probe also passed all 64,516 products,
+the two repeated-accumulation cases and retention with normal resource release.
+This establishes the required subnormal behavior for the tested multiply path.
+Packed decode, variable-sign dot sums with original model tiles, overlap and
+full-model output qualification remain outstanding.

@@ -1,0 +1,32 @@
+{
+  "passed": true,
+  "normal_stop": true,
+  "physical": true,
+  "full_model": false,
+  "scope": "native mixed FP16 multiply / FP32 accumulate using exact scaled FP8 encodings, no packed decode or model inference",
+  "completed_cases": 256,
+  "exhaustive_ordered_products": 64516,
+  "failures": [],
+  "timing": [
+    {
+      "input_code": 1,
+      "repeats": 128,
+      "elements": 254,
+      "cycles": 17320,
+      "cycles_per_fma_vector": 135.3125,
+      "physical": true,
+      "clock_hz": null
+    },
+    {
+      "input_code": 126,
+      "repeats": 128,
+      "elements": 254,
+      "cycles": 17321,
+      "cycles_per_fma_vector": 135.3203125,
+      "physical": true,
+      "clock_hz": null
+    }
+  ],
+  "weights_retained": true,
+  "fp32_comparison": "exact finite equality; signed zero canonicalized by positive-zero FMA accumulator"
+}
