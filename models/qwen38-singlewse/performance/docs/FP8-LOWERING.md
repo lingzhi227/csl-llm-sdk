@@ -27,3 +27,10 @@ invalidate the transformation. The next bounded kernel probe must test every
 finite encoding (including signed zero), mixed products and actual original-weight
 tiles before measuring its cycles. Packed bit extraction also needs a compiled,
 measured vector implementation. No speedup or device correctness is asserted here.
+
+`fp8-native-sim-001` has now passed all 64,516 ordered finite products through
+`@fmachs`, including FP16 subnormal inputs, followed by two 128-repeat accumulations
+and weight retention. This is WSE-3 simulator evidence. Each 254-element repeated
+FMA vector took 135.09375 simulator cycles including its loop. The physical probe
+is staged separately; these observations are not physical timing or a packed
+FP8 GEMV result.

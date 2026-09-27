@@ -1,0 +1,26 @@
+// Encoding / native mixed-precision qualification only; no packed-weight decode.
+param memcpy_params;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const clock=@import_module("<time>");
+var weights=@zeros([254]u16);var input=@zeros([1]u16);
+var output=@zeros([254]f32);var ticks=@zeros([6]u16);var calls=@zeros([1]u32);
+const wp:[*]u16=&weights;const xp:[*]u16=&input;const yp:[*]f32=&output;
+const tp:[*]u16=&ticks;const cp:[*]u32=&calls;
+const yd=@get_dsr(dsr_dest,4);const ys=@get_dsr(dsr_src0,4);const ws=@get_dsr(dsr_src1,4);
+fn compute(iterations:u16) void {
+  @assert(iterations>0 and iterations<=128);
+  const out=@get_dsd(mem1d_dsd,.{.base_address=yp,.extent=254});
+  const weight=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]f16,wp),.extent=254});
+  @fmovs(out,0.0);
+  @load_to_dsr(yd,out,.{.save_address=false});@load_to_dsr(ys,out,.{.save_address=false});
+  @load_to_dsr(ws,weight,.{.save_address=false});
+  const value:f16=@bitcast(f16,input[0]);
+  clock.enable_tsc();clock.get_timestamp(@ptrcast(*[3]u16,&ticks[0]));
+  var i:u16=0;while(i<iterations){@fmachs(yd,ys,ws,value);i+=1;}
+  clock.get_timestamp(@ptrcast(*[3]u16,&ticks[3]));clock.disable_tsc();
+  calls[0]+=1;sys.unblock_cmd_stream();
+}
+comptime {
+  @export_symbol(wp,"weights");@export_symbol(xp,"input");@export_symbol(yp,"output");
+  @export_symbol(tp,"ticks");@export_symbol(cp,"calls");@export_symbol(compute);
+}

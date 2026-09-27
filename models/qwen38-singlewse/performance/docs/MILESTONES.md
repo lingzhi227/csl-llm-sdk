@@ -3,7 +3,7 @@
 ## P0: checked graph and executable stream foundation
 
 Status: source and simulator milestone. The full-model 2,000 tokens/s target has
-not been reached. Physical transport qualification is a separate pending step.
+not been reached. Physical transport qualification completed separately in P1 below.
 
 Implemented and checked:
 
@@ -45,3 +45,22 @@ CPU/runtime and shared-lock limits remain in force.
 Physical 256 PE transport cycles and normal allocation release; then native
 mixed FP16/FP32 operator qualification, packed vector decode, regional GEMV and
 reduction scheduling. Full-model speed claims require full-model evidence.
+
+## P1: physical 256 PE stream qualification
+
+`mesh-transport-hw-001` completed all five physical cases on one WSE-3. Every
+endpoint packet, epoch count, child acknowledgement count and independent root
+checksum passed, with changed inputs and restarted requests. The 33-word cases
+measured 2,248 root cycles per roundtrip, and the 256-word cases measured 2,500.
+These are complete multicast plus all-endpoint acknowledgement cycles, not model
+token latency. Clock frequency is not assumed. Host completion plus audit transfer
+is reported separately in the raw compact results.
+
+Both jobs succeeded and released normally, with no cleanup errors:
+`wsjob-hd2dkp3emcbrcfmv9ytx2d` (compile) and
+`wsjob-nwki8fjpbhdyphj3rs2kfw` (execute). Stage wall times were 232.454 seconds and
+71.407 seconds, including infrastructure work. They are not provider-billed node
+hours. A fresh account/system audit found no owned active jobs or assignments.
+
+All 256 compiled application ELFs passed the local SRAM gate; maximum low-section
+end plus the declared 4,096-byte stack allowance is 10,752 bytes, below 48,128.

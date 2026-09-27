@@ -65,3 +65,33 @@ feedback and observation must be accounted for. Matrix weights reside in differe
 regions; aggregate wafer peak bandwidth cannot be applied to all sequential
 layers at once. Scalar FP8 expansion and nearly full local SRAM are additional
 constraints requiring measured kernel work.
+
+## Temporal weight banks across broad spatial compute regions
+
+Layer regions are logical ownership boundaries, not a requirement to give each
+layer a small permanent exclusive rectangle. The native mixed-precision simulator
+probe completed 254-element FP16/FP32 FMA vectors in about 135 cycles including its
+loop (device qualification remains separate). A baseline 272x128 weight tile thus
+contains far too much sequential work for a roughly two-microsecond projection
+budget, even before scalar FP8 expansion or communication.
+
+The next placement candidate therefore distributes small tiles of **each**
+projection across many more PEs, and packs tiles from **different layers** into
+each PE's resident compressed weight bank. For example, a 2x128 tile of the
+17408x5120 gate matrix needs 348,160 participants with only 256 original FP8 bytes
+per participating PE. This is an analytical partition count, not an admitted
+layout. It must still include scales, bank descriptors, code, stack, state and
+routing, and account for phases with multiple tiles per PE.
+
+The bank exposes its next local tile early: decode into bounded scratch while
+other regions execute, receive operands asynchronously, consume the decoded tile,
+then release its buffer. A PE that is inactive in the current projection can
+prepare its next projection. Explicit buffer ownership, prefetch readiness and
+completion credits are required; a throughput claim cannot assume overlap that
+has not been measured. This preserves weight/compute locality without expanding
+the entire FP8 model into a BF16 copy that would exceed single-wafer SRAM.
+
+Manual controls will include small-tile dimensions, tensor-to-bank phase offsets,
+regional reduction geometry, prefetch distance and one/two scratch buffers. Compare
+this candidate with dedicated layer rectangles using measured critical paths and
+link occupancy. No layout is selected merely from wafer-wide peak bandwidth.

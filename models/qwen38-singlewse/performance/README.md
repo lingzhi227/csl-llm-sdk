@@ -11,9 +11,9 @@ partial layers, projected operator rates and commercial serving claims cannot
 satisfy that target. No performance success is claimed yet.
 
 The first executable slice is a compiler-generated 2D multicast / acknowledgement
-microbenchmark. It establishes explicit routes, queues, event ownership and
+microbenchmark, now qualified on 256 physical WSE-3 PEs. It establishes explicit routes, queues, event ownership and
 same-PE cycle timing before adding model computation. It is not model inference.
 
 Run the source checks with `python3 -m unittest discover -s performance/tests`.
 Run `python3 performance/tools/build_mesh.py --output <new-directory>` to lower
-a checked mesh plan into CSL. See `docs/ARCHITECTURE.md` and `docs/MEASUREMENT.md`.
+a checked mesh plan into CSL. See `docs/MILESTONES.md`, `docs/ARCHITECTURE.md` and `docs/MEASUREMENT.md`.
