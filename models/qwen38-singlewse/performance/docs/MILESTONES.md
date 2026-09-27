@@ -408,3 +408,37 @@ active job or assignment. Stage wall intervals are not device latency or final
 provider billing. Original functional runtime/code and all failed attempts remain
 unchanged. Seventeen source tests and the no-job actual-artifact framing proof
 pass; the full original model and2,000 dependent tokens/s remain unachieved.
+
+## P10: physical mixed resident FP8/BF16 banks
+
+`mixed-bank-hw-001` closes the reserved-but-unexecuted BF16 gap. Every PE holds112
+original FP8 tiles and12 original BF16 tiles while executing either native path
+and P9's tree-only reduction. BF16 expands only two weights at a time to FP32,
+using DSR7 independently from pending child receives. Checked4-byte type/slot
+control replaces unused per-tile metadata; complete-model address ownership is
+still unimplemented. The actual maximum footprint is47,472 bytes including the
+unchanged4,096-byte stack allowance, leaving656 bytes below48,128.
+
+The sixPE/2x3 physical component passes12 epochs, independent exact FP32 local and
+subtree results, frozen FP64 bounds, complete callbacks, exact replay and all bank
+bytes after one initial upload. The744 original tiles include BF16 head, untied
+embedding and recurrent input weights alongside FP8 gate/out/down weights. First,
+middle,last slots, zeros, tiny normal values, large patterns and alternating types
+are covered. BF16 subnormal arithmetic and embedding lookup are not qualified by
+this test. Maximum FP64 absolute error0.00390625 belongs to the largeBF16 case and
+passes both the frozen bound and exact orderedFP32 gate.
+
+Root component timing is1,252 cycles for FP8,1,213 for BF16 and1,217–1,245 for mixed
+PE types. Timing includes resident dispatch, local arithmetic and the sixPE tree;
+initialization, host operand/control transfer and receive arming are separate.
+Different operands prevent a precision-speedup comparison. This is not fullK,
+fullM or model token throughput.
+
+Compile `wsjob-cgptn3ebb4wdhvr3grwbdp` and runtime
+`wsjob-jfpmomx3qw4gztsme62zh4` both succeed and release normally. Their stage wall
+times are41.451 and81.573 seconds; provider-billed hours are unavailable. Fresh
+account/system accounting shows no owned allocation. Simulator002 passes in111.014
+seconds and releases its bounded service/lock. Simulator001's builtin-name alias
+compiler failure is preserved;002 changes that alias only and reuses the exact
+frozen fixture. Nineteen source tests pass. See MIXED-BANK.md for implementation
+and acceptance boundaries. Full-model2,000 dependent tokens/s remains unmet.

@@ -60,3 +60,11 @@ and two separately checked summation orders pass, including intermediate results
 and retention. Only two output rows per matrix are executed. The failed initial
 simulator and artifact-loading attempt are preserved; the successful run reuses
 the compiled artifact and releases normally. See `docs/FULL-K-CONTRACTION.md`.
+
+P10 qualifies actual BF16 computation beside FP8 in full112/12 resident banks on
+six physical PEs. All12 switching/replay epochs and complete bank retention pass;
+compiled footprint47,472 bytes including stack leaves656 bytes. The explicit
+4-byte typed-slot control replaces unused per-tile metadata. Root component cycles
+are1,252 FP8 and1,213 BF16, with different original operands; this is not a precision
+speedup or model rate. See `docs/MIXED-BANK.md`. Device-controlled epochs, full-model
+physical ownership/routes and the2,000 tokens/s target remain unfinished.

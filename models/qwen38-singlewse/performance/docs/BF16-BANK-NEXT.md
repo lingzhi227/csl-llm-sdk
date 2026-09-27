@@ -1,4 +1,8 @@
-# Next: execute BF16 banks beside the qualified FP8 path
+# Design antecedent: execute BF16 banks beside the qualified FP8 path
+
+P10 now implements and physically qualifies the representative combined bank;
+see [MIXED-BANK.md](MIXED-BANK.md). The proposal below is retained as design history,
+not the current implementation status. Complete-model scheduling remains unfinished.
 
 The original untied embedding/head and other BF16 matrices remain required.
 P7 reserves their bytes but does not execute them. Adding another isolated FP8

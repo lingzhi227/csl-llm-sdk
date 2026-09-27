@@ -1,0 +1,319 @@
+{
+  "passed": true,
+  "normal_stop": true,
+  "physical": true,
+  "full_model": false,
+  "scope": "Six-PE mixed resident bank component; two output rows/tile,128 columns/tile; distinct original slices across slots, not a complete matrix. Host provides typed slot controls and already-encoded operands. BF16 executes finite normal/tiny normal/signed-zero activations with exact high-half expansion; no BF16 subnormal arithmetic qualification, embedding lookup, dynamic producer or full-model schedule.",
+  "application": [
+    2,
+    3
+  ],
+  "fixture_sha256": "40d7c4cc23b0f1b2fc940e81201b1c14463b919932b8588f0386598bb237980e",
+  "cases": [
+    {
+      "case": 0,
+      "operand_mode": "mixed",
+      "types": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "slots": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "root_contraction_cycles": 1252,
+      "max_abs_fp64_error": 1.706757757347077e-08,
+      "host_operand_upload_seconds": 0.001340712420642376,
+      "host_arm_and_ready_seconds": 0.056230220943689346,
+      "host_start_through_result_audit_seconds": 0.00300399586558342
+    },
+    {
+      "case": 1,
+      "operand_mode": "mixed",
+      "types": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "slots": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "root_contraction_cycles": 1213,
+      "max_abs_fp64_error": 2.0721927285194397e-08,
+      "host_operand_upload_seconds": 0.0013738218694925308,
+      "host_arm_and_ready_seconds": 0.0014049718156456947,
+      "host_start_through_result_audit_seconds": 0.0020312685519456863
+    },
+    {
+      "case": 2,
+      "operand_mode": "zero",
+      "types": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "slots": [
+        56,
+        56,
+        56,
+        56,
+        56,
+        56
+      ],
+      "root_contraction_cycles": 1252,
+      "max_abs_fp64_error": 0.0,
+      "host_operand_upload_seconds": 0.009111180901527405,
+      "host_arm_and_ready_seconds": 0.0017417650669813156,
+      "host_start_through_result_audit_seconds": 0.002327181398868561
+    },
+    {
+      "case": 3,
+      "operand_mode": "zero",
+      "types": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "slots": [
+        6,
+        6,
+        6,
+        6,
+        6,
+        6
+      ],
+      "root_contraction_cycles": 1213,
+      "max_abs_fp64_error": 0.0,
+      "host_operand_upload_seconds": 0.0011661211028695107,
+      "host_arm_and_ready_seconds": 0.001260140910744667,
+      "host_start_through_result_audit_seconds": 0.001843675971031189
+    },
+    {
+      "case": 4,
+      "operand_mode": "tiny",
+      "types": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "slots": [
+        111,
+        111,
+        111,
+        111,
+        111,
+        111
+      ],
+      "root_contraction_cycles": 1252,
+      "max_abs_fp64_error": 1.7737547541862853e-15,
+      "host_operand_upload_seconds": 0.0011071404442191124,
+      "host_arm_and_ready_seconds": 0.0013042716309428215,
+      "host_start_through_result_audit_seconds": 0.0018108859658241272
+    },
+    {
+      "case": 5,
+      "operand_mode": "tiny",
+      "types": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "slots": [
+        11,
+        11,
+        11,
+        11,
+        11,
+        11
+      ],
+      "root_contraction_cycles": 1213,
+      "max_abs_fp64_error": 3.1806871698511196e-27,
+      "host_operand_upload_seconds": 0.0011323196813464165,
+      "host_arm_and_ready_seconds": 0.0013583013787865639,
+      "host_start_through_result_audit_seconds": 0.0019092075526714325
+    },
+    {
+      "case": 6,
+      "operand_mode": "boundary",
+      "types": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "slots": [
+        0,
+        13,
+        26,
+        39,
+        52,
+        65
+      ],
+      "root_contraction_cycles": 1252,
+      "max_abs_fp64_error": 6.198883056640625e-06,
+      "host_operand_upload_seconds": 0.001344701275229454,
+      "host_arm_and_ready_seconds": 0.0013086814433336258,
+      "host_start_through_result_audit_seconds": 0.001965627074241638
+    },
+    {
+      "case": 7,
+      "operand_mode": "boundary",
+      "types": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "slots": [
+        0,
+        5,
+        10,
+        3,
+        8,
+        1
+      ],
+      "root_contraction_cycles": 1213,
+      "max_abs_fp64_error": 0.00390625,
+      "host_operand_upload_seconds": 0.0011106887832283974,
+      "host_arm_and_ready_seconds": 0.0013445913791656494,
+      "host_start_through_result_audit_seconds": 0.001996817998588085
+    },
+    {
+      "case": 8,
+      "operand_mode": "mixed",
+      "types": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "slots": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "root_contraction_cycles": 1213,
+      "max_abs_fp64_error": 2.0721927285194397e-08,
+      "host_operand_upload_seconds": 0.0011143796145915985,
+      "host_arm_and_ready_seconds": 0.00126689113676548,
+      "host_start_through_result_audit_seconds": 0.0018318863585591316
+    },
+    {
+      "case": 9,
+      "operand_mode": "mixed",
+      "types": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "slots": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "root_contraction_cycles": 1252,
+      "max_abs_fp64_error": 1.706757757347077e-08,
+      "host_operand_upload_seconds": 0.0011288803070783615,
+      "host_arm_and_ready_seconds": 0.0012867003679275513,
+      "host_start_through_result_audit_seconds": 0.0018995171412825584
+    },
+    {
+      "case": 10,
+      "operand_mode": "mixed",
+      "types": [
+        0,
+        1,
+        0,
+        1,
+        0,
+        1
+      ],
+      "slots": [
+        10,
+        3,
+        44,
+        1,
+        78,
+        11
+      ],
+      "root_contraction_cycles": 1217,
+      "max_abs_fp64_error": 5.8120349422097206e-08,
+      "host_operand_upload_seconds": 0.0012193508446216583,
+      "host_arm_and_ready_seconds": 0.0012909118086099625,
+      "host_start_through_result_audit_seconds": 0.001902417279779911
+    },
+    {
+      "case": 11,
+      "operand_mode": "mixed",
+      "types": [
+        1,
+        0,
+        1,
+        0,
+        1,
+        0
+      ],
+      "slots": [
+        11,
+        28,
+        9,
+        62,
+        7,
+        96
+      ],
+      "root_contraction_cycles": 1245,
+      "max_abs_fp64_error": 2.0409515855135396e-08,
+      "host_operand_upload_seconds": 0.0011380203068256378,
+      "host_arm_and_ready_seconds": 0.0012544123455882072,
+      "host_start_through_result_audit_seconds": 0.0017701862379908562
+    }
+  ],
+  "host_initialization_seconds": 0.006040594540536404,
+  "all_weights_retained": true,
+  "weight_uploads": 1,
+  "clock_hz": null,
+  "timing_note": "Root start to result includes typed slot dispatch, FP8 weight decode or BF16 streaming expansion, native dot, reduction and start-entry skew. Control/operand upload, receive arming/readiness and initialization are separate. Root timestamp can precede sender callbacks; all callbacks audited before rearm. No full-K/matrix/model rate."
+}

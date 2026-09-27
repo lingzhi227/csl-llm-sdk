@@ -1,0 +1,18 @@
+{
+  "source_files": {
+    "csl/bf16_gemv.csl": "010085f1382f05d608de520f17b4ffb0e39366f0ca224382dbef74703fb65277",
+    "csl/bf16_resident.csl": "7d6109b40ef5dc17b3efdc1c77a04f4a9893d7889d2927dec5408fb5d733acde",
+    "performance/spatial/contraction.py": "a00ceb2a8001d5fd878fd1e8d76dde68d5b935d726e13135173299badae87fed",
+    "performance/probes/contraction/pe.csl": "b73bc94cc480d9c8bdc51ac54c265e4812df7c7bd1feb0376ffd55d962c6ce3f",
+    "performance/probes/contraction/prepare.py": "8fbf342307accba03edf1c4365324961418b6444e15c5aa9f3f5a0bae72b754f",
+    "performance/probes/contraction/run.py": "ba3f715fbef3d40fb3a3d9ef1524388c9233f6c3b2010faec20d9edc96f1af4c",
+    "performance/tools/stage_contraction_sim.py": "d57f89377b8fec39d0dae20630bfdbade2bddf3b361aea2d83c3e306b662b939",
+    "performance/tools/stage_contraction_hw.py": "928ceec25c3fe6a26019a0a5a4598103d17f976890ea6dafd23ddc620df6112d"
+  },
+  "changes": [
+    "BF16 ordered FP32 FMA retains original high-half expansion, shrinks scratch to2 floats, moves expansion toDSR7 and maps over128 rawBF16 words",
+    "P9 tree-only network drops activation decoder and chain comparison, adds full112 FP8+12 BF16 resident banks and checked4-byte typed slot control",
+    "Component fixtures cover original head/embedding and recurrent input matrices alongside originalFP8 projection tiles; sixPE partial-K scope",
+    "Reuse bounded source staging and physical lifecycle; all original functional sources unchanged"
+  ]
+}

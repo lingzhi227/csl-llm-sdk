@@ -1,0 +1,38 @@
+{
+  "physical": true,
+  "full_model": false,
+  "full_input_width": false,
+  "full_output_rows": false,
+  "application": [
+    2,
+    3
+  ],
+  "fp8_slots_per_pe": 112,
+  "bf16_slots_per_pe": 12,
+  "control_bytes_per_pe": 4,
+  "per_tile_metadata_bytes": 0,
+  "max_compiled_sram_plus_declared_stack": 47472,
+  "sram_margin_bytes": 656,
+  "cycle_ranges": {
+    "fp8": [
+      1252,
+      1252
+    ],
+    "bf16": [
+      1213,
+      1213
+    ],
+    "mixed": [
+      1217,
+      1245
+    ]
+  },
+  "epochs": 12,
+  "weight_uploads": 1,
+  "max_abs_fp64_error": 0.00390625,
+  "fixture_sha256": "40d7c4cc23b0f1b2fc940e81201b1c14463b919932b8588f0386598bb237980e",
+  "scope": "Six-PE mixed resident bank component; two output rows/tile,128 columns/tile; distinct original slices across slots, not a complete matrix. Host provides typed slot controls and already-encoded operands. BF16 executes finite normal/tiny normal/signed-zero activations with exact high-half expansion; no BF16 subnormal arithmetic qualification, embedding lookup, dynamic producer or full-model schedule.",
+  "timing_note": "Root start to result includes typed slot dispatch, FP8 weight decode or BF16 streaming expansion, native dot, reduction and start-entry skew. Control/operand upload, receive arming/readiness and initialization are separate. Root timestamp can precede sender callbacks; all callbacks audited before rearm. No full-K/matrix/model rate.",
+  "clock_hz": null,
+  "interpretation": "Actual mixed-path SRAM and resident lifecycle qualification, not full-model ownership/placement admission. Root timing includes representative sixPE tree, with different arithmetic by kind; no precision speedup claim from comparing them."
+}

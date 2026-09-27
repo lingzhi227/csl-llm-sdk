@@ -156,3 +156,11 @@ nodes. It qualifies two original output rows for each complete K width, rather
 than supplying full matrix placement. BF16 execution and shared resident-bank
 capacities are the next integration gap; see BF16-BANK-NEXT.md. An independent
 guarded-quantization proposal is documented separately and is unimplemented.
+
+P10 composes real FP8 and BF16 execution,112/12 resident slots and the tree protocol
+at47,472 bytes including stack on physical WSE-3. DSR7 streams lossless BF16
+high-half expansion through two FP32 temporaries; DSR4 is shared sequentially by
+the native dots. A checked4-byte per-PE type/slot control replaces unused per-tile
+metadata. This is representative sixPE executable admission, not the full-model
+address schedule. The next boundary is device input arrival and safe repeated
+epoch ownership without a host barrier on every contraction; see MIXED-BANK.md.

@@ -1,0 +1,276 @@
+{
+  "schema": "wse-mixed-bank-component-v1",
+  "plan": {
+    "blocks": [
+      6
+    ],
+    "mesh_width": 2,
+    "first_tree_color": 3,
+    "chain_colors": [
+      17,
+      18
+    ],
+    "input_queues": [
+      2,
+      3,
+      4
+    ],
+    "output_queues": [
+      2,
+      3
+    ],
+    "tasks": [
+      8,
+      9,
+      10
+    ],
+    "dsrs": [
+      3,
+      5,
+      6
+    ],
+    "fp8_slots": 112,
+    "bf16_slots": 12
+  },
+  "resources": {
+    "application_pes": 6,
+    "active_pes": 6,
+    "full_model": false,
+    "full_input_width": false,
+    "full_output_rows": false,
+    "stack_allowance": 4096,
+    "sram_ceiling": 48128,
+    "compiled_sram_admitted": false,
+    "resident_payload_bytes_per_pe": 35264,
+    "control_bytes_per_pe": 4,
+    "per_tile_descriptor_bytes": 0,
+    "descriptor_leases": {
+      "child_receives": [
+        3,
+        5
+      ],
+      "send": 6,
+      "native_dot": 4,
+      "bf16_expansion": 7
+    },
+    "metadata_policy": "Checked [kind,slot] u16 control per PE; caller supplies ownership. No per-tile metadata array. Complete model address schedule not implemented.",
+    "schedule": "Arm all child receives, host readiness audit, local typed resident dot then local/left/right ordered tree. No chain comparison.",
+    "timing": "Root own start to result, same-clock only; host control/operand upload and arming excluded and separately reported."
+  },
+  "trees": [
+    [
+      {
+        "rank": 0,
+        "size": 6,
+        "depth": 0,
+        "parent": null,
+        "side": null,
+        "children": [
+          1,
+          4
+        ]
+      },
+      {
+        "rank": 1,
+        "size": 3,
+        "depth": 1,
+        "parent": 0,
+        "side": 0,
+        "children": [
+          2,
+          3
+        ]
+      },
+      {
+        "rank": 2,
+        "size": 1,
+        "depth": 2,
+        "parent": 1,
+        "side": 0,
+        "children": []
+      },
+      {
+        "rank": 3,
+        "size": 1,
+        "depth": 2,
+        "parent": 1,
+        "side": 1,
+        "children": []
+      },
+      {
+        "rank": 4,
+        "size": 2,
+        "depth": 1,
+        "parent": 0,
+        "side": 1,
+        "children": [
+          5
+        ]
+      },
+      {
+        "rank": 5,
+        "size": 1,
+        "depth": 2,
+        "parent": 4,
+        "side": 0,
+        "children": []
+      }
+    ]
+  ],
+  "routes": [
+    {
+      "x": 0,
+      "y": 0,
+      "color": 3,
+      "rx": "EAST",
+      "tx": [
+        "RAMP"
+      ]
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "color": 3,
+      "rx": "RAMP",
+      "tx": [
+        "WEST"
+      ]
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "color": 5,
+      "rx": "SOUTH",
+      "tx": [
+        "RAMP"
+      ]
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "color": 5,
+      "rx": "RAMP",
+      "tx": [
+        "NORTH"
+      ]
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "color": 6,
+      "rx": "SOUTH",
+      "tx": [
+        "RAMP"
+      ]
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "color": 6,
+      "rx": "WEST",
+      "tx": [
+        "NORTH"
+      ]
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "color": 6,
+      "rx": "RAMP",
+      "tx": [
+        "EAST"
+      ]
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "color": 4,
+      "rx": "EAST",
+      "tx": [
+        "RAMP"
+      ]
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "color": 4,
+      "rx": "SOUTH",
+      "tx": [
+        "WEST"
+      ]
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "color": 4,
+      "rx": "WEST",
+      "tx": [
+        "NORTH"
+      ]
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "color": 4,
+      "rx": "SOUTH",
+      "tx": [
+        "EAST"
+      ]
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "color": 4,
+      "rx": "RAMP",
+      "tx": [
+        "NORTH"
+      ]
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "color": 5,
+      "rx": "EAST",
+      "tx": [
+        "RAMP"
+      ]
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "color": 5,
+      "rx": "RAMP",
+      "tx": [
+        "WEST"
+      ]
+    }
+  ],
+  "owners": [
+    [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        1,
+        2
+      ]
+    ]
+  ]
+}
