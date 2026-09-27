@@ -1,0 +1,103 @@
+// One regional epoch: native FP8 local dot, column multicast, ordered row sum.
+param memcpy_params;param x:u16;param y:u16;param width:u16;param height:u16;
+param operand_color:u16;param sum_out_color:u16;param sum_in_color:u16;param return_color:u16;param ack_out_color:u16;param ack_in_color:u16;
+param operand_iq:u16;param sum_iq:u16;param row_iq:u16;param ack_iq:u16;
+param operand_oq:u16;param sum_oq:u16;param ack_oq:u16;
+param operand_recv_task:u16;param operand_send_task:u16;param sum_recv_task:u16;param sum_send_task:u16;param row_recv_task:u16;param ack_send_task:u16;
+param operand_dsr:u16;param dot_dsr:u16;param sum_recv_dsr:u16;param operand_send_dsr:u16;param sum_send_dsr:u16;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);const clock=@import_module("<time>");
+const unpacker=@import_module("fp8_unpack.csl",.{.max_pairs=128});const dot=@import_module("fp8_dot.csl",.{.rows=2});
+comptime {@comptime_assert(dot_dsr==4);}
+var weights=@zeros([128]u16);var raw=@zeros([33]u32);var packet=@zeros([65]u32);
+var scale=@zeros([1]f32);var decoded=@zeros([256]u16);var output=@zeros([2]f32);
+var previous=@zeros([2]f32);var row_result=@zeros([2]f32);var ticks=@zeros([24]u16);var audit=@zeros([8]u32);var ack=@zeros([1]u32);
+const wp:[*]u16=&weights;const rp:[*]u32=&raw;const pp:[*]u32=&packet;const sp:[*]f32=&scale;
+const yp:[*]f32=&output;const rowp:[*]f32=&row_result;const tp:[*]u16=&ticks;const ap:[*]u32=&audit;
+var overlapping:bool=false;var operand_ready:bool=false;var weights_ready:bool=false;var local_ready:bool=false;var previous_ready:bool=false;
+var packet_sent:bool=false;var sum_sent:bool=false;var row_ready:bool=false;var child_ready:bool=false;var role_done:bool=false;var finished:bool=false;var sum_started:bool=false;var ack_started:bool=false;
+var child_count:u32=0;
+const recv_done=@get_local_task_id(operand_recv_task);const packet_done=@get_local_task_id(operand_send_task);
+const previous_done=@get_local_task_id(sum_recv_task);const sum_done=@get_local_task_id(sum_send_task);
+const row_done=@get_local_task_id(row_recv_task);const ack_done=@get_local_task_id(ack_send_task);
+const qi=@get_input_queue(operand_iq);const qprev=@get_input_queue(sum_iq);const qr=@get_input_queue(row_iq);const qa=@get_input_queue(ack_iq);
+const qo=@get_output_queue(operand_oq);const qs=@get_output_queue(sum_oq);const qc=@get_output_queue(ack_oq);
+const rd=@get_dsr(dsr_dest,operand_dsr);const rs=@get_dsr(dsr_src0,operand_dsr);
+const pd=@get_dsr(dsr_dest,sum_recv_dsr);const ps=@get_dsr(dsr_src0,sum_recv_dsr);
+const td=@get_dsr(dsr_dest,operand_send_dsr);const ts=@get_dsr(dsr_src0,operand_send_dsr);
+const sd=@get_dsr(dsr_dest,sum_send_dsr);const ss=@get_dsr(dsr_src0,sum_send_dsr);
+fn stamp(offset:u16) void {clock.get_timestamp(@ptrcast(*[3]u16,&ticks[offset]));}
+fn finish() void {
+  if(role_done and packet_sent and !finished){finished=true;stamp(21);clock.disable_tsc();sys.unblock_cmd_stream();}
+}
+fn join_rows() void {
+  if(comptime x==0){
+    if(row_ready and child_ready and sum_sent and !ack_started){
+      ack_started=true;ack[0]=child_count+@as(u32,width);
+      if(comptime y==0){@assert(ack[0]==@as(u32,width)*@as(u32,height));role_done=true;finish();}
+      else{
+        const m=@get_dsd(mem1d_dsd,.{.base_address=&ack,.extent=1});const f=@get_dsd(fabout_dsd,.{.output_queue=qc,.extent=1});
+        @load_to_dsr(ss,m);@load_to_dsr(sd,f,.{.async=true,.activate=ack_done});@mov32(sd,ss,.{.async=true});
+      }
+    }
+  }
+}
+fn reduce() void {
+  if(local_ready and previous_ready and !sum_started){
+    sum_started=true;
+    if(comptime x>0){for(@range(u16,2))|i|{output[i]=previous[i]+output[i];}}
+    const m=@get_dsd(mem1d_dsd,.{.base_address=&output,.extent=2});const f=@get_dsd(fabout_dsd,.{.output_queue=qs,.extent=2});
+    @load_to_dsr(ss,m);@load_to_dsr(sd,f,.{.async=true,.activate=sum_done});@mov32(sd,ss,.{.async=true});
+  }
+}
+fn compute_if_ready() void {
+  if(operand_ready and weights_ready and !local_ready){
+    stamp(12);dot.compute(&decoded,@ptrcast([*]u16,pp),yp,@bitcast(f32,packet[64]),scale[0]);stamp(15);
+    local_ready=true;audit[2]+=1;reduce();
+  }
+}
+fn decode_weight() void {stamp(3);unpacker.decode(wp,&decoded,128);stamp(6);weights_ready=true;audit[1]+=1;}
+task received_operand() void {operand_ready=true;audit[0]+=1;stamp(9);if(!overlapping){decode_weight();}compute_if_ready();}
+task sent_operand() void {
+  packet_sent=true;audit[4]+=1;
+  if(!overlapping){decode_weight();compute_if_ready();}finish();
+}
+task received_previous() void {previous_ready=true;reduce();}
+task sent_sum() void {sum_sent=true;audit[3]+=1;stamp(18);if(comptime x>0){role_done=true;finish();}else{join_rows();}}
+task received_row() void {row_ready=true;audit[5]+=1;join_rows();}
+task received_child(value:u32) void {@block(qa);@assert(!child_ready);child_ready=true;child_count=value;audit[6]+=1;join_rows();}
+task sent_ack() void {audit[7]+=1;role_done=true;finish();}
+fn execute(mode:u16) void {
+  @assert(mode<=1);overlapping=mode==1;operand_ready=false;weights_ready=false;local_ready=false;previous_ready=x==0;
+  packet_sent=y>0;sum_sent=false;row_ready=false;child_ready=y+1==height;role_done=false;finished=false;sum_started=false;ack_started=false;child_count=0;
+  for(@range(u16,8))|i|{audit[i]=0;}
+  clock.enable_tsc();stamp(0);
+  if(comptime x==0){
+    const m=@get_dsd(mem1d_dsd,.{.base_address=&row_result,.extent=2});const f=@get_dsd(fabin_dsd,.{.input_queue=qr,.extent=2});
+    @load_to_dsr(pd,m);@load_to_dsr(ps,f,.{.async=true,.activate=row_done});@mov32(pd,ps,.{.async=true});
+    if(comptime y+1<height){@unblock(qa);}
+  }else{
+    const m=@get_dsd(mem1d_dsd,.{.base_address=&previous,.extent=2});const f=@get_dsd(fabin_dsd,.{.input_queue=qprev,.extent=2});
+    @load_to_dsr(pd,m);@load_to_dsr(ps,f,.{.async=true,.activate=previous_done});@mov32(pd,ps,.{.async=true});
+  }
+  if(comptime y==0){
+    unpacker.decode(@ptrcast([*]u16,rp),@ptrcast([*]u16,pp),64);packet[64]=raw[32];operand_ready=true;audit[0]+=1;stamp(9);
+    const m=@get_dsd(mem1d_dsd,.{.base_address=&packet,.extent=65});const f=@get_dsd(fabout_dsd,.{.output_queue=qo,.extent=65});
+    @load_to_dsr(ts,m);@load_to_dsr(td,f,.{.async=true,.activate=packet_done});@mov32(td,ts,.{.async=true});
+  }else{
+    const m=@get_dsd(mem1d_dsd,.{.base_address=&packet,.extent=65});const f=@get_dsd(fabin_dsd,.{.input_queue=qi,.extent=65});
+    @load_to_dsr(rd,m);@load_to_dsr(rs,f,.{.async=true,.activate=recv_done});@mov32(rd,rs,.{.async=true});
+  }
+  if(overlapping){decode_weight();compute_if_ready();}
+}
+comptime {
+  @initialize_queue(qs,.{.color=@get_color(sum_out_color)});@bind_local_task(sent_sum,sum_done);
+  if(y==0){@initialize_queue(qo,.{.color=@get_color(operand_color)});@bind_local_task(sent_operand,packet_done);}
+  else{@initialize_queue(qi,.{.color=@get_color(operand_color)});@bind_local_task(received_operand,recv_done);}
+  if(x==0){
+    @initialize_queue(qr,.{.color=@get_color(return_color)});@bind_local_task(received_row,row_done);
+    if(y+1<height){@initialize_queue(qa,.{.color=@get_color(ack_in_color)});@bind_data_task(received_child,@get_data_task_id(qa));}
+    if(y>0){@initialize_queue(qc,.{.color=@get_color(ack_out_color)});@bind_local_task(sent_ack,ack_done);}
+  }else{@initialize_queue(qprev,.{.color=@get_color(sum_in_color)});@bind_local_task(received_previous,previous_done);}
+  @export_symbol(wp,"weights");@export_symbol(rp,"raw");@export_symbol(pp,"packet");@export_symbol(sp,"scale");
+  @export_symbol(yp,"output");@export_symbol(rowp,"row_result");@export_symbol(tp,"ticks");@export_symbol(ap,"audit");@export_symbol(execute);
+}

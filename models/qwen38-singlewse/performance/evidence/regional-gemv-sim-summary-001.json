@@ -1,0 +1,48 @@
+{
+  "physical": false,
+  "full_model": false,
+  "application": [
+    8,
+    8
+  ],
+  "same_pe_root_cycles": [
+    {
+      "case": 0,
+      "serialized_cycles": 2485,
+      "overlapped_cycles": 2108,
+      "cycles_saved": 377,
+      "reduction_fraction": 0.1517102615694165,
+      "speedup": 1.1788425047438331
+    },
+    {
+      "case": 1,
+      "serialized_cycles": 2485,
+      "overlapped_cycles": 2145,
+      "cycles_saved": 340,
+      "reduction_fraction": 0.13682092555331993,
+      "speedup": 1.1585081585081585
+    },
+    {
+      "case": 2,
+      "serialized_cycles": 2485,
+      "overlapped_cycles": 2108,
+      "cycles_saved": 377,
+      "reduction_fraction": 0.1517102615694165,
+      "speedup": 1.1788425047438331
+    },
+    {
+      "case": 3,
+      "serialized_cycles": 2485,
+      "overlapped_cycles": 2145,
+      "cycles_saved": 340,
+      "reduction_fraction": 0.13682092555331993,
+      "speedup": 1.1585081585081585
+    }
+  ],
+  "max_compiled_sram_plus_declared_stack": 13232,
+  "scope": "Original projection submatrices: on-device exact operand coding, column multicast, local FP8 dot, ascending-K sums, returned rows and root completion; no full model",
+  "clock_hz": null,
+  "timing_note": "Root same-PE entry-to-all-row completion includes host-launch entry skew and device encoding/decode/transport/dot/reduction. No cross-PE timestamp subtraction. Host time includes result/audit transfer; local readiness timestamps mark callbacks, not fabric arrival.",
+  "fixture_sha256": "60eb6d84c0a329c89368eda849ad6d6ee3a6c6c10a2a94f9dcc6ac09e73db543",
+  "interpretation": "Measured whole-region schedule comparison, including launch-entry skew. The difference is not attributed solely to fabric transfer; callback scheduling also changes. No model rate or cross-PE timestamp subtraction."
+}

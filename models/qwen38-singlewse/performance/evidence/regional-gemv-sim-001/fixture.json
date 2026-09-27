@@ -1,0 +1,49 @@
+{
+  "model": "Qwen/Qwen3.8-27B-FP8",
+  "revision": "017b9c7af6b5689d5dd426a76e0bc077eb5ca20a",
+  "shard_sha256": {
+    "layers-0.safetensors": "07f700e293baeaf3cd4240c3df1a948c4403f16961ea7979e86c8d6a9f8fd466"
+  },
+  "application": [
+    8,
+    8
+  ],
+  "cases": 4,
+  "origins": [
+    {
+      "tensor": "model.language_model.layers.0.mlp.gate_proj.weight",
+      "row_start": 0,
+      "rows": 16,
+      "k_block_start": 0,
+      "k_blocks": 8,
+      "pattern": 0
+    },
+    {
+      "tensor": "model.language_model.layers.0.mlp.gate_proj.weight",
+      "row_start": 17392,
+      "rows": 16,
+      "k_block_start": 32,
+      "k_blocks": 8,
+      "pattern": 1
+    },
+    {
+      "tensor": "model.language_model.layers.0.mlp.up_proj.weight",
+      "row_start": 128,
+      "rows": 16,
+      "k_block_start": 16,
+      "k_blocks": 8,
+      "pattern": 2
+    },
+    {
+      "tensor": "model.language_model.layers.0.mlp.down_proj.weight",
+      "row_start": 5104,
+      "rows": 16,
+      "k_block_start": 128,
+      "k_blocks": 8,
+      "pattern": 3
+    }
+  ],
+  "fixture_sha256": "60eb6d84c0a329c89368eda849ad6d6ee3a6c6c10a2a94f9dcc6ac09e73db543",
+  "criterion": "Every K-prefix bit-exact to independent ordered FP32 emulator (zero signs canonicalized), within gamma(260+Kblocks) FP64 absolute-product bound; operand coding and all endpoint counters/retention exact",
+  "full_model": false
+}

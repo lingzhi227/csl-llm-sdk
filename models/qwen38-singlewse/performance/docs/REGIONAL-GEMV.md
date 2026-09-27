@@ -1,7 +1,7 @@
-# Next regional GEMV contract (implementation pending)
+# Regional GEMV contract and P5 physical qualification
 
-P3 qualifies arithmetic and P4 qualifies the small resident decode lease. The next
-executable boundary must include the operand producer/transport, local dot,
+P3 qualifies arithmetic and P4 qualifies the small resident decode lease. The P5
+executable boundary includes the operand producer/transport, local dot,
 inter-PE sum and completion, with real original weights and same-PE timing.
 A fast local dot does not establish this boundary.
 
@@ -14,7 +14,8 @@ linear IDs naively into a rectangle can put adjacent K tiles across a distant
 row or wafer wrap. Such mappings must be checked and rejected or replaced by
 local clusters before claiming locality.
 
-For the first bounded executable region:
+The first bounded executable region is implemented in `spatial/regional.py` and
+`probes/regional_gemv/`. Its checked contract is:
 
 - Start with an8x8 region: K block per column, two output rows per row. Original
   rows0:16 and K0:1024 of a pinned projection form a precisely declared partial
@@ -42,3 +43,31 @@ reduction order and prefetch distance. The generated CSL and resource table must
 come from the same plan. Requalify actual compiled SRAM after communication code
 is added. All model matrices, state actors and the complete sentence loop remain
 required for final acceptance.
+
+`regional-gemv-sim-001` and `regional-gemv-hw-001` now pass all four fixtures in
+both schedules. On the physical8x8 region, every serialized case takes2,599 root
+cycles and every overlapping case2,188, a15.814% reduction in region completion
+cycles. All original-weight partial sums equal the independent ascending-term
+FP32 emulator exactly and satisfy the independent FP64 bounds. See MILESTONES.md
+for resource release and measurement scope.
+
+This is exact encoding of already quantized FP8 input bytes, not dynamic FP32 to
+FP8 quantization. `source_quantization=false` records that boundary. The direct
+IEEE encoder in `csl/fp8_encode.csl` is a separate uncompiled candidate, with a
+host-only midpoint/neighbor/random-input identity check. It is not part of the
+qualified P5 artifact and does not yet qualify the scale/division convention.
+
+The generated plan records manual colors, queues, tasks and DSR leases. DSRs0:2
+remain available to compiler/memcpy; dot owns4. DSR5 receives either incoming row
+partials or a final row result depending on role. DSR7 sends a row partial/result
+and can be reused for a completion acknowledgement only after its send callback.
+The six stream colors are independently checked for route collisions and paired
+links. Thirteen source tests include independent route endpoint traversal.
+
+P5's compiled per-PE SRAM including the unchanged stack reserve ranges12,288 to
+13,232 bytes. It contains one weight tile per PE, not the full resident bank.
+Simply adding the maximum bank's extra35,500 bytes would exceed the ceiling for
+some roles (up to48,732 bytes before composition/alignment changes). This is a
+warning from separate-component accounting, not a failed combined compile.
+The next placement must use actual role budgets and repeat combined compilation;
+it must not assume that two separately fitting components also fit together.

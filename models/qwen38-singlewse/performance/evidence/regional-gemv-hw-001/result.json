@@ -1,0 +1,4697 @@
+{
+  "passed": true,
+  "normal_stop": true,
+  "physical": true,
+  "full_model": false,
+  "scope": "Original projection submatrices: on-device exact operand coding, column multicast, local FP8 dot, ascending-K sums, returned rows and root completion; no full model",
+  "application": [
+    8,
+    8
+  ],
+  "fixture_sha256": "60eb6d84c0a329c89368eda849ad6d6ee3a6c6c10a2a94f9dcc6ac09e73db543",
+  "cases": [
+    {
+      "case": 0,
+      "overlapped": false,
+      "root_region_cycles": 2599,
+      "host_launch_through_result_audit_seconds": 0.0033493898808956146,
+      "timing": [
+        {
+          "x": 0,
+          "y": 0,
+          "entry_to_finish": 2599,
+          "decode": 512,
+          "dot": 525,
+          "operand_ready_callback": 349,
+          "sum_send_done": 1616
+        },
+        {
+          "x": 1,
+          "y": 0,
+          "entry_to_finish": 1708,
+          "decode": 513,
+          "dot": 523,
+          "operand_ready_callback": 348,
+          "sum_send_done": 1673
+        },
+        {
+          "x": 2,
+          "y": 0,
+          "entry_to_finish": 1766,
+          "decode": 513,
+          "dot": 523,
+          "operand_ready_callback": 348,
+          "sum_send_done": 1731
+        },
+        {
+          "x": 3,
+          "y": 0,
+          "entry_to_finish": 1824,
+          "decode": 513,
+          "dot": 523,
+          "operand_ready_callback": 348,
+          "sum_send_done": 1789
+        },
+        {
+          "x": 4,
+          "y": 0,
+          "entry_to_finish": 1882,
+          "decode": 513,
+          "dot": 523,
+          "operand_ready_callback": 348,
+          "sum_send_done": 1847
+        },
+        {
+          "x": 5,
+          "y": 0,
+          "entry_to_finish": 1940,
+          "decode": 513,
+          "dot": 523,
+          "operand_ready_callback": 348,
+          "sum_send_done": 1905
+        },
+        {
+          "x": 6,
+          "y": 0,
+          "entry_to_finish": 1998,
+          "decode": 513,
+          "dot": 523,
+          "operand_ready_callback": 348,
+          "sum_send_done": 1963
+        },
+        {
+          "x": 7,
+          "y": 0,
+          "entry_to_finish": 2056,
+          "decode": 513,
+          "dot": 523,
+          "operand_ready_callback": 348,
+          "sum_send_done": 2021
+        },
+        {
+          "x": 0,
+          "y": 1,
+          "entry_to_finish": 2545,
+          "decode": 502,
+          "dot": 521,
+          "operand_ready_callback": 473,
+          "sum_send_done": 1629
+        },
+        {
+          "x": 1,
+          "y": 1,
+          "entry_to_finish": 1722,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 465,
+          "sum_send_done": 1692
+        },
+        {
+          "x": 2,
+          "y": 1,
+          "entry_to_finish": 1780,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 465,
+          "sum_send_done": 1750
+        },
+        {
+          "x": 3,
+          "y": 1,
+          "entry_to_finish": 1838,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 465,
+          "sum_send_done": 1808
+        },
+        {
+          "x": 4,
+          "y": 1,
+          "entry_to_finish": 1896,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 465,
+          "sum_send_done": 1866
+        },
+        {
+          "x": 5,
+          "y": 1,
+          "entry_to_finish": 1954,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 465,
+          "sum_send_done": 1924
+        },
+        {
+          "x": 6,
+          "y": 1,
+          "entry_to_finish": 2012,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 465,
+          "sum_send_done": 1982
+        },
+        {
+          "x": 7,
+          "y": 1,
+          "entry_to_finish": 2070,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 465,
+          "sum_send_done": 2040
+        },
+        {
+          "x": 0,
+          "y": 2,
+          "entry_to_finish": 2480,
+          "decode": 502,
+          "dot": 521,
+          "operand_ready_callback": 477,
+          "sum_send_done": 1633
+        },
+        {
+          "x": 1,
+          "y": 2,
+          "entry_to_finish": 1726,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 469,
+          "sum_send_done": 1696
+        },
+        {
+          "x": 2,
+          "y": 2,
+          "entry_to_finish": 1784,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 469,
+          "sum_send_done": 1754
+        },
+        {
+          "x": 3,
+          "y": 2,
+          "entry_to_finish": 1842,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 469,
+          "sum_send_done": 1812
+        },
+        {
+          "x": 4,
+          "y": 2,
+          "entry_to_finish": 1900,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 469,
+          "sum_send_done": 1870
+        },
+        {
+          "x": 5,
+          "y": 2,
+          "entry_to_finish": 1958,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 469,
+          "sum_send_done": 1928
+        },
+        {
+          "x": 6,
+          "y": 2,
+          "entry_to_finish": 2016,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 469,
+          "sum_send_done": 1986
+        },
+        {
+          "x": 7,
+          "y": 2,
+          "entry_to_finish": 2074,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 469,
+          "sum_send_done": 2044
+        },
+        {
+          "x": 0,
+          "y": 3,
+          "entry_to_finish": 2415,
+          "decode": 501,
+          "dot": 521,
+          "operand_ready_callback": 481,
+          "sum_send_done": 1636
+        },
+        {
+          "x": 1,
+          "y": 3,
+          "entry_to_finish": 1729,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 473,
+          "sum_send_done": 1699
+        },
+        {
+          "x": 2,
+          "y": 3,
+          "entry_to_finish": 1787,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 473,
+          "sum_send_done": 1757
+        },
+        {
+          "x": 3,
+          "y": 3,
+          "entry_to_finish": 1845,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 473,
+          "sum_send_done": 1815
+        },
+        {
+          "x": 4,
+          "y": 3,
+          "entry_to_finish": 1903,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 473,
+          "sum_send_done": 1873
+        },
+        {
+          "x": 5,
+          "y": 3,
+          "entry_to_finish": 1961,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 473,
+          "sum_send_done": 1931
+        },
+        {
+          "x": 6,
+          "y": 3,
+          "entry_to_finish": 2019,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 473,
+          "sum_send_done": 1989
+        },
+        {
+          "x": 7,
+          "y": 3,
+          "entry_to_finish": 2077,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 473,
+          "sum_send_done": 2047
+        },
+        {
+          "x": 0,
+          "y": 4,
+          "entry_to_finish": 2350,
+          "decode": 502,
+          "dot": 521,
+          "operand_ready_callback": 485,
+          "sum_send_done": 1641
+        },
+        {
+          "x": 1,
+          "y": 4,
+          "entry_to_finish": 1734,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 477,
+          "sum_send_done": 1704
+        },
+        {
+          "x": 2,
+          "y": 4,
+          "entry_to_finish": 1792,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 477,
+          "sum_send_done": 1762
+        },
+        {
+          "x": 3,
+          "y": 4,
+          "entry_to_finish": 1850,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 477,
+          "sum_send_done": 1820
+        },
+        {
+          "x": 4,
+          "y": 4,
+          "entry_to_finish": 1908,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 477,
+          "sum_send_done": 1878
+        },
+        {
+          "x": 5,
+          "y": 4,
+          "entry_to_finish": 1966,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 477,
+          "sum_send_done": 1936
+        },
+        {
+          "x": 6,
+          "y": 4,
+          "entry_to_finish": 2024,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 477,
+          "sum_send_done": 1994
+        },
+        {
+          "x": 7,
+          "y": 4,
+          "entry_to_finish": 2082,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 477,
+          "sum_send_done": 2052
+        },
+        {
+          "x": 0,
+          "y": 5,
+          "entry_to_finish": 2285,
+          "decode": 502,
+          "dot": 521,
+          "operand_ready_callback": 489,
+          "sum_send_done": 1645
+        },
+        {
+          "x": 1,
+          "y": 5,
+          "entry_to_finish": 1738,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 481,
+          "sum_send_done": 1708
+        },
+        {
+          "x": 2,
+          "y": 5,
+          "entry_to_finish": 1796,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 481,
+          "sum_send_done": 1766
+        },
+        {
+          "x": 3,
+          "y": 5,
+          "entry_to_finish": 1854,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 481,
+          "sum_send_done": 1824
+        },
+        {
+          "x": 4,
+          "y": 5,
+          "entry_to_finish": 1912,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 481,
+          "sum_send_done": 1882
+        },
+        {
+          "x": 5,
+          "y": 5,
+          "entry_to_finish": 1970,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 481,
+          "sum_send_done": 1940
+        },
+        {
+          "x": 6,
+          "y": 5,
+          "entry_to_finish": 2028,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 481,
+          "sum_send_done": 1998
+        },
+        {
+          "x": 7,
+          "y": 5,
+          "entry_to_finish": 2086,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 481,
+          "sum_send_done": 2056
+        },
+        {
+          "x": 0,
+          "y": 6,
+          "entry_to_finish": 2220,
+          "decode": 501,
+          "dot": 521,
+          "operand_ready_callback": 493,
+          "sum_send_done": 1648
+        },
+        {
+          "x": 1,
+          "y": 6,
+          "entry_to_finish": 1741,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 485,
+          "sum_send_done": 1711
+        },
+        {
+          "x": 2,
+          "y": 6,
+          "entry_to_finish": 1799,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 485,
+          "sum_send_done": 1769
+        },
+        {
+          "x": 3,
+          "y": 6,
+          "entry_to_finish": 1857,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 485,
+          "sum_send_done": 1827
+        },
+        {
+          "x": 4,
+          "y": 6,
+          "entry_to_finish": 1915,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 485,
+          "sum_send_done": 1885
+        },
+        {
+          "x": 5,
+          "y": 6,
+          "entry_to_finish": 1973,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 485,
+          "sum_send_done": 1943
+        },
+        {
+          "x": 6,
+          "y": 6,
+          "entry_to_finish": 2031,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 485,
+          "sum_send_done": 2001
+        },
+        {
+          "x": 7,
+          "y": 6,
+          "entry_to_finish": 2089,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 485,
+          "sum_send_done": 2059
+        },
+        {
+          "x": 0,
+          "y": 7,
+          "entry_to_finish": 2156,
+          "decode": 503,
+          "dot": 523,
+          "operand_ready_callback": 496,
+          "sum_send_done": 1657
+        },
+        {
+          "x": 1,
+          "y": 7,
+          "entry_to_finish": 1748,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 489,
+          "sum_send_done": 1718
+        },
+        {
+          "x": 2,
+          "y": 7,
+          "entry_to_finish": 1806,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 489,
+          "sum_send_done": 1776
+        },
+        {
+          "x": 3,
+          "y": 7,
+          "entry_to_finish": 1864,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 489,
+          "sum_send_done": 1834
+        },
+        {
+          "x": 4,
+          "y": 7,
+          "entry_to_finish": 1922,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 489,
+          "sum_send_done": 1892
+        },
+        {
+          "x": 5,
+          "y": 7,
+          "entry_to_finish": 1980,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 489,
+          "sum_send_done": 1950
+        },
+        {
+          "x": 6,
+          "y": 7,
+          "entry_to_finish": 2038,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 489,
+          "sum_send_done": 2008
+        },
+        {
+          "x": 7,
+          "y": 7,
+          "entry_to_finish": 2096,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 489,
+          "sum_send_done": 2066
+        }
+      ],
+      "max_abs_fp64_error": 0.0
+    },
+    {
+      "case": 0,
+      "overlapped": true,
+      "root_region_cycles": 2188,
+      "host_launch_through_result_audit_seconds": 0.0029482273384928703,
+      "timing": [
+        {
+          "x": 0,
+          "y": 0,
+          "entry_to_finish": 2188,
+          "decode": 525,
+          "dot": 525,
+          "operand_ready_callback": 349,
+          "sum_send_done": 1566
+        },
+        {
+          "x": 1,
+          "y": 0,
+          "entry_to_finish": 1636,
+          "decode": 523,
+          "dot": 523,
+          "operand_ready_callback": 348,
+          "sum_send_done": 1601
+        },
+        {
+          "x": 2,
+          "y": 0,
+          "entry_to_finish": 1694,
+          "decode": 523,
+          "dot": 523,
+          "operand_ready_callback": 348,
+          "sum_send_done": 1659
+        },
+        {
+          "x": 3,
+          "y": 0,
+          "entry_to_finish": 1752,
+          "decode": 523,
+          "dot": 523,
+          "operand_ready_callback": 348,
+          "sum_send_done": 1717
+        },
+        {
+          "x": 4,
+          "y": 0,
+          "entry_to_finish": 1810,
+          "decode": 524,
+          "dot": 523,
+          "operand_ready_callback": 348,
+          "sum_send_done": 1775
+        },
+        {
+          "x": 5,
+          "y": 0,
+          "entry_to_finish": 1868,
+          "decode": 523,
+          "dot": 523,
+          "operand_ready_callback": 348,
+          "sum_send_done": 1833
+        },
+        {
+          "x": 6,
+          "y": 0,
+          "entry_to_finish": 1926,
+          "decode": 523,
+          "dot": 523,
+          "operand_ready_callback": 348,
+          "sum_send_done": 1891
+        },
+        {
+          "x": 7,
+          "y": 0,
+          "entry_to_finish": 1984,
+          "decode": 523,
+          "dot": 523,
+          "operand_ready_callback": 348,
+          "sum_send_done": 1949
+        },
+        {
+          "x": 0,
+          "y": 1,
+          "entry_to_finish": 2134,
+          "decode": 529,
+          "dot": 521,
+          "operand_ready_callback": 619,
+          "sum_send_done": 1249
+        },
+        {
+          "x": 1,
+          "y": 1,
+          "entry_to_finish": 1342,
+          "decode": 534,
+          "dot": 523,
+          "operand_ready_callback": 621,
+          "sum_send_done": 1312
+        },
+        {
+          "x": 2,
+          "y": 1,
+          "entry_to_finish": 1400,
+          "decode": 534,
+          "dot": 523,
+          "operand_ready_callback": 621,
+          "sum_send_done": 1370
+        },
+        {
+          "x": 3,
+          "y": 1,
+          "entry_to_finish": 1458,
+          "decode": 532,
+          "dot": 523,
+          "operand_ready_callback": 619,
+          "sum_send_done": 1428
+        },
+        {
+          "x": 4,
+          "y": 1,
+          "entry_to_finish": 1516,
+          "decode": 534,
+          "dot": 523,
+          "operand_ready_callback": 621,
+          "sum_send_done": 1486
+        },
+        {
+          "x": 5,
+          "y": 1,
+          "entry_to_finish": 1574,
+          "decode": 534,
+          "dot": 523,
+          "operand_ready_callback": 621,
+          "sum_send_done": 1544
+        },
+        {
+          "x": 6,
+          "y": 1,
+          "entry_to_finish": 1632,
+          "decode": 531,
+          "dot": 523,
+          "operand_ready_callback": 618,
+          "sum_send_done": 1602
+        },
+        {
+          "x": 7,
+          "y": 1,
+          "entry_to_finish": 1690,
+          "decode": 527,
+          "dot": 523,
+          "operand_ready_callback": 614,
+          "sum_send_done": 1660
+        },
+        {
+          "x": 0,
+          "y": 2,
+          "entry_to_finish": 2069,
+          "decode": 531,
+          "dot": 521,
+          "operand_ready_callback": 621,
+          "sum_send_done": 1251
+        },
+        {
+          "x": 1,
+          "y": 2,
+          "entry_to_finish": 1344,
+          "decode": 535,
+          "dot": 523,
+          "operand_ready_callback": 622,
+          "sum_send_done": 1314
+        },
+        {
+          "x": 2,
+          "y": 2,
+          "entry_to_finish": 1402,
+          "decode": 535,
+          "dot": 523,
+          "operand_ready_callback": 622,
+          "sum_send_done": 1372
+        },
+        {
+          "x": 3,
+          "y": 2,
+          "entry_to_finish": 1460,
+          "decode": 535,
+          "dot": 523,
+          "operand_ready_callback": 622,
+          "sum_send_done": 1430
+        },
+        {
+          "x": 4,
+          "y": 2,
+          "entry_to_finish": 1518,
+          "decode": 535,
+          "dot": 523,
+          "operand_ready_callback": 622,
+          "sum_send_done": 1488
+        },
+        {
+          "x": 5,
+          "y": 2,
+          "entry_to_finish": 1576,
+          "decode": 535,
+          "dot": 523,
+          "operand_ready_callback": 622,
+          "sum_send_done": 1546
+        },
+        {
+          "x": 6,
+          "y": 2,
+          "entry_to_finish": 1634,
+          "decode": 529,
+          "dot": 523,
+          "operand_ready_callback": 616,
+          "sum_send_done": 1604
+        },
+        {
+          "x": 7,
+          "y": 2,
+          "entry_to_finish": 1692,
+          "decode": 534,
+          "dot": 523,
+          "operand_ready_callback": 621,
+          "sum_send_done": 1662
+        },
+        {
+          "x": 0,
+          "y": 3,
+          "entry_to_finish": 2004,
+          "decode": 529,
+          "dot": 521,
+          "operand_ready_callback": 619,
+          "sum_send_done": 1249
+        },
+        {
+          "x": 1,
+          "y": 3,
+          "entry_to_finish": 1342,
+          "decode": 525,
+          "dot": 523,
+          "operand_ready_callback": 612,
+          "sum_send_done": 1312
+        },
+        {
+          "x": 2,
+          "y": 3,
+          "entry_to_finish": 1400,
+          "decode": 525,
+          "dot": 523,
+          "operand_ready_callback": 612,
+          "sum_send_done": 1370
+        },
+        {
+          "x": 3,
+          "y": 3,
+          "entry_to_finish": 1458,
+          "decode": 525,
+          "dot": 523,
+          "operand_ready_callback": 612,
+          "sum_send_done": 1428
+        },
+        {
+          "x": 4,
+          "y": 3,
+          "entry_to_finish": 1516,
+          "decode": 525,
+          "dot": 523,
+          "operand_ready_callback": 612,
+          "sum_send_done": 1486
+        },
+        {
+          "x": 5,
+          "y": 3,
+          "entry_to_finish": 1574,
+          "decode": 525,
+          "dot": 523,
+          "operand_ready_callback": 612,
+          "sum_send_done": 1544
+        },
+        {
+          "x": 6,
+          "y": 3,
+          "entry_to_finish": 1632,
+          "decode": 522,
+          "dot": 523,
+          "operand_ready_callback": 609,
+          "sum_send_done": 1602
+        },
+        {
+          "x": 7,
+          "y": 3,
+          "entry_to_finish": 1690,
+          "decode": 528,
+          "dot": 523,
+          "operand_ready_callback": 615,
+          "sum_send_done": 1660
+        },
+        {
+          "x": 0,
+          "y": 4,
+          "entry_to_finish": 1939,
+          "decode": 523,
+          "dot": 521,
+          "operand_ready_callback": 613,
+          "sum_send_done": 1243
+        },
+        {
+          "x": 1,
+          "y": 4,
+          "entry_to_finish": 1336,
+          "decode": 529,
+          "dot": 523,
+          "operand_ready_callback": 616,
+          "sum_send_done": 1306
+        },
+        {
+          "x": 2,
+          "y": 4,
+          "entry_to_finish": 1394,
+          "decode": 526,
+          "dot": 523,
+          "operand_ready_callback": 613,
+          "sum_send_done": 1364
+        },
+        {
+          "x": 3,
+          "y": 4,
+          "entry_to_finish": 1452,
+          "decode": 526,
+          "dot": 523,
+          "operand_ready_callback": 613,
+          "sum_send_done": 1422
+        },
+        {
+          "x": 4,
+          "y": 4,
+          "entry_to_finish": 1510,
+          "decode": 526,
+          "dot": 523,
+          "operand_ready_callback": 613,
+          "sum_send_done": 1480
+        },
+        {
+          "x": 5,
+          "y": 4,
+          "entry_to_finish": 1568,
+          "decode": 526,
+          "dot": 523,
+          "operand_ready_callback": 613,
+          "sum_send_done": 1538
+        },
+        {
+          "x": 6,
+          "y": 4,
+          "entry_to_finish": 1626,
+          "decode": 529,
+          "dot": 523,
+          "operand_ready_callback": 616,
+          "sum_send_done": 1596
+        },
+        {
+          "x": 7,
+          "y": 4,
+          "entry_to_finish": 1684,
+          "decode": 526,
+          "dot": 523,
+          "operand_ready_callback": 613,
+          "sum_send_done": 1654
+        },
+        {
+          "x": 0,
+          "y": 5,
+          "entry_to_finish": 1874,
+          "decode": 526,
+          "dot": 521,
+          "operand_ready_callback": 616,
+          "sum_send_done": 1246
+        },
+        {
+          "x": 1,
+          "y": 5,
+          "entry_to_finish": 1339,
+          "decode": 527,
+          "dot": 523,
+          "operand_ready_callback": 614,
+          "sum_send_done": 1309
+        },
+        {
+          "x": 2,
+          "y": 5,
+          "entry_to_finish": 1397,
+          "decode": 527,
+          "dot": 523,
+          "operand_ready_callback": 614,
+          "sum_send_done": 1367
+        },
+        {
+          "x": 3,
+          "y": 5,
+          "entry_to_finish": 1455,
+          "decode": 527,
+          "dot": 523,
+          "operand_ready_callback": 614,
+          "sum_send_done": 1425
+        },
+        {
+          "x": 4,
+          "y": 5,
+          "entry_to_finish": 1513,
+          "decode": 527,
+          "dot": 523,
+          "operand_ready_callback": 614,
+          "sum_send_done": 1483
+        },
+        {
+          "x": 5,
+          "y": 5,
+          "entry_to_finish": 1571,
+          "decode": 527,
+          "dot": 523,
+          "operand_ready_callback": 614,
+          "sum_send_done": 1541
+        },
+        {
+          "x": 6,
+          "y": 5,
+          "entry_to_finish": 1629,
+          "decode": 527,
+          "dot": 523,
+          "operand_ready_callback": 614,
+          "sum_send_done": 1599
+        },
+        {
+          "x": 7,
+          "y": 5,
+          "entry_to_finish": 1687,
+          "decode": 526,
+          "dot": 523,
+          "operand_ready_callback": 613,
+          "sum_send_done": 1657
+        },
+        {
+          "x": 0,
+          "y": 6,
+          "entry_to_finish": 1809,
+          "decode": 531,
+          "dot": 521,
+          "operand_ready_callback": 621,
+          "sum_send_done": 1251
+        },
+        {
+          "x": 1,
+          "y": 6,
+          "entry_to_finish": 1344,
+          "decode": 528,
+          "dot": 523,
+          "operand_ready_callback": 615,
+          "sum_send_done": 1314
+        },
+        {
+          "x": 2,
+          "y": 6,
+          "entry_to_finish": 1402,
+          "decode": 528,
+          "dot": 523,
+          "operand_ready_callback": 615,
+          "sum_send_done": 1372
+        },
+        {
+          "x": 3,
+          "y": 6,
+          "entry_to_finish": 1460,
+          "decode": 528,
+          "dot": 523,
+          "operand_ready_callback": 615,
+          "sum_send_done": 1430
+        },
+        {
+          "x": 4,
+          "y": 6,
+          "entry_to_finish": 1518,
+          "decode": 528,
+          "dot": 523,
+          "operand_ready_callback": 615,
+          "sum_send_done": 1488
+        },
+        {
+          "x": 5,
+          "y": 6,
+          "entry_to_finish": 1576,
+          "decode": 528,
+          "dot": 523,
+          "operand_ready_callback": 615,
+          "sum_send_done": 1546
+        },
+        {
+          "x": 6,
+          "y": 6,
+          "entry_to_finish": 1634,
+          "decode": 528,
+          "dot": 523,
+          "operand_ready_callback": 615,
+          "sum_send_done": 1604
+        },
+        {
+          "x": 7,
+          "y": 6,
+          "entry_to_finish": 1692,
+          "decode": 527,
+          "dot": 523,
+          "operand_ready_callback": 614,
+          "sum_send_done": 1662
+        },
+        {
+          "x": 0,
+          "y": 7,
+          "entry_to_finish": 1745,
+          "decode": 523,
+          "dot": 523,
+          "operand_ready_callback": 612,
+          "sum_send_done": 1246
+        },
+        {
+          "x": 1,
+          "y": 7,
+          "entry_to_finish": 1337,
+          "decode": 526,
+          "dot": 523,
+          "operand_ready_callback": 613,
+          "sum_send_done": 1307
+        },
+        {
+          "x": 2,
+          "y": 7,
+          "entry_to_finish": 1395,
+          "decode": 527,
+          "dot": 523,
+          "operand_ready_callback": 614,
+          "sum_send_done": 1365
+        },
+        {
+          "x": 3,
+          "y": 7,
+          "entry_to_finish": 1453,
+          "decode": 527,
+          "dot": 523,
+          "operand_ready_callback": 614,
+          "sum_send_done": 1423
+        },
+        {
+          "x": 4,
+          "y": 7,
+          "entry_to_finish": 1511,
+          "decode": 526,
+          "dot": 523,
+          "operand_ready_callback": 613,
+          "sum_send_done": 1481
+        },
+        {
+          "x": 5,
+          "y": 7,
+          "entry_to_finish": 1569,
+          "decode": 527,
+          "dot": 523,
+          "operand_ready_callback": 614,
+          "sum_send_done": 1539
+        },
+        {
+          "x": 6,
+          "y": 7,
+          "entry_to_finish": 1627,
+          "decode": 527,
+          "dot": 523,
+          "operand_ready_callback": 614,
+          "sum_send_done": 1597
+        },
+        {
+          "x": 7,
+          "y": 7,
+          "entry_to_finish": 1685,
+          "decode": 526,
+          "dot": 523,
+          "operand_ready_callback": 613,
+          "sum_send_done": 1655
+        }
+      ],
+      "max_abs_fp64_error": 0.0
+    },
+    {
+      "case": 1,
+      "overlapped": true,
+      "root_region_cycles": 2188,
+      "host_launch_through_result_audit_seconds": 0.002909226343035698,
+      "timing": [
+        {
+          "x": 0,
+          "y": 0,
+          "entry_to_finish": 2188,
+          "decode": 525,
+          "dot": 525,
+          "operand_ready_callback": 349,
+          "sum_send_done": 1566
+        },
+        {
+          "x": 1,
+          "y": 0,
+          "entry_to_finish": 1636,
+          "decode": 523,
+          "dot": 523,
+          "operand_ready_callback": 348,
+          "sum_send_done": 1601
+        },
+        {
+          "x": 2,
+          "y": 0,
+          "entry_to_finish": 1694,
+          "decode": 523,
+          "dot": 523,
+          "operand_ready_callback": 348,
+          "sum_send_done": 1659
+        },
+        {
+          "x": 3,
+          "y": 0,
+          "entry_to_finish": 1752,
+          "decode": 523,
+          "dot": 523,
+          "operand_ready_callback": 348,
+          "sum_send_done": 1717
+        },
+        {
+          "x": 4,
+          "y": 0,
+          "entry_to_finish": 1810,
+          "decode": 523,
+          "dot": 523,
+          "operand_ready_callback": 348,
+          "sum_send_done": 1775
+        },
+        {
+          "x": 5,
+          "y": 0,
+          "entry_to_finish": 1868,
+          "decode": 523,
+          "dot": 523,
+          "operand_ready_callback": 348,
+          "sum_send_done": 1833
+        },
+        {
+          "x": 6,
+          "y": 0,
+          "entry_to_finish": 1926,
+          "decode": 523,
+          "dot": 523,
+          "operand_ready_callback": 348,
+          "sum_send_done": 1891
+        },
+        {
+          "x": 7,
+          "y": 0,
+          "entry_to_finish": 1984,
+          "decode": 523,
+          "dot": 523,
+          "operand_ready_callback": 348,
+          "sum_send_done": 1949
+        },
+        {
+          "x": 0,
+          "y": 1,
+          "entry_to_finish": 2134,
+          "decode": 529,
+          "dot": 521,
+          "operand_ready_callback": 619,
+          "sum_send_done": 1249
+        },
+        {
+          "x": 1,
+          "y": 1,
+          "entry_to_finish": 1342,
+          "decode": 534,
+          "dot": 523,
+          "operand_ready_callback": 621,
+          "sum_send_done": 1312
+        },
+        {
+          "x": 2,
+          "y": 1,
+          "entry_to_finish": 1400,
+          "decode": 532,
+          "dot": 523,
+          "operand_ready_callback": 619,
+          "sum_send_done": 1370
+        },
+        {
+          "x": 3,
+          "y": 1,
+          "entry_to_finish": 1458,
+          "decode": 532,
+          "dot": 523,
+          "operand_ready_callback": 619,
+          "sum_send_done": 1428
+        },
+        {
+          "x": 4,
+          "y": 1,
+          "entry_to_finish": 1516,
+          "decode": 534,
+          "dot": 523,
+          "operand_ready_callback": 621,
+          "sum_send_done": 1486
+        },
+        {
+          "x": 5,
+          "y": 1,
+          "entry_to_finish": 1574,
+          "decode": 532,
+          "dot": 523,
+          "operand_ready_callback": 619,
+          "sum_send_done": 1544
+        },
+        {
+          "x": 6,
+          "y": 1,
+          "entry_to_finish": 1632,
+          "decode": 527,
+          "dot": 523,
+          "operand_ready_callback": 614,
+          "sum_send_done": 1602
+        },
+        {
+          "x": 7,
+          "y": 1,
+          "entry_to_finish": 1690,
+          "decode": 532,
+          "dot": 523,
+          "operand_ready_callback": 619,
+          "sum_send_done": 1660
+        },
+        {
+          "x": 0,
+          "y": 2,
+          "entry_to_finish": 2069,
+          "decode": 529,
+          "dot": 521,
+          "operand_ready_callback": 619,
+          "sum_send_done": 1249
+        },
+        {
+          "x": 1,
+          "y": 2,
+          "entry_to_finish": 1342,
+          "decode": 535,
+          "dot": 523,
+          "operand_ready_callback": 622,
+          "sum_send_done": 1312
+        },
+        {
+          "x": 2,
+          "y": 2,
+          "entry_to_finish": 1400,
+          "decode": 535,
+          "dot": 523,
+          "operand_ready_callback": 622,
+          "sum_send_done": 1370
+        },
+        {
+          "x": 3,
+          "y": 2,
+          "entry_to_finish": 1458,
+          "decode": 535,
+          "dot": 523,
+          "operand_ready_callback": 622,
+          "sum_send_done": 1428
+        },
+        {
+          "x": 4,
+          "y": 2,
+          "entry_to_finish": 1516,
+          "decode": 535,
+          "dot": 523,
+          "operand_ready_callback": 622,
+          "sum_send_done": 1486
+        },
+        {
+          "x": 5,
+          "y": 2,
+          "entry_to_finish": 1574,
+          "decode": 535,
+          "dot": 523,
+          "operand_ready_callback": 622,
+          "sum_send_done": 1544
+        },
+        {
+          "x": 6,
+          "y": 2,
+          "entry_to_finish": 1632,
+          "decode": 534,
+          "dot": 523,
+          "operand_ready_callback": 621,
+          "sum_send_done": 1602
+        },
+        {
+          "x": 7,
+          "y": 2,
+          "entry_to_finish": 1690,
+          "decode": 535,
+          "dot": 523,
+          "operand_ready_callback": 622,
+          "sum_send_done": 1660
+        },
+        {
+          "x": 0,
+          "y": 3,
+          "entry_to_finish": 2004,
+          "decode": 529,
+          "dot": 521,
+          "operand_ready_callback": 619,
+          "sum_send_done": 1249
+        },
+        {
+          "x": 1,
+          "y": 3,
+          "entry_to_finish": 1342,
+          "decode": 525,
+          "dot": 523,
+          "operand_ready_callback": 612,
+          "sum_send_done": 1312
+        },
+        {
+          "x": 2,
+          "y": 3,
+          "entry_to_finish": 1400,
+          "decode": 525,
+          "dot": 523,
+          "operand_ready_callback": 612,
+          "sum_send_done": 1370
+        },
+        {
+          "x": 3,
+          "y": 3,
+          "entry_to_finish": 1458,
+          "decode": 525,
+          "dot": 523,
+          "operand_ready_callback": 612,
+          "sum_send_done": 1428
+        },
+        {
+          "x": 4,
+          "y": 3,
+          "entry_to_finish": 1516,
+          "decode": 525,
+          "dot": 523,
+          "operand_ready_callback": 612,
+          "sum_send_done": 1486
+        },
+        {
+          "x": 5,
+          "y": 3,
+          "entry_to_finish": 1574,
+          "decode": 525,
+          "dot": 523,
+          "operand_ready_callback": 612,
+          "sum_send_done": 1544
+        },
+        {
+          "x": 6,
+          "y": 3,
+          "entry_to_finish": 1632,
+          "decode": 528,
+          "dot": 523,
+          "operand_ready_callback": 615,
+          "sum_send_done": 1602
+        },
+        {
+          "x": 7,
+          "y": 3,
+          "entry_to_finish": 1690,
+          "decode": 525,
+          "dot": 523,
+          "operand_ready_callback": 612,
+          "sum_send_done": 1660
+        },
+        {
+          "x": 0,
+          "y": 4,
+          "entry_to_finish": 1939,
+          "decode": 523,
+          "dot": 521,
+          "operand_ready_callback": 613,
+          "sum_send_done": 1243
+        },
+        {
+          "x": 1,
+          "y": 4,
+          "entry_to_finish": 1336,
+          "decode": 529,
+          "dot": 523,
+          "operand_ready_callback": 616,
+          "sum_send_done": 1306
+        },
+        {
+          "x": 2,
+          "y": 4,
+          "entry_to_finish": 1394,
+          "decode": 526,
+          "dot": 523,
+          "operand_ready_callback": 613,
+          "sum_send_done": 1364
+        },
+        {
+          "x": 3,
+          "y": 4,
+          "entry_to_finish": 1452,
+          "decode": 526,
+          "dot": 523,
+          "operand_ready_callback": 613,
+          "sum_send_done": 1422
+        },
+        {
+          "x": 4,
+          "y": 4,
+          "entry_to_finish": 1510,
+          "decode": 529,
+          "dot": 523,
+          "operand_ready_callback": 616,
+          "sum_send_done": 1480
+        },
+        {
+          "x": 5,
+          "y": 4,
+          "entry_to_finish": 1568,
+          "decode": 529,
+          "dot": 523,
+          "operand_ready_callback": 616,
+          "sum_send_done": 1538
+        },
+        {
+          "x": 6,
+          "y": 4,
+          "entry_to_finish": 1626,
+          "decode": 524,
+          "dot": 523,
+          "operand_ready_callback": 611,
+          "sum_send_done": 1596
+        },
+        {
+          "x": 7,
+          "y": 4,
+          "entry_to_finish": 1684,
+          "decode": 526,
+          "dot": 523,
+          "operand_ready_callback": 613,
+          "sum_send_done": 1654
+        },
+        {
+          "x": 0,
+          "y": 5,
+          "entry_to_finish": 1874,
+          "decode": 526,
+          "dot": 521,
+          "operand_ready_callback": 616,
+          "sum_send_done": 1246
+        },
+        {
+          "x": 1,
+          "y": 5,
+          "entry_to_finish": 1339,
+          "decode": 527,
+          "dot": 523,
+          "operand_ready_callback": 614,
+          "sum_send_done": 1309
+        },
+        {
+          "x": 2,
+          "y": 5,
+          "entry_to_finish": 1397,
+          "decode": 527,
+          "dot": 523,
+          "operand_ready_callback": 614,
+          "sum_send_done": 1367
+        },
+        {
+          "x": 3,
+          "y": 5,
+          "entry_to_finish": 1455,
+          "decode": 530,
+          "dot": 523,
+          "operand_ready_callback": 617,
+          "sum_send_done": 1425
+        },
+        {
+          "x": 4,
+          "y": 5,
+          "entry_to_finish": 1513,
+          "decode": 527,
+          "dot": 523,
+          "operand_ready_callback": 614,
+          "sum_send_done": 1483
+        },
+        {
+          "x": 5,
+          "y": 5,
+          "entry_to_finish": 1571,
+          "decode": 527,
+          "dot": 523,
+          "operand_ready_callback": 614,
+          "sum_send_done": 1541
+        },
+        {
+          "x": 6,
+          "y": 5,
+          "entry_to_finish": 1629,
+          "decode": 526,
+          "dot": 523,
+          "operand_ready_callback": 613,
+          "sum_send_done": 1599
+        },
+        {
+          "x": 7,
+          "y": 5,
+          "entry_to_finish": 1687,
+          "decode": 527,
+          "dot": 523,
+          "operand_ready_callback": 614,
+          "sum_send_done": 1657
+        },
+        {
+          "x": 0,
+          "y": 6,
+          "entry_to_finish": 1809,
+          "decode": 531,
+          "dot": 521,
+          "operand_ready_callback": 621,
+          "sum_send_done": 1251
+        },
+        {
+          "x": 1,
+          "y": 6,
+          "entry_to_finish": 1344,
+          "decode": 528,
+          "dot": 523,
+          "operand_ready_callback": 615,
+          "sum_send_done": 1314
+        },
+        {
+          "x": 2,
+          "y": 6,
+          "entry_to_finish": 1402,
+          "decode": 528,
+          "dot": 523,
+          "operand_ready_callback": 615,
+          "sum_send_done": 1372
+        },
+        {
+          "x": 3,
+          "y": 6,
+          "entry_to_finish": 1460,
+          "decode": 526,
+          "dot": 523,
+          "operand_ready_callback": 613,
+          "sum_send_done": 1430
+        },
+        {
+          "x": 4,
+          "y": 6,
+          "entry_to_finish": 1518,
+          "decode": 528,
+          "dot": 523,
+          "operand_ready_callback": 615,
+          "sum_send_done": 1488
+        },
+        {
+          "x": 5,
+          "y": 6,
+          "entry_to_finish": 1576,
+          "decode": 528,
+          "dot": 523,
+          "operand_ready_callback": 615,
+          "sum_send_done": 1546
+        },
+        {
+          "x": 6,
+          "y": 6,
+          "entry_to_finish": 1634,
+          "decode": 527,
+          "dot": 523,
+          "operand_ready_callback": 614,
+          "sum_send_done": 1604
+        },
+        {
+          "x": 7,
+          "y": 6,
+          "entry_to_finish": 1692,
+          "decode": 528,
+          "dot": 523,
+          "operand_ready_callback": 615,
+          "sum_send_done": 1662
+        },
+        {
+          "x": 0,
+          "y": 7,
+          "entry_to_finish": 1745,
+          "decode": 523,
+          "dot": 523,
+          "operand_ready_callback": 612,
+          "sum_send_done": 1246
+        },
+        {
+          "x": 1,
+          "y": 7,
+          "entry_to_finish": 1337,
+          "decode": 527,
+          "dot": 523,
+          "operand_ready_callback": 614,
+          "sum_send_done": 1307
+        },
+        {
+          "x": 2,
+          "y": 7,
+          "entry_to_finish": 1395,
+          "decode": 526,
+          "dot": 523,
+          "operand_ready_callback": 613,
+          "sum_send_done": 1365
+        },
+        {
+          "x": 3,
+          "y": 7,
+          "entry_to_finish": 1453,
+          "decode": 527,
+          "dot": 523,
+          "operand_ready_callback": 614,
+          "sum_send_done": 1423
+        },
+        {
+          "x": 4,
+          "y": 7,
+          "entry_to_finish": 1511,
+          "decode": 527,
+          "dot": 523,
+          "operand_ready_callback": 614,
+          "sum_send_done": 1481
+        },
+        {
+          "x": 5,
+          "y": 7,
+          "entry_to_finish": 1569,
+          "decode": 527,
+          "dot": 523,
+          "operand_ready_callback": 614,
+          "sum_send_done": 1539
+        },
+        {
+          "x": 6,
+          "y": 7,
+          "entry_to_finish": 1627,
+          "decode": 527,
+          "dot": 523,
+          "operand_ready_callback": 614,
+          "sum_send_done": 1597
+        },
+        {
+          "x": 7,
+          "y": 7,
+          "entry_to_finish": 1685,
+          "decode": 527,
+          "dot": 523,
+          "operand_ready_callback": 614,
+          "sum_send_done": 1655
+        }
+      ],
+      "max_abs_fp64_error": 1.1239620789638138e-08
+    },
+    {
+      "case": 1,
+      "overlapped": false,
+      "root_region_cycles": 2599,
+      "host_launch_through_result_audit_seconds": 0.002881556749343872,
+      "timing": [
+        {
+          "x": 0,
+          "y": 0,
+          "entry_to_finish": 2599,
+          "decode": 513,
+          "dot": 525,
+          "operand_ready_callback": 349,
+          "sum_send_done": 1617
+        },
+        {
+          "x": 1,
+          "y": 0,
+          "entry_to_finish": 1709,
+          "decode": 513,
+          "dot": 523,
+          "operand_ready_callback": 348,
+          "sum_send_done": 1674
+        },
+        {
+          "x": 2,
+          "y": 0,
+          "entry_to_finish": 1767,
+          "decode": 513,
+          "dot": 523,
+          "operand_ready_callback": 348,
+          "sum_send_done": 1732
+        },
+        {
+          "x": 3,
+          "y": 0,
+          "entry_to_finish": 1825,
+          "decode": 513,
+          "dot": 523,
+          "operand_ready_callback": 348,
+          "sum_send_done": 1790
+        },
+        {
+          "x": 4,
+          "y": 0,
+          "entry_to_finish": 1883,
+          "decode": 513,
+          "dot": 523,
+          "operand_ready_callback": 348,
+          "sum_send_done": 1848
+        },
+        {
+          "x": 5,
+          "y": 0,
+          "entry_to_finish": 1941,
+          "decode": 513,
+          "dot": 523,
+          "operand_ready_callback": 348,
+          "sum_send_done": 1906
+        },
+        {
+          "x": 6,
+          "y": 0,
+          "entry_to_finish": 1999,
+          "decode": 513,
+          "dot": 523,
+          "operand_ready_callback": 348,
+          "sum_send_done": 1964
+        },
+        {
+          "x": 7,
+          "y": 0,
+          "entry_to_finish": 2057,
+          "decode": 513,
+          "dot": 523,
+          "operand_ready_callback": 348,
+          "sum_send_done": 2022
+        },
+        {
+          "x": 0,
+          "y": 1,
+          "entry_to_finish": 2545,
+          "decode": 502,
+          "dot": 521,
+          "operand_ready_callback": 473,
+          "sum_send_done": 1629
+        },
+        {
+          "x": 1,
+          "y": 1,
+          "entry_to_finish": 1722,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 465,
+          "sum_send_done": 1692
+        },
+        {
+          "x": 2,
+          "y": 1,
+          "entry_to_finish": 1780,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 465,
+          "sum_send_done": 1750
+        },
+        {
+          "x": 3,
+          "y": 1,
+          "entry_to_finish": 1838,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 465,
+          "sum_send_done": 1808
+        },
+        {
+          "x": 4,
+          "y": 1,
+          "entry_to_finish": 1896,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 465,
+          "sum_send_done": 1866
+        },
+        {
+          "x": 5,
+          "y": 1,
+          "entry_to_finish": 1954,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 465,
+          "sum_send_done": 1924
+        },
+        {
+          "x": 6,
+          "y": 1,
+          "entry_to_finish": 2012,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 465,
+          "sum_send_done": 1982
+        },
+        {
+          "x": 7,
+          "y": 1,
+          "entry_to_finish": 2070,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 465,
+          "sum_send_done": 2040
+        },
+        {
+          "x": 0,
+          "y": 2,
+          "entry_to_finish": 2480,
+          "decode": 501,
+          "dot": 521,
+          "operand_ready_callback": 477,
+          "sum_send_done": 1632
+        },
+        {
+          "x": 1,
+          "y": 2,
+          "entry_to_finish": 1725,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 469,
+          "sum_send_done": 1695
+        },
+        {
+          "x": 2,
+          "y": 2,
+          "entry_to_finish": 1783,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 469,
+          "sum_send_done": 1753
+        },
+        {
+          "x": 3,
+          "y": 2,
+          "entry_to_finish": 1841,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 469,
+          "sum_send_done": 1811
+        },
+        {
+          "x": 4,
+          "y": 2,
+          "entry_to_finish": 1899,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 469,
+          "sum_send_done": 1869
+        },
+        {
+          "x": 5,
+          "y": 2,
+          "entry_to_finish": 1957,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 469,
+          "sum_send_done": 1927
+        },
+        {
+          "x": 6,
+          "y": 2,
+          "entry_to_finish": 2015,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 469,
+          "sum_send_done": 1985
+        },
+        {
+          "x": 7,
+          "y": 2,
+          "entry_to_finish": 2073,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 469,
+          "sum_send_done": 2043
+        },
+        {
+          "x": 0,
+          "y": 3,
+          "entry_to_finish": 2415,
+          "decode": 502,
+          "dot": 521,
+          "operand_ready_callback": 481,
+          "sum_send_done": 1637
+        },
+        {
+          "x": 1,
+          "y": 3,
+          "entry_to_finish": 1730,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 473,
+          "sum_send_done": 1700
+        },
+        {
+          "x": 2,
+          "y": 3,
+          "entry_to_finish": 1788,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 473,
+          "sum_send_done": 1758
+        },
+        {
+          "x": 3,
+          "y": 3,
+          "entry_to_finish": 1846,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 473,
+          "sum_send_done": 1816
+        },
+        {
+          "x": 4,
+          "y": 3,
+          "entry_to_finish": 1904,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 473,
+          "sum_send_done": 1874
+        },
+        {
+          "x": 5,
+          "y": 3,
+          "entry_to_finish": 1962,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 473,
+          "sum_send_done": 1932
+        },
+        {
+          "x": 6,
+          "y": 3,
+          "entry_to_finish": 2020,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 473,
+          "sum_send_done": 1990
+        },
+        {
+          "x": 7,
+          "y": 3,
+          "entry_to_finish": 2078,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 473,
+          "sum_send_done": 2048
+        },
+        {
+          "x": 0,
+          "y": 4,
+          "entry_to_finish": 2350,
+          "decode": 501,
+          "dot": 521,
+          "operand_ready_callback": 485,
+          "sum_send_done": 1640
+        },
+        {
+          "x": 1,
+          "y": 4,
+          "entry_to_finish": 1733,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 477,
+          "sum_send_done": 1703
+        },
+        {
+          "x": 2,
+          "y": 4,
+          "entry_to_finish": 1791,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 477,
+          "sum_send_done": 1761
+        },
+        {
+          "x": 3,
+          "y": 4,
+          "entry_to_finish": 1849,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 477,
+          "sum_send_done": 1819
+        },
+        {
+          "x": 4,
+          "y": 4,
+          "entry_to_finish": 1907,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 477,
+          "sum_send_done": 1877
+        },
+        {
+          "x": 5,
+          "y": 4,
+          "entry_to_finish": 1965,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 477,
+          "sum_send_done": 1935
+        },
+        {
+          "x": 6,
+          "y": 4,
+          "entry_to_finish": 2023,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 477,
+          "sum_send_done": 1993
+        },
+        {
+          "x": 7,
+          "y": 4,
+          "entry_to_finish": 2081,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 477,
+          "sum_send_done": 2051
+        },
+        {
+          "x": 0,
+          "y": 5,
+          "entry_to_finish": 2285,
+          "decode": 501,
+          "dot": 521,
+          "operand_ready_callback": 489,
+          "sum_send_done": 1644
+        },
+        {
+          "x": 1,
+          "y": 5,
+          "entry_to_finish": 1737,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 481,
+          "sum_send_done": 1707
+        },
+        {
+          "x": 2,
+          "y": 5,
+          "entry_to_finish": 1795,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 481,
+          "sum_send_done": 1765
+        },
+        {
+          "x": 3,
+          "y": 5,
+          "entry_to_finish": 1853,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 481,
+          "sum_send_done": 1823
+        },
+        {
+          "x": 4,
+          "y": 5,
+          "entry_to_finish": 1911,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 481,
+          "sum_send_done": 1881
+        },
+        {
+          "x": 5,
+          "y": 5,
+          "entry_to_finish": 1969,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 481,
+          "sum_send_done": 1939
+        },
+        {
+          "x": 6,
+          "y": 5,
+          "entry_to_finish": 2027,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 481,
+          "sum_send_done": 1997
+        },
+        {
+          "x": 7,
+          "y": 5,
+          "entry_to_finish": 2085,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 481,
+          "sum_send_done": 2055
+        },
+        {
+          "x": 0,
+          "y": 6,
+          "entry_to_finish": 2220,
+          "decode": 501,
+          "dot": 521,
+          "operand_ready_callback": 493,
+          "sum_send_done": 1648
+        },
+        {
+          "x": 1,
+          "y": 6,
+          "entry_to_finish": 1741,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 485,
+          "sum_send_done": 1711
+        },
+        {
+          "x": 2,
+          "y": 6,
+          "entry_to_finish": 1799,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 485,
+          "sum_send_done": 1769
+        },
+        {
+          "x": 3,
+          "y": 6,
+          "entry_to_finish": 1857,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 485,
+          "sum_send_done": 1827
+        },
+        {
+          "x": 4,
+          "y": 6,
+          "entry_to_finish": 1915,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 485,
+          "sum_send_done": 1885
+        },
+        {
+          "x": 5,
+          "y": 6,
+          "entry_to_finish": 1973,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 485,
+          "sum_send_done": 1943
+        },
+        {
+          "x": 6,
+          "y": 6,
+          "entry_to_finish": 2031,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 485,
+          "sum_send_done": 2001
+        },
+        {
+          "x": 7,
+          "y": 6,
+          "entry_to_finish": 2089,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 485,
+          "sum_send_done": 2059
+        },
+        {
+          "x": 0,
+          "y": 7,
+          "entry_to_finish": 2156,
+          "decode": 503,
+          "dot": 523,
+          "operand_ready_callback": 496,
+          "sum_send_done": 1657
+        },
+        {
+          "x": 1,
+          "y": 7,
+          "entry_to_finish": 1748,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 489,
+          "sum_send_done": 1718
+        },
+        {
+          "x": 2,
+          "y": 7,
+          "entry_to_finish": 1806,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 489,
+          "sum_send_done": 1776
+        },
+        {
+          "x": 3,
+          "y": 7,
+          "entry_to_finish": 1864,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 489,
+          "sum_send_done": 1834
+        },
+        {
+          "x": 4,
+          "y": 7,
+          "entry_to_finish": 1922,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 489,
+          "sum_send_done": 1892
+        },
+        {
+          "x": 5,
+          "y": 7,
+          "entry_to_finish": 1980,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 489,
+          "sum_send_done": 1950
+        },
+        {
+          "x": 6,
+          "y": 7,
+          "entry_to_finish": 2038,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 489,
+          "sum_send_done": 2008
+        },
+        {
+          "x": 7,
+          "y": 7,
+          "entry_to_finish": 2096,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 489,
+          "sum_send_done": 2066
+        }
+      ],
+      "max_abs_fp64_error": 1.1239620789638138e-08
+    },
+    {
+      "case": 2,
+      "overlapped": false,
+      "root_region_cycles": 2599,
+      "host_launch_through_result_audit_seconds": 0.0028166044503450394,
+      "timing": [
+        {
+          "x": 0,
+          "y": 0,
+          "entry_to_finish": 2599,
+          "decode": 512,
+          "dot": 525,
+          "operand_ready_callback": 349,
+          "sum_send_done": 1616
+        },
+        {
+          "x": 1,
+          "y": 0,
+          "entry_to_finish": 1708,
+          "decode": 513,
+          "dot": 523,
+          "operand_ready_callback": 348,
+          "sum_send_done": 1673
+        },
+        {
+          "x": 2,
+          "y": 0,
+          "entry_to_finish": 1766,
+          "decode": 513,
+          "dot": 523,
+          "operand_ready_callback": 348,
+          "sum_send_done": 1731
+        },
+        {
+          "x": 3,
+          "y": 0,
+          "entry_to_finish": 1824,
+          "decode": 513,
+          "dot": 523,
+          "operand_ready_callback": 348,
+          "sum_send_done": 1789
+        },
+        {
+          "x": 4,
+          "y": 0,
+          "entry_to_finish": 1882,
+          "decode": 513,
+          "dot": 523,
+          "operand_ready_callback": 348,
+          "sum_send_done": 1847
+        },
+        {
+          "x": 5,
+          "y": 0,
+          "entry_to_finish": 1940,
+          "decode": 513,
+          "dot": 523,
+          "operand_ready_callback": 348,
+          "sum_send_done": 1905
+        },
+        {
+          "x": 6,
+          "y": 0,
+          "entry_to_finish": 1998,
+          "decode": 513,
+          "dot": 523,
+          "operand_ready_callback": 348,
+          "sum_send_done": 1963
+        },
+        {
+          "x": 7,
+          "y": 0,
+          "entry_to_finish": 2056,
+          "decode": 513,
+          "dot": 523,
+          "operand_ready_callback": 348,
+          "sum_send_done": 2021
+        },
+        {
+          "x": 0,
+          "y": 1,
+          "entry_to_finish": 2545,
+          "decode": 501,
+          "dot": 521,
+          "operand_ready_callback": 473,
+          "sum_send_done": 1628
+        },
+        {
+          "x": 1,
+          "y": 1,
+          "entry_to_finish": 1721,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 465,
+          "sum_send_done": 1691
+        },
+        {
+          "x": 2,
+          "y": 1,
+          "entry_to_finish": 1779,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 465,
+          "sum_send_done": 1749
+        },
+        {
+          "x": 3,
+          "y": 1,
+          "entry_to_finish": 1837,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 465,
+          "sum_send_done": 1807
+        },
+        {
+          "x": 4,
+          "y": 1,
+          "entry_to_finish": 1895,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 465,
+          "sum_send_done": 1865
+        },
+        {
+          "x": 5,
+          "y": 1,
+          "entry_to_finish": 1953,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 465,
+          "sum_send_done": 1923
+        },
+        {
+          "x": 6,
+          "y": 1,
+          "entry_to_finish": 2011,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 465,
+          "sum_send_done": 1981
+        },
+        {
+          "x": 7,
+          "y": 1,
+          "entry_to_finish": 2069,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 465,
+          "sum_send_done": 2039
+        },
+        {
+          "x": 0,
+          "y": 2,
+          "entry_to_finish": 2480,
+          "decode": 501,
+          "dot": 521,
+          "operand_ready_callback": 477,
+          "sum_send_done": 1632
+        },
+        {
+          "x": 1,
+          "y": 2,
+          "entry_to_finish": 1725,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 469,
+          "sum_send_done": 1695
+        },
+        {
+          "x": 2,
+          "y": 2,
+          "entry_to_finish": 1783,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 469,
+          "sum_send_done": 1753
+        },
+        {
+          "x": 3,
+          "y": 2,
+          "entry_to_finish": 1841,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 469,
+          "sum_send_done": 1811
+        },
+        {
+          "x": 4,
+          "y": 2,
+          "entry_to_finish": 1899,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 469,
+          "sum_send_done": 1869
+        },
+        {
+          "x": 5,
+          "y": 2,
+          "entry_to_finish": 1957,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 469,
+          "sum_send_done": 1927
+        },
+        {
+          "x": 6,
+          "y": 2,
+          "entry_to_finish": 2015,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 469,
+          "sum_send_done": 1985
+        },
+        {
+          "x": 7,
+          "y": 2,
+          "entry_to_finish": 2073,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 469,
+          "sum_send_done": 2043
+        },
+        {
+          "x": 0,
+          "y": 3,
+          "entry_to_finish": 2415,
+          "decode": 502,
+          "dot": 521,
+          "operand_ready_callback": 481,
+          "sum_send_done": 1637
+        },
+        {
+          "x": 1,
+          "y": 3,
+          "entry_to_finish": 1730,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 473,
+          "sum_send_done": 1700
+        },
+        {
+          "x": 2,
+          "y": 3,
+          "entry_to_finish": 1788,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 473,
+          "sum_send_done": 1758
+        },
+        {
+          "x": 3,
+          "y": 3,
+          "entry_to_finish": 1846,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 473,
+          "sum_send_done": 1816
+        },
+        {
+          "x": 4,
+          "y": 3,
+          "entry_to_finish": 1904,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 473,
+          "sum_send_done": 1874
+        },
+        {
+          "x": 5,
+          "y": 3,
+          "entry_to_finish": 1962,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 473,
+          "sum_send_done": 1932
+        },
+        {
+          "x": 6,
+          "y": 3,
+          "entry_to_finish": 2020,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 473,
+          "sum_send_done": 1990
+        },
+        {
+          "x": 7,
+          "y": 3,
+          "entry_to_finish": 2078,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 473,
+          "sum_send_done": 2048
+        },
+        {
+          "x": 0,
+          "y": 4,
+          "entry_to_finish": 2350,
+          "decode": 502,
+          "dot": 521,
+          "operand_ready_callback": 485,
+          "sum_send_done": 1641
+        },
+        {
+          "x": 1,
+          "y": 4,
+          "entry_to_finish": 1734,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 477,
+          "sum_send_done": 1704
+        },
+        {
+          "x": 2,
+          "y": 4,
+          "entry_to_finish": 1792,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 477,
+          "sum_send_done": 1762
+        },
+        {
+          "x": 3,
+          "y": 4,
+          "entry_to_finish": 1850,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 477,
+          "sum_send_done": 1820
+        },
+        {
+          "x": 4,
+          "y": 4,
+          "entry_to_finish": 1908,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 477,
+          "sum_send_done": 1878
+        },
+        {
+          "x": 5,
+          "y": 4,
+          "entry_to_finish": 1966,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 477,
+          "sum_send_done": 1936
+        },
+        {
+          "x": 6,
+          "y": 4,
+          "entry_to_finish": 2024,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 477,
+          "sum_send_done": 1994
+        },
+        {
+          "x": 7,
+          "y": 4,
+          "entry_to_finish": 2082,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 477,
+          "sum_send_done": 2052
+        },
+        {
+          "x": 0,
+          "y": 5,
+          "entry_to_finish": 2285,
+          "decode": 501,
+          "dot": 521,
+          "operand_ready_callback": 489,
+          "sum_send_done": 1644
+        },
+        {
+          "x": 1,
+          "y": 5,
+          "entry_to_finish": 1737,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 481,
+          "sum_send_done": 1707
+        },
+        {
+          "x": 2,
+          "y": 5,
+          "entry_to_finish": 1795,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 481,
+          "sum_send_done": 1765
+        },
+        {
+          "x": 3,
+          "y": 5,
+          "entry_to_finish": 1853,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 481,
+          "sum_send_done": 1823
+        },
+        {
+          "x": 4,
+          "y": 5,
+          "entry_to_finish": 1911,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 481,
+          "sum_send_done": 1881
+        },
+        {
+          "x": 5,
+          "y": 5,
+          "entry_to_finish": 1969,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 481,
+          "sum_send_done": 1939
+        },
+        {
+          "x": 6,
+          "y": 5,
+          "entry_to_finish": 2027,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 481,
+          "sum_send_done": 1997
+        },
+        {
+          "x": 7,
+          "y": 5,
+          "entry_to_finish": 2085,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 481,
+          "sum_send_done": 2055
+        },
+        {
+          "x": 0,
+          "y": 6,
+          "entry_to_finish": 2220,
+          "decode": 502,
+          "dot": 521,
+          "operand_ready_callback": 493,
+          "sum_send_done": 1649
+        },
+        {
+          "x": 1,
+          "y": 6,
+          "entry_to_finish": 1742,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 485,
+          "sum_send_done": 1712
+        },
+        {
+          "x": 2,
+          "y": 6,
+          "entry_to_finish": 1800,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 485,
+          "sum_send_done": 1770
+        },
+        {
+          "x": 3,
+          "y": 6,
+          "entry_to_finish": 1858,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 485,
+          "sum_send_done": 1828
+        },
+        {
+          "x": 4,
+          "y": 6,
+          "entry_to_finish": 1916,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 485,
+          "sum_send_done": 1886
+        },
+        {
+          "x": 5,
+          "y": 6,
+          "entry_to_finish": 1974,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 485,
+          "sum_send_done": 1944
+        },
+        {
+          "x": 6,
+          "y": 6,
+          "entry_to_finish": 2032,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 485,
+          "sum_send_done": 2002
+        },
+        {
+          "x": 7,
+          "y": 6,
+          "entry_to_finish": 2090,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 485,
+          "sum_send_done": 2060
+        },
+        {
+          "x": 0,
+          "y": 7,
+          "entry_to_finish": 2156,
+          "decode": 503,
+          "dot": 523,
+          "operand_ready_callback": 496,
+          "sum_send_done": 1657
+        },
+        {
+          "x": 1,
+          "y": 7,
+          "entry_to_finish": 1748,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 489,
+          "sum_send_done": 1718
+        },
+        {
+          "x": 2,
+          "y": 7,
+          "entry_to_finish": 1806,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 489,
+          "sum_send_done": 1776
+        },
+        {
+          "x": 3,
+          "y": 7,
+          "entry_to_finish": 1864,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 489,
+          "sum_send_done": 1834
+        },
+        {
+          "x": 4,
+          "y": 7,
+          "entry_to_finish": 1922,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 489,
+          "sum_send_done": 1892
+        },
+        {
+          "x": 5,
+          "y": 7,
+          "entry_to_finish": 1980,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 489,
+          "sum_send_done": 1950
+        },
+        {
+          "x": 6,
+          "y": 7,
+          "entry_to_finish": 2038,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 489,
+          "sum_send_done": 2008
+        },
+        {
+          "x": 7,
+          "y": 7,
+          "entry_to_finish": 2096,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 489,
+          "sum_send_done": 2066
+        }
+      ],
+      "max_abs_fp64_error": 4.70760583293206e-15
+    },
+    {
+      "case": 2,
+      "overlapped": true,
+      "root_region_cycles": 2188,
+      "host_launch_through_result_audit_seconds": 0.0029458971694111824,
+      "timing": [
+        {
+          "x": 0,
+          "y": 0,
+          "entry_to_finish": 2188,
+          "decode": 526,
+          "dot": 525,
+          "operand_ready_callback": 349,
+          "sum_send_done": 1567
+        },
+        {
+          "x": 1,
+          "y": 0,
+          "entry_to_finish": 1637,
+          "decode": 523,
+          "dot": 523,
+          "operand_ready_callback": 348,
+          "sum_send_done": 1602
+        },
+        {
+          "x": 2,
+          "y": 0,
+          "entry_to_finish": 1695,
+          "decode": 523,
+          "dot": 523,
+          "operand_ready_callback": 348,
+          "sum_send_done": 1660
+        },
+        {
+          "x": 3,
+          "y": 0,
+          "entry_to_finish": 1753,
+          "decode": 524,
+          "dot": 523,
+          "operand_ready_callback": 348,
+          "sum_send_done": 1718
+        },
+        {
+          "x": 4,
+          "y": 0,
+          "entry_to_finish": 1811,
+          "decode": 523,
+          "dot": 523,
+          "operand_ready_callback": 348,
+          "sum_send_done": 1776
+        },
+        {
+          "x": 5,
+          "y": 0,
+          "entry_to_finish": 1869,
+          "decode": 523,
+          "dot": 523,
+          "operand_ready_callback": 348,
+          "sum_send_done": 1834
+        },
+        {
+          "x": 6,
+          "y": 0,
+          "entry_to_finish": 1927,
+          "decode": 523,
+          "dot": 523,
+          "operand_ready_callback": 348,
+          "sum_send_done": 1892
+        },
+        {
+          "x": 7,
+          "y": 0,
+          "entry_to_finish": 1985,
+          "decode": 523,
+          "dot": 523,
+          "operand_ready_callback": 348,
+          "sum_send_done": 1950
+        },
+        {
+          "x": 0,
+          "y": 1,
+          "entry_to_finish": 2134,
+          "decode": 529,
+          "dot": 521,
+          "operand_ready_callback": 619,
+          "sum_send_done": 1249
+        },
+        {
+          "x": 1,
+          "y": 1,
+          "entry_to_finish": 1342,
+          "decode": 532,
+          "dot": 523,
+          "operand_ready_callback": 619,
+          "sum_send_done": 1312
+        },
+        {
+          "x": 2,
+          "y": 1,
+          "entry_to_finish": 1400,
+          "decode": 527,
+          "dot": 523,
+          "operand_ready_callback": 614,
+          "sum_send_done": 1370
+        },
+        {
+          "x": 3,
+          "y": 1,
+          "entry_to_finish": 1458,
+          "decode": 534,
+          "dot": 523,
+          "operand_ready_callback": 621,
+          "sum_send_done": 1428
+        },
+        {
+          "x": 4,
+          "y": 1,
+          "entry_to_finish": 1516,
+          "decode": 534,
+          "dot": 523,
+          "operand_ready_callback": 621,
+          "sum_send_done": 1486
+        },
+        {
+          "x": 5,
+          "y": 1,
+          "entry_to_finish": 1574,
+          "decode": 534,
+          "dot": 523,
+          "operand_ready_callback": 621,
+          "sum_send_done": 1544
+        },
+        {
+          "x": 6,
+          "y": 1,
+          "entry_to_finish": 1632,
+          "decode": 532,
+          "dot": 523,
+          "operand_ready_callback": 619,
+          "sum_send_done": 1602
+        },
+        {
+          "x": 7,
+          "y": 1,
+          "entry_to_finish": 1690,
+          "decode": 534,
+          "dot": 523,
+          "operand_ready_callback": 621,
+          "sum_send_done": 1660
+        },
+        {
+          "x": 0,
+          "y": 2,
+          "entry_to_finish": 2069,
+          "decode": 529,
+          "dot": 521,
+          "operand_ready_callback": 619,
+          "sum_send_done": 1249
+        },
+        {
+          "x": 1,
+          "y": 2,
+          "entry_to_finish": 1342,
+          "decode": 535,
+          "dot": 523,
+          "operand_ready_callback": 622,
+          "sum_send_done": 1312
+        },
+        {
+          "x": 2,
+          "y": 2,
+          "entry_to_finish": 1400,
+          "decode": 534,
+          "dot": 523,
+          "operand_ready_callback": 621,
+          "sum_send_done": 1370
+        },
+        {
+          "x": 3,
+          "y": 2,
+          "entry_to_finish": 1458,
+          "decode": 535,
+          "dot": 523,
+          "operand_ready_callback": 622,
+          "sum_send_done": 1428
+        },
+        {
+          "x": 4,
+          "y": 2,
+          "entry_to_finish": 1516,
+          "decode": 535,
+          "dot": 523,
+          "operand_ready_callback": 622,
+          "sum_send_done": 1486
+        },
+        {
+          "x": 5,
+          "y": 2,
+          "entry_to_finish": 1574,
+          "decode": 535,
+          "dot": 523,
+          "operand_ready_callback": 622,
+          "sum_send_done": 1544
+        },
+        {
+          "x": 6,
+          "y": 2,
+          "entry_to_finish": 1632,
+          "decode": 535,
+          "dot": 523,
+          "operand_ready_callback": 622,
+          "sum_send_done": 1602
+        },
+        {
+          "x": 7,
+          "y": 2,
+          "entry_to_finish": 1690,
+          "decode": 535,
+          "dot": 523,
+          "operand_ready_callback": 622,
+          "sum_send_done": 1660
+        },
+        {
+          "x": 0,
+          "y": 3,
+          "entry_to_finish": 2004,
+          "decode": 529,
+          "dot": 521,
+          "operand_ready_callback": 619,
+          "sum_send_done": 1249
+        },
+        {
+          "x": 1,
+          "y": 3,
+          "entry_to_finish": 1342,
+          "decode": 529,
+          "dot": 523,
+          "operand_ready_callback": 616,
+          "sum_send_done": 1312
+        },
+        {
+          "x": 2,
+          "y": 3,
+          "entry_to_finish": 1400,
+          "decode": 528,
+          "dot": 523,
+          "operand_ready_callback": 615,
+          "sum_send_done": 1370
+        },
+        {
+          "x": 3,
+          "y": 3,
+          "entry_to_finish": 1458,
+          "decode": 525,
+          "dot": 523,
+          "operand_ready_callback": 612,
+          "sum_send_done": 1428
+        },
+        {
+          "x": 4,
+          "y": 3,
+          "entry_to_finish": 1516,
+          "decode": 525,
+          "dot": 523,
+          "operand_ready_callback": 612,
+          "sum_send_done": 1486
+        },
+        {
+          "x": 5,
+          "y": 3,
+          "entry_to_finish": 1574,
+          "decode": 525,
+          "dot": 523,
+          "operand_ready_callback": 612,
+          "sum_send_done": 1544
+        },
+        {
+          "x": 6,
+          "y": 3,
+          "entry_to_finish": 1632,
+          "decode": 525,
+          "dot": 523,
+          "operand_ready_callback": 612,
+          "sum_send_done": 1602
+        },
+        {
+          "x": 7,
+          "y": 3,
+          "entry_to_finish": 1690,
+          "decode": 525,
+          "dot": 523,
+          "operand_ready_callback": 612,
+          "sum_send_done": 1660
+        },
+        {
+          "x": 0,
+          "y": 4,
+          "entry_to_finish": 1939,
+          "decode": 523,
+          "dot": 521,
+          "operand_ready_callback": 613,
+          "sum_send_done": 1243
+        },
+        {
+          "x": 1,
+          "y": 4,
+          "entry_to_finish": 1336,
+          "decode": 528,
+          "dot": 523,
+          "operand_ready_callback": 615,
+          "sum_send_done": 1306
+        },
+        {
+          "x": 2,
+          "y": 4,
+          "entry_to_finish": 1394,
+          "decode": 524,
+          "dot": 523,
+          "operand_ready_callback": 611,
+          "sum_send_done": 1364
+        },
+        {
+          "x": 3,
+          "y": 4,
+          "entry_to_finish": 1452,
+          "decode": 526,
+          "dot": 523,
+          "operand_ready_callback": 613,
+          "sum_send_done": 1422
+        },
+        {
+          "x": 4,
+          "y": 4,
+          "entry_to_finish": 1510,
+          "decode": 529,
+          "dot": 523,
+          "operand_ready_callback": 616,
+          "sum_send_done": 1480
+        },
+        {
+          "x": 5,
+          "y": 4,
+          "entry_to_finish": 1568,
+          "decode": 526,
+          "dot": 523,
+          "operand_ready_callback": 613,
+          "sum_send_done": 1538
+        },
+        {
+          "x": 6,
+          "y": 4,
+          "entry_to_finish": 1626,
+          "decode": 526,
+          "dot": 523,
+          "operand_ready_callback": 613,
+          "sum_send_done": 1596
+        },
+        {
+          "x": 7,
+          "y": 4,
+          "entry_to_finish": 1684,
+          "decode": 526,
+          "dot": 523,
+          "operand_ready_callback": 613,
+          "sum_send_done": 1654
+        },
+        {
+          "x": 0,
+          "y": 5,
+          "entry_to_finish": 1874,
+          "decode": 526,
+          "dot": 521,
+          "operand_ready_callback": 616,
+          "sum_send_done": 1246
+        },
+        {
+          "x": 1,
+          "y": 5,
+          "entry_to_finish": 1339,
+          "decode": 528,
+          "dot": 523,
+          "operand_ready_callback": 615,
+          "sum_send_done": 1309
+        },
+        {
+          "x": 2,
+          "y": 5,
+          "entry_to_finish": 1397,
+          "decode": 526,
+          "dot": 523,
+          "operand_ready_callback": 613,
+          "sum_send_done": 1367
+        },
+        {
+          "x": 3,
+          "y": 5,
+          "entry_to_finish": 1455,
+          "decode": 527,
+          "dot": 523,
+          "operand_ready_callback": 614,
+          "sum_send_done": 1425
+        },
+        {
+          "x": 4,
+          "y": 5,
+          "entry_to_finish": 1513,
+          "decode": 527,
+          "dot": 523,
+          "operand_ready_callback": 614,
+          "sum_send_done": 1483
+        },
+        {
+          "x": 5,
+          "y": 5,
+          "entry_to_finish": 1571,
+          "decode": 527,
+          "dot": 523,
+          "operand_ready_callback": 614,
+          "sum_send_done": 1541
+        },
+        {
+          "x": 6,
+          "y": 5,
+          "entry_to_finish": 1629,
+          "decode": 527,
+          "dot": 523,
+          "operand_ready_callback": 614,
+          "sum_send_done": 1599
+        },
+        {
+          "x": 7,
+          "y": 5,
+          "entry_to_finish": 1687,
+          "decode": 527,
+          "dot": 523,
+          "operand_ready_callback": 614,
+          "sum_send_done": 1657
+        },
+        {
+          "x": 0,
+          "y": 6,
+          "entry_to_finish": 1809,
+          "decode": 531,
+          "dot": 521,
+          "operand_ready_callback": 621,
+          "sum_send_done": 1251
+        },
+        {
+          "x": 1,
+          "y": 6,
+          "entry_to_finish": 1344,
+          "decode": 523,
+          "dot": 523,
+          "operand_ready_callback": 610,
+          "sum_send_done": 1314
+        },
+        {
+          "x": 2,
+          "y": 6,
+          "entry_to_finish": 1402,
+          "decode": 523,
+          "dot": 523,
+          "operand_ready_callback": 610,
+          "sum_send_done": 1372
+        },
+        {
+          "x": 3,
+          "y": 6,
+          "entry_to_finish": 1460,
+          "decode": 523,
+          "dot": 523,
+          "operand_ready_callback": 610,
+          "sum_send_done": 1430
+        },
+        {
+          "x": 4,
+          "y": 6,
+          "entry_to_finish": 1518,
+          "decode": 528,
+          "dot": 523,
+          "operand_ready_callback": 615,
+          "sum_send_done": 1488
+        },
+        {
+          "x": 5,
+          "y": 6,
+          "entry_to_finish": 1576,
+          "decode": 528,
+          "dot": 523,
+          "operand_ready_callback": 615,
+          "sum_send_done": 1546
+        },
+        {
+          "x": 6,
+          "y": 6,
+          "entry_to_finish": 1634,
+          "decode": 528,
+          "dot": 523,
+          "operand_ready_callback": 615,
+          "sum_send_done": 1604
+        },
+        {
+          "x": 7,
+          "y": 6,
+          "entry_to_finish": 1692,
+          "decode": 528,
+          "dot": 523,
+          "operand_ready_callback": 615,
+          "sum_send_done": 1662
+        },
+        {
+          "x": 0,
+          "y": 7,
+          "entry_to_finish": 1745,
+          "decode": 523,
+          "dot": 523,
+          "operand_ready_callback": 612,
+          "sum_send_done": 1246
+        },
+        {
+          "x": 1,
+          "y": 7,
+          "entry_to_finish": 1337,
+          "decode": 524,
+          "dot": 523,
+          "operand_ready_callback": 611,
+          "sum_send_done": 1307
+        },
+        {
+          "x": 2,
+          "y": 7,
+          "entry_to_finish": 1395,
+          "decode": 524,
+          "dot": 523,
+          "operand_ready_callback": 611,
+          "sum_send_done": 1365
+        },
+        {
+          "x": 3,
+          "y": 7,
+          "entry_to_finish": 1453,
+          "decode": 521,
+          "dot": 523,
+          "operand_ready_callback": 608,
+          "sum_send_done": 1423
+        },
+        {
+          "x": 4,
+          "y": 7,
+          "entry_to_finish": 1511,
+          "decode": 527,
+          "dot": 523,
+          "operand_ready_callback": 614,
+          "sum_send_done": 1481
+        },
+        {
+          "x": 5,
+          "y": 7,
+          "entry_to_finish": 1569,
+          "decode": 527,
+          "dot": 523,
+          "operand_ready_callback": 614,
+          "sum_send_done": 1539
+        },
+        {
+          "x": 6,
+          "y": 7,
+          "entry_to_finish": 1627,
+          "decode": 527,
+          "dot": 523,
+          "operand_ready_callback": 614,
+          "sum_send_done": 1597
+        },
+        {
+          "x": 7,
+          "y": 7,
+          "entry_to_finish": 1685,
+          "decode": 527,
+          "dot": 523,
+          "operand_ready_callback": 614,
+          "sum_send_done": 1655
+        }
+      ],
+      "max_abs_fp64_error": 4.70760583293206e-15
+    },
+    {
+      "case": 3,
+      "overlapped": true,
+      "root_region_cycles": 2188,
+      "host_launch_through_result_audit_seconds": 0.0028113853186368942,
+      "timing": [
+        {
+          "x": 0,
+          "y": 0,
+          "entry_to_finish": 2188,
+          "decode": 526,
+          "dot": 525,
+          "operand_ready_callback": 349,
+          "sum_send_done": 1567
+        },
+        {
+          "x": 1,
+          "y": 0,
+          "entry_to_finish": 1637,
+          "decode": 523,
+          "dot": 523,
+          "operand_ready_callback": 348,
+          "sum_send_done": 1602
+        },
+        {
+          "x": 2,
+          "y": 0,
+          "entry_to_finish": 1695,
+          "decode": 523,
+          "dot": 523,
+          "operand_ready_callback": 348,
+          "sum_send_done": 1660
+        },
+        {
+          "x": 3,
+          "y": 0,
+          "entry_to_finish": 1753,
+          "decode": 523,
+          "dot": 523,
+          "operand_ready_callback": 348,
+          "sum_send_done": 1718
+        },
+        {
+          "x": 4,
+          "y": 0,
+          "entry_to_finish": 1811,
+          "decode": 523,
+          "dot": 523,
+          "operand_ready_callback": 348,
+          "sum_send_done": 1776
+        },
+        {
+          "x": 5,
+          "y": 0,
+          "entry_to_finish": 1869,
+          "decode": 523,
+          "dot": 523,
+          "operand_ready_callback": 348,
+          "sum_send_done": 1834
+        },
+        {
+          "x": 6,
+          "y": 0,
+          "entry_to_finish": 1927,
+          "decode": 524,
+          "dot": 523,
+          "operand_ready_callback": 348,
+          "sum_send_done": 1892
+        },
+        {
+          "x": 7,
+          "y": 0,
+          "entry_to_finish": 1985,
+          "decode": 523,
+          "dot": 523,
+          "operand_ready_callback": 348,
+          "sum_send_done": 1950
+        },
+        {
+          "x": 0,
+          "y": 1,
+          "entry_to_finish": 2134,
+          "decode": 529,
+          "dot": 521,
+          "operand_ready_callback": 619,
+          "sum_send_done": 1249
+        },
+        {
+          "x": 1,
+          "y": 1,
+          "entry_to_finish": 1342,
+          "decode": 531,
+          "dot": 523,
+          "operand_ready_callback": 618,
+          "sum_send_done": 1312
+        },
+        {
+          "x": 2,
+          "y": 1,
+          "entry_to_finish": 1400,
+          "decode": 531,
+          "dot": 523,
+          "operand_ready_callback": 618,
+          "sum_send_done": 1370
+        },
+        {
+          "x": 3,
+          "y": 1,
+          "entry_to_finish": 1458,
+          "decode": 531,
+          "dot": 523,
+          "operand_ready_callback": 618,
+          "sum_send_done": 1428
+        },
+        {
+          "x": 4,
+          "y": 1,
+          "entry_to_finish": 1516,
+          "decode": 532,
+          "dot": 523,
+          "operand_ready_callback": 619,
+          "sum_send_done": 1486
+        },
+        {
+          "x": 5,
+          "y": 1,
+          "entry_to_finish": 1574,
+          "decode": 534,
+          "dot": 523,
+          "operand_ready_callback": 621,
+          "sum_send_done": 1544
+        },
+        {
+          "x": 6,
+          "y": 1,
+          "entry_to_finish": 1632,
+          "decode": 534,
+          "dot": 523,
+          "operand_ready_callback": 621,
+          "sum_send_done": 1602
+        },
+        {
+          "x": 7,
+          "y": 1,
+          "entry_to_finish": 1690,
+          "decode": 527,
+          "dot": 523,
+          "operand_ready_callback": 614,
+          "sum_send_done": 1660
+        },
+        {
+          "x": 0,
+          "y": 2,
+          "entry_to_finish": 2069,
+          "decode": 529,
+          "dot": 521,
+          "operand_ready_callback": 619,
+          "sum_send_done": 1249
+        },
+        {
+          "x": 1,
+          "y": 2,
+          "entry_to_finish": 1342,
+          "decode": 529,
+          "dot": 523,
+          "operand_ready_callback": 616,
+          "sum_send_done": 1312
+        },
+        {
+          "x": 2,
+          "y": 2,
+          "entry_to_finish": 1400,
+          "decode": 523,
+          "dot": 523,
+          "operand_ready_callback": 610,
+          "sum_send_done": 1370
+        },
+        {
+          "x": 3,
+          "y": 2,
+          "entry_to_finish": 1458,
+          "decode": 529,
+          "dot": 523,
+          "operand_ready_callback": 616,
+          "sum_send_done": 1428
+        },
+        {
+          "x": 4,
+          "y": 2,
+          "entry_to_finish": 1516,
+          "decode": 529,
+          "dot": 523,
+          "operand_ready_callback": 616,
+          "sum_send_done": 1486
+        },
+        {
+          "x": 5,
+          "y": 2,
+          "entry_to_finish": 1574,
+          "decode": 535,
+          "dot": 523,
+          "operand_ready_callback": 622,
+          "sum_send_done": 1544
+        },
+        {
+          "x": 6,
+          "y": 2,
+          "entry_to_finish": 1632,
+          "decode": 535,
+          "dot": 523,
+          "operand_ready_callback": 622,
+          "sum_send_done": 1602
+        },
+        {
+          "x": 7,
+          "y": 2,
+          "entry_to_finish": 1690,
+          "decode": 531,
+          "dot": 523,
+          "operand_ready_callback": 618,
+          "sum_send_done": 1660
+        },
+        {
+          "x": 0,
+          "y": 3,
+          "entry_to_finish": 2004,
+          "decode": 529,
+          "dot": 521,
+          "operand_ready_callback": 619,
+          "sum_send_done": 1249
+        },
+        {
+          "x": 1,
+          "y": 3,
+          "entry_to_finish": 1342,
+          "decode": 522,
+          "dot": 523,
+          "operand_ready_callback": 609,
+          "sum_send_done": 1312
+        },
+        {
+          "x": 2,
+          "y": 3,
+          "entry_to_finish": 1400,
+          "decode": 532,
+          "dot": 523,
+          "operand_ready_callback": 619,
+          "sum_send_done": 1370
+        },
+        {
+          "x": 3,
+          "y": 3,
+          "entry_to_finish": 1458,
+          "decode": 522,
+          "dot": 523,
+          "operand_ready_callback": 609,
+          "sum_send_done": 1428
+        },
+        {
+          "x": 4,
+          "y": 3,
+          "entry_to_finish": 1516,
+          "decode": 522,
+          "dot": 523,
+          "operand_ready_callback": 609,
+          "sum_send_done": 1486
+        },
+        {
+          "x": 5,
+          "y": 3,
+          "entry_to_finish": 1574,
+          "decode": 525,
+          "dot": 523,
+          "operand_ready_callback": 612,
+          "sum_send_done": 1544
+        },
+        {
+          "x": 6,
+          "y": 3,
+          "entry_to_finish": 1632,
+          "decode": 525,
+          "dot": 523,
+          "operand_ready_callback": 612,
+          "sum_send_done": 1602
+        },
+        {
+          "x": 7,
+          "y": 3,
+          "entry_to_finish": 1690,
+          "decode": 532,
+          "dot": 523,
+          "operand_ready_callback": 619,
+          "sum_send_done": 1660
+        },
+        {
+          "x": 0,
+          "y": 4,
+          "entry_to_finish": 1939,
+          "decode": 523,
+          "dot": 521,
+          "operand_ready_callback": 613,
+          "sum_send_done": 1243
+        },
+        {
+          "x": 1,
+          "y": 4,
+          "entry_to_finish": 1336,
+          "decode": 529,
+          "dot": 523,
+          "operand_ready_callback": 616,
+          "sum_send_done": 1306
+        },
+        {
+          "x": 2,
+          "y": 4,
+          "entry_to_finish": 1394,
+          "decode": 523,
+          "dot": 523,
+          "operand_ready_callback": 610,
+          "sum_send_done": 1364
+        },
+        {
+          "x": 3,
+          "y": 4,
+          "entry_to_finish": 1452,
+          "decode": 528,
+          "dot": 523,
+          "operand_ready_callback": 615,
+          "sum_send_done": 1422
+        },
+        {
+          "x": 4,
+          "y": 4,
+          "entry_to_finish": 1510,
+          "decode": 529,
+          "dot": 523,
+          "operand_ready_callback": 616,
+          "sum_send_done": 1480
+        },
+        {
+          "x": 5,
+          "y": 4,
+          "entry_to_finish": 1568,
+          "decode": 529,
+          "dot": 523,
+          "operand_ready_callback": 616,
+          "sum_send_done": 1538
+        },
+        {
+          "x": 6,
+          "y": 4,
+          "entry_to_finish": 1626,
+          "decode": 526,
+          "dot": 523,
+          "operand_ready_callback": 613,
+          "sum_send_done": 1596
+        },
+        {
+          "x": 7,
+          "y": 4,
+          "entry_to_finish": 1684,
+          "decode": 527,
+          "dot": 523,
+          "operand_ready_callback": 614,
+          "sum_send_done": 1654
+        },
+        {
+          "x": 0,
+          "y": 5,
+          "entry_to_finish": 1874,
+          "decode": 526,
+          "dot": 521,
+          "operand_ready_callback": 616,
+          "sum_send_done": 1246
+        },
+        {
+          "x": 1,
+          "y": 5,
+          "entry_to_finish": 1339,
+          "decode": 527,
+          "dot": 523,
+          "operand_ready_callback": 614,
+          "sum_send_done": 1309
+        },
+        {
+          "x": 2,
+          "y": 5,
+          "entry_to_finish": 1397,
+          "decode": 532,
+          "dot": 523,
+          "operand_ready_callback": 619,
+          "sum_send_done": 1367
+        },
+        {
+          "x": 3,
+          "y": 5,
+          "entry_to_finish": 1455,
+          "decode": 528,
+          "dot": 523,
+          "operand_ready_callback": 615,
+          "sum_send_done": 1425
+        },
+        {
+          "x": 4,
+          "y": 5,
+          "entry_to_finish": 1513,
+          "decode": 527,
+          "dot": 523,
+          "operand_ready_callback": 614,
+          "sum_send_done": 1483
+        },
+        {
+          "x": 5,
+          "y": 5,
+          "entry_to_finish": 1571,
+          "decode": 527,
+          "dot": 523,
+          "operand_ready_callback": 614,
+          "sum_send_done": 1541
+        },
+        {
+          "x": 6,
+          "y": 5,
+          "entry_to_finish": 1629,
+          "decode": 527,
+          "dot": 523,
+          "operand_ready_callback": 614,
+          "sum_send_done": 1599
+        },
+        {
+          "x": 7,
+          "y": 5,
+          "entry_to_finish": 1687,
+          "decode": 532,
+          "dot": 523,
+          "operand_ready_callback": 619,
+          "sum_send_done": 1657
+        },
+        {
+          "x": 0,
+          "y": 6,
+          "entry_to_finish": 1809,
+          "decode": 531,
+          "dot": 521,
+          "operand_ready_callback": 621,
+          "sum_send_done": 1251
+        },
+        {
+          "x": 1,
+          "y": 6,
+          "entry_to_finish": 1344,
+          "decode": 528,
+          "dot": 523,
+          "operand_ready_callback": 615,
+          "sum_send_done": 1314
+        },
+        {
+          "x": 2,
+          "y": 6,
+          "entry_to_finish": 1402,
+          "decode": 528,
+          "dot": 523,
+          "operand_ready_callback": 615,
+          "sum_send_done": 1372
+        },
+        {
+          "x": 3,
+          "y": 6,
+          "entry_to_finish": 1460,
+          "decode": 528,
+          "dot": 523,
+          "operand_ready_callback": 615,
+          "sum_send_done": 1430
+        },
+        {
+          "x": 4,
+          "y": 6,
+          "entry_to_finish": 1518,
+          "decode": 528,
+          "dot": 523,
+          "operand_ready_callback": 615,
+          "sum_send_done": 1488
+        },
+        {
+          "x": 5,
+          "y": 6,
+          "entry_to_finish": 1576,
+          "decode": 528,
+          "dot": 523,
+          "operand_ready_callback": 615,
+          "sum_send_done": 1546
+        },
+        {
+          "x": 6,
+          "y": 6,
+          "entry_to_finish": 1634,
+          "decode": 523,
+          "dot": 523,
+          "operand_ready_callback": 610,
+          "sum_send_done": 1604
+        },
+        {
+          "x": 7,
+          "y": 6,
+          "entry_to_finish": 1692,
+          "decode": 523,
+          "dot": 523,
+          "operand_ready_callback": 610,
+          "sum_send_done": 1662
+        },
+        {
+          "x": 0,
+          "y": 7,
+          "entry_to_finish": 1745,
+          "decode": 523,
+          "dot": 523,
+          "operand_ready_callback": 612,
+          "sum_send_done": 1246
+        },
+        {
+          "x": 1,
+          "y": 7,
+          "entry_to_finish": 1337,
+          "decode": 527,
+          "dot": 523,
+          "operand_ready_callback": 614,
+          "sum_send_done": 1307
+        },
+        {
+          "x": 2,
+          "y": 7,
+          "entry_to_finish": 1395,
+          "decode": 527,
+          "dot": 523,
+          "operand_ready_callback": 614,
+          "sum_send_done": 1365
+        },
+        {
+          "x": 3,
+          "y": 7,
+          "entry_to_finish": 1453,
+          "decode": 527,
+          "dot": 523,
+          "operand_ready_callback": 614,
+          "sum_send_done": 1423
+        },
+        {
+          "x": 4,
+          "y": 7,
+          "entry_to_finish": 1511,
+          "decode": 527,
+          "dot": 523,
+          "operand_ready_callback": 614,
+          "sum_send_done": 1481
+        },
+        {
+          "x": 5,
+          "y": 7,
+          "entry_to_finish": 1569,
+          "decode": 527,
+          "dot": 523,
+          "operand_ready_callback": 614,
+          "sum_send_done": 1539
+        },
+        {
+          "x": 6,
+          "y": 7,
+          "entry_to_finish": 1627,
+          "decode": 521,
+          "dot": 523,
+          "operand_ready_callback": 608,
+          "sum_send_done": 1597
+        },
+        {
+          "x": 7,
+          "y": 7,
+          "entry_to_finish": 1685,
+          "decode": 521,
+          "dot": 523,
+          "operand_ready_callback": 608,
+          "sum_send_done": 1655
+        }
+      ],
+      "max_abs_fp64_error": 1.4662742614746094e-05
+    },
+    {
+      "case": 3,
+      "overlapped": false,
+      "root_region_cycles": 2599,
+      "host_launch_through_result_audit_seconds": 0.002875305712223053,
+      "timing": [
+        {
+          "x": 0,
+          "y": 0,
+          "entry_to_finish": 2599,
+          "decode": 512,
+          "dot": 525,
+          "operand_ready_callback": 349,
+          "sum_send_done": 1616
+        },
+        {
+          "x": 1,
+          "y": 0,
+          "entry_to_finish": 1708,
+          "decode": 513,
+          "dot": 523,
+          "operand_ready_callback": 348,
+          "sum_send_done": 1673
+        },
+        {
+          "x": 2,
+          "y": 0,
+          "entry_to_finish": 1766,
+          "decode": 513,
+          "dot": 523,
+          "operand_ready_callback": 348,
+          "sum_send_done": 1731
+        },
+        {
+          "x": 3,
+          "y": 0,
+          "entry_to_finish": 1824,
+          "decode": 513,
+          "dot": 523,
+          "operand_ready_callback": 348,
+          "sum_send_done": 1789
+        },
+        {
+          "x": 4,
+          "y": 0,
+          "entry_to_finish": 1882,
+          "decode": 513,
+          "dot": 523,
+          "operand_ready_callback": 348,
+          "sum_send_done": 1847
+        },
+        {
+          "x": 5,
+          "y": 0,
+          "entry_to_finish": 1940,
+          "decode": 513,
+          "dot": 523,
+          "operand_ready_callback": 348,
+          "sum_send_done": 1905
+        },
+        {
+          "x": 6,
+          "y": 0,
+          "entry_to_finish": 1998,
+          "decode": 513,
+          "dot": 523,
+          "operand_ready_callback": 348,
+          "sum_send_done": 1963
+        },
+        {
+          "x": 7,
+          "y": 0,
+          "entry_to_finish": 2056,
+          "decode": 513,
+          "dot": 523,
+          "operand_ready_callback": 348,
+          "sum_send_done": 2021
+        },
+        {
+          "x": 0,
+          "y": 1,
+          "entry_to_finish": 2545,
+          "decode": 502,
+          "dot": 521,
+          "operand_ready_callback": 473,
+          "sum_send_done": 1629
+        },
+        {
+          "x": 1,
+          "y": 1,
+          "entry_to_finish": 1722,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 465,
+          "sum_send_done": 1692
+        },
+        {
+          "x": 2,
+          "y": 1,
+          "entry_to_finish": 1780,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 465,
+          "sum_send_done": 1750
+        },
+        {
+          "x": 3,
+          "y": 1,
+          "entry_to_finish": 1838,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 465,
+          "sum_send_done": 1808
+        },
+        {
+          "x": 4,
+          "y": 1,
+          "entry_to_finish": 1896,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 465,
+          "sum_send_done": 1866
+        },
+        {
+          "x": 5,
+          "y": 1,
+          "entry_to_finish": 1954,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 465,
+          "sum_send_done": 1924
+        },
+        {
+          "x": 6,
+          "y": 1,
+          "entry_to_finish": 2012,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 465,
+          "sum_send_done": 1982
+        },
+        {
+          "x": 7,
+          "y": 1,
+          "entry_to_finish": 2070,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 465,
+          "sum_send_done": 2040
+        },
+        {
+          "x": 0,
+          "y": 2,
+          "entry_to_finish": 2480,
+          "decode": 502,
+          "dot": 521,
+          "operand_ready_callback": 477,
+          "sum_send_done": 1633
+        },
+        {
+          "x": 1,
+          "y": 2,
+          "entry_to_finish": 1726,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 469,
+          "sum_send_done": 1696
+        },
+        {
+          "x": 2,
+          "y": 2,
+          "entry_to_finish": 1784,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 469,
+          "sum_send_done": 1754
+        },
+        {
+          "x": 3,
+          "y": 2,
+          "entry_to_finish": 1842,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 469,
+          "sum_send_done": 1812
+        },
+        {
+          "x": 4,
+          "y": 2,
+          "entry_to_finish": 1900,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 469,
+          "sum_send_done": 1870
+        },
+        {
+          "x": 5,
+          "y": 2,
+          "entry_to_finish": 1958,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 469,
+          "sum_send_done": 1928
+        },
+        {
+          "x": 6,
+          "y": 2,
+          "entry_to_finish": 2016,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 469,
+          "sum_send_done": 1986
+        },
+        {
+          "x": 7,
+          "y": 2,
+          "entry_to_finish": 2074,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 469,
+          "sum_send_done": 2044
+        },
+        {
+          "x": 0,
+          "y": 3,
+          "entry_to_finish": 2415,
+          "decode": 502,
+          "dot": 521,
+          "operand_ready_callback": 481,
+          "sum_send_done": 1637
+        },
+        {
+          "x": 1,
+          "y": 3,
+          "entry_to_finish": 1730,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 473,
+          "sum_send_done": 1700
+        },
+        {
+          "x": 2,
+          "y": 3,
+          "entry_to_finish": 1788,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 473,
+          "sum_send_done": 1758
+        },
+        {
+          "x": 3,
+          "y": 3,
+          "entry_to_finish": 1846,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 473,
+          "sum_send_done": 1816
+        },
+        {
+          "x": 4,
+          "y": 3,
+          "entry_to_finish": 1904,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 473,
+          "sum_send_done": 1874
+        },
+        {
+          "x": 5,
+          "y": 3,
+          "entry_to_finish": 1962,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 473,
+          "sum_send_done": 1932
+        },
+        {
+          "x": 6,
+          "y": 3,
+          "entry_to_finish": 2020,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 473,
+          "sum_send_done": 1990
+        },
+        {
+          "x": 7,
+          "y": 3,
+          "entry_to_finish": 2078,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 473,
+          "sum_send_done": 2048
+        },
+        {
+          "x": 0,
+          "y": 4,
+          "entry_to_finish": 2350,
+          "decode": 501,
+          "dot": 521,
+          "operand_ready_callback": 485,
+          "sum_send_done": 1640
+        },
+        {
+          "x": 1,
+          "y": 4,
+          "entry_to_finish": 1733,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 477,
+          "sum_send_done": 1703
+        },
+        {
+          "x": 2,
+          "y": 4,
+          "entry_to_finish": 1791,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 477,
+          "sum_send_done": 1761
+        },
+        {
+          "x": 3,
+          "y": 4,
+          "entry_to_finish": 1849,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 477,
+          "sum_send_done": 1819
+        },
+        {
+          "x": 4,
+          "y": 4,
+          "entry_to_finish": 1907,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 477,
+          "sum_send_done": 1877
+        },
+        {
+          "x": 5,
+          "y": 4,
+          "entry_to_finish": 1965,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 477,
+          "sum_send_done": 1935
+        },
+        {
+          "x": 6,
+          "y": 4,
+          "entry_to_finish": 2023,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 477,
+          "sum_send_done": 1993
+        },
+        {
+          "x": 7,
+          "y": 4,
+          "entry_to_finish": 2081,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 477,
+          "sum_send_done": 2051
+        },
+        {
+          "x": 0,
+          "y": 5,
+          "entry_to_finish": 2285,
+          "decode": 502,
+          "dot": 521,
+          "operand_ready_callback": 489,
+          "sum_send_done": 1645
+        },
+        {
+          "x": 1,
+          "y": 5,
+          "entry_to_finish": 1738,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 481,
+          "sum_send_done": 1708
+        },
+        {
+          "x": 2,
+          "y": 5,
+          "entry_to_finish": 1796,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 481,
+          "sum_send_done": 1766
+        },
+        {
+          "x": 3,
+          "y": 5,
+          "entry_to_finish": 1854,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 481,
+          "sum_send_done": 1824
+        },
+        {
+          "x": 4,
+          "y": 5,
+          "entry_to_finish": 1912,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 481,
+          "sum_send_done": 1882
+        },
+        {
+          "x": 5,
+          "y": 5,
+          "entry_to_finish": 1970,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 481,
+          "sum_send_done": 1940
+        },
+        {
+          "x": 6,
+          "y": 5,
+          "entry_to_finish": 2028,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 481,
+          "sum_send_done": 1998
+        },
+        {
+          "x": 7,
+          "y": 5,
+          "entry_to_finish": 2086,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 481,
+          "sum_send_done": 2056
+        },
+        {
+          "x": 0,
+          "y": 6,
+          "entry_to_finish": 2220,
+          "decode": 501,
+          "dot": 521,
+          "operand_ready_callback": 493,
+          "sum_send_done": 1648
+        },
+        {
+          "x": 1,
+          "y": 6,
+          "entry_to_finish": 1741,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 485,
+          "sum_send_done": 1711
+        },
+        {
+          "x": 2,
+          "y": 6,
+          "entry_to_finish": 1799,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 485,
+          "sum_send_done": 1769
+        },
+        {
+          "x": 3,
+          "y": 6,
+          "entry_to_finish": 1857,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 485,
+          "sum_send_done": 1827
+        },
+        {
+          "x": 4,
+          "y": 6,
+          "entry_to_finish": 1915,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 485,
+          "sum_send_done": 1885
+        },
+        {
+          "x": 5,
+          "y": 6,
+          "entry_to_finish": 1973,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 485,
+          "sum_send_done": 1943
+        },
+        {
+          "x": 6,
+          "y": 6,
+          "entry_to_finish": 2031,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 485,
+          "sum_send_done": 2001
+        },
+        {
+          "x": 7,
+          "y": 6,
+          "entry_to_finish": 2089,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 485,
+          "sum_send_done": 2059
+        },
+        {
+          "x": 0,
+          "y": 7,
+          "entry_to_finish": 2156,
+          "decode": 503,
+          "dot": 523,
+          "operand_ready_callback": 496,
+          "sum_send_done": 1657
+        },
+        {
+          "x": 1,
+          "y": 7,
+          "entry_to_finish": 1748,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 489,
+          "sum_send_done": 1718
+        },
+        {
+          "x": 2,
+          "y": 7,
+          "entry_to_finish": 1806,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 489,
+          "sum_send_done": 1776
+        },
+        {
+          "x": 3,
+          "y": 7,
+          "entry_to_finish": 1864,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 489,
+          "sum_send_done": 1834
+        },
+        {
+          "x": 4,
+          "y": 7,
+          "entry_to_finish": 1922,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 489,
+          "sum_send_done": 1892
+        },
+        {
+          "x": 5,
+          "y": 7,
+          "entry_to_finish": 1980,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 489,
+          "sum_send_done": 1950
+        },
+        {
+          "x": 6,
+          "y": 7,
+          "entry_to_finish": 2038,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 489,
+          "sum_send_done": 2008
+        },
+        {
+          "x": 7,
+          "y": 7,
+          "entry_to_finish": 2096,
+          "decode": 502,
+          "dot": 523,
+          "operand_ready_callback": 489,
+          "sum_send_done": 2066
+        }
+      ],
+      "max_abs_fp64_error": 1.4662742614746094e-05
+    }
+  ],
+  "clock_hz": null,
+  "all_inputs_retained": true,
+  "timing_note": "Root same-PE entry-to-all-row completion includes host-launch entry skew and device encoding/decode/transport/dot/reduction. No cross-PE timestamp subtraction. Host time includes result/audit transfer; local readiness timestamps mark callbacks, not fabric arrival."
+}

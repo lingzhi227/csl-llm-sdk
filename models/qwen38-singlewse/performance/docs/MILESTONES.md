@@ -155,3 +155,58 @@ the test driver; a real on-wafer producer is not qualified by this probe.
 The bounded workstation service completed in60.687 seconds and its lock is free.
 No new hardware allocation was used for P4. Its immutable source and complete
 simulator evidence are preserved separately from physical P3.
+
+## P5: physical regional dataflow and measured overlap
+
+The checked regional plan now lowers to column input multicast, ascending-K row
+sums, row-result return and an all-row completion join. Explicit receive/decode
+readiness gates native FP8 arithmetic. Independent packet and sum DSR leases allow
+transfer and computation to progress concurrently; sends release storage only
+through their completion callbacks. The matched serialized variant performs the
+same arithmetic and transfers. This is a restricted component compiler, not a
+complete physical model scheduler.
+
+`regional-gemv-hw-001` uses64 physical PEs in an8x8 rectangle. Four original layer0
+projection slices cover gate/up/down matrices, boundary row/K blocks and fixed
+zero, mixed, small-scale and large-magnitude activation patterns. Every K-prefix
+matches an independent ordered FP32 emulator bit for bit; the final row return,
+all encoded operand packets, all endpoint event counters and all retained inputs
+pass. Both schedules produce identical results within the frozen independent
+FP64 bounds (maximum error1.4662742614746094e-5). All8 epochs and normal stop pass.
+
+For each of the four paired cases, **serialized2,599 cycles versus overlapped
+2,188 cycles** at the original root PE means411 fewer cycles,15.814% lower region
+completion latency (1.18784x rate for this component). The measured boundary
+includes input encoding, weight decode, multicast, local arithmetic, ordered
+reduction and all-row completion. It includes host-launch entry skew. The schedule
+also changes callback placement, so savings are not attributed solely to fabric
+transfer. Local decode takes501–513 cycles serialized and521–535 overlapped;
+contention is measured rather than assumed free. No cross-PE time subtraction or
+nominal clock conversion is used. Host launch through result/audit transfer is
+separately retained (about2.81–3.35ms); this is not a model-token rate.
+
+All64 compiled PEs pass SRAM admission, maximum13,232 bytes including4,096 stack.
+This contains one FP8 tile per PE. It is not combined full-bank/model admission.
+Both jobs succeeded and released normally with no cleanup errors:
+`wsjob-uudmpdnnxnpsvj8i55zcjm` compile42.416s stage wall, and
+`wsjob-bmjrupukcwit69jtbyjydh` runtime199.952s stage wall. Runtime infrastructure
+initialization accounts for much of that interval; it is not device compute time
+or a claim about provider billing. Fresh job/system accounting confirms no owned
+active job or assignment. The workstation simulator also ended normally, with
+configured2GiB/no-swap/64-task limits observed while the service was live.
+
+The prerequisite simulator passed in181.474 seconds. Source tests now total13,
+including independent multicast, row-return, sum-neighbor and ack-neighbor endpoint
+traversals and collision rejection. No frozen failure or functional baseline was
+changed, and no tolerance was loosened after device observations.
+
+Next: qualify fast dynamic activation encoding/scaling, combine resident banks
+with actual role-specific communication footprints, and lower complete contraction
+widths with local hierarchical reductions. Then integrate the complete original
+model and qualify dependent sentence throughput. The2,000 tokens/s target remains
+unmet; this partial projection milestone does not redefine final acceptance.
+
+The supplementary `fp8-encoder-identity-001` checks53,725 finite FP32 bit patterns,
+all finite FP8 centers and midpoint neighbors against an independent nearest-level
+oracle. The direct-bit CSL encoder is explicitly uncompiled and unqualified on
+device. This host mathematical check alone establishes no inference speedup.

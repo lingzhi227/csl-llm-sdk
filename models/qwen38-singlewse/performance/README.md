@@ -30,3 +30,10 @@ P4 compiles and simulates the largest candidate resident bank at 46,768 bytes
 including its declared stack; all112 FP8 slots and retained buffers pass. Prefetch
 and compute are measured separately. There is no network overlap or whole-model
 SRAM admission yet; see MILESTONES.md for the unimplemented paths and timing scope.
+
+P5 measures a complete8x8 regional dataflow component on physical WSE-3:2,599 to
+2,188 cycles with matched overlapping scheduling (15.8% lower latency), including
+encoding, multicast, local dots, ordered sums and completion. All four paired
+original-weight fixtures pass exactly. This is a partial projection component;
+full-model2,000 tokens/s remains unmet. See `docs/REGIONAL-GEMV.md` and the frozen
+`regional-gemv-hw-001` evidence for what is and is not included.

@@ -119,3 +119,11 @@ include BF16 execution, descriptor dispatch or communication, so its 1,360-byte
 margin cannot be treated as their proven budget. Adding those paths must repeat
 compiled admission; if necessary the placement/packing policy must change before
 launch, without increasing the 48,128-byte ceiling.
+
+P5 adds a checked regional computation backend: column operand multicast,
+arrival/decode readiness, native ordered FP8 dots, ascending-K row sums and returned
+completion. Same input and output contracts allow a serialized/overlapped schedule
+comparison without changing arithmetic. Its source/resource details and measured
+limits are in REGIONAL-GEMV.md. Full bank placement and dynamic activation scale
+production remain separate compiler boundaries, not implicitly supplied by the
+host fixture used for component qualification.
