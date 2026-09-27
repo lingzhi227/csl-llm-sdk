@@ -1,0 +1,7 @@
+const memcpy=@import_module("<memcpy/get_params>",.{.width=1,.height=1});
+layout {
+ @set_rectangle(1,1);@set_tile_code(0,0,"pe.csl",.{.memcpy_params=memcpy.get_params(0)});
+ @export_name("gate",[*]f32,false);@export_name("up",[*]f32,false);@export_name("down",[*]f32,false);
+ @export_name("original",[*]u32,false);@export_name("gain",[*]u32,false);@export_name("output",[*]u32,false);
+ @export_name("execute",fn(u16)void);
+}

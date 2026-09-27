@@ -152,3 +152,11 @@ See [COMPACT-PROJECTION.md](docs/COMPACT-PROJECTION.md) and
 [RETILED-MATRIX.md](docs/RETILED-MATRIX.md). The next acceptance boundary is a real
 multi-operator MLP graph with direct consumers and cross-operator lifetimes;
 its semantic importer is not executable. Complete-model2000tokens/s remains unmet.
+
+P19 lowers a full-dimensional MLP ownership/fusion candidate with136 group128
+regions and40 independent down-output stripes. All1,044,480 matrix tiles and
+702,880 known stream paths pass a bounded independent audit. Fused numeric
+packet helpers pass1350 simulator words under the existing quantization
+convention; literal-division differences and failures are retained. Complete
+subgraph runtime and bank/actor SRAM are not admitted, and no new hardware
+performance result is claimed. See [MLP-SPATIAL-FUSION.md](docs/MLP-SPATIAL-FUSION.md).

@@ -1,0 +1,78 @@
+{
+  "schema": "mlp-spatial-fusion-milestone-v1",
+  "plan": "mlp-regions-plan-003.json",
+  "plan_sha256": "9e8e877c8a73ac683bdd44c3e8aba2d77956d61335d5867e1eaefef09a79c57a",
+  "scope": "Complete original5120/17408 ownership, real operator interfaces and selected spatial stream families. This is a candidate lowering, not an executable subgraph, admitted27B placement or performance result.",
+  "audit": {
+    "passed": true,
+    "original_matrix_tiles": 1044480,
+    "original_matrix_bytes": 267386880,
+    "distinct_active_pes": 711224,
+    "known_streams": 702880,
+    "known_route_entries": 3767796,
+    "known_directed_links": 1811540,
+    "known_directed_link_max_words": 128,
+    "down_reduction_leaves": 136,
+    "down_fp32_binary_depth": 22,
+    "known_word_hops_by_family": {
+      "header-fork": 1886300,
+      "vertical-multicast": 46880600,
+      "transpose-to-header": 944640,
+      "vertical-reduction": 42265600,
+      "residual-consumer": 104960,
+      "horizontal-reduction": 3399680,
+      "native-tree": 5796864,
+      "packed-activation-operand": 17408
+    },
+    "all_streams_audited": false,
+    "executable": false,
+    "physical": false,
+    "full_model": false,
+    "scope": "Every original FP8 matrix tile, replicated scale index and active actor coordinate; input multicast, every gate/up contraction and adjacent packed activation operand, and inter-region down streams. Missing families, leases, slot packing, numerical order and compiled SRAM are not admitted."
+  },
+  "fusion_unit": {
+    "passed": true,
+    "normal_stop": true,
+    "physical": false,
+    "full_model": false,
+    "words_checked": 1350,
+    "fixture_sha256": "ec4f03ce72878efc57faf5c012e7c2faf91b9900b402cf312d0edc1a70dee326",
+    "scope": "Numerical qualification of fused packet epilogues and local epoch guard only. Synthetic finite operands; no original matrix contraction, distributed readiness, inter-PE stream, throughput or full MLP claim.",
+    "measured_speedup": null,
+    "scale_implementation": "FP32 clamped maximum multiplied by FP32(1/448), unchanged from P6/P10 and functional baseline",
+    "literal_division_differing_indices": [
+      [
+        256,
+        385
+      ],
+      [
+        256,
+        385
+      ],
+      [
+        385
+      ]
+    ]
+  },
+  "unit_sram_including_stack": 15840,
+  "sram_scope": "OnePE synthetic numeric unit only; no resident bank or distributed actor admission",
+  "helper_bank_deficit": {
+    "prior_bank_pes": 860880,
+    "wafer_pes": 870000,
+    "prior_dedicated_actor_allowance": 9120,
+    "candidate_helper_roles": 14904,
+    "deficit_if_all_helpers_exclude_weight_banks": 5784,
+    "admitted": false,
+    "required": "Cohost original banks on sufficient helper roles or recompute complete model packing; do not subtract original weights to fit this layer."
+  },
+  "preserved_failures": [
+    "mlp-fusion-sim-001",
+    "mlp-fusion-sim-002"
+  ],
+  "hardware_jobs_added": 0,
+  "resource_audit": "resource-audit-p19-final-001.json",
+  "no_owned_hardware_allocation": true,
+  "complete_subgraph_executable": false,
+  "full_model_speed_target_achieved": false,
+  "measured_model_tokens_per_second": null
+}

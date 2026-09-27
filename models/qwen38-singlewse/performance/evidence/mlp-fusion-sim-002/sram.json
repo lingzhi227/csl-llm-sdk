@@ -1,0 +1,40 @@
+{
+  "passed": true,
+  "application_pes": 1,
+  "compiled_elf_images": 1,
+  "application": [
+    1,
+    1
+  ],
+  "fabric": [
+    8,
+    3
+  ],
+  "offset": [
+    4,
+    1
+  ],
+  "records": [
+    {
+      "file": "out/bin/out_0_0.elf",
+      "sha256": "27c7c12fa1a275c7da95f7f420d66b4e5fa37e52b17753d63b58dda10995b08f",
+      "rectangles": [
+        [
+          4,
+          1,
+          1,
+          1
+        ]
+      ],
+      "source": "pe.csl",
+      "low_section_end": 11744,
+      "low_section_bytes": 11730,
+      "static_allocated_section_bytes": 12118,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    }
+  ],
+  "note": "A compiler ELF may cover several PEs. All complete low-memory PT_LOAD rectangles form the exact application once; SRAM is admitted for every mapped image."
+}

@@ -1,0 +1,21 @@
+{
+  "origins": {
+    "qwen_math.csl": {
+      "source": "csl/qwen_math.csl",
+      "sha256": "03adca23c7dd74282093961ae51e0ae4d193e7adc14b8dd43fa2f16f4e95e137"
+    },
+    "tools/stage_mlp_fusion_sim.py": {
+      "source": "performance/tools/stage_encoder_sim.py",
+      "sha256": "fc71df9db3a0efa70164debaa00ded04b2f27cea1ac3b8d83ea2ecf9ba13cce7"
+    },
+    "fp8_encode.csl": {
+      "source": "performance/csl/fp8_encode.csl",
+      "sha256": "21dda5fde73c94da0cbc0d859412cccdd51f51ee1f863d1711036933b53f1c63"
+    },
+    "runtime/backend.py": {
+      "source": "runtime/backend.py",
+      "sha256": "2dc91a3e63a1fa5550edc99a970428f8d0101b1f9731a0fe0cf81b793258252b"
+    }
+  },
+  "scope": "Fusion packet helpers call preserved qwen_math and qualified FP8 encoder routines. These numerical source identities do not imply that the earlier complete-model numerical target passed. New guard is a local contract only; distributed proof and actor runtime are still unimplemented."
+}

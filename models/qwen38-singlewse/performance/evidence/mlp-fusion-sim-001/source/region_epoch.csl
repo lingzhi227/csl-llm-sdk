@@ -1,0 +1,26 @@
+// Cross-operator route/queue/buffer reuse contract. The caller performs the
+// actual routing writes and first-color bind between the guarded transitions.
+// This module does not implement the distributed row fence or termination tree.
+var epoch:u16=65535;
+var phase:u16=0; // 0 idle,1 native,2 routes installed,3 bound,4 down
+var native_idle:bool=false;
+var row_delivered:bool=false;
+var outstanding:bool=false;
+var consumer_done:bool=false;
+fn begin(next:u16) void {
+ @assert(phase==0 and !outstanding and next<65535);
+ @assert(next==if(epoch==65535) @as(u16,0) else epoch+1);
+ epoch=next;phase=1;native_idle=false;row_delivered=false;consumer_done=false;
+}
+fn sent_native() void {@assert(phase==1 and !native_idle);native_idle=true;}
+fn delivered_row() void {@assert(phase==1 and !row_delivered);row_delivered=true;}
+fn can_install() bool {return phase==1 and native_idle and row_delivered;}
+fn routes_installed() void {@assert(can_install());phase=2;}
+fn bind_first(color:u16) void {@assert(phase==2 and color==4);phase=3;}
+fn acknowledge() void {@assert(phase==3);phase=4;}
+fn send_chunk(current:u16) void {
+ @assert(phase==4 and current==epoch and !outstanding and !consumer_done);outstanding=true;
+}
+fn sent_chunk() void {@assert(phase==4 and outstanding);outstanding=false;}
+fn consumed() void {@assert(phase==4 and !consumer_done);consumer_done=true;}
+fn release() void {@assert(phase==4 and consumer_done and !outstanding);phase=0;}

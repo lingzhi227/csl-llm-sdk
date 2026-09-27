@@ -1,0 +1,24 @@
+{
+  "fixture_sha256": "ec4f03ce72878efc57faf5c012e7c2faf91b9900b402cf312d0edc1a70dee326",
+  "cases": 3,
+  "values_per_case": 128,
+  "criterion": "All450 output words per case bit-exact against independent PyTorch BF16/SiLU and existing P6/P10 reciprocal-multiply group128 FP8 oracle; normal stop; two nonzero epochs separated by zero epoch. Literal divide-by448 differences are separately reported, not accepted as bit-identical.",
+  "scale_implementation": "FP32 clamped maximum multiplied by FP32(1/448), unchanged from P6/P10 and functional baseline",
+  "literal_division_differing_indices": [
+    [
+      256,
+      385
+    ],
+    [
+      256,
+      385
+    ],
+    [
+      385
+    ]
+  ],
+  "torch_version": "2.6.0+cpu",
+  "physical": false,
+  "full_model": false,
+  "scope": "Numerical qualification of fused packet epilogues and local epoch guard only. Synthetic finite operands; no original matrix contraction, distributed readiness, inter-PE stream, throughput or full MLP claim."
+}

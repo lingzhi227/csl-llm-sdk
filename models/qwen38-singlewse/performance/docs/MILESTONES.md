@@ -704,3 +704,21 @@ not further isolated matrix tuning. The initial importer binds real layer0 MLP
 nodes13..18, shared quantization, actual successor interfaces and cross-operator
 lifetimes, but has no admitted physical placement/routes/executable schedule.
 Complete original model, correct sentences and>=2000dependenttokens/s remain unmet.
+
+## P19: complete-dimensional MLP ownership and spatial fusion candidate
+
+The new136-region candidate maps every original MLP matrix tile and scale index
+to paired gate/up workers, local activation actors and40 independent down output
+stripes. The independent audit covers1,044,480 original tiles and702,880 known
+stream paths. Actual code/SRAM, complete routing, distributed readiness and
+full-subgraph execution remain unqualified. Treating all helpers as bank-free
+would exceed the prior full-model actor allowance by5784, so geometry alone is
+not storage admission.
+
+Packed fusion helpers keep projection, SiLU, multiply and residual BF16 boundaries
+and direct native input encoding. Simulator003 passes1350 exact words against
+the existing reciprocal-multiply quantization convention. The earlier compiler
+failure and literal-division scale mismatch remain preserved, with both oracles
+reported. All workstation services release; no new ALCF jobs are submitted.
+See MLP-SPATIAL-FUSION.md for scope, resource gaps and the next executable boundary.
+No complete model or >=2000dependenttokens/s result is claimed.

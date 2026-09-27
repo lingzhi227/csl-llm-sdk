@@ -1,0 +1,39 @@
+param memcpy_params;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const fused=@import_module("mlp_fused.csl");
+const epoch=@import_module("region_epoch.csl");
+var gate=@zeros([128]f32);var up=@zeros([128]f32);var down=@zeros([128]f32);
+var original=@zeros([64]u32);var gain=@zeros([64]u32);var output=@zeros([450]u32);
+const gp:[*]f32=&gate;const uptr:[*]f32=&up;const dp:[*]f32=&down;
+const ip:[*]u32=&original;const wp:[*]u32=&gain;const op:[*]u32=&output;
+fn execute(sequence:u16) void {
+ epoch.begin(sequence);
+ var maximum:f32=0.0000000001;var norm_maximum:f32=0.0000000001;
+ for(@range(u16,64))|i|{
+  output[i]=fused.projection_pair(@ptrcast([*]f32,&gate[2*i]));
+  output[64+i]=fused.projection_pair(@ptrcast([*]f32,&up[2*i]));
+  output[128+i]=fused.activation_pair(output[i],output[64+i]);
+  const m=fused.maximum_pair(output[128+i]);if(m>maximum){maximum=m;}
+  output[257+i]=fused.normalized_pair(original[i],gain[i],0.75);
+  const n=fused.maximum_pair(output[257+i]);if(n>norm_maximum){norm_maximum=n;}
+  output[386+i]=fused.residual_pair(@ptrcast([*]f32,&down[2*i]),original[i]);
+ }
+ // This unit test supplies local events. It does not fake a distributed fence.
+ if(sequence==1){epoch.sent_native();epoch.delivered_row();}
+ else{epoch.delivered_row();epoch.sent_native();}
+ @assert(epoch.can_install());epoch.routes_installed();epoch.bind_first(4);epoch.acknowledge();
+ const scale=maximum*0.002232142857142857;const norm_scale=norm_maximum*0.002232142857142857;
+ for(@range(u16,64))|i|{
+  output[192+i]=fused.encoded_pair(output[128+i],scale);
+  output[321+i]=fused.encoded_pair(output[257+i],norm_scale);
+ }
+ output[256]=@bitcast(u32,scale);output[385]=@bitcast(u32,norm_scale);
+ epoch.send_chunk(sequence);
+ if(sequence==1){epoch.consumed();epoch.sent_chunk();}
+ else{epoch.sent_chunk();epoch.consumed();}
+ epoch.release();sys.unblock_cmd_stream();
+}
+comptime {
+ @export_symbol(gp,"gate");@export_symbol(uptr,"up");@export_symbol(dp,"down");
+ @export_symbol(ip,"original");@export_symbol(wp,"gain");@export_symbol(op,"output");@export_symbol(execute);
+}

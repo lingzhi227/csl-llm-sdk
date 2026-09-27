@@ -1,0 +1,10 @@
+{
+  "fixture_sha256": "c51e5246ec61fde07480d673d5531dad453de03add8a338ecaf7be71fc8989bd",
+  "cases": 3,
+  "values_per_case": 128,
+  "criterion": "All450 output words per case bit-exact against independent PyTorch BF16/SiLU/group128 FP8 oracle; normal stop; two nonzero epochs separated by zero epoch.",
+  "torch_version": "2.6.0+cpu",
+  "physical": false,
+  "full_model": false,
+  "scope": "Numerical qualification of fused packet epilogues and local epoch guard only. Synthetic finite operands; no original matrix contraction, distributed readiness, inter-PE stream, throughput or full MLP claim."
+}
