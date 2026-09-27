@@ -1,0 +1,48 @@
+{
+  "physical": false,
+  "full_model": false,
+  "full_output_rows": false,
+  "application": [
+    8,
+    28
+  ],
+  "active_matrix_pes": 224,
+  "full_k_blocks": [
+    40,
+    48,
+    136
+  ],
+  "fixture_sha256": "2b48d01d60b647ef4c2008fe26e4d407cc73321e20109db0a49fa5561d7d15b2",
+  "comparisons": [
+    {
+      "case": 0,
+      "k_blocks": 40,
+      "chain_cycles": 4893,
+      "tree_cycles": 1898,
+      "reduction_fraction": 0.6120989168199469,
+      "component_speedup": 2.577976817702845
+    },
+    {
+      "case": 0,
+      "k_blocks": 48,
+      "chain_cycles": 5580,
+      "tree_cycles": 1927,
+      "reduction_fraction": 0.6546594982078853,
+      "component_speedup": 2.895692786715101
+    },
+    {
+      "case": 0,
+      "k_blocks": 136,
+      "chain_cycles": 13748,
+      "tree_cycles": 2202,
+      "reduction_fraction": 0.8398312481815536,
+      "component_speedup": 6.243415077202543
+    }
+  ],
+  "max_compiled_sram_plus_declared_stack": 12432,
+  "max_abs_fp64_error": 1.3412403276902296e-07,
+  "scope": "Full original input widths5120/6144/17408; two output rows per projection. Original FP8 bytes/scales; on-device operand decode and native dots, static binary tree or right-to-left chain. Host supplies already-quantized activation fixture; no dynamic producer/full-M/model.",
+  "timing_note": "Each row root times its own full-K result: on-device activation packet encoding, weight decode, native dots and complete reduction including start-entry skew. Host receive arming/readiness is separate. Root timing does not include every sender completion callback; host full audit verifies those before rearm. Tree and chain use separately frozen FP32 schedules, not bitwise-equivalent regrouping; no full-M/model rate.",
+  "clock_hz": null,
+  "interpretation": "Full input widths, only two output rows per projection. Both schedules satisfy separate exactFP32 and FP64 bounds; regrouping changes addition order. No dynamic quantization, full-M/model throughput, assumed clock, or cross-PE subtraction."
+}

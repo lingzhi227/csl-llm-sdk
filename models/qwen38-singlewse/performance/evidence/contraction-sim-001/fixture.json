@@ -1,0 +1,152 @@
+{
+  "model": "Qwen/Qwen3.8-27B-FP8",
+  "revision": "017b9c7af6b5689d5dd426a76e0bc077eb5ca20a",
+  "shard_sha256": {
+    "layers-0.safetensors": "07f700e293baeaf3cd4240c3df1a948c4403f16961ea7979e86c8d6a9f8fd466"
+  },
+  "application": [
+    136,
+    3
+  ],
+  "blocks": [
+    40,
+    48,
+    136
+  ],
+  "cases": 4,
+  "simulation_cases": [
+    0
+  ],
+  "physical_cases": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "origins": [
+    {
+      "case": 0,
+      "row": 0,
+      "tensor": "model.language_model.layers.0.mlp.gate_proj.weight",
+      "output_row_start": 0,
+      "output_rows": 2,
+      "input_columns": 5120,
+      "full_input_width": true,
+      "full_output_rows": false
+    },
+    {
+      "case": 0,
+      "row": 1,
+      "tensor": "model.language_model.layers.0.linear_attn.out_proj.weight",
+      "output_row_start": 0,
+      "output_rows": 2,
+      "input_columns": 6144,
+      "full_input_width": true,
+      "full_output_rows": false
+    },
+    {
+      "case": 0,
+      "row": 2,
+      "tensor": "model.language_model.layers.0.mlp.down_proj.weight",
+      "output_row_start": 0,
+      "output_rows": 2,
+      "input_columns": 17408,
+      "full_input_width": true,
+      "full_output_rows": false
+    },
+    {
+      "case": 1,
+      "row": 0,
+      "tensor": "model.language_model.layers.0.mlp.gate_proj.weight",
+      "output_row_start": 126,
+      "output_rows": 2,
+      "input_columns": 5120,
+      "full_input_width": true,
+      "full_output_rows": false
+    },
+    {
+      "case": 1,
+      "row": 1,
+      "tensor": "model.language_model.layers.0.linear_attn.out_proj.weight",
+      "output_row_start": 126,
+      "output_rows": 2,
+      "input_columns": 6144,
+      "full_input_width": true,
+      "full_output_rows": false
+    },
+    {
+      "case": 1,
+      "row": 2,
+      "tensor": "model.language_model.layers.0.mlp.down_proj.weight",
+      "output_row_start": 126,
+      "output_rows": 2,
+      "input_columns": 17408,
+      "full_input_width": true,
+      "full_output_rows": false
+    },
+    {
+      "case": 2,
+      "row": 0,
+      "tensor": "model.language_model.layers.0.mlp.gate_proj.weight",
+      "output_row_start": 17406,
+      "output_rows": 2,
+      "input_columns": 5120,
+      "full_input_width": true,
+      "full_output_rows": false
+    },
+    {
+      "case": 2,
+      "row": 1,
+      "tensor": "model.language_model.layers.0.linear_attn.out_proj.weight",
+      "output_row_start": 5118,
+      "output_rows": 2,
+      "input_columns": 6144,
+      "full_input_width": true,
+      "full_output_rows": false
+    },
+    {
+      "case": 2,
+      "row": 2,
+      "tensor": "model.language_model.layers.0.mlp.down_proj.weight",
+      "output_row_start": 5118,
+      "output_rows": 2,
+      "input_columns": 17408,
+      "full_input_width": true,
+      "full_output_rows": false
+    },
+    {
+      "case": 3,
+      "row": 0,
+      "tensor": "model.language_model.layers.0.mlp.gate_proj.weight",
+      "output_row_start": 254,
+      "output_rows": 2,
+      "input_columns": 5120,
+      "full_input_width": true,
+      "full_output_rows": false
+    },
+    {
+      "case": 3,
+      "row": 1,
+      "tensor": "model.language_model.layers.0.linear_attn.out_proj.weight",
+      "output_row_start": 254,
+      "output_rows": 2,
+      "input_columns": 6144,
+      "full_input_width": true,
+      "full_output_rows": false
+    },
+    {
+      "case": 3,
+      "row": 2,
+      "tensor": "model.language_model.layers.0.mlp.down_proj.weight",
+      "output_row_start": 254,
+      "output_rows": 2,
+      "input_columns": 17408,
+      "full_input_width": true,
+      "full_output_rows": false
+    }
+  ],
+  "fixture_sha256": "d215e225bd12428a1f76eae0d057bc7bd02df2b5b2028776cf5dbe002ec10cef",
+  "full_model": false,
+  "criterion": "Every native local dot and every subtree/chain aggregate exactly match separately frozen orderedFP32 emulators (zero signs canonicalized); every aggregate satisfies independent gamma(260+Kblocks) FP64 absolute-product bound; participant counts, packet encoding, input/weight retention and endpoint callbacks exact",
+  "scope": "Full original input widths5120/6144/17408; two output rows per projection. Original FP8 bytes/scales; on-device operand decode and native dots, static binary tree or right-to-left chain. Host supplies already-quantized activation fixture; no dynamic producer/full-M/model."
+}

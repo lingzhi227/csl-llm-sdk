@@ -3,7 +3,7 @@ import argparse,base64,hashlib,json,re,shlex,subprocess
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 p=argparse.ArgumentParser();p.add_argument('name');a=p.parse_args()
-if not re.fullmatch('(fp8-(native|tile-fast|bank|encoder)|regional-(gemv|bank)|spatial-quant)-(sim|hw)-[0-9]{3}',a.name):raise ValueError('name')
+if not re.fullmatch('(fp8-(native|tile-fast|bank|encoder)|regional-(gemv|bank)|spatial-quant|contraction)-(sim|hw)-[0-9]{3}',a.name):raise ValueError('name')
 physical='-hw-' in a.name
 remote=('/srv/qwen38-singlewse-hardware/' if physical else '/srv/model-storage/qwen38-singlewse/runs/')+a.name
 script='root_name='+repr(remote)+'\n'+'''import json,base64
@@ -14,7 +14,7 @@ for n in m['files']:
  p=Path(n)
  assert not p.is_absolute() and '..' not in p.parts and p.suffix in ['.py','.csl','.json']
  source[n]=base64.b64encode((r/n).read_bytes()).decode()
-receipts={n:(r/n).read_text() for n in ['source-manifest.json','COMPLETE.json','FAILURE.json','result.json','sram.json','fixture.json','artifact.json','compile-audit.json','run-audit.json','compile.log'] if (r/n).is_file()}
+receipts={n:(r/n).read_text() for n in ['source-manifest.json','COMPLETE.json','FAILURE.json','result.json','sram.json','fixture.json','artifact.json','compile-audit.json','run-audit.json','reuse-artifact.json','reused-compile-audit.json','upload-framing.json','compile.log'] if (r/n).is_file()}
 assert sum(len(s) for s in source.values())+sum(len(s) for s in receipts.values())<4194304
 print(json.dumps(dict(source=source,receipts=receipts)))
 '''

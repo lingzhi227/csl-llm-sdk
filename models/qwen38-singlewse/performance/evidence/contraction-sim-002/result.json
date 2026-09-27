@@ -1,0 +1,98 @@
+{
+  "passed": true,
+  "normal_stop": true,
+  "physical": false,
+  "full_model": false,
+  "scope": "Full original input widths5120/6144/17408; two output rows per projection. Original FP8 bytes/scales; on-device operand decode and native dots, static binary tree or right-to-left chain. Host supplies already-quantized activation fixture; no dynamic producer/full-M/model.",
+  "application": [
+    8,
+    28
+  ],
+  "blocks": [
+    40,
+    48,
+    136
+  ],
+  "fixture_sha256": "2b48d01d60b647ef4c2008fe26e4d407cc73321e20109db0a49fa5561d7d15b2",
+  "cases": [
+    {
+      "case": 0,
+      "schedule": "chain",
+      "roots": [
+        {
+          "row": 0,
+          "root": [
+            0,
+            0
+          ],
+          "k_blocks": 40,
+          "root_contraction_cycles": 4893,
+          "max_abs_fp64_error": 2.2883114070282318e-08
+        },
+        {
+          "row": 1,
+          "root": [
+            0,
+            5
+          ],
+          "k_blocks": 48,
+          "root_contraction_cycles": 5580,
+          "max_abs_fp64_error": 1.291263629354944e-07
+        },
+        {
+          "row": 2,
+          "root": [
+            0,
+            11
+          ],
+          "k_blocks": 136,
+          "root_contraction_cycles": 13748,
+          "max_abs_fp64_error": 1.3412403276902296e-07
+        }
+      ],
+      "host_arm_and_ready_seconds": 24.078028390184045,
+      "host_start_through_result_audit_seconds": 12.67068651970476
+    },
+    {
+      "case": 0,
+      "schedule": "tree",
+      "roots": [
+        {
+          "row": 0,
+          "root": [
+            0,
+            0
+          ],
+          "k_blocks": 40,
+          "root_contraction_cycles": 1898,
+          "max_abs_fp64_error": 1.7002321328618564e-08
+        },
+        {
+          "row": 1,
+          "root": [
+            0,
+            5
+          ],
+          "k_blocks": 48,
+          "root_contraction_cycles": 1927,
+          "max_abs_fp64_error": 3.667736336865346e-08
+        },
+        {
+          "row": 2,
+          "root": [
+            0,
+            11
+          ],
+          "k_blocks": 136,
+          "root_contraction_cycles": 2202,
+          "max_abs_fp64_error": 7.451938799363234e-08
+        }
+      ],
+      "host_arm_and_ready_seconds": 3.1536964657716453,
+      "host_start_through_result_audit_seconds": 7.585828304756433
+    }
+  ],
+  "clock_hz": null,
+  "all_inputs_and_weight_retained": true,
+  "timing_note": "Each row root times its own full-K result: on-device activation packet encoding, weight decode, native dots and complete reduction including start-entry skew. Host receive arming/readiness is separate. Root timing does not include every sender completion callback; host full audit verifies those before rearm. Tree and chain use separately frozen FP32 schedules, not bitwise-equivalent regrouping; no full-M/model rate."
+}

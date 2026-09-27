@@ -146,3 +146,13 @@ still uses a host readiness barrier, and a single constant weight tile is prepar
 once. Full model lowering must place upstream values into these owners and replace
 that inter-group host lifecycle with device readiness/credit events. P8 is not an
 admission of producer code into the nearly full P7 bank PE.
+
+P9 lowers complete K dimensions into static preorder contraction trees with
+explicit parent/child intervals, per-level colors, two receive queues and fixed
+addition order. Logical ranks map onto manually selected line or serpentine2D
+geometries; the qualified8x28 version packs all224 participants without holes.
+The express paths use routers through intermediate PEs and execute only at tree
+nodes. It qualifies two original output rows for each complete K width, rather
+than supplying full matrix placement. BF16 execution and shared resident-bank
+capacities are the next integration gap; see BF16-BANK-NEXT.md. An independent
+guarded-quantization proposal is documented separately and is unimplemented.

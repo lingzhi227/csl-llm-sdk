@@ -1,0 +1,120 @@
+{
+  "physical": true,
+  "full_model": false,
+  "full_output_rows": false,
+  "application": [
+    8,
+    28
+  ],
+  "active_matrix_pes": 224,
+  "full_k_blocks": [
+    40,
+    48,
+    136
+  ],
+  "fixture_sha256": "2b48d01d60b647ef4c2008fe26e4d407cc73321e20109db0a49fa5561d7d15b2",
+  "comparisons": [
+    {
+      "case": 0,
+      "k_blocks": 40,
+      "chain_cycles": 5100,
+      "tree_cycles": 1965,
+      "reduction_fraction": 0.6147058823529412,
+      "component_speedup": 2.595419847328244
+    },
+    {
+      "case": 0,
+      "k_blocks": 48,
+      "chain_cycles": 5815,
+      "tree_cycles": 1994,
+      "reduction_fraction": 0.6570937231298366,
+      "component_speedup": 2.916248746238716
+    },
+    {
+      "case": 0,
+      "k_blocks": 136,
+      "chain_cycles": 14389,
+      "tree_cycles": 2274,
+      "reduction_fraction": 0.8419626103273333,
+      "component_speedup": 6.327616534740545
+    },
+    {
+      "case": 1,
+      "k_blocks": 40,
+      "chain_cycles": 5100,
+      "tree_cycles": 1971,
+      "reduction_fraction": 0.6135294117647059,
+      "component_speedup": 2.5875190258751903
+    },
+    {
+      "case": 1,
+      "k_blocks": 48,
+      "chain_cycles": 5815,
+      "tree_cycles": 2000,
+      "reduction_fraction": 0.6560619088564058,
+      "component_speedup": 2.9075
+    },
+    {
+      "case": 1,
+      "k_blocks": 136,
+      "chain_cycles": 14389,
+      "tree_cycles": 2275,
+      "reduction_fraction": 0.8418931127944957,
+      "component_speedup": 6.324835164835164
+    },
+    {
+      "case": 2,
+      "k_blocks": 40,
+      "chain_cycles": 5102,
+      "tree_cycles": 1970,
+      "reduction_fraction": 0.6138769110152881,
+      "component_speedup": 2.5898477157360404
+    },
+    {
+      "case": 2,
+      "k_blocks": 48,
+      "chain_cycles": 5815,
+      "tree_cycles": 1994,
+      "reduction_fraction": 0.6570937231298366,
+      "component_speedup": 2.916248746238716
+    },
+    {
+      "case": 2,
+      "k_blocks": 136,
+      "chain_cycles": 14389,
+      "tree_cycles": 2275,
+      "reduction_fraction": 0.8418931127944957,
+      "component_speedup": 6.324835164835164
+    },
+    {
+      "case": 3,
+      "k_blocks": 40,
+      "chain_cycles": 5100,
+      "tree_cycles": 1972,
+      "reduction_fraction": 0.6133333333333333,
+      "component_speedup": 2.586206896551724
+    },
+    {
+      "case": 3,
+      "k_blocks": 48,
+      "chain_cycles": 5815,
+      "tree_cycles": 1998,
+      "reduction_fraction": 0.6564058469475494,
+      "component_speedup": 2.9104104104104103
+    },
+    {
+      "case": 3,
+      "k_blocks": 136,
+      "chain_cycles": 14389,
+      "tree_cycles": 2275,
+      "reduction_fraction": 0.8418931127944957,
+      "component_speedup": 6.324835164835164
+    }
+  ],
+  "max_compiled_sram_plus_declared_stack": 12432,
+  "max_abs_fp64_error": 0.00017780065536499023,
+  "scope": "Full original input widths5120/6144/17408; two output rows per projection. Original FP8 bytes/scales; on-device operand decode and native dots, static binary tree or right-to-left chain. Host supplies already-quantized activation fixture; no dynamic producer/full-M/model.",
+  "timing_note": "Each row root times its own full-K result: on-device activation packet encoding, weight decode, native dots and complete reduction including start-entry skew. Host receive arming/readiness is separate. Root timing does not include every sender completion callback; host full audit verifies those before rearm. Tree and chain use separately frozen FP32 schedules, not bitwise-equivalent regrouping; no full-M/model rate.",
+  "clock_hz": null,
+  "interpretation": "Full input widths, only two output rows per projection. Both schedules satisfy separate exactFP32 and FP64 bounds; regrouping changes addition order. No dynamic quantization, full-M/model throughput, assumed clock, or cross-PE subtraction."
+}

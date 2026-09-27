@@ -52,3 +52,11 @@ subtree-packet and independent arithmetic checks. Producer median2,484 cycles,
 combined median3,003 cycles; host arming/readiness and one-time weight predecode
 are separate. Both jobs completed normally and released. See
 `docs/SPATIAL-QUANTIZATION.md`; this is a component, not complete model throughput.
+
+P9 qualifies complete40/48/136-block K contractions on224 physical PEs in an8x28
+mesh, using original projection weights. A static binary tree reduces the longest
+case from14,389 to2,274–2,275 cycles (about6.33x for this component). All four cases
+and two separately checked summation orders pass, including intermediate results
+and retention. Only two output rows per matrix are executed. The failed initial
+simulator and artifact-loading attempt are preserved; the successful run reuses
+the compiled artifact and releases normally. See `docs/FULL-K-CONTRACTION.md`.

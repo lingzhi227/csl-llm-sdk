@@ -1,0 +1,11 @@
+{
+  "scope": "Task-local component artifact admission and compile reuse; original runtime and functional publication unchanged",
+  "source_files": {
+    "runtime/backend.py": "2dc91a3e63a1fa5550edc99a970428f8d0101b1f9731a0fe0cf81b793258252b",
+    "runtime/supervise.py": "82bcb910375efbdd0b636352d685709ffb8b1086676029e21d6854eeeb3984e4"
+  },
+  "changes": [
+    "Opt-in component single-message artifact upload capped8MiB with pre-allocation file-size check; delegates to existing AST-pinned bounded SDK transport",
+    "Reuse only a source-identical compiled component, after prior successful/released compile, artifact hash, every ELF hash and actual SRAM gates"
+  ]
+}

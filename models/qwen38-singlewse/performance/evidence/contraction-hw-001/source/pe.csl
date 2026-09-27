@@ -1,0 +1,66 @@
+// Full original K-width native dots and either static binary tree or linear sum.
+param memcpy_params;param rank:u16;param count:u16;param active:u16;param children:u16;param subtree:u16;
+param left_color:u16;param right_color:u16;param out_color:u16;param chain_in_color:u16;param chain_out_color:u16;
+param left_iq:u16;param right_iq:u16;param chain_iq:u16;param tree_oq:u16;param chain_oq:u16;
+param left_task:u16;param right_task:u16;param send_task:u16;param left_dsr:u16;param right_dsr:u16;param send_dsr:u16;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);const clock=@import_module("<time>");
+const unpacker=@import_module("fp8_unpack.csl",.{.max_pairs=128});const dot=@import_module("fp8_dot.csl",.{.rows=2});
+var weights=@zeros([128]u16);var scale=@zeros([1]f32);var raw=@zeros([33]u32);var packet=@zeros([65]u32);var decoded=@zeros([256]u16);
+var local_result=@zeros([2]f32);var aggregate=@zeros([3]u32);var left=@zeros([3]u32);var right=@zeros([3]u32);var audit=@zeros([6]u32);var ticks=@zeros([6]u16);
+const wp:[*]u16=&weights;const sp:[*]f32=&scale;const rp:[*]u32=&raw;const pp:[*]u32=&packet;const lp:[*]f32=&local_result;const gp:[*]u32=&aggregate;const ap:[*]u32=&audit;const tp:[*]u16=&ticks;
+const qi=@get_input_queue(left_iq);const qj=@get_input_queue(right_iq);const qc=@get_input_queue(chain_iq);const qo=@get_output_queue(tree_oq);const qco=@get_output_queue(chain_oq);
+const ld=@get_dsr(dsr_dest,left_dsr);const ls=@get_dsr(dsr_src0,left_dsr);const rd=@get_dsr(dsr_dest,right_dsr);const rs=@get_dsr(dsr_src0,right_dsr);const sd=@get_dsr(dsr_dest,send_dsr);const ss=@get_dsr(dsr_src0,send_dsr);
+const lt=@get_local_task_id(left_task);const rt=@get_local_task_id(right_task);const st=@get_local_task_id(send_task);
+var armed:bool=false;var tree_mode:bool=false;var local_ready:bool=false;var left_ready:bool=false;var right_ready:bool=false;var joined:bool=false;
+fn finish() void {audit[5]=1;armed=false;sys.unblock_cmd_stream();}
+fn join() void {
+ if(local_ready and left_ready and right_ready and !joined){joined=true;
+  var a:f32=local_result[0];var b:f32=local_result[1];var contributors:u32=1;
+  if((tree_mode and children>0) or (!tree_mode and rank+1<count)){a+=@bitcast(f32,left[0]);b+=@bitcast(f32,left[1]);contributors+=left[2];}
+  if(tree_mode and children>1){a+=@bitcast(f32,right[0]);b+=@bitcast(f32,right[1]);contributors+=right[2];}
+  aggregate[0]=@bitcast(u32,a);aggregate[1]=@bitcast(u32,b);aggregate[2]=contributors;audit[3]=1;
+  if(tree_mode){@assert(contributors==@as(u32,subtree));}else{@assert(contributors==@as(u32,count-rank));}
+  if(comptime rank==0){clock.get_timestamp(@ptrcast(*[3]u16,&ticks[3]));clock.disable_tsc();finish();}
+  else{
+   const m=@get_dsd(mem1d_dsd,.{.base_address=&aggregate,.extent=3});
+   const ft=@get_dsd(fabout_dsd,.{.output_queue=qo,.extent=3});const fc=@get_dsd(fabout_dsd,.{.output_queue=qco,.extent=3});
+   @load_to_dsr(ss,m);if(tree_mode){@load_to_dsr(sd,ft,.{.async=true,.activate=st});}else{@load_to_dsr(sd,fc,.{.async=true,.activate=st});}@mov32(sd,ss,.{.async=true});
+  }
+ }
+}
+task received_left() void {left_ready=true;audit[2]+=1;join();}
+task received_right() void {right_ready=true;audit[2]+=1;join();}
+task sent() void {audit[4]=1;finish();}
+fn arm(mode:u16) void {
+ @assert(!armed and mode<=1);armed=true;tree_mode=mode==1;local_ready=false;joined=false;
+ left_ready=rank+1>=count;if(tree_mode){left_ready=children==0;}right_ready=!tree_mode or children<2;
+ for(@range(u16,6))|i|{audit[i]=0;}audit[0]=1;
+ if(comptime active>0){
+  if(!left_ready){
+   const m=@get_dsd(mem1d_dsd,.{.base_address=&left,.extent=3});const ft=@get_dsd(fabin_dsd,.{.input_queue=qi,.extent=3});const fc=@get_dsd(fabin_dsd,.{.input_queue=qc,.extent=3});
+   @load_to_dsr(ld,m);if(tree_mode){@load_to_dsr(ls,ft,.{.async=true,.activate=lt});}else{@load_to_dsr(ls,fc,.{.async=true,.activate=lt});}@mov32(ld,ls,.{.async=true});
+  }
+  if(comptime children>1){if(tree_mode){
+   const m=@get_dsd(mem1d_dsd,.{.base_address=&right,.extent=3});const f=@get_dsd(fabin_dsd,.{.input_queue=qj,.extent=3});@load_to_dsr(rd,m);@load_to_dsr(rs,f,.{.async=true,.activate=rt});@mov32(rd,rs,.{.async=true});
+  }}
+ }
+ sys.unblock_cmd_stream();
+}
+fn start() void {
+ @assert(armed and !local_ready);
+ if(comptime active>0){
+  if(comptime rank==0){clock.enable_tsc();clock.get_timestamp(@ptrcast(*[3]u16,&ticks[0]));}
+  unpacker.decode(@ptrcast([*]u16,rp),@ptrcast([*]u16,pp),64);packet[64]=raw[32];
+  unpacker.decode(wp,&decoded,128);dot.compute(&decoded,@ptrcast([*]u16,pp),lp,@bitcast(f32,packet[64]),scale[0]);
+  local_ready=true;audit[1]=1;join();
+ }else{finish();}
+}
+comptime {
+ if(active>0){
+  if(children>0){@initialize_queue(qi,.{.color=@get_color(left_color)});}
+  if(children>1){@initialize_queue(qj,.{.color=@get_color(right_color)});@bind_local_task(received_right,rt);}
+  if(rank+1<count){@initialize_queue(qc,.{.color=@get_color(chain_in_color)});@bind_local_task(received_left,lt);}
+  if(rank>0){@initialize_queue(qo,.{.color=@get_color(out_color)});@initialize_queue(qco,.{.color=@get_color(chain_out_color)});@bind_local_task(sent,st);}
+ }
+ @export_symbol(wp,"weights");@export_symbol(sp,"scale");@export_symbol(rp,"raw");@export_symbol(pp,"packet");@export_symbol(lp,"local_result");@export_symbol(gp,"aggregate");@export_symbol(ap,"audit");@export_symbol(tp,"ticks");@export_symbol(arm);@export_symbol(start);
+}

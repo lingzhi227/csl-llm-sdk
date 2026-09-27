@@ -1,0 +1,326 @@
+{
+  "passed": true,
+  "normal_stop": true,
+  "physical": true,
+  "full_model": false,
+  "scope": "Full original input widths5120/6144/17408; two output rows per projection. Original FP8 bytes/scales; on-device operand decode and native dots, static binary tree or right-to-left chain. Host supplies already-quantized activation fixture; no dynamic producer/full-M/model.",
+  "application": [
+    8,
+    28
+  ],
+  "blocks": [
+    40,
+    48,
+    136
+  ],
+  "fixture_sha256": "2b48d01d60b647ef4c2008fe26e4d407cc73321e20109db0a49fa5561d7d15b2",
+  "cases": [
+    {
+      "case": 0,
+      "schedule": "chain",
+      "roots": [
+        {
+          "row": 0,
+          "root": [
+            0,
+            0
+          ],
+          "k_blocks": 40,
+          "root_contraction_cycles": 5100,
+          "max_abs_fp64_error": 2.2883114070282318e-08
+        },
+        {
+          "row": 1,
+          "root": [
+            0,
+            5
+          ],
+          "k_blocks": 48,
+          "root_contraction_cycles": 5815,
+          "max_abs_fp64_error": 1.291263629354944e-07
+        },
+        {
+          "row": 2,
+          "root": [
+            0,
+            11
+          ],
+          "k_blocks": 136,
+          "root_contraction_cycles": 14389,
+          "max_abs_fp64_error": 1.3412403276902296e-07
+        }
+      ],
+      "host_arm_and_ready_seconds": 0.06902814749628305,
+      "host_start_through_result_audit_seconds": 0.0032382383942604065
+    },
+    {
+      "case": 0,
+      "schedule": "tree",
+      "roots": [
+        {
+          "row": 0,
+          "root": [
+            0,
+            0
+          ],
+          "k_blocks": 40,
+          "root_contraction_cycles": 1965,
+          "max_abs_fp64_error": 1.7002321328618564e-08
+        },
+        {
+          "row": 1,
+          "root": [
+            0,
+            5
+          ],
+          "k_blocks": 48,
+          "root_contraction_cycles": 1994,
+          "max_abs_fp64_error": 3.667736336865346e-08
+        },
+        {
+          "row": 2,
+          "root": [
+            0,
+            11
+          ],
+          "k_blocks": 136,
+          "root_contraction_cycles": 2274,
+          "max_abs_fp64_error": 7.451938799363234e-08
+        }
+      ],
+      "host_arm_and_ready_seconds": 0.001406582072377205,
+      "host_start_through_result_audit_seconds": 0.002091257832944393
+    },
+    {
+      "case": 1,
+      "schedule": "tree",
+      "roots": [
+        {
+          "row": 0,
+          "root": [
+            0,
+            0
+          ],
+          "k_blocks": 40,
+          "root_contraction_cycles": 1971,
+          "max_abs_fp64_error": 0.0
+        },
+        {
+          "row": 1,
+          "root": [
+            0,
+            5
+          ],
+          "k_blocks": 48,
+          "root_contraction_cycles": 2000,
+          "max_abs_fp64_error": 0.0
+        },
+        {
+          "row": 2,
+          "root": [
+            0,
+            11
+          ],
+          "k_blocks": 136,
+          "root_contraction_cycles": 2275,
+          "max_abs_fp64_error": 0.0
+        }
+      ],
+      "host_arm_and_ready_seconds": 0.0015302933752536774,
+      "host_start_through_result_audit_seconds": 0.0019508469849824905
+    },
+    {
+      "case": 1,
+      "schedule": "chain",
+      "roots": [
+        {
+          "row": 0,
+          "root": [
+            0,
+            0
+          ],
+          "k_blocks": 40,
+          "root_contraction_cycles": 5100,
+          "max_abs_fp64_error": 0.0
+        },
+        {
+          "row": 1,
+          "root": [
+            0,
+            5
+          ],
+          "k_blocks": 48,
+          "root_contraction_cycles": 5815,
+          "max_abs_fp64_error": 0.0
+        },
+        {
+          "row": 2,
+          "root": [
+            0,
+            11
+          ],
+          "k_blocks": 136,
+          "root_contraction_cycles": 14389,
+          "max_abs_fp64_error": 0.0
+        }
+      ],
+      "host_arm_and_ready_seconds": 0.0013642320409417152,
+      "host_start_through_result_audit_seconds": 0.0019150357693433762
+    },
+    {
+      "case": 2,
+      "schedule": "chain",
+      "roots": [
+        {
+          "row": 0,
+          "root": [
+            0,
+            0
+          ],
+          "k_blocks": 40,
+          "root_contraction_cycles": 5102,
+          "max_abs_fp64_error": 6.07337530961205e-15
+        },
+        {
+          "row": 1,
+          "root": [
+            0,
+            5
+          ],
+          "k_blocks": 48,
+          "root_contraction_cycles": 5815,
+          "max_abs_fp64_error": 1.174250583921288e-14
+        },
+        {
+          "row": 2,
+          "root": [
+            0,
+            11
+          ],
+          "k_blocks": 136,
+          "root_contraction_cycles": 14389,
+          "max_abs_fp64_error": 4.5844391108849913e-14
+        }
+      ],
+      "host_arm_and_ready_seconds": 0.001332591287791729,
+      "host_start_through_result_audit_seconds": 0.0018070656806230545
+    },
+    {
+      "case": 2,
+      "schedule": "tree",
+      "roots": [
+        {
+          "row": 0,
+          "root": [
+            0,
+            0
+          ],
+          "k_blocks": 40,
+          "root_contraction_cycles": 1970,
+          "max_abs_fp64_error": 4.484043344965549e-15
+        },
+        {
+          "row": 1,
+          "root": [
+            0,
+            5
+          ],
+          "k_blocks": 48,
+          "root_contraction_cycles": 1994,
+          "max_abs_fp64_error": 6.3393301025227444e-15
+        },
+        {
+          "row": 2,
+          "root": [
+            0,
+            11
+          ],
+          "k_blocks": 136,
+          "root_contraction_cycles": 2275,
+          "max_abs_fp64_error": 2.8990512383276004e-14
+        }
+      ],
+      "host_arm_and_ready_seconds": 0.0012713717296719551,
+      "host_start_through_result_audit_seconds": 0.001933995634317398
+    },
+    {
+      "case": 3,
+      "schedule": "tree",
+      "roots": [
+        {
+          "row": 0,
+          "root": [
+            0,
+            0
+          ],
+          "k_blocks": 40,
+          "root_contraction_cycles": 1972,
+          "max_abs_fp64_error": 3.0875205993652344e-05
+        },
+        {
+          "row": 1,
+          "root": [
+            0,
+            5
+          ],
+          "k_blocks": 48,
+          "root_contraction_cycles": 1998,
+          "max_abs_fp64_error": 3.4809112548828125e-05
+        },
+        {
+          "row": 2,
+          "root": [
+            0,
+            11
+          ],
+          "k_blocks": 136,
+          "root_contraction_cycles": 2275,
+          "max_abs_fp64_error": 6.0677528381347656e-05
+        }
+      ],
+      "host_arm_and_ready_seconds": 0.0012903409078717232,
+      "host_start_through_result_audit_seconds": 0.0017334548756480217
+    },
+    {
+      "case": 3,
+      "schedule": "chain",
+      "roots": [
+        {
+          "row": 0,
+          "root": [
+            0,
+            0
+          ],
+          "k_blocks": 40,
+          "root_contraction_cycles": 5100,
+          "max_abs_fp64_error": 4.38690185546875e-05
+        },
+        {
+          "row": 1,
+          "root": [
+            0,
+            5
+          ],
+          "k_blocks": 48,
+          "root_contraction_cycles": 5815,
+          "max_abs_fp64_error": 5.1975250244140625e-05
+        },
+        {
+          "row": 2,
+          "root": [
+            0,
+            11
+          ],
+          "k_blocks": 136,
+          "root_contraction_cycles": 14389,
+          "max_abs_fp64_error": 0.00017780065536499023
+        }
+      ],
+      "host_arm_and_ready_seconds": 0.0012881308794021606,
+      "host_start_through_result_audit_seconds": 0.0017968658357858658
+    }
+  ],
+  "clock_hz": null,
+  "all_inputs_and_weight_retained": true,
+  "timing_note": "Each row root times its own full-K result: on-device activation packet encoding, weight decode, native dots and complete reduction including start-entry skew. Host receive arming/readiness is separate. Root timing does not include every sender completion callback; host full audit verifies those before rearm. Tree and chain use separately frozen FP32 schedules, not bitwise-equivalent regrouping; no full-M/model rate."
+}

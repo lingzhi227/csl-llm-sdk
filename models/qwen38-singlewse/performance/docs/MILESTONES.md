@@ -333,3 +333,78 @@ Next work remains full-width hierarchical reductions, actual BF16/native paths,
 role-specific full weight ownership and device-driven epoch orchestration before
 complete64-layer/full-vocabulary integration. The2,000 dependent tokens/s target
 is still unmet; this milestone does not reduce its scope.
+
+## P9: complete K-width hierarchical contraction
+
+The checked contraction plan covers all40/48/136 original K blocks of selected
+layer0 gate, linear-attention output and MLP down-projection rows. These correspond
+to5120/6144/17408 input columns. There are two real output rows per matrix; full
+input width does not mean every matrix output or the full model is executed.
+
+A static preorder binary tree has at most seven dependency edges at136 blocks.
+At most two input queues receive child sums; fixed per-level/per-side colors give
+non-overlapping express routes. Intermediate routers forward without software
+relay tasks. The224 active tiles occupy disjoint serpentine subregions within an
+8x28 rectangle. Tree and descending-K chain controls share exactly the same local
+native dot work and have separate frozen FP32 aggregation references and FP64
+absolute-product bounds. See FULL-K-CONTRACTION.md for resource/timing contracts.
+
+Simulator001 compiles and admits the initial136x3 padded layout, but hits its
+240-second run limit before a complete numeric record. Its exact progress location
+was not logged and is unproven. Attempt002 removes184 padded PEs through the2D
+mapping and adds phase logging, without changing logical trees, full K coverage,
+arithmetic or acceptance bounds. It completes both schedules and all input/weight
+retention checks in209.422 seconds total. No unchanged failed experiment is rerun.
+
+In simulator002's frozen mixed case, chain/tree root cycles are4,893/1,898 for40
+blocks,5,580/1,927 for48, and13,748/2,202 for136. Every native dot and every subtree
+or chain-suffix result exactly equals its own ordered FP32 reference, all counts
+and packet contents agree, and all FP64 bounds pass. Maximum observed FP64 error
+is1.3412403276902296e-7. Actual maximum ELF SRAM including4,096 stack is12,432 bytes.
+The workstation service exited normally and its shared heavy-job lock is free.
+These observations are simulator component evidence; physical qualification is
+recorded separately when its complete checks and allocation release are available.
+
+### Physical P9 qualification
+
+`contraction-hw-002` passes all four frozen cases in both schedules, eight complete
+epochs in one runtime. Every local dot, every tree subtree and every chain suffix
+matches its respective ordered FP32 reference exactly; the independent FP64 bounds,
+participant counts, packets, callbacks and full weight/scale/input retention pass.
+Normal stop completes. Maximum FP64 error across both schedules/all nodes is
+0.00017780065536499023 in the large signed-value fixture; no tolerance is fitted
+to observed output.
+
+| Complete K blocks | Chain root cycles | Tree root cycles | Component speedup |
+|---|---:|---:|---:|
+|40 (5120 columns)|5100–5102|1965–1972|2.586–2.595x|
+|48 (6144 columns)|5815|1994–2000|2.908–2.916x|
+|136 (17408 columns)|14389|2274–2275|6.325–6.328x|
+
+These same-root intervals include local operand encoding, weight decode, native
+dots, full-K reduction and launch-entry skew. Separate host arming/readiness is
+excluded from device timing. All sender callbacks are audited before rearming,
+but the root interval ends at numerical readiness. Already-quantized activation
+fixtures and only two output rows per matrix remain explicit scope limits. This
+is not P8-plus-P9 fusion, full-M execution, a full model or a token rate. Regrouping
+changes summation order; both paths satisfy their own frozen numerical contract.
+
+Physical001 compiled successfully (`wsjob-td9p7dj3agghajcn3z9s8e`,192.527s stage
+wall) and admitted all224 PEs, maximum12,432 bytes including the4,096-byte stack.
+Its runtime `wsjob-cf4hvhxx2qncukelzr7ykb` failed before neural execution because
+the service could not find the compiled artifact; the supervisor cancelled and
+released it (53.767s stage wall). The1,131,713-byte archive exceeded the old1MiB
+component upload chunk. Physical002 reuses the exact hash-pinned artifact/CSL
+and fixture with an explicit8MiB single-message profile, without recompiling.
+A no-job recording stub verifies byte-identical protobuf framing to the original
+installed SDK; the prior profile used two messages. This successful repair does
+not independently prove the server's internal failure mechanism on001.
+
+The component reuse supervisor checks prior successful/released compile evidence,
+all CSL hashes, artifact SHA, every ELF hash and SRAM again before the new run.
+Runtime002 `wsjob-bodpssysjsslbcadkfddkr` succeeds and releases normally in71.493s
+stage wall, without cleanup errors. A fresh account/system audit finds no owned
+active job or assignment. Stage wall intervals are not device latency or final
+provider billing. Original functional runtime/code and all failed attempts remain
+unchanged. Seventeen source tests and the no-job actual-artifact framing proof
+pass; the full original model and2,000 dependent tokens/s remain unachieved.
