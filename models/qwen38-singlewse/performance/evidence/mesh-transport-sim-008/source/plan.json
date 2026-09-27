@@ -1,0 +1,366 @@
+{
+  "schema": "wse-stream-plan-v1",
+  "plan": {
+    "width": 3,
+    "height": 4,
+    "max_words": 256,
+    "data_color": 3,
+    "row_colors": [
+      4,
+      5
+    ],
+    "column_colors": [
+      6,
+      7
+    ],
+    "input_queues": [
+      2,
+      3,
+      4
+    ],
+    "output_queues": [
+      2,
+      3
+    ],
+    "local_tasks": [
+      8,
+      9,
+      10
+    ],
+    "stack_allowance": 4096,
+    "code_allowance": 8192,
+    "sram_ceiling": 48128
+  },
+  "resources": {
+    "passed": true,
+    "scope": "restricted rooted multicast/ack tree only",
+    "pes": 12,
+    "routes": 34,
+    "tree_edges": 11,
+    "max_one_way_hops": 5,
+    "estimated_live_data_bytes": 1536,
+    "estimated_total_bytes": 13824,
+    "compiled_sram_qualified": false,
+    "root_window": 1,
+    "payload_buffers": 1,
+    "completion": "own receive and every child ack; parent send completion before buffer reuse"
+  },
+  "routes": [
+    {
+      "x": 0,
+      "y": 0,
+      "color": 3,
+      "rx": "RAMP",
+      "tx": [
+        "EAST",
+        "SOUTH"
+      ]
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "color": 5,
+      "rx": "EAST",
+      "tx": [
+        "RAMP"
+      ]
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "color": 7,
+      "rx": "SOUTH",
+      "tx": [
+        "RAMP"
+      ]
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "color": 3,
+      "rx": "WEST",
+      "tx": [
+        "RAMP",
+        "EAST"
+      ]
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "color": 4,
+      "rx": "EAST",
+      "tx": [
+        "RAMP"
+      ]
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "color": 5,
+      "rx": "RAMP",
+      "tx": [
+        "WEST"
+      ]
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "color": 3,
+      "rx": "WEST",
+      "tx": [
+        "RAMP"
+      ]
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "color": 4,
+      "rx": "RAMP",
+      "tx": [
+        "WEST"
+      ]
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "color": 3,
+      "rx": "NORTH",
+      "tx": [
+        "RAMP",
+        "EAST",
+        "SOUTH"
+      ]
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "color": 5,
+      "rx": "EAST",
+      "tx": [
+        "RAMP"
+      ]
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "color": 6,
+      "rx": "SOUTH",
+      "tx": [
+        "RAMP"
+      ]
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "color": 7,
+      "rx": "RAMP",
+      "tx": [
+        "NORTH"
+      ]
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "color": 3,
+      "rx": "WEST",
+      "tx": [
+        "RAMP",
+        "EAST"
+      ]
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "color": 4,
+      "rx": "EAST",
+      "tx": [
+        "RAMP"
+      ]
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "color": 5,
+      "rx": "RAMP",
+      "tx": [
+        "WEST"
+      ]
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "color": 3,
+      "rx": "WEST",
+      "tx": [
+        "RAMP"
+      ]
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "color": 4,
+      "rx": "RAMP",
+      "tx": [
+        "WEST"
+      ]
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "color": 3,
+      "rx": "NORTH",
+      "tx": [
+        "RAMP",
+        "EAST",
+        "SOUTH"
+      ]
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "color": 5,
+      "rx": "EAST",
+      "tx": [
+        "RAMP"
+      ]
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "color": 7,
+      "rx": "SOUTH",
+      "tx": [
+        "RAMP"
+      ]
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "color": 6,
+      "rx": "RAMP",
+      "tx": [
+        "NORTH"
+      ]
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "color": 3,
+      "rx": "WEST",
+      "tx": [
+        "RAMP",
+        "EAST"
+      ]
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "color": 4,
+      "rx": "EAST",
+      "tx": [
+        "RAMP"
+      ]
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "color": 5,
+      "rx": "RAMP",
+      "tx": [
+        "WEST"
+      ]
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "color": 3,
+      "rx": "WEST",
+      "tx": [
+        "RAMP"
+      ]
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "color": 4,
+      "rx": "RAMP",
+      "tx": [
+        "WEST"
+      ]
+    },
+    {
+      "x": 0,
+      "y": 3,
+      "color": 3,
+      "rx": "NORTH",
+      "tx": [
+        "RAMP",
+        "EAST"
+      ]
+    },
+    {
+      "x": 0,
+      "y": 3,
+      "color": 5,
+      "rx": "EAST",
+      "tx": [
+        "RAMP"
+      ]
+    },
+    {
+      "x": 0,
+      "y": 3,
+      "color": 7,
+      "rx": "RAMP",
+      "tx": [
+        "NORTH"
+      ]
+    },
+    {
+      "x": 1,
+      "y": 3,
+      "color": 3,
+      "rx": "WEST",
+      "tx": [
+        "RAMP",
+        "EAST"
+      ]
+    },
+    {
+      "x": 1,
+      "y": 3,
+      "color": 4,
+      "rx": "EAST",
+      "tx": [
+        "RAMP"
+      ]
+    },
+    {
+      "x": 1,
+      "y": 3,
+      "color": 5,
+      "rx": "RAMP",
+      "tx": [
+        "WEST"
+      ]
+    },
+    {
+      "x": 2,
+      "y": 3,
+      "color": 3,
+      "rx": "WEST",
+      "tx": [
+        "RAMP"
+      ]
+    },
+    {
+      "x": 2,
+      "y": 3,
+      "color": 4,
+      "rx": "RAMP",
+      "tx": [
+        "WEST"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "physical": false,
+  "normal_stop": false,
+  "completed_cases": [
+    {
+      "case": 0,
+      "payload_words": 1,
+      "iterations": 1,
+      "seed": 1,
+      "root_cycles": 2145,
+      "cycles_per_roundtrip": 2145.0,
+      "host_launch_seconds": 2.6823952794075012e-05,
+      "host_completion_and_audit_seconds": 4.433019085321575,
+      "clock_hz": null,
+      "packet_every_endpoint_pass": true,
+      "epoch_every_endpoint_pass": true,
+      "children_every_endpoint_pass": true,
+      "root_checksum": 32896
+    },
+    {
+      "case": 1,
+      "payload_words": 33,
+      "iterations": 64,
+      "seed": 17,
+      "root_cycles": 139266,
+      "cycles_per_roundtrip": 2176.03125,
+      "host_launch_seconds": 2.6032328605651855e-05,
+      "host_completion_and_audit_seconds": 82.48147578630596,
+      "clock_hz": null,
+      "packet_every_endpoint_pass": true,
+      "epoch_every_endpoint_pass": true,
+      "children_every_endpoint_pass": true,
+      "root_checksum": 49024
+    }
+  ],
+  "reason": "Bounded simulator budget; use the smaller geometry for complete suite and real hardware for256PE timing"
+}

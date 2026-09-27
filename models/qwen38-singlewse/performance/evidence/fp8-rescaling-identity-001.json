@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "scope": "IEEE mathematical encoding identity only; no hardware or model performance claim",
+  "finite_encodings": 254,
+  "ordered_products": 64516,
+  "fp16_bits": "((fp8_code & 127) << 7) | ((fp8_code & 128) << 8)",
+  "fp16_value_scale": 256,
+  "fp32_dot_scale": 65536,
+  "accumulation_requirement": "Native mixed FP16 multiply / FP32 accumulate with original term order; rescale before original activation/weight scales",
+  "device_denormal_qualification_required": true,
+  "device_kernel_qualified": false
+}

@@ -1,0 +1,85 @@
+{
+  "passed": true,
+  "normal_stop": true,
+  "physical": false,
+  "full_model": false,
+  "scope": "arrival-driven 2D multicast and tree acknowledgement; no neural arithmetic",
+  "application": [
+    3,
+    4
+  ],
+  "cases": [
+    {
+      "case": 0,
+      "payload_words": 1,
+      "iterations": 1,
+      "seed": 1,
+      "root_cycles": 443,
+      "cycles_per_roundtrip": 443.0,
+      "host_launch_seconds": 3.0720140784978867e-05,
+      "clock_hz": null,
+      "packet_every_endpoint_pass": true,
+      "epoch_every_endpoint_pass": true,
+      "children_every_endpoint_pass": true,
+      "root_checksum": 78
+    },
+    {
+      "case": 1,
+      "payload_words": 33,
+      "iterations": 64,
+      "seed": 17,
+      "root_cycles": 30338,
+      "cycles_per_roundtrip": 474.03125,
+      "host_launch_seconds": 2.815062180161476e-05,
+      "clock_hz": null,
+      "packet_every_endpoint_pass": true,
+      "epoch_every_endpoint_pass": true,
+      "children_every_endpoint_pass": true,
+      "root_checksum": 834
+    },
+    {
+      "case": 2,
+      "payload_words": 33,
+      "iterations": 128,
+      "seed": 97,
+      "root_cycles": 60674,
+      "cycles_per_roundtrip": 474.015625,
+      "host_launch_seconds": 2.1032989025115967e-05,
+      "clock_hz": null,
+      "packet_every_endpoint_pass": true,
+      "epoch_every_endpoint_pass": true,
+      "children_every_endpoint_pass": true,
+      "root_checksum": 1602
+    },
+    {
+      "case": 3,
+      "payload_words": 33,
+      "iterations": 128,
+      "seed": 41,
+      "root_cycles": 60674,
+      "cycles_per_roundtrip": 474.015625,
+      "host_launch_seconds": 2.443511039018631e-05,
+      "clock_hz": null,
+      "packet_every_endpoint_pass": true,
+      "epoch_every_endpoint_pass": true,
+      "children_every_endpoint_pass": true,
+      "root_checksum": 1602
+    },
+    {
+      "case": 4,
+      "payload_words": 33,
+      "iterations": 64,
+      "seed": 97,
+      "root_cycles": 30338,
+      "cycles_per_roundtrip": 474.03125,
+      "host_launch_seconds": 2.1808315068483353e-05,
+      "clock_hz": null,
+      "packet_every_endpoint_pass": true,
+      "epoch_every_endpoint_pass": true,
+      "children_every_endpoint_pass": true,
+      "root_checksum": 834
+    }
+  ],
+  "rate_is_not_model_tokens_per_second": true,
+  "timing": "same root 48-bit cycle counter; no frequency assumption; host launch separately"
+}

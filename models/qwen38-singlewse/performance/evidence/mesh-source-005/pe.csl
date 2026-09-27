@@ -1,0 +1,96 @@
+// Arrival-driven 2D multicast and tree acknowledgement; no neural arithmetic.
+param memcpy_params;
+param x:u16;param y:u16;param width:u16;param height:u16;param max_words:u16;
+param child_count:u16;param data_color:u16;param east_color:u16;param south_color:u16;param ack_color:u16;
+param data_iq:u16;param east_iq:u16;param south_iq:u16;param data_oq:u16;param ack_oq:u16;
+param receive_task:u16;param send_task:u16;param next_task:u16;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const clock=@import_module("<time>");
+const log=@import_module("<simprint>");
+const root:bool=x==0 and y==0;
+var packet=@zeros([max_words]u32);
+// completed epochs, root checksum, receive epochs, acknowledged children
+var audit=@zeros([4]u32);
+var ticks=@zeros([6]u16);
+const packet_ptr:[*]u32=&packet;const audit_ptr:[*]u32=&audit;const ticks_ptr:[*]u16=&ticks;
+var total:u16=0;var words:u16=0;var epoch:u16=0;
+var ready:bool=false;var arrived:u16=0;var sum:u32=0;
+var reply=@zeros([1]u32);
+const recv_done=@get_local_task_id(receive_task);
+const send_done=@get_local_task_id(send_task);
+const next_done=@get_local_task_id(next_task);
+const iq=@get_input_queue(data_iq);
+const iq_east=@get_input_queue(east_iq);
+const iq_south=@get_input_queue(south_iq);
+const oq=@get_output_queue(if(root) data_oq else ack_oq);
+const rx_d=@get_dsr(dsr_dest,3);const rx_s=@get_dsr(dsr_src0,3);
+const tx_d=@get_dsr(dsr_dest,4);const tx_s=@get_dsr(dsr_src0,4);
+
+fn open_children() void {
+  if(comptime x+1<width){@unblock(iq_east);}
+  if(comptime x==0 and y+1<height){@unblock(iq_south);}
+}
+fn receive_packet() void {
+  const mem=@get_dsd(mem1d_dsd,.{.base_address=&packet,.extent=max_words});
+  const wire=@get_dsd(fabin_dsd,.{.input_queue=iq,.extent=1});
+  @load_to_dsr(rx_d,@set_dsd_length(mem,words));
+  @load_to_dsr(rx_s,@set_dsd_length(wire,words),.{.async=true,.activate=recv_done});
+  @mov32(rx_d,rx_s,.{.async=true});
+}
+fn send_packet(ptr:[*]u32,count:u16) void {
+  const mem=@get_dsd(mem1d_dsd,.{.base_address=ptr,.extent=1});
+  const wire=@get_dsd(fabout_dsd,.{.output_queue=oq,.extent=1});
+  @load_to_dsr(tx_s,@set_dsd_length(mem,count));
+  @load_to_dsr(tx_d,@set_dsd_length(wire,count),.{.async=true,.activate=send_done});
+  @mov32(tx_d,tx_s,.{.async=true});
+}
+fn join() void {
+  if(ready and arrived==child_count){
+    ready=false;reply[0]=sum;
+    if(comptime root){
+      const n:u32=@as(u32,width)*@as(u32,height);
+      const expected:u32=(n*(n+1))/2+n*@as(u32,epoch);
+      if(sum!=expected){log.fmt("bad root epoch {d} sum {d} expected {d}",.{epoch,sum,expected});}
+      @assert(sum==expected);audit[1]=sum;audit[0]+=1;epoch+=1;
+      if(epoch==total){clock.get_timestamp(@ptrcast(*[3]u16,&ticks[3]));clock.disable_tsc();sys.unblock_cmd_stream();}
+      else {@activate(next_done);}
+    }else{send_packet(&reply,1);}
+  }
+}
+task received() void {
+  @assert(packet[0]==@as(u32,epoch));audit[2]+=1;
+  sum+=@as(u32,y)*@as(u32,width)+@as(u32,x)+1+@as(u32,epoch);
+  ready=true;join();
+}
+task child_east(value:u32) void {@block(iq_east);sum+=value;arrived+=1;audit[3]+=1;@assert(arrived<=child_count);join();}
+task child_south(value:u32) void {@block(iq_south);sum+=value;arrived+=1;audit[3]+=1;@assert(arrived<=child_count);join();}
+task sent() void {
+  if(comptime root){
+    sum+=1+@as(u32,epoch);audit[2]+=1;ready=true;join();
+  }else{
+    audit[0]+=1;epoch+=1;
+    if(epoch==total){sys.unblock_cmd_stream();}
+    else{sum=0;arrived=0;open_children();receive_packet();}
+  }
+}
+task next_epoch() void {
+  sum=0;arrived=0;ready=false;open_children();packet[0]=@as(u32,epoch);
+  send_packet(&packet,words);
+}
+fn benchmark(iterations:u16,packet_words:u16) void {
+  @assert(iterations>0 and iterations<=256 and packet_words>0 and packet_words<=max_words);
+  total=iterations;words=packet_words;epoch=0;sum=0;arrived=0;ready=false;
+  for(@range(u16,4))|i|{audit[i]=0;}
+  if(comptime root){
+    clock.enable_tsc();clock.get_timestamp(@ptrcast(*[3]u16,&ticks[0]));@activate(next_done);
+  }else{open_children();receive_packet();}
+}
+comptime {
+  @initialize_queue(oq,.{.color=@get_color(if(root) data_color else ack_color)});
+  @bind_local_task(sent,send_done);
+  if(root){@bind_local_task(next_epoch,next_done);}
+  else{@initialize_queue(iq,.{.color=@get_color(data_color)});@bind_local_task(received,recv_done);}
+  if(x+1<width){@initialize_queue(iq_east,.{.color=@get_color(east_color)});@bind_data_task(child_east,@get_data_task_id(iq_east));}
+  if(x==0 and y+1<height){@initialize_queue(iq_south,.{.color=@get_color(south_color)});@bind_data_task(child_south,@get_data_task_id(iq_south));}
+  @export_symbol(packet_ptr,"packet");@export_symbol(audit_ptr,"audit");@export_symbol(ticks_ptr,"ticks");@export_symbol(benchmark);
+}
