@@ -1,0 +1,71 @@
+// Arrival-triggered typed resident dots. Next request is armed only by sent().
+param memcpy_params;param rank:u16;param children:u16;param subtree:u16;param fp8_slots:u16;param bf16_slots:u16;param cases:u16;param max_rounds:u16;
+param left_color:u16;param right_color:u16;param out_color:u16;param left_iq:u16;param right_iq:u16;param tree_oq:u16;
+param left_task:u16;param right_task:u16;param send_task:u16;param left_dsr:u16;param right_dsr:u16;param send_dsr:u16;
+param request_color:u16;param request_iq:u16;param request_task:u16;param request_dsr:u16;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const unpacker=@import_module("fp8_unpack.csl",.{.max_pairs=128});const fp8=@import_module("fp8_dot.csl",.{.rows=2});const bf_dot=@import_module("bf16_dot.csl",.{.rows=2});
+var weights=@zeros([fp8_slots*128]u16);var scale=@zeros([fp8_slots]f32);var bfweights=@zeros([bf16_slots*256]u16);
+var request=@zeros([66]u32);var decoded=@zeros([256]u16);var expected=@zeros([cases*4]f32);var failure=@zeros([4]u32);
+var local_result=@zeros([2]f32);var aggregate=@zeros([4]u32);var left=@zeros([4]u32);var right=@zeros([4]u32);var audit=@zeros([8]u16);
+const wp:[*]u16=&weights;const sp:[*]f32=&scale;const bp:[*]u16=&bfweights;const pp:[*]u32=&request;
+const ep:[*]f32=&expected;const fp:[*]u32=&failure;const lp:[*]f32=&local_result;const gp:[*]u32=&aggregate;const ap:[*]u16=&audit;
+const qi=@get_input_queue(left_iq);const qj=@get_input_queue(right_iq);const qo=@get_output_queue(tree_oq);const qr=@get_input_queue(request_iq);
+const ld=@get_dsr(dsr_dest,left_dsr);const ls=@get_dsr(dsr_src0,left_dsr);const rd=@get_dsr(dsr_dest,right_dsr);const rs=@get_dsr(dsr_src0,right_dsr);const sd=@get_dsr(dsr_dest,send_dsr);const ss=@get_dsr(dsr_src0,send_dsr);const qd=@get_dsr(dsr_dest,request_dsr);const qs=@get_dsr(dsr_src0,request_dsr);
+const lt=@get_local_task_id(left_task);const rt=@get_local_task_id(right_task);const st=@get_local_task_id(send_task);const qt=@get_local_task_id(request_task);
+var running:bool=false;var local_ready:bool=false;var left_ready:bool=false;var right_ready:bool=false;var joined:bool=false;
+var limit:u16=0;var completed:u16=0;var current:u16=0;
+fn check(value:f32,index:u16) void {
+ if(value!=expected[current*4+index]){
+  if(audit[7]==0){failure[0]=@as(u32,current);failure[1]=@as(u32,index);failure[2]=@bitcast(u32,value);failure[3]=@bitcast(u32,expected[current*4+index]);}audit[7]+=1;
+ }
+}
+fn arm_request() void {
+ const m=@get_dsd(mem1d_dsd,.{.base_address=&request,.extent=66});const f=@get_dsd(fabin_dsd,.{.input_queue=qr,.extent=66});
+ @load_to_dsr(qd,m);@load_to_dsr(qs,f,.{.async=true,.activate=qt});@mov32(qd,qs,.{.async=true});
+}
+fn join() void {
+ if(local_ready and left_ready and right_ready and !joined){joined=true;
+  var a:f32=local_result[0];var b:f32=local_result[1];var contributors:u32=1;
+  if(comptime children>0){@assert(left[3]==@as(u32,completed));a+=@bitcast(f32,left[0]);b+=@bitcast(f32,left[1]);contributors+=left[2];}
+  if(comptime children>1){@assert(right[3]==@as(u32,completed));a+=@bitcast(f32,right[0]);b+=@bitcast(f32,right[1]);contributors+=right[2];}
+  aggregate[0]=@bitcast(u32,a);aggregate[1]=@bitcast(u32,b);aggregate[2]=contributors;aggregate[3]=@as(u32,completed);audit[4]+=1;@assert(contributors==@as(u32,subtree));check(a,2);check(b,3);
+  const m=@get_dsd(mem1d_dsd,.{.base_address=&aggregate,.extent=4});const f=@get_dsd(fabout_dsd,.{.output_queue=qo,.extent=4});
+  @load_to_dsr(ss,m);@load_to_dsr(sd,f,.{.async=true,.activate=st});@mov32(sd,ss,.{.async=true});
+ }
+}
+task received_left() void {left_ready=true;audit[3]+=1;join();}
+task received_right() void {right_ready=true;audit[3]+=1;join();}
+task sent() void {
+ audit[5]+=1;completed+=1;current+=1;if(current==cases){current=0;}
+ if(completed==limit){running=false;audit[6]=1;}else{arm_request();}
+}
+task received_request() void {
+ @assert(running and audit[5]==completed);audit[1]+=1;
+ const control=@ptrcast([*]u16,pp);const kind=control[0]&255;const slot=control[1];
+ @assert(kind<=1 and control[0]>>8==current);if(kind==0){@assert(slot<fp8_slots);}else{@assert(slot<bf16_slots);}
+ local_ready=false;joined=false;left_ready=children==0;right_ready=children<2;
+ if(comptime children>0){
+  const m=@get_dsd(mem1d_dsd,.{.base_address=&left,.extent=4});const f=@get_dsd(fabin_dsd,.{.input_queue=qi,.extent=4});
+  @load_to_dsr(ld,m);@load_to_dsr(ls,f,.{.async=true,.activate=lt});@mov32(ld,ls,.{.async=true});
+ }
+ if(comptime children>1){
+  const m=@get_dsd(mem1d_dsd,.{.base_address=&right,.extent=4});const f=@get_dsd(fabin_dsd,.{.input_queue=qj,.extent=4});
+  @load_to_dsr(rd,m);@load_to_dsr(rs,f,.{.async=true,.activate=rt});@mov32(rd,rs,.{.async=true});
+ }
+ if(kind==0){unpacker.decode(@ptrcast([*]u16,&weights[slot*128]),&decoded,128);fp8.compute(&decoded,@ptrcast([*]u16,&request[1]),lp,@bitcast(f32,request[65]),scale[slot]);}
+ else{bf_dot.compute(@ptrcast([*]u16,&bfweights[slot*256]),@ptrcast([*]u16,&request[1]),lp);}
+ check(local_result[0],0);check(local_result[1],1);audit[2]+=1;local_ready=true;join();
+}
+fn initialize(rounds:u16,first:u16) void {
+ @assert(!running and rounds>0 and rounds<=max_rounds and first<cases);running=true;limit=rounds;completed=0;current=first;
+ for(@range(u16,8))|i|{audit[i]=0;}for(@range(u16,4))|i|{failure[i]=0;}audit[0]=1;arm_request();sys.unblock_cmd_stream();
+}
+fn start() void {sys.unblock_cmd_stream();}
+comptime {
+ if(children>0){@initialize_queue(qi,.{.color=@get_color(left_color)});@bind_local_task(received_left,lt);}
+ if(children>1){@initialize_queue(qj,.{.color=@get_color(right_color)});@bind_local_task(received_right,rt);}
+ @initialize_queue(qo,.{.color=@get_color(out_color)});@bind_local_task(sent,st);
+ @initialize_queue(qr,.{.color=@get_color(request_color)});@bind_local_task(received_request,qt);
+ @export_symbol(wp,"weights");@export_symbol(sp,"scale");@export_symbol(bp,"bfweights");@export_symbol(pp,"request");@export_symbol(ep,"expected");@export_symbol(fp,"failure");@export_symbol(lp,"local_result");@export_symbol(gp,"aggregate");@export_symbol(ap,"audit");@export_symbol(initialize);@export_symbol(start);
+}

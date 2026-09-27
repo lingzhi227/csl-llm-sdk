@@ -1,0 +1,14 @@
+{
+  "sim_log_sha256": "5e99442060a3bb7236d8a04f4604dd601dd11defffee5ab75ba0c4f29bc9177c",
+  "first_fatal": "@113776 FATAL: P4.4: Id: 40, Instr: 3415, Seq: 0, Pipe: 3, Msg: trying to term ut_instr[2], but it's not ours, Instr: 3399",
+  "service": "MainPID=0\nResult=exit-code\nActiveState=failed\n",
+  "utc": "2026-09-27T14:07:19.633813+00:00",
+  "application_tile": [
+    0,
+    3
+  ],
+  "role": "controller",
+  "source_finding": "Two simultaneous explicit-DSR fabric operations have input/output queue2 and no explicit microthread; both default to UT2.",
+  "change_in_002": "Explicit controller sendUT2/recvUT3; independent worker receive/sendUT2/3/4/5, new resource collision checks. Arithmetic, fixture source and acceptance gates unchanged.",
+  "primary_documentation": "https://cerebras-sdk-docs-140.netlify.app/csl/code-examples/tutorial-topic-15-wse3-microthreads"
+}

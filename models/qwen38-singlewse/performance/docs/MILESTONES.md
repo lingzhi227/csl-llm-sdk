@@ -442,3 +442,36 @@ seconds and releases its bounded service/lock. Simulator001's builtin-name alias
 compiler failure is preserved;002 changes that alias only and reuses the exact
 frozen fixture. Nineteen source tests pass. See MIXED-BANK.md for implementation
 and acceptance boundaries. Full-model2,000 dependent tokens/s remains unmet.
+
+## P11: physical arrival-triggered resident epochs
+
+`epoch-bank-hw-001` removes the per-epoch host barrier from the representative
+mixed bank. Six full112-FP8/12-BF16 workers, one controller and one passivePE form
+a2x4 component.66-word multicast requests trigger local computation; four-word
+reductions carry exact contributor counts and monotonic epoch tags. Send completion
+grants the next receive, and each root result gates the controller's next request.
+Explicit microthread assignments are checked separately from queue/DSR identities.
+
+Two96-epoch loops with rotated reset order pass on physical WSE-3. All4,608 local/
+subtree FP32 values match frozen independent oracles, every subtree oracle passes
+its pre-dispatch FP64 bound, and both complete root histories satisfy direct FP64
+checks. Counts, tags, terminal callbacks, replay and all weights/oracles/requests
+retain their expected values after one initial upload. Maximum actual SRAM is
+47,792 bytes including4,096 stack and192 validation-oracle bytes per worker; the
+48,128-byte ceiling and112/12 bank capacities are unchanged.
+
+The full96-epoch loops take169,455 and169,474 same-controller cycles, averaging
+1,765.156 and1,765.354 per epoch including real controller gaps. Request-to-result
+medians are1,694 FP8 and1,659 BF16; gaps are89–90 cycles. Initial readiness and
+terminal host auditing are separate. These are independent preloaded neural
+operands with completion-dependent control, not autoregressive tokens or complete
+projections. Full original model2,000 tokens/s remains unmet.
+
+Compile `wsjob-xdtlrbvuw59bp9svown5yh` and runtime
+`wsjob-rq9kf3ruklkqnnaalifpga` succeed and release normally, with41.533 and198.691
+seconds stage wall including cluster setup. Fresh resource accounting reports no
+owned active job or assignment. Simulator002 completes in140.875 seconds. Failed
+simulator001 exposed concurrent send/receive defaulting toUT2 at the controller;
+002 changes resource assignments and retains the identical numerical fixture.
+All sources, diagnostics and release receipts are preserved. Twenty-one source
+tests pass. See RESIDENT-EPOCHS.md for protocol and measurement limits.

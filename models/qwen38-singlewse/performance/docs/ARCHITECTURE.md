@@ -164,3 +164,13 @@ the native dots. A checked4-byte per-PE type/slot control replaces unused per-ti
 metadata. This is representative sixPE executable admission, not the full-model
 address schedule. The next boundary is device input arrival and safe repeated
 epoch ownership without a host barrier on every contraction; see MIXED-BANK.md.
+
+P11 replaces the representative bank's per-epoch host launches with regional
+device control. Request arrival activates arithmetic; tagged child reductions
+and explicit send-completion credits govern reuse. The resource IR now separately
+assigns microthreads as well as queues, DSRs and local tasks, and rejects collisions.
+Two96-epoch physical loops pass while retaining full112/12 banks, at47,792 bytes
+including validation instrumentation/stack. A dedicated controller receives every
+root result before issuing the next request; this restricted pattern is not yet
+a whole-wafer model interpreter or arbitrary graph scheduler. Independent operand
+fixtures do not establish neural feedback. See RESIDENT-EPOCHS.md.

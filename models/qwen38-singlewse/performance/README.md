@@ -68,3 +68,12 @@ compiled footprint47,472 bytes including stack leaves656 bytes. The explicit
 are1,252 FP8 and1,213 BF16, with different original operands; this is not a precision
 speedup or model rate. See `docs/MIXED-BANK.md`. Device-controlled epochs, full-model
 physical ownership/routes and the2,000 tokens/s target remain unfinished.
+
+P11 runs two96-epoch resident sequences entirely under device control on physical
+WSE-3. Request arrival triggers arithmetic; tagged reductions and send-completion
+credits advance the loop. All4,608 local/subtree checks and full retention pass,
+with47,792-byte maximum SRAM including stack. Complete loops average about1,765
+controller cycles/epoch, including multicast, compute, reduction, return and gaps.
+Neural inputs are independent preloaded fixtures; this is not autoregressive model
+throughput. See `docs/RESIDENT-EPOCHS.md`. Full-model ownership/routes and2,000
+dependent tokens/s remain unfinished.

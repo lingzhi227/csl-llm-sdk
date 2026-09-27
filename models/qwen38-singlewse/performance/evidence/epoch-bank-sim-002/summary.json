@@ -1,0 +1,51 @@
+{
+  "physical": false,
+  "full_model": false,
+  "full_input_width": false,
+  "full_output_rows": false,
+  "application": [
+    2,
+    4
+  ],
+  "worker_pes": 6,
+  "controller_pes": 1,
+  "passive_pes": 1,
+  "fp8_slots_per_worker": 112,
+  "bf16_slots_per_worker": 12,
+  "max_compiled_sram_plus_declared_stack": 47792,
+  "sram_margin_bytes": 336,
+  "request_to_result_cycles": {
+    "fp8": {
+      "min": 1649,
+      "median": 1649.0,
+      "max": 1724
+    },
+    "bf16": {
+      "min": 1637,
+      "median": 1637.0,
+      "max": 1712
+    }
+  },
+  "inter_epoch_cycles": {
+    "min": 93,
+    "median": 93.0,
+    "max": 93
+  },
+  "total_cycles_per_96epoch_run": [
+    166638,
+    166638
+  ],
+  "cycles_per_epoch_including_controller_gaps": [
+    1735.8125,
+    1735.8125
+  ],
+  "epochs": 192,
+  "local_and_subtree_fp32_values_checked": 4608,
+  "weight_uploads": 1,
+  "max_abs_root_fp64_error": 0.00445556640625,
+  "fixture_sha256": "d8298985a475f34bc2a84319c3a78e07eeda52b54bebf53a5038110412b5ead3",
+  "scope": "Six original mixed-bank workers plus one controller and one passive PE.66word request multicast, arrival-triggered native dot and fourword tagged tree result; two96-epoch runs without host access inside each loop.12 preloaded independent operand fixtures repeat eight times; control depends on prior completion but neural operands do not depend on prior output. Not fullK, fullM or full-model/token throughput.",
+  "timing_note": "Same-controller request issue to tagged numerical root result, including multicast/dispatch/arithmetic/reduction/return. Total includes actual controller gaps between96 epochs. Initial host readiness and final callback audit separate; no per-epoch host access. Last sender callbacks may trail final root result and are all verified. Independent preloaded neural inputs, no token throughput or assumed clock.",
+  "clock_hz": null,
+  "interpretation": "Device control depends on prior result completion. Independent preloaded neural inputs are not an autoregressive sequence. Full-model spatial ownership, complete layers and token rate remain unqualified. PerPE192-byte oracle is validation instrumentation included in SRAM and timing."
+}

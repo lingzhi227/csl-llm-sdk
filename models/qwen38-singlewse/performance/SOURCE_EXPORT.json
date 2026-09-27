@@ -1,8 +1,8 @@
 {
   "files": {
     "README.md": {
-      "source_sha256": "f945daeb12caf5e07d392b1581f66e9a0107920f4049542009328628c68b9aed",
-      "published_sha256": "f945daeb12caf5e07d392b1581f66e9a0107920f4049542009328628c68b9aed",
+      "source_sha256": "2bc19561a80a83efc70ab3663151109d3ea3ac3f133af1c4f36af9f2a832b153",
+      "published_sha256": "2bc19561a80a83efc70ab3663151109d3ea3ac3f133af1c4f36af9f2a832b153",
       "site_adapted": false
     },
     "csl/bf16_dot.csl": {
@@ -31,8 +31,8 @@
       "site_adapted": false
     },
     "docs/ARCHITECTURE.md": {
-      "source_sha256": "0042cb243c9ff65d6bc9c39daf12ab2bcc496e6861542474e905095901d86e6a",
-      "published_sha256": "0042cb243c9ff65d6bc9c39daf12ab2bcc496e6861542474e905095901d86e6a",
+      "source_sha256": "f66c8818db3cfdc839ce495564a1918dc8b53a9674e1972316e2ecf3ab08627a",
+      "published_sha256": "f66c8818db3cfdc839ce495564a1918dc8b53a9674e1972316e2ecf3ab08627a",
       "site_adapted": false
     },
     "docs/BF16-BANK-NEXT.md": {
@@ -61,8 +61,8 @@
       "site_adapted": false
     },
     "docs/MILESTONES.md": {
-      "source_sha256": "d1be65f11f02ac5f0a544f423fb7bbf4dffd6c7618937c5628d779257e509866",
-      "published_sha256": "d1be65f11f02ac5f0a544f423fb7bbf4dffd6c7618937c5628d779257e509866",
+      "source_sha256": "1dee8b01bf812e3f55d52233a4ebd8a28d1d9e0efa869c805866cafbac4b6def",
+      "published_sha256": "1dee8b01bf812e3f55d52233a4ebd8a28d1d9e0efa869c805866cafbac4b6def",
       "site_adapted": false
     },
     "docs/MIXED-BANK.md": {
@@ -73,6 +73,11 @@
     "docs/REGIONAL-GEMV.md": {
       "source_sha256": "fe41bce9e560cbcaf0adeead461c91a210ec0cb8bad4ec6a0a8a5d0e6a656ccb",
       "published_sha256": "fe41bce9e560cbcaf0adeead461c91a210ec0cb8bad4ec6a0a8a5d0e6a656ccb",
+      "site_adapted": false
+    },
+    "docs/RESIDENT-EPOCHS.md": {
+      "source_sha256": "5cc03c1dc019af69575930fe672db3cf8770c93a8330d051f0058263730faa12",
+      "published_sha256": "5cc03c1dc019af69575930fe672db3cf8770c93a8330d051f0058263730faa12",
       "site_adapted": false
     },
     "docs/SPATIAL-QUANTIZATION.md": {
@@ -593,6 +598,411 @@
     "evidence/contraction-sim-002/workstation-release.json": {
       "source_sha256": "b73fe757fe1a07efb34158f7d228b71bc4678c8746b3b09bb8ac2dc9978aad3d",
       "published_sha256": "b73fe757fe1a07efb34158f7d228b71bc4678c8746b3b09bb8ac2dc9978aad3d",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-hw-001/COMPLETE.json": {
+      "source_sha256": "d783117a2ec286343e891cf1bc3ed99f7eb45a92e82ec45789194636b1862848",
+      "published_sha256": "d783117a2ec286343e891cf1bc3ed99f7eb45a92e82ec45789194636b1862848",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-hw-001/artifact.json": {
+      "source_sha256": "fb639d18e44946b4fbadeadd2a2d127eb19ba0e1cfe34a9466edaa60628801ae",
+      "published_sha256": "86d0da4d3268cbc9f21e0b5e243294a9cbc62e406dc642c32776b19fd0969822",
+      "site_adapted": true
+    },
+    "evidence/epoch-bank-hw-001/compile-audit.json": {
+      "source_sha256": "0f48ff0100fd2b1bd14f23775f3fe644a6535c366ffebef97626a86a55a61833",
+      "published_sha256": "0f48ff0100fd2b1bd14f23775f3fe644a6535c366ffebef97626a86a55a61833",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-hw-001/fixture.json": {
+      "source_sha256": "218a42b4e45e26b53fbeaf5db41fbe0c7eac5c83fccfb311b192135b50f73270",
+      "published_sha256": "218a42b4e45e26b53fbeaf5db41fbe0c7eac5c83fccfb311b192135b50f73270",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-hw-001/result.json": {
+      "source_sha256": "f41d6825762a23117ac8c00b0afb593151595cb9066a79e12724d62cf9077da6",
+      "published_sha256": "f41d6825762a23117ac8c00b0afb593151595cb9066a79e12724d62cf9077da6",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-hw-001/run-audit.json": {
+      "source_sha256": "10f1cb061159acf42f0b34c6c799d004f71f4d750e2f3cf18a1f659461ccd750",
+      "published_sha256": "10f1cb061159acf42f0b34c6c799d004f71f4d750e2f3cf18a1f659461ccd750",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-hw-001/source/REUSE.json": {
+      "source_sha256": "55b91a0a5f3bba7d4d23a0e2162509620a9f754051b7baea52d02bc707e111a5",
+      "published_sha256": "55b91a0a5f3bba7d4d23a0e2162509620a9f754051b7baea52d02bc707e111a5",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-hw-001/source/backend.py": {
+      "source_sha256": "664ae62d7f8f1fb5e6a786bcc0e87b9527b06892108260c811568e02c1af8914",
+      "published_sha256": "664ae62d7f8f1fb5e6a786bcc0e87b9527b06892108260c811568e02c1af8914",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-hw-001/source/bank-source.json": {
+      "source_sha256": "73d955fb7e9d153b4fe764ce976e72dd0c1418c04dc1547bc5d1db3e915fd37b",
+      "published_sha256": "73d955fb7e9d153b4fe764ce976e72dd0c1418c04dc1547bc5d1db3e915fd37b",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-hw-001/source/banks.json": {
+      "source_sha256": "8e7ac15d707952e70d64e5f68c24ef1830f2dc6ec3ffabe403bf0f3a9149c455",
+      "published_sha256": "8e7ac15d707952e70d64e5f68c24ef1830f2dc6ec3ffabe403bf0f3a9149c455",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-hw-001/source/bf16_dot.csl": {
+      "source_sha256": "df87de73558cb9549c5a4bef6522dd9a675ce9da3b0de05d598a949973350901",
+      "published_sha256": "df87de73558cb9549c5a4bef6522dd9a675ce9da3b0de05d598a949973350901",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-hw-001/source/bounded_client.py": {
+      "source_sha256": "ccc9c9ffca067713b4f0d895976d00453face992e5f3c277680d66d105267e40",
+      "published_sha256": "ccc9c9ffca067713b4f0d895976d00453face992e5f3c277680d66d105267e40",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-hw-001/source/check_sram.py": {
+      "source_sha256": "6cda9d6c75a76055ce028ff17d1036aeebb8275a4c52ffb2cb9156195a89bc33",
+      "published_sha256": "6cda9d6c75a76055ce028ff17d1036aeebb8275a4c52ffb2cb9156195a89bc33",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-hw-001/source/compile_hw.py": {
+      "source_sha256": "0bcdee93c861486789418e30419aa63ef972d992908b20f0d6f0aecc95e023ca",
+      "published_sha256": "0bcdee93c861486789418e30419aa63ef972d992908b20f0d6f0aecc95e023ca",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-hw-001/source/controller.csl": {
+      "source_sha256": "ba0829a328bbaddb763b4b4eda5defe513507b38ba2923ab7acdd91be0b0e64a",
+      "published_sha256": "ba0829a328bbaddb763b4b4eda5defe513507b38ba2923ab7acdd91be0b0e64a",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-hw-001/source/elf_inventory.py": {
+      "source_sha256": "341a9e7531a05377381e7e8a062d0a94a4074e97617ec9fcef9d1ab5cf68d015",
+      "published_sha256": "341a9e7531a05377381e7e8a062d0a94a4074e97617ec9fcef9d1ab5cf68d015",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-hw-001/source/experiment.json": {
+      "source_sha256": "e88a9264227e98d8db71f44670b16107764050d0ba07997079111565f08715ba",
+      "published_sha256": "e88a9264227e98d8db71f44670b16107764050d0ba07997079111565f08715ba",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-hw-001/source/fp8_dot.csl": {
+      "source_sha256": "3c8ed07cb664579ded0d7a9979ca4d62debf514ebf7e231b17e941ba62cae349",
+      "published_sha256": "3c8ed07cb664579ded0d7a9979ca4d62debf514ebf7e231b17e941ba62cae349",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-hw-001/source/fp8_unpack.csl": {
+      "source_sha256": "86079208068c5a54a7a2c1ad9ed4b9dc12a3401ace179f5423244273b5981b30",
+      "published_sha256": "86079208068c5a54a7a2c1ad9ed4b9dc12a3401ace179f5423244273b5981b30",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-hw-001/source/job_capture.py": {
+      "source_sha256": "ae99f3c6225458b6c171bfe4d66cd949571fe83891e72539a6376d2784523390",
+      "published_sha256": "ae99f3c6225458b6c171bfe4d66cd949571fe83891e72539a6376d2784523390",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-hw-001/source/layout.csl": {
+      "source_sha256": "91cea4f275439ab2310cb264e838ca97f77737f86eb76cf4a115397471452a20",
+      "published_sha256": "91cea4f275439ab2310cb264e838ca97f77737f86eb76cf4a115397471452a20",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-hw-001/source/prepare.py": {
+      "source_sha256": "3b12ceef9489fe84560a4f633d7bb6292539ff590eb825c28ae6756b675abff7",
+      "published_sha256": "3b12ceef9489fe84560a4f633d7bb6292539ff590eb825c28ae6756b675abff7",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-hw-001/source/region.json": {
+      "source_sha256": "f7dedd6068dc3abb23b27f8e10c745409cee57f878da252c8d40d26dbe4e222a",
+      "published_sha256": "f7dedd6068dc3abb23b27f8e10c745409cee57f878da252c8d40d26dbe4e222a",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-hw-001/source/run.py": {
+      "source_sha256": "50980693b848a949f6b91d043ab82b9f29417550c8e82714b4b263300e825a0e",
+      "published_sha256": "50980693b848a949f6b91d043ab82b9f29417550c8e82714b4b263300e825a0e",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-hw-001/source/run_hw.py": {
+      "source_sha256": "b0939ebb67c73ac7dc162f098e1400ad80cbe7325bc05d053c4f730edf13b269",
+      "published_sha256": "b0939ebb67c73ac7dc162f098e1400ad80cbe7325bc05d053c4f730edf13b269",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-hw-001/source/runtime/__init__.py": {
+      "source_sha256": "43881f9d80fb56de64d7b42709b90e81faa8e82a3994c9423946d6d44164ab11",
+      "published_sha256": "43881f9d80fb56de64d7b42709b90e81faa8e82a3994c9423946d6d44164ab11",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-hw-001/source/runtime/lifecycle.py": {
+      "source_sha256": "82e90d4f4888685280cca01018d50d86ae12fd84d2533352786115321101854a",
+      "published_sha256": "82e90d4f4888685280cca01018d50d86ae12fd84d2533352786115321101854a",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-hw-001/source/runtime/store.py": {
+      "source_sha256": "d499e04e756091cb6ae690cbbc2b2932bb4323dd4e2a874436821cf00d7b5dce",
+      "published_sha256": "d499e04e756091cb6ae690cbbc2b2932bb4323dd4e2a874436821cf00d7b5dce",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-hw-001/source/source_gate.py": {
+      "source_sha256": "ca40512bac7c40f0e5f32b362d516ba7518e4bde20bcd1dbe45c6c31fa9a4271",
+      "published_sha256": "ca40512bac7c40f0e5f32b362d516ba7518e4bde20bcd1dbe45c6c31fa9a4271",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-hw-001/source/supervise.py": {
+      "source_sha256": "c9e38e0479c923c867f7aba7cc92a25041caf598b9814a0dda03a9108afc5ad5",
+      "published_sha256": "42c169c1747c1dff9f0cc283cc453441e5df01ea0f2bcd469822210ee64a18cd",
+      "site_adapted": true
+    },
+    "evidence/epoch-bank-hw-001/source/worker.csl": {
+      "source_sha256": "a1867fd3da063ee505025fff01017d1a9e257451ce4b9c0d2484fa44b9ed6c7b",
+      "published_sha256": "a1867fd3da063ee505025fff01017d1a9e257451ce4b9c0d2484fa44b9ed6c7b",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-hw-001/source-manifest.json": {
+      "source_sha256": "4538697ab4fca3619a06a14a7e552c62df5c3b7b1e8ce4dabf064feb0b7ef39b",
+      "published_sha256": "4538697ab4fca3619a06a14a7e552c62df5c3b7b1e8ce4dabf064feb0b7ef39b",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-hw-001/sram.json": {
+      "source_sha256": "7d8a28a8702030459dda15e98c3b00e59f4c4b5c08de78d39f95ef5e34735161",
+      "published_sha256": "7d8a28a8702030459dda15e98c3b00e59f4c4b5c08de78d39f95ef5e34735161",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-hw-001/summary.json": {
+      "source_sha256": "3dc31d7a0d37f19f2d816fc4acf8d8e5f52e8b8fe8424e1f0b7cfee094ff4143",
+      "published_sha256": "3dc31d7a0d37f19f2d816fc4acf8d8e5f52e8b8fe8424e1f0b7cfee094ff4143",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-sim-001/FAILURE.json": {
+      "source_sha256": "31b79a9fd680ed6887f19506f3cae26ea86ec5165d2429b822c2a4bf6ef61ce4",
+      "published_sha256": "31b79a9fd680ed6887f19506f3cae26ea86ec5165d2429b822c2a4bf6ef61ce4",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-sim-001/diagnostic.json": {
+      "source_sha256": "5017c9c4b9d8b6073332acdcc96b2cdd8d85d6b4d9470bc233131d8c949891cf",
+      "published_sha256": "5017c9c4b9d8b6073332acdcc96b2cdd8d85d6b4d9470bc233131d8c949891cf",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-sim-001/fixture.json": {
+      "source_sha256": "218a42b4e45e26b53fbeaf5db41fbe0c7eac5c83fccfb311b192135b50f73270",
+      "published_sha256": "218a42b4e45e26b53fbeaf5db41fbe0c7eac5c83fccfb311b192135b50f73270",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-sim-001/source/REUSE.json": {
+      "source_sha256": "55b91a0a5f3bba7d4d23a0e2162509620a9f754051b7baea52d02bc707e111a5",
+      "published_sha256": "55b91a0a5f3bba7d4d23a0e2162509620a9f754051b7baea52d02bc707e111a5",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-sim-001/source/backend.py": {
+      "source_sha256": "2dc91a3e63a1fa5550edc99a970428f8d0101b1f9731a0fe0cf81b793258252b",
+      "published_sha256": "2dc91a3e63a1fa5550edc99a970428f8d0101b1f9731a0fe0cf81b793258252b",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-sim-001/source/bank-source.json": {
+      "source_sha256": "73d955fb7e9d153b4fe764ce976e72dd0c1418c04dc1547bc5d1db3e915fd37b",
+      "published_sha256": "73d955fb7e9d153b4fe764ce976e72dd0c1418c04dc1547bc5d1db3e915fd37b",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-sim-001/source/banks.json": {
+      "source_sha256": "8e7ac15d707952e70d64e5f68c24ef1830f2dc6ec3ffabe403bf0f3a9149c455",
+      "published_sha256": "8e7ac15d707952e70d64e5f68c24ef1830f2dc6ec3ffabe403bf0f3a9149c455",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-sim-001/source/bf16_dot.csl": {
+      "source_sha256": "df87de73558cb9549c5a4bef6522dd9a675ce9da3b0de05d598a949973350901",
+      "published_sha256": "df87de73558cb9549c5a4bef6522dd9a675ce9da3b0de05d598a949973350901",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-sim-001/source/check_sram.py": {
+      "source_sha256": "6cda9d6c75a76055ce028ff17d1036aeebb8275a4c52ffb2cb9156195a89bc33",
+      "published_sha256": "6cda9d6c75a76055ce028ff17d1036aeebb8275a4c52ffb2cb9156195a89bc33",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-sim-001/source/controller.csl": {
+      "source_sha256": "b786e01d5902c2642bf12df6ff9e3179b19dc09cd24c730825362b9ec5ce4965",
+      "published_sha256": "b786e01d5902c2642bf12df6ff9e3179b19dc09cd24c730825362b9ec5ce4965",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-sim-001/source/elf_inventory.py": {
+      "source_sha256": "341a9e7531a05377381e7e8a062d0a94a4074e97617ec9fcef9d1ab5cf68d015",
+      "published_sha256": "341a9e7531a05377381e7e8a062d0a94a4074e97617ec9fcef9d1ab5cf68d015",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-sim-001/source/execute.py": {
+      "source_sha256": "4c7a884c98c9a779d6b1b80fc972c83c27b0b44e6464fe20f43148c40b8852bd",
+      "published_sha256": "f5ae8cc4fbb745e92fb742a545b6ed00997fb29757f1007d9510c8af6ca99f84",
+      "site_adapted": true
+    },
+    "evidence/epoch-bank-sim-001/source/fp8_dot.csl": {
+      "source_sha256": "3c8ed07cb664579ded0d7a9979ca4d62debf514ebf7e231b17e941ba62cae349",
+      "published_sha256": "3c8ed07cb664579ded0d7a9979ca4d62debf514ebf7e231b17e941ba62cae349",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-sim-001/source/fp8_unpack.csl": {
+      "source_sha256": "86079208068c5a54a7a2c1ad9ed4b9dc12a3401ace179f5423244273b5981b30",
+      "published_sha256": "86079208068c5a54a7a2c1ad9ed4b9dc12a3401ace179f5423244273b5981b30",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-sim-001/source/layout.csl": {
+      "source_sha256": "801078be68efde7a94af37f6bcbfb9e82157185198c0ace4209f366a70b865e0",
+      "published_sha256": "801078be68efde7a94af37f6bcbfb9e82157185198c0ace4209f366a70b865e0",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-sim-001/source/prepare.py": {
+      "source_sha256": "3b12ceef9489fe84560a4f633d7bb6292539ff590eb825c28ae6756b675abff7",
+      "published_sha256": "3b12ceef9489fe84560a4f633d7bb6292539ff590eb825c28ae6756b675abff7",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-sim-001/source/region.json": {
+      "source_sha256": "a12663c65f6428094fdec6b3a461ec146eb7a9ba373842dd3bea0b6e2cdf0102",
+      "published_sha256": "a12663c65f6428094fdec6b3a461ec146eb7a9ba373842dd3bea0b6e2cdf0102",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-sim-001/source/run.py": {
+      "source_sha256": "50980693b848a949f6b91d043ab82b9f29417550c8e82714b4b263300e825a0e",
+      "published_sha256": "50980693b848a949f6b91d043ab82b9f29417550c8e82714b4b263300e825a0e",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-sim-001/source/source_gate.py": {
+      "source_sha256": "ca40512bac7c40f0e5f32b362d516ba7518e4bde20bcd1dbe45c6c31fa9a4271",
+      "published_sha256": "ca40512bac7c40f0e5f32b362d516ba7518e4bde20bcd1dbe45c6c31fa9a4271",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-sim-001/source/worker.csl": {
+      "source_sha256": "619829f0923ce129f813d57dc0c895774ac6798edc427dd33b3852d33338002c",
+      "published_sha256": "619829f0923ce129f813d57dc0c895774ac6798edc427dd33b3852d33338002c",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-sim-001/source-manifest.json": {
+      "source_sha256": "581d68cfa6a6e0d732c773d8f656ab0cbae78269bc06a4f065eddbe4e42124ac",
+      "published_sha256": "581d68cfa6a6e0d732c773d8f656ab0cbae78269bc06a4f065eddbe4e42124ac",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-sim-001/sram.json": {
+      "source_sha256": "fee579ae6963eaa2c35c58945c4308859a26860289c1a32cb85c15abdad8f98a",
+      "published_sha256": "fee579ae6963eaa2c35c58945c4308859a26860289c1a32cb85c15abdad8f98a",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-sim-001/workstation-release.json": {
+      "source_sha256": "ee934a396e2a01ef01f8989746028de8d470b35cbe5bc984063fdd6c924343f6",
+      "published_sha256": "ee934a396e2a01ef01f8989746028de8d470b35cbe5bc984063fdd6c924343f6",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-sim-002/COMPLETE.json": {
+      "source_sha256": "8f2a652384687b7e154b20ba0ed51eba39aeb9916c234c66a12b230ffb8c6d28",
+      "published_sha256": "8f2a652384687b7e154b20ba0ed51eba39aeb9916c234c66a12b230ffb8c6d28",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-sim-002/fixture.json": {
+      "source_sha256": "218a42b4e45e26b53fbeaf5db41fbe0c7eac5c83fccfb311b192135b50f73270",
+      "published_sha256": "218a42b4e45e26b53fbeaf5db41fbe0c7eac5c83fccfb311b192135b50f73270",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-sim-002/result.json": {
+      "source_sha256": "9730a10eb73c1cb4e3209ab709b846f21aae49a44d323bc51816ec11d3d61536",
+      "published_sha256": "9730a10eb73c1cb4e3209ab709b846f21aae49a44d323bc51816ec11d3d61536",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-sim-002/source/REUSE.json": {
+      "source_sha256": "55b91a0a5f3bba7d4d23a0e2162509620a9f754051b7baea52d02bc707e111a5",
+      "published_sha256": "55b91a0a5f3bba7d4d23a0e2162509620a9f754051b7baea52d02bc707e111a5",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-sim-002/source/backend.py": {
+      "source_sha256": "2dc91a3e63a1fa5550edc99a970428f8d0101b1f9731a0fe0cf81b793258252b",
+      "published_sha256": "2dc91a3e63a1fa5550edc99a970428f8d0101b1f9731a0fe0cf81b793258252b",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-sim-002/source/bank-source.json": {
+      "source_sha256": "73d955fb7e9d153b4fe764ce976e72dd0c1418c04dc1547bc5d1db3e915fd37b",
+      "published_sha256": "73d955fb7e9d153b4fe764ce976e72dd0c1418c04dc1547bc5d1db3e915fd37b",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-sim-002/source/banks.json": {
+      "source_sha256": "8e7ac15d707952e70d64e5f68c24ef1830f2dc6ec3ffabe403bf0f3a9149c455",
+      "published_sha256": "8e7ac15d707952e70d64e5f68c24ef1830f2dc6ec3ffabe403bf0f3a9149c455",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-sim-002/source/bf16_dot.csl": {
+      "source_sha256": "df87de73558cb9549c5a4bef6522dd9a675ce9da3b0de05d598a949973350901",
+      "published_sha256": "df87de73558cb9549c5a4bef6522dd9a675ce9da3b0de05d598a949973350901",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-sim-002/source/check_sram.py": {
+      "source_sha256": "6cda9d6c75a76055ce028ff17d1036aeebb8275a4c52ffb2cb9156195a89bc33",
+      "published_sha256": "6cda9d6c75a76055ce028ff17d1036aeebb8275a4c52ffb2cb9156195a89bc33",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-sim-002/source/controller.csl": {
+      "source_sha256": "ba0829a328bbaddb763b4b4eda5defe513507b38ba2923ab7acdd91be0b0e64a",
+      "published_sha256": "ba0829a328bbaddb763b4b4eda5defe513507b38ba2923ab7acdd91be0b0e64a",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-sim-002/source/elf_inventory.py": {
+      "source_sha256": "341a9e7531a05377381e7e8a062d0a94a4074e97617ec9fcef9d1ab5cf68d015",
+      "published_sha256": "341a9e7531a05377381e7e8a062d0a94a4074e97617ec9fcef9d1ab5cf68d015",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-sim-002/source/execute.py": {
+      "source_sha256": "4c7a884c98c9a779d6b1b80fc972c83c27b0b44e6464fe20f43148c40b8852bd",
+      "published_sha256": "f5ae8cc4fbb745e92fb742a545b6ed00997fb29757f1007d9510c8af6ca99f84",
+      "site_adapted": true
+    },
+    "evidence/epoch-bank-sim-002/source/fp8_dot.csl": {
+      "source_sha256": "3c8ed07cb664579ded0d7a9979ca4d62debf514ebf7e231b17e941ba62cae349",
+      "published_sha256": "3c8ed07cb664579ded0d7a9979ca4d62debf514ebf7e231b17e941ba62cae349",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-sim-002/source/fp8_unpack.csl": {
+      "source_sha256": "86079208068c5a54a7a2c1ad9ed4b9dc12a3401ace179f5423244273b5981b30",
+      "published_sha256": "86079208068c5a54a7a2c1ad9ed4b9dc12a3401ace179f5423244273b5981b30",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-sim-002/source/layout.csl": {
+      "source_sha256": "91cea4f275439ab2310cb264e838ca97f77737f86eb76cf4a115397471452a20",
+      "published_sha256": "91cea4f275439ab2310cb264e838ca97f77737f86eb76cf4a115397471452a20",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-sim-002/source/prepare.py": {
+      "source_sha256": "3b12ceef9489fe84560a4f633d7bb6292539ff590eb825c28ae6756b675abff7",
+      "published_sha256": "3b12ceef9489fe84560a4f633d7bb6292539ff590eb825c28ae6756b675abff7",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-sim-002/source/region.json": {
+      "source_sha256": "f7dedd6068dc3abb23b27f8e10c745409cee57f878da252c8d40d26dbe4e222a",
+      "published_sha256": "f7dedd6068dc3abb23b27f8e10c745409cee57f878da252c8d40d26dbe4e222a",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-sim-002/source/run.py": {
+      "source_sha256": "50980693b848a949f6b91d043ab82b9f29417550c8e82714b4b263300e825a0e",
+      "published_sha256": "50980693b848a949f6b91d043ab82b9f29417550c8e82714b4b263300e825a0e",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-sim-002/source/source_gate.py": {
+      "source_sha256": "ca40512bac7c40f0e5f32b362d516ba7518e4bde20bcd1dbe45c6c31fa9a4271",
+      "published_sha256": "ca40512bac7c40f0e5f32b362d516ba7518e4bde20bcd1dbe45c6c31fa9a4271",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-sim-002/source/worker.csl": {
+      "source_sha256": "a1867fd3da063ee505025fff01017d1a9e257451ce4b9c0d2484fa44b9ed6c7b",
+      "published_sha256": "a1867fd3da063ee505025fff01017d1a9e257451ce4b9c0d2484fa44b9ed6c7b",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-sim-002/source-manifest.json": {
+      "source_sha256": "13917d38b4ffb8598b30a69cb53cecdc454a62a3020c253d5e6d642e7ab58de3",
+      "published_sha256": "13917d38b4ffb8598b30a69cb53cecdc454a62a3020c253d5e6d642e7ab58de3",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-sim-002/sram.json": {
+      "source_sha256": "52de2e79d412509e089ba0ace97f19081ee7cc2e4f10f58b173a21e31801fb41",
+      "published_sha256": "52de2e79d412509e089ba0ace97f19081ee7cc2e4f10f58b173a21e31801fb41",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-sim-002/summary.json": {
+      "source_sha256": "9c6a8bb4a2a73364f5896b97b2e51fce3df3e52721c6743dc667466706a57440",
+      "published_sha256": "9c6a8bb4a2a73364f5896b97b2e51fce3df3e52721c6743dc667466706a57440",
+      "site_adapted": false
+    },
+    "evidence/epoch-bank-sim-002/workstation-release.json": {
+      "source_sha256": "b0027813e7f130f8f1ef332dacdfc2e371ccba098961a1c3570c78d8b405f464",
+      "published_sha256": "b0027813e7f130f8f1ef332dacdfc2e371ccba098961a1c3570c78d8b405f464",
       "site_adapted": false
     },
     "evidence/fp8-bank-sim-001/COMPLETE.json": {
@@ -3010,6 +3420,16 @@
       "published_sha256": "21953979f33b08f32436a2f431debeec52ca81cd8412cb00418eeaf972cdf6bb",
       "site_adapted": false
     },
+    "evidence/resource-audit-p11-001.json": {
+      "source_sha256": "e4cbc6f13b5ac310f08ab1126e253fe60cea0eb3e6bb35921628bd7fa0fcdcac",
+      "published_sha256": "e4cbc6f13b5ac310f08ab1126e253fe60cea0eb3e6bb35921628bd7fa0fcdcac",
+      "site_adapted": false
+    },
+    "evidence/resource-audit-p11-preflight.json": {
+      "source_sha256": "3d575271ca28f64b75697fd2dd2e3f13372c42e79a5f1f1575503f23d6534791",
+      "published_sha256": "3d575271ca28f64b75697fd2dd2e3f13372c42e79a5f1f1575503f23d6534791",
+      "site_adapted": false
+    },
     "evidence/resource-audit-p3-001.json": {
       "source_sha256": "bba47b861e5e84f9bdd5e62a3af4cbdfa1d4a341bc53e11f269924926189bae4",
       "published_sha256": "bba47b861e5e84f9bdd5e62a3af4cbdfa1d4a341bc53e11f269924926189bae4",
@@ -3365,6 +3785,31 @@
       "published_sha256": "ba3f715fbef3d40fb3a3d9ef1524388c9233f6c3b2010faec20d9edc96f1af4c",
       "site_adapted": false
     },
+    "probes/epoch_bank/REUSE.json": {
+      "source_sha256": "55b91a0a5f3bba7d4d23a0e2162509620a9f754051b7baea52d02bc707e111a5",
+      "published_sha256": "55b91a0a5f3bba7d4d23a0e2162509620a9f754051b7baea52d02bc707e111a5",
+      "site_adapted": false
+    },
+    "probes/epoch_bank/controller.csl": {
+      "source_sha256": "ba0829a328bbaddb763b4b4eda5defe513507b38ba2923ab7acdd91be0b0e64a",
+      "published_sha256": "ba0829a328bbaddb763b4b4eda5defe513507b38ba2923ab7acdd91be0b0e64a",
+      "site_adapted": false
+    },
+    "probes/epoch_bank/prepare.py": {
+      "source_sha256": "3b12ceef9489fe84560a4f633d7bb6292539ff590eb825c28ae6756b675abff7",
+      "published_sha256": "3b12ceef9489fe84560a4f633d7bb6292539ff590eb825c28ae6756b675abff7",
+      "site_adapted": false
+    },
+    "probes/epoch_bank/run.py": {
+      "source_sha256": "50980693b848a949f6b91d043ab82b9f29417550c8e82714b4b263300e825a0e",
+      "published_sha256": "50980693b848a949f6b91d043ab82b9f29417550c8e82714b4b263300e825a0e",
+      "site_adapted": false
+    },
+    "probes/epoch_bank/worker.csl": {
+      "source_sha256": "a1867fd3da063ee505025fff01017d1a9e257451ce4b9c0d2484fa44b9ed6c7b",
+      "published_sha256": "a1867fd3da063ee505025fff01017d1a9e257451ce4b9c0d2484fa44b9ed6c7b",
+      "site_adapted": false
+    },
     "probes/fp8_bank/layout.csl": {
       "source_sha256": "b6994ac8aa5767f4e70a74dc217e37a35327d3964abb0d325f71928dec93aed7",
       "published_sha256": "b6994ac8aa5767f4e70a74dc217e37a35327d3964abb0d325f71928dec93aed7",
@@ -3540,6 +3985,11 @@
       "published_sha256": "a00ceb2a8001d5fd878fd1e8d76dde68d5b935d726e13135173299badae87fed",
       "site_adapted": false
     },
+    "spatial/epoch_bank.py": {
+      "source_sha256": "f77a8a4d8fa1599415c565aa6dcd42484e92cb919def17c63384376a7bfed05b",
+      "published_sha256": "f77a8a4d8fa1599415c565aa6dcd42484e92cb919def17c63384376a7bfed05b",
+      "site_adapted": false
+    },
     "spatial/mesh.py": {
       "source_sha256": "81f13816c5a672da7dd9d8c0af7d052f1a43fef5584af6d4dee422bda6209713",
       "published_sha256": "81f13816c5a672da7dd9d8c0af7d052f1a43fef5584af6d4dee422bda6209713",
@@ -3573,6 +4023,11 @@
     "tests/test_contraction.py": {
       "source_sha256": "55215c2dc5431a1dc1c3039f2454004e3e37ebd4d045f37e190d2219453993bc",
       "published_sha256": "55215c2dc5431a1dc1c3039f2454004e3e37ebd4d045f37e190d2219453993bc",
+      "site_adapted": false
+    },
+    "tests/test_epoch_bank.py": {
+      "source_sha256": "90ba9ec06dc58956e4b3512081c4e284893d07024d7b61becb86f22893dee702",
+      "published_sha256": "90ba9ec06dc58956e4b3512081c4e284893d07024d7b61becb86f22893dee702",
       "site_adapted": false
     },
     "tests/test_mesh.py": {
@@ -3616,8 +4071,8 @@
       "site_adapted": true
     },
     "tools/collect_operator.py": {
-      "source_sha256": "b29197bc54c1a8364ce3e43028d20f30b819f1b7251767f6e938946b1c793615",
-      "published_sha256": "242fbddac180d0a00ba792da52b1d036cfcac60d6cbff1493bb6d15e07f2c7fc",
+      "source_sha256": "9c56f8a59ea069379b37d75d73a40d7faa3aee7d821393fff07de25ed3a33b7e",
+      "published_sha256": "75df25fe7177880334f97ebd508c353c251beec19001a2f692fe5aabb75db1f8",
       "site_adapted": true
     },
     "tools/export_milestone.py": {
@@ -3673,6 +4128,16 @@
     "tools/stage_encoder_sim.py": {
       "source_sha256": "fc71df9db3a0efa70164debaa00ded04b2f27cea1ac3b8d83ea2ecf9ba13cce7",
       "published_sha256": "97142159275513d21812fd9c807f202a22d7a9078492100f9479102093772ad7",
+      "site_adapted": true
+    },
+    "tools/stage_epoch_bank_hw.py": {
+      "source_sha256": "78560f615b1c9185b97ed273d4f027fe021ae2e3a73f9bf9ef030da906427260",
+      "published_sha256": "32f4e4399854791dae92b2b18681408fd350da02161fb4c42b6b47285356d67e",
+      "site_adapted": true
+    },
+    "tools/stage_epoch_bank_sim.py": {
+      "source_sha256": "5c5a4bb6719f20e97e10939c754f6d82b2ac2d2fe03edff7a5dad8de56f84924",
+      "published_sha256": "bd983260be985b9426a5e57e0d740243708586bd5f1a98b82f2e0fa26a8472dd",
       "site_adapted": true
     },
     "tools/stage_mesh_hw.py": {
@@ -3738,6 +4203,11 @@
     "tools/summarize_contraction.py": {
       "source_sha256": "95c73335ca603208313939af3d36801e8b88bb6ad80f3cf9fe73c53f9347f0c7",
       "published_sha256": "95c73335ca603208313939af3d36801e8b88bb6ad80f3cf9fe73c53f9347f0c7",
+      "site_adapted": false
+    },
+    "tools/summarize_epoch_bank.py": {
+      "source_sha256": "0b7a1d6f97364cb6457cca380db9fee8b747dceca41c1fd38d3f78d431a91cc4",
+      "published_sha256": "0b7a1d6f97364cb6457cca380db9fee8b747dceca41c1fd38d3f78d431a91cc4",
       "site_adapted": false
     },
     "tools/summarize_mixed_bank.py": {

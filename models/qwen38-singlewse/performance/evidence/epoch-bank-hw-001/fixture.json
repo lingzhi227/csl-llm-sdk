@@ -1,0 +1,140 @@
+{
+  "model": "Qwen/Qwen3.8-27B-FP8",
+  "revision": "017b9c7af6b5689d5dd426a76e0bc077eb5ca20a",
+  "shard_sha256": {
+    "layers-0.safetensors": "07f700e293baeaf3cd4240c3df1a948c4403f16961ea7979e86c8d6a9f8fd466",
+    "outside.safetensors": "ddff1d6665a2b39f2612fce0ef955e2436724c565bfbcbc127c7ffd078b698ff"
+  },
+  "bank_source": {
+    "attempt": "mixed-bank-sim-002",
+    "fixture_sha256": "40d7c4cc23b0f1b2fc940e81201b1c14463b919932b8588f0386598bb237980e",
+    "metadata_sha256": "8e7ac15d707952e70d64e5f68c24ef1830f2dc6ec3ffabe403bf0f3a9149c455",
+    "all_original_bank_bytes_reused": true
+  },
+  "application": [
+    2,
+    4
+  ],
+  "workers": [
+    2,
+    3
+  ],
+  "controller": [
+    0,
+    3
+  ],
+  "owners": [
+    [
+      0,
+      0
+    ],
+    [
+      1,
+      0
+    ],
+    [
+      1,
+      1
+    ],
+    [
+      0,
+      1
+    ],
+    [
+      0,
+      2
+    ],
+    [
+      1,
+      2
+    ]
+  ],
+  "cases": [
+    {
+      "case": 0,
+      "kind": 0,
+      "slot": 0,
+      "operand_mode": "mixed"
+    },
+    {
+      "case": 1,
+      "kind": 1,
+      "slot": 0,
+      "operand_mode": "mixed"
+    },
+    {
+      "case": 2,
+      "kind": 0,
+      "slot": 56,
+      "operand_mode": "zero"
+    },
+    {
+      "case": 3,
+      "kind": 1,
+      "slot": 6,
+      "operand_mode": "zero"
+    },
+    {
+      "case": 4,
+      "kind": 0,
+      "slot": 111,
+      "operand_mode": "tiny"
+    },
+    {
+      "case": 5,
+      "kind": 1,
+      "slot": 11,
+      "operand_mode": "tiny"
+    },
+    {
+      "case": 6,
+      "kind": 0,
+      "slot": 37,
+      "operand_mode": "boundary"
+    },
+    {
+      "case": 7,
+      "kind": 1,
+      "slot": 5,
+      "operand_mode": "boundary"
+    },
+    {
+      "case": 8,
+      "kind": 1,
+      "slot": 0,
+      "operand_mode": "mixed"
+    },
+    {
+      "case": 9,
+      "kind": 0,
+      "slot": 0,
+      "operand_mode": "mixed"
+    },
+    {
+      "case": 10,
+      "kind": 0,
+      "slot": 111,
+      "operand_mode": "mixed"
+    },
+    {
+      "case": 11,
+      "kind": 1,
+      "slot": 11,
+      "operand_mode": "mixed"
+    }
+  ],
+  "runs": [
+    {
+      "rounds": 96,
+      "first": 0
+    },
+    {
+      "rounds": 96,
+      "first": 5
+    }
+  ],
+  "fixture_sha256": "d8298985a475f34bc2a84319c3a78e07eeda52b54bebf53a5038110412b5ead3",
+  "full_model": false,
+  "criterion": "Each of192 autonomous epochs: every worker local/subtree result equals preloaded independent orderedFP32 oracle (zero signs canonicalized); every expected subtree passes frozen independentFP64 bound before dispatch. On-device epoch/count checks, final exact counters, full controller root history/FP64 bounds, reset with rotated case order, all resident bank bytes and oracle/request retention.",
+  "scope": "Six original mixed-bank workers plus one controller and one passive PE.66word request multicast, arrival-triggered native dot and fourword tagged tree result; two96-epoch runs without host access inside each loop.12 preloaded independent operand fixtures repeat eight times; control depends on prior completion but neural operands do not depend on prior output. Not fullK, fullM or full-model/token throughput."
+}

@@ -1,0 +1,21 @@
+{
+  "source_files": {
+    "performance/probes/mixed_bank/pe.csl": "fb223d1f8c590959ad5b4e4a8fb35136626572d8149937667b37674dde604381",
+    "performance/probes/mixed_bank/prepare.py": "ee1d504044f427ee72ae33e5d414cddbfc83d6feda9972edf60d9572638f4bf7",
+    "performance/probes/mixed_bank/run.py": "ab08ab849c44d71f90b74458adce9e4dfaa61e0b841d528652512e1e8fb0adb3",
+    "performance/spatial/mixed_bank.py": "bfc96097c01c94820bb2f445348badcb57863945b01aab6809d03256bc253f20",
+    "performance/tools/stage_mixed_bank_sim.py": "be9b77a5ad2fe18b982d3a4511ba941b1839dae335dc2960f2ca5f6ee4dbf6c1",
+    "performance/tools/stage_mixed_bank_hw.py": "e003a48d518e19b6bd50dd3df5436ba4d71fb667b3ba87e7960653290bcdb19e"
+  },
+  "unchanged_modules": {
+    "fp8_unpack.csl": "86079208068c5a54a7a2c1ad9ed4b9dc12a3401ace179f5423244273b5981b30",
+    "fp8_dot.csl": "3c8ed07cb664579ded0d7a9979ca4d62debf514ebf7e231b17e941ba62cae349",
+    "bf16_dot.csl": "df87de73558cb9549c5a4bef6522dd9a675ce9da3b0de05d598a949973350901"
+  },
+  "changes": [
+    "Add controller request multicast/result return; same6 original bank actors plus controller and passivePE",
+    "Request arrival arms child receives and computes, send completion grants next request; tag every reduction with monotonic epoch",
+    "PerPE independent exactFP32 expected values instrument local/subtree checks; no intermediate outputs enter neural inputs",
+    "One initial host ready audit and one final callback audit per96epoch loop; two rotated/reset loops after single weight upload"
+  ]
+}
