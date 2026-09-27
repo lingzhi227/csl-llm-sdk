@@ -111,3 +111,11 @@ allowances they use 46,756 to 47,536 bytes. This leaves little space for unmodel
 routing logic. The 16,384 reserved actor PEs are a capacity reservation, not proof
 that recurrent/KV state and other operators have legal placements. Physical bank
 coordinates, actual executable SRAM and routing remain explicit admission gates.
+
+The first maximum-occupancy component compile (`fp8-bank-sim-001`) fits at
+46,768 bytes including the declared stack. This executable includes dynamic FP8
+slot addressing and the single decoded-buffer readiness lease. It does not yet
+include BF16 execution, descriptor dispatch or communication, so its 1,360-byte
+margin cannot be treated as their proven budget. Adding those paths must repeat
+compiled admission; if necessary the placement/packing policy must change before
+launch, without increasing the 48,128-byte ceiling.

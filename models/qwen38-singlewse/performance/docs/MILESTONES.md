@@ -127,3 +127,31 @@ Compile a resident bank actor with actual buffer/code extents; expose tile
 predecode and operand receive as separate readiness events. Then measure regional
 GEMV, numerically qualified reduction and overlap before complete-model integration.
 No component milestone satisfies the full-model 2,000 tokens/s target.
+
+## P4: compiled resident-bank capacity and predecode lifecycle (simulator)
+
+`fp8-bank-sim-001` compiles the maximum candidate occupancy: 112 FP8 tiles,
+12 BF16-sized reserved tiles,124 descriptor-sized words,112 FP32 scales, two
+65-word operand buffers, one decoded 2x128 tile, decoder scratch and the executable
+FP8 dot path. Both 2-PE program variants pass SRAM admission; the maximum actual
+low-section end plus 4,096 stack bytes is **46,768 bytes**, leaving 1,360 bytes.
+This is an actual component ELF result, not complete bank-runtime or model SRAM
+admission. BF16/metadata capacity buffers hold sentinels; BF16 execution, full
+scheduler and route code are not included.
+
+All112 dynamically selected slots, including alternating boundaries, execute
+against the previously frozen original-weight fixture. Inline and predecoded
+outputs are bit-identical and within the independent bound. The complete weight,
+scale, BF16-reserve, metadata and both packet buffers retain their expected values;
+call counts and normal shutdown pass. The decoded buffer requires a ready token
+for its matching slot, consumed by compute before reuse.
+
+Same-PE simulator measurements separate the work explicitly: inline compute
+982 cycles, or prefetch497 plus compute537 cycles. Including the inline variant's
+10-cycle no-op prefetch, their measured sums are992 and1,034 cycles. **No overlap
+or net speedup is established.** The operand's exact half encoding is prepared by
+the test driver; a real on-wafer producer is not qualified by this probe.
+
+The bounded workstation service completed in60.687 seconds and its lock is free.
+No new hardware allocation was used for P4. Its immutable source and complete
+simulator evidence are preserved separately from physical P3.

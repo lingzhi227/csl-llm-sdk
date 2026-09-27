@@ -1,0 +1,36 @@
+// Maximum candidate bank occupancy, with explicit one-slot predecode ownership.
+// BF16/metadata arrays are retained capacity probes, not a complete bank scheduler.
+param memcpy_params;param prefetched:bool;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);const clock=@import_module("<time>");
+const unpacker=@import_module("fp8_unpack.csl",.{.max_pairs=128});
+const dot=@import_module("fp8_dot.csl",.{.rows=2});
+var weights=@zeros([112*128]u16);var bf16_reserve=@zeros([12*256]u16);
+var scales=@zeros([112]f32);var metadata=@zeros([124]u32);
+// Two packet buffers reserve operand ping-pong capacity; only buffer0 is consumed here.
+var packet=@zeros([130]u32);var decoded=@zeros([256]u16);
+var output=@zeros([2]f32);var ticks=@zeros([12]u16);var calls=@zeros([2]u32);
+var ready:bool=false;var prepared_slot:u16=0;
+const wp:[*]u16=&weights;const bp:[*]u16=&bf16_reserve;const mp:[*]u32=&metadata;
+const sp:[*]f32=&scales;const pp:[*]u32=&packet;const yp:[*]f32=&output;
+const tp:[*]u16=&ticks;const cp:[*]u32=&calls;
+fn prefetch(slot:u16) void {
+  @assert(slot<112);clock.enable_tsc();clock.get_timestamp(@ptrcast(*[3]u16,&ticks[0]));
+  if(comptime prefetched){
+    @assert(!ready);unpacker.decode(@ptrcast([*]u16,&weights[slot*128]),&decoded,128);
+    prepared_slot=slot;ready=true;
+  }
+  clock.get_timestamp(@ptrcast(*[3]u16,&ticks[3]));clock.disable_tsc();calls[0]+=1;sys.unblock_cmd_stream();
+}
+fn compute(slot:u16) void {
+  @assert(slot<112);clock.enable_tsc();clock.get_timestamp(@ptrcast(*[3]u16,&ticks[6]));
+  if(comptime prefetched){@assert(ready and prepared_slot==slot);}
+  else{unpacker.decode(@ptrcast([*]u16,&weights[slot*128]),&decoded,128);}
+  dot.compute(&decoded,@ptrcast([*]u16,pp),yp,@bitcast(f32,packet[64]),scales[slot]);
+  if(comptime prefetched){ready=false;}
+  clock.get_timestamp(@ptrcast(*[3]u16,&ticks[9]));clock.disable_tsc();calls[1]+=1;sys.unblock_cmd_stream();
+}
+comptime {
+  @export_symbol(wp,"weights");@export_symbol(bp,"bf16_reserve");@export_symbol(mp,"metadata");
+  @export_symbol(sp,"scales");@export_symbol(pp,"packet");@export_symbol(yp,"output");
+  @export_symbol(tp,"ticks");@export_symbol(cp,"calls");@export_symbol(prefetch);@export_symbol(compute);
+}

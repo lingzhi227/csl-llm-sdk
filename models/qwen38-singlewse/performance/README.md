@@ -25,3 +25,8 @@ complete model performance is still unqualified. `spatial/banks.py` supplies a
 compact all-matrix ownership/storage candidate with explicit unproven placement
 and SRAM gates. Run `performance/tools/plan_banks.py --output <fresh-json>` to
 reproduce the estimate without loading checkpoint payloads.
+
+P4 compiles and simulates the largest candidate resident bank at 46,768 bytes
+including its declared stack; all112 FP8 slots and retained buffers pass. Prefetch
+and compute are measured separately. There is no network overlap or whole-model
+SRAM admission yet; see MILESTONES.md for the unimplemented paths and timing scope.
