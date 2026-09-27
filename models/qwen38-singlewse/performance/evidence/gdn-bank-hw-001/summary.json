@@ -1,0 +1,47 @@
+{
+  "physical": true,
+  "full_model": false,
+  "application": [
+    4,
+    5
+  ],
+  "state_pes": 16,
+  "fp8_slots_per_state_pe": 111,
+  "total_state_shape": [
+    128,
+    128
+  ],
+  "state_shape_per_pe": [
+    32,
+    32
+  ],
+  "positions": 96,
+  "reset_replay_positions": 8,
+  "full_state_terminal_checks": 13,
+  "output_fp32_values_checked": 13312,
+  "native_fp8_dot_values_checked": 192,
+  "request_to_full_state_output_cycles": {
+    "min": 6755,
+    "median": 6756.5,
+    "max": 6758
+  },
+  "inter_step_cycles": {
+    "min": 58,
+    "median": 58,
+    "max": 58
+  },
+  "max_state_fp64_error": 6.842145550134404e-08,
+  "max_output_fp64_error": 8.644613996855455e-09,
+  "all_outputs_and_terminal_states_exact_block_order_fp32": true,
+  "unchanged_fp64_bounds_passed": true,
+  "original_weight_uploads": 1,
+  "all_original_banks_retained": true,
+  "max_compiled_sram_plus_stack": 46784,
+  "sram_margin_bytes": 1344,
+  "compiled_elf_images": 19,
+  "exact_application_coordinate_coverage": true,
+  "fixture_sha256": "f6d90ed8bd88a67a36d8594751215a1cba52c737eb81269b1a5635a1542049a0",
+  "clock_hz": null,
+  "scope": "Complete128x128 recurrent FP32 state on16 atlas32x32 shards cohosted with111 original FP8 tiles each. Preprocessed synthetic Q/K/V/decay/beta from unchanged recurrence fixture. No convolution/gates/norm or full model.",
+  "timing_note": "Same-controller request issue through all four complete tagged output shards; send callback and terminal worker callback audit are separate. Eight state-dependent recurrences per batch with no host access inside. Preprocessed synthetic neural operands, no convolution/gates/norm or model/token rate."
+}

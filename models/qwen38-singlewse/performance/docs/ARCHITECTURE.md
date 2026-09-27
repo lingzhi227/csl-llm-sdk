@@ -176,3 +176,11 @@ including validation instrumentation/stack. A dedicated controller receives ever
 root result before issuing the next request; this restricted pattern is not yet
 a whole-wafer model interpreter or arbitrary graph scheduler. Independent operand
 fixtures do not establish neural feedback. See RESIDENT-EPOCHS.md.
+
+
+P12 gives every original tensor, recurrent/KV shard and produced value an explicit
+owner or lifetime interval. P13 physically qualifies one complete4x4 GDN state
+rectangle cohosted with maximum111-slot FP8 banks. Native vector sums/delta and
+exclusive state/dot scratch leases leave1,344bytes after actual code/stack. The
+full model's routing transitions and producer integration are still unimplemented;
+ROUTE-EPOCHS-NEXT.md records the required coordinate/color/queue/quiescence gates.

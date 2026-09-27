@@ -83,3 +83,12 @@ controller cycles/epoch, including multicast, compute, reduction, return and gap
 Neural inputs are independent preloaded fixtures; this is not autoregressive model
 throughput. See `docs/RESIDENT-EPOCHS.md`. Full-model ownership/routes and2,000
 dependent tokens/s remain unfinished.
+
+
+P13 qualifies the complete128x128 FP32 recurrent state on16 physical cohostPE,
+each retaining111 original FP8 tiles.96 dependent updates plus8 reset replay,
+13,312 output values, complete terminal states, native FP8 dot checks and full
+weight retention pass. Physical component latency is6,755–6,758cycles; actual
+maxSRAM46,784bytes includes4KiB stack. Both jobs release normally. This does not
+include preprocessing or full-model/token feedback; see
+[COHOST-RECURRENCE.md](docs/COHOST-RECURRENCE.md).

@@ -1,0 +1,59 @@
+{
+  "physical": false,
+  "full_run_passed": false,
+  "normal_stop": false,
+  "batches_checked": [
+    {
+      "replay": false,
+      "first": 0,
+      "count": 8,
+      "request_to_full_state_output_cycles": [
+        14504,
+        14445,
+        14445,
+        14445,
+        14445,
+        14445,
+        14445,
+        14445
+      ],
+      "inter_step_cycles": [
+        59,
+        59,
+        59,
+        59,
+        59,
+        59,
+        59
+      ],
+      "autonomous_batch_cycles": 116032,
+      "max_state_fp64_error": 2.336425511395568e-08,
+      "max_output_fp64_error": 6.123819465408964e-09,
+      "host_arm_seconds": 0.6496588732115924,
+      "host_batch_result_seconds": 13.733838826883584
+    },
+    {
+      "replay": true,
+      "first": 0,
+      "count": 4,
+      "request_to_full_state_output_cycles": [
+        14504,
+        14445,
+        14445,
+        14445
+      ],
+      "inter_step_cycles": [
+        59,
+        59,
+        59
+      ],
+      "autonomous_batch_cycles": 58016,
+      "max_state_fp64_error": 5.615303155792617e-08,
+      "max_output_fp64_error": 6.123819465408964e-09,
+      "host_arm_seconds": 0.6449333210475743,
+      "host_batch_result_seconds": 6.750735888723284
+    }
+  ],
+  "run_log_sha256": "148883caf7d3138bace783c669476497e0509520c49904661e2e4b09b44af80b",
+  "scope": "All8 dependent and4 reset-replay output/terminal-state checks emitted after exact FP32 and unchanged FP64 gates. Full retention and normal stop incomplete at240second deadline. Not an accepted full simulation."
+}

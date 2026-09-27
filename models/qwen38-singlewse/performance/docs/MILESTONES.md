@@ -496,3 +496,29 @@ account/system audit reports no owned job or assignment.25 source tests pass.
 This is an ownership and addressing result. New state arithmetic, routing, actual
 SRAM and complete token feedback are not admitted. Full-model2,000tokens/s remains
 unmet. See COMPLETE-MODEL-ATLAS.md and frozen atlas-audit-001 evidence.
+
+## P13: physical complete recurrent state co-resident with FP8 banks
+
+`gdn-bank-hw-001` qualifies the atlas's4x4 state partition on20 physicalPE:
+16 state workers each hold32x32 FP32 state and111 original FP8 tiles; one controller
+and three passivePE complete the rectangle. Arrival-triggered prediction, delta
+broadcast, state update and output reduction preserve state across8-step batches.
+All96 positions plus8 reset-replay positions pass13,312 exact FP32 output checks
+and13 full terminal-state checks against the frozen block oracle and unchanged
+FP64 bounds.192 native FP8 dot values and full original bank retention also pass.
+Inputs are preprocessed synthetic packets; convolution/gates/norm and full-model
+feedback are outside this component.
+
+Vector joins/delta and exclusive scratch reuse reduce the component's stable
+simulated step from14,445 to6,628cycles in preserved partial runs. The accepted
+simulator008 completes all gates in228.232seconds with packed32-bit transport of
+unchanged weights. Physical steps measure6,755–6,758cycles, median6,756.5, with
+58-cycle gaps. This is not a physical paired speedup or model token rate.
+
+Actual maxSRAM including4,096stack is46,784bytes, margin1,344.19 compiler images
+cover20 application coordinates exactly; a new component gate checks PT_LOAD
+rectangles and retains the original SRAM ceiling. Compile and runtime both succeed
+and release normally (41.374/81.434seconds stage wall). Workstation service/lock
+and physical account/system release are verified. All failed/partial attempts
+remain frozen;27 source tests pass. See COHOST-RECURRENCE.md. Full-model2,000tokens/s
+and complete route/state/nonlinear integration remain unfinished.

@@ -1,0 +1,757 @@
+{
+  "schema": "wse-cohost-gdn-state-v1",
+  "plan": {
+    "width": 4,
+    "height": 5,
+    "fp8_slots": 111,
+    "batch": 8,
+    "request_color": 18,
+    "delta_color": 19,
+    "chain_colors": [
+      7,
+      8
+    ],
+    "result_colors": [
+      12,
+      13,
+      14,
+      15
+    ]
+  },
+  "resources": {
+    "application_pes": 20,
+    "state_pes": 16,
+    "fp8_slots_per_state_pe": 111,
+    "state_elements": 16384,
+    "state_elements_per_pe": 1024,
+    "worker_input_queues": {
+      "chain": 2,
+      "request": 4,
+      "delta": 5
+    },
+    "worker_output_queues": {
+      "chain_or_result": 2,
+      "delta": 3
+    },
+    "worker_microthreads": {
+      "chain": 2,
+      "request": 4,
+      "send": 5,
+      "delta": 6
+    },
+    "worker_dsrs": {
+      "request": 2,
+      "chain": 3,
+      "delta": 5,
+      "send": 6,
+      "math": [
+        4,
+        7
+      ]
+    },
+    "controller_input_queues": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "controller_receive_microthreads": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "controller_send_queue": 2,
+    "controller_send_microthread": 6,
+    "shared_scratch_bytes": 1548,
+    "scratch_leases": [
+      {
+        "name": "state_request",
+        "byte_start": 0,
+        "bytes": 1548,
+        "phase": "state"
+      },
+      {
+        "name": "decoded_fp8",
+        "byte_start": 260,
+        "bytes": 512,
+        "phase": "dot"
+      },
+      {
+        "name": "encoded_dot_input",
+        "byte_start": 0,
+        "bytes": 260,
+        "phase": "dot"
+      }
+    ],
+    "phase_exclusion": "Native FP8 dot requires !running; state request is armed only after dot completion. No state/FP8 overlap on the same PE.",
+    "compiled_sram_admitted": false,
+    "full_model": false,
+    "arithmetic": "Each32-key native FMA partial then right-associated4-block FP32 chain; prediction and output separately reduced. FP32 state persists across all batches.",
+    "schedule": "Controller issues next preprocessed packet only after send callback and four tagged complete32-value results. Every worker send callback grants its next phase receive. Eight state-dependent steps per batch without host access."
+  },
+  "routes": [
+    {
+      "x": 0,
+      "y": 0,
+      "color": 18,
+      "rx": "RAMP",
+      "tx": [
+        "SOUTH"
+      ]
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "color": 18,
+      "rx": "NORTH",
+      "tx": [
+        "RAMP",
+        "EAST",
+        "SOUTH"
+      ]
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "color": 19,
+      "rx": "RAMP",
+      "tx": [
+        "EAST"
+      ]
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "color": 18,
+      "rx": "WEST",
+      "tx": [
+        "RAMP",
+        "EAST"
+      ]
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "color": 19,
+      "rx": "WEST",
+      "tx": [
+        "RAMP",
+        "EAST"
+      ]
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "color": 8,
+      "rx": "RAMP",
+      "tx": [
+        "WEST"
+      ]
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "color": 8,
+      "rx": "EAST",
+      "tx": [
+        "RAMP"
+      ]
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "color": 18,
+      "rx": "WEST",
+      "tx": [
+        "RAMP",
+        "EAST"
+      ]
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "color": 19,
+      "rx": "WEST",
+      "tx": [
+        "RAMP",
+        "EAST"
+      ]
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "color": 7,
+      "rx": "RAMP",
+      "tx": [
+        "WEST"
+      ]
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "color": 7,
+      "rx": "EAST",
+      "tx": [
+        "RAMP"
+      ]
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "color": 18,
+      "rx": "WEST",
+      "tx": [
+        "RAMP"
+      ]
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "color": 19,
+      "rx": "WEST",
+      "tx": [
+        "RAMP"
+      ]
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "color": 8,
+      "rx": "RAMP",
+      "tx": [
+        "WEST"
+      ]
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "color": 8,
+      "rx": "EAST",
+      "tx": [
+        "RAMP"
+      ]
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "color": 12,
+      "rx": "SOUTH",
+      "tx": [
+        "RAMP"
+      ]
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "color": 12,
+      "rx": "RAMP",
+      "tx": [
+        "NORTH"
+      ]
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "color": 18,
+      "rx": "NORTH",
+      "tx": [
+        "RAMP",
+        "EAST",
+        "SOUTH"
+      ]
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "color": 19,
+      "rx": "RAMP",
+      "tx": [
+        "EAST"
+      ]
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "color": 18,
+      "rx": "WEST",
+      "tx": [
+        "RAMP",
+        "EAST"
+      ]
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "color": 19,
+      "rx": "WEST",
+      "tx": [
+        "RAMP",
+        "EAST"
+      ]
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "color": 8,
+      "rx": "RAMP",
+      "tx": [
+        "WEST"
+      ]
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "color": 8,
+      "rx": "EAST",
+      "tx": [
+        "RAMP"
+      ]
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "color": 18,
+      "rx": "WEST",
+      "tx": [
+        "RAMP",
+        "EAST"
+      ]
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "color": 19,
+      "rx": "WEST",
+      "tx": [
+        "RAMP",
+        "EAST"
+      ]
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "color": 7,
+      "rx": "RAMP",
+      "tx": [
+        "WEST"
+      ]
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "color": 7,
+      "rx": "EAST",
+      "tx": [
+        "RAMP"
+      ]
+    },
+    {
+      "x": 3,
+      "y": 2,
+      "color": 18,
+      "rx": "WEST",
+      "tx": [
+        "RAMP"
+      ]
+    },
+    {
+      "x": 3,
+      "y": 2,
+      "color": 19,
+      "rx": "WEST",
+      "tx": [
+        "RAMP"
+      ]
+    },
+    {
+      "x": 3,
+      "y": 2,
+      "color": 8,
+      "rx": "RAMP",
+      "tx": [
+        "WEST"
+      ]
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "color": 8,
+      "rx": "EAST",
+      "tx": [
+        "RAMP"
+      ]
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "color": 13,
+      "rx": "SOUTH",
+      "tx": [
+        "RAMP"
+      ]
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "color": 13,
+      "rx": "SOUTH",
+      "tx": [
+        "NORTH"
+      ]
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "color": 13,
+      "rx": "RAMP",
+      "tx": [
+        "NORTH"
+      ]
+    },
+    {
+      "x": 0,
+      "y": 3,
+      "color": 18,
+      "rx": "NORTH",
+      "tx": [
+        "RAMP",
+        "EAST",
+        "SOUTH"
+      ]
+    },
+    {
+      "x": 0,
+      "y": 3,
+      "color": 19,
+      "rx": "RAMP",
+      "tx": [
+        "EAST"
+      ]
+    },
+    {
+      "x": 1,
+      "y": 3,
+      "color": 18,
+      "rx": "WEST",
+      "tx": [
+        "RAMP",
+        "EAST"
+      ]
+    },
+    {
+      "x": 1,
+      "y": 3,
+      "color": 19,
+      "rx": "WEST",
+      "tx": [
+        "RAMP",
+        "EAST"
+      ]
+    },
+    {
+      "x": 1,
+      "y": 3,
+      "color": 8,
+      "rx": "RAMP",
+      "tx": [
+        "WEST"
+      ]
+    },
+    {
+      "x": 0,
+      "y": 3,
+      "color": 8,
+      "rx": "EAST",
+      "tx": [
+        "RAMP"
+      ]
+    },
+    {
+      "x": 2,
+      "y": 3,
+      "color": 18,
+      "rx": "WEST",
+      "tx": [
+        "RAMP",
+        "EAST"
+      ]
+    },
+    {
+      "x": 2,
+      "y": 3,
+      "color": 19,
+      "rx": "WEST",
+      "tx": [
+        "RAMP",
+        "EAST"
+      ]
+    },
+    {
+      "x": 2,
+      "y": 3,
+      "color": 7,
+      "rx": "RAMP",
+      "tx": [
+        "WEST"
+      ]
+    },
+    {
+      "x": 1,
+      "y": 3,
+      "color": 7,
+      "rx": "EAST",
+      "tx": [
+        "RAMP"
+      ]
+    },
+    {
+      "x": 3,
+      "y": 3,
+      "color": 18,
+      "rx": "WEST",
+      "tx": [
+        "RAMP"
+      ]
+    },
+    {
+      "x": 3,
+      "y": 3,
+      "color": 19,
+      "rx": "WEST",
+      "tx": [
+        "RAMP"
+      ]
+    },
+    {
+      "x": 3,
+      "y": 3,
+      "color": 8,
+      "rx": "RAMP",
+      "tx": [
+        "WEST"
+      ]
+    },
+    {
+      "x": 2,
+      "y": 3,
+      "color": 8,
+      "rx": "EAST",
+      "tx": [
+        "RAMP"
+      ]
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "color": 14,
+      "rx": "SOUTH",
+      "tx": [
+        "RAMP"
+      ]
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "color": 14,
+      "rx": "SOUTH",
+      "tx": [
+        "NORTH"
+      ]
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "color": 14,
+      "rx": "SOUTH",
+      "tx": [
+        "NORTH"
+      ]
+    },
+    {
+      "x": 0,
+      "y": 3,
+      "color": 14,
+      "rx": "RAMP",
+      "tx": [
+        "NORTH"
+      ]
+    },
+    {
+      "x": 0,
+      "y": 4,
+      "color": 18,
+      "rx": "NORTH",
+      "tx": [
+        "RAMP",
+        "EAST"
+      ]
+    },
+    {
+      "x": 0,
+      "y": 4,
+      "color": 19,
+      "rx": "RAMP",
+      "tx": [
+        "EAST"
+      ]
+    },
+    {
+      "x": 1,
+      "y": 4,
+      "color": 18,
+      "rx": "WEST",
+      "tx": [
+        "RAMP",
+        "EAST"
+      ]
+    },
+    {
+      "x": 1,
+      "y": 4,
+      "color": 19,
+      "rx": "WEST",
+      "tx": [
+        "RAMP",
+        "EAST"
+      ]
+    },
+    {
+      "x": 1,
+      "y": 4,
+      "color": 8,
+      "rx": "RAMP",
+      "tx": [
+        "WEST"
+      ]
+    },
+    {
+      "x": 0,
+      "y": 4,
+      "color": 8,
+      "rx": "EAST",
+      "tx": [
+        "RAMP"
+      ]
+    },
+    {
+      "x": 2,
+      "y": 4,
+      "color": 18,
+      "rx": "WEST",
+      "tx": [
+        "RAMP",
+        "EAST"
+      ]
+    },
+    {
+      "x": 2,
+      "y": 4,
+      "color": 19,
+      "rx": "WEST",
+      "tx": [
+        "RAMP",
+        "EAST"
+      ]
+    },
+    {
+      "x": 2,
+      "y": 4,
+      "color": 7,
+      "rx": "RAMP",
+      "tx": [
+        "WEST"
+      ]
+    },
+    {
+      "x": 1,
+      "y": 4,
+      "color": 7,
+      "rx": "EAST",
+      "tx": [
+        "RAMP"
+      ]
+    },
+    {
+      "x": 3,
+      "y": 4,
+      "color": 18,
+      "rx": "WEST",
+      "tx": [
+        "RAMP"
+      ]
+    },
+    {
+      "x": 3,
+      "y": 4,
+      "color": 19,
+      "rx": "WEST",
+      "tx": [
+        "RAMP"
+      ]
+    },
+    {
+      "x": 3,
+      "y": 4,
+      "color": 8,
+      "rx": "RAMP",
+      "tx": [
+        "WEST"
+      ]
+    },
+    {
+      "x": 2,
+      "y": 4,
+      "color": 8,
+      "rx": "EAST",
+      "tx": [
+        "RAMP"
+      ]
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "color": 15,
+      "rx": "SOUTH",
+      "tx": [
+        "RAMP"
+      ]
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "color": 15,
+      "rx": "SOUTH",
+      "tx": [
+        "NORTH"
+      ]
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "color": 15,
+      "rx": "SOUTH",
+      "tx": [
+        "NORTH"
+      ]
+    },
+    {
+      "x": 0,
+      "y": 3,
+      "color": 15,
+      "rx": "SOUTH",
+      "tx": [
+        "NORTH"
+      ]
+    },
+    {
+      "x": 0,
+      "y": 4,
+      "color": 15,
+      "rx": "RAMP",
+      "tx": [
+        "NORTH"
+      ]
+    }
+  ]
+}

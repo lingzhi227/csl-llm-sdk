@@ -1,0 +1,17 @@
+// Lossless finite E4M3FN -> binary16/256 embedding from packed byte pairs.
+// NaN bytes 127/255 must be rejected by the original-weight/input finite gate.
+param max_pairs:u16;
+var temp=@zeros([max_pairs]u16);
+fn decode(bits_in:[*]u16,output:[*]u16,pairs:u16) void {
+  @assert(pairs>0 and pairs<=max_pairs);
+  const all=@get_dsd(mem1d_dsd,.{.base_address=bits_in,.extent=max_pairs});
+  const lo=@get_dsd(mem1d_dsd,.{.base_address=output,.extent=max_pairs,.stride=2});
+  const hi=@increment_dsd_offset(lo,1,u16);
+  const tmp=@get_dsd(mem1d_dsd,.{.base_address=&temp,.extent=max_pairs});
+  const w=@set_dsd_length(all,pairs);const even=@set_dsd_length(lo,pairs);
+  const odd=@set_dsd_length(hi,pairs);const t=@set_dsd_length(tmp,pairs);
+  @and16(even,w,@as(u16,127));@sll16(even,even,@as(u16,7));
+  @and16(t,w,@as(u16,128));@sll16(t,t,@as(u16,8));@add16(even,even,t);
+  @and16(odd,w,@as(u16,32512));@slr16(odd,odd,@as(u16,1));
+  @and16(t,w,@as(u16,32768));@add16(odd,odd,t);
+}

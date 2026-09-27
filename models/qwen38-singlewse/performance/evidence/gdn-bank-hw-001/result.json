@@ -1,0 +1,401 @@
+{
+  "passed": true,
+  "normal_stop": true,
+  "physical": true,
+  "full_model": false,
+  "application": [
+    4,
+    5
+  ],
+  "fixture_sha256": "f6d90ed8bd88a67a36d8594751215a1cba52c737eb81269b1a5635a1542049a0",
+  "scope": "Complete128x128 recurrent FP32 state on16 atlas32x32 shards cohosted with111 original FP8 tiles each. Preprocessed synthetic Q/K/V/decay/beta from unchanged recurrence fixture. No convolution/gates/norm or full model.",
+  "batches": [
+    {
+      "replay": false,
+      "first": 0,
+      "count": 8,
+      "request_to_full_state_output_cycles": [
+        6757,
+        6755,
+        6757,
+        6755,
+        6758,
+        6755,
+        6757,
+        6756
+      ],
+      "inter_step_cycles": [
+        58,
+        58,
+        58,
+        58,
+        58,
+        58,
+        58
+      ],
+      "autonomous_batch_cycles": 54456,
+      "max_state_fp64_error": 2.336425511395568e-08,
+      "max_output_fp64_error": 6.123819465408964e-09,
+      "host_arm_seconds": 0.0014767637476325035,
+      "host_batch_result_seconds": 0.0016938243061304092
+    },
+    {
+      "replay": false,
+      "first": 8,
+      "count": 8,
+      "request_to_full_state_output_cycles": [
+        6757,
+        6755,
+        6757,
+        6755,
+        6758,
+        6755,
+        6757,
+        6756
+      ],
+      "inter_step_cycles": [
+        58,
+        58,
+        58,
+        58,
+        58,
+        58,
+        58
+      ],
+      "autonomous_batch_cycles": 54456,
+      "max_state_fp64_error": 1.9197163525497274e-08,
+      "max_output_fp64_error": 5.647451402357451e-09,
+      "host_arm_seconds": 0.0013581421226263046,
+      "host_batch_result_seconds": 0.0014867028221488
+    },
+    {
+      "replay": false,
+      "first": 16,
+      "count": 8,
+      "request_to_full_state_output_cycles": [
+        6757,
+        6755,
+        6757,
+        6755,
+        6758,
+        6755,
+        6757,
+        6756
+      ],
+      "inter_step_cycles": [
+        58,
+        58,
+        58,
+        58,
+        58,
+        58,
+        58
+      ],
+      "autonomous_batch_cycles": 54456,
+      "max_state_fp64_error": 3.529494718712556e-08,
+      "max_output_fp64_error": 3.6834195442023154e-09,
+      "host_arm_seconds": 0.0013517318293452263,
+      "host_batch_result_seconds": 0.0014640232548117638
+    },
+    {
+      "replay": false,
+      "first": 24,
+      "count": 8,
+      "request_to_full_state_output_cycles": [
+        6757,
+        6755,
+        6757,
+        6755,
+        6758,
+        6755,
+        6757,
+        6756
+      ],
+      "inter_step_cycles": [
+        58,
+        58,
+        58,
+        58,
+        58,
+        58,
+        58
+      ],
+      "autonomous_batch_cycles": 54456,
+      "max_state_fp64_error": 6.842145550134404e-08,
+      "max_output_fp64_error": 4.146706091348595e-09,
+      "host_arm_seconds": 0.0013917535543441772,
+      "host_batch_result_seconds": 0.003028346225619316
+    },
+    {
+      "replay": false,
+      "first": 32,
+      "count": 8,
+      "request_to_full_state_output_cycles": [
+        6757,
+        6755,
+        6757,
+        6755,
+        6758,
+        6755,
+        6757,
+        6756
+      ],
+      "inter_step_cycles": [
+        58,
+        58,
+        58,
+        58,
+        58,
+        58,
+        58
+      ],
+      "autonomous_batch_cycles": 54456,
+      "max_state_fp64_error": 3.0247472859734614e-08,
+      "max_output_fp64_error": 4.018959533225175e-09,
+      "host_arm_seconds": 0.0013912636786699295,
+      "host_batch_result_seconds": 0.001465952955186367
+    },
+    {
+      "replay": false,
+      "first": 40,
+      "count": 8,
+      "request_to_full_state_output_cycles": [
+        6757,
+        6755,
+        6757,
+        6755,
+        6758,
+        6755,
+        6757,
+        6756
+      ],
+      "inter_step_cycles": [
+        58,
+        58,
+        58,
+        58,
+        58,
+        58,
+        58
+      ],
+      "autonomous_batch_cycles": 54456,
+      "max_state_fp64_error": 1.837497781709274e-08,
+      "max_output_fp64_error": 3.770023146096313e-09,
+      "host_arm_seconds": 0.0014002816751599312,
+      "host_batch_result_seconds": 0.0013203220441937447
+    },
+    {
+      "replay": false,
+      "first": 48,
+      "count": 8,
+      "request_to_full_state_output_cycles": [
+        6757,
+        6755,
+        6757,
+        6755,
+        6758,
+        6755,
+        6757,
+        6756
+      ],
+      "inter_step_cycles": [
+        58,
+        58,
+        58,
+        58,
+        58,
+        58,
+        58
+      ],
+      "autonomous_batch_cycles": 54456,
+      "max_state_fp64_error": 3.360042044597833e-08,
+      "max_output_fp64_error": 4.3584171549593265e-09,
+      "host_arm_seconds": 0.0014066528528928757,
+      "host_batch_result_seconds": 0.0015050927177071571
+    },
+    {
+      "replay": false,
+      "first": 56,
+      "count": 8,
+      "request_to_full_state_output_cycles": [
+        6757,
+        6755,
+        6757,
+        6755,
+        6758,
+        6755,
+        6757,
+        6756
+      ],
+      "inter_step_cycles": [
+        58,
+        58,
+        58,
+        58,
+        58,
+        58,
+        58
+      ],
+      "autonomous_batch_cycles": 54456,
+      "max_state_fp64_error": 2.6286927856666864e-08,
+      "max_output_fp64_error": 4.974619067371622e-09,
+      "host_arm_seconds": 0.0014554811641573906,
+      "host_batch_result_seconds": 0.0015056226402521133
+    },
+    {
+      "replay": false,
+      "first": 64,
+      "count": 8,
+      "request_to_full_state_output_cycles": [
+        6757,
+        6755,
+        6757,
+        6755,
+        6758,
+        6755,
+        6757,
+        6756
+      ],
+      "inter_step_cycles": [
+        58,
+        58,
+        58,
+        58,
+        58,
+        58,
+        58
+      ],
+      "autonomous_batch_cycles": 54456,
+      "max_state_fp64_error": 4.636359807186352e-08,
+      "max_output_fp64_error": 3.1853159537104103e-09,
+      "host_arm_seconds": 0.0013859318569302559,
+      "host_batch_result_seconds": 0.001559114083647728
+    },
+    {
+      "replay": false,
+      "first": 72,
+      "count": 8,
+      "request_to_full_state_output_cycles": [
+        6757,
+        6755,
+        6757,
+        6755,
+        6758,
+        6755,
+        6757,
+        6756
+      ],
+      "inter_step_cycles": [
+        58,
+        58,
+        58,
+        58,
+        58,
+        58,
+        58
+      ],
+      "autonomous_batch_cycles": 54456,
+      "max_state_fp64_error": 3.767356471229277e-08,
+      "max_output_fp64_error": 8.644613996855455e-09,
+      "host_arm_seconds": 0.0014517037197947502,
+      "host_batch_result_seconds": 0.0015668440610170364
+    },
+    {
+      "replay": false,
+      "first": 80,
+      "count": 8,
+      "request_to_full_state_output_cycles": [
+        6757,
+        6755,
+        6757,
+        6755,
+        6758,
+        6755,
+        6757,
+        6756
+      ],
+      "inter_step_cycles": [
+        58,
+        58,
+        58,
+        58,
+        58,
+        58,
+        58
+      ],
+      "autonomous_batch_cycles": 54456,
+      "max_state_fp64_error": 3.12351901565755e-08,
+      "max_output_fp64_error": 4.300333808016435e-09,
+      "host_arm_seconds": 0.001515652984380722,
+      "host_batch_result_seconds": 0.0015076929703354836
+    },
+    {
+      "replay": false,
+      "first": 88,
+      "count": 8,
+      "request_to_full_state_output_cycles": [
+        6757,
+        6755,
+        6757,
+        6755,
+        6758,
+        6755,
+        6757,
+        6756
+      ],
+      "inter_step_cycles": [
+        58,
+        58,
+        58,
+        58,
+        58,
+        58,
+        58
+      ],
+      "autonomous_batch_cycles": 54456,
+      "max_state_fp64_error": 3.9992676392763826e-08,
+      "max_output_fp64_error": 3.383486124955426e-09,
+      "host_arm_seconds": 0.0013440810143947601,
+      "host_batch_result_seconds": 0.0014937426894903183
+    },
+    {
+      "replay": true,
+      "first": 0,
+      "count": 8,
+      "request_to_full_state_output_cycles": [
+        6757,
+        6755,
+        6757,
+        6755,
+        6758,
+        6755,
+        6757,
+        6756
+      ],
+      "inter_step_cycles": [
+        58,
+        58,
+        58,
+        58,
+        58,
+        58,
+        58
+      ],
+      "autonomous_batch_cycles": 54456,
+      "max_state_fp64_error": 2.336425511395568e-08,
+      "max_output_fp64_error": 6.123819465408964e-09,
+      "host_arm_seconds": 0.0014031324535608292,
+      "host_batch_result_seconds": 0.0014416035264730453
+    }
+  ],
+  "original_weight_uploads": 1,
+  "all_original_banks_retained": true,
+  "state_unchanged_by_native_fp8_dots": true,
+  "native_fp8_dot_values_checked": 192,
+  "state_elements_per_terminal_check": 16384,
+  "all_outputs_and_terminal_states_exact_block_order_fp32": true,
+  "unchanged_fp64_bounds_passed": true,
+  "host_initialization_seconds": 0.0056195687502622604,
+  "clock_hz": null,
+  "timing_note": "Same-controller request issue through all four complete tagged output shards; send callback and terminal worker callback audit are separate. Eight state-dependent recurrences per batch with no host access inside. Preprocessed synthetic neural operands, no convolution/gates/norm or model/token rate."
+}

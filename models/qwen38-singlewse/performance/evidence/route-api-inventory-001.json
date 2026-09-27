@@ -1,0 +1,27 @@
+{
+  "utc": "2026-09-27T15:28:21.508262+00:00",
+  "scope": "Read-only installed SDK API inventory; no route epoch implementation or physical qualification",
+  "sdk": "2.10.1",
+  "library_build": "rel-sdk-2.10.0/202604012315-1813-1394a6ea",
+  "files": {
+    "tile_config/teardown.csl": "9cca28a4fc8395a0192574d4ca1a13cdf6eb8de7808abdbd3c34aa2f49386f3b",
+    "tile_config/color_config.csl": "e6e203d80968df5f9f8dd49c6877e1eb3d0be195dbc21b26f0fa1b628c2ae90e",
+    "tile_config/switch_config.csl": "4d4422389d0bbbca61e78ad12b1399b8b51a4c0a02e29ad7acb963899ce68378",
+    "memcpy/get_params.csl": "541f7f0ca4588be0ac785e74cd50eb4c297ff5ba7c9470c3a15123cbc3ea8496"
+  },
+  "observed_apis": [
+    "teardown.get_pending",
+    "teardown.is_pending",
+    "teardown.exit",
+    "color_config.reset_routes(c:anytype,comptime new_routes:anytype)",
+    "switch_config.clear_current_position",
+    "switch_config.set_invalid_for_all_switch_positions",
+    "switch_config.set_rxtx_switch_pos1",
+    "switch_config.set_current_switch_position"
+  ],
+  "primary_references": [
+    "https://cerebras-sdk-docs-130.netlify.app/csl/code-examples/benchmark-7pt-stencil-spmv",
+    "https://cerebras-sdk-docs-140.netlify.app/csl/code-examples/tutorial-topic-07-switches-entrypt"
+  ],
+  "caveat": "reset_routes route description is comptime even though the call executes at runtime; a compact dynamic route-word lowering is not yet implemented or admitted."
+}

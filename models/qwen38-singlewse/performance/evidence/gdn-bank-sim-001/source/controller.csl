@@ -1,0 +1,50 @@
+// Eight preprocessed packets; recurrent state remains distributed across batches.
+param memcpy_params;param active:bool;param request_color:u16;param result_colors:[4]u16;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);const clock=@import_module("<time>");
+var requests=@zeros([if(active) 8*387 else 1]u32);var results=@zeros([if(active) 8*4*35 else 1]u32);
+var ticks=@zeros([if(active) 8*6 else 1]u16);var audit=@zeros([8]u32);
+const pp:[*]u32=&requests;const rp:[*]u32=&results;const tp:[*]u16=&ticks;const ap:[*]u32=&audit;
+const qo=@get_output_queue(2);const sd=@get_dsr(dsr_dest,6);const ss=@get_dsr(dsr_src0,6);const st=@get_local_task_id(12);
+var running:bool=false;var sent_ready:bool=false;var ready:u16=0;var limit:u16=0;var completed:u16=0;var base:u16=0;
+fn receive(comptime shard:u16) void {
+ const qi=@get_input_queue(2+shard);const rd=@get_dsr(dsr_dest,2+shard);const rs=@get_dsr(dsr_src0,2+shard);
+ const m=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]u32,&results[(completed*4+shard)*35]),.extent=35});const f=@get_dsd(fabin_dsd,.{.input_queue=qi,.extent=35});
+ @load_to_dsr(rd,m);@load_to_dsr(rs,f,.{.async=true,.ut_id=@get_ut_id(2+shard),.activate=@get_local_task_id(8+shard)});@mov32(rd,rs,.{.async=true});
+}
+fn issue() void {
+ sent_ready=false;ready=0;clock.get_timestamp(@ptrcast(*[3]u16,&ticks[completed*6]));
+ receive(0);receive(1);receive(2);receive(3);
+ const m=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]u32,&requests[completed*387]),.extent=387});const f=@get_dsd(fabout_dsd,.{.output_queue=qo,.extent=387});
+ @load_to_dsr(ss,m);@load_to_dsr(sd,f,.{.async=true,.ut_id=@get_ut_id(6),.activate=st});@mov32(sd,ss,.{.async=true});
+}
+fn advance() void {
+ if(sent_ready and ready==15){
+  completed+=1;audit[1]+=1;
+  if(completed==limit){running=false;audit[6]=1;clock.disable_tsc();sys.unblock_cmd_stream();}else{issue();}
+ }
+}
+fn arrived(comptime shard:u16) void {
+ const at:u16=(completed*4+shard)*35;@assert(results[at+32]==4 and results[at+33]==@as(u32,base+completed) and results[at+34]==1);
+ @assert((ready&(@as(u16,1)<<shard))==0);ready|=@as(u16,1)<<shard;audit[3]+=1;
+ if(ready==15){clock.get_timestamp(@ptrcast(*[3]u16,&ticks[completed*6+3]));}advance();
+}
+task received0() void {arrived(0);}task received1() void {arrived(1);}task received2() void {arrived(2);}task received3() void {arrived(3);}
+task sent() void {sent_ready=true;audit[5]+=1;advance();}
+fn reset() void {@assert(!running);for(@range(u16,8))|i|{audit[i]=0;}sys.unblock_cmd_stream();}
+fn initialize(rounds:u16,position:u16) void {
+ @assert(!running and rounds>0 and rounds<=8);limit=rounds;base=position;completed=0;audit[0]+=1;audit[6]=0;
+ if(comptime active){@assert(audit[1]==@as(u32,position));}sys.unblock_cmd_stream();
+}
+fn start() void {
+ if(comptime active){@assert(!running);running=true;clock.enable_tsc();issue();}else{audit[6]=1;sys.unblock_cmd_stream();}
+}
+fn dot(slot:u16) void {sys.unblock_cmd_stream();}
+comptime {
+ if(active){
+  for(@range(u16,4))|i|{@initialize_queue(@get_input_queue(2+i),.{.color=@get_color(result_colors[i])});}
+  @initialize_queue(qo,.{.color=@get_color(request_color)});@bind_local_task(sent,st);
+  @bind_local_task(received0,@get_local_task_id(8));@bind_local_task(received1,@get_local_task_id(9));@bind_local_task(received2,@get_local_task_id(10));@bind_local_task(received3,@get_local_task_id(11));
+ }
+ @export_symbol(pp,"requests");@export_symbol(rp,"results");@export_symbol(tp,"ticks");@export_symbol(ap,"audit");
+ @export_symbol(reset);@export_symbol(initialize);@export_symbol(start);@export_symbol(dot);
+}

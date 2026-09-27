@@ -1,0 +1,29 @@
+// 32-key by32-value FP32 state. Caller reduces prediction/output across4 key shards.
+// Adapted from the preserved csl/recurrent_value64.csl; communication owns2/3/5/6.
+// Math leases4/7 synchronously. State is never rounded to BF16.
+const md=@get_dsr(dsr_dest,4);const ms=@get_dsr(dsr_src0,4);const ds=@get_dsr(dsr_src1,4);
+const od=@get_dsr(dsr_dest,7);const os=@get_dsr(dsr_src0,7);const ws=@get_dsr(dsr_src1,7);
+fn accumulate(value:f32) void {@fmacs(od,os,ws,value);}
+fn correct(value:f32) void {@fmacs(md,ms,ds,value);}
+fn reset(matrix:[*]f32) void {
+ const all=@get_dsd(mem1d_dsd,.{.base_address=matrix,.extent=1024});@fmovs(all,0.0);
+}
+fn reduce(matrix:[*]f32,vector:[*]f32,result:[*]f32) void {
+ const out=@get_dsd(mem1d_dsd,.{.base_address=result,.extent=32});
+ const row=@get_dsd(mem1d_dsd,.{.base_address=matrix,.extent=32});
+ const x=@get_dsd(mem1d_dsd,.{.base_address=vector,.extent=32});
+ @fmovs(out,0.0);@load_to_dsr(od,out,.{.save_address=false});@load_to_dsr(os,out,.{.save_address=false});
+ @load_to_dsr(ws,row,.{.save_address=true});@map(accumulate,x);
+}
+fn predict(matrix:[*]f32,k:[*]f32,decay:f32,prediction:[*]f32) void {
+ const all=@get_dsd(mem1d_dsd,.{.base_address=matrix,.extent=1024});
+ @load_to_dsr(md,all,.{.save_address=false});@load_to_dsr(ms,all,.{.save_address=false});@fmuls(md,ms,decay);
+ reduce(matrix,k,prediction);
+}
+fn update(matrix:[*]f32,q:[*]f32,k:[*]f32,delta:[*]f32,result:[*]f32) void {
+ const row=@get_dsd(mem1d_dsd,.{.base_address=matrix,.extent=32});
+ const correction=@get_dsd(mem1d_dsd,.{.base_address=delta,.extent=32});
+ const key=@get_dsd(mem1d_dsd,.{.base_address=k,.extent=32});
+ @load_to_dsr(md,row,.{.save_address=true});@load_to_dsr(ms,row,.{.save_address=true});
+ @load_to_dsr(ds,correction,.{.save_address=false});@map(correct,key);reduce(matrix,q,result);
+}
