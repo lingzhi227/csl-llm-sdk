@@ -1,0 +1,58 @@
+{
+  "physical": false,
+  "full_model": false,
+  "groups": 16,
+  "application": [
+    8,
+    4
+  ],
+  "items_per_pe": 4,
+  "fixture_sha256": "fd184db1fcac5f508b852c8ded60b208c2780a12a8af7c16ea6e75c3972f8b2c",
+  "scope": "Spatial full group128 quantization+packet gathering followed by one original2x128 native FP8 consumer on root; no complete projection/model",
+  "timing_note": "Same-root maximum through scale, encoding, full ordered packet and native consumer. Input transfer and explicit receive arming/readiness audit are excluded from device interval and host setup is separate; start-entry skew remains. One constant original weight tile is predecoded once before groups; no host operation between quantization and consumer.",
+  "clock_hz": null,
+  "cycles": {
+    "packet_present_cycles": {
+      "min": 1997,
+      "median": 2297.0,
+      "max": 2337,
+      "sum": 36511
+    },
+    "producer_ready_cycles": {
+      "min": 2059,
+      "median": 2359.0,
+      "max": 2399,
+      "sum": 37503
+    },
+    "native_consumer_cycles": {
+      "min": 513,
+      "median": 513.0,
+      "max": 513,
+      "sum": 8208
+    },
+    "producer_consumer_cycles": {
+      "min": 2572,
+      "median": 2872.0,
+      "max": 2912,
+      "sum": 45711
+    }
+  },
+  "host_seconds": {
+    "host_arm_and_ready_seconds": {
+      "min": 0.6730204946361482,
+      "median": 0.6769692115485668,
+      "max": 0.7230734378099442,
+      "sum": 10.92217790428549
+    },
+    "host_start_through_result_audit_seconds": {
+      "min": 2.7765146330930293,
+      "median": 2.784843784989789,
+      "max": 2.8579696137458086,
+      "sum": 44.79935918422416
+    }
+  },
+  "weight_predecode_cycles": 481,
+  "max_abs_fp64_error": 1.5333343981183134e-06,
+  "max_compiled_sram_plus_declared_stack": 14272,
+  "interpretation": "Complete spatial group128 producer and one original2x128 consumer; no host work between them. Explicit host receive arming/readiness and one-time constant weight predecode are outside device interval and separately reported. Not full projection, model, or token rate."
+}

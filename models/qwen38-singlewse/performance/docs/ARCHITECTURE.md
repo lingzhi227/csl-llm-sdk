@@ -137,3 +137,12 @@ as total byte capacity; merely packing the remaining tiles into fewer active PEs
 would undo the latency objective. The six-role component passes actual compiled
 SRAM after removing unused profiling, but its48-byte minimum margin rules out
 assuming additional scheduler/BF16 paths fit without another admission step.
+
+
+P8 adds a spatial group128 producer (`spatial/quant.py`) with explicit maximum,
+scale and payload planes. Its32-PE physical executable directly feeds the native
+dot packet contract with no intermediate host transfer. Per-group receive arming
+still uses a host readiness barrier, and a single constant weight tile is prepared
+once. Full model lowering must place upstream values into these owners and replace
+that inter-group host lifecycle with device readiness/credit events. P8 is not an
+admission of producer code into the nearly full P7 bank PE.

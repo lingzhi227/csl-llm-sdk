@@ -1,0 +1,38 @@
+{
+  "fixture_sha256": "fd184db1fcac5f508b852c8ded60b208c2780a12a8af7c16ea6e75c3972f8b2c",
+  "quant_fixture_sha256": "f7351fae5e2fed6ce8267cd0717a5ac0dc65b63cff7f6ce1349c898d9356658b",
+  "quant_groups": 44,
+  "model": "Qwen/Qwen3.8-27B-FP8",
+  "revision": "017b9c7af6b5689d5dd426a76e0bc077eb5ca20a",
+  "shard_sha256": {
+    "layers-0.safetensors": "07f700e293baeaf3cd4240c3df1a948c4403f16961ea7979e86c8d6a9f8fd466"
+  },
+  "tensor": "model.language_model.layers.0.mlp.gate_proj.weight",
+  "rows": [
+    0,
+    2
+  ],
+  "k_block": 0,
+  "full_model": false,
+  "criterion": "All output FP8 bytes and scale bits exact vs frozen PyTorch; every subtree packet exact; native consumer exact vs independent orderedFP32 emulator and within gamma260 FP64 bound; retained inputs/weight",
+  "simulation_groups": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    20,
+    28,
+    36
+  ],
+  "physical_groups": "all44",
+  "scope": "Spatial full group128 quantization+packet gathering followed by one original2x128 native FP8 consumer on root; no complete projection/model"
+}

@@ -282,3 +282,54 @@ Simulator root timings retain the first serialized9,882-cycle observation, with
 other serialized observations1,752 and overlapped1,567. Launch-entry skew remains
 in scope; no outlier is removed or full-model rate extrapolated. P7 is chiefly a
 combined SRAM/lifecycle qualification, not a physical performance claim.
+
+## P8: physical spatial quantization and direct native consumer
+
+`spatial-quant-hw-001` runs the full group128 maximum, original scale multiplication,
+original FP32 division and qualified FP8 encoding across32 PEs in an8x4 rectangle.
+Four values belong to each PE. A maximum tree, one scale multicast and an ordered
+payload tree produce the complete65-word operand packet at the root. The root
+immediately invokes one original layer0 gate2x128 native FP8 tile, with no host
+operation between producer and consumer. This is one partial dot, not a complete
+projection, resident bank selection or full model.
+
+All44 frozen P6 PyTorch groups pass. Every local output byte and scale bit is
+exact, as are all32 subtree packets including unused tails. Every native product
+matches the independent ordered FP32 emulator exactly (zero signs canonicalized)
+and the frozen FP64 bound; maximum FP64 error3.799237310886383e-5. Input and original
+weight/scale retention, endpoint counters, repeated epochs and normal stop pass.
+The prerequisite simulator passes its16 predetermined groups in79.969 seconds;
+no failed attempts or relaxed acceptance criteria are hidden.
+
+Physical same-root producer-ready cycles span2,118–2,492, median2,484. They include
+local maximum, maximum reduction, scale broadcast, encoding, ordered gathering
+and the scale-send completion credit. The native consumer is519 cycles, making
+complete producer-plus-consumer latency2,637–3,011, median3,003. Packet availability
+is measured separately (median2,422). No nominal clock or tokens/s is inferred.
+For context P6's single-PE producer median was22,790 cycles on these same groups;
+that earlier interval excludes packing/gathering and is not a matched paired
+schedule benchmark. P8 uses32 PEs rather than one.
+
+Before each group, the driver launches receive arming and verifies every endpoint
+is ready. This host barrier is excluded from device timing and separately reported
+(median1.277ms including audit). Host start through result/audit transfer is also
+separate (median2.717ms). One constant original weight tile is decoded before the
+groups (500 device cycles). The device producer does not include an upstream
+projection or input placement. These exclusions must be removed or integrated
+when qualifying a self-driven complete model; they cannot be silently subtracted
+from model end-to-end throughput.
+
+Maximum compiled SRAM including4,096-byte declared stack is14,272 bytes. This is
+an actor containing one weight tile, not the full resident-bank footprint. Compile
+`wsjob-ehgytpojumajnkusihenmf` (81.526s stage wall) and runtime
+`wsjob-erexmvfbee5z5pykbhzhad` (71.595s stage wall) both succeeded and released without
+cleanup errors. A fresh account/system audit confirms no owned active job or
+assignment; those wall intervals are not provider billing or compute latency.
+The bounded workstation service is inactive, its main process exited and shared
+lock is free. Fifteen source tests now cover independent tree traversal, ordered
+partitions, physical links and resource collision rejection as well as prior work.
+
+Next work remains full-width hierarchical reductions, actual BF16/native paths,
+role-specific full weight ownership and device-driven epoch orchestration before
+complete64-layer/full-vocabulary integration. The2,000 dependent tokens/s target
+is still unmet; this milestone does not reduce its scope.

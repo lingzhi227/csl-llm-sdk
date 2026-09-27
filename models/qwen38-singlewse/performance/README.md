@@ -45,3 +45,10 @@ in the simulator:24 epochs and full storage readback pass, with48,080 bytes maxi
 SRAM including stack. Its48-byte margin leaves full scheduler/BF16 integration
 unqualified. Both results retain their exact tested scope; the original complete
 model and2,000 tokens/s acceptance target are unchanged.
+
+P8 qualifies a32-PE spatial group128 producer followed directly by one original
+2x128 FP8 consumer on physical WSE-3. All44 frozen groups pass exact code/scale,
+subtree-packet and independent arithmetic checks. Producer median2,484 cycles,
+combined median3,003 cycles; host arming/readiness and one-time weight predecode
+are separate. Both jobs completed normally and released. See
+`docs/SPATIAL-QUANTIZATION.md`; this is a component, not complete model throughput.

@@ -1,12 +1,12 @@
-# Next spatial activation producer (not implemented)
+# Spatial activation producer and original-weight consumer
 
 P6's complete scalar group still takes about22,800 cycles, despite exact direct
-encoding. The next producer should distribute the128 values over32 PEs (8x4,
+encoding. The implemented producer distributes the128 values over32 PEs (8x4,
 four values per PE), retaining the original group scale and final packet contract.
-Its output must connect directly to the65-word operand interface qualified in P5.
+It uses the65-word operand interface qualified in P5 and directly invokes one native2x128 original-weight consumer on the root.
 No host-produced FP8 values may stand in for that producer when integrated.
 
-The proposed dependency chain is explicit:
+The dependency chain is explicit:
 
 1. Each PE owns four finite FP32 inputs and computes their absolute maximum,
    clamped from below by the same FP32 value1e-10. Since finite positive IEEE bits
@@ -30,7 +30,7 @@ and memcpy; use3 for max transmit,4 for scale receive/transmit by role,5/6 for
 payload receives and7 for payload send. Row/column alternating max colors3:6,
 scale broadcast7 and alternating payload colors8:11 avoid overlapping routes.
 The checked plan, actual CSL and compiled resource gate must agree before launch;
-this allocation is a proposal, not a verified artifact.
+`spatial/quant.py` checks this restricted allocation and lowers the routes and per-PE parameters. Execution admission is recorded per immutable attempt below.
 
 All receives are posted before a producer can deliver the corresponding phase.
 Scale readiness gates division, own encoded data and all child payloads gate the
@@ -47,3 +47,40 @@ rank's four outputs and the complete65-word root packet against an independent
 packing oracle. A later complete-model allocator must preserve the128-value
 quantization groups while mapping prior outputs to these input owners. That
 placement, full model integration and2,000 dependent tokens/s remain unproven.
+
+## Arming, measurement and consumer scope
+
+The host first launches `arm` and checks all endpoint readiness records before
+launching `start`. This guarantees the maximum tasks and asynchronous receives
+are initialized; launch dispatch alone is not used as an all-PE readiness proof.
+Arming and that readiness audit are separately timed on the host and excluded
+from device producer cycles. A future self-driven model must integrate arming
+with its producer/consumer credit protocol; this probe is not host-free token
+execution.
+
+The root timestamps complete gathered packet availability, then producer readiness
+including its scale-send completion credit. It next invokes the exact native dot
+without any host read or write between quantization and computation. Root DSR4
+is leased to scale transmission first, and to dot computation only after its
+completion callback. The constant original two-row layer0 gate weight tile is
+decoded once before the measured groups; its preparation cycles and host time
+are separate. This is one partial128-term consumer, not a full projection or
+resident weight-bank execution.
+
+The complete physical fixture remains the frozen44 P6 PyTorch groups. Simulator
+coverage is fixed beforehand at the12 boundary groups and indices12/20/28/36.
+Every local code, every scale bit and every subtree's ordered packet are checked,
+including sentinel tails. The native output must equal an independent ordered
+FP32 emulator and satisfy the separately frozen FP64 absolute-product bound.
+Inputs, original packed weights/scales and endpoint event counts are retained.
+No acceptance tolerance is chosen from the observed candidate outputs.
+
+## Qualified P8 evidence
+
+Simulator `spatial-quant-sim-001` passes16 predetermined groups; physical
+`spatial-quant-hw-001` passes all44. The physical median producer-ready interval is
+2,484 cycles, one native consumer519 cycles, combined3,003 cycles. Packet-present
+median is2,422 cycles. Maximum compiled SRAM plus4,096 stack allowance is14,272
+bytes. Both physical jobs succeeded and released normally; see immutable evidence
+and MILESTONES.md for complete timing scopes and host costs. There is no complete
+projection/model or autonomous inter-group dispatch in this result.

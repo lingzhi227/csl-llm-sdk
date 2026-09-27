@@ -1,0 +1,460 @@
+{
+  "passed": true,
+  "normal_stop": true,
+  "physical": true,
+  "full_model": false,
+  "scope": "Spatial full group128 quantization+packet gathering followed by one original2x128 native FP8 consumer on root; no complete projection/model",
+  "application": [
+    8,
+    4
+  ],
+  "items_per_pe": 4,
+  "fixture_sha256": "fd184db1fcac5f508b852c8ded60b208c2780a12a8af7c16ea6e75c3972f8b2c",
+  "groups": [
+    {
+      "group": 0,
+      "packet_present_cycles": 2386,
+      "producer_ready_cycles": 2448,
+      "native_consumer_cycles": 519,
+      "producer_consumer_cycles": 2967,
+      "host_arm_and_ready_seconds": 0.0014617238193750381,
+      "host_start_through_result_audit_seconds": 0.003010614775121212,
+      "max_abs_fp64_error": 5.178153514862061e-07
+    },
+    {
+      "group": 1,
+      "packet_present_cycles": 2385,
+      "producer_ready_cycles": 2447,
+      "native_consumer_cycles": 519,
+      "producer_consumer_cycles": 2966,
+      "host_arm_and_ready_seconds": 0.0013293810188770294,
+      "host_start_through_result_audit_seconds": 0.002591651864349842,
+      "max_abs_fp64_error": 4.675239324569702e-07
+    },
+    {
+      "group": 2,
+      "packet_present_cycles": 2385,
+      "producer_ready_cycles": 2447,
+      "native_consumer_cycles": 519,
+      "producer_consumer_cycles": 2966,
+      "host_arm_and_ready_seconds": 0.0012217704206705093,
+      "host_start_through_result_audit_seconds": 0.002585921436548233,
+      "max_abs_fp64_error": 4.435077940456722e-07
+    },
+    {
+      "group": 3,
+      "packet_present_cycles": 2385,
+      "producer_ready_cycles": 2447,
+      "native_consumer_cycles": 519,
+      "producer_consumer_cycles": 2966,
+      "host_arm_and_ready_seconds": 0.0012284498661756516,
+      "host_start_through_result_audit_seconds": 0.002691803500056267,
+      "max_abs_fp64_error": 1.2754141369697436e-06
+    },
+    {
+      "group": 4,
+      "packet_present_cycles": 2385,
+      "producer_ready_cycles": 2447,
+      "native_consumer_cycles": 519,
+      "producer_consumer_cycles": 2966,
+      "host_arm_and_ready_seconds": 0.0019928468391299248,
+      "host_start_through_result_audit_seconds": 0.0030597345903515816,
+      "max_abs_fp64_error": 2.054269145901344e-07
+    },
+    {
+      "group": 5,
+      "packet_present_cycles": 2400,
+      "producer_ready_cycles": 2462,
+      "native_consumer_cycles": 519,
+      "producer_consumer_cycles": 2981,
+      "host_arm_and_ready_seconds": 0.001668785698711872,
+      "host_start_through_result_audit_seconds": 0.0029192445799708366,
+      "max_abs_fp64_error": 5.949179371356195e-07
+    },
+    {
+      "group": 6,
+      "packet_present_cycles": 2420,
+      "producer_ready_cycles": 2482,
+      "native_consumer_cycles": 519,
+      "producer_consumer_cycles": 3001,
+      "host_arm_and_ready_seconds": 0.0013526221737265587,
+      "host_start_through_result_audit_seconds": 0.002729262225329876,
+      "max_abs_fp64_error": 1.3758477379610667e-06
+    },
+    {
+      "group": 7,
+      "packet_present_cycles": 2349,
+      "producer_ready_cycles": 2411,
+      "native_consumer_cycles": 519,
+      "producer_consumer_cycles": 2930,
+      "host_arm_and_ready_seconds": 0.0011946000158786774,
+      "host_start_through_result_audit_seconds": 0.0026467423886060715,
+      "max_abs_fp64_error": 4.0039570414762693e-07
+    },
+    {
+      "group": 8,
+      "packet_present_cycles": 2056,
+      "producer_ready_cycles": 2118,
+      "native_consumer_cycles": 519,
+      "producer_consumer_cycles": 2637,
+      "host_arm_and_ready_seconds": 0.0012851813808083534,
+      "host_start_through_result_audit_seconds": 0.002754232846200466,
+      "max_abs_fp64_error": 0.0
+    },
+    {
+      "group": 9,
+      "packet_present_cycles": 2421,
+      "producer_ready_cycles": 2483,
+      "native_consumer_cycles": 519,
+      "producer_consumer_cycles": 3002,
+      "host_arm_and_ready_seconds": 0.0012865914031863213,
+      "host_start_through_result_audit_seconds": 0.0026729125529527664,
+      "max_abs_fp64_error": 8.230612635884427e-09
+    },
+    {
+      "group": 10,
+      "packet_present_cycles": 2430,
+      "producer_ready_cycles": 2492,
+      "native_consumer_cycles": 519,
+      "producer_consumer_cycles": 3011,
+      "host_arm_and_ready_seconds": 0.0012732511386275291,
+      "host_start_through_result_audit_seconds": 0.0027603432536125183,
+      "max_abs_fp64_error": 1.405888972623162e-23
+    },
+    {
+      "group": 11,
+      "packet_present_cycles": 2399,
+      "producer_ready_cycles": 2461,
+      "native_consumer_cycles": 519,
+      "producer_consumer_cycles": 2980,
+      "host_arm_and_ready_seconds": 0.0012762397527694702,
+      "host_start_through_result_audit_seconds": 0.002629762515425682,
+      "max_abs_fp64_error": 2.980232238769531e-07
+    },
+    {
+      "group": 12,
+      "packet_present_cycles": 2423,
+      "producer_ready_cycles": 2485,
+      "native_consumer_cycles": 519,
+      "producer_consumer_cycles": 3004,
+      "host_arm_and_ready_seconds": 0.0012718914076685905,
+      "host_start_through_result_audit_seconds": 0.00305782537907362,
+      "max_abs_fp64_error": 3.136987197782659e-14
+    },
+    {
+      "group": 13,
+      "packet_present_cycles": 2422,
+      "producer_ready_cycles": 2484,
+      "native_consumer_cycles": 519,
+      "producer_consumer_cycles": 3003,
+      "host_arm_and_ready_seconds": 0.001378561370074749,
+      "host_start_through_result_audit_seconds": 0.0027153734117746353,
+      "max_abs_fp64_error": 8.499395577534624e-14
+    },
+    {
+      "group": 14,
+      "packet_present_cycles": 2423,
+      "producer_ready_cycles": 2485,
+      "native_consumer_cycles": 519,
+      "producer_consumer_cycles": 3004,
+      "host_arm_and_ready_seconds": 0.001279730349779129,
+      "host_start_through_result_audit_seconds": 0.002719162032008171,
+      "max_abs_fp64_error": 4.573578928773747e-13
+    },
+    {
+      "group": 15,
+      "packet_present_cycles": 2423,
+      "producer_ready_cycles": 2485,
+      "native_consumer_cycles": 519,
+      "producer_consumer_cycles": 3004,
+      "host_arm_and_ready_seconds": 0.0015702228993177414,
+      "host_start_through_result_audit_seconds": 0.0034574083983898163,
+      "max_abs_fp64_error": 4.4275894799453153e-13
+    },
+    {
+      "group": 16,
+      "packet_present_cycles": 2422,
+      "producer_ready_cycles": 2484,
+      "native_consumer_cycles": 519,
+      "producer_consumer_cycles": 3003,
+      "host_arm_and_ready_seconds": 0.0013208016753196716,
+      "host_start_through_result_audit_seconds": 0.0027463017031550407,
+      "max_abs_fp64_error": 5.442990350969235e-13
+    },
+    {
+      "group": 17,
+      "packet_present_cycles": 2423,
+      "producer_ready_cycles": 2485,
+      "native_consumer_cycles": 519,
+      "producer_consumer_cycles": 3004,
+      "host_arm_and_ready_seconds": 0.0014365119859576225,
+      "host_start_through_result_audit_seconds": 0.0033499980345368385,
+      "max_abs_fp64_error": 1.0732463095325384e-12
+    },
+    {
+      "group": 18,
+      "packet_present_cycles": 2422,
+      "producer_ready_cycles": 2484,
+      "native_consumer_cycles": 519,
+      "producer_consumer_cycles": 3003,
+      "host_arm_and_ready_seconds": 0.0013043815270066261,
+      "host_start_through_result_audit_seconds": 0.0028538433834910393,
+      "max_abs_fp64_error": 1.1966255189423819e-11
+    },
+    {
+      "group": 19,
+      "packet_present_cycles": 2424,
+      "producer_ready_cycles": 2486,
+      "native_consumer_cycles": 519,
+      "producer_consumer_cycles": 3005,
+      "host_arm_and_ready_seconds": 0.0014425227418541908,
+      "host_start_through_result_audit_seconds": 0.0028107529506087303,
+      "max_abs_fp64_error": 1.1869849287499123e-11
+    },
+    {
+      "group": 20,
+      "packet_present_cycles": 2420,
+      "producer_ready_cycles": 2482,
+      "native_consumer_cycles": 519,
+      "producer_consumer_cycles": 3001,
+      "host_arm_and_ready_seconds": 0.0012682611122727394,
+      "host_start_through_result_audit_seconds": 0.002733473666012287,
+      "max_abs_fp64_error": 6.111403050290676e-12
+    },
+    {
+      "group": 21,
+      "packet_present_cycles": 2422,
+      "producer_ready_cycles": 2484,
+      "native_consumer_cycles": 519,
+      "producer_consumer_cycles": 3003,
+      "host_arm_and_ready_seconds": 0.0011568600311875343,
+      "host_start_through_result_audit_seconds": 0.002516111359000206,
+      "max_abs_fp64_error": 9.700573677662305e-13
+    },
+    {
+      "group": 22,
+      "packet_present_cycles": 2421,
+      "producer_ready_cycles": 2483,
+      "native_consumer_cycles": 519,
+      "producer_consumer_cycles": 3002,
+      "host_arm_and_ready_seconds": 0.0011915294453501701,
+      "host_start_through_result_audit_seconds": 0.0025939717888832092,
+      "max_abs_fp64_error": 1.6427652640982338e-11
+    },
+    {
+      "group": 23,
+      "packet_present_cycles": 2425,
+      "producer_ready_cycles": 2487,
+      "native_consumer_cycles": 519,
+      "producer_consumer_cycles": 3006,
+      "host_arm_and_ready_seconds": 0.0013558901846408844,
+      "host_start_through_result_audit_seconds": 0.002973044291138649,
+      "max_abs_fp64_error": 7.04815164564998e-11
+    },
+    {
+      "group": 24,
+      "packet_present_cycles": 2423,
+      "producer_ready_cycles": 2485,
+      "native_consumer_cycles": 519,
+      "producer_consumer_cycles": 3004,
+      "host_arm_and_ready_seconds": 0.0013275006785988808,
+      "host_start_through_result_audit_seconds": 0.003022274933755398,
+      "max_abs_fp64_error": 1.0832595410958934e-10
+    },
+    {
+      "group": 25,
+      "packet_present_cycles": 2422,
+      "producer_ready_cycles": 2484,
+      "native_consumer_cycles": 519,
+      "producer_consumer_cycles": 3003,
+      "host_arm_and_ready_seconds": 0.0015706634148955345,
+      "host_start_through_result_audit_seconds": 0.0036399494856595993,
+      "max_abs_fp64_error": 1.3106671303830808e-10
+    },
+    {
+      "group": 26,
+      "packet_present_cycles": 2423,
+      "producer_ready_cycles": 2485,
+      "native_consumer_cycles": 519,
+      "producer_consumer_cycles": 3004,
+      "host_arm_and_ready_seconds": 0.0021093077957630157,
+      "host_start_through_result_audit_seconds": 0.0030461251735687256,
+      "max_abs_fp64_error": 8.596607870003936e-10
+    },
+    {
+      "group": 27,
+      "packet_present_cycles": 2422,
+      "producer_ready_cycles": 2484,
+      "native_consumer_cycles": 519,
+      "producer_consumer_cycles": 3003,
+      "host_arm_and_ready_seconds": 0.0012292396277189255,
+      "host_start_through_result_audit_seconds": 0.0027253134176135063,
+      "max_abs_fp64_error": 1.0851844423065415e-09
+    },
+    {
+      "group": 28,
+      "packet_present_cycles": 2422,
+      "producer_ready_cycles": 2484,
+      "native_consumer_cycles": 519,
+      "producer_consumer_cycles": 3003,
+      "host_arm_and_ready_seconds": 0.0012828800827264786,
+      "host_start_through_result_audit_seconds": 0.0026766937226057053,
+      "max_abs_fp64_error": 6.014893472183758e-09
+    },
+    {
+      "group": 29,
+      "packet_present_cycles": 2421,
+      "producer_ready_cycles": 2483,
+      "native_consumer_cycles": 519,
+      "producer_consumer_cycles": 3002,
+      "host_arm_and_ready_seconds": 0.0012666909024119377,
+      "host_start_through_result_audit_seconds": 0.002819674089550972,
+      "max_abs_fp64_error": 2.048822445033238e-09
+    },
+    {
+      "group": 30,
+      "packet_present_cycles": 2421,
+      "producer_ready_cycles": 2483,
+      "native_consumer_cycles": 519,
+      "producer_consumer_cycles": 3002,
+      "host_arm_and_ready_seconds": 0.001275329850614071,
+      "host_start_through_result_audit_seconds": 0.002619601786136627,
+      "max_abs_fp64_error": 1.2944040950202407e-08
+    },
+    {
+      "group": 31,
+      "packet_present_cycles": 2423,
+      "producer_ready_cycles": 2485,
+      "native_consumer_cycles": 519,
+      "producer_consumer_cycles": 3004,
+      "host_arm_and_ready_seconds": 0.0012062406167387962,
+      "host_start_through_result_audit_seconds": 0.002612551674246788,
+      "max_abs_fp64_error": 4.79117545637564e-09
+    },
+    {
+      "group": 32,
+      "packet_present_cycles": 2421,
+      "producer_ready_cycles": 2483,
+      "native_consumer_cycles": 519,
+      "producer_consumer_cycles": 3002,
+      "host_arm_and_ready_seconds": 0.0012238100171089172,
+      "host_start_through_result_audit_seconds": 0.00265326164662838,
+      "max_abs_fp64_error": 8.39726510548644e-08
+    },
+    {
+      "group": 33,
+      "packet_present_cycles": 2424,
+      "producer_ready_cycles": 2486,
+      "native_consumer_cycles": 519,
+      "producer_consumer_cycles": 3005,
+      "host_arm_and_ready_seconds": 0.0011951392516493797,
+      "host_start_through_result_audit_seconds": 0.0025820527225732803,
+      "max_abs_fp64_error": 1.9901825965007447e-08
+    },
+    {
+      "group": 34,
+      "packet_present_cycles": 2423,
+      "producer_ready_cycles": 2485,
+      "native_consumer_cycles": 519,
+      "producer_consumer_cycles": 3004,
+      "host_arm_and_ready_seconds": 0.00121235940605402,
+      "host_start_through_result_audit_seconds": 0.002610071562230587,
+      "max_abs_fp64_error": 2.6883114401243802e-08
+    },
+    {
+      "group": 35,
+      "packet_present_cycles": 2421,
+      "producer_ready_cycles": 2483,
+      "native_consumer_cycles": 519,
+      "producer_consumer_cycles": 3002,
+      "host_arm_and_ready_seconds": 0.0012100404128432274,
+      "host_start_through_result_audit_seconds": 0.0025840606540441513,
+      "max_abs_fp64_error": 1.0750591172836721e-07
+    },
+    {
+      "group": 36,
+      "packet_present_cycles": 2422,
+      "producer_ready_cycles": 2484,
+      "native_consumer_cycles": 519,
+      "producer_consumer_cycles": 3003,
+      "host_arm_and_ready_seconds": 0.002325819805264473,
+      "host_start_through_result_audit_seconds": 0.003146545961499214,
+      "max_abs_fp64_error": 1.5333343981183134e-06
+    },
+    {
+      "group": 37,
+      "packet_present_cycles": 2422,
+      "producer_ready_cycles": 2484,
+      "native_consumer_cycles": 519,
+      "producer_consumer_cycles": 3003,
+      "host_arm_and_ready_seconds": 0.0013937409967184067,
+      "host_start_through_result_audit_seconds": 0.0025679413229227066,
+      "max_abs_fp64_error": 6.751848218300438e-07
+    },
+    {
+      "group": 38,
+      "packet_present_cycles": 2424,
+      "producer_ready_cycles": 2486,
+      "native_consumer_cycles": 519,
+      "producer_consumer_cycles": 3005,
+      "host_arm_and_ready_seconds": 0.0012773508206009865,
+      "host_start_through_result_audit_seconds": 0.0025830911472439766,
+      "max_abs_fp64_error": 2.3665209312184743e-06
+    },
+    {
+      "group": 39,
+      "packet_present_cycles": 2423,
+      "producer_ready_cycles": 2485,
+      "native_consumer_cycles": 519,
+      "producer_consumer_cycles": 3004,
+      "host_arm_and_ready_seconds": 0.0011926200240850449,
+      "host_start_through_result_audit_seconds": 0.002570020966231823,
+      "max_abs_fp64_error": 1.165892172139138e-06
+    },
+    {
+      "group": 40,
+      "packet_present_cycles": 2421,
+      "producer_ready_cycles": 2483,
+      "native_consumer_cycles": 519,
+      "producer_consumer_cycles": 3002,
+      "host_arm_and_ready_seconds": 0.0012584608048200607,
+      "host_start_through_result_audit_seconds": 0.002843514084815979,
+      "max_abs_fp64_error": 1.9005434296559542e-05
+    },
+    {
+      "group": 41,
+      "packet_present_cycles": 2422,
+      "producer_ready_cycles": 2484,
+      "native_consumer_cycles": 519,
+      "producer_consumer_cycles": 3003,
+      "host_arm_and_ready_seconds": 0.0012698611244559288,
+      "host_start_through_result_audit_seconds": 0.0025788312777876854,
+      "max_abs_fp64_error": 5.291009074426256e-06
+    },
+    {
+      "group": 42,
+      "packet_present_cycles": 2422,
+      "producer_ready_cycles": 2484,
+      "native_consumer_cycles": 519,
+      "producer_consumer_cycles": 3003,
+      "host_arm_and_ready_seconds": 0.001271270215511322,
+      "host_start_through_result_audit_seconds": 0.0026282621547579765,
+      "max_abs_fp64_error": 3.147748066112399e-05
+    },
+    {
+      "group": 43,
+      "packet_present_cycles": 2423,
+      "producer_ready_cycles": 2485,
+      "native_consumer_cycles": 519,
+      "producer_consumer_cycles": 3004,
+      "host_arm_and_ready_seconds": 0.0012608598917722702,
+      "host_start_through_result_audit_seconds": 0.002555382438004017,
+      "max_abs_fp64_error": 3.799237310886383e-05
+    }
+  ],
+  "clock_hz": null,
+  "weight_predecode_cycles": 500,
+  "host_weight_prepare_seconds": 0.07238110527396202,
+  "all_inputs_and_weight_retained": true,
+  "timing_note": "Same-root maximum through scale, encoding, full ordered packet and native consumer. Input transfer and explicit receive arming/readiness audit are excluded from device interval and host setup is separate; start-entry skew remains. One constant original weight tile is predecoded once before groups; no host operation between quantization and consumer."
+}

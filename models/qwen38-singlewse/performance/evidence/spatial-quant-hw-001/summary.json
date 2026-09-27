@@ -1,0 +1,58 @@
+{
+  "physical": true,
+  "full_model": false,
+  "groups": 44,
+  "application": [
+    8,
+    4
+  ],
+  "items_per_pe": 4,
+  "fixture_sha256": "fd184db1fcac5f508b852c8ded60b208c2780a12a8af7c16ea6e75c3972f8b2c",
+  "scope": "Spatial full group128 quantization+packet gathering followed by one original2x128 native FP8 consumer on root; no complete projection/model",
+  "timing_note": "Same-root maximum through scale, encoding, full ordered packet and native consumer. Input transfer and explicit receive arming/readiness audit are excluded from device interval and host setup is separate; start-entry skew remains. One constant original weight tile is predecoded once before groups; no host operation between quantization and consumer.",
+  "clock_hz": null,
+  "cycles": {
+    "packet_present_cycles": {
+      "min": 2056,
+      "median": 2422.0,
+      "max": 2430,
+      "sum": 105916
+    },
+    "producer_ready_cycles": {
+      "min": 2118,
+      "median": 2484.0,
+      "max": 2492,
+      "sum": 108644
+    },
+    "native_consumer_cycles": {
+      "min": 519,
+      "median": 519.0,
+      "max": 519,
+      "sum": 22836
+    },
+    "producer_consumer_cycles": {
+      "min": 2637,
+      "median": 3003.0,
+      "max": 3011,
+      "sum": 131480
+    }
+  },
+  "host_seconds": {
+    "host_arm_and_ready_seconds": {
+      "min": 0.0011568600311875343,
+      "median": 0.0012767952866852283,
+      "max": 0.002325819805264473,
+      "sum": 0.05990779399871826
+    },
+    "host_start_through_result_audit_seconds": {
+      "min": 0.002516111359000206,
+      "median": 0.002717267721891403,
+      "max": 0.0036399494856595993,
+      "sum": 0.1226447131484747
+    }
+  },
+  "weight_predecode_cycles": 500,
+  "max_abs_fp64_error": 3.799237310886383e-05,
+  "max_compiled_sram_plus_declared_stack": 14272,
+  "interpretation": "Complete spatial group128 producer and one original2x128 consumer; no host work between them. Explicit host receive arming/readiness and one-time constant weight predecode are outside device interval and separately reported. Not full projection, model, or token rate."
+}
