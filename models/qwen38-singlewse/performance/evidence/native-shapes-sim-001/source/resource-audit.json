@@ -1,0 +1,68 @@
+{
+  "schema": "wse-explicit-sdk-lease-audit-v1",
+  "passed": true,
+  "source_sha256": {
+    "pe.csl": "a53b2f30e725ad4081f7739364eb68d50e04df12a798850b6a8a849b1dc97257",
+    "fp8_shape.csl": "b013ea6d04ab92356c46c78d388fba260213d03356f7678989cd4a4b3a86d93c",
+    "bf16_shape.csl": "522bf6960f2a3042232d3ff8df9bf995579cda18cc137bacdcdc889ae4b0455f",
+    "fp8_unpack_shift.csl": "9fa14188758bd1dae78f1fbff7426513bc1fca004dc81b540e91df39a2c4eab3"
+  },
+  "leases": [
+    {
+      "file": "fp8_shape.csl",
+      "resource": "descriptor",
+      "index": 4,
+      "descriptor_kind": "dsr_dest"
+    },
+    {
+      "file": "fp8_shape.csl",
+      "resource": "descriptor",
+      "index": 4,
+      "descriptor_kind": "dsr_src0"
+    },
+    {
+      "file": "fp8_shape.csl",
+      "resource": "descriptor",
+      "index": 4,
+      "descriptor_kind": "dsr_src1"
+    },
+    {
+      "file": "bf16_shape.csl",
+      "resource": "descriptor",
+      "index": 7,
+      "descriptor_kind": "dsr_dest"
+    },
+    {
+      "file": "bf16_shape.csl",
+      "resource": "descriptor",
+      "index": 7,
+      "descriptor_kind": "dsr_src0"
+    },
+    {
+      "file": "bf16_shape.csl",
+      "resource": "descriptor",
+      "index": 4,
+      "descriptor_kind": "dsr_dest"
+    },
+    {
+      "file": "bf16_shape.csl",
+      "resource": "descriptor",
+      "index": 4,
+      "descriptor_kind": "dsr_src0"
+    },
+    {
+      "file": "bf16_shape.csl",
+      "resource": "descriptor",
+      "index": 4,
+      "descriptor_kind": "dsr_src1"
+    }
+  ],
+  "sdk_reserved_descriptor_indices": [
+    0
+  ],
+  "sdk_reserved_queue_and_microthread_indices": [
+    0,
+    1
+  ],
+  "scope": "Explicit literal application leases avoid default SDK memcpy reservations; dynamic lifetimes and queue liveness require execution."
+}

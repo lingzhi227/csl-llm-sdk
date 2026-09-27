@@ -1,0 +1,30 @@
+{
+  "schema": "wse-complete-matrix-routing-audit-v1",
+  "passed": true,
+  "physical": false,
+  "weights_read": false,
+  "matrix_shape": [
+    48,
+    5120
+  ],
+  "all_original_tiles": 960,
+  "contraction_edges": 936,
+  "gather_edges": 23,
+  "route_entries": 7586,
+  "input_recipients": 960,
+  "input_forwarders": 1261,
+  "input_words": 2600,
+  "source_to_input_farthest_hops": 1260,
+  "contraction_and_gather_word_hops": 44520,
+  "all_routes_reachable": true,
+  "all_intermediate_router_ports_checked": true,
+  "all_original_addresses_and_output_rows_checked": true,
+  "compiled_sram_admitted": false,
+  "full_model_executable": false,
+  "scope": "Complete original matrix owner and static input/contraction/ordered-output routing only. Abstract graph traversal is not executable queue/thread/numerical qualification.",
+  "sha256": {
+    "base": "19830e61b881f592c92710fc59e6af8d40f1b3afad70d8905ebbedda461f21db",
+    "overlay": "9461459fe8e0da74396018cbd112d6cc66fa8cca291f61188309a76e0b47e767",
+    "plan": "577799983773b4ebb28d8f964e0771dbdcf5733837f948028e130dc9f3c9a7df"
+  }
+}

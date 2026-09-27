@@ -1,0 +1,262 @@
+{
+  "schema": "wse-equal-work-native-shapes-v1",
+  "application": [
+    4,
+    1
+  ],
+  "shapes": [
+    {
+      "rows": 2,
+      "columns": 128,
+      "weight_elements": 256,
+      "fp8_weight_bytes": 256,
+      "bf16_weight_bytes": 512,
+      "input_packet_words": 65,
+      "partial_output_words": 3,
+      "scalar_map_steps": 128,
+      "fp32_bf16_expansion_bytes": 8
+    },
+    {
+      "rows": 4,
+      "columns": 64,
+      "weight_elements": 256,
+      "fp8_weight_bytes": 256,
+      "bf16_weight_bytes": 512,
+      "input_packet_words": 33,
+      "partial_output_words": 5,
+      "scalar_map_steps": 64,
+      "fp32_bf16_expansion_bytes": 16
+    },
+    {
+      "rows": 8,
+      "columns": 32,
+      "weight_elements": 256,
+      "fp8_weight_bytes": 256,
+      "bf16_weight_bytes": 512,
+      "input_packet_words": 17,
+      "partial_output_words": 9,
+      "scalar_map_steps": 32,
+      "fp32_bf16_expansion_bytes": 32
+    },
+    {
+      "rows": 16,
+      "columns": 16,
+      "weight_elements": 256,
+      "fp8_weight_bytes": 256,
+      "bf16_weight_bytes": 512,
+      "input_packet_words": 9,
+      "partial_output_words": 17,
+      "scalar_map_steps": 16,
+      "fp32_bf16_expansion_bytes": 64
+    }
+  ],
+  "repetitions": 32,
+  "fp8_slots": 110,
+  "bf16_slots": 13,
+  "bank_words": 8814,
+  "selected_fp8_slot": 0,
+  "selected_bf16_slot": 6,
+  "full_model": false,
+  "ownership": "Component-only repacking of selected original tiles; remaining original background slots retain their 2x128 format. No P15/P17 global ownership identity is reused for retiled values.",
+  "scope": "Four independent original-weight 256-MAC tiles at different row/K shapes, equal resident bank capacity. Local arithmetic and FP8 decode-plus-arithmetic timings only; excludes input distribution, reduction, matrix coverage and dependent model inference.",
+  "model": "Qwen/Qwen3.8-27B-FP8",
+  "revision": "017b9c7af6b5689d5dd426a76e0bc077eb5ca20a",
+  "original_shards": {
+    "layers-0.safetensors": "07f700e293baeaf3cd4240c3df1a948c4403f16961ea7979e86c8d6a9f8fd466"
+  },
+  "origins": [
+    {
+      "pe": [
+        0,
+        0
+      ],
+      "rows": 2,
+      "columns": 128,
+      "fp8_tensor": "model.language_model.layers.0.mlp.gate_proj.weight",
+      "bf16_tensor": "model.language_model.layers.0.linear_attn.in_proj_a.weight",
+      "original_row_start": 0,
+      "original_column_start": 0,
+      "fp8_scale_block": [
+        0,
+        0
+      ],
+      "background_owner": [
+        0,
+        0
+      ],
+      "extra_bf16_owner": [
+        1,
+        0
+      ],
+      "background_fixture": "40d7c4cc23b0f1b2fc940e81201b1c14463b919932b8588f0386598bb237980e"
+    },
+    {
+      "pe": [
+        1,
+        0
+      ],
+      "rows": 4,
+      "columns": 64,
+      "fp8_tensor": "model.language_model.layers.0.mlp.gate_proj.weight",
+      "bf16_tensor": "model.language_model.layers.0.linear_attn.in_proj_a.weight",
+      "original_row_start": 0,
+      "original_column_start": 0,
+      "fp8_scale_block": [
+        0,
+        0
+      ],
+      "background_owner": [
+        1,
+        0
+      ],
+      "extra_bf16_owner": [
+        1,
+        1
+      ],
+      "background_fixture": "40d7c4cc23b0f1b2fc940e81201b1c14463b919932b8588f0386598bb237980e"
+    },
+    {
+      "pe": [
+        2,
+        0
+      ],
+      "rows": 8,
+      "columns": 32,
+      "fp8_tensor": "model.language_model.layers.0.mlp.gate_proj.weight",
+      "bf16_tensor": "model.language_model.layers.0.linear_attn.in_proj_a.weight",
+      "original_row_start": 0,
+      "original_column_start": 0,
+      "fp8_scale_block": [
+        0,
+        0
+      ],
+      "background_owner": [
+        1,
+        1
+      ],
+      "extra_bf16_owner": [
+        0,
+        1
+      ],
+      "background_fixture": "40d7c4cc23b0f1b2fc940e81201b1c14463b919932b8588f0386598bb237980e"
+    },
+    {
+      "pe": [
+        3,
+        0
+      ],
+      "rows": 16,
+      "columns": 16,
+      "fp8_tensor": "model.language_model.layers.0.mlp.gate_proj.weight",
+      "bf16_tensor": "model.language_model.layers.0.linear_attn.in_proj_a.weight",
+      "original_row_start": 0,
+      "original_column_start": 0,
+      "fp8_scale_block": [
+        0,
+        0
+      ],
+      "background_owner": [
+        0,
+        1
+      ],
+      "extra_bf16_owner": [
+        0,
+        2
+      ],
+      "background_fixture": "40d7c4cc23b0f1b2fc940e81201b1c14463b919932b8588f0386598bb237980e"
+    }
+  ],
+  "cases": [
+    {
+      "case": 0,
+      "kind": 0,
+      "mode": "mixed",
+      "decode_modes": [
+        0,
+        1
+      ]
+    },
+    {
+      "case": 1,
+      "kind": 0,
+      "mode": "zero",
+      "decode_modes": [
+        0,
+        1
+      ]
+    },
+    {
+      "case": 2,
+      "kind": 0,
+      "mode": "tiny",
+      "decode_modes": [
+        0,
+        1
+      ]
+    },
+    {
+      "case": 3,
+      "kind": 0,
+      "mode": "boundary",
+      "decode_modes": [
+        0,
+        1
+      ]
+    },
+    {
+      "case": 4,
+      "kind": 1,
+      "mode": "mixed",
+      "decode_modes": [
+        0
+      ]
+    },
+    {
+      "case": 5,
+      "kind": 1,
+      "mode": "zero",
+      "decode_modes": [
+        0
+      ]
+    },
+    {
+      "case": 6,
+      "kind": 1,
+      "mode": "tiny",
+      "decode_modes": [
+        0
+      ]
+    },
+    {
+      "case": 7,
+      "kind": 1,
+      "mode": "boundary",
+      "decode_modes": [
+        0
+      ]
+    }
+  ],
+  "fixture_sha256": "d35076704d61959d39bed8ed007fa827537c664fff391bbc577db894f825633b",
+  "simulation_cases": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "physical_cases": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "comparison": "Equal256 MACs per invocation, with different original tile slices and output dimensions. Per-MAC local timing comparison only; not identical complete-matrix workloads or communication costs.",
+  "criterion": "All active rows exactly match separately emulated orderedFP32 values after zero-sign canonicalization and satisfy independentFP64 bounds; unused output tails remain zero, packet and full original resident bank retained, all32 repetitions counted, normal stop."
+}

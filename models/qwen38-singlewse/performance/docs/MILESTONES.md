@@ -625,3 +625,47 @@ See COUPLED-BANK.md and coupled-bank-summary-001.json.
 Full matrices, real quant/value delivery, BF16 input distribution, many-root
 output return, generic epochs, all-layer feedback and complete-model correctness
 and 2,000 dependent tokens/s measurement remain the integration objective.
+
+## P17: physical native shape/scaling sweep and complete original BF16 matrix
+
+`native-shapes-hw-002` qualifies four equal256-MAC shapes (2x128,4x64,8x32,16x16)
+and a matched vector-output-scaling copy of each shape on eight physical PEs.
+Three vector multiplies preserve the original FP32 scaling order and rounding
+boundaries. Eight frozen inputs and twelve timing modes pass720 active outputs,
+zero tails,6,240 packet words,3,072 counted native invocations, matched-pair
+identity and282,048 original bank bytes, followed by normal shutdown and release.
+Actual maximum SRAM including4KiB stack is46,560bytes, leaving1,568bytes before
+future communication integration. All45 source tests pass.
+
+For the same16x16 original FP8 tile, scalar/vector mean intervals are683.03125
+and327.15625cycles:2.08778x locally. Including each call's weight decode gives
+935.25 versus580.28125cycles:1.61172x. The equal-MAC shape sweep favors8x32 for
+FP8 and16x16 forBF16 locally, but different shapes cover different original
+matrix slices and have different reduction/communication costs. No complete
+matrix or model speedup is inferred. See NATIVE-SHAPES.md and the frozen summary.
+
+The complete original layer0 in_proj_a48x5120 candidate now lowers all960 tiles
+at their original atlas addresses, with24 K40 trees and an ordered48-value return.
+Independent route/owner audit003 passes all7586 PE/color entries. Simulator017
+passes all native/subtree/full outputs,62,400 input words,122,880 retained target
+words, deliberate one-bit negative controls/restoration and normal stop. Its
+maximum actual SRAM plus stack is48,048bytes; its interval is9,328simulatorcycles.
+All earlier compiler, memory, timeout and crash attempts remain preserved.
+
+Physical compiler001 succeeds/releases but its host wrapper rejects a measured
+12,170,645-byte archive against the old8MiB cap. Attempt002 reuses the exact
+archive after source,1262PE coverage,SRAM and16MiB one-message protobuf admission.
+Its first complete original matrix case passes all outputs/inputs/counters at
+10,824physicalcycles. The next arm/fence stalls; timeout cancels/releases the job
+before full retention, replay and normal stop. Two zero-bank diagnostic simulator
+epochs subsequently pass, without establishing the physical fault's cause.
+Attempt003's one-channel host transport then passes all six cases, exact replay,
+11,520 native and11,520 subtree values,288 returned values,374,400 input words,
+33,832,240 original bank bytes plus13,520 padding bytes, and normal stop. All
+five full original BF16 matrix calls measure10,824physicalcycles; the remaining
+FP8 cohost smoke case uses different original weights and measures10,633cycles.
+Compiled SRAM plus stack remains48,048bytes. Both jobs succeed and release.
+The exact earlier stall cause remains unproven; its unchanged first-case device
+interval shows that one-channel host transport is a reliability change, not
+arithmetic acceleration. See FULL-MATRIX.md and full-matrix-summary-001.json.
+Complete-model2,000dependenttokens/s remains unmet.

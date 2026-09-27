@@ -1,0 +1,18 @@
+const memcpy=@import_module("<memcpy/get_params>",.{.width=8,.height=1});
+layout {
+ @set_rectangle(8,1);
+ @set_tile_code(0,0,"pe.csl",.{.memcpy_params=memcpy.get_params(0),.rows=2,.columns=128,.vector_scales=false});
+ @set_tile_code(1,0,"pe.csl",.{.memcpy_params=memcpy.get_params(1),.rows=4,.columns=64,.vector_scales=false});
+ @set_tile_code(2,0,"pe.csl",.{.memcpy_params=memcpy.get_params(2),.rows=8,.columns=32,.vector_scales=false});
+ @set_tile_code(3,0,"pe.csl",.{.memcpy_params=memcpy.get_params(3),.rows=16,.columns=16,.vector_scales=false});
+ @set_tile_code(4,0,"pe.csl",.{.memcpy_params=memcpy.get_params(4),.rows=2,.columns=128,.vector_scales=true});
+ @set_tile_code(5,0,"pe.csl",.{.memcpy_params=memcpy.get_params(5),.rows=4,.columns=64,.vector_scales=true});
+ @set_tile_code(6,0,"pe.csl",.{.memcpy_params=memcpy.get_params(6),.rows=8,.columns=32,.vector_scales=true});
+ @set_tile_code(7,0,"pe.csl",.{.memcpy_params=memcpy.get_params(7),.rows=16,.columns=16,.vector_scales=true});
+ @export_name("bank",[*]u32,false);
+ @export_name("packet",[*]u32,false);
+ @export_name("output",[*]f32,false);
+ @export_name("ticks",[*]u16,false);
+ @export_name("audit",[*]u32,false);
+ @export_name("measure",fn(u16,u16)void);
+}

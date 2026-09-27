@@ -1,0 +1,135 @@
+param memcpy_params;param role:u16;param input_on:bool;param fp8_slots:u16;param bf16_slots:u16;
+param k_rank:u16;param children:u16;param subtree:u16;param left_color:u16;param right_color:u16;param out_color:u16;param gather_steps:u16;param gather_words:u16;
+param trace:bool;param trace_tag:comptime_string;
+const prt=@import_module("<simprint>",.{.enable=trace});
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);const clock=@import_module("<time>");const tile=@import_module("<tile_config>");
+const window=@import_module("counter_window.csl");const switches=@import_module("<memcpy/memcpy_switches>");
+const unpacker=@import_module("fp8_unpack_shift.csl",.{.max_pairs=128});const fp8=@import_module("fp8_dot.csl",.{.rows=2});const bf_dot=@import_module("bf16_dot.csl",.{.rows=2});
+const root=role==1 and k_rank==0;const hc=@get_color(2);const iq=@get_input_queue(2);const oq=@get_output_queue(2);const liq=@get_input_queue(3);const riq=@get_input_queue(4);const giq=@get_input_queue(5);
+const rt=@get_local_task_id(8);const st=@get_local_task_id(9);const ct=@get_local_task_id(10);const lt=@get_local_task_id(11);const jt=@get_local_task_id(12);const gt=@get_local_task_id(13);const bt=@get_local_task_id(14);
+const rd=@get_dsr(dsr_dest,2);const rs=@get_dsr(dsr_src0,2);const sd=@get_dsr(dsr_dest,6);const ss=@get_dsr(dsr_src0,6);
+// DSR0 belongs to SDK memcpy. Live host progress reads must never overwrite
+// the gather receiver's destination descriptor, so it owns DSR1 explicitly.
+const ld=@get_dsr(dsr_dest,3);const ls=@get_dsr(dsr_src0,3);const jd=@get_dsr(dsr_dest,5);const js=@get_dsr(dsr_src0,5);const gd=@get_dsr(dsr_dest,1);const gs=@get_dsr(dsr_src0,1);
+// Non-worker target/scratch padding permits bounded whole-rectangle simulator
+// validation transfers over both host channels. It carries no model weights.
+var bank=@zeros([if(role==1) 8814 else 128]u32);var packet=@zeros([if(role==0) 2600 else if(role==1) 65 else 1]u32);
+var left=@zeros([3]u32);var right=@zeros([3]u32);var scratch=@zeros([128]u32);var control=@zeros([2]u16);
+// Uniform worker export extent permits two row-wide diagnostic reads instead
+// of24 individual host commands. Non-root pairs must remain untouched zeros.
+var collected=@zeros([if(role==0) 48 else 2]u32);var local_result=@zeros([2]f32);var audit=@zeros([12]u16);var ticks=@zeros([if(role==0) 6 else 1]u16);
+const wp:[*]u32=&bank;const pp:[*]u32=&packet;const cp:[*]u16=&control;const lp:[*]f32=&local_result;const ap:[*]u16=&audit;const tp:[*]u16=&ticks;const gp:[*]u32=&collected;const sp:[*]u32=&scratch;
+var targetp:[*]u32=&bank;
+const td=[1]u32{switches.ctrl(switches.teardown_cmd_1())};
+var armed:bool=false;var started:bool=false;var complete:bool=false;var torn:bool=false;var joined:bool=false;var left_ready:bool=false;var right_ready:bool=false;var returned_value:bool=false;var stage:u16=0;var sent_words:u16=0;var remaining:u16=0;
+fn finish() void {if(started and complete and torn and (role!=0 or returned_value)){started=false;armed=false;audit[10]=1;clock.disable_tsc();}}
+fn transmit(base:[*]u32,count:u16,comptime maximum:u16) void {
+ const m=@get_dsd(mem1d_dsd,.{.base_address=base,.extent=maximum});const f=@get_dsd(fabout_dsd,.{.output_queue=oq,.extent=maximum});
+ @load_to_dsr(ss,@set_dsd_length(m,count));@load_to_dsr(sd,@set_dsd_length(f,count),.{.async=true,.ut_id=@get_ut_id(5),.activate=st});@mov32(sd,ss,.{.async=true});
+}
+fn gather_next() void {
+ if(remaining==0){
+  const offset:u16=@as(u16,2)<<stage;remaining=if(gather_words-offset<offset) gather_words-offset else offset;
+  tile.input_queue_config.encode_input_queue(5,12+@as(i16,stage),false);
+  stage+=1;
+ }
+ const m=@get_dsd(mem1d_dsd,.{.base_address=&collected,.extent=2});const f=@get_dsd(fabin_dsd,.{.input_queue=giq,.extent=2});
+ @load_to_dsr(gd,m);@load_to_dsr(gs,f,.{.async=true,.ut_id=@get_ut_id(6),.activate=gt});@mov32(gd,gs,.{.async=true});
+}
+fn join() void {
+ if(left_ready and right_ready and !joined){joined=true;var x:f32=local_result[0];var y:f32=local_result[1];var count:u32=1;
+  if(comptime children>0){x+=@bitcast(f32,left[0]);y+=@bitcast(f32,left[1]);count+=left[2];}
+  if(comptime children>1){x+=@bitcast(f32,right[0]);y+=@bitcast(f32,right[1]);count+=right[2];}
+  scratch[6]=@bitcast(u32,x);scratch[7]=@bitcast(u32,y);scratch[8]=count;audit[5]+=1;if(count!=@as(u32,subtree)){audit[11]|=1;}
+  if(comptime root){if(comptime trace){prt.print_string(@strcat(trace_tag," J\n"));}collected[0]=@bitcast(u32,x);collected[1]=@bitcast(u32,y);stage=0;sent_words=0;remaining=0;transmit(gp,2,2);}
+  else{transmit(@ptrcast([*]u32,&scratch[6]),3,3);}
+ }
+}
+fn children_arm() void {
+ left_ready=children==0;right_ready=children<2;
+ if(comptime children>0){
+  const m=@get_dsd(mem1d_dsd,.{.base_address=&left,.extent=3});const f=@get_dsd(fabin_dsd,.{.input_queue=liq,.extent=3});
+  @load_to_dsr(ld,m);@load_to_dsr(ls,f,.{.async=true,.ut_id=@get_ut_id(3),.activate=lt});@mov32(ld,ls,.{.async=true});
+ }
+ if(comptime children>1){
+  const m=@get_dsd(mem1d_dsd,.{.base_address=&right,.extent=3});const f=@get_dsd(fabin_dsd,.{.input_queue=riq,.extent=3});
+  @load_to_dsr(jd,m);@load_to_dsr(js,f,.{.async=true,.ut_id=@get_ut_id(4),.activate=jt});@mov32(jd,js,.{.async=true});
+ }
+ join();
+}
+task received() void {
+ if(comptime trace and !root){prt.print_string(@strcat(trace_tag," R\n"));}
+ audit[1]+=1;const slot=control[1];
+ if(control[0]==0){const decoded=@ptrcast([*]u16,&scratch);const scale=@ptrcast([*]f32,&bank[fp8_slots*64]);unpacker.decode(@ptrcast([*]u16,&wp[slot*64]),decoded,128);fp8.compute(decoded,@ptrcast([*]u16,pp),lp,@bitcast(f32,packet[64]),scale[slot]);}
+ else{bf_dot.compute(@ptrcast([*]u16,&bank[fp8_slots*65+slot*128]),@ptrcast([*]u16,pp),lp);}
+ audit[2]+=1;if(comptime trace and !root){prt.print_string(@strcat(trace_tag," D\n"));}children_arm();
+}
+task received_left() void {left_ready=true;audit[3]+=1;join();}
+task received_right() void {right_ready=true;audit[4]+=1;join();}
+task received_gather() void {audit[6]+=1;remaining-=2;transmit(gp,2,2);}
+task returned() void {if(comptime trace){prt.print_string("source returned\n");}clock.get_timestamp(@ptrcast(*[3]u16,&ticks[3]));returned_value=true;audit[1]+=1;finish();}
+task sent_data() void {
+ audit[7]+=1;
+ if(comptime role==0){
+  if(comptime trace){prt.print_string("source data sent\n");}
+  const m=@get_dsd(mem1d_dsd,.{.tensor_access=|i|{1}->td[i]});const f=@get_dsd(fabout_dsd,.{.extent=1,.control=true,.output_queue=oq});
+  @load_to_dsr(ss,m);@load_to_dsr(sd,f,.{.async=true,.ut_id=@get_ut_id(5),.activate=ct});@mov32(sd,ss,.{.async=true});
+ }else if(comptime root){sent_words+=2;if(sent_words==gather_words){complete=true;finish();}else{gather_next();}}
+ else{complete=true;finish();}
+}
+task sent_control() void {if(comptime trace){prt.print_string("source control sent\n");}audit[9]+=1;complete=true;finish();}
+fn torn_input() void {if(comptime trace and role==0){prt.print_string("source torn\n");}if(!armed or torn){audit[11]|=2;}torn=true;audit[8]+=1;finish();}
+fn arm() void {
+ if(comptime trace){prt.print_string(@strcat(trace_tag," A\n"));}
+ @assert(!armed and !started);for(@range(u16,12))|i|{audit[i]=0;}audit[0]=1;armed=true;joined=false;returned_value=false;
+ torn=!input_on;complete=role==2;
+ if(comptime role==1){
+  @assert(control[0]<=1);if(control[0]==0){@assert(control[1]<fp8_slots);}else{@assert(control[1]<bf16_slots);}
+  window.configure(hc,2600,k_rank*65,65);
+  const m=@get_dsd(mem1d_dsd,.{.base_address=&packet,.extent=65});const f=@get_dsd(fabin_dsd,.{.input_queue=iq,.extent=65});
+  @load_to_dsr(rd,m);@load_to_dsr(rs,f,.{.async=true,.ut_id=@get_ut_id(2),.activate=rt});@mov32(rd,rs,.{.async=true});
+ }
+ if(comptime input_on){tile.teardown.exit(hc);}
+ if(comptime role==0){
+  const m=@get_dsd(mem1d_dsd,.{.base_address=&collected,.extent=48});const f=@get_dsd(fabin_dsd,.{.input_queue=liq,.extent=48});
+  @load_to_dsr(ld,m);@load_to_dsr(ls,f,.{.async=true,.ut_id=@get_ut_id(4),.activate=bt});@mov32(ld,ls,.{.async=true});clock.enable_tsc();
+ }
+ sys.unblock_cmd_stream();if(comptime trace){prt.print_string(@strcat(trace_tag," armed\n"));}
+}
+// Release the host command immediately. The host must separately require every
+// finish counter before rearming; this permits bounded progress snapshots.
+fn start() void {
+ if(comptime trace and role!=2){prt.print_string(@strcat(trace_tag," S\n"));}
+ @assert(armed and !started);started=true;
+ if(comptime role==0){clock.get_timestamp(@ptrcast(*[3]u16,&ticks[0]));transmit(pp,2600,2600);if(comptime trace){prt.print_string("source transmit issued\n");}}
+ finish();sys.unblock_cmd_stream();if(comptime trace and role==0){prt.print_string("source unblocked\n");}
+}
+fn initialize_aliases() void {if(comptime trace){prt.print_string(@strcat(trace_tag," I\n"));}if(comptime role==1){targetp=@ptrcast([*]u32,&bank[fp8_slots*65+6*128]);}sys.unblock_cmd_stream();}
+// After all native/subtree/gather values are read, scratch is dead. The host
+// can upload the complete original expected payload there and require exact
+// word comparison, avoiding slow simulator D2H of large arrays. No hash/sample.
+fn check_payload(kind:u16) void {
+ if(comptime role==1){
+  @assert(kind<=1 and audit[10]==1);
+  const n:u16=if(kind==0) 65 else 128;const actual:[*]u32=if(kind==0) pp else targetp;
+  var seen:u16=0;var mismatches:u16=0;
+  while(seen<n){if(actual[seen]!=scratch[seen]){mismatches+=1;}seen+=1;}
+  // Local arithmetic has already been captured and compared by the host.
+  // Reuse its two-word export instead of adding a short scalar tensor.
+  const report=@ptrcast([*]u32,lp);report[0]=@as(u32,seen);report[1]=@as(u32,mismatches);
+ }
+ sys.unblock_cmd_stream();
+}
+comptime {
+ if(input_on){@set_teardown_handler(torn_input,hc);}
+ if(role==0 or role==1){@initialize_queue(oq,.{.color=if(role==0) hc else @get_color(out_color)});@bind_local_task(sent_data,st);}
+ if(role==0){@bind_local_task(sent_control,ct);@initialize_queue(liq,.{.color=@get_color(18)});@bind_local_task(returned,bt);}
+ if(role==1){
+  @initialize_queue(iq,.{.color=hc});@bind_local_task(received,rt);
+  if(children>0){@initialize_queue(liq,.{.color=@get_color(left_color)});@bind_local_task(received_left,lt);}
+  if(children>1){@initialize_queue(riq,.{.color=@get_color(right_color)});@bind_local_task(received_right,jt);}
+  if(root and gather_steps>0){@initialize_queue(giq,.{.color=@get_color(12)});@bind_local_task(received_gather,gt);}
+ }
+ @export_symbol(wp,"bank");@export_symbol(targetp,"target");@export_symbol(pp,"packet");@export_symbol(cp,"control");@export_symbol(lp,"local_result");@export_symbol(ap,"audit");@export_symbol(tp,"ticks");
+ @export_symbol(sp,"aggregate");@export_symbol(gp,"gather");@export_symbol(initialize_aliases);@export_symbol(arm);@export_symbol(start);@export_symbol(check_payload);
+}

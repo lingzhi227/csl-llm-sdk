@@ -1,0 +1,91 @@
+{
+  "physical": true,
+  "accepted": false,
+  "host_events": [
+    {
+      "phase": "upload_resident_banks",
+      "physical": true
+    },
+    {
+      "phase": "aliases_submitted",
+      "wall_seconds": 109.21507051493973
+    },
+    {
+      "phase": "initialization_observed",
+      "wall_seconds": 109.53176619671285
+    },
+    {
+      "phase": "complete_matrix_epoch",
+      "case": 0
+    },
+    {
+      "phase": "arm",
+      "case": 0
+    },
+    {
+      "phase": "all_pes_armed",
+      "wall_seconds": 109.53744385298342,
+      "case": 0
+    },
+    {
+      "phase": "start",
+      "wall_seconds": 109.53747790306807,
+      "case": 0,
+      "upload_arm_seconds": 0.003143305890262127
+    },
+    {
+      "phase": "start_submitted",
+      "wall_seconds": 109.53797385748476,
+      "case": 0
+    },
+    {
+      "phase": "completion_counters_checked",
+      "wall_seconds": 109.53952412027866,
+      "case": 0
+    },
+    {
+      "phase": "all_input_packets_checked",
+      "wall_seconds": 109.54392973706126,
+      "case": 0
+    },
+    {
+      "phase": "all_native_dots_checked",
+      "wall_seconds": 109.54511159658432,
+      "case": 0
+    },
+    {
+      "phase": "all_subtrees_checked",
+      "wall_seconds": 109.54644895810634,
+      "case": 0
+    },
+    {
+      "phase": "all_outputs_checked",
+      "wall_seconds": 109.5499327359721,
+      "case": 0,
+      "cycles": 10824
+    },
+    {
+      "case": 0,
+      "kind": "bf16",
+      "mode": "mixed",
+      "complete_original_matrix": true,
+      "slot": 6,
+      "replay_of": null,
+      "source_send_to_all_outputs_return_cycles": 10824,
+      "max_local_fp64_error": 8.940696716308594e-08,
+      "max_subtree_fp64_error": 3.845198079943657e-07,
+      "max_output_fp64_error": 3.845198079943657e-07,
+      "host_upload_arm_seconds": 0.003143305890262127,
+      "host_start_seconds": 0.0018680058419704437
+    },
+    {
+      "phase": "complete_matrix_epoch",
+      "case": 1
+    },
+    {
+      "phase": "arm",
+      "case": 1
+    }
+  ],
+  "scope": "First complete original48x5120 BF16 case passes all960 native/subtree outputs,48 full outputs, all62400 first-case packetwords and1262 completion counters, source10824cycles. Subsequent case1 arm does not return before300s hostdeadline. Full bank retention and normalstop are not reached; cancelled job released."
+}

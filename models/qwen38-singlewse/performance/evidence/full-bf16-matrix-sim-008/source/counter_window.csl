@@ -1,0 +1,11 @@
+// Select a contiguous word window without consuming other words at the RAMP.
+// Caller must establish queue/teardown completion before reconfiguration.
+const tile=@import_module("<tile_config>");
+fn configure(comptime c:color,period:u16,offset:u16,count:u16) void {
+ @assert(period>0 and count>0 and count<=period and offset+count<=period);
+ const id=@get_filter_id(c);
+ tile.filters.set_max_counter(id,count-1);
+ tile.filters.set_active_limit(id,period-1);
+ const initial:u16=if(offset==0) 0 else period-offset;
+ tile.filters.set_counter(id,initial);
+}

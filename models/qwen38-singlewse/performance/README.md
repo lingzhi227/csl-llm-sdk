@@ -124,3 +124,16 @@ Compiled SRAM including stack is 48,032 bytes, leaving 96 bytes. Both hardware
 jobs and workstation services release. See [COUPLED-BANK.md](docs/COUPLED-BANK.md).
 This is partial-K component execution; complete matrices, all-layer feedback and
 the 2,000 dependent tokens/s target remain unqualified.
+
+P17 qualifies four equal-work native shapes and matched scalar/vector output
+scaling on eight physical WSE-3 PEs. The same 16x16 FP8 tile improves 2.088x
+locally, or 1.612x including per-call weight decode, with exactly matched outputs
+and all original banks retained. See [NATIVE-SHAPES.md](docs/NATIVE-SHAPES.md).
+Separately, the complete original48x5120 BF16 matrix passes five full-matrix
+calls plus an FP8 cohost smoke case, exact replay, all original bank retention
+and normal stop at its atlas
+coordinates. BF16 input-to-full-result intervals are10,824physicalcycles. The
+earlier two-channel host-transport stall and successful one-channel qualification
+are preserved in [FULL-MATRIX.md](docs/FULL-MATRIX.md).
+These are component results. Complete dependent model inference at2,000tokens/s
+remains unmet.

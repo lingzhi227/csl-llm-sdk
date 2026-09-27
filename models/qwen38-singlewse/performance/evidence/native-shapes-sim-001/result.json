@@ -1,0 +1,350 @@
+{
+  "passed": true,
+  "normal_stop": true,
+  "physical": false,
+  "full_model": false,
+  "application": [
+    4,
+    1
+  ],
+  "scope": "Four independent original-weight 256-MAC tiles at different row/K shapes, equal resident bank capacity. Local arithmetic and FP8 decode-plus-arithmetic timings only; excludes input distribution, reduction, matrix coverage and dependent model inference.",
+  "fixture_sha256": "d35076704d61959d39bed8ed007fa827537c664fff391bbc577db894f825633b",
+  "shapes": [
+    {
+      "rows": 2,
+      "columns": 128,
+      "weight_elements": 256,
+      "fp8_weight_bytes": 256,
+      "bf16_weight_bytes": 512,
+      "input_packet_words": 65,
+      "partial_output_words": 3,
+      "scalar_map_steps": 128,
+      "fp32_bf16_expansion_bytes": 8
+    },
+    {
+      "rows": 4,
+      "columns": 64,
+      "weight_elements": 256,
+      "fp8_weight_bytes": 256,
+      "bf16_weight_bytes": 512,
+      "input_packet_words": 33,
+      "partial_output_words": 5,
+      "scalar_map_steps": 64,
+      "fp32_bf16_expansion_bytes": 16
+    },
+    {
+      "rows": 8,
+      "columns": 32,
+      "weight_elements": 256,
+      "fp8_weight_bytes": 256,
+      "bf16_weight_bytes": 512,
+      "input_packet_words": 17,
+      "partial_output_words": 9,
+      "scalar_map_steps": 32,
+      "fp32_bf16_expansion_bytes": 32
+    },
+    {
+      "rows": 16,
+      "columns": 16,
+      "weight_elements": 256,
+      "fp8_weight_bytes": 256,
+      "bf16_weight_bytes": 512,
+      "input_packet_words": 9,
+      "partial_output_words": 17,
+      "scalar_map_steps": 16,
+      "fp32_bf16_expansion_bytes": 64
+    }
+  ],
+  "cases": [
+    {
+      "case": 0,
+      "kind": 0,
+      "mode": "mixed",
+      "decode_modes": [
+        0,
+        1
+      ],
+      "decode_each": 0,
+      "repetitions": 32,
+      "total_cycles_by_shape": [
+        16894,
+        12286,
+        14366,
+        20542
+      ],
+      "cycles_per_invocation_by_shape": [
+        527.9375,
+        383.9375,
+        448.9375,
+        641.9375
+      ],
+      "max_fp64_error": 1.6880221664905548e-09
+    },
+    {
+      "case": 0,
+      "kind": 0,
+      "mode": "mixed",
+      "decode_modes": [
+        0,
+        1
+      ],
+      "decode_each": 1,
+      "repetitions": 32,
+      "total_cycles_by_shape": [
+        24606,
+        19998,
+        22078,
+        28254
+      ],
+      "cycles_per_invocation_by_shape": [
+        768.9375,
+        624.9375,
+        689.9375,
+        882.9375
+      ],
+      "max_fp64_error": 1.6880221664905548e-09
+    },
+    {
+      "case": 1,
+      "kind": 0,
+      "mode": "zero",
+      "decode_modes": [
+        0,
+        1
+      ],
+      "decode_each": 0,
+      "repetitions": 32,
+      "total_cycles_by_shape": [
+        16894,
+        12286,
+        14366,
+        20542
+      ],
+      "cycles_per_invocation_by_shape": [
+        527.9375,
+        383.9375,
+        448.9375,
+        641.9375
+      ],
+      "max_fp64_error": 0.0
+    },
+    {
+      "case": 1,
+      "kind": 0,
+      "mode": "zero",
+      "decode_modes": [
+        0,
+        1
+      ],
+      "decode_each": 1,
+      "repetitions": 32,
+      "total_cycles_by_shape": [
+        24606,
+        19998,
+        22078,
+        28254
+      ],
+      "cycles_per_invocation_by_shape": [
+        768.9375,
+        624.9375,
+        689.9375,
+        882.9375
+      ],
+      "max_fp64_error": 0.0
+    },
+    {
+      "case": 2,
+      "kind": 0,
+      "mode": "tiny",
+      "decode_modes": [
+        0,
+        1
+      ],
+      "decode_each": 0,
+      "repetitions": 32,
+      "total_cycles_by_shape": [
+        16894,
+        12286,
+        14366,
+        20542
+      ],
+      "cycles_per_invocation_by_shape": [
+        527.9375,
+        383.9375,
+        448.9375,
+        641.9375
+      ],
+      "max_fp64_error": 4.0245584642661925e-16
+    },
+    {
+      "case": 2,
+      "kind": 0,
+      "mode": "tiny",
+      "decode_modes": [
+        0,
+        1
+      ],
+      "decode_each": 1,
+      "repetitions": 32,
+      "total_cycles_by_shape": [
+        24606,
+        19998,
+        22078,
+        28254
+      ],
+      "cycles_per_invocation_by_shape": [
+        768.9375,
+        624.9375,
+        689.9375,
+        882.9375
+      ],
+      "max_fp64_error": 4.0245584642661925e-16
+    },
+    {
+      "case": 3,
+      "kind": 0,
+      "mode": "boundary",
+      "decode_modes": [
+        0,
+        1
+      ],
+      "decode_each": 0,
+      "repetitions": 32,
+      "total_cycles_by_shape": [
+        16894,
+        12286,
+        14366,
+        20542
+      ],
+      "cycles_per_invocation_by_shape": [
+        527.9375,
+        383.9375,
+        448.9375,
+        641.9375
+      ],
+      "max_fp64_error": 0.0
+    },
+    {
+      "case": 3,
+      "kind": 0,
+      "mode": "boundary",
+      "decode_modes": [
+        0,
+        1
+      ],
+      "decode_each": 1,
+      "repetitions": 32,
+      "total_cycles_by_shape": [
+        24606,
+        19998,
+        22078,
+        28254
+      ],
+      "cycles_per_invocation_by_shape": [
+        768.9375,
+        624.9375,
+        689.9375,
+        882.9375
+      ],
+      "max_fp64_error": 0.0
+    },
+    {
+      "case": 4,
+      "kind": 1,
+      "mode": "mixed",
+      "decode_modes": [
+        0
+      ],
+      "decode_each": 0,
+      "repetitions": 32,
+      "total_cycles_by_shape": [
+        31390,
+        21214,
+        17182,
+        14686
+      ],
+      "cycles_per_invocation_by_shape": [
+        980.9375,
+        662.9375,
+        536.9375,
+        458.9375
+      ],
+      "max_fp64_error": 1.1175870895385742e-08
+    },
+    {
+      "case": 5,
+      "kind": 1,
+      "mode": "zero",
+      "decode_modes": [
+        0
+      ],
+      "decode_each": 0,
+      "repetitions": 32,
+      "total_cycles_by_shape": [
+        31390,
+        21214,
+        17182,
+        14686
+      ],
+      "cycles_per_invocation_by_shape": [
+        980.9375,
+        662.9375,
+        536.9375,
+        458.9375
+      ],
+      "max_fp64_error": 0.0
+    },
+    {
+      "case": 6,
+      "kind": 1,
+      "mode": "tiny",
+      "decode_modes": [
+        0
+      ],
+      "decode_each": 0,
+      "repetitions": 32,
+      "total_cycles_by_shape": [
+        31390,
+        21214,
+        17182,
+        14686
+      ],
+      "cycles_per_invocation_by_shape": [
+        980.9375,
+        662.9375,
+        536.9375,
+        458.9375
+      ],
+      "max_fp64_error": 1.2116903504194741e-27
+    },
+    {
+      "case": 7,
+      "kind": 1,
+      "mode": "boundary",
+      "decode_modes": [
+        0
+      ],
+      "decode_each": 0,
+      "repetitions": 32,
+      "total_cycles_by_shape": [
+        31390,
+        21214,
+        17182,
+        14686
+      ],
+      "cycles_per_invocation_by_shape": [
+        980.9375,
+        662.9375,
+        536.9375,
+        458.9375
+      ],
+      "max_fp64_error": 0.00146484375
+    }
+  ],
+  "all_weights_retained": true,
+  "all_packets_and_counters_exact": true,
+  "all_ordered_outputs_exact": true,
+  "timing_note": "EachPE measures32 local invocations, including loop/control and callback-free counter overhead. Mode0 excludes one-time FP8 decode; mode1 includes decode in every FP8 invocation. No communication, reduction, complete matrix or dependent-model timing. Different shape inputs cover different original slices; equal256MAC count only.",
+  "clock_hz": null,
+  "full_model_speed_target_achieved": false
+}

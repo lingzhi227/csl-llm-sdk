@@ -1,0 +1,24 @@
+{
+  "application_pes": 1262,
+  "application": [
+    631,
+    2
+  ],
+  "matrix_shape": [
+    48,
+    5120
+  ],
+  "fabric_offset": [
+    123,
+    706
+  ],
+  "complete_original_matrix": true,
+  "full_model": false,
+  "memcpy_channels": 1,
+  "simulation_memcpy_channels": 2,
+  "artifact_single_message_limit": 16777216,
+  "compiler_timeout_seconds": 600,
+  "run_timeout_seconds": 300,
+  "simulation_protocol_source": "full-bf16-matrix-sim-017",
+  "scope": "Complete original layer0 in_proj_a: all48 outputs and5120 inputs at frozen BF16 owner addresses. One2600-word broadcast,24 K40 trees, ordered concatenation and controller return. Host supplies independent BF16 input; not autonomous model inference."
+}

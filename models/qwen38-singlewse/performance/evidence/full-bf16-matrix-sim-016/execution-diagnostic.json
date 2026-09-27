@@ -1,0 +1,154 @@
+{
+  "physical": false,
+  "accepted": false,
+  "host_events": [
+    {
+      "phase": "upload_resident_banks",
+      "physical": false
+    },
+    {
+      "phase": "aliases_submitted",
+      "wall_seconds": 1.4016429237090051
+    },
+    {
+      "phase": "target_upload_submitted",
+      "wall_seconds": 1.4049731278792024,
+      "pes": 960,
+      "rectangle_pes": 1262
+    },
+    {
+      "phase": "initialization_observed",
+      "wall_seconds": 223.92235975293443
+    },
+    {
+      "phase": "complete_matrix_epoch",
+      "case": 0
+    },
+    {
+      "phase": "arm",
+      "case": 0
+    },
+    {
+      "phase": "all_pes_armed",
+      "wall_seconds": 278.52596549969167,
+      "case": 0
+    },
+    {
+      "phase": "start",
+      "wall_seconds": 278.5260330736637,
+      "case": 0,
+      "upload_arm_seconds": 54.59978424804285
+    },
+    {
+      "phase": "start_submitted",
+      "wall_seconds": 278.5260770097375,
+      "case": 0
+    },
+    {
+      "phase": "start_task_done",
+      "wall_seconds": 278.7265949337743,
+      "case": 0
+    },
+    {
+      "phase": "progress",
+      "case": 0,
+      "received_dot_join_gather_sent_teardown_finished_errors": [
+        107,
+        118,
+        408,
+        7,
+        702,
+        962,
+        1122,
+        0
+      ]
+    },
+    {
+      "phase": "progress",
+      "case": 0,
+      "received_dot_join_gather_sent_teardown_finished_errors": [
+        961,
+        960,
+        960,
+        52,
+        1013,
+        1261,
+        1262,
+        0
+      ]
+    },
+    {
+      "phase": "completion_counters_checked",
+      "wall_seconds": 418.99841694161296,
+      "case": 0
+    },
+    {
+      "phase": "all_native_dots_checked",
+      "wall_seconds": 430.0308675416745,
+      "case": 0
+    },
+    {
+      "phase": "all_subtrees_checked",
+      "wall_seconds": 461.46771930297837,
+      "case": 0
+    },
+    {
+      "phase": "all_outputs_checked",
+      "wall_seconds": 485.9429096947424,
+      "case": 0,
+      "cycles": 11170
+    },
+    {
+      "phase": "payload_negative_upload",
+      "wall_seconds": 485.9431286728941,
+      "kind": 0,
+      "words": 62400
+    },
+    {
+      "phase": "payload_negative_read",
+      "wall_seconds": 485.9435542537831,
+      "kind": 0
+    },
+    {
+      "phase": "exact_payload_checked",
+      "wall_seconds": 659.3974304758012,
+      "kind": 0,
+      "compared_words": 62400,
+      "negative_control_rank": 0,
+      "negative_control_word": 64,
+      "negative_control_mismatches": 1,
+      "restored_mismatches": 0,
+      "expected_sha256": "840a07492ce9e0d9f6325b127c78a8012b4d2989f38a6000c25d9b538edd60e2"
+    },
+    {
+      "case": 0,
+      "kind": "bf16",
+      "mode": "mixed",
+      "complete_original_matrix": true,
+      "slot": 6,
+      "replay_of": null,
+      "source_send_to_all_outputs_return_cycles": 11170,
+      "max_local_fp64_error": 8.940696716308594e-08,
+      "max_subtree_fp64_error": 3.845198079943657e-07,
+      "max_output_fp64_error": 3.845198079943657e-07,
+      "host_upload_arm_seconds": 54.59978424804285,
+      "host_start_seconds": 140.47136452281848
+    },
+    {
+      "phase": "bank_retention",
+      "full_background": false
+    },
+    {
+      "phase": "payload_negative_upload",
+      "wall_seconds": 659.3977833837271,
+      "kind": 1,
+      "words": 122880
+    },
+    {
+      "phase": "payload_negative_read",
+      "wall_seconds": 659.398610428907,
+      "kind": 1
+    }
+  ],
+  "scope": "All960 local and subtree values and all48 original matrix outputs pass exact ordered FP32 and independent FP64 checks; all62400 input words pass exact comparison with one-bit negative control/restoration. Run900s deadline expires during122880-word target retention validation; no normal-stop or retention acceptance."
+}

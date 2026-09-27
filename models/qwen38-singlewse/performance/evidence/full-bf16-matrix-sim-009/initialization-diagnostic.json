@@ -1,0 +1,83 @@
+{
+  "attempt": "full-bf16-matrix-sim-009",
+  "passed": false,
+  "physical": false,
+  "scope": "Initialization diagnostic; no matrix numerical acceptance",
+  "host_events": [
+    {
+      "phase": "upload_resident_banks",
+      "physical": false
+    },
+    {
+      "phase": "aliases_submitted",
+      "wall_seconds": 1.4056039531715214
+    },
+    {
+      "phase": "target_upload_submitted",
+      "wall_seconds": 1.4066724898293614,
+      "x": 301,
+      "y": 0,
+      "pes": 330
+    },
+    {
+      "phase": "fp8_smoke_upload_submitted",
+      "wall_seconds": 1.406935276929289,
+      "x": 301,
+      "y": 0,
+      "pes": 330
+    },
+    {
+      "phase": "target_upload_submitted",
+      "wall_seconds": 1.4074646327644587,
+      "x": 1,
+      "y": 1,
+      "pes": 630
+    },
+    {
+      "phase": "fp8_smoke_upload_submitted",
+      "wall_seconds": 1.4078169097192585,
+      "x": 1,
+      "y": 1,
+      "pes": 630
+    },
+    {
+      "phase": "complete_matrix_epoch",
+      "case": 0
+    },
+    {
+      "phase": "arm",
+      "case": 0
+    },
+    {
+      "phase": "start",
+      "wall_seconds": 1.4116317559964955,
+      "case": 0,
+      "upload_arm_seconds": 0.00012775789946317673
+    },
+    {
+      "phase": "start_submitted",
+      "wall_seconds": 1.4116614200174809,
+      "case": 0
+    },
+    {
+      "phase": "start_task_done",
+      "wall_seconds": 1.4116774378344417,
+      "case": 0
+    }
+  ],
+  "device_events": [
+    "@419 last I",
+    "@443 source I",
+    "@1045 first I",
+    "@132196 Caught signal 15",
+    "@132196 Caught signal 15",
+    "@132197 Stopping due to signal 15 (Terminated)",
+    "@132197 Caught signal 15"
+  ],
+  "log_sha256": {
+    "sim.log": "479444874098d94a69a6596adfc9efa055f86d4d0369f5c9750c888f215e0ad7",
+    "run.log": "f116f9bcbfe87b8386f51bfe6e38814806e9a2afc60d10eef99461e92448ef06"
+  },
+  "observation": "Host submitted uploads and start at1.41seconds; device initialization markers appeared at419..1045cycles. No arm or start marker before132197cycle timeout. Host submission does not demonstrate device completion.",
+  "next_change": "Two memcpy channels; do not upload unused FP8 operands in BF16-only simulation; D2H initialization/arm fences; run900seconds with2GiB/noSwap/2CPU caps."
+}

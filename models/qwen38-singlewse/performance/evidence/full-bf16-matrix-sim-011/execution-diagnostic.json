@@ -1,0 +1,118 @@
+{
+  "physical": false,
+  "accepted": false,
+  "host_events": [
+    {
+      "phase": "upload_resident_banks",
+      "physical": false
+    },
+    {
+      "phase": "aliases_submitted",
+      "wall_seconds": 1.5341247669421136
+    },
+    {
+      "phase": "target_upload_submitted",
+      "wall_seconds": 1.5345517960377038,
+      "x": 301,
+      "y": 0,
+      "pes": 330
+    },
+    {
+      "phase": "target_upload_submitted",
+      "wall_seconds": 1.535269137006253,
+      "x": 1,
+      "y": 1,
+      "pes": 630
+    },
+    {
+      "phase": "initialization_observed",
+      "wall_seconds": 205.02784855803475
+    },
+    {
+      "phase": "complete_matrix_epoch",
+      "case": 0
+    },
+    {
+      "phase": "arm",
+      "case": 0
+    },
+    {
+      "phase": "all_pes_armed",
+      "wall_seconds": 259.3308588368818,
+      "case": 0
+    },
+    {
+      "phase": "start",
+      "wall_seconds": 259.33092641085386,
+      "case": 0,
+      "upload_arm_seconds": 54.29914222098887
+    },
+    {
+      "phase": "start_submitted",
+      "wall_seconds": 259.33098239824176,
+      "case": 0
+    },
+    {
+      "phase": "start_task_done",
+      "wall_seconds": 259.53114797221497,
+      "case": 0
+    },
+    {
+      "phase": "progress",
+      "case": 0,
+      "received_dot_join_gather_sent_teardown_finished_errors": [
+        106,
+        118,
+        384,
+        6,
+        679,
+        952,
+        1114,
+        0
+      ]
+    },
+    {
+      "phase": "progress",
+      "case": 0,
+      "received_dot_join_gather_sent_teardown_finished_errors": [
+        961,
+        960,
+        960,
+        52,
+        1013,
+        1261,
+        1262,
+        0
+      ]
+    }
+  ],
+  "device_events": [
+    "@449 last I",
+    "@451 source I",
+    "@1053 first I",
+    "@125608 last A",
+    "@125930 last armed",
+    "@128823 source A",
+    "@129100 source armed",
+    "@129425 first A",
+    "@129741 first armed",
+    "@132507 source S",
+    "@132507 last S",
+    "@132570 source transmit issued",
+    "@132607 source unblocked",
+    "@133109 first S",
+    "@135753 source data sent",
+    "@135771 source control sent",
+    "@135831 source torn",
+    "@139113 first J",
+    "@139577 last R",
+    "@140694 last D",
+    "@143811 source returned",
+    "@354778 Caught signal 11"
+  ],
+  "log_sha256": {
+    "run.log": "6f00d779dd506a1e317d77ef37ec93c6c85d4e16a735e4d7d4f71e9b35e92996",
+    "sim.log": "1c70358f421af5db2c91b923e0197ebd62290fe9474711568ebb6e4b112b1b9d"
+  },
+  "scope": "Full dataflow reached return and complete counters; numerical/readback gate unfinished. Simulator SIG11 at354778 cycles causes runtime abort134; exact fault cause unproven."
+}

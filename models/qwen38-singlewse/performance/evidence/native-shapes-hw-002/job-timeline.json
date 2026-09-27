@@ -1,0 +1,93 @@
+{
+  "utc": "2026-09-27T20:34:04.370252+00:00",
+  "jobs": [
+    {
+      "id": "wsjob-lg9q8nzwasdb6af8sfrbxs",
+      "type": "compile",
+      "phase": "SUCCEEDED",
+      "created": "2026-09-27T20:23:18Z",
+      "execution_time": "2026-09-27T20:23:29Z",
+      "completion_time": "2026-09-27T20:24:01Z",
+      "conditions": [
+        {
+          "lastTransitionTime": "2026-09-27T20:23:18Z",
+          "message": "job created",
+          "type": "Created"
+        },
+        {
+          "lastTransitionTime": "2026-09-27T20:23:19Z",
+          "message": "job queueing to be scheduled",
+          "type": "Queueing"
+        },
+        {
+          "lastTransitionTime": "2026-09-27T20:23:19Z",
+          "message": "job scheduled and waiting to be initialized",
+          "type": "Scheduled"
+        },
+        {
+          "lastTransitionTime": "2026-09-27T20:23:22Z",
+          "message": "job initializing with image pulling/config update/...",
+          "type": "Initializing"
+        },
+        {
+          "lastTransitionTime": "2026-09-27T20:23:29Z",
+          "message": "job started running",
+          "type": "Running"
+        },
+        {
+          "lastTransitionTime": "2026-09-27T20:24:01Z",
+          "message": "job terminated by client with status: Succeeded",
+          "type": "Succeeded"
+        }
+      ],
+      "system_count": 0
+    },
+    {
+      "id": "wsjob-ax3f6qgfhwbgg8qj9rhgtp",
+      "type": "execute",
+      "phase": "SUCCEEDED",
+      "created": "2026-09-27T20:24:09Z",
+      "execution_time": "2026-09-27T20:27:43Z",
+      "completion_time": "2026-09-27T20:28:32Z",
+      "conditions": [
+        {
+          "lastTransitionTime": "2026-09-27T20:24:09Z",
+          "message": "job created",
+          "type": "Created"
+        },
+        {
+          "lastTransitionTime": "2026-09-27T20:24:10Z",
+          "message": "job queueing to be scheduled",
+          "type": "Queueing"
+        },
+        {
+          "lastTransitionTime": "2026-09-27T20:27:28Z",
+          "message": "job scheduled and waiting to be initialized",
+          "type": "Scheduled"
+        },
+        {
+          "lastTransitionTime": "2026-09-27T20:27:34Z",
+          "message": "Infrastructure setup completed",
+          "type": "InfraSetupJobTerminated"
+        },
+        {
+          "lastTransitionTime": "2026-09-27T20:27:36Z",
+          "message": "job initializing with image pulling/config update/...",
+          "type": "Initializing"
+        },
+        {
+          "lastTransitionTime": "2026-09-27T20:27:43Z",
+          "message": "job started running",
+          "type": "Running"
+        },
+        {
+          "lastTransitionTime": "2026-09-27T20:28:32Z",
+          "message": "job terminated by client with status: Succeeded",
+          "type": "Succeeded"
+        }
+      ],
+      "system_count": 1
+    }
+  ],
+  "note": "Scheduler and execution timestamps, not provider-billed node hours. Terminal jobs and current system release are separately audited."
+}

@@ -1,0 +1,26 @@
+param memcpy_params;param rows:u16;param columns:u16;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);const clock=@import_module("<time>");
+const unpacker=@import_module("fp8_unpack_shift.csl",.{.max_pairs=128});
+const fp8=@import_module("fp8_shape.csl",.{.rows=rows,.columns=columns});
+const bf_dot=@import_module("bf16_shape.csl",.{.rows=rows,.columns=columns});
+var bank=@zeros([8814]u32);var packet=@zeros([65]u32);var decoded=@zeros([256]u16);
+var output=@zeros([16]f32);var ticks=@zeros([6]u16);var audit=@zeros([4]u32);
+const wp:[*]u32=&bank;const pp:[*]u32=&packet;const dp:[*]u16=&decoded;const op:[*]f32=&output;const tp:[*]u16=&ticks;const ap:[*]u32=&audit;
+fn measure(kind:u16,decode_each:u16) void {
+ @assert(kind<=1 and decode_each<=1 and (kind==0 or decode_each==0));
+ for(@range(u16,16))|i|{output[i]=0.0;}
+ audit[0]=0;audit[1]=kind;audit[2]=decode_each;audit[3]=rows*columns;
+ if(kind==0){unpacker.decode(@ptrcast([*]u16,wp),dp,128);}
+ clock.enable_tsc();clock.get_timestamp(@ptrcast(*[3]u16,tp));
+ for(@range(u16,32))|i|{
+  if(kind==0){
+   if(decode_each==1){unpacker.decode(@ptrcast([*]u16,wp),dp,128);}
+   fp8.compute(dp,@ptrcast([*]u16,pp),op,@bitcast(f32,packet[columns/2]),@bitcast(f32,bank[110*64]));
+  }else{bf_dot.compute(@ptrcast([*]u16,&bank[110*65+6*128]),@ptrcast([*]u16,pp),op);}
+  audit[0]+=1;
+ }
+ clock.get_timestamp(@ptrcast(*[3]u16,&ticks[3]));clock.disable_tsc();sys.unblock_cmd_stream();
+}
+comptime {
+ @export_symbol(wp,"bank");@export_symbol(pp,"packet");@export_symbol(op,"output");@export_symbol(tp,"ticks");@export_symbol(ap,"audit");@export_symbol(measure);
+}

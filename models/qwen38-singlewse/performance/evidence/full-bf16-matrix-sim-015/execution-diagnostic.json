@@ -1,0 +1,98 @@
+{
+  "physical": false,
+  "accepted": false,
+  "host_events": [
+    {
+      "phase": "upload_resident_banks",
+      "physical": false
+    },
+    {
+      "phase": "aliases_submitted",
+      "wall_seconds": 1.4041796629317105
+    },
+    {
+      "phase": "target_upload_submitted",
+      "wall_seconds": 1.405594506766647,
+      "x": 301,
+      "y": 0,
+      "pes": 330
+    },
+    {
+      "phase": "target_upload_submitted",
+      "wall_seconds": 1.407049617730081,
+      "x": 1,
+      "y": 1,
+      "pes": 630
+    },
+    {
+      "phase": "initialization_observed",
+      "wall_seconds": 199.70106684276834
+    },
+    {
+      "phase": "complete_matrix_epoch",
+      "case": 0
+    },
+    {
+      "phase": "arm",
+      "case": 0
+    },
+    {
+      "phase": "all_pes_armed",
+      "wall_seconds": 253.34386372705922,
+      "case": 0
+    },
+    {
+      "phase": "start",
+      "wall_seconds": 253.3439343678765,
+      "case": 0,
+      "upload_arm_seconds": 53.63894763402641
+    },
+    {
+      "phase": "start_submitted",
+      "wall_seconds": 253.34397437702864,
+      "case": 0
+    },
+    {
+      "phase": "start_task_done",
+      "wall_seconds": 253.5444942349568,
+      "case": 0
+    },
+    {
+      "phase": "progress",
+      "case": 0,
+      "received_dot_join_gather_sent_teardown_finished_errors": [
+        106,
+        118,
+        406,
+        7,
+        702,
+        961,
+        1122,
+        0
+      ]
+    },
+    {
+      "phase": "progress",
+      "case": 0,
+      "received_dot_join_gather_sent_teardown_finished_errors": [
+        961,
+        960,
+        960,
+        52,
+        1013,
+        1261,
+        1262,
+        0
+      ]
+    },
+    {
+      "phase": "completion_counters_checked",
+      "wall_seconds": 391.38569392310455,
+      "case": 0
+    }
+  ],
+  "device_events": [
+    "@316710 Caught signal 11"
+  ],
+  "scope": "Complete counters pass; simulator crashes during post-execution readback. Expected1320-byte response and driver order suggest first330-worker scalar verification read, but root cause is not proven; no completed numerical/retention acceptance."
+}

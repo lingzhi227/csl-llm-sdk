@@ -1,0 +1,461 @@
+{
+  "schema": "wse-complete-original-bf16-matrix-qualification-v1",
+  "physical": true,
+  "full_model": false,
+  "attempt": "full-bf16-matrix-hw-003",
+  "model": "Qwen/Qwen3.8-27B-FP8",
+  "revision": "017b9c7af6b5689d5dd426a76e0bc077eb5ca20a",
+  "matrix": "model.language_model.layers.0.linear_attn.in_proj_a.weight",
+  "matrix_shape": [
+    48,
+    5120
+  ],
+  "application": [
+    631,
+    2
+  ],
+  "worker_pes": 960,
+  "fixture_sha256": "b9fc3fa2e6150f2de1e017cc5f0490ec4374ca527e25bc1e22e4250e9f646f1c",
+  "artifact_sha256": "7173a277dec4818d110e035447d1117ea152fb5846d43bc0baec97f3a14f4818",
+  "memcpy_channels": 1,
+  "original_bf16_matrix_cases": 5,
+  "fp8_cohost_smoke_cases": 1,
+  "native_output_values": 11520,
+  "subtree_values": 11520,
+  "returned_values": 288,
+  "original_bf16_returned_values": 240,
+  "exact_input_words": 374400,
+  "original_target_matrix_bytes": 491520,
+  "full_original_bank_readback_bytes": 33832240,
+  "full_transfer_readback_bytes": 33845760,
+  "retained_padding_bytes": 13520,
+  "max_compiled_sram_plus_stack": 48048,
+  "all_original_weights_retained": true,
+  "all_outputs_exact": true,
+  "replay_exact": true,
+  "cases": [
+    {
+      "case": 0,
+      "kind": "bf16",
+      "mode": "mixed",
+      "complete_original_matrix": true,
+      "slot": 6,
+      "replay_of": null,
+      "source_send_to_all_outputs_return_cycles": 10824,
+      "max_local_fp64_error": 8.940696716308594e-08,
+      "max_subtree_fp64_error": 3.845198079943657e-07,
+      "max_output_fp64_error": 3.845198079943657e-07,
+      "host_upload_arm_seconds": 0.0028945952653884888,
+      "host_start_seconds": 0.001945306546986103
+    },
+    {
+      "case": 1,
+      "kind": "bf16",
+      "mode": "zero",
+      "complete_original_matrix": true,
+      "slot": 6,
+      "replay_of": null,
+      "source_send_to_all_outputs_return_cycles": 10824,
+      "max_local_fp64_error": 0.0,
+      "max_subtree_fp64_error": 0.0,
+      "max_output_fp64_error": 0.0,
+      "host_upload_arm_seconds": 0.002759103663265705,
+      "host_start_seconds": 0.001987976022064686
+    },
+    {
+      "case": 2,
+      "kind": "bf16",
+      "mode": "tiny",
+      "complete_original_matrix": true,
+      "slot": 6,
+      "replay_of": null,
+      "source_send_to_all_outputs_return_cycles": 10824,
+      "max_local_fp64_error": 9.693522803355793e-27,
+      "max_subtree_fp64_error": 4.168972111912003e-26,
+      "max_output_fp64_error": 4.168972111912003e-26,
+      "host_upload_arm_seconds": 0.002643573097884655,
+      "host_start_seconds": 0.0018436852842569351
+    },
+    {
+      "case": 3,
+      "kind": "bf16",
+      "mode": "boundary",
+      "complete_original_matrix": true,
+      "slot": 6,
+      "replay_of": null,
+      "source_send_to_all_outputs_return_cycles": 10824,
+      "max_local_fp64_error": 0.01171875,
+      "max_subtree_fp64_error": 0.0503997802734375,
+      "max_output_fp64_error": 0.0503997802734375,
+      "host_upload_arm_seconds": 0.0028059836477041245,
+      "host_start_seconds": 0.0019289469346404076
+    },
+    {
+      "case": 4,
+      "kind": "fp8",
+      "mode": "fp8_cohost_smoke",
+      "complete_original_matrix": false,
+      "slot": 0,
+      "replay_of": null,
+      "source_send_to_all_outputs_return_cycles": 10633,
+      "max_local_fp64_error": 1.0782969184219837e-08,
+      "max_subtree_fp64_error": 2.60278625319188e-08,
+      "max_output_fp64_error": 2.60278625319188e-08,
+      "host_upload_arm_seconds": 0.0027342531830072403,
+      "host_start_seconds": 0.002784724347293377
+    },
+    {
+      "case": 5,
+      "kind": "bf16",
+      "mode": "mixed",
+      "complete_original_matrix": true,
+      "slot": 6,
+      "replay_of": 0,
+      "source_send_to_all_outputs_return_cycles": 10824,
+      "max_local_fp64_error": 8.940696716308594e-08,
+      "max_subtree_fp64_error": 3.845198079943657e-07,
+      "max_output_fp64_error": 3.845198079943657e-07,
+      "host_upload_arm_seconds": 0.0031103864312171936,
+      "host_start_seconds": 0.0020149461925029755
+    }
+  ],
+  "host_bank_upload_and_initialization_seconds": 0.33671162463724613,
+  "host_observation_phases": [
+    {
+      "phase": "upload_resident_banks",
+      "physical": true
+    },
+    {
+      "phase": "aliases_submitted",
+      "wall_seconds": 110.0507488725707
+    },
+    {
+      "phase": "initialization_observed",
+      "wall_seconds": 110.38630999717861
+    },
+    {
+      "phase": "complete_matrix_epoch",
+      "case": 0
+    },
+    {
+      "phase": "arm",
+      "case": 0
+    },
+    {
+      "phase": "all_pes_armed",
+      "wall_seconds": 110.39140615146607,
+      "case": 0
+    },
+    {
+      "phase": "start",
+      "wall_seconds": 110.39143901132047,
+      "case": 0,
+      "upload_arm_seconds": 0.0028945952653884888
+    },
+    {
+      "phase": "start_submitted",
+      "wall_seconds": 110.39188584499061,
+      "case": 0
+    },
+    {
+      "phase": "completion_counters_checked",
+      "wall_seconds": 110.39355322904885,
+      "case": 0
+    },
+    {
+      "phase": "all_input_packets_checked",
+      "wall_seconds": 110.40046683698893,
+      "case": 0
+    },
+    {
+      "phase": "all_native_dots_checked",
+      "wall_seconds": 110.40164578706026,
+      "case": 0
+    },
+    {
+      "phase": "all_subtrees_checked",
+      "wall_seconds": 110.40314758010209,
+      "case": 0
+    },
+    {
+      "phase": "all_outputs_checked",
+      "wall_seconds": 110.40660285018384,
+      "case": 0,
+      "cycles": 10824
+    },
+    {
+      "phase": "complete_matrix_epoch",
+      "case": 1
+    },
+    {
+      "phase": "arm",
+      "case": 1
+    },
+    {
+      "phase": "all_pes_armed",
+      "wall_seconds": 110.40979580581188,
+      "case": 1
+    },
+    {
+      "phase": "start",
+      "wall_seconds": 110.40982562676072,
+      "case": 1,
+      "upload_arm_seconds": 0.002759103663265705
+    },
+    {
+      "phase": "start_submitted",
+      "wall_seconds": 110.4102526595816,
+      "case": 1
+    },
+    {
+      "phase": "completion_counters_checked",
+      "wall_seconds": 110.41192819457501,
+      "case": 1
+    },
+    {
+      "phase": "all_input_packets_checked",
+      "wall_seconds": 110.41814952716231,
+      "case": 1
+    },
+    {
+      "phase": "all_native_dots_checked",
+      "wall_seconds": 110.41921871621162,
+      "case": 1
+    },
+    {
+      "phase": "all_subtrees_checked",
+      "wall_seconds": 110.42071740888059,
+      "case": 1
+    },
+    {
+      "phase": "all_outputs_checked",
+      "wall_seconds": 110.42395608592778,
+      "case": 1,
+      "cycles": 10824
+    },
+    {
+      "phase": "complete_matrix_epoch",
+      "case": 2
+    },
+    {
+      "phase": "arm",
+      "case": 2
+    },
+    {
+      "phase": "all_pes_armed",
+      "wall_seconds": 110.42701923195273,
+      "case": 2
+    },
+    {
+      "phase": "start",
+      "wall_seconds": 110.42704947292805,
+      "case": 2,
+      "upload_arm_seconds": 0.002643573097884655
+    },
+    {
+      "phase": "start_submitted",
+      "wall_seconds": 110.42750371620059,
+      "case": 2
+    },
+    {
+      "phase": "completion_counters_checked",
+      "wall_seconds": 110.42900325916708,
+      "case": 2
+    },
+    {
+      "phase": "all_input_packets_checked",
+      "wall_seconds": 110.43522407207638,
+      "case": 2
+    },
+    {
+      "phase": "all_native_dots_checked",
+      "wall_seconds": 110.43639298155904,
+      "case": 2
+    },
+    {
+      "phase": "all_subtrees_checked",
+      "wall_seconds": 110.43791415542364,
+      "case": 2
+    },
+    {
+      "phase": "all_outputs_checked",
+      "wall_seconds": 110.441185942851,
+      "case": 2,
+      "cycles": 10824
+    },
+    {
+      "phase": "complete_matrix_epoch",
+      "case": 3
+    },
+    {
+      "phase": "arm",
+      "case": 3
+    },
+    {
+      "phase": "all_pes_armed",
+      "wall_seconds": 110.4444150198251,
+      "case": 3
+    },
+    {
+      "phase": "start",
+      "wall_seconds": 110.44444453995675,
+      "case": 3,
+      "upload_arm_seconds": 0.0028059836477041245
+    },
+    {
+      "phase": "start_submitted",
+      "wall_seconds": 110.44489330425858,
+      "case": 3
+    },
+    {
+      "phase": "completion_counters_checked",
+      "wall_seconds": 110.44648360740393,
+      "case": 3
+    },
+    {
+      "phase": "all_input_packets_checked",
+      "wall_seconds": 110.45264459960163,
+      "case": 3
+    },
+    {
+      "phase": "all_native_dots_checked",
+      "wall_seconds": 110.45367357786745,
+      "case": 3
+    },
+    {
+      "phase": "all_subtrees_checked",
+      "wall_seconds": 110.45506148040295,
+      "case": 3
+    },
+    {
+      "phase": "all_outputs_checked",
+      "wall_seconds": 110.45833213813603,
+      "case": 3,
+      "cycles": 10824
+    },
+    {
+      "phase": "complete_matrix_epoch",
+      "case": 4
+    },
+    {
+      "phase": "arm",
+      "case": 4
+    },
+    {
+      "phase": "all_pes_armed",
+      "wall_seconds": 110.46148034371436,
+      "case": 4
+    },
+    {
+      "phase": "start",
+      "wall_seconds": 110.46150925476104,
+      "case": 4,
+      "upload_arm_seconds": 0.0027342531830072403
+    },
+    {
+      "phase": "start_submitted",
+      "wall_seconds": 110.46194656845182,
+      "case": 4
+    },
+    {
+      "phase": "completion_counters_checked",
+      "wall_seconds": 110.46445291955024,
+      "case": 4
+    },
+    {
+      "phase": "all_input_packets_checked",
+      "wall_seconds": 110.47259373869747,
+      "case": 4
+    },
+    {
+      "phase": "all_native_dots_checked",
+      "wall_seconds": 110.47380744945258,
+      "case": 4
+    },
+    {
+      "phase": "all_subtrees_checked",
+      "wall_seconds": 110.47589981742203,
+      "case": 4
+    },
+    {
+      "phase": "all_outputs_checked",
+      "wall_seconds": 110.48246572166681,
+      "case": 4,
+      "cycles": 10633
+    },
+    {
+      "phase": "complete_matrix_epoch",
+      "case": 5
+    },
+    {
+      "phase": "arm",
+      "case": 5
+    },
+    {
+      "phase": "all_pes_armed",
+      "wall_seconds": 110.48631707485765,
+      "case": 5
+    },
+    {
+      "phase": "start",
+      "wall_seconds": 110.4863482248038,
+      "case": 5,
+      "upload_arm_seconds": 0.0031103864312171936
+    },
+    {
+      "phase": "start_submitted",
+      "wall_seconds": 110.48680681921542,
+      "case": 5
+    },
+    {
+      "phase": "completion_counters_checked",
+      "wall_seconds": 110.48848410416394,
+      "case": 5
+    },
+    {
+      "phase": "all_input_packets_checked",
+      "wall_seconds": 110.49467623606324,
+      "case": 5
+    },
+    {
+      "phase": "all_native_dots_checked",
+      "wall_seconds": 110.49575941544026,
+      "case": 5
+    },
+    {
+      "phase": "all_subtrees_checked",
+      "wall_seconds": 110.49734700936824,
+      "case": 5
+    },
+    {
+      "phase": "all_outputs_checked",
+      "wall_seconds": 110.500832548365,
+      "case": 5,
+      "cycles": 10824
+    },
+    {
+      "phase": "bank_retention",
+      "full_background": true
+    }
+  ],
+  "jobs": [
+    {
+      "cancelled": false,
+      "id": "wsjob-yudxujmwfgoq7qsbtfbrj7",
+      "phase": "SUCCEEDED",
+      "released": true
+    },
+    {
+      "cancelled": false,
+      "id": "wsjob-xkjoqlpygvj4jn5msrupvd",
+      "phase": "SUCCEEDED",
+      "released": true
+    }
+  ],
+  "all_jobs_released": true,
+  "background_scope": "Representative original mixed-bank prefixes at the exact candidate per-PE capacities; only target BF16 slot has complete frozen-atlas tensor identity.",
+  "scope": "Complete original layer0 in_proj_a: all48 outputs and5120 inputs at frozen BF16 owner addresses. One2600-word broadcast,24 K40 trees, ordered concatenation and controller return. Host supplies independent BF16 input; not autonomous model inference.",
+  "timing_note": "Same source clock from2600-word input send to all48 output values returned. Includes input,960 native tiles,24 K40 trees,ordered vector gather and return. One completion D2H fence follows start; each PE admits its read only after local finish, and early-finished PE copies may overlap remaining work. No time is subtracted. Excludes host arm and final retention. Independent host operands, no model rate.",
+  "clock_hz": null,
+  "full_model_speed_target_achieved": false
+}

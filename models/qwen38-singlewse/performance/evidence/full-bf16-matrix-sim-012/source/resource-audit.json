@@ -1,0 +1,201 @@
+{
+  "schema": "wse-explicit-sdk-lease-audit-v1",
+  "passed": true,
+  "source_sha256": {
+    "pe.csl": "7ae26c99498e09fb0f05483a8b9d0a86ffbf91ac18cd40ce4bb59733bb0e1895",
+    "counter_window.csl": "5f1649dc5e7f26f7778e2e9cb13dd5f146ee67e8782c2ec5ae955cc37e72e868",
+    "fp8_unpack_shift.csl": "9fa14188758bd1dae78f1fbff7426513bc1fca004dc81b540e91df39a2c4eab3",
+    "fp8_dot.csl": "3c8ed07cb664579ded0d7a9979ca4d62debf514ebf7e231b17e941ba62cae349",
+    "bf16_dot.csl": "df87de73558cb9549c5a4bef6522dd9a675ce9da3b0de05d598a949973350901"
+  },
+  "leases": [
+    {
+      "file": "pe.csl",
+      "resource": "descriptor",
+      "index": 2,
+      "descriptor_kind": "dsr_dest"
+    },
+    {
+      "file": "pe.csl",
+      "resource": "descriptor",
+      "index": 2,
+      "descriptor_kind": "dsr_src0"
+    },
+    {
+      "file": "pe.csl",
+      "resource": "descriptor",
+      "index": 6,
+      "descriptor_kind": "dsr_dest"
+    },
+    {
+      "file": "pe.csl",
+      "resource": "descriptor",
+      "index": 6,
+      "descriptor_kind": "dsr_src0"
+    },
+    {
+      "file": "pe.csl",
+      "resource": "descriptor",
+      "index": 3,
+      "descriptor_kind": "dsr_dest"
+    },
+    {
+      "file": "pe.csl",
+      "resource": "descriptor",
+      "index": 3,
+      "descriptor_kind": "dsr_src0"
+    },
+    {
+      "file": "pe.csl",
+      "resource": "descriptor",
+      "index": 5,
+      "descriptor_kind": "dsr_dest"
+    },
+    {
+      "file": "pe.csl",
+      "resource": "descriptor",
+      "index": 5,
+      "descriptor_kind": "dsr_src0"
+    },
+    {
+      "file": "pe.csl",
+      "resource": "descriptor",
+      "index": 1,
+      "descriptor_kind": "dsr_dest"
+    },
+    {
+      "file": "pe.csl",
+      "resource": "descriptor",
+      "index": 1,
+      "descriptor_kind": "dsr_src0"
+    },
+    {
+      "file": "pe.csl",
+      "resource": "input_queue",
+      "index": 2,
+      "descriptor_kind": null
+    },
+    {
+      "file": "pe.csl",
+      "resource": "input_queue",
+      "index": 3,
+      "descriptor_kind": null
+    },
+    {
+      "file": "pe.csl",
+      "resource": "input_queue",
+      "index": 4,
+      "descriptor_kind": null
+    },
+    {
+      "file": "pe.csl",
+      "resource": "input_queue",
+      "index": 5,
+      "descriptor_kind": null
+    },
+    {
+      "file": "pe.csl",
+      "resource": "output_queue",
+      "index": 2,
+      "descriptor_kind": null
+    },
+    {
+      "file": "pe.csl",
+      "resource": "microthread",
+      "index": 5,
+      "descriptor_kind": null
+    },
+    {
+      "file": "pe.csl",
+      "resource": "microthread",
+      "index": 6,
+      "descriptor_kind": null
+    },
+    {
+      "file": "pe.csl",
+      "resource": "microthread",
+      "index": 3,
+      "descriptor_kind": null
+    },
+    {
+      "file": "pe.csl",
+      "resource": "microthread",
+      "index": 4,
+      "descriptor_kind": null
+    },
+    {
+      "file": "pe.csl",
+      "resource": "microthread",
+      "index": 5,
+      "descriptor_kind": null
+    },
+    {
+      "file": "pe.csl",
+      "resource": "microthread",
+      "index": 2,
+      "descriptor_kind": null
+    },
+    {
+      "file": "pe.csl",
+      "resource": "microthread",
+      "index": 4,
+      "descriptor_kind": null
+    },
+    {
+      "file": "fp8_dot.csl",
+      "resource": "descriptor",
+      "index": 4,
+      "descriptor_kind": "dsr_dest"
+    },
+    {
+      "file": "fp8_dot.csl",
+      "resource": "descriptor",
+      "index": 4,
+      "descriptor_kind": "dsr_src0"
+    },
+    {
+      "file": "fp8_dot.csl",
+      "resource": "descriptor",
+      "index": 4,
+      "descriptor_kind": "dsr_src1"
+    },
+    {
+      "file": "bf16_dot.csl",
+      "resource": "descriptor",
+      "index": 7,
+      "descriptor_kind": "dsr_dest"
+    },
+    {
+      "file": "bf16_dot.csl",
+      "resource": "descriptor",
+      "index": 7,
+      "descriptor_kind": "dsr_src0"
+    },
+    {
+      "file": "bf16_dot.csl",
+      "resource": "descriptor",
+      "index": 4,
+      "descriptor_kind": "dsr_dest"
+    },
+    {
+      "file": "bf16_dot.csl",
+      "resource": "descriptor",
+      "index": 4,
+      "descriptor_kind": "dsr_src0"
+    },
+    {
+      "file": "bf16_dot.csl",
+      "resource": "descriptor",
+      "index": 4,
+      "descriptor_kind": "dsr_src1"
+    }
+  ],
+  "sdk_reserved_descriptor_indices": [
+    0
+  ],
+  "sdk_reserved_queue_and_microthread_indices": [
+    0,
+    1
+  ],
+  "scope": "Explicit literal application leases avoid default SDK memcpy reservations; dynamic lifetimes and queue liveness require execution."
+}
