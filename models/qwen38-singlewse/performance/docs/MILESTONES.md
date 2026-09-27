@@ -475,3 +475,24 @@ simulator001 exposed concurrent send/receive defaulting toUT2 at the controller;
 002 changes resource assignments and retains the identical numerical fixture.
 All sources, diagnostics and release receipts are preserved. Twenty-one source
 tests pass. See RESIDENT-EPOCHS.md for protocol and measurement limits.
+
+## P12: complete original-model ownership and lifetime atlas
+
+All1,251 original tensors,498 matrices,64 layers,96-position state and1,332 values
+have explicit physical owners or storage intervals. The750x1160 fabric contains
+860,880 FP8 bankPE and9,120 actorPE.36,864 banks cohost32x32 FP32 GDN shards;
+824,000 non-state banks form the BF16 ring.620 compact whole-K dispatch segments
+cover all matrices. Maximum bank data reservation35,256 bytes still requires
+actual composed code/stack/scratch admission. Distributed values, normalization
+gains, canonical weights and optional full diagnostic capture are explicit.
+
+The independent auditor imports no builder code and visits all105,052,160 real
+tile addresses. Complete geometry, original tensor identity, all state axes,
+canonical byte slices and4,851 overlapping value lifetime pairs pass. Workstation
+runtime4.757seconds, peakRSS422,316KiB under2GiB/no-swap/twoCPU/240seconds and shared
+lock. Service and lock release are verified. No hardware is allocated; a fresh
+account/system audit reports no owned job or assignment.25 source tests pass.
+
+This is an ownership and addressing result. New state arithmetic, routing, actual
+SRAM and complete token feedback are not admitted. Full-model2,000tokens/s remains
+unmet. See COMPLETE-MODEL-ATLAS.md and frozen atlas-audit-001 evidence.

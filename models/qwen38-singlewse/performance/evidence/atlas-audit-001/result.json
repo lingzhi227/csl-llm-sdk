@@ -1,0 +1,74 @@
+{
+  "schema": "wse-complete-model-atlas-audit-v1",
+  "passed": true,
+  "physical": false,
+  "weights_read": false,
+  "full_model_executable": false,
+  "full_model_speed_target_achieved": false,
+  "atlas_sha256": "19830e61b881f592c92710fc59e6af8d40f1b3afad70d8905ebbedda461f21db",
+  "auditor_sha256": "01e8c59771e7ef15ea64ca23cb7f7cff3457b92ee031adcbd64aadb5c47aadf0",
+  "source_metadata_sha256": {
+    "model-graph.json": "c6b031b2dbbda10f318210d48f0c71f95782e12459a27459f29d053a4cd67ad1",
+    "tensors.json": "35ee74a4b6941612aaa7b08ecf7fd17f301afb0f4797801fa47e1c152d150781",
+    "config.json": "74227dd615bf1ea975aa676bdf355a0379858c12f394b5365cd9dfa5fc2c70bc",
+    "rotary-frequencies.json": "51c7c760a7c8c32b3e5b5431f0cb4d23478ba70412e1672b28853ebbd5300595"
+  },
+  "matrix_tiles_visited": {
+    "fp8": 95027200,
+    "bf16": 10024960
+  },
+  "original_tensors_checked": 1251,
+  "application_pes": 870000,
+  "actor_pes": 9120,
+  "bank_pes": 860880,
+  "gdn_state_pes": 36864,
+  "kv_cache_bytes": 6291456,
+  "canonical_tensors": 353,
+  "value_lifetimes": 1332,
+  "concurrent_value_pairs_checked": 4851,
+  "bank_profiles": [
+    {
+      "fp8_slots": 110,
+      "bf16_slots": 0,
+      "state_capacity_bytes": 4096,
+      "pes": 21504,
+      "data_bytes": 32696,
+      "remaining_code_stack_scratch_bytes": 15432
+    },
+    {
+      "fp8_slots": 110,
+      "bf16_slots": 12,
+      "state_capacity_bytes": 0,
+      "pes": 362960,
+      "data_bytes": 34744,
+      "remaining_code_stack_scratch_bytes": 13384
+    },
+    {
+      "fp8_slots": 110,
+      "bf16_slots": 13,
+      "state_capacity_bytes": 0,
+      "pes": 136960,
+      "data_bytes": 35256,
+      "remaining_code_stack_scratch_bytes": 12872
+    },
+    {
+      "fp8_slots": 111,
+      "bf16_slots": 0,
+      "state_capacity_bytes": 4096,
+      "pes": 15376,
+      "data_bytes": 32956,
+      "remaining_code_stack_scratch_bytes": 15172
+    },
+    {
+      "fp8_slots": 111,
+      "bf16_slots": 12,
+      "state_capacity_bytes": 0,
+      "pes": 324080,
+      "data_bytes": 35004,
+      "remaining_code_stack_scratch_bytes": 13124
+    }
+  ],
+  "duration_seconds": 4.757372866850346,
+  "max_rss_kib": 422316,
+  "scope": "Metadata ownership, dispatch addressing, coverage and lifetimes only. No routes, compiled SRAM, numerical execution or token performance admitted."
+}

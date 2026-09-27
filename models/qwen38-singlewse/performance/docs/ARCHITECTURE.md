@@ -26,8 +26,10 @@ The new implementation separates five inspectable, serializable levels:
    artifact identity, same-PE timestamps and invocation-correlated release.
 
 The checked stream/PE/CSL multicast pattern, model dependency importer and
-compact matrix-bank ownership planner are implemented. Physical model placement
-and a complete executable model schedule are not implemented. A verifier for this restricted pattern is not a general proof of
+compact matrix-bank ownership planner are implemented. P12 adds a complete
+physical ownership/lifetime atlas (see COMPLETE-MODEL-ATLAS.md). Full-model routes,
+actual composed SRAM admission and a complete executable schedule remain
+unimplemented. A verifier for this restricted pattern is not a general proof of
 arbitrary graph deadlock freedom. The model and region compiler will be added
 incrementally; placeholder stages must not be reported as implemented.
 

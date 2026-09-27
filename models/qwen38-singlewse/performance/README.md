@@ -10,6 +10,12 @@ Qwen3.8-27B-FP8 text model, correct dependent sentence generation, at least
 partial layers, projected operator rates and commercial serving claims cannot
 satisfy that target. The full-model speed target remains unmet; qualified component milestones are recorded below.
 
+P12 now provides an independently audited complete physical ownership and value
+lifetime atlas: all1251 tensors,498 matrices,64 layers and105,052,160 real matrix
+tiles are covered. Co-resident FP8/GDN state, distributed KV and value actors have
+explicit locations and data budgets. This is metadata, not compiled routes/SRAM
+or model execution. See [COMPLETE-MODEL-ATLAS.md](docs/COMPLETE-MODEL-ATLAS.md).
+
 The first executable slice is a compiler-generated 2D multicast / acknowledgement
 microbenchmark, now qualified on 256 physical WSE-3 PEs. It establishes explicit routes, queues, event ownership and
 same-PE cycle timing before adding model computation. It is not model inference.
