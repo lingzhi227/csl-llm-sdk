@@ -1,0 +1,147 @@
+// Resident embedding cohost and credited128-value down partial join.
+// Roles:0 sink/kick,1 collector,2 header relay/join,3 source,4 gated source,5 idle.
+// This is the actual actor body, with host qualification entry points. The full
+// model's device epoch controller and native producers remain separate work.
+param memcpy_params;param role:u16;param source_color:u16;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const tile=@import_module("<tile_config>");
+const actor=role==1 or role==2;const chunk:u16=8;
+const iq=@get_input_queue(2);const cq=@get_input_queue(3);const oq=@get_output_queue(2);
+const rd=@get_dsr(dsr_dest,2);const rs=@get_dsr(dsr_src0,2);
+const cd=@get_dsr(dsr_dest,3);const cs=@get_dsr(dsr_src0,3);
+const sd=@get_dsr(dsr_dest,6);const ss=@get_dsr(dsr_src0,6);
+const ot=@get_local_task_id(8);const ct=@get_local_task_id(9);const st=@get_local_task_id(10);
+const ft=@get_local_task_id(11);const bt=@get_local_task_id(12);
+var bank=@zeros([if(actor) 8814 else 128]u32);
+var values=@zeros([128]u32);var child=@zeros([chunk]u32);var packet=@zeros([if(role==0 or role==4) 65 else 1]u32);
+var audit=@zeros([12]u32);
+const bankp:[*]u32=&bank;const vp:[*]u32=&values;const pp:[*]u32=&packet;const ap:[*]u32=&audit;
+var armed:bool=false;var started:bool=false;var complete:bool=false;
+var child_ready:bool=false;var sending:bool=false;var forward_done:bool=false;
+var source_ready:bool=false;var source_sent:bool=false;var returned:bool=false;
+var own_received:u16=0;var output_index:u16=0;
+fn finish() void {
+ if(started and complete){started=false;armed=false;audit[11]=1;sys.unblock_cmd_stream();}
+}
+fn transmit(base:[*]u32,comptime words:u16) void {
+ const m=@get_dsd(mem1d_dsd,.{.base_address=base,.extent=words});
+ const f=@get_dsd(fabout_dsd,.{.output_queue=oq,.extent=words});
+ @load_to_dsr(ss,m);@load_to_dsr(sd,f,.{.async=true,.ut_id=@get_ut_id(5),.activate=st});
+ @mov32(sd,ss,.{.async=true});
+}
+fn receive_own() void {
+ @assert(own_received<16);
+ const m=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]u32,&values[own_received*chunk]),.extent=chunk});
+ const f=@get_dsd(fabin_dsd,.{.input_queue=iq,.extent=chunk});
+ @load_to_dsr(rd,m);@load_to_dsr(rs,f,.{.async=true,.ut_id=@get_ut_id(2),.activate=ot});
+ @mov32(rd,rs,.{.async=true});
+}
+fn receive_child() void {
+ @assert(!child_ready and output_index<16);
+ const m=@get_dsd(mem1d_dsd,.{.base_address=&child,.extent=chunk});
+ const f=@get_dsd(fabin_dsd,.{.input_queue=cq,.extent=chunk});
+ @load_to_dsr(cd,m);@load_to_dsr(cs,f,.{.async=true,.ut_id=@get_ut_id(3),.activate=ct});
+ @mov32(cd,cs,.{.async=true});
+}
+fn join() void {
+ if(forward_done and own_received>output_index and child_ready and !sending){
+  const own=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]f32,&values[output_index*chunk]),.extent=chunk});
+  const rhs=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]f32,&child),.extent=chunk});
+  @fadds(own,own,rhs);audit[4]+=1;sending=true;
+  transmit(@ptrcast([*]u32,&values[output_index*chunk]),chunk);
+ }
+}
+task own_arrived() void {own_received+=1;audit[1]+=1;join();if(own_received<16){receive_own();}}
+task child_arrived() void {child_ready=true;audit[2]+=1;join();}
+fn try_source() void {
+ if(started and source_ready and !source_sent){source_sent=true;transmit(vp,128);}
+}
+task forwarded_input() void {
+ audit[5]+=1;
+ if(comptime role==2){transmit(vp,65);}
+ else{source_ready=true;try_source();}
+}
+task result_arrived() void {returned=true;audit[1]+=1;complete=source_sent;finish();}
+task sent() void {
+ audit[3]+=1;
+ if(comptime role==0){source_sent=true;complete=returned;finish();}
+ else if(comptime actor){
+  if(!forward_done){
+   // Only the header uses values as the65-word ingress buffer. Reuse is legal
+   // after its forward send callback, and after restoring the next queue color.
+   forward_done=true;audit[6]+=1;
+   tile.output_queue_config.encode_output_queue(2,17);
+   tile.input_queue_config.encode_input_queue(2,13,false);
+   receive_own();join();
+  }else{
+   sending=false;child_ready=false;output_index+=1;
+   if(output_index==16){complete=true;finish();}else{receive_child();join();}
+  }
+ }else{complete=true;finish();}
+}
+fn arm() void {
+ @assert(!armed and !started);armed=true;complete=role==5;child_ready=false;sending=false;
+ own_received=0;output_index=0;source_sent=false;returned=false;
+ forward_done=role!=2;source_ready=role==3;
+ for(@range(u16,12))|i|{audit[i]=0;}audit[0]=1;
+ if(comptime actor){
+  receive_child();
+  if(comptime role==1){receive_own();}
+  else{
+   // Restore both the ingress and forward color on every warm epoch.
+   tile.input_queue_config.encode_input_queue(2,2,false);
+   tile.output_queue_config.encode_output_queue(2,3);
+   const m=@get_dsd(mem1d_dsd,.{.base_address=&values,.extent=65});
+   const f=@get_dsd(fabin_dsd,.{.input_queue=iq,.extent=65});
+   @load_to_dsr(rd,m);@load_to_dsr(rs,f,.{.async=true,.ut_id=@get_ut_id(2),.activate=ft});
+   @mov32(rd,rs,.{.async=true});
+  }
+ }
+ if(comptime role==4){
+  const m=@get_dsd(mem1d_dsd,.{.base_address=&packet,.extent=65});
+  const f=@get_dsd(fabin_dsd,.{.input_queue=iq,.extent=65});
+  @load_to_dsr(rd,m);@load_to_dsr(rs,f,.{.async=true,.ut_id=@get_ut_id(2),.activate=ft});
+  @mov32(rd,rs,.{.async=true});
+ }
+ if(comptime role==0){
+  const m=@get_dsd(mem1d_dsd,.{.base_address=&values,.extent=128});
+  const f=@get_dsd(fabin_dsd,.{.input_queue=iq,.extent=128});
+  @load_to_dsr(rd,m);@load_to_dsr(rs,f,.{.async=true,.ut_id=@get_ut_id(2),.activate=bt});
+  @mov32(rd,rs,.{.async=true});
+ }
+ sys.unblock_cmd_stream();
+}
+fn start() void {
+ @assert(armed and !started);started=true;
+ if(comptime role==0){transmit(pp,65);}
+ if(comptime role==3 or role==4){try_source();}
+ finish();
+}
+// These banks are explicitly assigned embedding-only BF16 tiles in row-major
+//2x128 form. Other tensor classes must not be silently assigned to this role.
+fn embedding_lookup(slot:u16,half:u16) void {
+ @assert(!armed and !started and slot<68 and half<2);
+ if(comptime actor){
+  const m=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]u32,&bank[slot*128+half*64]),.extent=64});
+  const out=@get_dsd(mem1d_dsd,.{.base_address=&values,.extent=64});@mov32(out,m);
+ }
+ sys.unblock_cmd_stream();
+}
+comptime {
+ if(role!=5){
+  @initialize_queue(oq,.{.color=@get_color(if(role==0) 2 else if(role==1) 13 else if(role==2) 3 else source_color)});
+  @bind_local_task(sent,st);
+ }
+ if(actor){
+  @initialize_queue(iq,.{.color=@get_color(if(role==1) 10 else 2)});
+  @initialize_queue(cq,.{.color=@get_color(if(role==1) 14 else 18)});
+  @bind_local_task(own_arrived,ot);@bind_local_task(child_arrived,ct);
+ }
+ if(role==2 or role==4){
+  if(role==4){@initialize_queue(iq,.{.color=@get_color(3)});}
+  @bind_local_task(forwarded_input,ft);
+ }
+ if(role==0){@initialize_queue(iq,.{.color=@get_color(17)});@bind_local_task(result_arrived,bt);}
+ @export_symbol(bankp,"bank");@export_symbol(vp,"values");@export_symbol(pp,"packet");@export_symbol(ap,"audit");
+ @export_symbol(arm);@export_symbol(start);@export_symbol(embedding_lookup);
+}

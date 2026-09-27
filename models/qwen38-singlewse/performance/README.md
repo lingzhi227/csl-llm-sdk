@@ -160,3 +160,15 @@ packet helpers pass1350 simulator words under the existing quantization
 convention; literal-division differences and failures are retained. Complete
 subgraph runtime and bank/actor SRAM are not admitted, and no new hardware
 performance result is claimed. See [MLP-SPATIAL-FUSION.md](docs/MLP-SPATIAL-FUSION.md).
+
+P20 assigns all1251 original text tensors and persistent short-context state to
+an MLP-anchored residency candidate, including5800 embedding-only communication
+helpers. The independent address/capacity audit passes; combined all-role SRAM
+and full execution remain unqualified. Two actual helper roles then pass physical
+three-epoch input relay, credited8-word ordered joins, embedding lookups and full
+original-bank retention. Their maximum SRAM including4KiB stack is46128bytes.
+The import-time host failure is retained; its successful artifact is reused for
+the corrected run. Both submitted jobs release normally and69 source tests pass.
+See [MLP-RESIDENCY-CHUNKS.md](docs/MLP-RESIDENCY-CHUNKS.md). No complete MLP timing
+or new model token rate is claimed; the mainline remains a real complete MLP and
+then complete dependent model inference at>=2000tokens/s.

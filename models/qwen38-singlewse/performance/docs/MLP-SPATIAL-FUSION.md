@@ -4,6 +4,11 @@ P19 advances the real layer0 MLP boundary from P18's semantic importer. It does
 not execute that complete subgraph or report a new physical speed result. The
 complete model and >=2000 dependent tokens/s target remain unmet.
 
+P20 subsequently supplies a full original residency candidate and physical
+qualification of two resident chunk helpers; see [MLP-RESIDENCY-CHUNKS.md](MLP-RESIDENCY-CHUNKS.md).
+The P19 evidence and limitations below retain their historical scope. Complete
+MLP execution, combined all-role SRAM and model throughput are still unqualified.
+
 `mlp-regions-plan-003.json` binds the original5120/17408 dimensions, original
 matrix coordinates and replicated scale indices to a new candidate geometry.
 The independent audit covers all1,044,480 native matrix tiles and267,386,880

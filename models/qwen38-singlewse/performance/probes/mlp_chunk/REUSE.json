@@ -1,0 +1,39 @@
+{
+  "origins": {
+    "tools/stage_mlp_chunk_sim.py": {
+      "source": "performance/tools/stage_mlp_fusion_sim.py",
+      "sha256": "ff2bce42b4bd5d3f24b7aafed5acee159a675a8879903107ad68f4910f0babca"
+    },
+    "runtime/compile_mlp_chunk.py": {
+      "source": "performance/runtime/compile_component.py",
+      "sha256": "88be9d51bbba287958e3c26a0ae1722954ebb4aa9c4c4ce76b64c65e597acc7f"
+    },
+    "tools/stage_mlp_chunk_hw.py": {
+      "source": "performance/tools/stage_coupled_bank_hw.py",
+      "sha256": "0f5b78fe5df974b730a180693e390f55c1775d98447f074ed695d0f3a30feef5"
+    },
+    "weights.py": {
+      "source": "runtime/weights.py",
+      "sha256": "c9100439ae9df7558886885c50640112e5877b1b0108b2ff58cb20b6d4f41b88"
+    },
+    "simulator backend.py": {
+      "source": "runtime/backend.py",
+      "sha256": "2dc91a3e63a1fa5550edc99a970428f8d0101b1f9731a0fe0cf81b793258252b"
+    },
+    "physical backend.py": {
+      "source": "performance/runtime/backend.py",
+      "sha256": "9ba4d952d8f40d029244cfe6a8daa24757c0d72c594b8f00b3575c33b56da888"
+    },
+    "physical supervise.py": {
+      "source": "performance/runtime/supervise.py",
+      "sha256": "31d0c5454fe49f11fd9411ca76d1d660057182de1277e245f648bc5c6a60ed3d"
+    }
+  },
+  "new_source": [
+    "protocols/mlp_chunk_actor.csl",
+    "probes/mlp_chunk/layout.csl",
+    "probes/mlp_chunk/prepare.py",
+    "probes/mlp_chunk/run.py"
+  ],
+  "scope": "New resident helper actor and synthetic partial-join qualification. Bounded lifecycle, original shard reader, exact ELF census and artifact admission are reused from this task. Frozen manifests record exact execution copies; physical002 uses the exact001 artifact with an import-safe driver. No source from another active project is modified."
+}

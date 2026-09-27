@@ -1,0 +1,29 @@
+const memcpy=@import_module("<memcpy/get_params>",.{.width=3,.height=3});
+layout {
+ @set_rectangle(3,3);
+ for(@range(u16,3))|y|{for(@range(u16,3))|x|{
+  const role=if(x==0 and y==0) 0 else if(x==1 and y==1) 1 else if(x==1 and y==0) 2 else if((x==0 and y==1) or (x==2 and y==0)) 3 else if(x==1 and y==2) 4 else 5;
+  const out_color=if(x==0 and y==1) 10 else if(x==2 and y==0) 18 else 14;
+  @set_tile_code(x,y,"mlp_chunk_actor.csl",.{.memcpy_params=memcpy.get_params(x),.role=role,.source_color=out_color});
+ }}
+ // Normalized ingress -> actual header relay -> downstream dependency source.
+ @set_color_config(0,0,@get_color(2),.{.routes=.{.rx=.{RAMP},.tx=.{EAST}}});
+ @set_color_config(1,0,@get_color(2),.{.routes=.{.rx=.{WEST},.tx=.{RAMP}}});
+ @set_color_config(1,0,@get_color(3),.{.routes=.{.rx=.{RAMP},.tx=.{SOUTH}}});
+ @set_color_config(1,1,@get_color(3),.{.routes=.{.rx=.{NORTH},.tx=.{SOUTH}}});
+ @set_color_config(1,2,@get_color(3),.{.routes=.{.rx=.{NORTH},.tx=.{RAMP}}});
+ // Own and child partials join at the collector, then the header.
+ @set_color_config(0,1,@get_color(10),.{.routes=.{.rx=.{RAMP},.tx=.{EAST}}});
+ @set_color_config(1,1,@get_color(10),.{.routes=.{.rx=.{WEST},.tx=.{RAMP}}});
+ @set_color_config(1,2,@get_color(14),.{.routes=.{.rx=.{RAMP},.tx=.{NORTH}}});
+ @set_color_config(1,1,@get_color(14),.{.routes=.{.rx=.{SOUTH},.tx=.{RAMP}}});
+ @set_color_config(1,1,@get_color(13),.{.routes=.{.rx=.{RAMP},.tx=.{NORTH}}});
+ @set_color_config(1,0,@get_color(13),.{.routes=.{.rx=.{SOUTH},.tx=.{RAMP}}});
+ @set_color_config(2,0,@get_color(18),.{.routes=.{.rx=.{RAMP},.tx=.{WEST}}});
+ @set_color_config(1,0,@get_color(18),.{.routes=.{.rx=.{EAST},.tx=.{RAMP}}});
+ @set_color_config(1,0,@get_color(17),.{.routes=.{.rx=.{RAMP},.tx=.{WEST}}});
+ @set_color_config(0,0,@get_color(17),.{.routes=.{.rx=.{EAST},.tx=.{RAMP}}});
+ @export_name("bank",[*]u32,false);@export_name("values",[*]u32,false);
+ @export_name("packet",[*]u32,false);@export_name("audit",[*]u32,false);
+ @export_name("arm",fn()void);@export_name("start",fn()void);@export_name("embedding_lookup",fn(u16,u16)void);
+}

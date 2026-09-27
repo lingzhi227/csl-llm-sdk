@@ -1,0 +1,130 @@
+{
+  "schema": "wse-mlp-residency-and-chunk-summary-v1",
+  "model": "Qwen/Qwen3.8-27B-FP8",
+  "revision": "017b9c7af6b5689d5dd426a76e0bc077eb5ca20a",
+  "metadata_audit": {
+    "passed": true,
+    "original_tensors": 1251,
+    "original_bytes": 29468003328,
+    "matrix_tiles": 105052160,
+    "resident_matrix_bytes_including_scale_copies": 29839851520,
+    "bank_profiles_enumerated": 870000,
+    "embedding_helpers": 5800,
+    "embedding_helper_tiles": 394400,
+    "norm_owners": 40,
+    "norm_bytes_per_owner": 33024,
+    "gdn_shards_enumerated": 36864,
+    "gdn_state_bytes": 150994944,
+    "kv_state_bytes": 6291456,
+    "conv_state_bytes": 2949120,
+    "original_auxiliary_weight_bytes": 3970048,
+    "auxiliary_pages_enumerated": 103232,
+    "auxiliary_capacity_pages": 2513666,
+    "maximum_matrix_state_and_allocated_aux_payload": 35232,
+    "matrix_boundary_addresses_checked": 998,
+    "whole_matrix_tile_bijection": "Disjoint fixed MLP domains and layer slots; disjoint exact other-matrix stream/PE capacity intervals; disjoint helper embedding prefix. Matrix values are not read by this audit.",
+    "compiled_all_role_sram_admitted": false,
+    "full_model_executable": false,
+    "physical": false
+  },
+  "physical_result": {
+    "passed": true,
+    "normal_stop": true,
+    "physical": true,
+    "full_model": false,
+    "fixture_sha256": "1479fa3c66bcdd432b74513fac527132b8e4e928d3e043178e18f79ece722fed",
+    "epochs": 3,
+    "partial_and_final_values_checked": 1152,
+    "all_counters_exact": true,
+    "all_original_banks_retained": true,
+    "embedding_lookup_words_checked": 512,
+    "ingress_relay_words_checked": 390,
+    "scope": "Actual resident embedding lookup plus relay/credited two-stage FP32 join. Sources supply synthetic partial vectors; no original down projection or complete MLP execution/timing claim.",
+    "measured_speedup": null
+  },
+  "physical_application": [
+    3,
+    3
+  ],
+  "physically_qualified_embedding_helpers": 2,
+  "compiled_images": 8,
+  "helper_sram": {
+    "header": {
+      "original_embedding_bytes": 34816,
+      "allocated_bank_bytes": 35256,
+      "low_section_end": 42032,
+      "stack_allowance": 4096,
+      "total": 46128,
+      "margin": 2000
+    },
+    "collector": {
+      "original_embedding_bytes": 34816,
+      "allocated_bank_bytes": 35256,
+      "low_section_end": 41904,
+      "stack_allowance": 4096,
+      "total": 46000,
+      "margin": 2128
+    }
+  },
+  "chunk_words": 8,
+  "own_buffer_bytes": 512,
+  "child_credit_buffer_bytes": 32,
+  "numerical_order": "Two ordered FP32 joins: (A+B)+C. Three synthetic partial-vector cases including cancellation, zero and warm nonzero replay; original down projection is not executed.",
+  "bank_scope": "Both physical helpers retain the same68 original embedding tiles in row-major2x128 form plus440 padding bytes. This does not load all5800 helper banks or the full model.",
+  "topology_scope": "One internal collector and one internal header with child inputs, fixed color parity. Leaf/parity variants, native producer bindings, device epoch control and actual successor remain unqualified.",
+  "artifact_reused_from": "mlp-chunk-hw-001",
+  "artifact_sha256": "a2bfc1ee34225759367fa3e47a7912fd31a6d54935e97cd5da09ff1bd7c82771",
+  "preserved_host_failure": "mlp-chunk-hw-001: top-level run driver executed on import before physical backend selection. No runtime job was submitted; original failed cleanup receipt retained, separate account audit proved no owned allocation. Callable main/import guard fixed002.",
+  "driver_adaptation": {
+    "simulator_sha256": "e7b4e35ea117d2e90407a53fb2e8dff096b28a1dcb5fbbbd6df8e842d62818fa",
+    "physical_sha256": "12c23fda764ac2baf54ca1024678f9925186f604b6570bb92bfa6f0bca87a0c2",
+    "changes": "Argparse --physical, backend argument, result physical flag and callable main with import guard for run_hw. CSL, fixture, neural/numeric assertions, counters and copies unchanged."
+  },
+  "hardware_jobs_added": 2,
+  "jobs": [
+    {
+      "cancelled": false,
+      "id": "wsjob-g8okmzcennfa3krodvnwz8",
+      "phase": "SUCCEEDED",
+      "released": true
+    },
+    {
+      "cancelled": false,
+      "id": "wsjob-jt6vmz6ypukdfeqmpdr5eu",
+      "phase": "SUCCEEDED",
+      "released": true
+    }
+  ],
+  "all_owned_jobs_released": true,
+  "lifecycle_seconds": {
+    "compile": 71.40037952456623,
+    "failed_host_entry": 1.1670733094215393,
+    "run": 81.38816501386464
+  },
+  "lifecycle_note": "Host scheduling/startup/validation/cleanup durations, not inference latency, device cycles or provider billed node-hours.",
+  "complete_subgraph_executable": false,
+  "compiled_all_role_sram_admitted": false,
+  "full_model": false,
+  "full_model_speed_target_achieved": false,
+  "measured_model_tokens_per_second": null,
+  "evidence_sha256": {
+    "evidence/mlp-residency-plan-001.json": "bf5ad02eabe7529a5ea10672f95158aea21a4e8b7b47bf081d4757e055071666",
+    "evidence/mlp-chunk-sim-001/COMPLETE.json": "5a0e19fc87a155c694be7313ccd341a7ec196ea39ba8691b1eaa910282969e3e",
+    "evidence/mlp-chunk-sim-001/workstation-release.json": "24418f2ac2e99dbd7815b2ffcaaf094f2b39d4d8547d7b85afc776cec5c564a4",
+    "evidence/mlp-chunk-sim-001/source-manifest.json": "5c3f3bf4392bbbb4fe0d4e82f29cf85f683c153fb3939f217d19a6f556c39702",
+    "evidence/mlp-chunk-hw-002/COMPLETE.json": "c8239a81cab89f87e7518c22dbaf9dd5b69099abe5a0e31de8abfc2975519be8",
+    "evidence/mlp-chunk-hw-002/result.json": "e8193b96c9abc70f259e6b94c524a271176e0bace4dbeb1603306c092666b768",
+    "evidence/mlp-chunk-hw-002/fixture.json": "e0573ce11067eba39751b606c12bd5e186439f03b5dbebf143d5fb5328b06c5b",
+    "evidence/mlp-chunk-hw-002/source/driver-adaptation.json": "ac4256656dc3e47de0a52fe839d5a3d8d1448e5646a98f1ec4156c33dabeb5b5",
+    "evidence/mlp-chunk-hw-002/reuse-artifact.json": "9381bfb9908bd850400675b49900d9181c3e1c4861329782e3aea741c7c8f75c",
+    "evidence/mlp-chunk-hw-001/source-manifest.json": "f31cd6fd57a38c5863abc464ecef729469075db8e23a514d76b68db1c08d48db",
+    "evidence/mlp-chunk-hw-002/source-manifest.json": "c84c1e37aba40822ae6c55d23e5b4fd05bb2f4f0ee4802ff2a6aaad9d7428a5a",
+    "evidence/mlp-chunk-hw-001/compile-audit.json": "b70a78f8ae513748eace28b4e574f105f4548baf36d916d9fbdcb11874b79f6e",
+    "evidence/mlp-chunk-hw-001/run-audit.json": "2472202e136c024090d3057e0659e864c04967870b93fde2c67c264837e57755",
+    "evidence/resource-audit-p20-runtime-entry-001.json": "9e68a8da11009dda985370d6a910d024994c723f506aebb3a106c981a7bfc49c",
+    "evidence/mlp-chunk-hw-002/run-audit.json": "eb6d575284549e646f090ff4292f2014a23abbe41d37d1c55527c7a0648fabe1",
+    "evidence/mlp-chunk-hw-002/artifact.json": "c6ca643f3ba952bdb744067a3a3f5dcd7ff5755d0b378fb6b8aad35b7aa59aeb",
+    "evidence/mlp-chunk-hw-002/sram.json": "a5895a2d2d01b2d5cdf463301e1949b4d08e7f6c50d9f86daecfc2e90bc10c5d",
+    "evidence/resource-audit-p20-final-001.json": "6a3604bf93d980fcbd756e5ddfe2d1b985fb86079b2f64d0abfa6b26f0261abf"
+  }
+}

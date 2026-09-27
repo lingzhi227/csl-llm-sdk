@@ -722,3 +722,31 @@ failure and literal-division scale mismatch remain preserved, with both oracles
 reported. All workstation services release; no new ALCF jobs are submitted.
 See MLP-SPATIAL-FUSION.md for scope, resource gaps and the next executable boundary.
 No complete model or >=2000dependenttokens/s result is claimed.
+
+## P20: full original residency candidate and physical resident chunk joins
+
+All1251 original text tensors, all64 MLP layer slots, complete embedding/head,
+GDN/KV/conv state and norm gains have compact addresses anchored to the new MLP
+coordinates. The independent audit enumerates870000 profiles,36864 GDN shards
+and103232 auxiliary pages, and proves exact matrix stream/domain coverage.
+5800 embedding-only collector/header helpers eliminate the old bank-free actor
+deficit at the metadata capacity level. Maximum allocated payload is35232bytes;
+other combined role programs, dynamic intermediates and communication remain
+unqualified.
+
+The actual resident helper program forwards the original-format65-word ingress
+packet, joins ordered FP32 partials in8-word credited chunks and performs original
+embedding lookup. Simulator001 and physical002 pass three warm epochs,1152
+intermediate/final values,512 lookup words,390 relay words, all callback counters
+and complete original-bank/padding retention. Only two internal helper instances
+with one color parity are qualified. Synthetic partial sources are not the actual
+down projections, and host launch scaffolding is not a full-model epoch controller.
+Maximum physical SRAM plus4KiB stack is46128bytes, leaving2000bytes.
+
+Physical001 compiles but fails on host import before any runtime job. Its failure
+is preserved; physical002 fixes only driver entry/backend selection and reuses
+the exact artifact/CSL/ELFs/fixture. The one compile and one runtime job both
+succeed and release. Final account audit has151 terminal own jobs, none active
+or assigned. All69 source tests pass. See MLP-RESIDENCY-CHUNKS.md and the bound
+summary receipt. This progress does not satisfy complete MLP timing or full-model
+correct dependent sentence generation at>=2000tokens/s.

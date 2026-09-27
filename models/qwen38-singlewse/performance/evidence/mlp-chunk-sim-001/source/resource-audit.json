@@ -1,0 +1,107 @@
+{
+  "schema": "wse-explicit-sdk-lease-audit-v1",
+  "passed": true,
+  "source_sha256": {
+    "mlp_chunk_actor.csl": "713737ef2780f0b6abc08b6a2959264d064190ddb0951d90379b3be137bbb096"
+  },
+  "leases": [
+    {
+      "file": "mlp_chunk_actor.csl",
+      "resource": "descriptor",
+      "index": 2,
+      "descriptor_kind": "dsr_dest"
+    },
+    {
+      "file": "mlp_chunk_actor.csl",
+      "resource": "descriptor",
+      "index": 2,
+      "descriptor_kind": "dsr_src0"
+    },
+    {
+      "file": "mlp_chunk_actor.csl",
+      "resource": "descriptor",
+      "index": 3,
+      "descriptor_kind": "dsr_dest"
+    },
+    {
+      "file": "mlp_chunk_actor.csl",
+      "resource": "descriptor",
+      "index": 3,
+      "descriptor_kind": "dsr_src0"
+    },
+    {
+      "file": "mlp_chunk_actor.csl",
+      "resource": "descriptor",
+      "index": 6,
+      "descriptor_kind": "dsr_dest"
+    },
+    {
+      "file": "mlp_chunk_actor.csl",
+      "resource": "descriptor",
+      "index": 6,
+      "descriptor_kind": "dsr_src0"
+    },
+    {
+      "file": "mlp_chunk_actor.csl",
+      "resource": "input_queue",
+      "index": 2,
+      "descriptor_kind": null
+    },
+    {
+      "file": "mlp_chunk_actor.csl",
+      "resource": "input_queue",
+      "index": 3,
+      "descriptor_kind": null
+    },
+    {
+      "file": "mlp_chunk_actor.csl",
+      "resource": "output_queue",
+      "index": 2,
+      "descriptor_kind": null
+    },
+    {
+      "file": "mlp_chunk_actor.csl",
+      "resource": "microthread",
+      "index": 5,
+      "descriptor_kind": null
+    },
+    {
+      "file": "mlp_chunk_actor.csl",
+      "resource": "microthread",
+      "index": 2,
+      "descriptor_kind": null
+    },
+    {
+      "file": "mlp_chunk_actor.csl",
+      "resource": "microthread",
+      "index": 3,
+      "descriptor_kind": null
+    },
+    {
+      "file": "mlp_chunk_actor.csl",
+      "resource": "microthread",
+      "index": 2,
+      "descriptor_kind": null
+    },
+    {
+      "file": "mlp_chunk_actor.csl",
+      "resource": "microthread",
+      "index": 2,
+      "descriptor_kind": null
+    },
+    {
+      "file": "mlp_chunk_actor.csl",
+      "resource": "microthread",
+      "index": 2,
+      "descriptor_kind": null
+    }
+  ],
+  "sdk_reserved_descriptor_indices": [
+    0
+  ],
+  "sdk_reserved_queue_and_microthread_indices": [
+    0,
+    1
+  ],
+  "scope": "Explicit literal application leases avoid default SDK memcpy reservations; dynamic lifetimes and queue liveness require execution."
+}
