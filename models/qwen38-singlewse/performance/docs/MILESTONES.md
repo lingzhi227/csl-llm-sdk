@@ -750,3 +750,26 @@ succeed and release. Final account audit has151 terminal own jobs, none active
 or assigned. All69 source tests pass. See MLP-RESIDENCY-CHUNKS.md and the bound
 summary receipt. This progress does not satisfy complete MLP timing or full-model
 correct dependent sentence generation at>=2000tokens/s.
+
+## P21: connected static MLP source and selected role compiler admission
+
+Separate static down routes remove the candidate native route rewrite and its
+row-fence/readiness exchange. An independent full-dimensional fabric audit checks
+1059920 flows and4843946 PE/color definitions, with256 maximum aggregate words
+per directed link for the listed MLP and two RMS phases. This is not a cycle
+prediction or proof of runtime liveness.
+
+The real worker, fused activation/quantization, resident collector/header, norm
+and spectator-bank bodies are implemented. The input boundary performs a real
+residual add; output chunks feed the real following RMS. Their changed distributed
+sum orders and complete numerical execution remain unqualified. Selected25-role
+compile004 passes47776bytes including4KiB stack, leaving352bytes. All71 source
+tests pass. The full870000-PE candidate layout is7470bytes of source.
+
+Full compile001's host syntax error and002's600s compiler timeout are preserved.
+Their resources are released. Optimized whole-wafer compile003 is live at the
+milestone snapshot, with4GiB/no swap,2CPU and1800s/1850s bounded compile/service
+limits. No complete layout, numerical runtime or timing result is inferred. No
+new WSE jobs are submitted; the latest hardware audit finds no own active or
+assigned jobs. See MLP-STATIC-PIPELINE.md and its bound summary. The complete
+model, correct dependent sentences and>=2000tokens/s target remain unmet.

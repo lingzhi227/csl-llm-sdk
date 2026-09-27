@@ -1,0 +1,18 @@
+{
+  "utc": "2026-09-27T23:40:17.159187+00:00",
+  "unit": "qwen38-single-mlp-full-compile-001.service",
+  "status": {
+    "MainPID": "0",
+    "Result": "exit-code",
+    "ExecMainStatus": "1",
+    "ControlGroup": "",
+    "CPUUsageNSec": "83826000",
+    "ActiveState": "failed",
+    "SubState": "failed"
+  },
+  "residual_cgroup_pids": [],
+  "attempt_resources_released": true,
+  "physical": false,
+  "journal_tail": "Sep 27 19:27:23 workstation systemd[1626]: Started /usr/bin/taskset --cpu-list 6,7 /usr/bin/flock -n /srv/cerebras-workstation/heavy.lock /usr/bin/python3 execute.py.\nSep 27 19:27:23 workstation taskset[923015]:   File \"/srv/model-storage/qwen38-singlewse/runs/mlp-full-compile-001/execute.py\", line 18\nSep 27 19:27:23 workstation taskset[923015]:     verify();Path('COMPLETE.json').write_text(json.dumps(dict(passed=True,physical=False,executed=False,application=[750,1160],sram_passed=result['passed'],seconds=time.monotonic()-started))+'\nSep 27 19:27:23 workstation taskset[923015]:                                                                                                                                                                                                ^\nSep 27 19:27:23 workstation taskset[923015]: SyntaxError: unterminated string literal (detected at line 18)\nSep 27 19:27:23 workstation systemd[1626]: qwen38-single-mlp-full-compile-001.service: Main process exited, code=exited, status=1/FAILURE\nSep 27 19:27:23 workstation systemd[1626]: qwen38-single-mlp-full-compile-001.service: Failed with result 'exit-code'.\n",
+  "scope": "Only this terminal workstation attempt. A later bounded whole-wafer compile is active; this is not a claim that the shared lock or all workstation services are idle."
+}

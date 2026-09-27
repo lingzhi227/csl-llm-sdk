@@ -15,6 +15,25 @@ SUBSTITUTIONS = [('/path/to/alcf-session.sh', '/path/to/alcf-session.sh'), ('/op
 
 def sha(raw):return hashlib.sha256(raw).hexdigest()
 
+
+def validate_python(path, raw, published):
+    """Preserve a proven failed execution source, without accepting new errors."""
+    try:
+        ast.parse(published)
+    except SyntaxError as error:
+        rel=path.relative_to(ROOT)
+        if len(rel.parts)<4 or rel.parts[0]!='evidence' or rel.parts[2]!='source':raise
+        receipt=ROOT/rel.parts[0]/rel.parts[1]/'source-syntax-errors.json'
+        if not receipt.is_file():raise
+        record=json.loads(receipt.read_text()).get('/'.join(rel.parts[3:]))
+        if not record or record['source_sha256']!=sha(raw):raise
+        # An adaptation that newly corrupts otherwise valid Python is never
+        # admitted. The original, observed failure must have the same location.
+        try:ast.parse(raw)
+        except SyntaxError as original:
+            if original.lineno!=record['line'] or error.lineno!=original.lineno or original.msg!=record['message']:raise
+        else:raise ValueError('Publication introduced a new Python syntax error')
+
 def main():
     p=argparse.ArgumentParser();p.add_argument('--repo',type=Path,required=True);a=p.parse_args()
     if not (a.repo/'.git').is_dir():raise ValueError('Publication clone required')
@@ -30,7 +49,7 @@ def main():
         text=raw.decode()
         if f.suffix!='.csl':
             for before,after in SUBSTITUTIONS:text=text.replace(before,after)
-        if f.suffix=='.py':ast.parse(text)
+        if f.suffix=='.py':validate_python(f,raw,text)
         if f.suffix=='.json':json.loads(text)
         published=text.encode();dest=target/rel;dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(published)
         entries[str(rel)]=dict(source_sha256=sha(raw),published_sha256=sha(published),site_adapted=raw!=published)

@@ -1,0 +1,168 @@
+{
+  "application": [
+    13,
+    1
+  ],
+  "profiles": [
+    {
+      "source": "mlp_worker.csl",
+      "parameters": {
+        "gate": true,
+        "rank": 0,
+        "pair": 0,
+        "fp8_slots": 129,
+        "children": 2,
+        "subtree": 40,
+        "left_color": 4,
+        "right_color": 5,
+        "native_out": 16
+      }
+    },
+    {
+      "source": "mlp_worker.csl",
+      "parameters": {
+        "gate": true,
+        "rank": 1,
+        "pair": 1,
+        "fp8_slots": 129,
+        "children": 2,
+        "subtree": 20,
+        "left_color": 6,
+        "right_color": 7,
+        "native_out": 4
+      }
+    },
+    {
+      "source": "mlp_worker.csl",
+      "parameters": {
+        "gate": true,
+        "rank": 39,
+        "pair": 63,
+        "fp8_slots": 129,
+        "children": 0,
+        "subtree": 1,
+        "left_color": 4,
+        "right_color": 5,
+        "native_out": 11
+      }
+    },
+    {
+      "source": "mlp_worker.csl",
+      "parameters": {
+        "gate": true,
+        "rank": 20,
+        "pair": 0,
+        "fp8_slots": 129,
+        "children": 0,
+        "subtree": 1,
+        "left_color": 4,
+        "right_color": 5,
+        "native_out": 11
+      }
+    },
+    {
+      "source": "mlp_worker.csl",
+      "parameters": {
+        "gate": true,
+        "rank": 2,
+        "pair": 63,
+        "fp8_slots": 129,
+        "children": 2,
+        "subtree": 10,
+        "left_color": 8,
+        "right_color": 9,
+        "native_out": 6
+      }
+    },
+    {
+      "source": "mlp_worker.csl",
+      "parameters": {
+        "gate": false,
+        "rank": 0,
+        "pair": 0,
+        "fp8_slots": 104,
+        "children": 2,
+        "subtree": 40,
+        "left_color": 4,
+        "right_color": 5,
+        "native_out": 17
+      }
+    },
+    {
+      "source": "mlp_worker.csl",
+      "parameters": {
+        "gate": false,
+        "rank": 1,
+        "pair": 1,
+        "fp8_slots": 102,
+        "children": 2,
+        "subtree": 20,
+        "left_color": 6,
+        "right_color": 7,
+        "native_out": 4
+      }
+    },
+    {
+      "source": "mlp_worker.csl",
+      "parameters": {
+        "gate": false,
+        "rank": 39,
+        "pair": 63,
+        "fp8_slots": 86,
+        "children": 0,
+        "subtree": 1,
+        "left_color": 4,
+        "right_color": 5,
+        "native_out": 11
+      }
+    },
+    {
+      "source": "mlp_worker.csl",
+      "parameters": {
+        "gate": false,
+        "rank": 20,
+        "pair": 0,
+        "fp8_slots": 104,
+        "children": 0,
+        "subtree": 1,
+        "left_color": 4,
+        "right_color": 5,
+        "native_out": 11
+      }
+    },
+    {
+      "source": "mlp_worker.csl",
+      "parameters": {
+        "gate": false,
+        "rank": 2,
+        "pair": 63,
+        "fp8_slots": 86,
+        "children": 2,
+        "subtree": 10,
+        "left_color": 8,
+        "right_color": 9,
+        "native_out": 6
+      }
+    },
+    {
+      "source": "mlp_activation.csl",
+      "parameters": {
+        "pair": 0
+      }
+    },
+    {
+      "source": "mlp_activation.csl",
+      "parameters": {
+        "pair": 1
+      }
+    },
+    {
+      "source": "mlp_activation.csl",
+      "parameters": {
+        "pair": 63
+      }
+    }
+  ],
+  "full_wafer": false,
+  "executed": false
+}

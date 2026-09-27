@@ -1,0 +1,275 @@
+{
+  "application": [
+    25,
+    1
+  ],
+  "profiles": [
+    {
+      "source": "mlp_worker.csl",
+      "parameters": {
+        "gate": true,
+        "rank": 0,
+        "fp8_slots": 129,
+        "children": 2,
+        "subtree": 40,
+        "left_color": 4,
+        "right_color": 5,
+        "native_out": 16
+      }
+    },
+    {
+      "source": "mlp_worker.csl",
+      "parameters": {
+        "gate": true,
+        "rank": 1,
+        "fp8_slots": 129,
+        "children": 2,
+        "subtree": 20,
+        "left_color": 6,
+        "right_color": 7,
+        "native_out": 4
+      }
+    },
+    {
+      "source": "mlp_worker.csl",
+      "parameters": {
+        "gate": true,
+        "rank": 39,
+        "fp8_slots": 129,
+        "children": 0,
+        "subtree": 1,
+        "left_color": 4,
+        "right_color": 5,
+        "native_out": 11
+      }
+    },
+    {
+      "source": "mlp_worker.csl",
+      "parameters": {
+        "gate": true,
+        "rank": 20,
+        "fp8_slots": 129,
+        "children": 0,
+        "subtree": 1,
+        "left_color": 4,
+        "right_color": 5,
+        "native_out": 11
+      }
+    },
+    {
+      "source": "mlp_worker.csl",
+      "parameters": {
+        "gate": true,
+        "rank": 2,
+        "fp8_slots": 129,
+        "children": 2,
+        "subtree": 10,
+        "left_color": 8,
+        "right_color": 9,
+        "native_out": 6
+      }
+    },
+    {
+      "source": "mlp_worker.csl",
+      "parameters": {
+        "gate": false,
+        "rank": 0,
+        "fp8_slots": 104,
+        "children": 2,
+        "subtree": 40,
+        "left_color": 4,
+        "right_color": 5,
+        "native_out": 17
+      }
+    },
+    {
+      "source": "mlp_worker.csl",
+      "parameters": {
+        "gate": false,
+        "rank": 1,
+        "fp8_slots": 102,
+        "children": 2,
+        "subtree": 20,
+        "left_color": 6,
+        "right_color": 7,
+        "native_out": 4
+      }
+    },
+    {
+      "source": "mlp_worker.csl",
+      "parameters": {
+        "gate": false,
+        "rank": 39,
+        "fp8_slots": 86,
+        "children": 0,
+        "subtree": 1,
+        "left_color": 4,
+        "right_color": 5,
+        "native_out": 11
+      }
+    },
+    {
+      "source": "mlp_worker.csl",
+      "parameters": {
+        "gate": false,
+        "rank": 20,
+        "fp8_slots": 104,
+        "children": 0,
+        "subtree": 1,
+        "left_color": 4,
+        "right_color": 5,
+        "native_out": 11
+      }
+    },
+    {
+      "source": "mlp_worker.csl",
+      "parameters": {
+        "gate": false,
+        "rank": 2,
+        "fp8_slots": 86,
+        "children": 2,
+        "subtree": 10,
+        "left_color": 8,
+        "right_color": 9,
+        "native_out": 6
+      }
+    },
+    {
+      "source": "mlp_activation.csl",
+      "parameters": {
+        "pair": 0
+      }
+    },
+    {
+      "source": "mlp_activation.csl",
+      "parameters": {
+        "pair": 1
+      }
+    },
+    {
+      "source": "mlp_activation.csl",
+      "parameters": {
+        "pair": 63
+      }
+    },
+    {
+      "source": "mlp_norm.csl",
+      "parameters": {
+        "rank": 0
+      }
+    },
+    {
+      "source": "mlp_norm.csl",
+      "parameters": {
+        "rank": 1
+      }
+    },
+    {
+      "source": "mlp_norm.csl",
+      "parameters": {
+        "rank": 39
+      }
+    },
+    {
+      "source": "mlp_join.csl",
+      "parameters": {
+        "header": false,
+        "relay_only": false,
+        "has_child": false,
+        "own_color": 2,
+        "child_color": 14,
+        "out_color": 13
+      }
+    },
+    {
+      "source": "mlp_join.csl",
+      "parameters": {
+        "header": false,
+        "relay_only": false,
+        "has_child": true,
+        "own_color": 2,
+        "child_color": 14,
+        "out_color": 13
+      }
+    },
+    {
+      "source": "mlp_join.csl",
+      "parameters": {
+        "header": false,
+        "relay_only": false,
+        "has_child": false,
+        "own_color": 2,
+        "child_color": 13,
+        "out_color": 14
+      }
+    },
+    {
+      "source": "mlp_join.csl",
+      "parameters": {
+        "header": false,
+        "relay_only": false,
+        "has_child": true,
+        "own_color": 2,
+        "child_color": 13,
+        "out_color": 14
+      }
+    },
+    {
+      "source": "mlp_join.csl",
+      "parameters": {
+        "header": true,
+        "relay_only": false,
+        "has_child": false,
+        "own_color": 13,
+        "child_color": 18,
+        "out_color": 17
+      }
+    },
+    {
+      "source": "mlp_join.csl",
+      "parameters": {
+        "header": true,
+        "relay_only": false,
+        "has_child": true,
+        "own_color": 13,
+        "child_color": 18,
+        "out_color": 17
+      }
+    },
+    {
+      "source": "mlp_join.csl",
+      "parameters": {
+        "header": true,
+        "relay_only": false,
+        "has_child": false,
+        "own_color": 13,
+        "child_color": 17,
+        "out_color": 18
+      }
+    },
+    {
+      "source": "mlp_join.csl",
+      "parameters": {
+        "header": true,
+        "relay_only": false,
+        "has_child": true,
+        "own_color": 13,
+        "child_color": 17,
+        "out_color": 18
+      }
+    },
+    {
+      "source": "mlp_join.csl",
+      "parameters": {
+        "header": true,
+        "relay_only": true,
+        "has_child": false,
+        "own_color": 13,
+        "child_color": 18,
+        "out_color": 17
+      }
+    }
+  ],
+  "full_wafer": false,
+  "executed": false
+}

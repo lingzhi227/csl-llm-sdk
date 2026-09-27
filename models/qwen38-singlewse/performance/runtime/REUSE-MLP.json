@@ -1,0 +1,30 @@
+{
+  "origins": {
+    "mlp_worker.csl": {
+      "source": "performance/protocols/matrix_epoch.csl",
+      "sha256": "1fdd7858946d1a13d8078b1c563498f49446e9ea9ce42c41c594bc728a33af84"
+    },
+    "mlp_join.csl": {
+      "source": "performance/protocols/mlp_chunk_actor.csl",
+      "sha256": "713737ef2780f0b6abc08b6a2959264d064190ddb0951d90379b3be137bbb096"
+    },
+    "mlp_fused.csl": {
+      "source": "performance/csl/mlp_fused.csl",
+      "sha256": "15f7449d59d216df4775e9a0ddf0c210286bb1cc00d6f02a139f27daaa2cffc3"
+    },
+    "qwen_math.csl": {
+      "source": "csl/qwen_math.csl",
+      "sha256": "03adca23c7dd74282093961ae51e0ae4d193e7adc14b8dd43fa2f16f4e95e137"
+    },
+    "fp8_shape.csl": {
+      "source": "performance/probes/native_shapes/fp8_shape.csl",
+      "sha256": "b9869927f2afebc6f48d4e680ace6e1f458713db8c3c5895465e7d5652e8d301"
+    },
+    "fp8_unpack_shift.csl": {
+      "source": "performance/csl/fp8_unpack_shift.csl",
+      "sha256": "9fa14188758bd1dae78f1fbff7426513bc1fca004dc81b540e91df39a2c4eab3"
+    }
+  },
+  "scope": "New connected MLP role bodies derive from this task's qualified native/epoch and credited helper implementations. Numeric helper sources are copied unchanged at staging; selected role compiler admission is separate from whole-layout and execution acceptance. No original project or frozen source is modified.",
+  "sdk_coordinate_reference": "SDK2.10.1 tile_config.csl get_fabric_coord(tile_config.fabric_coord.Y), also used by installed layout.csl."
+}

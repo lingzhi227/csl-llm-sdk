@@ -1,0 +1,18 @@
+{
+  "utc": "2026-09-27T23:40:17.037105+00:00",
+  "unit": "qwen38-single-mlp-integrated-compile-001.service",
+  "status": {
+    "MainPID": "0",
+    "Result": "exit-code",
+    "ExecMainStatus": "1",
+    "ControlGroup": "",
+    "CPUUsageNSec": "21164068000",
+    "ActiveState": "failed",
+    "SubState": "failed"
+  },
+  "residual_cgroup_pids": [],
+  "attempt_resources_released": true,
+  "physical": false,
+  "journal_tail": "Sep 27 19:13:34 workstation systemd[1626]: Started /usr/bin/taskset --cpu-list 6,7 /usr/bin/flock -n /srv/cerebras-workstation/heavy.lock /usr/bin/python3 execute.py.\nSep 27 19:13:55 workstation taskset[908849]: Traceback (most recent call last):\nSep 27 19:13:55 workstation taskset[908849]:   File \"/srv/model-storage/qwen38-singlewse/runs/mlp-integrated-compile-001/execute.py\", line 13, in <module>\nSep 27 19:13:55 workstation taskset[908849]:     if code:raise RuntimeError(phase+' exit '+str(code))\nSep 27 19:13:55 workstation taskset[908849]: RuntimeError: compile exit 1\nSep 27 19:13:55 workstation systemd[1626]: qwen38-single-mlp-integrated-compile-001.service: Main process exited, code=exited, status=1/FAILURE\nSep 27 19:13:55 workstation systemd[1626]: qwen38-single-mlp-integrated-compile-001.service: Failed with result 'exit-code'.\nSep 27 19:13:55 workstation systemd[1626]: qwen38-single-mlp-integrated-compile-001.service: Consumed 21.164s CPU time.\n",
+  "scope": "Only this terminal workstation attempt. A later bounded whole-wafer compile is active; this is not a claim that the shared lock or all workstation services are idle."
+}

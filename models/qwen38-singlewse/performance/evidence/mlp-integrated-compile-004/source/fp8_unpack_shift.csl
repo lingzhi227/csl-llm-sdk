@@ -1,0 +1,13 @@
+// Exact packed E4M3FN -> FP16/256 bit embedding without temporary storage.
+// Arithmetic sign propagation plus masks replaces split sign/magnitude scratch.
+// Finite-value admission is unchanged; this is not a NaN numeric decoder.
+param max_pairs:u16;
+fn decode(bits_in:[*]u16,output:[*]u16,pairs:u16) void {
+ @assert(pairs>0 and pairs<=max_pairs);
+ const all=@get_dsd(mem1d_dsd,.{.base_address=bits_in,.extent=max_pairs});
+ const lo=@get_dsd(mem1d_dsd,.{.base_address=output,.extent=max_pairs,.stride=2});
+ const hi=@increment_dsd_offset(lo,1,u16);
+ const w=@set_dsd_length(all,pairs);const even=@set_dsd_length(lo,pairs);const odd=@set_dsd_length(hi,pairs);
+ @sll16(even,w,@as(u16,8));@sar16(even,even,@as(u16,1));@and16(even,even,@as(u16,0xbfff));
+ @sar16(odd,w,@as(u16,1));@and16(odd,odd,@as(u16,0xbf80));
+}

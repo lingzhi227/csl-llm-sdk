@@ -172,3 +172,12 @@ the corrected run. Both submitted jobs release normally and69 source tests pass.
 See [MLP-RESIDENCY-CHUNKS.md](docs/MLP-RESIDENCY-CHUNKS.md). No complete MLP timing
 or new model token rate is claimed; the mainline remains a real complete MLP and
 then complete dependent model inference at>=2000tokens/s.
+
+P21 adds static paths for the connected complete-dimensional MLP and CSL for
+native gate/up/down, arrival-triggered activation/quantization, credited joins,
+preceding residual and actual successor RMS. The independent audit admits1059920
+listed data flows without static color aliases. Selected25-role compilation
+passes with47776 maximum bytes including stack. Full750x1160 layout source is
+generated; whole-wafer compile003 remains pending after the preserved600s timeout
+of002. No integrated numerical execution, latency or model rate is claimed.
+See [MLP-STATIC-PIPELINE.md](docs/MLP-STATIC-PIPELINE.md). No new WSE job was submitted.

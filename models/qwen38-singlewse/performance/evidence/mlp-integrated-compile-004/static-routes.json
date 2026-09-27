@@ -1,0 +1,126 @@
+{
+  "schema": "wse-static-mlp-fabric-v1",
+  "application": [
+    747,
+    1080
+  ],
+  "original_dimensions": {
+    "hidden": 5120,
+    "intermediate": 17408,
+    "k_groups": 40,
+    "mlp_groups": 136
+  },
+  "strategy": "Concurrent static gate/up trees and down local gather/broadcast; no route word rewrites or forwarding-drain fence is needed for this fabric.",
+  "local_down_colors": [
+    2,
+    15
+  ],
+  "down_broadcast_color": 18,
+  "activation_join_colors": [
+    4,
+    5
+  ],
+  "activation_scale_color": 6,
+  "worker_transition": [
+    "consume complete65-word initial packet",
+    "complete own native dot and exact children",
+    "native outgoing send callback",
+    "rebind initial input queue from3 to18 and child queue to static down-local color",
+    "consume complete65-word down packet",
+    "down native dot",
+    "send own pair then credit-forward child pairs"
+  ],
+  "activation_transition": [
+    "both packed gate/up operands",
+    "BF16 SiLU/multiply and local absmax",
+    "group absmax arrival and outgoing callback",
+    "scale broadcast",
+    "encode packed pair",
+    "ordered gather with callback credits",
+    "root sends65-word down packet"
+  ],
+  "fabric_routes_static": true,
+  "device_epoch_controller_implemented": false,
+  "full_model_reset_qualified": false,
+  "full_subgraph_executable": false,
+  "compiled_sram_qualified": false,
+  "physical": false,
+  "full_model": false,
+  "audit": {
+    "passed": true,
+    "application": [
+      747,
+      1080
+    ],
+    "static_flows": 1059920,
+    "route_entries": 4843946,
+    "flows_by_family": {
+      "header-fork": 40,
+      "vertical-multicast": 720,
+      "transpose-to-header": 360,
+      "vertical-reduction": 5080,
+      "residual-consumer": 40,
+      "horizontal-reduction": 320,
+      "native-tree": 678912,
+      "packed-activation-operand": 17408,
+      "down-local-broadcast": 136,
+      "activation-scale": 136,
+      "activation-max-and-encoded-gather": 8568,
+      "down-local-gather": 348160,
+      "two-rms-reductions": 39,
+      "two-rms-broadcasts": 1
+    },
+    "consumer_deliveries_by_family": {
+      "header-fork": 720,
+      "vertical-multicast": 696320,
+      "transpose-to-header": 360,
+      "vertical-reduction": 5080,
+      "residual-consumer": 40,
+      "horizontal-reduction": 320,
+      "native-tree": 678912,
+      "packed-activation-operand": 17408,
+      "down-local-broadcast": 348160,
+      "activation-scale": 8568,
+      "activation-max-and-encoded-gather": 8568,
+      "down-local-gather": 348160,
+      "two-rms-reductions": 39,
+      "two-rms-broadcasts": 39
+    },
+    "word_hops_by_family": {
+      "header-fork": 1886300,
+      "vertical-multicast": 46880600,
+      "transpose-to-header": 944640,
+      "vertical-reduction": 42265600,
+      "residual-consumer": 104960,
+      "horizontal-reduction": 3399680,
+      "native-tree": 5796864,
+      "packed-activation-operand": 17408,
+      "down-local-broadcast": 22992840,
+      "activation-scale": 8568,
+      "activation-max-and-encoded-gather": 282744,
+      "down-local-gather": 22630400,
+      "two-rms-reductions": 78,
+      "two-rms-broadcasts": 78
+    },
+    "directed_links": 1857370,
+    "maximum_link_words": 256,
+    "static_single_rx_and_no_color_alias": true,
+    "native_route_rewrites": 0,
+    "all_listed_streams_connected": true,
+    "scope": "Static complete-dimensional MLP data paths plus two RMS phases. Does not prove PE queue phases, asynchronous liveness, external predecessor transport, epoch controller, termination, SRAM or execution.",
+    "runtime_liveness_qualified": false,
+    "compiled_sram_qualified": false,
+    "full_subgraph_executable": false,
+    "physical": false,
+    "full_model": false
+  },
+  "source_sha256": {
+    "configs/model-graph.json": "c6b031b2dbbda10f318210d48f0c71f95782e12459a27459f29d053a4cd67ad1",
+    "configs/tensors.json": "35ee74a4b6941612aaa7b08ecf7fd17f301afb0f4797801fa47e1c152d150781",
+    "performance/spatial/mlp_static.py": "7c6826825d1aabb794d0e436cb1d5bc91fd4d65cf6b519789b1e3fb82566ccc3",
+    "performance/spatial/mlp_regions.py": "17908f20e726f44f3323de49b0cc6db07df6243f8a518c6b54df69cad185d205",
+    "performance/spatial/contraction.py": "29b00f286143dc809f237d763d47443bc9f449f9fc9676db520281934e1e853b",
+    "performance/spatial/model_subgraph.py": "1164c5ff167e6174a05281dd9c18410030e198b1da59394161956d03389553ee",
+    "performance/tools/audit_mlp_static.py": "e7f883b49c1c5f3bf670282d88eb0cc1218812628cb77597d746489b03a5e6f7"
+  }
+}

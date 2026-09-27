@@ -1,0 +1,18 @@
+{
+  "utc": "2026-09-27T23:40:17.071588+00:00",
+  "unit": "qwen38-single-mlp-integrated-compile-002.service",
+  "status": {
+    "MainPID": "0",
+    "Result": "success",
+    "ExecMainStatus": "0",
+    "ControlGroup": "",
+    "CPUUsageNSec": "[not set]",
+    "ActiveState": "inactive",
+    "SubState": "dead"
+  },
+  "residual_cgroup_pids": [],
+  "attempt_resources_released": true,
+  "physical": false,
+  "journal_tail": "Sep 27 19:17:40 workstation systemd[1626]: Started /usr/bin/taskset --cpu-list 6,7 /usr/bin/flock -n /srv/cerebras-workstation/heavy.lock /usr/bin/python3 execute.py.\nSep 27 19:18:08 workstation systemd[1626]: qwen38-single-mlp-integrated-compile-002.service: Consumed 29.401s CPU time.\n",
+  "scope": "Only this terminal workstation attempt. A later bounded whole-wafer compile is active; this is not a claim that the shared lock or all workstation services are idle."
+}

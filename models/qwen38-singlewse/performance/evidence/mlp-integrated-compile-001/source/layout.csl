@@ -1,0 +1,21 @@
+const memcpy=@import_module("<memcpy/get_params>",.{.width=13,.height=1});
+layout {
+ @set_rectangle(13,1);
+ @set_tile_code(0,0,"mlp_worker.csl",.{.memcpy_params=memcpy.get_params(0),.gate=true,.rank=0,.pair=0,.fp8_slots=129,.children=2,.subtree=40,.left_color=4,.right_color=5,.native_out=16});
+ @set_tile_code(1,0,"mlp_worker.csl",.{.memcpy_params=memcpy.get_params(1),.gate=true,.rank=1,.pair=1,.fp8_slots=129,.children=2,.subtree=20,.left_color=6,.right_color=7,.native_out=4});
+ @set_tile_code(2,0,"mlp_worker.csl",.{.memcpy_params=memcpy.get_params(2),.gate=true,.rank=39,.pair=63,.fp8_slots=129,.children=0,.subtree=1,.left_color=4,.right_color=5,.native_out=11});
+ @set_tile_code(3,0,"mlp_worker.csl",.{.memcpy_params=memcpy.get_params(3),.gate=true,.rank=20,.pair=0,.fp8_slots=129,.children=0,.subtree=1,.left_color=4,.right_color=5,.native_out=11});
+ @set_tile_code(4,0,"mlp_worker.csl",.{.memcpy_params=memcpy.get_params(4),.gate=true,.rank=2,.pair=63,.fp8_slots=129,.children=2,.subtree=10,.left_color=8,.right_color=9,.native_out=6});
+ @set_tile_code(5,0,"mlp_worker.csl",.{.memcpy_params=memcpy.get_params(5),.gate=false,.rank=0,.pair=0,.fp8_slots=104,.children=2,.subtree=40,.left_color=4,.right_color=5,.native_out=17});
+ @set_tile_code(6,0,"mlp_worker.csl",.{.memcpy_params=memcpy.get_params(6),.gate=false,.rank=1,.pair=1,.fp8_slots=102,.children=2,.subtree=20,.left_color=6,.right_color=7,.native_out=4});
+ @set_tile_code(7,0,"mlp_worker.csl",.{.memcpy_params=memcpy.get_params(7),.gate=false,.rank=39,.pair=63,.fp8_slots=86,.children=0,.subtree=1,.left_color=4,.right_color=5,.native_out=11});
+ @set_tile_code(8,0,"mlp_worker.csl",.{.memcpy_params=memcpy.get_params(8),.gate=false,.rank=20,.pair=0,.fp8_slots=104,.children=0,.subtree=1,.left_color=4,.right_color=5,.native_out=11});
+ @set_tile_code(9,0,"mlp_worker.csl",.{.memcpy_params=memcpy.get_params(9),.gate=false,.rank=2,.pair=63,.fp8_slots=86,.children=2,.subtree=10,.left_color=8,.right_color=9,.native_out=6});
+ @set_tile_code(10,0,"mlp_activation.csl",.{.memcpy_params=memcpy.get_params(10),.pair=0});
+ @set_tile_code(11,0,"mlp_activation.csl",.{.memcpy_params=memcpy.get_params(11),.pair=1});
+ @set_tile_code(12,0,"mlp_activation.csl",.{.memcpy_params=memcpy.get_params(12),.pair=63});
+ @export_name("packet",[*]u32,false);
+ @export_name("audit",[*]u32,false);
+ @export_name("arm",fn(u16)void);
+ @export_name("start",fn()void);
+}

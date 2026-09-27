@@ -1,0 +1,116 @@
+// Full original gate/up K40 contraction and co-resident down projection worker.
+// Dedicated static down routes avoid native fabric rewrites and row fences.
+// A local send callback protects local scratch/queue reuse; it is not a claim
+// about unrelated forwarding completion. Other bank obligations remain separate.
+param memcpy_params;param gate:bool;param rank:u16;
+param fp8_slots:u16;param children:u16;param subtree:u16;
+param left_color:u16;param right_color:u16;param native_out:u16;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const tile=@import_module("<tile_config>");
+const qwen=@import_module("qwen_math.csl");
+const unpacker=@import_module("fp8_unpack_shift.csl",.{.max_pairs=128});
+const dot=@import_module("fp8_shape.csl",.{.rows=2,.columns=128,.vector_scales=true});
+const iq=@get_input_queue(2);const lq=@get_input_queue(3);const rq=@get_input_queue(4);const oq=@get_output_queue(2);
+const rd=@get_dsr(dsr_dest,2);const rs=@get_dsr(dsr_src0,2);
+const ld=@get_dsr(dsr_dest,3);const ls=@get_dsr(dsr_src0,3);
+const jd=@get_dsr(dsr_dest,5);const js=@get_dsr(dsr_src0,5);
+const sd=@get_dsr(dsr_dest,6);const ss=@get_dsr(dsr_src0,6);
+const rt=@get_local_task_id(8);const lt=@get_local_task_id(9);const jt=@get_local_task_id(10);const st=@get_local_task_id(11);
+var bank=@zeros([8814]u32);var packet=@zeros([65]u32);var scratch=@zeros([128]u32);
+var left=@zeros([3]u32);var right=@zeros([3]u32);var sum=@zeros([3]u32);var native_local=@zeros([2]f32);var down_local=@zeros([2]f32);
+var audit=@zeros([8]u32);var control=@zeros([1]u16);
+const bp:[*]u32=&bank;const pp:[*]u32=&packet;const ap:[*]u32=&audit;const cp:[*]u16=&control;
+const np:[*]f32=&native_local;const dp:[*]f32=&down_local;
+var phase:u16=0;var armed:bool=false;var started:bool=false;var complete:bool=false;
+var own_ready:bool=false;var left_ready:bool=false;var right_ready:bool=false;var joined:bool=false;
+var forwarded:u16=0;var pair:u16=0;
+fn finish() void {if(started and complete){started=false;armed=false;audit[7]=1;sys.unblock_cmd_stream();}}
+fn transmit(base:[*]u32,comptime words:u16) void {
+ const m=@get_dsd(mem1d_dsd,.{.base_address=base,.extent=words});
+ const f=@get_dsd(fabout_dsd,.{.output_queue=oq,.extent=words});
+ @load_to_dsr(ss,m);@load_to_dsr(sd,f,.{.async=true,.ut_id=@get_ut_id(5),.activate=st});@mov32(sd,ss,.{.async=true});
+}
+fn receive_packet() void {
+ const m=@get_dsd(mem1d_dsd,.{.base_address=&packet,.extent=65});const f=@get_dsd(fabin_dsd,.{.input_queue=iq,.extent=65});
+ @load_to_dsr(rd,m);@load_to_dsr(rs,f,.{.async=true,.ut_id=@get_ut_id(2),.activate=rt});@mov32(rd,rs,.{.async=true});
+}
+fn receive_down_child() void {
+ const m=@get_dsd(mem1d_dsd,.{.base_address=&left,.extent=2});const f=@get_dsd(fabin_dsd,.{.input_queue=lq,.extent=2});
+ @load_to_dsr(ld,m);@load_to_dsr(ls,f,.{.async=true,.ut_id=@get_ut_id(3),.activate=lt});@mov32(ld,ls,.{.async=true});
+}
+fn join_native() void {
+ if(own_ready and left_ready and right_ready and !joined){
+  joined=true;const s=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]f32,&sum),.extent=2});
+  const v=@get_dsd(mem1d_dsd,.{.base_address=&native_local,.extent=2});@fmovs(s,v);sum[2]=1;
+  if(comptime children>0){const l=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]f32,&left),.extent=2});@fadds(s,s,l);sum[2]+=left[2];}
+  if(comptime children>1){const r=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]f32,&right),.extent=2});@fadds(s,s,r);sum[2]+=right[2];}
+  @assert(sum[2]==@as(u32,subtree));audit[3]+=1;
+  if(comptime rank==0){
+   const a=qwen.round(@bitcast(f32,sum[0]));const b=qwen.round(@bitcast(f32,sum[1]));
+   scratch[0]=@as(u32,a)|(@as(u32,b)<<16);transmit(&scratch,1);
+  }else{transmit(&sum,3);}
+ }
+}
+task input_arrived() void {
+ const layer=control[0];const slot:u16=if(phase==1) (if(gate) 2*layer else layer) else 2*layer+1;
+ @assert(slot<fp8_slots);audit[1]+=1;
+ unpacker.decode(@ptrcast([*]u16,&bank[slot*64]),@ptrcast([*]u16,&scratch),128);
+ const scale=@ptrcast([*]f32,&bank[fp8_slots*64]);
+ if(phase==1){
+  dot.compute(@ptrcast([*]u16,&scratch),@ptrcast([*]u16,&packet),np,@bitcast(f32,packet[64]),scale[slot]);
+  own_ready=true;join_native();
+ }else{
+  @assert(phase==2 and gate);
+  dot.compute(@ptrcast([*]u16,&scratch),@ptrcast([*]u16,&packet),dp,@bitcast(f32,packet[64]),scale[slot]);
+  audit[4]+=1;transmit(@ptrcast([*]u32,dp),2);
+ }
+}
+task left_arrived() void {
+ if(phase==1){left_ready=true;audit[2]+=1;join_native();}
+ else{@assert(phase==2);transmit(&left,2);}
+}
+task right_arrived() void {right_ready=true;audit[2]+=1;join_native();}
+task sent() void {
+ audit[5]+=1;
+ if(phase==1){
+  if(comptime gate){
+   phase=2;tile.input_queue_config.encode_input_queue(2,18,false);
+   tile.output_queue_config.encode_output_queue(2,if(pair%2==0) 2 else 15);
+   if(pair<63){tile.input_queue_config.encode_input_queue(3,if(pair%2==0) 15 else 2,false);}
+   receive_packet();
+  }else{complete=true;finish();}
+ }else{
+  forwarded+=1;audit[6]=@as(u32,forwarded);
+  if(forwarded==64-pair){complete=true;finish();}else{receive_down_child();}
+ }
+}
+fn arm(layer:u16) void {
+ @assert(!armed and !started and layer<64);
+ // Read the real fabric row once per arm. This avoids64 specialized copies of
+ // every K-tree worker when only the forwarding count differs by row.
+ if(comptime gate){const y=tile.get_fabric_coord(tile.fabric_coord.Y);@assert(y>=42);pair=(y-41)%65-1;@assert(pair<64);}
+ control[0]=layer;armed=true;complete=false;phase=1;forwarded=0;
+ own_ready=false;left_ready=children==0;right_ready=children<2;joined=false;
+ for(@range(u16,8))|i|{audit[i]=0;}audit[0]=1;
+ tile.input_queue_config.encode_input_queue(2,3,false);
+ tile.output_queue_config.encode_output_queue(2,@as(i16,native_out));
+ if(comptime children>0){
+  tile.input_queue_config.encode_input_queue(3,@as(i16,left_color),false);
+  const m=@get_dsd(mem1d_dsd,.{.base_address=&left,.extent=3});const f=@get_dsd(fabin_dsd,.{.input_queue=lq,.extent=3});
+  @load_to_dsr(ld,m);@load_to_dsr(ls,f,.{.async=true,.ut_id=@get_ut_id(3),.activate=lt});@mov32(ld,ls,.{.async=true});
+ }
+ if(comptime children>1){
+  const m=@get_dsd(mem1d_dsd,.{.base_address=&right,.extent=3});const f=@get_dsd(fabin_dsd,.{.input_queue=rq,.extent=3});
+  @load_to_dsr(jd,m);@load_to_dsr(js,f,.{.async=true,.ut_id=@get_ut_id(4),.activate=jt});@mov32(jd,js,.{.async=true});
+ }
+ receive_packet();sys.unblock_cmd_stream();
+}
+fn start() void {@assert(armed and !started);started=true;finish();}
+comptime {
+ @initialize_queue(iq,.{.color=@get_color(3)});@initialize_queue(oq,.{.color=@get_color(native_out)});
+ if(children>0 or gate){@initialize_queue(lq,.{.color=@get_color(left_color)});@bind_local_task(left_arrived,lt);}
+ if(children>1){@initialize_queue(rq,.{.color=@get_color(right_color)});@bind_local_task(right_arrived,jt);}
+ @bind_local_task(input_arrived,rt);@bind_local_task(sent,st);
+ @export_symbol(bp,"bank");@export_symbol(pp,"packet");@export_symbol(ap,"audit");@export_symbol(cp,"control");
+ @export_symbol(np,"native_local");@export_symbol(dp,"down_local");@export_symbol(arm);@export_symbol(start);
+}

@@ -1,0 +1,11 @@
+{
+  "utc": "2026-09-27T23:43:41.220953+00:00",
+  "status_at_snapshot": "active",
+  "terminal_result": null,
+  "unit": "qwen38-single-mlp-full-compile-003.service",
+  "main_pid": 934692,
+  "physical": false,
+  "reproduction": "python3 performance/tools/stage_mlp_full_compile.py 003 --candidate mlp-executable-candidate-003 --profiles mlp-integrated-compile-004 --seconds 1800",
+  "source_note": "Frozen CSL is in mlp-executable-candidate-003; helper/launcher source is produced by the pinned staging tool. Complete remote source/log/result collection waits for terminal service state to avoid freezing a changing log.",
+  "resource_note": "4GiB RAM, no swap,2CPU,1800s compile and1850s total service, shared heavy lock. Not an ALCF allocation."
+}

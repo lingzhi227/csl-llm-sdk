@@ -1,0 +1,520 @@
+{
+  "passed": true,
+  "application_pes": 25,
+  "compiled_elf_images": 25,
+  "application": [
+    25,
+    1
+  ],
+  "fabric": [
+    32,
+    3
+  ],
+  "offset": [
+    4,
+    1
+  ],
+  "records": [
+    {
+      "file": "out/bin/out_0_0.elf",
+      "sha256": "cdc6aaef447e5ed8c62fb2eb6600f751533f69b84e73307f11f0179ade483b71",
+      "rectangles": [
+        [
+          4,
+          1,
+          1,
+          1
+        ]
+      ],
+      "source": "mlp_worker.csl",
+      "low_section_end": 43680,
+      "low_section_bytes": 43680,
+      "static_allocated_section_bytes": 44084,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out/bin/out_10_0.elf",
+      "sha256": "78c9d6baee4a19119ad2349c25d4bd39f19979e3dc82240c696c41114ca4a985",
+      "rectangles": [
+        [
+          14,
+          1,
+          1,
+          1
+        ]
+      ],
+      "source": "mlp_activation.csl",
+      "low_section_end": 8320,
+      "low_section_bytes": 8316,
+      "static_allocated_section_bytes": 8720,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out/bin/out_11_0.elf",
+      "sha256": "b1d6cc5aad6b10012a695c875cb41d5f3ab5e26e103dbceadb05281f56057430",
+      "rectangles": [
+        [
+          15,
+          1,
+          1,
+          1
+        ]
+      ],
+      "source": "mlp_activation.csl",
+      "low_section_end": 8016,
+      "low_section_bytes": 8004,
+      "static_allocated_section_bytes": 8412,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out/bin/out_12_0.elf",
+      "sha256": "3c0450c104733cb107eefc4610a88c463843932edeee2aef955e3b372e06a2e3",
+      "rectangles": [
+        [
+          16,
+          1,
+          1,
+          1
+        ]
+      ],
+      "source": "mlp_activation.csl",
+      "low_section_end": 7856,
+      "low_section_bytes": 7844,
+      "static_allocated_section_bytes": 8252,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out/bin/out_13_0.elf",
+      "sha256": "bd67ae795b1a026ee97b797753865c3930cd283435e7b55793c50e7d08e639a4",
+      "rectangles": [
+        [
+          17,
+          1,
+          1,
+          1
+        ]
+      ],
+      "source": "mlp_norm.csl",
+      "low_section_end": 42064,
+      "low_section_bytes": 42056,
+      "static_allocated_section_bytes": 42460,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out/bin/out_14_0.elf",
+      "sha256": "ac2cb1e39674ce0741eb16db8e173911d58a42cae67992ef43d51ba1e5ed5b89",
+      "rectangles": [
+        [
+          18,
+          1,
+          1,
+          1
+        ]
+      ],
+      "source": "mlp_norm.csl",
+      "low_section_end": 42640,
+      "low_section_bytes": 42628,
+      "static_allocated_section_bytes": 43032,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out/bin/out_15_0.elf",
+      "sha256": "bbf1712f9bedd0c7e03228f98d994bfacb81e7716cb33f224b47ab9a07ef9f7b",
+      "rectangles": [
+        [
+          19,
+          1,
+          1,
+          1
+        ]
+      ],
+      "source": "mlp_norm.csl",
+      "low_section_end": 42288,
+      "low_section_bytes": 42280,
+      "static_allocated_section_bytes": 42684,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out/bin/out_16_0.elf",
+      "sha256": "81b753473788728d272ee33f475e4435220c44c45cd60d483af5d10a7589a650",
+      "rectangles": [
+        [
+          20,
+          1,
+          1,
+          1
+        ]
+      ],
+      "source": "mlp_join.csl",
+      "low_section_end": 41888,
+      "low_section_bytes": 41880,
+      "static_allocated_section_bytes": 42276,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out/bin/out_17_0.elf",
+      "sha256": "1bbcb2ec949f635d04a27708f173cb93a4da773cf51feed1a80634b3eb35720b",
+      "rectangles": [
+        [
+          21,
+          1,
+          1,
+          1
+        ]
+      ],
+      "source": "mlp_join.csl",
+      "low_section_end": 41936,
+      "low_section_bytes": 41928,
+      "static_allocated_section_bytes": 42328,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out/bin/out_18_0.elf",
+      "sha256": "be06db050e8b94d937ddb8a7f5b665921f23e94ebc87ea5a92dc48509a08f262",
+      "rectangles": [
+        [
+          22,
+          1,
+          1,
+          1
+        ]
+      ],
+      "source": "mlp_join.csl",
+      "low_section_end": 41888,
+      "low_section_bytes": 41880,
+      "static_allocated_section_bytes": 42276,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out/bin/out_19_0.elf",
+      "sha256": "025ea9d98f4ed309c55c9e24edc5c95a36e364002ec40d6f15981dc10e36deed",
+      "rectangles": [
+        [
+          23,
+          1,
+          1,
+          1
+        ]
+      ],
+      "source": "mlp_join.csl",
+      "low_section_end": 41936,
+      "low_section_bytes": 41928,
+      "static_allocated_section_bytes": 42328,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out/bin/out_1_0.elf",
+      "sha256": "2525426c2ed2cc8d1610d2a3615f90ece79384855448f5b001d8bf9c1e21bb97",
+      "rectangles": [
+        [
+          5,
+          1,
+          1,
+          1
+        ]
+      ],
+      "source": "mlp_worker.csl",
+      "low_section_end": 43584,
+      "low_section_bytes": 43584,
+      "static_allocated_section_bytes": 43988,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out/bin/out_20_0.elf",
+      "sha256": "b4446b56a1973ec27c813b4005f3cefecce8a35dbe6d6b96e5c6e749faa4b7f8",
+      "rectangles": [
+        [
+          24,
+          1,
+          1,
+          1
+        ]
+      ],
+      "source": "mlp_join.csl",
+      "low_section_end": 42048,
+      "low_section_bytes": 42040,
+      "static_allocated_section_bytes": 42436,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out/bin/out_21_0.elf",
+      "sha256": "bd942c1998d8fd575968f8e2ade2c1e0f658bac8a2d7f9a36f85f634a0a14e01",
+      "rectangles": [
+        [
+          25,
+          1,
+          1,
+          1
+        ]
+      ],
+      "source": "mlp_join.csl",
+      "low_section_end": 42064,
+      "low_section_bytes": 42056,
+      "static_allocated_section_bytes": 42456,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out/bin/out_22_0.elf",
+      "sha256": "cafa3794b9e525dc354e01701adca6012741d944151709601afd5eb0da504167",
+      "rectangles": [
+        [
+          26,
+          1,
+          1,
+          1
+        ]
+      ],
+      "source": "mlp_join.csl",
+      "low_section_end": 42048,
+      "low_section_bytes": 42040,
+      "static_allocated_section_bytes": 42436,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out/bin/out_23_0.elf",
+      "sha256": "656745f8f82d65330e8b325de4986471fce06ffa0e597e8543d42c42e438e1b3",
+      "rectangles": [
+        [
+          27,
+          1,
+          1,
+          1
+        ]
+      ],
+      "source": "mlp_join.csl",
+      "low_section_end": 42064,
+      "low_section_bytes": 42056,
+      "static_allocated_section_bytes": 42456,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out/bin/out_24_0.elf",
+      "sha256": "8d74e546cd0a79362ec5990481f150e6f3dfd5ef658e26852fc12abecf93194f",
+      "rectangles": [
+        [
+          28,
+          1,
+          1,
+          1
+        ]
+      ],
+      "source": "mlp_join.csl",
+      "low_section_end": 5840,
+      "low_section_bytes": 5828,
+      "static_allocated_section_bytes": 6224,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out/bin/out_2_0.elf",
+      "sha256": "0820ab8fc28585fb097c18d7c8cf72c1bb0705db23c68b52d53ea9a29ad42847",
+      "rectangles": [
+        [
+          6,
+          1,
+          1,
+          1
+        ]
+      ],
+      "source": "mlp_worker.csl",
+      "low_section_end": 43360,
+      "low_section_bytes": 43356,
+      "static_allocated_section_bytes": 43756,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out/bin/out_3_0.elf",
+      "sha256": "42ad2ec625a59970fbfaf629e6e26308198fea6eb27776dc59b0ece5067db571",
+      "rectangles": [
+        [
+          7,
+          1,
+          1,
+          1
+        ]
+      ],
+      "source": "mlp_worker.csl",
+      "low_section_end": 43360,
+      "low_section_bytes": 43356,
+      "static_allocated_section_bytes": 43756,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out/bin/out_4_0.elf",
+      "sha256": "3bf6caede53bbb43090f5a27dae08b883db2fc5675e07720195b3d5c6d473a26",
+      "rectangles": [
+        [
+          8,
+          1,
+          1,
+          1
+        ]
+      ],
+      "source": "mlp_worker.csl",
+      "low_section_end": 43600,
+      "low_section_bytes": 43592,
+      "static_allocated_section_bytes": 43996,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out/bin/out_5_0.elf",
+      "sha256": "e49652253b3fbad4a4e39b94724278c5a7a7d14ad07c54fe578c8fcf005854a9",
+      "rectangles": [
+        [
+          9,
+          1,
+          1,
+          1
+        ]
+      ],
+      "source": "mlp_worker.csl",
+      "low_section_end": 43232,
+      "low_section_bytes": 43220,
+      "static_allocated_section_bytes": 43624,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out/bin/out_6_0.elf",
+      "sha256": "f8e86a75f73bbd5681effe09ad066c9f6cb3933b091b47d1a166c47b6265264f",
+      "rectangles": [
+        [
+          10,
+          1,
+          1,
+          1
+        ]
+      ],
+      "source": "mlp_worker.csl",
+      "low_section_end": 43136,
+      "low_section_bytes": 43124,
+      "static_allocated_section_bytes": 43528,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out/bin/out_7_0.elf",
+      "sha256": "ba0e985576a72d46bcd9aea43a87e2daa1fa0f4a7dee0881adef608fde12271f",
+      "rectangles": [
+        [
+          11,
+          1,
+          1,
+          1
+        ]
+      ],
+      "source": "mlp_worker.csl",
+      "low_section_end": 42592,
+      "low_section_bytes": 42584,
+      "static_allocated_section_bytes": 42980,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out/bin/out_8_0.elf",
+      "sha256": "82662494a1ba05031b3092a63b45bdcbd979dd9dc43d9c8a268e7bcf34f38bf2",
+      "rectangles": [
+        [
+          12,
+          1,
+          1,
+          1
+        ]
+      ],
+      "source": "mlp_worker.csl",
+      "low_section_end": 42592,
+      "low_section_bytes": 42584,
+      "static_allocated_section_bytes": 42980,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out/bin/out_9_0.elf",
+      "sha256": "7e21af84c0d9f383cdecb7a1f30a72588226d6b934c72794341cdd756e7cf77e",
+      "rectangles": [
+        [
+          13,
+          1,
+          1,
+          1
+        ]
+      ],
+      "source": "mlp_worker.csl",
+      "low_section_end": 43136,
+      "low_section_bytes": 43132,
+      "static_allocated_section_bytes": 43536,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    }
+  ],
+  "note": "A compiler ELF may cover several PEs. All complete low-memory PT_LOAD rectangles form the exact application once; SRAM is admitted for every mapped image."
+}

@@ -1,0 +1,95 @@
+// Actual gate/up arrival -> BF16 SiLU/multiply -> group128 max/scale/encode ->
+// credited ordered gather -> native down broadcast. No host intermediate values.
+param memcpy_params;param pair:u16;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);const tile=@import_module("<tile_config>");
+const fused=@import_module("mlp_fused.csl");
+const giq=@get_input_queue(2);const uiq=@get_input_queue(3);const ciq=@get_input_queue(4);const siq=@get_input_queue(5);const oq=@get_output_queue(2);
+const gd=@get_dsr(dsr_dest,2);const gs=@get_dsr(dsr_src0,2);
+const ud=@get_dsr(dsr_dest,3);const us=@get_dsr(dsr_src0,3);
+const cd=@get_dsr(dsr_dest,5);const cs=@get_dsr(dsr_src0,5);
+const bd=@get_dsr(dsr_dest,1);const bs=@get_dsr(dsr_src0,1);
+const od=@get_dsr(dsr_dest,6);const os=@get_dsr(dsr_src0,6);
+const gt=@get_local_task_id(8);const ut=@get_local_task_id(9);const ct=@get_local_task_id(10);const bt=@get_local_task_id(11);const ot=@get_local_task_id(12);
+var gate_word=@zeros([1]u32);var up_word=@zeros([1]u32);var child=@zeros([1]u32);var scale=@zeros([1]u32);
+var packet=@zeros([if(pair==0) 65 else 1]u32);var maximum=@zeros([1]u32);var value=@zeros([1]u32);var audit=@zeros([8]u32);
+const pp:[*]u32=&packet;const vp:[*]u32=&value;const ap:[*]u32=&audit;const sp:[*]u32=&scale;
+var armed:bool=false;var started:bool=false;var complete:bool=false;
+var gate_ready:bool=false;var up_ready:bool=false;var local_ready:bool=false;var child_ready:bool=false;
+var max_started:bool=false;var max_sent:bool=false;var scale_ready:bool=false;var encoded:bool=false;
+var sent_words:u16=0;var phase:u16=0;
+fn finish() void {if(started and complete){started=false;armed=false;audit[7]=1;sys.unblock_cmd_stream();}}
+fn transmit(base:[*]u32,comptime words:u16) void {
+ const m=@get_dsd(mem1d_dsd,.{.base_address=base,.extent=words});const f=@get_dsd(fabout_dsd,.{.output_queue=oq,.extent=words});
+ @load_to_dsr(os,m);@load_to_dsr(od,f,.{.async=true,.ut_id=@get_ut_id(5),.activate=ot});@mov32(od,os,.{.async=true});
+}
+fn receive_child() void {
+ const m=@get_dsd(mem1d_dsd,.{.base_address=&child,.extent=1});const f=@get_dsd(fabin_dsd,.{.input_queue=ciq,.extent=1});
+ @load_to_dsr(cd,m);@load_to_dsr(cs,f,.{.async=true,.ut_id=@get_ut_id(4),.activate=ct});@mov32(cd,cs,.{.async=true});
+}
+fn encode_ready() void {
+ if(max_sent and scale_ready and !encoded){
+  encoded=true;packet[0]=fused.encoded_pair(value[0],@bitcast(f32,scale[0]));audit[4]+=1;phase=2;
+  if(comptime pair==0){packet[64]=scale[0];sent_words=1;receive_child();}
+  else{transmit(pp,1);}
+ }
+}
+fn join_maximum() void {
+ if(gate_ready and up_ready and !local_ready){
+  local_ready=true;value[0]=fused.activation_pair(gate_word[0],up_word[0]);
+  maximum[0]=@bitcast(u32,fused.maximum_pair(value[0]));audit[2]+=1;
+ }
+ if(local_ready and child_ready and !max_started){
+  max_started=true;if(comptime pair<63){if(child[0]>maximum[0]){maximum[0]=child[0];}}
+  if(comptime pair==0){
+   if(maximum[0]<@bitcast(u32,@as(f32,0.0000000001))){maximum[0]=@bitcast(u32,@as(f32,0.0000000001));}
+   scale[0]=@bitcast(u32,@bitcast(f32,maximum[0])*0.002232142857142857);
+   scale_ready=true;transmit(sp,1);
+  }else{transmit(&maximum,1);}
+ }
+}
+task gate_arrived() void {gate_ready=true;audit[1]+=1;join_maximum();}
+task up_arrived() void {up_ready=true;audit[1]+=1;join_maximum();}
+task child_arrived() void {
+ if(phase==1){child_ready=true;audit[3]+=1;join_maximum();}
+ else{
+  @assert(phase==2);audit[5]+=1;
+  if(comptime pair==0){
+   packet[sent_words]=child[0];sent_words+=1;
+   if(sent_words==64){phase=3;tile.output_queue_config.encode_output_queue(2,18);transmit(pp,65);}
+   else{receive_child();}
+  }else{transmit(&child,1);}
+ }
+}
+task scale_arrived() void {scale_ready=true;encode_ready();}
+task sent() void {
+ audit[6]+=1;
+ if(phase==1){max_sent=true;encode_ready();}
+ else if(phase==2){
+  sent_words+=1;if(sent_words==64-pair){complete=true;finish();}else{receive_child();}
+ }else{@assert(pair==0 and phase==3);complete=true;finish();}
+}
+fn arm(layer:u16) void {
+ @assert(!armed and !started and layer<64);armed=true;complete=false;phase=1;sent_words=0;
+ gate_ready=false;up_ready=false;local_ready=false;child_ready=pair==63;max_started=false;max_sent=false;scale_ready=false;encoded=false;
+ for(@range(u16,8))|i|{audit[i]=0;}audit[0]=1;
+ tile.output_queue_config.encode_output_queue(2,if(pair==0) 6 else @as(i16,4+pair%2));
+ const gm=@get_dsd(mem1d_dsd,.{.base_address=&gate_word,.extent=1});const gf=@get_dsd(fabin_dsd,.{.input_queue=giq,.extent=1});
+ @load_to_dsr(gd,gm);@load_to_dsr(gs,gf,.{.async=true,.ut_id=@get_ut_id(2),.activate=gt});@mov32(gd,gs,.{.async=true});
+ const um=@get_dsd(mem1d_dsd,.{.base_address=&up_word,.extent=1});const uf=@get_dsd(fabin_dsd,.{.input_queue=uiq,.extent=1});
+ @load_to_dsr(ud,um);@load_to_dsr(us,uf,.{.async=true,.ut_id=@get_ut_id(3),.activate=ut});@mov32(ud,us,.{.async=true});
+ if(comptime pair<63){receive_child();}
+ if(comptime pair>0){
+  const m=@get_dsd(mem1d_dsd,.{.base_address=&scale,.extent=1});const f=@get_dsd(fabin_dsd,.{.input_queue=siq,.extent=1});
+  @load_to_dsr(bd,m);@load_to_dsr(bs,f,.{.async=true,.ut_id=@get_ut_id(6),.activate=bt});@mov32(bd,bs,.{.async=true});
+ }
+ sys.unblock_cmd_stream();
+}
+fn start() void {@assert(armed and !started);started=true;finish();}
+comptime {
+ @initialize_queue(giq,.{.color=@get_color(16)});@initialize_queue(uiq,.{.color=@get_color(17)});
+ @initialize_queue(oq,.{.color=@get_color(if(pair==0) 6 else 4+pair%2)});
+ if(pair<63){@initialize_queue(ciq,.{.color=@get_color(4+(pair+1)%2)});@bind_local_task(child_arrived,ct);}
+ if(pair>0){@initialize_queue(siq,.{.color=@get_color(6)});@bind_local_task(scale_arrived,bt);}
+ @bind_local_task(gate_arrived,gt);@bind_local_task(up_arrived,ut);@bind_local_task(sent,ot);
+ @export_symbol(pp,"packet");@export_symbol(vp,"value");@export_symbol(ap,"audit");@export_symbol(sp,"scale");@export_symbol(arm);@export_symbol(start);
+}
