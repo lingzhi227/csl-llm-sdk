@@ -1,0 +1,46 @@
+// Bounded native32 packet source. No neural computation or packet rewriting.
+param memcpy_params;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+var wire=@zeros([321]u32);var audit=@zeros([4]u32);var empty=@zeros([1]u16);var sending:bool=false;
+const wp:[*]u32=&wire;const hp:[*]u16=&empty;const ap:[*]u32=&audit;
+const oq=@get_output_queue(2);const ss=@get_dsr(dsr_src0,1);const sd=@get_dsr(dsr_dest,1);
+const complete=@get_local_task_id(8);
+fn send() void {
+ @assert(!sending and wire[0]<=64);if(wire[0]==0){sys.unblock_cmd_stream();return;}
+ sending=true;audit[0]+=wire[0];audit[1]+=1;
+ const words:u16=@as(u16,wire[0])*5;
+ const m=@get_dsd(mem1d_dsd,.{.base_address=&wire[1],.extent=320});
+ const f=@get_dsd(fabout_dsd,.{.output_queue=oq,.extent=1});
+ @load_to_dsr(ss,@set_dsd_length(m,words));@load_to_dsr(sd,@set_dsd_length(f,words),.{.async=true,.ut_id=@get_ut_id(1),.activate=complete});
+ @mov32(sd,ss,.{.async=true});
+}
+task sent() void {@assert(sending);sending=false;audit[2]+=1;sys.unblock_cmd_stream();}
+fn clear() void {@assert(!sending);for(@range(u16,4))|i|{audit[i]=0;}sys.unblock_cmd_stream();}
+fn begin(token:u32) void {@assert(!sending);audit[3]=token;sys.unblock_cmd_stream();}
+fn prepare(head:u16) void {sys.unblock_cmd_stream();}
+fn inspect() void {sys.unblock_cmd_stream();}
+fn await_frames(kind:u16) void {sys.unblock_cmd_stream();}
+fn consume(head:u16) void {sys.unblock_cmd_stream();}
+fn retire(head:u16) void {sys.unblock_cmd_stream();}
+fn arm() void {sys.unblock_cmd_stream();}
+fn await_done() void {sys.unblock_cmd_stream();}
+comptime {
+ @initialize_queue(oq,.{.color=@get_color(3)});@bind_local_task(sent,complete);
+ @export_symbol(hp,"weights");
+ @export_symbol(hp,"history");
+ @export_symbol(hp,"gain");
+ @export_symbol(hp,"parameters");
+ @export_symbol(hp,"output");
+ @export_symbol(hp,"core");
+ @export_symbol(wp,"wire");
+ @export_symbol(wp,"packet");
+ @export_symbol(ap,"audit");
+ @export_symbol(wp,"status");
+ @export_symbol(wp,"state");
+ @export_symbol(send);
+ @export_symbol(inspect);
+ @export_symbol(clear);
+ @export_symbol(arm);
+ @export_symbol(await_done);
+ @export_symbol(begin);
+}

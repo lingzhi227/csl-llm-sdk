@@ -1,32 +1,32 @@
 # Next work: resident spatial pipeline
 
-Immediate P46 follow-up: connect the actual frontend and complete GDN graph in
-the resident layer. P45 complete compile027/reference003 remain the full-bank
-address authority; P46 physical gdn-columns-hw-001 qualifies every original
-8/32-column state slice and native paired return over six continuous plus two
-reset positions. These are complementary gates: P46 uses injected independent
-frontend-reference inputs and diagnostic banks. Do not repeat unchanged
-standalone recurrence, placement or compiler sweeps.
+Immediate P47 follow-up: lower the qualified connected frontend/GDN/gated graph
+into the complete resident layer. P47 physical001 passes all16 groups/48 heads,
+753 slices, six continuous plus two reset positions, independent numerical
+intervals and exact replay. It uses projected-input/terminal-output diagnostic
+boundaries. Its800PE serpentine geometry is not the production layer placement.
+P45 compile027/reference003 remain the full-bank and address authority.
 
-Use `paired_port()` and the frontend producer's direct packet-store adapter.
-Ingress is `[token,decay,beta,V128,K128,Q128]`; returns are five-word frames with
-two BF16 values, exactly matching P43's native frontend contract. Preserve all
-753 state slices and explicit namespaced auxiliary addresses unless a new joint
-route/placement result requires and verifies a migration. Connecting production
-routes and composing actual cohost code requires fresh full-program admission.
+Use the now-qualified separate launch/source-buffer/output lifetimes and
+pop-on-advance return markers. Preserve all original state slices, model banks
+and the earlier complete norm/MLP graph. Jointly lower the routes and cohost
+resource lifetimes: gate/up, down and mixer regions have different occupied
+colors, and the P45 minimum SRAM margin is only16B. A fixed diagnostic color or
+an unchanged bank budget cannot simply be copied onto every cohost.
 
-Resolve launch, source-buffer release and return retirement separately. The
-current frontend's consumed bit is coupled to its packet-DMA callback; an early
-return must not race that callback, and last-head output retirement must still
-wait for any outstanding source lease. Frontend ingress and GDN return queues
-must drain before current-token MLP input reuses its decoder. Check color, input
-and output queues, DSRs, microthreads and local-task ownership at every cohost.
+Measured first-launch-to-group-drain is227519–250397 physical cycles, with
+substantial return/consumer serialization. Optimize the actual connected path:
+reduce per-word receive overhead and central gathering, consume outputs directly
+in successor kernels, and overlap transfers only when their storage leases are
+proven. Do not make an open-ended set of optional standalone optimizations a
+prerequisite for completing the layer. Any arithmetic/reduction-order change
+needs new predeclared numerical bounds and full original-value coverage.
 
-Then execute the original output projection and retained norm/MLP graph. Freeze
-bounds for changed MLP reduction order before observing candidate output. Follow
-with all64 stages, full head and dependent token feedback. Preserve actual
-state across new prompts; the continuing-dialogue2000tps target remains unmet.
-See [Paired GDN](PAIRED-GDN.md), [Co-placement](GDN-CO-PLACEMENT.md) and
+Connect the original output projection to retained residual/normalization/MLP,
+then all64 stages, full vocabulary head and dependent token feedback. Preserve
+committed conversation state across appended prompts and account for context
+growth. The continuing-dialogue>=2000tps target remains unmet. See
+[Connected GDN](GDN-FUSION.md), [Co-placement](GDN-CO-PLACEMENT.md) and
 [Dialogue acceptance](DIALOGUE-ACCEPTANCE.md).
 
 1. Preserve physical006 as the accepted shared-input complete-MLP baseline:

@@ -1,0 +1,68 @@
+{
+  "passed": true,
+  "physical": false,
+  "scope": "Connected frontend/GDN/gated-output component. Two-position three-head smoke and all48-head diagnostic compiler admission; physical qualification pending, not full resident bank/layer/model admission.",
+  "simulator": "gdn-fusion-sim-012",
+  "full_compile": "gdn-fusion-sim-013",
+  "continuous_smoke_positions": 2,
+  "smoke_workers": 39,
+  "smoke_state_elements_verified": 98304,
+  "smoke_original_parameters_retained": true,
+  "full_application_pes": 800,
+  "full_compiled_images": 773,
+  "full_maximum_bytes_with_stack": 45440,
+  "original_slices": 753,
+  "original_heads": 48,
+  "host_injected_recurrent_results": false,
+  "maximum_state_error_bound_ratio": 0.1361639254396455,
+  "maximum_state_relative_l2": 3.168901504119948e-07,
+  "smoke_cycles": [
+    {
+      "units": "PE counter cycles",
+      "scope": "Instrumented component; original projected inputs supplied at diagnostic source; forced delayed callback and capture overhead included. No full-layer/model TPS.",
+      "frontend_first_launch_to_drain": [
+        241268
+      ],
+      "frontend_head_launch_to_gated_output": [
+        [
+          104201,
+          145503,
+          186521
+        ]
+      ],
+      "worker_key_update_min": 5637,
+      "worker_key_update_max": 21021,
+      "worker_query_reduce_min": 2244,
+      "worker_query_reduce_max": 8394,
+      "worker_return_drain_min": 5254,
+      "worker_return_drain_max": 107578
+    },
+    {
+      "units": "PE counter cycles",
+      "scope": "Instrumented component; original projected inputs supplied at diagnostic source; forced delayed callback and capture overhead included. No full-layer/model TPS.",
+      "frontend_first_launch_to_drain": [
+        240067
+      ],
+      "frontend_head_launch_to_gated_output": [
+        [
+          103666,
+          144620,
+          185320
+        ]
+      ],
+      "worker_key_update_min": 5637,
+      "worker_key_update_max": 21021,
+      "worker_query_reduce_min": 2244,
+      "worker_query_reduce_max": 8394,
+      "worker_return_drain_min": 5254,
+      "worker_return_drain_max": 106695
+    }
+  ],
+  "workstation_all_released": true,
+  "source_tests": "gdn-fusion-tests-001.json",
+  "manifest_hashes": {
+    "gdn-fusion-sim-012": "e9ab50645e3bedc2a457ca97162d278a31503f1f753c52740e4c4078276b0687",
+    "gdn-fusion-sim-013": "380a96ab9811cdd8f6357cafb33c5568ed86d48d5d3b6f5d48b69b4038c5dbc8"
+  },
+  "full_model_speed_target_achieved": false
+}

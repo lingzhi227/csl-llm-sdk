@@ -1,0 +1,145 @@
+const fusion_debug=@import_module("<simprint>");
+// Actual frontend -> filtered broadcast -> actual GDN -> switched gather.
+// Projection inputs and terminal output capture are diagnostic boundaries.
+param memcpy_params;param worker_count:u16;param delay_last_release:bool;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+// Native root frame [token,row,rows,packed-BF16,matrix] is multicast only to
+// groups needed by this source. Foreign rows are skipped at their destination,
+// leaving root code small enough for its full-K group's weight capacity.
+param frontend_group:u16;param frontend_projected_packets:u16;
+const frontend_ready=@get_local_task_id(18);const frontend_output=@get_local_task_id(19);
+const frontend=@import_module("mixer_frontend_native.csl",.{.group=frontend_group,.ready_task=frontend_ready,.output_task=frontend_output});
+const frontend_iq=@get_input_queue(2);
+var frontend_frame=@zeros([5]u32);var frontend_cursor:u16=0;
+var frontend_wire_active:bool=false;var frontend_wire_packets:u32=0;
+var frontend_status=@zeros([10]u32);const fsp:[*]u32=&frontend_status;
+fn frontend_transport_drained() bool {return !frontend_wire_active and frontend_cursor==0;}
+fn frontend_snapshot() void {
+ frontend_status[0]=frontend.invocation;frontend_status[1]=@as(u32,frontend.notified);
+ frontend_status[2]=@as(u32,frontend.consumed);frontend_status[3]=@as(u32,frontend.completed);
+ frontend_status[4]=@as(u32,frontend.retired);frontend_status[5]=0;
+ if(frontend.packet_busy){frontend_status[5]=1;}frontend_status[6]=@as(u32,frontend_cursor);
+ frontend_status[7]=0;if(frontend.drained() and frontend_transport_drained()){frontend_status[7]=1;}
+ frontend_status[8]=frontend_wire_packets;frontend_status[9]=@as(u32,frontend_projected_packets)+192;
+}
+fn frontend_begin(token:u32) void {
+ if(!(frontend_transport_drained())){fusion_debug.print_string("consumer.csl:25 ASSERT\n");}@assert(frontend_transport_drained());frontend.begin(token);frontend_wire_packets=0;frontend_wire_active=true;
+}
+fn frontend_reset() void {
+ if(!(frontend_transport_drained())){fusion_debug.print_string("consumer.csl:28 ASSERT\n");}@assert(frontend_transport_drained());frontend.reset();frontend_wire_packets=0;
+}
+fn frontend_deliver() void {
+ const token=frontend_frame[0];
+ if(token!=frontend.invocation or !frontend_wire_active){fusion_debug.fmt("ingress token={d} invocation={d} active={d} count={d} row={d} matrix={d}",.{token,frontend.invocation,@as(u16,frontend_wire_active),frontend_wire_packets,frontend_frame[1],frontend_frame[4]});}
+ if(!(token==frontend.invocation and frontend_wire_active)){fusion_debug.print_string("consumer.csl:33 ASSERT\n");}@assert(token==frontend.invocation and frontend_wire_active);
+ if(!(frontend_frame[1]<10240 and (frontend_frame[4]<4 or frontend_frame[4]==5))){fusion_debug.print_string("consumer.csl:34 ASSERT\n");}@assert(frontend_frame[1]<10240 and (frontend_frame[4]<4 or frontend_frame[4]==5));
+ const row=@as(u16,frontend_frame[1]);const matrix=@as(u16,frontend_frame[4]);
+ var wanted:bool=false;var index:u16=row;
+ if(matrix==0){
+  if(!(frontend_frame[2]==2 and row%2==0)){fusion_debug.print_string("consumer.csl:38 ASSERT\n");}@assert(frontend_frame[2]==2 and row%2==0);
+  wanted=(row>=128*frontend_group and row<128*frontend_group+128) or
+         (row>=2048+128*frontend_group and row<2048+128*frontend_group+128) or
+         (row>=4096+384*frontend_group and row<4096+384*frontend_group+384);
+ }else if(matrix==1 or matrix==5){
+  if(!(frontend_frame[2]==2 and row%2==0 and row<6144)){fusion_debug.print_string("consumer.csl:43 ASSERT\n");}@assert(frontend_frame[2]==2 and row%2==0 and row<6144);
+  wanted=row>=384*frontend_group and row<384*frontend_group+384;
+  index=10240+row;if(matrix==5){if(!(wanted)){fusion_debug.print_string("consumer.csl:45 ASSERT\n");}@assert(wanted);index=16480+row;}
+ }else{
+  if(!(frontend_frame[2]==1 and row<48 and frontend_frame[3]<65536)){fusion_debug.print_string("consumer.csl:47 ASSERT\n");}@assert(frontend_frame[2]==1 and row<48 and frontend_frame[3]<65536);
+  wanted=row>=3*frontend_group and row<3*frontend_group+3;index=16384+(matrix-2)*48+row;
+ }
+ if(wanted){frontend.accept(token,index,@as(u16,frontend_frame[3]&65535),@as(u16,frontend_frame[3]>>16));}
+ frontend_wire_packets+=1;
+ if(!(frontend_wire_packets<=@as(u32,frontend_projected_packets)+192)){fusion_debug.print_string("consumer.csl:52 ASSERT\n");}@assert(frontend_wire_packets<=@as(u32,frontend_projected_packets)+192);
+ if(frontend_wire_packets==@as(u32,frontend_projected_packets)+192){frontend_wire_active=false;}
+}
+task frontend_arrived(value:u32) void {
+ if(!(frontend_cursor<5)){fusion_debug.print_string("consumer.csl:56 ASSERT\n");}@assert(frontend_cursor<5);frontend_frame[frontend_cursor]=value;frontend_cursor+=1;
+ if(frontend_cursor==5){frontend_deliver();frontend_cursor=0;progress();}
+}
+
+comptime {
+ @comptime_assert(frontend_projected_packets>=518);
+ @initialize_queue(frontend_iq,.{.color=@get_color(3)});
+ @bind_data_task(frontend_arrived,@get_data_task_id(frontend_iq));
+ @bind_local_task(frontend_packet_ready,frontend_ready);@bind_local_task(frontend_output_ready,frontend_output);
+}
+
+const source_oq=@get_output_queue(3);const core_iq=@get_input_queue(3);
+const tx_s=@get_dsr(dsr_src0,1);const tx_d=@get_dsr(dsr_dest,1);
+const tx_done=@get_local_task_id(8);const marker_task=@get_control_task_id(40);
+var next_head:u16=0;var markers:u16=0;var core_cursor:u16=0;var core_frames:u16=0;
+var core_frame=@zeros([5]u32);var waiting:bool=false;var raced:u16=0;
+// Read-only diagnostic observation, never transmitted back to a worker.
+var captured=@zeros([1161]u32);var captured_core=@zeros([384]u16);var probe_status=@zeros([16]u32);
+const cp:[*]u32=&captured;const sp:[*]u32=&probe_status;const corep:[*]u16=&captured_core;
+fn progress() void {
+ if(waiting and frontend.drained() and frontend_transport_drained() and markers==worker_count and core_cursor==0 and next_head==3){
+  waiting=false;sys.unblock_cmd_stream();
+ }
+}
+fn pump() void {
+ if(next_head==3 or frontend.packet_busy){return;}
+ const bit:u16=@as(u16,1)<<next_head;if((frontend.notified&bit)==0){return;}
+ frontend.prepare(next_head);
+ const source=@get_dsd(mem1d_dsd,.{.base_address=frontend.packet_pointer,.extent=387});
+ const observed=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]u32,&captured[387*next_head]),.extent=387});
+ @mov32(observed,source);
+ frontend.packet_launched(frontend.invocation,next_head);
+ if(comptime delay_last_release){if(next_head==2){@block(tx_done);}}
+ const target=@get_dsd(fabout_dsd,.{.output_queue=source_oq,.extent=387});
+ @load_to_dsr(tx_s,source);@load_to_dsr(tx_d,target,.{.async=true,.ut_id=@get_ut_id(1),.activate=tx_done});
+ @mov32(tx_d,tx_s,.{.async=true});
+}
+task packet_sent() void {
+ frontend.packet_consumed(frontend.invocation,next_head);next_head+=1;pump();progress();
+}
+task returned(value:u32) void {
+ core_frame[core_cursor]=value;core_cursor+=1;
+ if(core_cursor==5){
+  if(!(core_frame[0]==frontend.invocation and core_frame[2]==2 and core_frame[4]==5)){fusion_debug.print_string("consumer.csl:99 ASSERT\n");}@assert(core_frame[0]==frontend.invocation and core_frame[2]==2 and core_frame[4]==5);
+  const row=@as(u16,core_frame[1]);if(!(row>=384*frontend_group and row<384*frontend_group+384 and row%2==0)){fusion_debug.print_string("consumer.csl:100 ASSERT\n");}@assert(row>=384*frontend_group and row<384*frontend_group+384 and row%2==0);
+  const first=@as(u16,core_frame[3]&65535);const second=@as(u16,core_frame[3]>>16);
+  const local:u16=row-384*frontend_group;captured_core[local]=first;captured_core[local+1]=second;
+  frontend.accept(core_frame[0],16480+row,first,second);core_cursor=0;core_frames+=1;
+  frontend_wire_packets+=1;if(!(frontend_wire_packets<=@as(u32,frontend_projected_packets)+192)){fusion_debug.print_string("consumer.csl:104 ASSERT\n");}@assert(frontend_wire_packets<=@as(u32,frontend_projected_packets)+192);
+  if(frontend_wire_packets==@as(u32,frontend_projected_packets)+192){frontend_wire_active=false;}
+  progress();
+ }
+}
+task marker() void {markers+=1;if(!(markers<=worker_count)){fusion_debug.print_string("consumer.csl:109 ASSERT\n");}@assert(markers<=worker_count);progress();}
+task frontend_packet_ready() void {pump();}
+task frontend_output_ready() void {
+ for(@range(u16,3))|head|{
+  const bit:u16=@as(u16,1)<<head;
+  if((frontend.completed&bit)!=0 and (frontend.retired&bit)==0){
+   // Terminal diagnostic consumption. Production output projection must own
+   // this callback before it can claim an integrated layer.
+   frontend.output_consumed(frontend.invocation,head);
+   if(comptime delay_last_release){if(head==2){if(!(frontend.packet_busy)){fusion_debug.print_string("consumer.csl:118 ASSERT\n");}@assert(frontend.packet_busy);raced+=1;@unblock(tx_done);}}
+  }
+ }
+ progress();
+}
+fn send() void {sys.unblock_cmd_stream();}
+fn arm() void {sys.unblock_cmd_stream();}
+fn await_done() void {if(!(!waiting)){fusion_debug.print_string("consumer.csl:125 ASSERT\n");}@assert(!waiting);waiting=true;progress();}
+fn inspect() void {
+ frontend_snapshot();for(@range(u16,10))|i|{probe_status[i]=frontend_status[i];}
+ probe_status[10]=markers;probe_status[11]=core_frames;probe_status[12]=raced;
+ probe_status[13]=next_head;probe_status[14]=core_cursor;probe_status[15]=worker_count;sys.unblock_cmd_stream();
+}
+fn clear() void {frontend_reset();markers=0;core_frames=0;next_head=0;raced=0;sys.unblock_cmd_stream();}
+fn begin(token:u32) void {
+ if(!(frontend.drained() and (markers==worker_count or frontend.invocation==0))){fusion_debug.print_string("consumer.csl:133 ASSERT\n");}@assert(frontend.drained() and (markers==worker_count or frontend.invocation==0));
+ frontend_begin(token);markers=0;core_frames=0;next_head=0;pump();sys.unblock_cmd_stream();
+}
+comptime {
+ @initialize_queue(source_oq,.{.color=@get_color(5)});@initialize_queue(core_iq,.{.color=@get_color(4)});
+ @bind_local_task(packet_sent,tx_done);@bind_data_task(returned,@get_data_task_id(core_iq));@bind_control_task(marker,marker_task);
+ @export_symbol(cp,"packet");@export_symbol(corep,"core");@export_symbol(sp,"status");
+ @export_symbol(frontend.wp,"weights");@export_symbol(frontend.hp,"history");@export_symbol(frontend.gp,"gain");
+ @export_symbol(frontend.pp,"parameters");@export_symbol(frontend.op,"output");@export_symbol(frontend.ap,"audit");
+ @export_symbol(cp,"wire");@export_symbol(cp,"state");
+ @export_symbol(send);@export_symbol(inspect);@export_symbol(clear);@export_symbol(begin);@export_symbol(arm);@export_symbol(await_done);
+}

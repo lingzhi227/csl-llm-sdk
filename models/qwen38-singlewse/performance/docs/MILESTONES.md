@@ -1139,3 +1139,40 @@ Physical001 then covers all original slices. Runtime initialization takes
 full state readback and verification. These timings are not neural latency or
 model TPS. Full production routes, launch/return fences and all64 layers remain
 open. Original functional code and the P45 complete-bank snapshot remain intact.
+
+## P47: connected original frontend, recurrence and gated output on WSE-3
+
+P47 connects the actual original frontend directly to all48 recurrent heads and
+back to gated normalization on real WSE-3. Six continuous plus two reset positions
+pass6,291,456 FP32 state observations,148,224 frontend FP32 values and49,152 each
+of core/gated BF16 outputs. Exact history and bitwise reset replay pass; maximum
+state relative L2 is6.448e-7. All800 diagnostic PEs/773 images fit, with45,440B
+maximum including4,096B stack. Same-PE launch-to-drain measurements span
+227,519–250,397 cycles; these include diagnostic overhead and are not model TPS.
+Twenty-five source and25 publication regressions pass. All13 workstation attempts
+and both cluster jobs are released. Original projected inputs remain a diagnostic
+boundary; production-bank routing, the complete layer and multi-turn model speed
+remain open. See [Connected recurrent dataflow](GDN-FUSION.md).
+
+The graph consumes original projected BF16 inputs and produces its own
+convolution, normalized Q/K, decay/beta gates, persistent recurrent states and
+final gated values. A hardware counter window selects each worker's head;
+switched paired returns use pop-on-advance control markers. Source launch,
+packet-buffer release and output retirement have separate lifetimes. Every group
+intentionally delays the final source callback until gated output completion.
+
+The smoke012 uses all three complete heads in group0, including8/32-column
+workers; full013 admits all original slices with identical kernels and driver.
+Physical001 then qualifies all16 groups over6+2 positions. Fresh capture audit
+verifies the full numerical chain, bitwise history/state/output replay and raw
+cycle observations. Original functional files and all earlier evidence remain.
+See `evidence/gdn-fusion-development-summary-001.json` for failed attempts,
+`gdn-fusion-summary-001.json` for the accepted result, and the physical directory
+for source/artifact identities and correlated release receipts.
+
+The timing identifies substantial return/consumer serialization: local state
+update costs5,643–21,028 cycles and query reduction2,247–8,399 cycles, while the
+return phase reaches138,991 cycles. This guides fusion work; it does not admit
+an extrapolated whole-layer or token rate. Next connect production routes and
+the original output projection to retained normalization/MLP, with fresh complete
+cohost SRAM/lifetime checks and numerical bounds for changed reduction order.

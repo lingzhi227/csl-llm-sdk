@@ -9,6 +9,18 @@ includes appended-input processing and generation, excluding user think time and
 initial loading; decode-only speed and TTFT are reported separately. See
 [DIALOGUE-ACCEPTANCE.md](docs/DIALOGUE-ACCEPTANCE.md). The target remains unmet.
 
+P47 connects the actual original frontend directly to all48 recurrent heads and
+back to gated normalization on real WSE-3. Six continuous plus two reset positions
+pass6,291,456 FP32 state observations,148,224 frontend FP32 values and49,152 each
+of core/gated BF16 outputs. Exact history and bitwise reset replay pass; maximum
+state relative L2 is6.448e-7. All800 diagnostic PEs/773 images fit, with45,440B
+maximum including4,096B stack. Same-PE launch-to-drain measurements span
+227,519–250,397 cycles; these include diagnostic overhead and are not model TPS.
+Twenty-five source and25 publication regressions pass. All13 workstation attempts
+and both cluster jobs are released. Original projected inputs remain a diagnostic
+boundary; production-bank routing, the complete layer and multi-turn model speed
+remain open. See [Connected recurrent dataflow](docs/GDN-FUSION.md).
+
 P46 physically qualifies all 48 recurrent heads on their 753 original value
 slices using paired native returns. Six continuous positions and two reset-replay
 positions pass: 6,291,456 FP32 state elements, 49,152 BF16 outputs and 24,576

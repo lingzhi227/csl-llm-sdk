@@ -1,0 +1,86 @@
+{
+  "passed": true,
+  "physical": false,
+  "normal_stop": true,
+  "groups": [
+    0
+  ],
+  "workers": 39,
+  "positions": 2,
+  "reset_replay_positions": 0,
+  "actual_frontend_execution": true,
+  "actual_gdn_execution": true,
+  "host_injected_recurrent_results": false,
+  "full_original_value_coverage": false,
+  "records": [
+    {
+      "position": 0,
+      "replay": false,
+      "frontend_interval": true,
+      "recurrent_state_interval": true,
+      "core_interval": true,
+      "gated_interval": true,
+      "exact_history": true,
+      "all_return_markers": true,
+      "delayed_source_callback": true,
+      "timing": {
+        "units": "PE counter cycles",
+        "scope": "Instrumented component; original projected inputs supplied at diagnostic source; forced delayed callback and capture overhead included. No full-layer/model TPS.",
+        "frontend_first_launch_to_drain": [
+          241268
+        ],
+        "frontend_head_launch_to_gated_output": [
+          [
+            104201,
+            145503,
+            186521
+          ]
+        ],
+        "worker_key_update_min": 5637,
+        "worker_key_update_max": 21021,
+        "worker_query_reduce_min": 2244,
+        "worker_query_reduce_max": 8394,
+        "worker_return_drain_min": 5254,
+        "worker_return_drain_max": 107578
+      },
+      "maximum_state_error_bound_ratio": 0.007601856261492019,
+      "maximum_state_relative_l2": 2.8371300362660633e-08
+    },
+    {
+      "position": 1,
+      "replay": false,
+      "frontend_interval": true,
+      "recurrent_state_interval": true,
+      "core_interval": true,
+      "gated_interval": true,
+      "exact_history": true,
+      "all_return_markers": true,
+      "delayed_source_callback": true,
+      "timing": {
+        "units": "PE counter cycles",
+        "scope": "Instrumented component; original projected inputs supplied at diagnostic source; forced delayed callback and capture overhead included. No full-layer/model TPS.",
+        "frontend_first_launch_to_drain": [
+          240067
+        ],
+        "frontend_head_launch_to_gated_output": [
+          [
+            103666,
+            144620,
+            185320
+          ]
+        ],
+        "worker_key_update_min": 5637,
+        "worker_key_update_max": 21021,
+        "worker_query_reduce_min": 2244,
+        "worker_query_reduce_max": 8394,
+        "worker_return_drain_min": 5254,
+        "worker_return_drain_max": 106695
+      },
+      "maximum_state_error_bound_ratio": 0.1361639254396455,
+      "maximum_state_relative_l2": 3.168901504119948e-07
+    }
+  ],
+  "fixture_sha256": "269d24b9bddf99c51971cbdd56e89674ead84ea2a4360f20f2b1a3ba8343c35d",
+  "scope": "Connected frontend/recurrence component with original slices; diagnostic placement and terminal output observer. No output projection, complete layer or model-speed admission.",
+  "full_model_speed_target_achieved": false
+}

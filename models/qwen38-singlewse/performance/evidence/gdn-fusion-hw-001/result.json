@@ -1,0 +1,1019 @@
+{
+  "passed": true,
+  "physical": true,
+  "normal_stop": true,
+  "groups": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15
+  ],
+  "workers": 753,
+  "positions": 6,
+  "reset_replay_positions": 2,
+  "actual_frontend_execution": true,
+  "actual_gdn_execution": true,
+  "host_injected_recurrent_results": false,
+  "full_original_value_coverage": true,
+  "records": [
+    {
+      "position": 0,
+      "replay": false,
+      "frontend_interval": true,
+      "recurrent_state_interval": true,
+      "core_interval": true,
+      "gated_interval": true,
+      "exact_history": true,
+      "all_return_markers": true,
+      "delayed_source_callback": true,
+      "timing": {
+        "units": "PE counter cycles",
+        "scope": "Instrumented component; original projected inputs supplied at diagnostic source; forced delayed callback and capture overhead included. No full-layer/model TPS.",
+        "frontend_first_launch_to_drain": [
+          246260,
+          229899,
+          230970,
+          230069,
+          231218,
+          231370,
+          231483,
+          231533,
+          231229,
+          231553,
+          231828,
+          231684,
+          231046,
+          231713,
+          231272,
+          250396
+        ],
+        "frontend_head_launch_to_gated_output": [
+          [
+            105574,
+            149025,
+            192496
+          ],
+          [
+            87304,
+            147122,
+            206807
+          ],
+          [
+            87760,
+            147917,
+            207876
+          ],
+          [
+            87476,
+            147317,
+            206967
+          ],
+          [
+            87743,
+            148009,
+            208116
+          ],
+          [
+            87988,
+            148214,
+            213923
+          ],
+          [
+            87961,
+            148252,
+            208375
+          ],
+          [
+            87989,
+            148320,
+            208433
+          ],
+          [
+            87682,
+            148102,
+            208127
+          ],
+          [
+            88077,
+            148420,
+            208461
+          ],
+          [
+            88125,
+            148623,
+            208674
+          ],
+          [
+            87928,
+            148333,
+            208592
+          ],
+          [
+            87811,
+            148025,
+            213622
+          ],
+          [
+            87914,
+            148313,
+            208621
+          ],
+          [
+            87848,
+            148018,
+            208155
+          ],
+          [
+            106862,
+            151750,
+            196528
+          ]
+        ],
+        "worker_key_update_min": 5643,
+        "worker_key_update_max": 21028,
+        "worker_query_reduce_min": 2247,
+        "worker_query_reduce_max": 8399,
+        "worker_return_drain_min": 420,
+        "worker_return_drain_max": 138991
+      },
+      "maximum_state_error_bound_ratio": 0.007676588997799293,
+      "maximum_state_relative_l2": 3.483708507867435e-08
+    },
+    {
+      "position": 1,
+      "replay": false,
+      "frontend_interval": true,
+      "recurrent_state_interval": true,
+      "core_interval": true,
+      "gated_interval": true,
+      "exact_history": true,
+      "all_return_markers": true,
+      "delayed_source_callback": true,
+      "timing": {
+        "units": "PE counter cycles",
+        "scope": "Instrumented component; original projected inputs supplied at diagnostic source; forced delayed callback and capture overhead included. No full-layer/model TPS.",
+        "frontend_first_launch_to_drain": [
+          245201,
+          228939,
+          229948,
+          228856,
+          230287,
+          230432,
+          230496,
+          230439,
+          230227,
+          230278,
+          230357,
+          230429,
+          230311,
+          230550,
+          230346,
+          249439
+        ],
+        "frontend_head_launch_to_gated_output": [
+          [
+            105102,
+            148245,
+            191437
+          ],
+          [
+            87035,
+            146565,
+            205847
+          ],
+          [
+            87387,
+            147212,
+            206854
+          ],
+          [
+            87053,
+            146532,
+            205754
+          ],
+          [
+            87534,
+            147454,
+            207185
+          ],
+          [
+            87591,
+            147535,
+            212985
+          ],
+          [
+            87579,
+            147548,
+            207388
+          ],
+          [
+            87560,
+            147524,
+            207339
+          ],
+          [
+            87490,
+            147422,
+            207125
+          ],
+          [
+            87544,
+            147468,
+            207185
+          ],
+          [
+            87549,
+            147556,
+            207249
+          ],
+          [
+            87527,
+            147500,
+            207337
+          ],
+          [
+            87586,
+            147460,
+            212887
+          ],
+          [
+            87574,
+            147621,
+            207458
+          ],
+          [
+            87563,
+            147461,
+            207229
+          ],
+          [
+            106484,
+            151051,
+            195571
+          ]
+        ],
+        "worker_key_update_min": 5643,
+        "worker_key_update_max": 21028,
+        "worker_query_reduce_min": 2247,
+        "worker_query_reduce_max": 8399,
+        "worker_return_drain_min": 420,
+        "worker_return_drain_max": 137970
+      },
+      "maximum_state_error_bound_ratio": 0.16546726291527974,
+      "maximum_state_relative_l2": 5.829384077569092e-07
+    },
+    {
+      "position": 2,
+      "replay": false,
+      "frontend_interval": true,
+      "recurrent_state_interval": true,
+      "core_interval": true,
+      "gated_interval": true,
+      "exact_history": true,
+      "all_return_markers": true,
+      "delayed_source_callback": true,
+      "timing": {
+        "units": "PE counter cycles",
+        "scope": "Instrumented component; original projected inputs supplied at diagnostic source; forced delayed callback and capture overhead included. No full-layer/model TPS.",
+        "frontend_first_launch_to_drain": [
+          243743,
+          227590,
+          228645,
+          227519,
+          228885,
+          229074,
+          228933,
+          229078,
+          228885,
+          229074,
+          228980,
+          229074,
+          228871,
+          229074,
+          228943,
+          247819
+        ],
+        "frontend_head_launch_to_gated_output": [
+          [
+            104611,
+            147287,
+            189979
+          ],
+          [
+            86613,
+            145604,
+            204499
+          ],
+          [
+            86994,
+            146357,
+            205551
+          ],
+          [
+            86618,
+            145601,
+            204417
+          ],
+          [
+            87062,
+            146511,
+            205783
+          ],
+          [
+            87138,
+            146643,
+            211627
+          ],
+          [
+            87077,
+            146541,
+            205825
+          ],
+          [
+            87142,
+            146647,
+            205978
+          ],
+          [
+            87062,
+            146511,
+            205783
+          ],
+          [
+            87138,
+            146643,
+            205982
+          ],
+          [
+            87124,
+            146541,
+            205825
+          ],
+          [
+            87138,
+            146643,
+            205982
+          ],
+          [
+            87048,
+            146515,
+            211447
+          ],
+          [
+            87138,
+            146643,
+            205982
+          ],
+          [
+            87087,
+            146551,
+            205826
+          ],
+          [
+            105964,
+            150000,
+            193951
+          ]
+        ],
+        "worker_key_update_min": 5643,
+        "worker_key_update_max": 21028,
+        "worker_query_reduce_min": 2247,
+        "worker_query_reduce_max": 8399,
+        "worker_return_drain_min": 420,
+        "worker_return_drain_max": 136992
+      },
+      "maximum_state_error_bound_ratio": 0.1553101789271571,
+      "maximum_state_relative_l2": 5.814394773804708e-07
+    },
+    {
+      "position": 3,
+      "replay": false,
+      "frontend_interval": true,
+      "recurrent_state_interval": true,
+      "core_interval": true,
+      "gated_interval": true,
+      "exact_history": true,
+      "all_return_markers": true,
+      "delayed_source_callback": true,
+      "timing": {
+        "units": "PE counter cycles",
+        "scope": "Instrumented component; original projected inputs supplied at diagnostic source; forced delayed callback and capture overhead included. No full-layer/model TPS.",
+        "frontend_first_launch_to_drain": [
+          246260,
+          229899,
+          230970,
+          230069,
+          231218,
+          231370,
+          231483,
+          231533,
+          231229,
+          231553,
+          231782,
+          231685,
+          231046,
+          231713,
+          231273,
+          250396
+        ],
+        "frontend_head_launch_to_gated_output": [
+          [
+            105574,
+            149025,
+            192496
+          ],
+          [
+            87304,
+            147122,
+            206807
+          ],
+          [
+            87760,
+            147917,
+            207876
+          ],
+          [
+            87476,
+            147317,
+            206967
+          ],
+          [
+            87743,
+            148009,
+            208116
+          ],
+          [
+            87988,
+            148214,
+            213923
+          ],
+          [
+            87961,
+            148252,
+            208375
+          ],
+          [
+            87989,
+            148320,
+            208433
+          ],
+          [
+            87682,
+            148102,
+            208127
+          ],
+          [
+            88077,
+            148420,
+            208461
+          ],
+          [
+            88079,
+            148623,
+            208674
+          ],
+          [
+            87929,
+            148333,
+            208592
+          ],
+          [
+            87811,
+            148025,
+            213622
+          ],
+          [
+            87914,
+            148313,
+            208621
+          ],
+          [
+            87849,
+            148018,
+            208155
+          ],
+          [
+            106862,
+            151750,
+            196528
+          ]
+        ],
+        "worker_key_update_min": 5643,
+        "worker_key_update_max": 21028,
+        "worker_query_reduce_min": 2247,
+        "worker_query_reduce_max": 8399,
+        "worker_return_drain_min": 420,
+        "worker_return_drain_max": 138991
+      },
+      "maximum_state_error_bound_ratio": 0.14230585837036944,
+      "maximum_state_relative_l2": 6.447582071114711e-07
+    },
+    {
+      "position": 4,
+      "replay": false,
+      "frontend_interval": true,
+      "recurrent_state_interval": true,
+      "core_interval": true,
+      "gated_interval": true,
+      "exact_history": true,
+      "all_return_markers": true,
+      "delayed_source_callback": true,
+      "timing": {
+        "units": "PE counter cycles",
+        "scope": "Instrumented component; original projected inputs supplied at diagnostic source; forced delayed callback and capture overhead included. No full-layer/model TPS.",
+        "frontend_first_launch_to_drain": [
+          245201,
+          228939,
+          229948,
+          228856,
+          230287,
+          230433,
+          230497,
+          230439,
+          230227,
+          230277,
+          230403,
+          230429,
+          230311,
+          230550,
+          230347,
+          249439
+        ],
+        "frontend_head_launch_to_gated_output": [
+          [
+            105102,
+            148245,
+            191437
+          ],
+          [
+            87035,
+            146565,
+            205847
+          ],
+          [
+            87387,
+            147212,
+            206854
+          ],
+          [
+            87053,
+            146532,
+            205754
+          ],
+          [
+            87534,
+            147454,
+            207185
+          ],
+          [
+            87592,
+            147535,
+            212985
+          ],
+          [
+            87580,
+            147548,
+            207388
+          ],
+          [
+            87560,
+            147524,
+            207339
+          ],
+          [
+            87490,
+            147422,
+            207125
+          ],
+          [
+            87543,
+            147468,
+            207185
+          ],
+          [
+            87595,
+            147556,
+            207249
+          ],
+          [
+            87527,
+            147500,
+            207337
+          ],
+          [
+            87586,
+            147460,
+            212887
+          ],
+          [
+            87574,
+            147621,
+            207458
+          ],
+          [
+            87564,
+            147461,
+            207229
+          ],
+          [
+            106484,
+            151051,
+            195571
+          ]
+        ],
+        "worker_key_update_min": 5643,
+        "worker_key_update_max": 21028,
+        "worker_query_reduce_min": 2247,
+        "worker_query_reduce_max": 8399,
+        "worker_return_drain_min": 420,
+        "worker_return_drain_max": 137970
+      },
+      "maximum_state_error_bound_ratio": 0.1454092991395989,
+      "maximum_state_relative_l2": 4.953265900318876e-07
+    },
+    {
+      "position": 5,
+      "replay": false,
+      "frontend_interval": true,
+      "recurrent_state_interval": true,
+      "core_interval": true,
+      "gated_interval": true,
+      "exact_history": true,
+      "all_return_markers": true,
+      "delayed_source_callback": true,
+      "timing": {
+        "units": "PE counter cycles",
+        "scope": "Instrumented component; original projected inputs supplied at diagnostic source; forced delayed callback and capture overhead included. No full-layer/model TPS.",
+        "frontend_first_launch_to_drain": [
+          246260,
+          229899,
+          230970,
+          230069,
+          231218,
+          231370,
+          231484,
+          231533,
+          231229,
+          231553,
+          231782,
+          231684,
+          231046,
+          231713,
+          231272,
+          250397
+        ],
+        "frontend_head_launch_to_gated_output": [
+          [
+            105574,
+            149025,
+            192496
+          ],
+          [
+            87304,
+            147122,
+            206807
+          ],
+          [
+            87760,
+            147917,
+            207876
+          ],
+          [
+            87476,
+            147317,
+            206967
+          ],
+          [
+            87743,
+            148009,
+            208116
+          ],
+          [
+            87988,
+            148214,
+            213923
+          ],
+          [
+            87962,
+            148252,
+            208375
+          ],
+          [
+            87989,
+            148320,
+            208433
+          ],
+          [
+            87682,
+            148102,
+            208127
+          ],
+          [
+            88077,
+            148420,
+            208461
+          ],
+          [
+            88079,
+            148623,
+            208674
+          ],
+          [
+            87928,
+            148333,
+            208592
+          ],
+          [
+            87811,
+            148025,
+            213622
+          ],
+          [
+            87914,
+            148313,
+            208621
+          ],
+          [
+            87848,
+            148018,
+            208155
+          ],
+          [
+            106863,
+            151751,
+            196528
+          ]
+        ],
+        "worker_key_update_min": 5643,
+        "worker_key_update_max": 21028,
+        "worker_query_reduce_min": 2247,
+        "worker_query_reduce_max": 8399,
+        "worker_return_drain_min": 420,
+        "worker_return_drain_max": 138991
+      },
+      "maximum_state_error_bound_ratio": 0.13948439561913034,
+      "maximum_state_relative_l2": 4.276878463728977e-07
+    },
+    {
+      "position": 0,
+      "replay": true,
+      "frontend_interval": true,
+      "recurrent_state_interval": true,
+      "core_interval": true,
+      "gated_interval": true,
+      "exact_history": true,
+      "all_return_markers": true,
+      "delayed_source_callback": true,
+      "timing": {
+        "units": "PE counter cycles",
+        "scope": "Instrumented component; original projected inputs supplied at diagnostic source; forced delayed callback and capture overhead included. No full-layer/model TPS.",
+        "frontend_first_launch_to_drain": [
+          246260,
+          229899,
+          230970,
+          230069,
+          231218,
+          231370,
+          231484,
+          231533,
+          231229,
+          231553,
+          231828,
+          231684,
+          231046,
+          231714,
+          231272,
+          250396
+        ],
+        "frontend_head_launch_to_gated_output": [
+          [
+            105574,
+            149025,
+            192496
+          ],
+          [
+            87304,
+            147122,
+            206807
+          ],
+          [
+            87760,
+            147917,
+            207876
+          ],
+          [
+            87476,
+            147317,
+            206967
+          ],
+          [
+            87743,
+            148009,
+            208116
+          ],
+          [
+            87988,
+            148214,
+            213923
+          ],
+          [
+            87962,
+            148252,
+            208375
+          ],
+          [
+            87989,
+            148320,
+            208433
+          ],
+          [
+            87682,
+            148102,
+            208127
+          ],
+          [
+            88077,
+            148420,
+            208461
+          ],
+          [
+            88125,
+            148623,
+            208674
+          ],
+          [
+            87928,
+            148333,
+            208592
+          ],
+          [
+            87811,
+            148025,
+            213622
+          ],
+          [
+            87915,
+            148313,
+            208621
+          ],
+          [
+            87848,
+            148018,
+            208155
+          ],
+          [
+            106862,
+            151750,
+            196528
+          ]
+        ],
+        "worker_key_update_min": 5643,
+        "worker_key_update_max": 21028,
+        "worker_query_reduce_min": 2247,
+        "worker_query_reduce_max": 8399,
+        "worker_return_drain_min": 420,
+        "worker_return_drain_max": 138991
+      },
+      "maximum_state_error_bound_ratio": 0.007676588997799293,
+      "maximum_state_relative_l2": 3.483708507867435e-08
+    },
+    {
+      "position": 1,
+      "replay": true,
+      "frontend_interval": true,
+      "recurrent_state_interval": true,
+      "core_interval": true,
+      "gated_interval": true,
+      "exact_history": true,
+      "all_return_markers": true,
+      "delayed_source_callback": true,
+      "timing": {
+        "units": "PE counter cycles",
+        "scope": "Instrumented component; original projected inputs supplied at diagnostic source; forced delayed callback and capture overhead included. No full-layer/model TPS.",
+        "frontend_first_launch_to_drain": [
+          245201,
+          228938,
+          229948,
+          228856,
+          230287,
+          230432,
+          230496,
+          230438,
+          230227,
+          230277,
+          230357,
+          230429,
+          230311,
+          230550,
+          230346,
+          249439
+        ],
+        "frontend_head_launch_to_gated_output": [
+          [
+            105102,
+            148245,
+            191437
+          ],
+          [
+            87034,
+            146565,
+            205847
+          ],
+          [
+            87387,
+            147212,
+            206854
+          ],
+          [
+            87053,
+            146532,
+            205754
+          ],
+          [
+            87534,
+            147454,
+            207185
+          ],
+          [
+            87591,
+            147535,
+            212985
+          ],
+          [
+            87579,
+            147548,
+            207388
+          ],
+          [
+            87559,
+            147523,
+            207339
+          ],
+          [
+            87490,
+            147422,
+            207125
+          ],
+          [
+            87543,
+            147468,
+            207185
+          ],
+          [
+            87549,
+            147556,
+            207249
+          ],
+          [
+            87527,
+            147500,
+            207337
+          ],
+          [
+            87586,
+            147460,
+            212887
+          ],
+          [
+            87574,
+            147621,
+            207458
+          ],
+          [
+            87563,
+            147461,
+            207229
+          ],
+          [
+            106484,
+            151051,
+            195571
+          ]
+        ],
+        "worker_key_update_min": 5643,
+        "worker_key_update_max": 21028,
+        "worker_query_reduce_min": 2247,
+        "worker_query_reduce_max": 8399,
+        "worker_return_drain_min": 420,
+        "worker_return_drain_max": 137970
+      },
+      "maximum_state_error_bound_ratio": 0.16546726291527974,
+      "maximum_state_relative_l2": 5.829384077569092e-07
+    }
+  ],
+  "fixture_sha256": "9153a94d81f4f97319e5b681911a4f870049543fe5e1609c9c578304543e5de6",
+  "scope": "Connected frontend/recurrence component with original slices; diagnostic placement and terminal output observer. No output projection, complete layer or model-speed admission.",
+  "full_model_speed_target_achieved": false
+}

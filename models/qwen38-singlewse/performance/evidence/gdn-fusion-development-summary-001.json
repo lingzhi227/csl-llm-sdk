@@ -1,0 +1,494 @@
+{
+  "physical": false,
+  "raw_logs_retained": true,
+  "attempts": [
+    {
+      "attempt": "gdn-fusion-sim-001",
+      "released": true,
+      "complete": false,
+      "note": "Compile failure: global comptime pointer cast; replaced with a typed empty export array.",
+      "logs": {
+        "compile.log": {
+          "bytes": 774,
+          "sha256": "9b922e76a19c965c5184723cb0ab0b5127b0fd1b3f0db19c78e198d077eb4607"
+        }
+      },
+      "events": [],
+      "source_manifest_sha256": "bce22826a69a64ca98fd96fb2266f24a26a29d60e4f77162277b3a959b686220",
+      "failure": {
+        "error": "RuntimeError",
+        "message": "compile exit 1"
+      }
+    },
+    {
+      "attempt": "gdn-fusion-sim-002",
+      "released": true,
+      "complete": false,
+      "note": "Compile failure: scalar asynchronous descriptor move; control word now has explicit memory backing.",
+      "logs": {
+        "compile.log": {
+          "bytes": 683,
+          "sha256": "17e81c5df864fb4408521d41b1e8f345e9389a2bb89f1bb0e90f76e0dbb00049"
+        }
+      },
+      "events": [],
+      "source_manifest_sha256": "8cec657f4489f2949cfe8e6de8ffb7fc98fd951f192f9998f604263b56886fa9",
+      "failure": {
+        "error": "RuntimeError",
+        "message": "compile exit 1"
+      }
+    },
+    {
+      "attempt": "gdn-fusion-sim-003",
+      "released": true,
+      "complete": false,
+      "note": "Frontend ingress assertion before qualified numerical output.",
+      "logs": {
+        "compile.log": {
+          "bytes": 340,
+          "sha256": "e91bb7ac0b5b7d77be3bee819e4c149e428ecd66160e569d49fcb8e6223d9619"
+        },
+        "run.log": {
+          "bytes": 372,
+          "sha256": "7630f1d095dd6f763908b80ece926ada4e223cd161052ec6be9841860bfa3cf0"
+        },
+        "sim.log": {
+          "bytes": 9265,
+          "sha256": "acef3d30eb3f6adf0f8ecf16c460c76be163a30ad67a8ad976d880250427653a"
+        }
+      },
+      "events": [
+        {
+          "phase": "token_begin",
+          "seconds": 0.6122753717936575,
+          "token": 1,
+          "replay": false
+        }
+      ],
+      "source_manifest_sha256": "36e756f4e8db0681d91e2df40d449b2d4ef74c9ac003457517a14e8185a19602",
+      "debug_marker_max": 0,
+      "failure": {
+        "error": "RuntimeError",
+        "message": "Simulator fatal"
+      }
+    },
+    {
+      "attempt": "gdn-fusion-sim-004",
+      "released": true,
+      "complete": false,
+      "note": "Failure-only assertion labels locate frontend ingress guard.",
+      "logs": {
+        "compile.log": {
+          "bytes": 340,
+          "sha256": "e91bb7ac0b5b7d77be3bee819e4c149e428ecd66160e569d49fcb8e6223d9619"
+        },
+        "run.log": {
+          "bytes": 372,
+          "sha256": "712684ae39635d1037eb88807387abe602c30f77f42aebf5fecc34119984eb32"
+        },
+        "sim.log": {
+          "bytes": 9295,
+          "sha256": "1470e3e5c1b062b235ce3d88f2c404fb597b8146d2040a23627cccf9e15c7f33"
+        }
+      },
+      "events": [
+        {
+          "phase": "token_begin",
+          "seconds": 0.6247382489964366,
+          "token": 1,
+          "replay": false
+        }
+      ],
+      "source_manifest_sha256": "c93b252690b69c5e5483196c055673b6f45fd07fb953e3ce3fb85e99b8610736",
+      "debug_marker_max": 0,
+      "failure": {
+        "error": "RuntimeError",
+        "message": "Simulator fatal"
+      }
+    },
+    {
+      "attempt": "gdn-fusion-sim-005",
+      "released": true,
+      "complete": false,
+      "note": "Trace observes projected token1 while frontend invocation0; added explicit SDK admission observation.",
+      "logs": {
+        "compile.log": {
+          "bytes": 340,
+          "sha256": "e91bb7ac0b5b7d77be3bee819e4c149e428ecd66160e569d49fcb8e6223d9619"
+        },
+        "run.log": {
+          "bytes": 370,
+          "sha256": "84a03a2fe303bd8c9a1c5274b03ec936a0d55897a3c9edc65d6381c5a661927c"
+        },
+        "sim.log": {
+          "bytes": 9366,
+          "sha256": "64f451a14b7d5749b45c97c6f3f25fe498c7240020056f2cdcfc126643fa07ec"
+        }
+      },
+      "events": [
+        {
+          "phase": "token_begin",
+          "seconds": 0.6100436220876873,
+          "token": 1,
+          "replay": false
+        }
+      ],
+      "source_manifest_sha256": "f549566c8571baebd46910bd6b18a5ad2c28937ec420d7295214869b442f933a",
+      "debug_marker_max": 0,
+      "failure": {
+        "error": "RuntimeError",
+        "message": "Simulator fatal"
+      }
+    },
+    {
+      "attempt": "gdn-fusion-sim-006",
+      "released": true,
+      "complete": false,
+      "note": "Idle bulk-header receive stalls SDK admission; changed to an idle data task without a pending bulk DMA.",
+      "logs": {
+        "compile.log": {
+          "bytes": 340,
+          "sha256": "e91bb7ac0b5b7d77be3bee819e4c149e428ecd66160e569d49fcb8e6223d9619"
+        },
+        "run.log": {
+          "bytes": 578,
+          "sha256": "21ed46cfcca6fbdb13cc23ac8446cf940895a1ab2c603fd1cde7e7fe0d6ac9ee"
+        },
+        "sim.log": {
+          "bytes": 7498,
+          "sha256": "e6ad931eed317c03588078de0288d5d15e39fcfcde4cc2f5a8904d587ceb5d08"
+        }
+      },
+      "events": [
+        {
+          "phase": "token_begin",
+          "seconds": 3.910783277824521,
+          "token": 1,
+          "replay": false
+        }
+      ],
+      "source_manifest_sha256": "b4f4a70591d2770a220f7c9f93617210339939c8630bddf6a55e338e7fd33d76",
+      "debug_marker_max": 0,
+      "failure": {
+        "error": "RuntimeError",
+        "message": "run exit 134"
+      }
+    },
+    {
+      "attempt": "gdn-fusion-sim-007",
+      "released": true,
+      "complete": false,
+      "note": "New header data-task admission progresses; complete graph still not observed.",
+      "logs": {
+        "compile.log": {
+          "bytes": 340,
+          "sha256": "e91bb7ac0b5b7d77be3bee819e4c149e428ecd66160e569d49fcb8e6223d9619"
+        },
+        "run.log": {
+          "bytes": 1385,
+          "sha256": "bf9204faf5fb966fa0306cbef422a958eff819fdc80dd7ba66b95a63bdeb8b07"
+        },
+        "sim.log": {
+          "bytes": 7603,
+          "sha256": "d83fb569faa1a0d1a05b47c2743e5364a5ab34fb397216f0c53e6d29186e0a2e"
+        }
+      },
+      "events": [
+        {
+          "phase": "token_begin",
+          "seconds": 3.770809004083276,
+          "token": 1,
+          "replay": false
+        }
+      ],
+      "source_manifest_sha256": "522251012269c4285ce1b9a66026f2ebe536fda3c6a07f1b1b348915de4c2ca2",
+      "debug_marker_max": 0,
+      "failure": {
+        "error": "RuntimeError",
+        "message": "run exit 134"
+      }
+    },
+    {
+      "attempt": "gdn-fusion-sim-008",
+      "released": true,
+      "complete": false,
+      "note": "Compact2D layout progresses through512 projected frames; not accepted.",
+      "logs": {
+        "compile.log": {
+          "bytes": 340,
+          "sha256": "e91bb7ac0b5b7d77be3bee819e4c149e428ecd66160e569d49fcb8e6223d9619"
+        },
+        "run.log": {
+          "bytes": 1544,
+          "sha256": "648ba98bdabd1e4cf138a9df3f5250f3b5b8b32002d8d99e1d7e3c4f317bcf6f"
+        },
+        "sim.log": {
+          "bytes": 7847,
+          "sha256": "69f166cc7a1ac7b370dbe60917cc1b6234143df3518b27a2f29c9e031cc1cb2d"
+        }
+      },
+      "events": [
+        {
+          "phase": "token_begin",
+          "seconds": 4.903268222231418,
+          "token": 1,
+          "replay": false
+        }
+      ],
+      "source_manifest_sha256": "3d2bbf472d538d908b39547a21f1aa4068165224c012a624fac490d5d3f06d35",
+      "debug_marker_max": 0,
+      "failure": {
+        "error": "RuntimeError",
+        "message": "run exit 134"
+      }
+    },
+    {
+      "attempt": "gdn-fusion-sim-009",
+      "released": true,
+      "complete": false,
+      "note": "All192 core frames and gated outputs observed, zero return markers with always_pop; SDK exits with a binary crash log.",
+      "logs": {
+        "compile.log": {
+          "bytes": 340,
+          "sha256": "e91bb7ac0b5b7d77be3bee819e4c149e428ecd66160e569d49fcb8e6223d9619"
+        },
+        "sim.log": {
+          "bytes": 10172,
+          "sha256": "35bde87ed3ae4d28343c9f09195379edead6c6e8d2120921a706ab710bbc03bc"
+        }
+      },
+      "events": [],
+      "source_manifest_sha256": "b1929fa8b29ae35f3d50b76d646c4c9d1ec938d6fa3f7f8225d3ba5d19128f48",
+      "debug_marker_max": 7,
+      "failure": {
+        "error": "RuntimeError",
+        "message": "run exit 139"
+      }
+    },
+    {
+      "attempt": "gdn-fusion-sim-010",
+      "released": true,
+      "complete": false,
+      "note": "pop_on_advance restores all39 markers and frontend drain;600s numerical readback deadline expires.",
+      "logs": {
+        "compile.log": {
+          "bytes": 340,
+          "sha256": "e91bb7ac0b5b7d77be3bee819e4c149e428ecd66160e569d49fcb8e6223d9619"
+        },
+        "run.log": {
+          "bytes": 2053,
+          "sha256": "94691b5b5c5286cfd39ca63a45930719f329261b42023459f44e3bf51237b450"
+        },
+        "sim.log": {
+          "bytes": 11147,
+          "sha256": "3de919a6ca356b80fefb2b9e7dbea9a6181dcb1f40a4d7567082d861b8c7901d"
+        }
+      },
+      "events": [
+        {
+          "phase": "token_begin",
+          "seconds": 4.893298244103789,
+          "token": 1,
+          "replay": false
+        },
+        {
+          "phase": "device_graph_drained",
+          "seconds": 67.37740296591073,
+          "token": 1,
+          "replay": false
+        }
+      ],
+      "source_manifest_sha256": "8958d2a0ea6b9a403bd2ad298f2378c8e7ca013f40666eca2e5371e7e807c914",
+      "debug_marker_max": 39,
+      "failure": {
+        "error": "TimeoutError",
+        "message": "run deadline"
+      }
+    },
+    {
+      "attempt": "gdn-fusion-sim-011",
+      "released": true,
+      "complete": false,
+      "note": "Per-copy logs show progress through all state reads; stale cross-row worker snapshots fail the idle check.",
+      "logs": {
+        "compile.log": {
+          "bytes": 340,
+          "sha256": "e91bb7ac0b5b7d77be3bee819e4c149e428ecd66160e569d49fcb8e6223d9619"
+        },
+        "run.log": {
+          "bytes": 12192,
+          "sha256": "54fa2e5ad8d7fb87c13d842caaa227049aeb288da31cf85520d7a7b5a0510dbe"
+        },
+        "sim.log": {
+          "bytes": 11285,
+          "sha256": "598b5abb209dfc5b76f679e448b434e34c46dc3a9b3346459038531bd5a356d1"
+        }
+      },
+      "events": [
+        {
+          "phase": "token_begin",
+          "seconds": 4.807126680854708,
+          "token": 1,
+          "replay": false
+        },
+        {
+          "phase": "device_graph_drained",
+          "seconds": 66.35390935465693,
+          "token": 1,
+          "replay": false
+        }
+      ],
+      "source_manifest_sha256": "2330ee6534397c44e557c8740907ced352e5d5dcd2cd5c85824f6f9cc904bee0",
+      "debug_marker_max": 39,
+      "failure": {
+        "error": "RuntimeError",
+        "message": "run exit 1"
+      }
+    },
+    {
+      "attempt": "gdn-fusion-sim-012",
+      "released": true,
+      "complete": true,
+      "note": "Fresh post-frontend-observation snapshot, live-column reads and PE timestamps pass both persistent positions and parameter retention.",
+      "logs": {
+        "compile.log": {
+          "bytes": 340,
+          "sha256": "e91bb7ac0b5b7d77be3bee819e4c149e428ecd66160e569d49fcb8e6223d9619"
+        },
+        "run.log": {
+          "bytes": 20400,
+          "sha256": "2cbabcb2b243fbf718580bfd5ead822faa764d37a0f725688337467c8fc3e7f5"
+        },
+        "sim.log": {
+          "bytes": 8027,
+          "sha256": "f7c7fed6aaab5bff8e61c4ff71ae0436633f2ab951ced8988ed99f52f2b23d77"
+        }
+      },
+      "events": [
+        {
+          "phase": "token_begin",
+          "seconds": 4.982119814027101,
+          "token": 1,
+          "replay": false
+        },
+        {
+          "phase": "device_graph_drained",
+          "seconds": 67.32196548115462,
+          "token": 1,
+          "replay": false
+        },
+        {
+          "phase": "worker_local_drained",
+          "seconds": 68.39262875029817,
+          "token": 1,
+          "replay": false
+        },
+        {
+          "phase": "position_verified",
+          "seconds": 279.2724228389561,
+          "position": 0,
+          "replay": false,
+          "frontend_interval": true,
+          "recurrent_state_interval": true,
+          "core_interval": true,
+          "gated_interval": true,
+          "exact_history": true,
+          "all_return_markers": true,
+          "delayed_source_callback": true,
+          "timing": {
+            "units": "PE counter cycles",
+            "scope": "Instrumented component; original projected inputs supplied at diagnostic source; forced delayed callback and capture overhead included. No full-layer/model TPS.",
+            "frontend_first_launch_to_drain": [
+              241268
+            ],
+            "frontend_head_launch_to_gated_output": [
+              [
+                104201,
+                145503,
+                186521
+              ]
+            ],
+            "worker_key_update_min": 5637,
+            "worker_key_update_max": 21021,
+            "worker_query_reduce_min": 2244,
+            "worker_query_reduce_max": 8394,
+            "worker_return_drain_min": 5254,
+            "worker_return_drain_max": 107578
+          },
+          "maximum_state_error_bound_ratio": 0.007601856261492019,
+          "maximum_state_relative_l2": 2.8371300362660633e-08
+        },
+        {
+          "phase": "token_begin",
+          "seconds": 279.2724728942849,
+          "token": 2,
+          "replay": false
+        },
+        {
+          "phase": "device_graph_drained",
+          "seconds": 341.4196414379403,
+          "token": 2,
+          "replay": false
+        },
+        {
+          "phase": "worker_local_drained",
+          "seconds": 342.4887912790291,
+          "token": 2,
+          "replay": false
+        },
+        {
+          "phase": "position_verified",
+          "seconds": 553.4076568582095,
+          "position": 1,
+          "replay": false,
+          "frontend_interval": true,
+          "recurrent_state_interval": true,
+          "core_interval": true,
+          "gated_interval": true,
+          "exact_history": true,
+          "all_return_markers": true,
+          "delayed_source_callback": true,
+          "timing": {
+            "units": "PE counter cycles",
+            "scope": "Instrumented component; original projected inputs supplied at diagnostic source; forced delayed callback and capture overhead included. No full-layer/model TPS.",
+            "frontend_first_launch_to_drain": [
+              240067
+            ],
+            "frontend_head_launch_to_gated_output": [
+              [
+                103666,
+                144620,
+                185320
+              ]
+            ],
+            "worker_key_update_min": 5637,
+            "worker_key_update_max": 21021,
+            "worker_query_reduce_min": 2244,
+            "worker_query_reduce_max": 8394,
+            "worker_return_drain_min": 5254,
+            "worker_return_drain_max": 106695
+          },
+          "maximum_state_error_bound_ratio": 0.1361639254396455,
+          "maximum_state_relative_l2": 3.168901504119948e-07
+        }
+      ],
+      "source_manifest_sha256": "e9ab50645e3bedc2a457ca97162d278a31503f1f753c52740e4c4078276b0687",
+      "debug_marker_max": 0
+    },
+    {
+      "attempt": "gdn-fusion-sim-013",
+      "released": true,
+      "complete": true,
+      "note": "Same kernels/driver compiled for all48 heads/753 slices; all800PE memory gates pass.",
+      "logs": {
+        "compile.log": {
+          "bytes": 340,
+          "sha256": "e91bb7ac0b5b7d77be3bee819e4c149e428ecd66160e569d49fcb8e6223d9619"
+        }
+      },
+      "events": [],
+      "source_manifest_sha256": "380a96ab9811cdd8f6357cafb33c5568ed86d48d5d3b6f5d48b69b4038c5dbc8"
+    }
+  ],
+  "full_model_speed_target_achieved": false
+}

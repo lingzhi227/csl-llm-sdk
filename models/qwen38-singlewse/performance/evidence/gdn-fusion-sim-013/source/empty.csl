@@ -1,0 +1,27 @@
+param memcpy_params;const sys=@import_module("<memcpy/memcpy>",memcpy_params);var zero=@zeros([1]u32);var short=@zeros([1]u16);const p:[*]u32=&zero;const h:[*]u16=&short;
+fn send() void {sys.unblock_cmd_stream();}
+fn inspect() void {sys.unblock_cmd_stream();}
+fn clear() void {sys.unblock_cmd_stream();}
+fn arm() void {sys.unblock_cmd_stream();}
+fn await_done() void {sys.unblock_cmd_stream();}
+fn begin(token:u32) void {sys.unblock_cmd_stream();}
+comptime {
+ @export_symbol(h,"weights");
+ @export_symbol(h,"history");
+ @export_symbol(h,"gain");
+ @export_symbol(h,"parameters");
+ @export_symbol(h,"output");
+ @export_symbol(h,"core");
+ @export_symbol(h,"ticks");
+ @export_symbol(p,"wire");
+ @export_symbol(p,"packet");
+ @export_symbol(p,"audit");
+ @export_symbol(p,"status");
+ @export_symbol(p,"state");
+ @export_symbol(send);
+ @export_symbol(inspect);
+ @export_symbol(clear);
+ @export_symbol(arm);
+ @export_symbol(await_done);
+ @export_symbol(begin);
+}

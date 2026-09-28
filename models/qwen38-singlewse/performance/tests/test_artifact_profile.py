@@ -7,6 +7,23 @@ spec=importlib.util.spec_from_file_location('performance_backend',Path(__file__)
 backend=importlib.util.module_from_spec(spec);spec.loader.exec_module(backend)
 
 class ArtifactProfileTests(unittest.TestCase):
+    def test_connected_fusion_requires_original_geometry_and_no_injected_core(self):
+        profile=dict(original_frontend_gdn_fusion=True,full_model=False,application=[160,5],application_pes=800,
+                     frontend_shape=[16,3,128],gdn_shape=[48,128,128],gdn_workers=753,
+                     host_injected_recurrent_results=False,fabric_offset=[4,1],
+                     revision='017b9c7af6b5689d5dd426a76e0bc077eb5ca20a',artifact_single_message_limit=16<<20)
+        self.assertTrue(backend.gdn_fusion_profile(profile))
+        self.assertEqual(backend.message_limit(profile),16<<20)
+        for key in profile:
+            if key=='artifact_single_message_limit':continue
+            changed=dict(profile);changed.pop(key)
+            self.assertFalse(backend.gdn_fusion_profile(changed))
+            with self.assertRaises(ValueError):backend.message_limit(changed)
+        for key,value in [('host_injected_recurrent_results',True),('application',[10,5]),('gdn_workers',39)]:
+            changed=dict(profile);changed[key]=value
+            self.assertFalse(backend.gdn_fusion_profile(changed))
+            with self.assertRaises(ValueError):backend.message_limit(changed)
+
     def test_all_original_gdn_slices_require_exact_bounded_geometry(self):
         profile=dict(original_gdn_columns=True,full_model=False,application=[251,6],application_pes=1506,
                      gdn_shape=[48,128,128],gdn_workers=753,fabric_offset=[4,1],

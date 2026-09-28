@@ -1,0 +1,28 @@
+{
+  "passed": true,
+  "state_elements_verified": 6291456,
+  "core_bf16_verified": 49152,
+  "gated_bf16_verified": 49152,
+  "frontend_fp32_verified": 148224,
+  "bitwise_reset_replay": true,
+  "exact_history": true,
+  "exact_shared_qk": true,
+  "maximum_state_error_bound_ratio": 0.16546726291527974,
+  "maximum_state_relative_l2": 6.447582071114711e-07,
+  "host_injected_recurrent_results": false,
+  "full_model_speed_target_achieved": false,
+  "physical": true,
+  "all_jobs_succeeded_and_released": [
+    "wsjob-bn4xwdydaqgnmhrw9u68ek",
+    "wsjob-gmypjv6bzax69txxfcwxfw"
+  ],
+  "hashes": {
+    "source-manifest.json": "4372cf585db7509cb2e154ce7a9455243f197657af6b444c81c824392b823482",
+    "fixture.npz": "9153a94d81f4f97319e5b681911a4f870049543fe5e1609c9c578304543e5de6",
+    "actual.npz": "9c1cc10a9556b0f6963e82de52b220266630ab8966438e96d8c789b9a8a3d57a",
+    "result.json": "d8fe593718a69bcc80f1a0da172fa06ae241a465264daede7e9a57629dcf801f",
+    "compile-audit.json": "29222f427584c6b6eaba8c35050a515360daf79280374c19c3b18e21c77e449c",
+    "run-audit.json": "4f996cee6b2f5033235a00b168f60dcd92e76a045374bb30698609d89cf7b515"
+  },
+  "scope": "All16 original frontend groups directly connected to753 recurrent slices/48 heads, with actual gated outputs. Original projected inputs are a diagnostic boundary; no output projection, full layer or model speed admission."
+}

@@ -1,0 +1,29 @@
+// Original full-key state slice. Diagnostic bank omits projection payloads.
+param memcpy_params;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const clock=@import_module("<time>");var ticks=@zeros([24]u16);const tp:[*]u16=&ticks;
+fn stamp(slot:u16) void {clock.get_timestamp(@ptrcast(*[3]u16,&ticks[3*slot]));}
+const bank_words:u16=4096;var bank=@zeros([4096]u32);
+var decoder=@zeros([128]f32);var values=@zeros([32]f32);
+SWITCH_GDN_PORT
+var status=@zeros([4]u32);var armed:bool=false;
+var empty=@zeros([1]u16);
+const bp:[*]u32=&bank;const sp:[*]u32=&status;const hp:[*]u16=&empty;
+fn send() void {sys.unblock_cmd_stream();}
+fn begin(token:u32) void {sys.unblock_cmd_stream();}
+fn await_done() void {sys.unblock_cmd_stream();}
+fn arm() void {@assert(!armed);armed=true;clock.enable_tsc();gdn_admit();sys.unblock_cmd_stream();}
+fn clear() void {
+ // Host calls only after the frontend receives every data/control return.
+ // The idle header data task owns no pending bulk DMA or scratch lease.
+ @assert(gdn_local_idle());
+ const all=@get_dsd(mem1d_dsd,.{.base_address=gdn_state(),.extent=128*gdn_columns});
+ @fmovs(all,0.0);gdn_invocation=0;sys.unblock_cmd_stream();
+}
+fn inspect() void {status[0]=gdn_invocation;status[1]=gdn_phase;status[2]=gdn_output;status[3]=@as(u32,armed);sys.unblock_cmd_stream();}
+comptime {
+ @export_symbol(bp,"state");@export_symbol(sp,"status");@export_symbol(sp,"wire");@export_symbol(sp,"packet");@export_symbol(sp,"audit");
+ @export_symbol(tp,"ticks");
+ @export_symbol(hp,"weights");@export_symbol(hp,"history");@export_symbol(hp,"gain");@export_symbol(hp,"parameters");@export_symbol(hp,"output");@export_symbol(hp,"core");
+ @export_symbol(send);@export_symbol(inspect);@export_symbol(clear);@export_symbol(begin);@export_symbol(arm);@export_symbol(await_done);
+}

@@ -1,0 +1,89 @@
+// Actual frontend -> filtered broadcast -> actual GDN -> switched gather.
+// Projection inputs and terminal output capture are diagnostic boundaries.
+param memcpy_params;param worker_count:u16;param delay_last_release:bool;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const clock=@import_module("<time>");
+var ticks=@zeros([21]u16);const tp:[*]u16=&ticks;var stamped:bool=false;
+fn stamp(slot:u16) void {clock.get_timestamp(@ptrcast(*[3]u16,&ticks[3*slot]));}
+FRONTEND_NATIVE_PORT
+const source_oq=@get_output_queue(3);const core_iq=@get_input_queue(3);
+const tx_s=@get_dsr(dsr_src0,1);const tx_d=@get_dsr(dsr_dest,1);
+const tx_done=@get_local_task_id(8);const marker_task=@get_control_task_id(40);
+var next_head:u16=0;var markers:u16=0;var core_cursor:u16=0;var core_frames:u16=0;
+var core_frame=@zeros([5]u32);var waiting:bool=false;var raced:u16=0;
+// Read-only diagnostic observation, never transmitted back to a worker.
+var captured=@zeros([1161]u32);var captured_core=@zeros([384]u16);var probe_status=@zeros([16]u32);
+const cp:[*]u32=&captured;const sp:[*]u32=&probe_status;const corep:[*]u16=&captured_core;
+fn progress() void {
+ if(frontend.drained() and frontend_transport_drained() and markers==worker_count and core_cursor==0 and next_head==3){
+  if(!stamped){stamp(6);stamped=true;clock.disable_tsc();}
+  if(waiting){waiting=false;sys.unblock_cmd_stream();}
+ }
+}
+fn pump() void {
+ if(next_head==3 or frontend.packet_busy){return;}
+ const bit:u16=@as(u16,1)<<next_head;if((frontend.notified&bit)==0){return;}
+ frontend.prepare(next_head);
+ const source=@get_dsd(mem1d_dsd,.{.base_address=frontend.packet_pointer,.extent=387});
+ const observed=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]u32,&captured[387*next_head]),.extent=387});
+ @mov32(observed,source);
+ frontend.packet_launched(frontend.invocation,next_head);
+ stamp(next_head);
+ if(comptime delay_last_release){if(next_head==2){@block(tx_done);}}
+ const target=@get_dsd(fabout_dsd,.{.output_queue=source_oq,.extent=387});
+ @load_to_dsr(tx_s,source);@load_to_dsr(tx_d,target,.{.async=true,.ut_id=@get_ut_id(1),.activate=tx_done});
+ @mov32(tx_d,tx_s,.{.async=true});
+}
+task packet_sent() void {
+ frontend.packet_consumed(frontend.invocation,next_head);next_head+=1;pump();progress();
+}
+task returned(value:u32) void {
+ core_frame[core_cursor]=value;core_cursor+=1;
+ if(core_cursor==5){
+  @assert(core_frame[0]==frontend.invocation and core_frame[2]==2 and core_frame[4]==5);
+  const row=@as(u16,core_frame[1]);@assert(row>=384*frontend_group and row<384*frontend_group+384 and row%2==0);
+  const first=@as(u16,core_frame[3]&65535);const second=@as(u16,core_frame[3]>>16);
+  const local:u16=row-384*frontend_group;captured_core[local]=first;captured_core[local+1]=second;
+  frontend.accept(core_frame[0],16480+row,first,second);core_cursor=0;core_frames+=1;
+  frontend_wire_packets+=1;@assert(frontend_wire_packets<=@as(u32,frontend_projected_packets)+192);
+  if(frontend_wire_packets==@as(u32,frontend_projected_packets)+192){frontend_wire_active=false;}
+  progress();
+ }
+}
+task marker() void {markers+=1;@assert(markers<=worker_count);progress();}
+task frontend_packet_ready() void {pump();}
+task frontend_output_ready() void {
+ for(@range(u16,3))|head|{
+  const bit:u16=@as(u16,1)<<head;
+  if((frontend.completed&bit)!=0 and (frontend.retired&bit)==0){
+   // Terminal diagnostic consumption. Production output projection must own
+   // this callback before it can claim an integrated layer.
+   stamp(3+head);frontend.output_consumed(frontend.invocation,head);
+   if(comptime delay_last_release){if(head==2){@assert(frontend.packet_busy);raced+=1;@unblock(tx_done);}}
+  }
+ }
+ progress();
+}
+fn send() void {sys.unblock_cmd_stream();}
+fn arm() void {sys.unblock_cmd_stream();}
+fn await_done() void {@assert(!waiting);waiting=true;progress();}
+fn inspect() void {
+ frontend_snapshot();for(@range(u16,10))|i|{probe_status[i]=frontend_status[i];}
+ probe_status[10]=markers;probe_status[11]=core_frames;probe_status[12]=raced;
+ probe_status[13]=next_head;probe_status[14]=core_cursor;probe_status[15]=worker_count;sys.unblock_cmd_stream();
+}
+fn clear() void {frontend_reset();markers=0;core_frames=0;next_head=0;raced=0;sys.unblock_cmd_stream();}
+fn begin(token:u32) void {
+ @assert(frontend.drained() and (markers==worker_count or frontend.invocation==0));
+ stamped=false;clock.enable_tsc();frontend_begin(token);markers=0;core_frames=0;next_head=0;pump();sys.unblock_cmd_stream();
+}
+comptime {
+ @initialize_queue(source_oq,.{.color=@get_color(5)});@initialize_queue(core_iq,.{.color=@get_color(4)});
+ @bind_local_task(packet_sent,tx_done);@bind_data_task(returned,@get_data_task_id(core_iq));@bind_control_task(marker,marker_task);
+ @export_symbol(cp,"packet");@export_symbol(corep,"core");@export_symbol(sp,"status");
+ @export_symbol(frontend.wp,"weights");@export_symbol(frontend.hp,"history");@export_symbol(frontend.gp,"gain");
+ @export_symbol(frontend.pp,"parameters");@export_symbol(frontend.op,"output");@export_symbol(frontend.ap,"audit");
+ @export_symbol(cp,"wire");@export_symbol(cp,"state");
+ @export_symbol(tp,"ticks");
+ @export_symbol(send);@export_symbol(inspect);@export_symbol(clear);@export_symbol(begin);@export_symbol(arm);@export_symbol(await_done);
+}
