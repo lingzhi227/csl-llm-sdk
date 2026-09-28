@@ -1,0 +1,194 @@
+{
+  "passed": true,
+  "physical": false,
+  "device_execution": false,
+  "full_model": false,
+  "stage": "layer_00",
+  "model": "Qwen/Qwen3.8-27B-FP8",
+  "revision": "017b9c7af6b5689d5dd426a76e0bc077eb5ca20a",
+  "application": [
+    78,
+    146
+  ],
+  "controller": [
+    107,
+    145
+  ],
+  "original_mlp_shape": [
+    5120,
+    17408,
+    5120
+  ],
+  "cases": [
+    {
+      "index": 0,
+      "epoch": 1,
+      "mode": "normalized_nonzero",
+      "replay_of": null
+    },
+    {
+      "index": 1,
+      "epoch": 2,
+      "mode": "zero_after_nonzero",
+      "replay_of": null
+    },
+    {
+      "index": 2,
+      "epoch": 3,
+      "mode": "changed_nonzero",
+      "replay_of": null
+    },
+    {
+      "index": 3,
+      "epoch": 4,
+      "mode": "warm_replay",
+      "replay_of": 0
+    }
+  ],
+  "matrix_records": [
+    {
+      "tensor": "model.language_model.layers.0.linear_attn.in_proj_qkv.weight",
+      "shape": [
+        10240,
+        5120
+      ],
+      "tiles": 204800,
+      "original_sha256": "e04d1e408ba77a84282e6a3eb3ec6677218788f691cb5bf32b01f1857af5c36e",
+      "original_scale_sha256": "ad7da085d1446c0262135ea70e629086b28d5a04dc2de201a07d09d3c5f1e358",
+      "tile_shape": [
+        2,
+        128
+      ]
+    },
+    {
+      "tensor": "model.language_model.layers.0.linear_attn.in_proj_z.weight",
+      "shape": [
+        6144,
+        5120
+      ],
+      "tiles": 122880,
+      "original_sha256": "549eb8904f573b91f7de63083a18646d9e6c76818ffb8a3dfbf05dc64bb091aa",
+      "original_scale_sha256": "c510749e06dc10c6ebd29af85c6151b52a7de07fa9e5aa1ae82e36e8544d6562",
+      "tile_shape": [
+        2,
+        128
+      ]
+    },
+    {
+      "tensor": "model.language_model.layers.0.linear_attn.in_proj_a.weight",
+      "shape": [
+        48,
+        5120
+      ],
+      "tiles": 1920,
+      "original_sha256": "ff9e6d0a05fc85c2a61e5f73200d6778c84d76df3df2ce6c80e1e9a4c99c0ce1",
+      "original_scale_sha256": null,
+      "tile_shape": [
+        1,
+        128
+      ]
+    },
+    {
+      "tensor": "model.language_model.layers.0.linear_attn.in_proj_b.weight",
+      "shape": [
+        48,
+        5120
+      ],
+      "tiles": 1920,
+      "original_sha256": "9694f11c0393c563dcbc8c1ba120c2eaebc36b200d6d19bf8761034acde4ac33",
+      "original_scale_sha256": null,
+      "tile_shape": [
+        1,
+        128
+      ]
+    },
+    {
+      "tensor": "model.language_model.layers.0.linear_attn.out_proj.weight",
+      "shape": [
+        5120,
+        6144
+      ],
+      "tiles": 122880,
+      "original_sha256": "52e9e5cf61570ab882057e4048db68a4e050d9d9f19049259ac4a07e6eea5844",
+      "original_scale_sha256": "67d30be39e6ddd926e0d5a09075311f29aa7fe2e1ee35b2d04d582a5427dd656",
+      "tile_shape": [
+        2,
+        128
+      ]
+    },
+    {
+      "tensor": "model.language_model.layers.0.mlp.gate_proj.weight",
+      "shape": [
+        17408,
+        5120
+      ],
+      "tiles": 348160,
+      "original_sha256": "4329138e685449fc21213af99925fde5d655c9242023b06073098a3636056155",
+      "original_scale_sha256": "61495ba505545f7c426e4d42262e7f3d3c8bcf498b67210487372778110d71d5",
+      "tile_shape": [
+        8,
+        32
+      ]
+    },
+    {
+      "tensor": "model.language_model.layers.0.mlp.up_proj.weight",
+      "shape": [
+        17408,
+        5120
+      ],
+      "tiles": 348160,
+      "original_sha256": "2c679c3e6ec3c29b7abd02347be5f854a3d5fec8e849bdf04986e0e1c8e14c2d",
+      "original_scale_sha256": "8cadd3be1eb4213023cacb577f23eb78b5bfb0c56340b41c0a0bd4b873d96f38",
+      "tile_shape": [
+        8,
+        32
+      ]
+    },
+    {
+      "tensor": "model.language_model.layers.0.mlp.down_proj.weight",
+      "shape": [
+        5120,
+        17408
+      ],
+      "tiles": 348160,
+      "original_sha256": "da4baf2590bdb148ca9cb6333f2ed3dc51f9e3e1c316e70d425a2cc2c10c9814",
+      "original_scale_sha256": "b1f2251e85c8543362f41efd0ec2a5eedb741d9653d1cb56a7b9581f11cb3b65",
+      "tile_shape": [
+        4,
+        64
+      ]
+    }
+  ],
+  "original_weight_bytes": 383862848,
+  "resident_weight_and_expanded_scale_bytes": 389796352,
+  "allocated_bank_bytes": 396953216,
+  "verified_original_shards": {
+    "layers-0.safetensors": "07f700e293baeaf3cd4240c3df1a948c4403f16961ea7979e86c8d6a9f8fd466"
+  },
+  "silu_proof": {
+    "passed": true,
+    "finite_inputs": 65280,
+    "nonfinite_inputs_excluded": 256,
+    "table_values": 3328,
+    "table_bytes": 6656,
+    "table_sha256": "27c22ce8840d0c7d2e3eb49be598d16090b65b2744f41dd3fb888e6120139760",
+    "torch_version": "2.6.0+cpu",
+    "oracle": "torch.nn.functional.silu(BF16.float()).bfloat16()",
+    "reference_sha256": "8ee31e1f33d082b070ae4792788c5abb48da676526e319e1be00d71f401c4979",
+    "exact_for_every_finite_bf16_input": true,
+    "physical": false,
+    "neural_model_execution": false,
+    "scope": "Independent CPU proof of compact table/bit-domain rules; no CSL or hardware execution."
+  },
+  "hashes": {
+    "banks.npy": "746ae46d5212fe4f0961d7b2dcfea6bd44c6b84012e801d366e30cc45bc7aa18",
+    "bank-index.json": "b8d7d19e20c011a2c6c9907bf2d3519a69b07788ef3707f4a5632205a262be59",
+    "fixture.npz": "af807b01b34a0593bb82380dd11537b9888592a1803ebfce355f91a37b321279",
+    "silu-table.npy": "60de9e6ef8fb403190ec2c2990984c73980522e69c4e4b95b90f44e9b970c7a6",
+    "silu-proof.json": "5bf2db8ce9c6f03ed8670b5525b850cf8aaa914b9da0b49ffd865c1ee42bc155"
+  },
+  "acceptance": "Every original5120 BF16 output bit-exact to frozen ordered native FP32/full-K/PyTorch SiLU reference; all native input codes/scales and native/sender counters exact; all initialized original banks retained; four warm epochs including zero and replay; actual all-PE drain and normal stop.",
+  "projection_oracle": "Independent row-major original weights, explicit32/64 FMA rounding and balanced central local-left-right FP32 reduction, every complete projection checked against FP64 mathematical truth and a priori gamma bounds.",
+  "scope": "Complete original-weight MLP component; host supplies only initial BF16 boundary fixtures. Enclosing mixer weights are loaded but mixer/state operations are inactive. Not complete neural layer or model inference.",
+  "seconds": 42.41570287756622
+}

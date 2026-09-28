@@ -130,5 +130,76 @@ class MlpNetworkTests(unittest.TestCase):
             output=[row for g in network['grant_schedule'] if g['kind']==2 for row in range(g['first_row'],g['first_row']+g['rows'])]
             self.assertEqual(output,list(range(5120)))
 
+    def test_preparation_has_unique_input_ownership_and_no_injection(self):
+        stage,_,network=self.cases[0]
+        for mutation in ('missing','duplicate','sink','inject','fetch'):
+            bad=copy.deepcopy(network)
+            if mutation=='missing':bad['prepare_schedule'].pop()
+            elif mutation=='duplicate':bad['prepare_schedule'][1]=bad['prepare_schedule'][0]
+            elif mutation=='sink':bad['prepare_schedule'][0]['target']=40
+            elif mutation=='inject':bad['prepare_schedule'][0]['words']=67
+            else:bad['grant_schedule'][0]['index']=999
+            with self.assertRaises(ValueError):audit_mlp_network(stage,bad)
+
+    def test_delayed_preparation_fifo_and_private_frames_across_warm_epochs(self):
+        # Per-recipient FIFO can hold a fetch while its earlier quantizer is
+        # still running. Other recipients can prepare concurrently. Only a
+        # granted immutable frame reaches the serialized return bus.
+        rng=random.Random(380028)
+        for _,_,network in self.cases:
+            prepared={};busy={};frames={};completed=0;overlap=False
+            for epoch in (1,2,3,4):
+                self.assertFalse(prepared or busy or frames)
+                arrivals={p['target']:deque([p]) for p in network['prepare_schedule']}
+                cursor=0;owner=None;bus=[];received=[];sent=0
+                fetches=[g for g in network['grant_schedule'] if g['kind']==0]
+                for step in range(100000):
+                    if owner is None and cursor<len(fetches):
+                        grant=fetches[cursor];owner=grant['target'];arrivals[owner].append(grant)
+                    for sid,q in arrivals.items():
+                        if sid in busy:
+                            busy[sid]-=1
+                            if busy[sid]==0:
+                                del busy[sid];frames[sid]=tuple((epoch,sid,i) for i in range(67));prepared[sid]=True
+                        elif q and rng.randrange(3):
+                            command=q[0]
+                            if command['kind']==3:
+                                q.popleft();self.assertNotIn(sid,prepared);busy[sid]=rng.randrange(20,100)
+                            else:
+                                self.assertEqual(sid,owner);self.assertTrue(prepared[sid]);q.popleft();bus=list(frames[sid]);sent=0
+                    overlap|=len(busy)>1
+                    if bus and rng.randrange(3):
+                        received.append(bus.pop(0));sent+=1
+                        if not bus:
+                            self.assertEqual(received,list(frames[owner]))
+                            del prepared[owner];del frames[owner];received=[];owner=None;cursor+=1
+                    if cursor==40:break
+                self.assertEqual(cursor,40);self.assertFalse(any(arrivals.values()))
+                completed+=cursor
+            self.assertTrue(overlap);self.assertEqual(completed,160)
+
+    def test_strided_halfword_packing_matches_scalar_wire_for_every_slice(self):
+        # Exercise the two vector stores independently of the scalar wire
+        # formula: odd halfwords are tags; operand data occupy every other even
+        # halfword. Includes all full/tail aliases and arbitrary sign/scale bits.
+        rng=random.Random(28)
+        for stage,_,_ in self.cases:
+            for region in stage['regions']:
+                if region['role'] not in ('gate_up','down'):continue
+                cols=region['matrices'][0]['tile_shape'][1]
+                for f in input_selectors(region)['frames']:
+                    values=[rng.randrange(65536) for _ in range(cols)]
+                    epoch=rng.randrange(1<<32);scale=rng.randrange(1<<32);tag=f['tag']
+                    arena=[0xdead]*138
+                    arena[1:2*(cols+5):2]=[tag]*(cols+5)
+                    arena[6:6+2*cols:2]=values
+                    headers=[epoch&65535,epoch>>16,f['part']]
+                    arena[0:6:2]=headers
+                    arena[2*(cols+3):2*(cols+5):2]=[scale&65535,scale>>16]
+                    actual=[arena[2*i]|(arena[2*i+1]<<16) for i in range(cols+5)]
+                    expected=[tag<<16|v for v in headers+values+[scale&65535,scale>>16]]
+                    self.assertEqual(actual,expected)
+                    self.assertTrue(all(v==0xdead for v in arena[2*(cols+5):]))
+
 
 if __name__=='__main__':unittest.main()

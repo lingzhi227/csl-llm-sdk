@@ -1,0 +1,23 @@
+{
+  "utc": "2026-09-28T04:52:59.099617+00:00",
+  "baseline": "layer-mlp-hw-003",
+  "candidate": "layer-mlp-hw-004",
+  "compiled": false,
+  "executed": false,
+  "physical": false,
+  "full_model": false,
+  "fixture": "layer-mlp-reference-001",
+  "changes": [
+    "40 prepare-only commands after controller start; per-target FIFO before injection grants",
+    "Same67-word quantized frames and186 exclusive response grants",
+    "Strided16-bit vector stores for native slice payload/tag construction and32-bit output segment copies",
+    "12u16 controller timestamps and host timer ending after complete output readback"
+  ],
+  "unchanged": [
+    "Original5120->17408->5120 weights and independent oracle",
+    "4warm cases, all20480 output bits, native ingress, counters and retention",
+    "Single RX, fixed OQ colors, qflush before transit route restore",
+    "Fused activation quantization already arrival-triggered; no change to that arithmetic"
+  ],
+  "claim": "Candidate only; no speedup or numerical result until physical acceptance"
+}

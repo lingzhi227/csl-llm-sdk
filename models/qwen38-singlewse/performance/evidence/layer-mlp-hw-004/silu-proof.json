@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "finite_inputs": 65280,
+  "nonfinite_inputs_excluded": 256,
+  "table_values": 3328,
+  "table_bytes": 6656,
+  "table_sha256": "27c22ce8840d0c7d2e3eb49be598d16090b65b2744f41dd3fb888e6120139760",
+  "torch_version": "2.6.0+cpu",
+  "oracle": "torch.nn.functional.silu(BF16.float()).bfloat16()",
+  "reference_sha256": "8ee31e1f33d082b070ae4792788c5abb48da676526e319e1be00d71f401c4979",
+  "exact_for_every_finite_bf16_input": true,
+  "physical": false,
+  "neural_model_execution": false,
+  "scope": "Independent CPU proof of compact table/bit-domain rules; no CSL or hardware execution."
+}

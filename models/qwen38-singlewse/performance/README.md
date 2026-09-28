@@ -7,28 +7,32 @@ Independent requests may overlap with isolated state. The earlier per-request
 interpretation and whole-wafer shared-layer overlay are superseded. The target
 remains unmet; this is active development.
 
-P27 physically qualifies the complete original layer0 MLP on one WSE-3. All
-four warm cases pass:20,480 final BF16 values match an independent original-weight
-oracle bit for bit, all native input codes/scales and completion counters match,
-all initialized weights/tables remain unchanged, and every PE drains before
-normal shutdown. The entire78x146 enclosing stage is present; mixer/state banks
-are initialized but their neural operations are inactive in this component.
+P28 physically accelerates the complete original layer0 MLP while retaining
+all four strict warm-case checks. All20,480 final BF16 outputs, native input
+codes/scales, worker/sender counters, resident banks/tables and actual all-PE drain
+pass; the runtime stops normally. Mixer/state banks remain loaded but their
+neural operations are inactive in this78x146 component.
 
-Nonzero cases take2,844,301–2,844,472 controller cycle-counter ticks. These are
-component measurements, not model tokens/s. SDK runtime loading takes323.486s,
-weight/table/setup initialization3.122s, and the complete diagnostic run340.388s.
-The physical artifact covers11,388 PEs with4,179 ELF images; the maximum footprint
-is48,128bytes including4,096 reserved stack, with zero remaining margin at the
-most constrained image. All122 source tests pass.
+Forty input quantizers now prepare concurrently inside the measured controller
+window; controller packet/output copies are vectorized. Nonzero controller
+counts fall from2,844,301–2,844,472 to713,625–713,752 ticks: about74.91% fewer,
+a3.985–3.986 baseline/candidate counter ratio. Explicit completed-output host
+wall times are2.388–2.801ms. This is a component comparison; no clock frequency,
+wall-time speedup or model TPS is inferred from raw counter ratios.
 
-The original numerical criteria and CSL remain fixed across two preserved host
-failures: an overly small individual ELF file guard, then a client serialization
-failure. The successful attempt uses the same compiler artifact and bounded row
-reads instead of a397MB host mmap. All owned hardware jobs are released and all
-workstation tasks have ended. Full-model sentence generation and>=2000 aggregate
-output tokens/s remain unfinished.
+All127 source tests pass. All11,388 PEs in4,179 ELF images pass the unchanged
+48,128-byte SRAM ceiling including4,096 reserved stack; three PEs have zero
+margin. SDK loading331.653s, initialization3.034s and full diagnostic350.365s are
+reported separately. Both new jobs succeeded/released; the account has no owned
+active job/assigned system and the workstation heavy-job lock is free.
 
-See [LAYER-MLP-QUALIFICATION.md](docs/LAYER-MLP-QUALIFICATION.md) and
+The frozen P27 baseline and prior failures remain preserved. Full64-layer
+resident sentence generation and>=2000 aggregate output tokens/s remain open.
+Next: coalesced native-slice sends and overlap of next-group return with current
+broadcast, followed by residual/norm and neighboring-layer integration.
+
+See [LAYER-MLP-PERFORMANCE.md](docs/LAYER-MLP-PERFORMANCE.md),
+[LAYER-MLP-QUALIFICATION.md](docs/LAYER-MLP-QUALIFICATION.md) and
 [NEXT-STEPS.md](docs/NEXT-STEPS.md).
 
 Generate a fresh candidate with

@@ -1,0 +1,94 @@
+{
+  "passed": true,
+  "physical": true,
+  "normal_stop": true,
+  "full_model": false,
+  "scope": "Complete original-weight MLP component; host supplies only initial BF16 boundary fixtures. Enclosing mixer weights are loaded but mixer/state operations are inactive. Not complete neural layer or model inference.",
+  "fixture_metadata_sha256": "128f186bae76c0876cddd399e46fe57b6fd450991379bc9f0a519be616c7bc7f",
+  "original_weights_resident": true,
+  "all_original_banks_retained": true,
+  "all_luts_retained": true,
+  "all_native_inputs_exact": true,
+  "all_counters_exact": true,
+  "all_pe_drained": true,
+  "epochs": [
+    {
+      "index": 0,
+      "epoch": 1,
+      "mode": "normalized_nonzero",
+      "replay_of": null,
+      "all_outputs_bit_exact": true,
+      "all_native_inputs_exact": true,
+      "all_counters_exact": true,
+      "all_pe_drained": true,
+      "host_arm_start_finish_seconds": 0.001504482701420784,
+      "completed_output_seconds": 0.0028006937354803085,
+      "controller_cycles": 713706,
+      "controller_phase_cycles": {
+        "input_prepare_and_distribute": 163614,
+        "fused_gate_up_and_distribute": 405913,
+        "down_and_collect": 144179
+      }
+    },
+    {
+      "index": 1,
+      "epoch": 2,
+      "mode": "zero_after_nonzero",
+      "replay_of": null,
+      "all_outputs_bit_exact": true,
+      "all_native_inputs_exact": true,
+      "all_counters_exact": true,
+      "all_pe_drained": true,
+      "host_arm_start_finish_seconds": 0.0014644116163253784,
+      "completed_output_seconds": 0.0025208108127117157,
+      "controller_cycles": 683492,
+      "controller_phase_cycles": {
+        "input_prepare_and_distribute": 151877,
+        "fused_gate_up_and_distribute": 387428,
+        "down_and_collect": 144187
+      }
+    },
+    {
+      "index": 2,
+      "epoch": 3,
+      "mode": "changed_nonzero",
+      "replay_of": null,
+      "all_outputs_bit_exact": true,
+      "all_native_inputs_exact": true,
+      "all_counters_exact": true,
+      "all_pe_drained": true,
+      "host_arm_start_finish_seconds": 0.0014796527102589607,
+      "completed_output_seconds": 0.0025545815005898476,
+      "controller_cycles": 713752,
+      "controller_phase_cycles": {
+        "input_prepare_and_distribute": 163569,
+        "fused_gate_up_and_distribute": 406011,
+        "down_and_collect": 144172
+      }
+    },
+    {
+      "index": 3,
+      "epoch": 4,
+      "mode": "warm_replay",
+      "replay_of": 0,
+      "all_outputs_bit_exact": true,
+      "all_native_inputs_exact": true,
+      "all_counters_exact": true,
+      "all_pe_drained": true,
+      "host_arm_start_finish_seconds": 0.0013628611341118813,
+      "completed_output_seconds": 0.0023883404210209846,
+      "controller_cycles": 713625,
+      "controller_phase_cycles": {
+        "input_prepare_and_distribute": 163569,
+        "fused_gate_up_and_distribute": 405885,
+        "down_and_collect": 144171
+      }
+    }
+  ],
+  "original_output_values_checked": 20480,
+  "runtime_load_seconds": 331.65309133101255,
+  "initialization_seconds": 3.03383475728333,
+  "full_runtime_seconds": 350.36458527483046,
+  "normal_stop_seconds": 3.879430134780705,
+  "full_model_tps": null
+}

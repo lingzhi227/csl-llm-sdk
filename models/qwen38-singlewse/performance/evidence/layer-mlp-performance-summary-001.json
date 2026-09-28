@@ -1,0 +1,83 @@
+{
+  "baseline": "layer-mlp-hw-003",
+  "candidate": "layer-mlp-hw-004",
+  "source_bindings": {
+    "layer-mlp-hw-003": {
+      "result.json": "0db5e57da91bce91653c0775717d1e1ee958642037bbb4d11bea4943655f1ecc",
+      "source-manifest.json": "9ef1736f6b7bae73eb1891ddad2d6481691c3c7af9b6bf6ac63f95d18ed518b6",
+      "COMPLETE.json": "bec63560756f7563d17b48eef018aa893fb97e17fc270c20fce94c55049bc950",
+      "sram-summary.json": "44e9008750056c278c1cf8820f82d7151b77fa853b090c720affe1caf45ac9bb"
+    },
+    "layer-mlp-hw-004": {
+      "result.json": "12259165d94aac71a91393592dc0cac72093efcc31efec44429e9c5e92cf2437",
+      "source-manifest.json": "dc89163e58a3d8778721c6255b56d4598bd67eede9f69872f70a9d3a9edcd6b5",
+      "COMPLETE.json": "0a7fb361b39d299f0c7b8437b446f06dd50ba361ea14b30e16ab1e2e94387774",
+      "sram-summary.json": "837bdac50bb7ec0077f958bbbf9ad067c6831ba0e28d0b1f80a1866f21955438"
+    }
+  },
+  "passed": true,
+  "original_output_values_checked": 20480,
+  "fixture_metadata_sha256": "128f186bae76c0876cddd399e46fe57b6fd450991379bc9f0a519be616c7bc7f",
+  "cases": [
+    {
+      "index": 0,
+      "epoch": 1,
+      "baseline_cycles": 2844472,
+      "candidate_cycles": 713706,
+      "baseline_to_candidate_cycle_ratio": 3.9854954280894375,
+      "cycle_reduction_fraction": 0.7490901650640259,
+      "candidate_completed_output_seconds": 0.0028006937354803085,
+      "candidate_phase_cycles": {
+        "input_prepare_and_distribute": 163614,
+        "fused_gate_up_and_distribute": 405913,
+        "down_and_collect": 144179
+      }
+    },
+    {
+      "index": 1,
+      "epoch": 2,
+      "baseline_cycles": 2358523,
+      "candidate_cycles": 683492,
+      "baseline_to_candidate_cycle_ratio": 3.450695838429711,
+      "cycle_reduction_fraction": 0.7102033772831555,
+      "candidate_completed_output_seconds": 0.0025208108127117157,
+      "candidate_phase_cycles": {
+        "input_prepare_and_distribute": 151877,
+        "fused_gate_up_and_distribute": 387428,
+        "down_and_collect": 144187
+      }
+    },
+    {
+      "index": 2,
+      "epoch": 3,
+      "baseline_cycles": 2844301,
+      "candidate_cycles": 713752,
+      "baseline_to_candidate_cycle_ratio": 3.9849989912462593,
+      "cycle_reduction_fraction": 0.7490589076191303,
+      "candidate_completed_output_seconds": 0.0025545815005898476,
+      "candidate_phase_cycles": {
+        "input_prepare_and_distribute": 163569,
+        "fused_gate_up_and_distribute": 406011,
+        "down_and_collect": 144172
+      }
+    },
+    {
+      "index": 3,
+      "epoch": 4,
+      "baseline_cycles": 2844443,
+      "candidate_cycles": 713625,
+      "baseline_to_candidate_cycle_ratio": 3.985907164126817,
+      "cycle_reduction_fraction": 0.7491160835355112,
+      "candidate_completed_output_seconds": 0.0023883404210209846,
+      "candidate_phase_cycles": {
+        "input_prepare_and_distribute": 163569,
+        "fused_gate_up_and_distribute": 405885,
+        "down_and_collect": 144171
+      }
+    }
+  ],
+  "cycle_to_seconds_calibration_performed": false,
+  "wall_time_speedup": null,
+  "full_model_tps": null,
+  "note": "Phase counters mark source distribution completion and final receipt, not isolated kernel durations; neural work overlaps these intervals. Baseline lacks completed-output wall time. No aggregate model speed acceptance."
+}

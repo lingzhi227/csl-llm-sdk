@@ -42,7 +42,10 @@ def build(stage_name):
                         'layer_mlp_network.py':'performance/spatial/layer_mlp_network.py','layer_fused_routes.py':'performance/spatial/layer_fused_routes.py',
                         'layer_routes.py':'performance/spatial/layer_routes.py','layer_schedule.py':'performance/spatial/layer_schedule.py'}.items():files[dest]=(ROOT/source).read_bytes()
     grants=network['grant_schedule'];fields={'targets':'target','kinds':'kind','indices':'index','words':'words','firsts':'first_row','rows':'rows'}
-    files['mlp_schedule.csl']=('\n'.join('const %s=[186]u16{%s};'%(name,','.join(str(g.get(key,0)) for g in grants)) for name,key in fields.items())+'\n').encode()
+    preparations=network['prepare_schedule']
+    schedules=['const %s=[%d]u16{%s};'%(name,len(grants),','.join(str(g.get(key,0)) for g in grants)) for name,key in fields.items()]
+    schedules+=['const prepare_%s=[%d]u16{%s};'%(name,len(preparations),','.join(str(g[key]) for g in preparations)) for name,key in {'targets':'target','indices':'index'}.items()]
+    files['mlp_schedule.csl']=('\n'.join(schedules)+'\n').encode()
     layout=[f'const memcpy=@import_module("<memcpy/get_params>",.{{.width={width},.height={height}}});','layout {',f' @set_rectangle({width},{height});']
     classes={};setups=[]
     for w in profiles:
@@ -62,7 +65,7 @@ def build(stage_name):
     files['profiles.json']=(json.dumps(dict(profiles=list(classes.values()),application=[width,height],physical=False,executed=False,
         whole_stage=stage_name,scope='Original connected MLP component; mixer/state banks retained but inactive; no full-layer or model execution.'),separators=(',',':'))+'\n').encode()
     files['worker-setups.json']=(json.dumps(setups,separators=(',',':'))+'\n').encode()
-    files['network-binding.json']=(json.dumps(dict(stage=stage_name,audit=network['audit'],senders=network['senders'],sinks=network['down_sinks'],grant_schedule=grants,
+    files['network-binding.json']=(json.dumps(dict(stage=stage_name,audit=network['audit'],senders=network['senders'],sinks=network['down_sinks'],grant_schedule=grants,prepare_schedule=preparations,
         network_sha256=hashlib.sha256(json.dumps(network,sort_keys=True,separators=(',',':')).encode()).hexdigest(),
         source_bindings={str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in [schedule,route_file]}),indent=2)+'\n').encode()
     return files,width,height,profiles

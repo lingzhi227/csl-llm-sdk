@@ -927,3 +927,22 @@ All122 source tests pass, all owned resources are released, and the original
 functional baseline remains preserved. Full layers/state, neighboring stages and
 complete original-model sentences at>=2000 aggregate generated tokens/s remain
 unfinished. See LAYER-MLP-QUALIFICATION.md and its bound summary receipt.
+
+## P28: parallel input preparation and vector communication
+
+Physical004 retains all P27 original-weight numerical, ingress, counter,
+retention, warm-reuse and normal-drain checks:20,480 exact BF16 outputs. Forty
+initial quantizers prepare independently before exclusive transmission, inside
+the controller timing window. Controller native-slice and output copies use
+vector operations. Fused activation quantization was already arrival-triggered;
+this corrects the prior proposed optimization without changing the P27 result.
+
+Nonzero controller counts fall to713,625–713,752, about74.91% fewer than P27 and
+a3.985–3.986 counter ratio. The explicit completed-output host interval is
+2.388–2.801ms; no calibrated wall speedup or model TPS is claimed. New phase
+markers and a frozen static controller-network traffic audit guide the next
+coalesced-send and overlap work. All127 tests and all11,388 PE SRAM gates pass,
+with unchanged maximum48,128bytes including4,096 stack. Both fresh jobs succeed
+and release; no workstation heavy job or model payload retransfer is needed.
+The full64-layer correct-sentence and>=2000 aggregate tokens/s goal remains
+unmet. See LAYER-MLP-PERFORMANCE.md and layer-mlp-performance-summary-001.json.

@@ -10,7 +10,9 @@ from stage_layer_mlp_compile import build
 
 
 def main():
-    parser=argparse.ArgumentParser();parser.add_argument('attempt');parser.add_argument('--reuse-download');parser.add_argument('--reuse-admitted');args=parser.parse_args()
+    parser=argparse.ArgumentParser();parser.add_argument('attempt');parser.add_argument('--reuse-download');parser.add_argument('--reuse-admitted');parser.add_argument('--reuse-payload');args=parser.parse_args()
+    if args.reuse_payload and (args.reuse_download or not re.fullmatch('layer-mlp-hw-[0-9]{3}',args.reuse_payload)):
+        raise ValueError('Payload-only reuse requires one valid attempt and a fresh compiler')
     if args.reuse_admitted and (not args.reuse_download or not re.fullmatch('layer-mlp-hw-[0-9]{3}',args.reuse_admitted)):
         raise ValueError('Admitted image reuse requires original compiler service provenance')
     if not re.fullmatch('[0-9]{3}',args.attempt):raise ValueError('Attempt')
@@ -121,6 +123,25 @@ receipt=dict(passed=result['passed'],physical_job_submitted=False,source_manifes
         (out/'artifact-admission.json').write_text(json.dumps(json.loads(result.stdout),indent=2)+'\n')
         (out/'payload-staging.json').write_text(json.dumps(dict(payload_verified=True,reused_remote_files=True,source_attempt=args.reuse_download,allocated_bank_bytes=meta['allocated_bank_bytes']),indent=2)+'\n')
         print(json.dumps(dict(name=name,compiler_service_reused=args.reuse_download,physical_dispatched=False)),flush=True)
+        return
+    if args.reuse_payload:
+        previous='/srv/qwen38-singlewse-hardware/'+args.reuse_payload
+        script='previous='+repr(previous)+'\nroot='+repr(dest)+'\n'+'''import json,os,resource
+from pathlib import Path
+resource.setrlimit(resource.RLIMIT_AS,(512<<20,512<<20));resource.setrlimit(resource.RLIMIT_CORE,(0,0))
+resource.setrlimit(resource.RLIMIT_CPU,(30,30));r=Path(root);old=Path(previous);os.chdir(r)
+from source_gate import verify
+from backend import file_sha256
+verify();meta=json.loads((r/'fixture.json').read_text())
+assert file_sha256(old/'fixture.json')==file_sha256(r/'fixture.json')
+for name in ['banks.npy','fixture.npz','silu-table.npy']:
+ assert file_sha256(old/name)==meta['hashes'][name];os.link(old/name,r/name)
+verify();print(json.dumps(dict(payload_verified=True,reused_remote_files=True,payload_source=old.name,
+ allocated_bank_bytes=meta['allocated_bank_bytes'],compiler_service_reused=False)))
+'''
+        result=subprocess.run(session+['timeout --signal=TERM --kill-after=5 45 /opt/cerebras/venv/bin/python -c '+shlex.quote(script)],capture_output=True,text=True,check=True,timeout=60)
+        (out/'payload-staging.json').write_text(result.stdout)
+        print(json.dumps(dict(name=name,payload_reused=args.reuse_payload,fresh_compilation_required=True,physical_dispatched=False)),flush=True)
         return
     remote='/srv/model-storage/qwen38-singlewse/runs/layer-mlp-reference-001'
     reader=subprocess.Popen(['ssh','workstation','tar -cf - -C '+shlex.quote(remote)+' banks.npy fixture.npz silu-table.npy'],stdout=subprocess.PIPE)
