@@ -1,0 +1,126 @@
+// Real retained-input native row loop plus complete-K arrival-driven reduction.
+// The root emits rounded original BF16 projection values directly to its next
+// consumer. Every worker waits for local send and the consumer's group credit.
+// Ingress distribution, root->consumer routes and credit fanout are supplied by
+// the layer fabric; a selected-role compile alone does not connect this graph.
+param memcpy_params;param rows:u16;param columns:u16;param branches:u16;
+param max_parts:u16;param bank_words:u16;param root:bool;
+param children:u16;param subtree_k:u16;param left_k:u16;param right_k:u16;
+param left_color:u16;param right_color:u16;param out_color:u16;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const native=@import_module("layer_native.csl",.{.rows=rows,.columns=columns,.branches=branches,.max_parts=max_parts});
+const partials:u16=rows*branches;const reduction_words:u16=partials+3;
+const output_words:u16=if(root) partials/2+3 else reduction_words;
+const input_words:u16=columns/2+3;
+var bank=@zeros([bank_words]u32);var operand=@zeros([input_words]u32);
+var left=@zeros([if(children>0) reduction_words else 1]u32);
+var right=@zeros([if(children>1) reduction_words else 1]u32);
+var outgoing=@zeros([output_words]u32);var credit=@zeros([2]u32);
+var audit=@zeros([8]u32);
+var setup=@zeros([5]u16);
+const bp:[*]u32=&bank;const ap:[*]u32=&audit;const sp:[*]u16=&setup;
+const iq=@get_input_queue(2);const lq=@get_input_queue(3);const rq=@get_input_queue(4);const cq=@get_input_queue(5);const oq=@get_output_queue(2);
+const id=@get_dsr(dsr_dest,2);const is=@get_dsr(dsr_src0,2);
+const ld=@get_dsr(dsr_dest,3);const ls=@get_dsr(dsr_src0,3);
+const rd=@get_dsr(dsr_dest,5);const rs=@get_dsr(dsr_src0,5);
+const cd=@get_dsr(dsr_dest,1);const cs=@get_dsr(dsr_src0,1);
+const od=@get_dsr(dsr_dest,6);const os=@get_dsr(dsr_src0,6);
+const it=@get_local_task_id(8);const lt=@get_local_task_id(9);const rt=@get_local_task_id(10);
+const ot=@get_local_task_id(11);const ct=@get_local_task_id(12);
+var running:bool=false;var left_ready:bool=false;var right_ready:bool=false;
+var own_ready:bool=false;var joined:bool=false;
+var epoch:u32=0;var row:u16=0;var output_start:u16=0;var captured:u16=0;
+
+fn receive_operand() void {
+ const m=@get_dsd(mem1d_dsd,.{.base_address=&operand,.extent=input_words});
+ const f=@get_dsd(fabin_dsd,.{.input_queue=iq,.extent=input_words});
+ @load_to_dsr(id,m);@load_to_dsr(is,f,.{.async=true,.ut_id=@get_ut_id(2),.activate=it});@mov32(id,is,.{.async=true});
+}
+fn join() void {
+ if(own_ready and left_ready and right_ready and !joined){
+  joined=true;
+  const total=@get_dsd(mem1d_dsd,.{.base_address=native.result,.extent=partials});
+  var count:u32=@as(u32,native.parts);
+  if(comptime children>0){
+   @assert(left[0]==epoch and left[1]==@as(u32,row) and left[2]==@as(u32,left_k));
+   const term=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]f32,&left[3]),.extent=partials});
+   @fadds(total,total,term);count+=left[2];
+  }
+  if(comptime children>1){
+   @assert(right[0]==epoch and right[1]==@as(u32,row) and right[2]==@as(u32,right_k));
+   const term=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]f32,&right[3]),.extent=partials});
+   @fadds(total,total,term);count+=right[2];
+  }
+  @assert(count==@as(u32,subtree_k));audit[3]+=1;
+  outgoing[0]=epoch;outgoing[1]=@as(u32,row);
+  if(comptime root){
+   // Header: epoch, iteration, actual first output row. Branch-major packed
+   // BF16 gate/up pairs are adjacent in one packet, after complete original K.
+   outgoing[2]=@as(u32,output_start+row*rows);
+   // Same integer ties-to-even expression as qwen_math.round. The child has
+   // already been consumed, so its packet is scratch; no second full vector.
+   const bits=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]u32,native.result),.extent=partials});
+   const temporary=@get_dsd(mem1d_dsd,.{.base_address=&left[3],.extent=partials});
+   @lsr32(temporary,bits,16);@and32(temporary,temporary,1);
+   @add32(temporary,temporary,32767);@add32(bits,bits,temporary);
+   const high=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]u16,native.result),.extent=partials,.stride=2});
+   const packed_out=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]u16,&outgoing[3]),.extent=partials});
+   @mov16(packed_out,@increment_dsd_offset(high,1,u16));
+  }else{
+   outgoing[2]=count;
+   const dest=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]f32,&outgoing[3]),.extent=partials});@fmovs(dest,total);
+  }
+  const m=@get_dsd(mem1d_dsd,.{.base_address=&outgoing,.extent=output_words});
+  const f=@get_dsd(fabout_dsd,.{.output_queue=oq,.extent=output_words});
+  @load_to_dsr(os,m);@load_to_dsr(od,f,.{.async=true,.ut_id=@get_ut_id(5),.activate=ot});@mov32(od,os,.{.async=true});
+ }
+}
+fn begin_row() void {
+ own_ready=false;joined=false;left_ready=children==0;right_ready=children<2;
+ const cm=@get_dsd(mem1d_dsd,.{.base_address=&credit,.extent=2});const cf=@get_dsd(fabin_dsd,.{.input_queue=cq,.extent=2});
+ @load_to_dsr(cd,cm);@load_to_dsr(cs,cf,.{.async=true,.ut_id=@get_ut_id(6),.activate=ct});@mov32(cd,cs,.{.async=true});
+ if(comptime children>0){
+  const m=@get_dsd(mem1d_dsd,.{.base_address=&left,.extent=reduction_words});const f=@get_dsd(fabin_dsd,.{.input_queue=lq,.extent=reduction_words});
+  @load_to_dsr(ld,m);@load_to_dsr(ls,f,.{.async=true,.ut_id=@get_ut_id(3),.activate=lt});@mov32(ld,ls,.{.async=true});
+ }
+ if(comptime children>1){
+  const m=@get_dsd(mem1d_dsd,.{.base_address=&right,.extent=reduction_words});const f=@get_dsd(fabin_dsd,.{.input_queue=rq,.extent=reduction_words});
+  @load_to_dsr(rd,m);@load_to_dsr(rs,f,.{.async=true,.ut_id=@get_ut_id(4),.activate=rt});@mov32(rd,rs,.{.async=true});
+ }
+ native.compute(bp,bank_words);audit[2]+=1;own_ready=true;join();
+}
+fn advance_if_released() void {
+ if(!native.pending){
+  @assert(native.iteration==row+1);row+=1;audit[6]=@as(u32,row);
+  if(native.done()){running=false;audit[7]=1;}else{begin_row();}
+ }
+}
+task operand_arrived() void {
+ @assert(running and row==0 and operand[0]==epoch);
+ const part=@as(u16,operand[1]);@assert(operand[1]==@as(u32,part));
+ native.capture(epoch,part,@ptrcast([*]u32,&operand[2]));captured+=1;audit[1]+=1;
+ if(captured==native.parts){begin_row();}else{receive_operand();}
+}
+task left_arrived() void {@assert(!left_ready);left_ready=true;join();}
+task right_arrived() void {@assert(!right_ready);right_ready=true;join();}
+task sent() void {native.send_completed(epoch,row);audit[4]+=1;advance_if_released();}
+task consumed() void {
+ @assert(credit[0]==epoch and credit[1]==@as(u32,row));
+ native.consumer_credit(epoch,row);audit[5]+=1;advance_if_released();
+}
+fn arm(new_epoch:u32) void {
+ @assert(!running);native.configure(new_epoch,setup[0],setup[1],setup[2],setup[3]);
+ @assert(setup[4]+setup[1]*rows>=setup[4]);
+ running=true;epoch=new_epoch;row=0;output_start=setup[4];captured=0;
+ for(@range(u16,8))|i|{audit[i]=0;}audit[0]=1;receive_operand();sys.unblock_cmd_stream();
+}
+comptime {
+ @comptime_assert(children<=2 and subtree_k>0 and (branches==1 or branches==2));
+ @comptime_assert(!root or children>0);
+ @initialize_queue(iq,.{.color=@get_color(2)});@initialize_queue(cq,.{.color=@get_color(18)});
+ @initialize_queue(oq,.{.color=@get_color(out_color)});
+ if(children>0){@initialize_queue(lq,.{.color=@get_color(left_color)});@bind_local_task(left_arrived,lt);}
+ if(children>1){@initialize_queue(rq,.{.color=@get_color(right_color)});@bind_local_task(right_arrived,rt);}
+ @bind_local_task(operand_arrived,it);@bind_local_task(sent,ot);@bind_local_task(consumed,ct);
+ @export_symbol(bp,"bank");@export_symbol(ap,"audit");@export_symbol(sp,"setup");@export_symbol(arm);
+}

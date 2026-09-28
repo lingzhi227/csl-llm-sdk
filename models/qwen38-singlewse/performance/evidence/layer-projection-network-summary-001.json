@@ -1,0 +1,117 @@
+{
+  "schema": "wse-layer-projection-network-summary-v1",
+  "utc": "2026-09-28T01:46:39.323708+00:00",
+  "scope": "Actual native reduction producer and fused block-consumer source, full original MLP tree audit, selected compiler admission; no connected neural runtime.",
+  "reduction_audit": {
+    "passed": true,
+    "regions": 128,
+    "groups": 2752,
+    "workers": 502320,
+    "edges": 499568,
+    "word_hops_per_epoch": 1845150416,
+    "route_entries": 2122720,
+    "fused_projection_blocks": 139264,
+    "tree_colors": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17
+    ],
+    "maximum_tree_edge_hops": 68,
+    "templates": [
+      [
+        106,
+        160
+      ],
+      [
+        144,
+        160
+      ],
+      [
+        159,
+        272
+      ],
+      [
+        160,
+        160
+      ],
+      [
+        184,
+        272
+      ],
+      [
+        272,
+        272
+      ]
+    ],
+    "reduction_routes_connected": true,
+    "fusion_endpoint_coverage": true,
+    "complete_input_distribution": false,
+    "root_consumer_routes_connected": false,
+    "external_credit_routes_connected": false,
+    "all_layer_routes_admitted": false,
+    "numerical_qualified": false,
+    "physical": false
+  },
+  "selected_projection_compile": {
+    "attempt": "layer-projection-compile-007",
+    "profiles": 16,
+    "maximum_sram_including_stack": 47936,
+    "stack_allowance": 4096,
+    "all_instances_compiled": false,
+    "executed": false
+  },
+  "fusion_packet_compile": {
+    "attempt": "layer-backend-compile-009",
+    "maximum_sram_including_stack": 47712,
+    "executed": false
+  },
+  "source_tests": {
+    "passed": 102,
+    "seconds": 26.978
+  },
+  "new_physical_jobs": 0,
+  "workstation_released": true,
+  "no_owned_hardware_allocation": true,
+  "provider_billed_node_hours": null,
+  "input_sha256": {
+    "layer-projection-network-001/audit.json": "0ed6b50b34d8681f871c897299578cb450abce32b914f533c1bacca4470e74fd",
+    "layer-projection-network-001/source-manifest.json": "3ae10f91678fb87fdbbcd1613f733eebe30d856f9b849c3cc2a83e0d59379a33",
+    "layer-projection-compile-007/source-manifest.json": "afe42cd3f3daccf4fc2184e5d59b24f855bca73ad2e64e17c647fff7779eb6e8",
+    "layer-projection-compile-007/sram.json": "ae5ab4a28e780e78a2eef307d0b6a675a85d950b57c3c203543a7b7dd29943e1",
+    "layer-backend-compile-009/source-manifest.json": "6ce8b6055a1c599003140bd356a06b6c5735c24ce04476800fb2a99b7e2b96c2",
+    "layer-backend-compile-009/sram.json": "e56b98f4b2fdfc23715e1913e497116efb45d4a8fa3d0f76f7d6ec605be5a4e1",
+    "resource-audit-p24-hardware-001.json": "d69750b50ca5c199415d403230aace0cc5c8e343d785f1097917c3774ba05a7d",
+    "resource-audit-p24-workstation-001.json": "dfc23d0aed4d19c03d4974a2aac0f80ca7fc1903c6f562da0298d4d38cf0571b"
+  },
+  "failures": {
+    "layer-projection-compile-001": "Compilation succeeded; SRAM up to49248 including4KiB stack exceeds48128. Original resident bank kept intact.",
+    "layer-projection-compile-002": "Unsupported @lsr32 builtin. Replaced by mapping the unchanged original BF16 round function; no ISA support inferred.",
+    "layer-projection-compile-003": "Mapped BF16 packing compiles; maximum48848 with full dummy banks still exceeds SRAM.",
+    "layer-projection-compile-004": "CSL rejects comptime pointer casts for shared-arena aliases; moved typed casts to runtime function scope.",
+    "layer-projection-compile-005": "Shared arena and direct single-part native path compile; maximum48688 with dummy full tail banks.006 uses exact all-worker maximum original matrix plus live auxiliary payload per class and trims nonessential counters; no weight/state omission."
+  },
+  "connected_layer_executed": false,
+  "full_model": false,
+  "target_achieved": false,
+  "remaining": [
+    "Original operand distributions",
+    "Actual root-to-fusion routes and credit fanouts",
+    "Native/fusion simultaneous queue/DSR/UT composition",
+    "GDN/norm/residual and successor integration",
+    "Independent changed-arithmetic numeric qualification",
+    "Two-request reset and complete64-layer physical sentences",
+    "Measured >=2000 aggregate generated tokens/s"
+  ]
+}

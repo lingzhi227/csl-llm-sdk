@@ -60,6 +60,27 @@ compile at maximum47712bytes including4096 stack, leaving416bytes. This does not
 include complete fabric or neural-layer execution. Current exact sources and
 evidence are described in [RESIDENT-LAYER-BACKEND.md](RESIDENT-LAYER-BACKEND.md).
 
+## P24 reduction network and fused block transfer
+
+The MLP producer now has an arrival-driven CSL native row loop and complete-K
+tree reduction. Balanced inorder roots stay inside the existing weight-owner
+groups. The full-model reduction audit covers499568 edges and2122720 PE/color
+entries, with no alias among those tree paths. Sliced ingress, root-to-fusion and
+external credit paths remain open; this is not the whole layer fabric.
+
+Initial operands, decoded weights, consumed child packets and outgoing results
+reuse one512-byte arena in explicitly separated phases. One ordered child DMA
+preserves local-left-right addition and frees DSR5/UT4. A producer advances only
+after both its send callback and the real consumer credit. The fused receiver
+credits each copied8-row projection block immediately, preventing a stop-and-wait
+cycle while it gathers its128-value quantization group. The receipt buffer itself
+is held through its send callback.
+
+Selected network compile007 admits16 maximum-actual-payload body profiles at
+47936bytes including4096 stack. Fusion backend009 also compiles. Complete-instance
+SRAM, the combined native/fusion communication leases and changed arithmetic
+remain unqualified. See [LAYER-PROJECTION-NETWORK.md](LAYER-PROJECTION-NETWORK.md).
+
 ## Explicit resource limits
 
 P22 gave every region exact cyclic matrix slots and a prefix allocation of128-byte

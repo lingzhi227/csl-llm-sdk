@@ -8,14 +8,14 @@ sentences and >=2000 aggregate completed generated tokens/s in sustained steady
 state. Independent requests may overlap. The old per-request target and broad
 whole-wafer shared-layer time overlay are superseded.
 
-P23 implements resident native-loop ownership and original-weight packing within
-P22's two-request stage map, with direct packed gate/up -> SiLU/multiply -> group128
-quantization -> down-fragment fusion. Six selected backend roles compile with a
-416-byte minimum SRAM margin including the declared stack. Original layer0/1
-packing samples and97 source tests pass. Complete routes, whole-layer SRAM,
-connected neural execution and speed remain unqualified. See
-../performance/docs/RESIDENT-LAYER-BACKEND.md and NEXT-STEPS.md.
-All eight compiler attempts and the weight audit are released. No new physical
+P24 adds actual arrival-driven native projection/reduction code, full original
+MLP tree routing checks and copied-block projection receipts in the fused actor.
+Sixteen selected communication-role profiles compile at47936bytes including the
+declared stack;102 source tests pass. The original weight addresses are preserved.
+Full input/root-consumer/credit routes, whole-layer SRAM, numerical execution and
+speed remain unqualified. See ../performance/docs/LAYER-PROJECTION-NETWORK.md and
+NEXT-STEPS.md. All seven new projection compile attempts and backend009 are
+released. No new physical
 WSE job was submitted; the final snapshot has no own active jobs or assignments.
 Historical functional results below are unchanged.
 

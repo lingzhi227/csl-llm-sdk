@@ -7,13 +7,14 @@ Independent requests may overlap with isolated state. The earlier per-request
 interpretation and whole-wafer shared-layer overlay are superseded. The target
 remains unmet; this is active development.
 
-P23 adds resident native row loops, exact original-weight packing and direct
-gate/up -> SiLU/multiply -> group128 quantization -> native down fragment bodies
-inside P22's66 disjoint stages. All498 matrices retain their original weights;
-gate/up use8x32 tiles and down4x64. Six selected backend profiles compile, with
-a416-byte minimum margin including the declared stack. The layer0/1 original
-packing audit and97 source tests pass. This does not admit full layer SRAM,
-complete routes, connected neural execution or performance. See
+P24 adds arrival-driven native projection workers and complete original MLP
+reduction trees within the resident stages:499568 tree edges and139264 projected
+blocks feed the declared fused group owners. Sixteen selected communication-role
+profiles compile at47936bytes including the declared stack;102 source tests pass.
+Fusion receipts release copied projection blocks before waiting for a complete
+quantization group. Input distribution, root-to-consumer/credit routes, full
+layer SRAM and connected neural execution remain unfinished. No model TPS is
+claimed. See [LAYER-PROJECTION-NETWORK.md](docs/LAYER-PROJECTION-NETWORK.md),
 [RESIDENT-LAYER-BACKEND.md](docs/RESIDENT-LAYER-BACKEND.md),
 [ARCHITECTURE.md](docs/ARCHITECTURE.md),
 [MEASUREMENT.md](docs/MEASUREMENT.md) and [NEXT-STEPS.md](docs/NEXT-STEPS.md).

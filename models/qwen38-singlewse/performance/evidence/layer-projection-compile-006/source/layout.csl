@@ -1,0 +1,24 @@
+const memcpy=@import_module("<memcpy/get_params>",.{.width=16,.height=1});
+layout {
+ @set_rectangle(16,1);
+ @set_tile_code(0,0,"layer_projection.csl",.{.memcpy_params=memcpy.get_params(0),.rows=8,.columns=32,.branches=2,.max_parts=1,.bank_words=8806,.root=false,.children=0,.subtree_k=1,.left_k=0,.right_k=0,.left_color=3,.right_color=4,.out_color=15});
+ @set_tile_code(1,0,"layer_projection.csl",.{.memcpy_params=memcpy.get_params(1),.rows=8,.columns=32,.branches=2,.max_parts=1,.bank_words=8806,.root=false,.children=1,.subtree_k=2,.left_k=1,.right_k=0,.left_color=15,.right_color=4,.out_color=13});
+ @set_tile_code(2,0,"layer_projection.csl",.{.memcpy_params=memcpy.get_params(2),.rows=8,.columns=32,.branches=2,.max_parts=1,.bank_words=8806,.root=false,.children=2,.subtree_k=80,.left_k=40,.right_k=39,.left_color=5,.right_color=6,.out_color=3});
+ @set_tile_code(3,0,"layer_projection.csl",.{.memcpy_params=memcpy.get_params(3),.rows=8,.columns=32,.branches=2,.max_parts=1,.bank_words=8806,.root=true,.children=2,.subtree_k=160,.left_k=80,.right_k=79,.left_color=3,.right_color=4,.out_color=19});
+ @set_tile_code(4,0,"layer_projection.csl",.{.memcpy_params=memcpy.get_params(4),.rows=8,.columns=32,.branches=2,.max_parts=2,.bank_words=8320,.root=false,.children=0,.subtree_k=2,.left_k=0,.right_k=0,.left_color=3,.right_color=4,.out_color=13});
+ @set_tile_code(5,0,"layer_projection.csl",.{.memcpy_params=memcpy.get_params(5),.rows=8,.columns=32,.branches=2,.max_parts=2,.bank_words=8320,.root=false,.children=2,.subtree_k=106,.left_k=52,.right_k=52,.left_color=5,.right_color=6,.out_color=3});
+ @set_tile_code(6,0,"layer_projection.csl",.{.memcpy_params=memcpy.get_params(6),.rows=8,.columns=32,.branches=2,.max_parts=2,.bank_words=8320,.root=false,.children=1,.subtree_k=4,.left_k=2,.right_k=0,.left_color=13,.right_color=4,.out_color=12});
+ @set_tile_code(7,0,"layer_projection.csl",.{.memcpy_params=memcpy.get_params(7),.rows=8,.columns=32,.branches=2,.max_parts=2,.bank_words=8320,.root=true,.children=2,.subtree_k=160,.left_k=106,.right_k=52,.left_color=3,.right_color=4,.out_color=19});
+ @set_tile_code(8,0,"layer_projection.csl",.{.memcpy_params=memcpy.get_params(8),.rows=4,.columns=64,.branches=1,.max_parts=1,.bank_words=8807,.root=false,.children=0,.subtree_k=1,.left_k=0,.right_k=0,.left_color=3,.right_color=4,.out_color=17});
+ @set_tile_code(9,0,"layer_projection.csl",.{.memcpy_params=memcpy.get_params(9),.rows=4,.columns=64,.branches=1,.max_parts=1,.bank_words=8807,.root=false,.children=1,.subtree_k=2,.left_k=1,.right_k=0,.left_color=17,.right_color=4,.out_color=15});
+ @set_tile_code(10,0,"layer_projection.csl",.{.memcpy_params=memcpy.get_params(10),.rows=4,.columns=64,.branches=1,.max_parts=1,.bank_words=8807,.root=false,.children=2,.subtree_k=136,.left_k=68,.right_k=67,.left_color=5,.right_color=6,.out_color=3});
+ @set_tile_code(11,0,"layer_projection.csl",.{.memcpy_params=memcpy.get_params(11),.rows=4,.columns=64,.branches=1,.max_parts=1,.bank_words=8807,.root=true,.children=2,.subtree_k=272,.left_k=136,.right_k=135,.left_color=3,.right_color=4,.out_color=19});
+ @set_tile_code(12,0,"layer_projection.csl",.{.memcpy_params=memcpy.get_params(12),.rows=4,.columns=64,.branches=1,.max_parts=2,.bank_words=8450,.root=false,.children=0,.subtree_k=2,.left_k=0,.right_k=0,.left_color=3,.right_color=4,.out_color=15});
+ @set_tile_code(13,0,"layer_projection.csl",.{.memcpy_params=memcpy.get_params(13),.rows=4,.columns=64,.branches=1,.max_parts=2,.bank_words=8450,.root=false,.children=1,.subtree_k=4,.left_k=2,.right_k=0,.left_color=15,.right_color=4,.out_color=13});
+ @set_tile_code(14,0,"layer_projection.csl",.{.memcpy_params=memcpy.get_params(14),.rows=4,.columns=64,.branches=1,.max_parts=2,.bank_words=8450,.root=false,.children=2,.subtree_k=180,.left_k=92,.right_k=86,.left_color=5,.right_color=6,.out_color=3});
+ @set_tile_code(15,0,"layer_projection.csl",.{.memcpy_params=memcpy.get_params(15),.rows=4,.columns=64,.branches=1,.max_parts=2,.bank_words=8450,.root=true,.children=2,.subtree_k=272,.left_k=158,.right_k=112,.left_color=3,.right_color=4,.out_color=19});
+ @export_name("bank",[*]u32,false);
+ @export_name("audit",[*]u32,false);
+ @export_name("setup",[*]u16,false);
+ @export_name("arm",fn(u32)void);
+}

@@ -35,7 +35,7 @@ def main():
         params=','.join('.%s=%s'%(k,str(v).lower()) for k,v in profile.items())
         layout.append(f' @set_tile_code({x},0,"layer_backend.csl",.{{.memcpy_params=memcpy.get_params({x}),{params}}});')
     layout.append(f' @set_tile_code({worker_width},0,"layer_controller.csl",.{{.memcpy_params=memcpy.get_params({worker_width}),.requests=2,.context=96,.chunks=40}});')
-    for symbol,kind in [('bank','u32'),('packet','u32'),('info','u32'),('state_operands','f32'),('state_result','f32'),('partial','f32'),('control','u32'),('fusion_packet','u32'),('bf16_result','f32')]:
+    for symbol,kind in [('bank','u32'),('packet','u32'),('info','u32'),('state_operands','f32'),('state_result','f32'),('partial','f32'),('control','u32'),('fusion_packet','u32'),('bf16_result','f32'),('projection_credit','u32')]:
         layout.append(f' @export_name("{symbol}",[*]{kind},false);')
     for symbol,args in [('command','u16'),('request_begin','u16,u32,u16'),('request_chunk','u16,u32,u16,u32,u16,u16'),
                         ('request_committed','u16,u32'),('request_completed','u16,u32,u16,u16'),('request_reset','u16,u32,u16')]:

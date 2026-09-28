@@ -833,3 +833,31 @@ assignment. See RESIDENT-LAYER-BACKEND.md and resident-layer-backend-summary-001
 Next work remains actual connected layer0 -> layer1 routing and neural execution;
 complete64-layer correct sentences and>=2000 aggregate generated tokens/s are
 still unachieved.
+
+## P24: arrival-driven full-K producers and fused block receipts
+
+Real native projection workers now receive/retain original K inputs, consume
+ordered full-K subtree packets, round the complete projection and release each
+row only after local send plus actual consumer credit. The full64-layer MLP
+reduction audit covers2752 contractions,502320 workers,499568 tree edges and
+2122720 PE/color entries. All139264 projected blocks map to the original fused
+group owners. Ingress, root-to-consumer and external credit routes remain open;
+these reduction paths alone do not connect the layer graph.
+
+The512-byte decode arena is shared across disjoint input/compute/reduction/send
+phases. A single ordered child DMA frees DSR5/UT4 while retaining local-left-right
+addition. Selected16-role compile007 passes47936bytes including4KiB stack. Exact
+original matrix plus live auxiliary payload is preserved in every selected
+profile; dummy unused tail bytes are not allocated. Earlier over-budget compiles,
+unsupported builtin and pointer-cast failure are frozen. The changed direct-single
+native path and complete reduction order remain numerically unqualified.
+
+The fused actor consumes11-word actual projection packets and immediately issues
+a copied-block receipt, allowing the producer's next rows to arrive before the
+whole128-value quantization group completes. Its receipt buffer survives until
+send completion. This interface compiles in backend009 but has not yet run as a
+connected physical stream. All102 source tests pass. Every new bounded compiler
+service is released; no WSE job was added and the final hardware snapshot has no
+own active job/system assignment. See LAYER-PROJECTION-NETWORK.md and the bound
+layer-projection-network-summary-001 receipt. Complete layers and full-model
+correct sentences at>=2000 aggregate generated tokens/s remain unfinished.
