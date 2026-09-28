@@ -8,16 +8,33 @@ sentences and >=2000 aggregate completed generated tokens/s in sustained steady
 state. Independent requests may overlap. The old per-request target and broad
 whole-wafer shared-layer time overlay are superseded.
 
-P31 now has a compiled residual/RMS -> complete original MLP -> residual/next
-RMS graph. Forty norm owners and forty adjacent quantizer/bus endpoints use
-fixed-color arrivals and explicit buffer retirement. Compile012 admits all11388
-PEs, maximum48112 bytes including4096 stack. Two earlier SRAM rejections remain
-preserved. An explicit800-page local recurrent-state relocation conserves every
-original resident word and every native matrix coordinate. Future mixer lowering
-must honor that state-address map. Independent original-weight reference002 and
-139 source tests pass. The four workstation jobs are released; physical007 is
-now being compiled/qualified, so no new physical numerical or speed acceptance
-is claimed. See [NORM-MLP-BRIDGE.md](../performance/docs/NORM-MLP-BRIDGE.md).
+P31 qualifies the physical residual/RMS -> complete original layer0 MLP ->
+residual/next-layer RMS graph. All81920 checked BF16 values are bit-exact across
+four epochs, including zero/change/replay. Native inputs/scales, all11388 PE
+and83 endpoint counters, original banks/gains/LUT retention, local drain and
+normal stop pass. The host supplies only the two initial boundary operands.
+Forty norm owners communicate directly with forty adjacent quantizer endpoints;
+down-output chunks feed residual owners while later returns can arrive.
+
+Physical008 corrects ten obsolete output-grant IDs exposed by007's preserved
+post-initialization timeout. Its sole CSL change is the grant target table;
+weights, bank placement and independent reference002 remain unchanged. All148
+source/publication tests pass; a bounded post-release capture re-read checks
+all81920 values and counters again. Both jobs succeeded and released, with no
+owned hardware assignment. All507 baseline files remain preserved except the
+two explicitly maintained active status/acceptance notices.
+
+Controller counts are695076–731270. Four completed-output host observations
+are10.420–10.811ms, including phase logging and readback; this is not sustained
+model throughput or a same-workload comparison with P30. Loading430.237s and
+initialization3.096s are separate. Physical SRAM admission covers4226 ELF images
+and11388 PEs, at maximum48128 bytes including4096 stack.
+
+The800-page state relocation retains original capacity. Its new logical-state
+address resolver is checked over all49152 pages of two requests, ready for future
+mixer lowering; no GDN execution was added to this physical graph. Complete
+mixer/attention layers, automatic stage handoff and full64-layer correct sentences
+at>=2000 aggregate generated tokens/s remain unqualified. See [NORM-MLP-BRIDGE.md](../performance/docs/NORM-MLP-BRIDGE.md).
 
 P30 remains the accepted physical MLP baseline described below; its resource
 release and timings refer to that completed attempt.

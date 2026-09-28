@@ -47,6 +47,26 @@ class NormBridgeTests(unittest.TestCase):
         bad=copy.deepcopy(self.new);bad['grant_schedule'][-1]['first_row']=0
         with self.assertRaises(ValueError):audit_mlp_network(self.stage,bad)
 
+    def test_legacy_output_ids_rejected_after_adding_fusion_endpoints(self):
+        bad=copy.deepcopy(self.new)
+        for g in bad['grant_schedule']:
+            if g['kind']==2:g['target']=40+g['index']
+        with self.assertRaisesRegex(ValueError,'Down collection grant'):
+            audit_mlp_network(self.stage,bad)
+
+    def test_reachable_but_wrong_command_endpoints_rejected(self):
+        for graph in (self.old,self.new):
+            for kind in (0,1,2):
+                bad=copy.deepcopy(graph)
+                command=next(g for g in bad['grant_schedule'] if g['kind']==kind)
+                if kind==1:command['target']=next(s['id'] for s in bad['senders'] if 'output_sink' in s)
+                else:command['target']+=1
+                with self.assertRaises(ValueError):audit_mlp_network(self.stage,bad)
+        bad=copy.deepcopy(self.new)
+        sink=next(s for s in bad['senders'] if 'output_sink' in s)
+        sink['rank']+=1
+        with self.assertRaisesRegex(ValueError,'original ownership'):audit_mlp_network(self.stage,bad)
+
     def test_bf16_residual_boundary_and_independent_full_width_rms(self):
         rng=np.random.default_rng(3138)
         for mode in ['zero','random','cancel','wide']:

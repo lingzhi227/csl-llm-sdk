@@ -1,0 +1,316 @@
+{
+  "utc": "2026-09-28T07:15:34.909309+00:00",
+  "attempt": "layer-mlp-hw-007",
+  "source_manifest_sha256": "447b8a8c8f666887be68c2e26c158373117af0a8831856311689f7b69180c638",
+  "runtime_outcome": {
+    "cleanup_errors": [],
+    "error": "TimeoutError: run host deadline",
+    "exit_code": null,
+    "jobs": [
+      {
+        "cancelled": true,
+        "id": "wsjob-auni7gptvmafn3ke7ywofp",
+        "phase": "CANCELLED",
+        "released": true
+      }
+    ],
+    "stage": "run",
+    "uncorrelated_new_jobs": [],
+    "wall_seconds": 992.6041720649227
+  },
+  "observed": "Initialization completed in3.0602007200941443s; no epoch output before900s total runtime deadline. No phase instrumentation localized the blocked call.",
+  "source_defect": "All10 kind2 down-output grants retain40+index after norm mode moves down sinks to73+index. Those IDs select fusion-only endpoints which reject kind2.",
+  "wrong_commands": [
+    {
+      "command": {
+        "target": 40,
+        "kind": 2,
+        "index": 0,
+        "words": 273,
+        "first_row": 0,
+        "rows": 540
+      },
+      "actual_endpoint": {
+        "id": 40,
+        "pe": [
+          138,
+          66
+        ],
+        "rank": 5223,
+        "fusion_producer": 0
+      },
+      "expected_endpoint": {
+        "id": 73,
+        "pe": [
+          112,
+          145
+        ],
+        "rank": 2578,
+        "output_sink": 0
+      }
+    },
+    {
+      "command": {
+        "target": 41,
+        "kind": 2,
+        "index": 1,
+        "words": 273,
+        "first_row": 540,
+        "rows": 540
+      },
+      "actual_endpoint": {
+        "id": 41,
+        "pe": [
+          134,
+          66
+        ],
+        "rank": 5219,
+        "fusion_producer": 1
+      },
+      "expected_endpoint": {
+        "id": 74,
+        "pe": [
+          120,
+          145
+        ],
+        "rank": 2586,
+        "output_sink": 1
+      }
+    },
+    {
+      "command": {
+        "target": 42,
+        "kind": 2,
+        "index": 2,
+        "words": 273,
+        "first_row": 1080,
+        "rows": 540
+      },
+      "actual_endpoint": {
+        "id": 42,
+        "pe": [
+          130,
+          66
+        ],
+        "rank": 5215,
+        "fusion_producer": 2
+      },
+      "expected_endpoint": {
+        "id": 75,
+        "pe": [
+          128,
+          145
+        ],
+        "rank": 2594,
+        "output_sink": 2
+      }
+    },
+    {
+      "command": {
+        "target": 43,
+        "kind": 2,
+        "index": 3,
+        "words": 273,
+        "first_row": 1620,
+        "rows": 540
+      },
+      "actual_endpoint": {
+        "id": 43,
+        "pe": [
+          126,
+          66
+        ],
+        "rank": 5211,
+        "fusion_producer": 3
+      },
+      "expected_endpoint": {
+        "id": 76,
+        "pe": [
+          136,
+          145
+        ],
+        "rank": 2602,
+        "output_sink": 3
+      }
+    },
+    {
+      "command": {
+        "target": 44,
+        "kind": 2,
+        "index": 4,
+        "words": 273,
+        "first_row": 2160,
+        "rows": 540
+      },
+      "actual_endpoint": {
+        "id": 44,
+        "pe": [
+          122,
+          66
+        ],
+        "rank": 5207,
+        "fusion_producer": 4
+      },
+      "expected_endpoint": {
+        "id": 77,
+        "pe": [
+          137,
+          145
+        ],
+        "rank": 2603,
+        "output_sink": 4
+      }
+    },
+    {
+      "command": {
+        "target": 45,
+        "kind": 2,
+        "index": 5,
+        "words": 273,
+        "first_row": 2700,
+        "rows": 540
+      },
+      "actual_endpoint": {
+        "id": 45,
+        "pe": [
+          118,
+          66
+        ],
+        "rank": 5203,
+        "fusion_producer": 5
+      },
+      "expected_endpoint": {
+        "id": 78,
+        "pe": [
+          129,
+          145
+        ],
+        "rank": 2595,
+        "output_sink": 5
+      }
+    },
+    {
+      "command": {
+        "target": 46,
+        "kind": 2,
+        "index": 6,
+        "words": 273,
+        "first_row": 3240,
+        "rows": 540
+      },
+      "actual_endpoint": {
+        "id": 46,
+        "pe": [
+          115,
+          66
+        ],
+        "rank": 5200,
+        "fusion_producer": 6
+      },
+      "expected_endpoint": {
+        "id": 79,
+        "pe": [
+          121,
+          145
+        ],
+        "rank": 2587,
+        "output_sink": 6
+      }
+    },
+    {
+      "command": {
+        "target": 47,
+        "kind": 2,
+        "index": 7,
+        "words": 273,
+        "first_row": 3780,
+        "rows": 540
+      },
+      "actual_endpoint": {
+        "id": 47,
+        "pe": [
+          113,
+          66
+        ],
+        "rank": 5198,
+        "fusion_producer": 7
+      },
+      "expected_endpoint": {
+        "id": 80,
+        "pe": [
+          113,
+          145
+        ],
+        "rank": 2579,
+        "output_sink": 7
+      }
+    },
+    {
+      "command": {
+        "target": 48,
+        "kind": 2,
+        "index": 8,
+        "words": 273,
+        "first_row": 4320,
+        "rows": 540
+      },
+      "actual_endpoint": {
+        "id": 48,
+        "pe": [
+          111,
+          66
+        ],
+        "rank": 5196,
+        "fusion_producer": 8
+      },
+      "expected_endpoint": {
+        "id": 81,
+        "pe": [
+          110,
+          145
+        ],
+        "rank": 2576,
+        "output_sink": 8
+      }
+    },
+    {
+      "command": {
+        "target": 49,
+        "kind": 2,
+        "index": 9,
+        "words": 133,
+        "first_row": 4860,
+        "rows": 260
+      },
+      "actual_endpoint": {
+        "id": 49,
+        "pe": [
+          109,
+          66
+        ],
+        "rank": 5194,
+        "fusion_producer": 9
+      },
+      "expected_endpoint": {
+        "id": 82,
+        "pe": [
+          127,
+          145
+        ],
+        "rank": 2593,
+        "output_sink": 9
+      }
+    }
+  ],
+  "root_cause_physically_confirmed": false,
+  "device_output_observed": false,
+  "worker_log_archive": {
+    "path": "/srv/qwen38-singlewse-hardware/layer-mlp-hw-007/log-export-003/log-export-wsjob-auni7gptvmafn3ke7ywofp-cfa605b5.zip",
+    "bytes": 18572,
+    "sha256": "807e0f85d919cbf6d24c99bfb3aeccba04c9378887b49dec70d4f3c09d1054a9"
+  },
+  "log_scope": "Bounded worker-0 log export; no compile artifacts/binaries. No device halt or assertion was exposed in available logs.",
+  "resource_release": "resource-audit-p31-hw007-final.json",
+  "full_model": false,
+  "full_model_tps": null
+}

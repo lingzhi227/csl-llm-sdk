@@ -1,0 +1,31 @@
+{
+  "norm_bridge": true,
+  "complete_original_mlp": true,
+  "stage": "layer_00",
+  "revision": "017b9c7af6b5689d5dd426a76e0bc077eb5ca20a",
+  "application": [
+    78,
+    146
+  ],
+  "application_pes": 11388,
+  "mlp_shape": [
+    5120,
+    17408,
+    5120
+  ],
+  "fabric_offset": [
+    67,
+    1
+  ],
+  "logical_origin": [
+    63,
+    0
+  ],
+  "artifact_single_message_limit": 67108864,
+  "compiler_timeout_seconds": 900,
+  "run_timeout_seconds": 900,
+  "fixture_metadata_sha256": "d419833ab3b9fe1f468a2e645d0bfb3fa125e6e9804088ea46510d293503366a",
+  "acceptance": "Original full MLP and successor RMS outputs bit-exact to independently frozen ordered FP32/BF16 oracle; both norms bounded against independent full-width FP64 truth before BF16; all native inputs/counters and forty residual owners exact; all banks, gains and LUTs retained; warm zero/change/replay, all-PE drain and normal stop.",
+  "full_model": false,
+  "scope": "Actual residual/RMS -> complete original layer0 MLP -> residual/next-layer RMS subgraph. Host provides two initial BF16 boundary operands only. Original mixer/state banks retained but mixer/state neural execution and full model remain unqualified."
+}

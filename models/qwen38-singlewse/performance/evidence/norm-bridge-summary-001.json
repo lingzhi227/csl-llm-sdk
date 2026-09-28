@@ -1,0 +1,38 @@
+{
+  "passed": true,
+  "physical": true,
+  "full_model": false,
+  "milestone": "P31",
+  "attempt": "layer-mlp-hw-008",
+  "scope": "Actual residual/RMS -> complete original layer0 MLP -> residual/next-layer RMS subgraph. Host provides two initial BF16 boundary operands only. Original mixer/state banks retained but mixer/state neural execution and full model remain unqualified.",
+  "source_manifest_sha256": "feb89e105af78eeaea73c6aef5cec219eb70bc39b04c01cb5d612c8ee8def8b5",
+  "artifact": {
+    "artifact": "/srv/qwen38-singlewse-hardware/layer-mlp-hw-008/cs_152523684ac779643358f6c627906425523a05283b0f681261adc8497a20b2d6.tar.gz",
+    "flags": "--arch=wse3 --fabric-dims=762,1172 --fabric-offsets=67,1 --memcpy --channels=1 --max-parallelism=1 -o out",
+    "bytes": 55096055,
+    "sha256": "5dd32bb4112df52ffc46d701ce875ee45ed2da3caa45fc6e6d000ede74bf7013"
+  },
+  "fixture_metadata_sha256": "d419833ab3b9fe1f468a2e645d0bfb3fa125e6e9804088ea46510d293503366a",
+  "checked_bf16_values": 81920,
+  "controller_counts": [
+    731230,
+    695076,
+    731270,
+    731260
+  ],
+  "host_completed_output_seconds": [
+    0.010810784995555878,
+    0.010757365263998508,
+    0.010464522056281567,
+    0.010419941507279873
+  ],
+  "host_timing_includes_phase_logging": true,
+  "same_workload_speedup_established": false,
+  "full_model_tps": null,
+  "raw_capture_audit": "layer-mlp-hw-008/raw-capture-audit.json",
+  "source_tests": "norm-bridge-fix-tests-002.json",
+  "publication_tests": "norm-bridge-fix-publication-tests-001.json",
+  "hardware_resource_audit": "resource-audit-p31-hw008-final.json",
+  "all_own_hardware_released": true,
+  "next_work": "Original mixer/state and neighboring complete layers, automatic admission/backpressure, full original64-layer correct sentences and>=2000 aggregate generated output tokens/s."
+}

@@ -38,7 +38,7 @@ def main():
             native_input_slices=p['native_input_slices']))
     files['workers.json']=(json.dumps(workers,separators=(',',':'))+'\n').encode()
     for n in ['fixture.json','bank-index.json','silu-proof.json']:files[n]=(reference/n).read_bytes()
-    config=dict(norm_bridge=args.norm_bridge,complete_original_mlp=True,stage='layer_00',revision=meta['revision'],application=[width,height],
+    config=dict(run_progress_timeout_seconds=30,norm_bridge=args.norm_bridge,complete_original_mlp=True,stage='layer_00',revision=meta['revision'],application=[width,height],
         application_pes=width*height,mlp_shape=meta['original_mlp_shape'],fabric_offset=[67,1],logical_origin=[63,0],
         artifact_single_message_limit=64<<20,compiler_timeout_seconds=900,run_timeout_seconds=900,
         fixture_metadata_sha256=expected,acceptance=meta['acceptance'],full_model=False,scope=meta['scope'])
@@ -48,6 +48,8 @@ def main():
     for n in ['backend.py','bounded_compiler.py','supervise.py','check_sram.py','placement.py']:files[n]=(ROOT/'performance/runtime'/n).read_bytes()
     files['compile_hw.py']=(ROOT/'performance/runtime/compile_layer_mlp.py').read_bytes()
     files['run.py']=(ROOT/'performance/runtime/run_layer_mlp.py').read_bytes()
+    for n in ['progress.py','progress_lifecycle.py']:files[n]=(ROOT/'performance/runtime'/n).read_bytes()
+    files['supervise.py']=files['supervise.py'].replace(b'from runtime.lifecycle import stage, query, TERMINAL',b'from progress_lifecycle import stage, query, TERMINAL')
     for n in ['lifecycle.py','store.py','__init__.py']:files['runtime/'+n]=(ROOT/'runtime'/n).read_bytes()
     session=['sh','/path/to/alcf-session.sh','host'];reuse=None
     if args.reuse_download:

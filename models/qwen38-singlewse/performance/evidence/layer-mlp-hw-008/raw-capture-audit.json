@@ -1,0 +1,69 @@
+{
+  "passed": true,
+  "physical_capture": true,
+  "new_hardware_job": false,
+  "full_model": false,
+  "checked_bf16_values": 81920,
+  "epochs": [
+    {
+      "epoch": 1,
+      "checked_bf16_values": 20480,
+      "controller_counts": 731230,
+      "all_pe_audits_match": true
+    },
+    {
+      "epoch": 2,
+      "checked_bf16_values": 20480,
+      "controller_counts": 695076,
+      "all_pe_audits_match": true
+    },
+    {
+      "epoch": 3,
+      "checked_bf16_values": 20480,
+      "controller_counts": 731270,
+      "all_pe_audits_match": true
+    },
+    {
+      "epoch": 4,
+      "checked_bf16_values": 20480,
+      "controller_counts": 731260,
+      "all_pe_audits_match": true
+    }
+  ],
+  "all83_endpoint_counters_exact": true,
+  "all11388_pe_audits_exact": true,
+  "raw_hashes": {
+    "actual.npz": {
+      "bytes": 7072894,
+      "sha256": "fb61c2cf3e61d55f7a46790dd7b8a89eea2157c24a66a7337551e914e3d52e9a"
+    },
+    "fixture.npz": {
+      "bytes": 5073482,
+      "sha256": "723bce2cb321dd30970f3c9d723e8c8725ac588c0db0d1dc20f67f5751929211"
+    },
+    "fixture.json": {
+      "bytes": 6914,
+      "sha256": "d419833ab3b9fe1f468a2e645d0bfb3fa125e6e9804088ea46510d293503366a"
+    },
+    "source-manifest.json": {
+      "bytes": 4451,
+      "sha256": "feb89e105af78eeaea73c6aef5cec219eb70bc39b04c01cb5d612c8ee8def8b5"
+    },
+    "result.json": {
+      "bytes": 4405,
+      "sha256": "273912256ebb05c6277d3ab8fa168d6b67e708aa7cf51bf3c8860a2d8e8514d5"
+    },
+    "artifact.json": {
+      "bytes": 371,
+      "sha256": "f21b055d50fac132ea5f966cf90cd2c8c3c026bf14c548e6f86e3287dcc65493"
+    }
+  },
+  "npz_uncompressed_bytes": {
+    "actual.npz": 6828288,
+    "fixture.npz": 5053728
+  },
+  "seconds": 0.2718959292396903,
+  "peak_rss_kib": 47304,
+  "note": "Rechecks retained BF16 boundaries/counters/timestamps. Native operands and bank retention were checked during the released device run; no new device reads or inference occur here.",
+  "audit_script_sha256": "1d29d8e39a849a4ea82297d2385bc33d000a7cf6bb2f1bcbff4356e450470f20"
+}

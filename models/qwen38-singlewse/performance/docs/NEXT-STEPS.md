@@ -5,19 +5,15 @@
    nonzero counts564289–564333. Four host observations improve versus P29 but
    remain slower than P28; no sustained wall speedup is established. Physical
    maximum48128incl4096stack controls admission, despite local compile48112.
-2. Qualify the implemented P31 preceding residual/RMS and following residual/next
-   normalization around the complete MLP: physical007 is dispatched against
-   admitted compile012 and independent reference002. Preserve every terminal
-   result and release receipt. The explicit800-page recurrent-state address map
-   is mandatory for subsequent mixer lowering. Use explicit stream endpoints,
-   short credits and retained original gains/activations. Drive subsequent epoch
-   arming from device arrivals after each PE retires its local leases; host-wide
-   arm/finish RPCs in the diagnostic driver are outside the future serving path.
-   Exercise actual warm backpressure and full completion. Old mlp_norm.csl uses
-   an unqualified prior layout and output-queue color rebinding; do not transplant
-   it as a proven current-stage kernel. Admit the combined actual code/buffers and
-   preserve independent numerical bounds. This is the next graph integration
-   step, rather than another open-ended sweep of isolated native optimizations.
+2. Preserve accepted physical008 as the residual/RMS+MLP+residual/next-RMS
+   integration baseline:81920 exact BF16 values, all native operands/counters,
+   resident bank/gain retention, warm replay and normal stop.007's timeout and
+   obsolete output-grant IDs remain preserved;148 source/publication tests pass.
+   The state-address resolver now checks all49152 original pages through the800
+   relocations and must be used by mixer lowering. Keep this integrated graph;
+   advance to complete mixer/layer execution rather than an open-ended isolated
+   optimization sweep. Host arm/start/finish and phase logging are diagnostic;
+   device-driven admission and full backpressure remain future serving work.
 3. Connect original GDN/conv/gates, attention and4x8 FP32 state pages to the
    resident projections; validate adjacent complete layers on actual requests
    with backpressure, state isolation and warm reset. Preserve every original
