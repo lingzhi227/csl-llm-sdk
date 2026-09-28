@@ -1,0 +1,66 @@
+{
+  "utc": "2026-09-28T08:49:39.025362+00:00",
+  "milestone": "P33 shared original BF16/FP8 mixer operand preparation and selected cohost storage calibration",
+  "physical": false,
+  "executed": false,
+  "full_mixer": false,
+  "full_stage_admitted": false,
+  "model_speed_achieved": false,
+  "original_matrices": 5,
+  "original_tiles_audited": 454400,
+  "input_owner_deliveries": 7072,
+  "logical_group_preparations": 88,
+  "operand_packet_words": 133,
+  "static_work_count_not_measured_speed": true,
+  "matched_linked_pes": 3440,
+  "matched_aggregate_saved_bytes": 3290528,
+  "bytes_saved_to_pe_count": {
+    "720": 13,
+    "736": 130,
+    "960": 2024,
+    "976": 1273
+  },
+  "full_compile": {
+    "attempt": "layer-mlp-compile-015",
+    "passed": false,
+    "reason": "PE memory linker overflow",
+    "missing_pes": 115,
+    "over_limit_linked_pes": 3440,
+    "released": true
+  },
+  "selected_compile": {
+    "attempt": "layer-backend-compile-012",
+    "passed": true,
+    "samples": 9,
+    "full_original_producer_with_stack": 39632,
+    "cohost_bank_words": 4096,
+    "cohost_payload_reduced_for_calibration": true,
+    "full_bank_admission": false,
+    "released": true
+  },
+  "source_tests": {
+    "passed": true,
+    "count": 155,
+    "seconds": 150.01732520805672
+  },
+  "resource_audit": "resource-audit-p33-final.json",
+  "hardware_jobs_added": 0,
+  "source_sha256": {
+    "csl/mixer_operand.csl": "4c9acb9a2552b4cad7a5bfaf89653b02be1566828b0e9ab90e5d467dcd4fc49b",
+    "csl/mixer_native.csl": "af6eb18ac7f5c80a0c772ecfadd0f6a0d91d1ccf32d927e7ab639ea7d879ba94",
+    "csl/mixer_projection.csl": "467ff20ab6c6c5110bb2abd1f3fe5eb9e92e94465c12ec42f6ff597a0a108a05",
+    "runtime/mixer_operand_producer.cslpart": "d38f5532eaccdce1cc38071ae306774cc25b5cdd9df5707a34c53ab12442c7a5",
+    "runtime/mixer_projection_port.cslpart": "62a536b24697e9ff27cd832d450983fb9da2cd078c04eeeee7ae3a0d113787cf",
+    "reference/mixer_operand.py": "ce7e278f8493d1380a2f1fed84dd23ecd2f156e79c09b320c0df030ae666edd1",
+    "spatial/mixer_projection.py": "1bc437d6b621070bf2d6f3ddcf0899165ff78573355b1d6a58b5c0242654f0ba",
+    "spatial/mixer_composition.py": "b31d7d213c925d9424248491df9d9c318454d662539521d2b7cce94b0c063e85",
+    "tools/stage_mixer_resource_compile.py": "1ab045968396598b97558a8866bd4b5e48762fe040f9e4b2f4a3835282d3e07d"
+  },
+  "next": "Fuse original A/B ingress consumption to release raw-cache lifetime, then use measured per-role code/workspace demand for complete data-conserving placement and full SRAM re-admission; connect conv/gates/GDN before any new model-speed claim.",
+  "publication_tests": {
+    "passed": true,
+    "tests": 155,
+    "seconds": 150.05367216584273,
+    "tested_export_manifest_sha256": "b131b4fc18872dead8d1d45e5a1564fe51e5a5f2fe3998d370932c033f8e9a5d"
+  }
+}

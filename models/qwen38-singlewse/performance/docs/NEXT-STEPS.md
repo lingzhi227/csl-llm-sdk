@@ -14,11 +14,14 @@
    advance to complete mixer/layer execution rather than an open-ended isolated
    optimization sweep. Host arm/start/finish and phase logging are diagnostic;
    device-driven admission and full backpressure remain future serving work.
-3. P32 mixed-projection composition fails full SRAM admission:3440 linked PEs
-   exceed48128 including4KiB stack;115 lack final ELF. Task21 conflict013 and
-   memory failure014 remain preserved/released. Share operand quantization at
-   the producer and reduce repeated ingress/program storage before reconnecting
-   consumers; do not lower reserve or state capacity to bypass this gate.
+3. P33 shares original BF16/E4M3 input preparation:133 words preserve raw BF16,
+   exact FP8 code and group scale. All3440 matched mixer PEs shrink720–976bytes,
+   but full compile015 still fails SRAM. Selected backend012 measures actual producer
+   plus cohost code at explicitly reduced calibration payload; it is not full
+   bank admission. Both are released. Next consume original A/B inputs during
+   ingress where their exact one-row ownership permits shortening raw-cache
+   lifetime; use measured code/workspace demands for data-conserving placement,
+   followed by complete SRAM admission. Preserve4KiB stack and request capacity.
    Connect original GDN/conv/gates, attention and4x8 FP32 state pages to the
    resident projections; validate adjacent complete layers on actual requests
    with backpressure, state isolation and warm reset. Preserve every original

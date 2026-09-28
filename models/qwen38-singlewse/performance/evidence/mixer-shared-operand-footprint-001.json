@@ -1,0 +1,26 @@
+{
+  "utc": "2026-09-28T08:42:33.841365+00:00",
+  "before": "layer-mlp-compile-014",
+  "after": "layer-mlp-compile-015",
+  "matched_over_limit_pes": 3440,
+  "bytes_saved_to_pe_count": {
+    "720": 13,
+    "736": 130,
+    "960": 2024,
+    "976": 1273
+  },
+  "aggregate_saved_bytes": 3290528,
+  "scope": "Matched actual linked original mixer bank PEs only. All remain over the unchanged48128-byte gate including4096 stack. Missing115 PE programs and the whole stage have no admission. These byte reductions are not runtime speedup.",
+  "physical": false,
+  "executed": false,
+  "operand_packet_words_before": 131,
+  "operand_packet_words_after": 133,
+  "logical_groups_prepared_before": 7072,
+  "logical_groups_prepared_after": 88,
+  "group_preparation_scope": "Static protocol work count, not observed execution or speed ratio",
+  "original_bank_bytes_unchanged": true,
+  "original_matrix_dimensions_unchanged": true,
+  "partial_elf_files": 5978,
+  "partial_elf_bytes": 419610688,
+  "partial_elf_manifest_sha256": "dc58e23e5798ddf84501a6f460450754448e1846b0490ae9066f8f98d63cfc38"
+}

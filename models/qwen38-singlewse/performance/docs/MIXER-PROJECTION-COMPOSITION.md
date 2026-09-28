@@ -1,5 +1,9 @@
 # Original mixer projections in the resident norm/MLP stage
 
+This page records the preserved P32 candidate. The current packed operand
+producer and subsequent failed015/selected012 results are described in
+[PACKED-MIXER-OPERANDS.md](PACKED-MIXER-OPERANDS.md).
+
 This candidate adds arrival-driven CSL projections to the accepted P31 stage
 programs. It preserves all original banks and the800-page state relocation.
 It is not yet a complete mixer: convolution, Q/K normalization, gates, recurrent

@@ -1,0 +1,215 @@
+{
+  "samples": [
+    {
+      "sample": 0,
+      "source": "mixer_layer_mlp_controller.csl",
+      "original_pe": [
+        107,
+        145
+      ],
+      "parameters": {
+        "gate_tail": 106,
+        "down_tail": 159,
+        "shared_inputs": true,
+        "norm_bridge": true
+      },
+      "actual_compiled_with_stack": 39632,
+      "actual_calibration_bank_bytes": 0,
+      "overhead_with_stack": 39632,
+      "arithmetic_extrapolation_at_original_bank": 39632,
+      "payload_changed": false,
+      "original_bank_words": 0,
+      "compiled_original_payload": true
+    },
+    {
+      "sample": 1,
+      "source": "mixer_layer_mlp_standby.csl",
+      "original_pe": [
+        64,
+        67
+      ],
+      "parameters": {
+        "bank_words": 4096,
+        "mixer_rank_parity": 1,
+        "mixer_input48_queue": 5,
+        "mixer_can_root": false
+      },
+      "actual_compiled_with_stack": 30768,
+      "actual_calibration_bank_bytes": 16384,
+      "overhead_with_stack": 14384,
+      "arithmetic_extrapolation_at_original_bank": 49588,
+      "payload_changed": true,
+      "original_bank_words": 8801,
+      "compiled_original_payload": false
+    },
+    {
+      "sample": 2,
+      "source": "mixer_layer_mlp_standby.csl",
+      "original_pe": [
+        63,
+        67
+      ],
+      "parameters": {
+        "bank_words": 4096,
+        "mixer_rank_parity": 0,
+        "mixer_input48_queue": 5,
+        "mixer_can_root": true
+      },
+      "actual_compiled_with_stack": 30992,
+      "actual_calibration_bank_bytes": 16384,
+      "overhead_with_stack": 14608,
+      "arithmetic_extrapolation_at_original_bank": 49812,
+      "payload_changed": true,
+      "original_bank_words": 8801,
+      "compiled_original_payload": false
+    },
+    {
+      "sample": 3,
+      "source": "mixer_layer_norm_bridge.csl",
+      "original_pe": [
+        63,
+        144
+      ],
+      "parameters": {
+        "bank_words": 4096,
+        "rank": 0,
+        "mixer_rank_parity": 1,
+        "mixer_input48_queue": 5,
+        "mixer_can_root": false
+      },
+      "actual_compiled_with_stack": 36144,
+      "actual_calibration_bank_bytes": 16384,
+      "overhead_with_stack": 19760,
+      "arithmetic_extrapolation_at_original_bank": 53420,
+      "payload_changed": true,
+      "original_bank_words": 8415,
+      "compiled_original_payload": false
+    },
+    {
+      "sample": 4,
+      "source": "mixer_layer_norm_bridge.csl",
+      "original_pe": [
+        64,
+        144
+      ],
+      "parameters": {
+        "bank_words": 4096,
+        "rank": 1,
+        "mixer_rank_parity": 0,
+        "mixer_input48_queue": 5,
+        "mixer_can_root": false
+      },
+      "actual_compiled_with_stack": 35264,
+      "actual_calibration_bank_bytes": 16384,
+      "overhead_with_stack": 18880,
+      "arithmetic_extrapolation_at_original_bank": 52540,
+      "payload_changed": true,
+      "original_bank_words": 8415,
+      "compiled_original_payload": false
+    },
+    {
+      "sample": 5,
+      "source": "mixer_layer_norm_bridge.csl",
+      "original_pe": [
+        102,
+        144
+      ],
+      "parameters": {
+        "bank_words": 4096,
+        "rank": 39,
+        "mixer_rank_parity": 0,
+        "mixer_input48_queue": 5,
+        "mixer_can_root": false
+      },
+      "actual_compiled_with_stack": 35072,
+      "actual_calibration_bank_bytes": 16384,
+      "overhead_with_stack": 18688,
+      "arithmetic_extrapolation_at_original_bank": 52348,
+      "payload_changed": true,
+      "original_bank_words": 8415,
+      "compiled_original_payload": false
+    },
+    {
+      "sample": 6,
+      "source": "mixer_layer_norm_sender.csl",
+      "original_pe": [
+        63,
+        143
+      ],
+      "parameters": {
+        "bank_words": 4096,
+        "rank": 0,
+        "sender_id": 0,
+        "bus_rx": "EAST",
+        "bus_tx": "SOUTH",
+        "mixer_rank_parity": 0,
+        "mixer_input48_queue": 4,
+        "mixer_can_root": false
+      },
+      "actual_compiled_with_stack": 35632,
+      "actual_calibration_bank_bytes": 16384,
+      "overhead_with_stack": 19248,
+      "arithmetic_extrapolation_at_original_bank": 53420,
+      "payload_changed": true,
+      "original_bank_words": 8543,
+      "compiled_original_payload": false
+    },
+    {
+      "sample": 7,
+      "source": "mixer_layer_norm_sender.csl",
+      "original_pe": [
+        64,
+        143
+      ],
+      "parameters": {
+        "bank_words": 4096,
+        "rank": 1,
+        "sender_id": 1,
+        "bus_rx": "EAST",
+        "bus_tx": "WEST",
+        "mixer_rank_parity": 1,
+        "mixer_input48_queue": 4,
+        "mixer_can_root": false
+      },
+      "actual_compiled_with_stack": 35648,
+      "actual_calibration_bank_bytes": 16384,
+      "overhead_with_stack": 19264,
+      "arithmetic_extrapolation_at_original_bank": 53436,
+      "payload_changed": true,
+      "original_bank_words": 8543,
+      "compiled_original_payload": false
+    },
+    {
+      "sample": 8,
+      "source": "mixer_layer_norm_sender.csl",
+      "original_pe": [
+        102,
+        143
+      ],
+      "parameters": {
+        "bank_words": 4096,
+        "rank": 39,
+        "sender_id": 39,
+        "bus_rx": "EAST",
+        "bus_tx": "WEST",
+        "mixer_rank_parity": 1,
+        "mixer_input48_queue": 4,
+        "mixer_can_root": false
+      },
+      "actual_compiled_with_stack": 35664,
+      "actual_calibration_bank_bytes": 16384,
+      "overhead_with_stack": 19280,
+      "arithmetic_extrapolation_at_original_bank": 53452,
+      "payload_changed": true,
+      "original_bank_words": 8543,
+      "compiled_original_payload": false
+    }
+  ],
+  "compile_passed": true,
+  "actual_producer_compiled": true,
+  "physical": false,
+  "executed": false,
+  "full_bank_admission": false,
+  "full_stage_admission": false,
+  "note": "Only the unchanged controller uses its actual full program/storage extent. Other rows use4096-word calibration banks: original-bank totals are arithmetic extrapolations, not admitted ELF footprints."
+}

@@ -56,13 +56,17 @@ class MixerProjectionTests(unittest.TestCase):
         self.assertEqual(old['state-page-remap.json'],new['state-page-remap.json'])
         for name in ('layer_projection.csl','layer_norm_bridge.csl','layer_norm_sender.csl','mlp_schedule.csl'):
             self.assertEqual(old[name],new[name])
-        self.assertEqual(sum(p['source'].startswith('mixer_') for p in after),3554)
+        self.assertEqual(sum(p['source'].startswith('mixer_') for p in after),3555)
         self.assertTrue(all(p['parameters']['mixer_input48_queue']==4 for p in after if p['source']=='mixer_layer_norm_sender.csl'))
         self.assertTrue(all(p['parameters']['mixer_input48_queue']==5 for p in after if p['source']=='mixer_layer_norm_bridge.csl'))
         for name in ('mixer_layer_norm_bridge.csl','mixer_layer_norm_sender.csl'):
             self.assertIn(b'@assert(!active);',new[name])
             self.assertIn(b'@assert(mixer.drained() and mixer_status[2]==0);',new[name])
         self.assertNotIn(b'MIXER_COHOST_IDLE',new['mixer_layer_mlp_standby.csl'])
+        self.assertIn(b'@assert(!mixer_operand_busy);',new['mixer_layer_mlp_controller.csl'])
+        self.assertIn(b'.extent=133',new['mixer_layer_mlp_controller.csl'])
+        self.assertIn(b'@assert(epoch==0 or cursor==grant_count);',new['mixer_layer_mlp_controller.csl'])
+        self.assertNotIn(b'encoded_pair',new['mixer_native.csl'])
 
 
 if __name__=='__main__':unittest.main()

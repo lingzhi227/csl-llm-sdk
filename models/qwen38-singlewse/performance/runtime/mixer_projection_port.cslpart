@@ -1,10 +1,10 @@
 // Composition port: the future conv/gate/residual consumer receives this local
 // root notification. Until connected, root data stays leased for explicit
 // consume; no synthetic neural result or fake automatic completion is emitted.
-param mixer_rank_parity:u16;param mixer_input48_queue:u16;
+param mixer_rank_parity:u16;param mixer_input48_queue:u16;param mixer_can_root:bool;
 const mrt=@get_local_task_id(25);const mdt=@get_local_task_id(26);
 const mixer=@import_module("mixer_projection.csl",.{.rank_parity=mixer_rank_parity,.bank_words=bank_words,
- .input48_queue=mixer_input48_queue,.root_ready_task=mrt,.drained_task=mdt});
+ .input48_queue=mixer_input48_queue,.can_root=mixer_can_root,.root_ready_task=mrt,.drained_task=mdt});
 var mixer_status=@zeros([4]u32);const msp:[*]u32=&mixer_status;
 const msetup:[*]u16=mixer.setup_pointer;const maudit:[*]u32=mixer.audit_pointer;
 const mout:[*]u32=mixer.root_output;

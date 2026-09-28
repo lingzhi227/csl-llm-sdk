@@ -7,6 +7,16 @@ Independent requests may overlap with isolated state. The earlier per-request
 interpretation and whole-wafer shared-layer overlay are superseded. The target
 remains unmet; this is active development.
 
+P33 shares original BF16/E4M3 preparation in one133-word input packet and
+specializes root code. All original dimensions/banks remain;155 source and publication tests
+pass. Matched3440 linked PEs save720–976bytes each (3290528bytes combined),
+but every one remains above the unchanged48128-byte/4096-stack gate. Full
+compile015 fails and has115 missing PEs. Selected backend compile012 admits the actual
+39632-byte producer and calibrates cohost programs with explicitly reduced
+4096-word banks; this is not full-bank/stage admission. Both services released;
+no WSE job added. Automatic stage handoff, mixer numeric execution and the full
+model speed goal remain open. See [PACKED-MIXER-OPERANDS.md](docs/PACKED-MIXER-OPERANDS.md).
+
 P32 adds original mixed-projection CSL/dataflow source to the P31 cohost stage.
 All454400 original matrix tile addresses and7072 input-owner deliveries are
 checked;152 source and publication tests pass. No new WSE job was submitted.
