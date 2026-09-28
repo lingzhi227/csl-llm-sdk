@@ -1,0 +1,69 @@
+{
+  "ControlGroup": "/user.slice/user-1000.slice/user@1000.service/app.slice/qwen38-single-layer-mlp-compile-020.service",
+  "CPUUsageNSec": "224717856000",
+  "ActiveState": "active",
+  "memory": {
+    "memory.current": "2147291136\n",
+    "memory.peak": "2147483648\n",
+    "memory.events": "low 0\nhigh 0\nmax 35994\noom 0\noom_kill 0\noom_group_kill 0\n"
+  },
+  "processes": [
+    {
+      "pid": 1813645,
+      "executable": "/usr/bin/flock",
+      "name": "flock",
+      "rss": "1992 kB",
+      "peak": "1992 kB",
+      "threads": "1"
+    },
+    {
+      "pid": 1813646,
+      "executable": "/usr/bin/python3",
+      "name": "python3",
+      "rss": "16828 kB",
+      "peak": "19524 kB",
+      "threads": "1"
+    },
+    {
+      "pid": 1813647,
+      "executable": "bash",
+      "name": "bash",
+      "rss": "3588 kB",
+      "peak": "3588 kB",
+      "threads": "1"
+    },
+    {
+      "pid": 1813650,
+      "executable": "Singularity runtime parent",
+      "name": "starter-suid",
+      "rss": "19088 kB",
+      "peak": "19088 kB",
+      "threads": "8"
+    },
+    {
+      "pid": 1813690,
+      "executable": "sinit",
+      "name": "sinit",
+      "rss": "15900 kB",
+      "peak": "15900 kB",
+      "threads": "7"
+    },
+    {
+      "pid": 1813730,
+      "executable": "python3",
+      "name": "python3",
+      "rss": "22808 kB",
+      "peak": "44352 kB",
+      "threads": "2"
+    },
+    {
+      "pid": 1813851,
+      "executable": "/cb/toolchains/cslang/rel-sdk-2.10.0/202604012315-1813-1394a6ea/bin/cslc-driver",
+      "name": "cslc-driver",
+      "rss": "2047640 kB",
+      "peak": "2048852 kB",
+      "threads": "1"
+    }
+  ],
+  "utc": "2026-09-28T14:25:44.691916+00:00"
+}

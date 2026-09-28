@@ -1,0 +1,41 @@
+{
+  "utc": "2026-09-28T14:35:58.686602+00:00",
+  "unit": "qwen38-single-layer-dialogue-reference-001.service",
+  "status": {
+    "MainPID": "0",
+    "Result": "success",
+    "ExecMainStatus": "0",
+    "ControlGroup": "",
+    "WorkingDirectory": "",
+    "LoadState": "not-found",
+    "ActiveState": "inactive",
+    "SubState": "dead"
+  },
+  "dispatch_sha256": "a9e63565e8c6586ecd2428d9a50bf93744d706328385ed5b8d154ad16b5846a6",
+  "invocation_journal": [
+    {
+      "USER_UNIT": "qwen38-single-layer-dialogue-reference-001.service",
+      "USER_INVOCATION_ID": "edfb91ad58484a4d90f0c99adb445c5c",
+      "MESSAGE": "Started /usr/bin/taskset --cpu-list 6 /usr/bin/flock -n /srv/cerebras-workstation/heavy.lock /usr/bin/python3 execute.py.",
+      "__REALTIME_TIMESTAMP": "1790606042659811"
+    },
+    {
+      "MESSAGE": "{\"passed\": true, \"physical\": false, \"neural_execution\": false, \"multi_turn_qualified\": false, \"all_source_words_classified_once\": true, \"all_destination_words_verified_once\": true, \"retained_words_verified\": 98436512, \"discarded_zero_state_words\": 801792, \"allocated_bytes\": 393746048, \"reclaimed_bytes\": 3207168, \"transfers\": 39990, \"original_weight_and_scale_bytes\": 389796352, \"every_original_matrix_and_mlp_prefix_preserved\": true, \"retained_auxiliary_pages\": 28605, \"work_slots\": 2, \"conversations\": 1, \"source_hashes\": {\"banks.npy\": \"abeaa66f1271604eda2afa37aacacfc4d673f13d5d0de23eb75fa76c6bf63288\", \"bank-index.json\": \"67295f8b430a92baa83e54b09141e45338298c292ab651127f469d4bc8f86833\"}, \"hashes\": {\"banks.npy\": \"ea3a3bceec7cfefbe697fd8264aca4ee1b82357590a7fff77511b1eba74d37ce\", \"bank-index.json\": \"6b090635f2f35c85d0e7f7a7f680a364b8a4c048918dd53a4f66968bcc39fee5\"}, \"seconds\": 6.77240593591705}",
+      "__REALTIME_TIMESTAMP": "1790606049538254"
+    },
+    {
+      "USER_UNIT": "qwen38-single-layer-dialogue-reference-001.service",
+      "USER_INVOCATION_ID": "edfb91ad58484a4d90f0c99adb445c5c",
+      "MESSAGE": "qwen38-single-layer-dialogue-reference-001.service: Consumed 4.040s CPU time.",
+      "__REALTIME_TIMESTAMP": "1790606049589908",
+      "CPU_USAGE_NSEC": "4040139000"
+    }
+  ],
+  "cgroup_members": [],
+  "matching_processes": [],
+  "shared_lock_available": true,
+  "own_running_services": "",
+  "workstation_released": true,
+  "physical": false,
+  "logs": {}
+}

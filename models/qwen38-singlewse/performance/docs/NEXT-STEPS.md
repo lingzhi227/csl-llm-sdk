@@ -34,14 +34,22 @@
    the48128-byte ceiling. Additional arithmetic/state transport requires new
    placement and fresh full-program admission. Keep P31 as the accepted physical
    neural graph and preserve020-024 failures; avoid another isolated sweep.
-4. For the single-conversation backend, evaluate a one-context persistent-state
-   map before placing real root consumers. The exact old-plan census identifies
-   160,235,520 bytes used only by the second independent context. Preserve the
-   remaining conversation state and every original weight; retain temporary
-   work slots where required for communication overlap. Reallocate near actual
-   conv/GDN consumers and reserve explicit longer-history capacity, then rerun
-   full bank/SRAM/numerical admission. The byte count alone admits no new context
-   or speed. Keep the existing qualification snapshot unchanged.
+4. P40 implements the single-conversation layer00 specialization. Compile021
+   admits11388 PEs/7910 images with maximum48112bytes including4096 stack;
+   reference001 verifies393746048 retained bytes, including all original weights,
+   the complete first convolution/recurrent state and both work slots. Removed
+   second-context pages are explicit invalid addresses. Use DialogueAuxiliaryPlacement
+   and bank-specialization.json, not the two-context provenance map. The actual
+   per-PE census frees3207168bytes but only59 non-gateway PEs have>=8192bytes spare.
+   Use those measured locations when lowering real conv/gate consumers; account
+   for distributed GDN state, original page ownership, cohost code/scratch and
+   phase-specific communication resources before fresh compiler/runtime admission.
+   Do not replace this with an isolated optimization sweep. Full-model context
+   capacity remains historical96, not qualified multi-turn capacity.
+   The new DialogueAdmission oracle covers exact-prefix appends, pending final
+   token commit, reset/replay, stop/continue and overflow. Its synthetic events
+   must be replaced by actual complete-stage retirement/state-clear events in
+   serving integration; it is not a neural runtime or timing result.
 5. Measure complete dependent stage service and optimize its critical path.
    The September28 target is one stateful multi-turn conversation at>=2000 average
    output tokens/s, not aggregate independent-request throughput. Report appended

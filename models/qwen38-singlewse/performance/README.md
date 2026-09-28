@@ -9,6 +9,18 @@ includes appended-input processing and generation, excluding user think time and
 initial loading; decode-only speed and TTFT are reported separately. See
 [DIALOGUE-ACCEPTANCE.md](docs/DIALOGUE-ACCEPTANCE.md). The target remains unmet.
 
+P40 specializes the complete layer00 banks for one continuing conversation,
+retaining all original weights, the complete first context and both work slots.
+Fresh compile021 admits
+all11388 PEs/7910 ELF images, maximum48112bytes including4096 stack. Actual SRAM
+falls by3207168bytes; remote reference001 independently verifies every retained
+word in393746048bytes. A turn-admission oracle checks exact history, pending final
+tokens, three continuing turns, reset/overflow and all-stage retirement. Twenty
+selected source and20 publication tests pass; these are protocol/storage checks,
+not device dialogue or speed results. Two failed/cancelled compiler attempts are preserved. All four
+workstation services release and no hardware job is submitted. See
+[Single-dialogue banks](docs/SINGLE-DIALOGUE-BANKS.md).
+
 P39 passes176 source and176 publication tests. Physical `layer-mixer-hw-002`
 executes all five complete original QKV/Z/A/B/output projections through3554
 internal endpoints. All86400 stored BF16 outputs are bit-exact to the predeclared

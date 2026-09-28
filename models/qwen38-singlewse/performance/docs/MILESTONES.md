@@ -1012,3 +1012,17 @@ WSE runtime) and both workstation services are released; failures are preserved.
 Host root read/consume and full retention timings are diagnostic, not model TPS.
 Actual conv/GDN consumers, complete neural stages and the multi-turn target remain
 unfinished. See [COMPLETE-MIXER-QUALIFICATION.md](COMPLETE-MIXER-QUALIFICATION.md).
+
+## P40: one-conversation storage and turn admission
+
+P40 specializes the complete layer00 banks for one continuing conversation,
+retaining all original weights, the complete first context and both work slots.
+Fresh compile021 admits
+all11388 PEs/7910 ELF images, maximum48112bytes including4096 stack. Actual SRAM
+falls by3207168bytes; remote reference001 independently verifies every retained
+word in393746048bytes. A turn-admission oracle checks exact history, pending final
+tokens, three continuing turns, reset/overflow and all-stage retirement. Twenty
+selected source and20 publication tests pass; these are protocol/storage checks,
+not device dialogue or speed results. Two failed/cancelled compiler attempts are preserved. All four
+workstation services release and no hardware job is submitted. See
+[Single-dialogue banks](SINGLE-DIALOGUE-BANKS.md).
