@@ -878,3 +878,28 @@ stage drain, changed-operation numerical qualification, neighboring-layer and
 full-model sentence generation/TPS remain unfinished. No WSE job was submitted;
 all eight P25 bounded compiler services are released and account allocation is
 empty. See LAYER-FUSED-TRANSPORT.md and layer-fused-transport-summary-001.json.
+
+## P26: connected original MLP compiler admission
+
+The original5120 ->17408 ->5120 MLP now has actual on-device connections from
+spatial input quantization through native gate/up, fused BF16 activation/group128
+quantization, down distribution/reduction and full output collection. Forty
+input quantizers,33 fused actors and10 segment sinks cohost low-payload native
+PEs without moving original banks. Tagged input routing preserves full and
+ragged-tail K ownership. Both enclosing regions compile with mixer/state banks
+resident but inactive:11388/10998 PEs,4179/4894 ELF images,maximum47776bytes
+including4096 stack,352bytes minimum margin. All115 source/protocol tests pass.
+
+Real WSE-3 compilation rejected simultaneous RAMP/cardinal RX. The corrected
+exclusive-grant bus selects one input and restores transit only after output
+queue flush. Earlier syntax failures and the180s bounded timeout remain frozen;
+005/006 finish within the revised300s compile cap. All six workstation services
+are released,631864899bytes retained remotely,zero WSE jobs added and no owned
+hardware allocation at the final snapshot.
+
+This is connected-component source/compiler admission, not neural execution or
+maximum-speed evidence. The granted bus needs measurement and likely sharding.
+Changed arithmetic/whole-MLP numerical qualification, actual complete local and
+request drain, residual/norm/mixer/attention, neighboring layers and original
+full-model sentences at>=2000 aggregate tokens/s remain unfinished. See
+LAYER-MLP-NETWORK.md and layer-mlp-network-summary-001.json.

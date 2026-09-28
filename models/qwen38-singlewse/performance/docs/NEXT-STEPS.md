@@ -1,27 +1,27 @@
 # Next work: resident spatial pipeline
 
-1. Keep P22 rectangles, P23 schedule002 original weight/auxiliary addresses and
-   P24 arithmetic trees. Use P25 routes003's fixed-color projection paths and
-   consecutive fusion group overlay. Compiles012/013 admit every actual PE in
-   both gate/up region geometries, including cohosted fusion transport.
-2. Lower retained native input distribution and fused group128 down-input fanout.
-   Bind actual down sends/consumption to the reserved transport lease, then
-   down reduction/residual and successor input. Preserve fixed queues and hardware
-   backpressure for copied packets. A local DMA/row-loop completion is not a stage
-   drain or request/state credit; connect those explicitly to the stage controller.
-3. Compose original GDN/conv/gates, RMS/norm, attention and4x8 FP32 pages on the
-   actual disjoint regions. Admit every participating program and simultaneous
-   queue/DSR/UT use before execution. Full gate/up admission leaves416B minimum
-   margin; it is not a whole-layer resource allowance or neural result.
-4. Freeze independent changed-reduction references before device observations.
-   Validate neighboring full layers on two distinct real requests, retained states,
-   backpressure and warm reset. Use actual predecessor values throughout.
-5. Measure complete stage service/ownership transfer, rebalance memory/areas and
-   concurrency, then instantiate embedding/all64 stages/full head/token feedback.
-   Run correct complete sentences and the predeclared>=2000 aggregate generated
-   tokens/s contract, publish evidenced milestones and release owned resources.
+1. Qualify the connected original MLP with independent original-weight references
+   frozen before device observations. Validate the new direct-single native path,
+   exact ordered full-K reduction, tagged full/tail input mapping, SiLU/BF16/FP8
+   boundaries and every original output. Keep the actual P23 banks and P25 actor
+   overlay. Compiler admission is not numerical acceptance.
+2. Expose/check every native worker and sender's actual drain, including final
+   qflush callbacks, before another component epoch. Then connect this local
+   ownership to automatic successor/request credits. Controller output collection
+   alone is not permission to reset state or reuse a request slot.
+3. Fuse down output with residual, RMS/norm and successor input; compose original
+   GDN/conv/gates, attention and4x8 FP32 state pages on disjoint resident regions.
+   Admit all simultaneous code/queue/DSR/UT use and validate adjacent full layers
+   on two actual requests with retained state, backpressure and warm reset.
+4. Measure complete stage service times and traffic. The single granted bus is
+   an initial integration mechanism, not a maximum-speed claim. Replace its
+   bottleneck through measured sharding/overlap while preserving one WSE-3 RX,
+   fixed queue colors, empty-queue route transitions and original arithmetic.
+5. Rebalance memory/areas/concurrency and instantiate embedding, all64 stages,
+   full head and token feedback. Run correct complete sentences and the declared
+   >=2000 aggregate generated tokens/s contract; publish evidence and verify
+   resource release after each bounded experiment.
 
-Do not dispatch the retired whole-wafer temporal-overlay candidate or the
-unsupported color-swap routing candidate. Preserve failed and successful source,
-compiler results and resource receipts. Protocol/byte/static-route checks and
-regional compiles do not establish complete neural execution or model TPS.
+Preserve rejected compiles and exact source snapshots. Do not dispatch the
+retired whole-wafer temporal overlay, WSE-3 color-swap candidate or the rejected
+simultaneous RAMP/cardinal return bus. No partial scope establishes model TPS.

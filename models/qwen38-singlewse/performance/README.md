@@ -7,20 +7,26 @@ Independent requests may overlap with isolated state. The earlier per-request
 interpretation and whole-wafer shared-layer overlay are superseded. The target
 remains unmet; this is active development.
 
-P25 compiles both complete original gate/up region geometries with native workers,
-full-K reductions, static projection paths and cohosted dual-stream fusion:
-5226 GDN PEs and5264 attention PEs, maximum47712bytes including4096 stack.
-All64 layers'4032 projection streams and139264 eight-row blocks pass static
-ownership/routing checks. Fixed copied FIFO transport releases only private
-sender memory at DMA completion; hardware backpressure replaces per-block
-software receipts. Separate early-suffix buffers avoid a cross-root serial wait.
-Original weight/auxiliary addresses and arithmetic trees are preserved.
+P26 connects the original complete MLP data path: spatial group128 input
+quantization, retained native full-K gate/up, fused BF16 SiLU/multiply/group
+quantization, native down input distribution, complete down reduction and5120
+BF16 output collection. Both full enclosing stage geometries compile:78x146 GDN (11388
+PEs,4179 ELF images) and78x141 attention (10998 PEs,4894 images). Both have
+maximum47776bytes including4096 stack and352bytes minimum margin. Original matrix and live auxiliary banks remain allocated; the
+mixer/state region is resident but inactive in this component.
 
-The first whole-region attempt rejected unsupported WSE-3 color swapping;
-current routes003 and compiles012/013 use fixed colors. All109 source tests pass.
-Input/downstream distributions, final stage drain, neural numerical execution
-and full-model speed remain unqualified. No WSE job was added. See
-[LAYER-FUSED-TRANSPORT.md](docs/LAYER-FUSED-TRANSPORT.md) and
+WSE-3 rejected simultaneous local/transit RX even under an exclusive grant.
+The corrected return bus uses one grant-selected RX and restores transit only
+from an output-queue-empty callback. Fixed queues retain their colors. Structural
+checks cover both GDN and attention MLP geometries; all115 source tests pass.
+These are compiler/protocol results: no new neural/device execution, latency or
+model TPS is claimed. Numerical references, complete local/request drain,
+residual/norm/mixer/attention, neighboring layers and full-model speed remain open.
+
+All six bounded compiler attempts are released. No WSE job was submitted;
+the final hardware snapshot has no owned active job or system assignment.
+
+See [LAYER-MLP-NETWORK.md](docs/LAYER-MLP-NETWORK.md) and
 [NEXT-STEPS.md](docs/NEXT-STEPS.md).
 
 Generate a fresh candidate with

@@ -8,7 +8,7 @@ import subprocess
 
 ROOT = Path(__file__).resolve().parents[1]
 parser = argparse.ArgumentParser(); parser.add_argument('attempt'); args = parser.parse_args()
-if not re.fullmatch('layer-projection-compile-[0-9]{3}', args.attempt): raise ValueError('Attempt')
+if not re.fullmatch('layer-(projection|mlp)-compile-[0-9]{3}', args.attempt): raise ValueError('Attempt')
 out = ROOT/'evidence'/args.attempt/'sram-summary.json'
 if out.exists(): raise ValueError('Frozen summary')
 remote = '/srv/model-storage/qwen38-singlewse/runs/'+args.attempt

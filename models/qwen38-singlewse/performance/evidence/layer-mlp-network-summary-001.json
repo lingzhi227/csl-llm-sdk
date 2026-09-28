@@ -1,0 +1,101 @@
+{
+  "milestone": "P26",
+  "utc": "2026-09-28T03:32:55.190427+00:00",
+  "passed_scopes": [
+    "Complete original MLP static routes and native program-port binding",
+    "Bounded buffer/tag/single-source protocol models",
+    "Full enclosing GDN/attention compiler and every-PE ELF SRAM admission"
+  ],
+  "original_mlp_shape": [
+    5120,
+    17408,
+    5120
+  ],
+  "full_enclosing_stage_compiles": [
+    {
+      "attempt": "layer-mlp-compile-005",
+      "application": [
+        78,
+        146
+      ],
+      "pes": 11388,
+      "elf_images": 4179,
+      "maximum_sram_with_stack": 47776,
+      "minimum_margin": 352,
+      "offline_compile_and_census_seconds": 236.6038500550203
+    },
+    {
+      "attempt": "layer-mlp-compile-006",
+      "application": [
+        78,
+        141
+      ],
+      "pes": 10998,
+      "elf_images": 4894,
+      "maximum_sram_with_stack": 47776,
+      "minimum_margin": 352,
+      "offline_compile_and_census_seconds": 227.49872574675828
+    }
+  ],
+  "spatial_input_quantizers_per_stage": 40,
+  "fusion_actors_per_stage": 33,
+  "output_sinks_per_stage": 10,
+  "grants_per_mlp": 186,
+  "source_tests": 115,
+  "weight_or_auxiliary_addresses_changed": false,
+  "arithmetic_tree_changed": false,
+  "executed": false,
+  "physical": false,
+  "numerical_qualified": false,
+  "full_layer": false,
+  "full_model": false,
+  "full_model_speed_target_achieved": false,
+  "hardware_jobs_added": 0,
+  "all_workstation_attempts_released": true,
+  "retained_workstation_bytes": 631864899,
+  "failures": {
+    "001": "Invalid DSD tensor-access syntax",
+    "002": "WSE-3 permits only one static RX direction, rejects RAMP+cardinal",
+    "003": "Array element address is scalar pointer, not exported many pointer",
+    "004": "180s compiler timeout; no accepted ELF census"
+  },
+  "open_gates": [
+    "Independent original-weight complete MLP numerical qualification",
+    "All native/actor/sender drain including final qflush callbacks",
+    "Residual/norm/mixer/GDN/attention/state and adjacent layers",
+    "Measured complete stage service and bus optimization",
+    "Complete original64-layer sentences and >=2000 aggregate output tokens/s"
+  ],
+  "inputs": {
+    "evidence/layer-mlp-compile-001/source-manifest.json": "8d40287559de95a3719d3081628d17c074a1aaa668e791f49e822db0159cd064",
+    "evidence/layer-mlp-compile-001/workstation-release.json": "184b3550058ca70508534c5b844ee9f43a00e504226c98faeeefa07628b50117",
+    "evidence/layer-mlp-compile-002/source-manifest.json": "7779dd16dda2eaa2d9c1c22ba32bff23bd5d916c27a6a9805f1cb208872b3384",
+    "evidence/layer-mlp-compile-002/workstation-release.json": "8a48746808b651bd648afe73cdc5f2256e7a6365f0e5a39ddf3837c06f15336c",
+    "evidence/layer-mlp-compile-003/source-manifest.json": "cbcb981f11398ab64cfac2db3e5fd967a6ef2f269f77dd288f2804ee040f081c",
+    "evidence/layer-mlp-compile-003/workstation-release.json": "d0ef464777b812e87d8ea89be10b9cdf4a72418497c8dfd80e50a9768100e23a",
+    "evidence/layer-mlp-compile-004/source-manifest.json": "2fb0eb81825fe59a7d508c73709422aabcdaf6b3691b8e02c3ff4e03f8ad96db",
+    "evidence/layer-mlp-compile-004/workstation-release.json": "859dda0cc66290526ff90634aaaf5c1bf18b08d28e6a0670b319d49f2c161cae",
+    "evidence/layer-mlp-compile-005/source-manifest.json": "15ddc4e5f11f01ece48432ea1ea1cba01f53dae2e3861be9f40a525e48e1b82a",
+    "evidence/layer-mlp-compile-005/workstation-release.json": "7a4138164101d25b64ab120e9bb3fdcbeabe0543dfb4ca4c907ea98524189f6f",
+    "evidence/layer-mlp-compile-006/source-manifest.json": "ed993665383a12486a45d5dbfe953c5c5af2b05d01a0a59644e970321d1530de",
+    "evidence/layer-mlp-compile-006/workstation-release.json": "8f3be71c51270e144faca8923349ab60a1b87cf42921925402614aaf78950647",
+    "evidence/layer-mlp-compile-005/COMPLETE.json": "3bf737df69cb19090b281dc2b586231e16073cecec37920a84c5c18347eeb64d",
+    "evidence/layer-mlp-compile-005/sram-summary.json": "4d804956ce8aede681de65cb87ddee8dd6015ab25ead8aca14d84e93e861346b",
+    "evidence/layer-mlp-compile-006/COMPLETE.json": "ab7886dd319fe6aa4e3875622c285430d9fb375f16cb2ed380c67bb5318a0bba",
+    "evidence/layer-mlp-compile-006/sram-summary.json": "0a103be85f36d30425e488e463ed7f8c40b123121483b741b0b7f63b435c8502",
+    "evidence/layer-mlp-network-001/audit.json": "e9d9418002945667c47c7cfa61448265cc96fb6fad69fd1f660d5e56a6ba5c2d",
+    "evidence/layer-mlp-network-001/source-manifest.json": "80cd20beced4b7a91992476c07ca834b61f8ce544e98ee9dd2b29443ba62ddbe",
+    "evidence/source-tests-p26-001.json": "5d34b2ffae57f81b06274b847b557e2a69f967790ab42286d36c3f26f0bc7b02",
+    "evidence/resource-audit-p26-workstation-001.json": "eaf51b3e0f36b3dcb54a357d4c4e74426484e367aeb287f1407bb38f798fccdb",
+    "evidence/resource-audit-p26-hardware-001.json": "113a9587b726b2b8cee7ec79c86418e4435baed457407a1193799f5484e6bae8",
+    "spatial/layer_mlp_network.py": "9a3b3ed5c00f80c67eba7fae5681b1f137a34d1bb164f2833b642312ca2201c4",
+    "runtime/layer_projection.csl": "933b733fd90fa0362302711b9d377143963228bc27effbb5ecf258f1da510bc7",
+    "runtime/layer_mlp_controller.csl": "9e9251a001461a06be3cfee046aa9aeed7bb8cf8bdd07dab538f1dcbe9133e79",
+    "runtime/layer_mlp_standby.csl": "8f4c7228ec768846f6d4e7cbb643da37541913bb30f90745b8ea48f142d43f3e",
+    "csl/layer_mlp_sender.csl": "56cff3d7eb70b8e290eed6f9c35cdac158cc9c815a4c6c1cc4985e596872db06",
+    "csl/layer_fusion.csl": "57b7955c1ac48d6109b3275fb82f2c4033c560e5c903f2b50bcc362378c02344",
+    "csl/layer_fusion_transport.csl": "c62a4848e7d86420908b78aa5b58c519ec42c708a35512497f778f64f92f803f",
+    "tools/stage_layer_mlp_compile.py": "3c78e238484ee77ee5ab7995639e47d89d304dda19858ab666694d8376a1c7e3",
+    "tests/test_layer_mlp_network.py": "73d08a90460dae1f53304cae41ef27799e41e7124702dc40ad99a1fa52387633"
+  }
+}

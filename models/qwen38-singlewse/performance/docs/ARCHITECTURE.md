@@ -197,3 +197,13 @@ Do not revert to an unbounded isolated matrix or helper benchmark series.
 The old overlay architecture is preserved in
 [HISTORICAL-ARCHITECTURE-P21.md](HISTORICAL-ARCHITECTURE-P21.md).
 Its evidence and useful modules survive; it is not the current final architecture.
+
+## P26 complete MLP connection
+
+The original stage now connects spatial input quantizers, retained native
+projection trees, P25's full-K fused actors, down-input fanout, down reduction
+and distributed output segments. P26 also compiles the enclosing stage with its
+original mixer/state bank reservation. See LAYER-MLP-NETWORK.md for exact
+queue/DSR/thread lifetimes and the WSE-3 single-RX/qflush correction. This finite
+MLP component does not yet implement upstream normalization, mixer arithmetic,
+residual, successor/request drain or full-model scheduling.

@@ -71,6 +71,7 @@ def main():
     for dest,source in {
         'layer_projection.csl':'performance/runtime/layer_projection.csl','layer_native.csl':'performance/csl/layer_native.csl',
         'layer_fusion_transport.csl':'performance/csl/layer_fusion_transport.csl',
+        'layer_mlp_sender.csl':'performance/csl/layer_mlp_sender.csl',
         'layer_fusion_ingress.csl':'performance/csl/layer_fusion_ingress.csl',
         'layer_fusion.csl':'performance/csl/layer_fusion.csl','mlp_fused.csl':'performance/csl/mlp_fused.csl',
         'fp8_encode.csl':'performance/csl/fp8_encode.csl',
