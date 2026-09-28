@@ -1,0 +1,56 @@
+{
+  "device_mixer_layer_mlp_standby.csl": {
+    "original_sha256": "f71dcd50862102b2f0dd4ac0a1f1e104ef7120241a520bdfdd3141658da53a47",
+    "adapted_sha256": "f90edbb0535b6303421ce3f0c914527cb688a8481c10fb4a7c22bdaf58ce7f26",
+    "role": "mixer_layer_mlp_standby.csl",
+    "exported_symbols_removed": 12,
+    "entrypoints_preserved": [
+      "arm",
+      "start",
+      "finish",
+      "mixer_begin",
+      "mixer_consume"
+    ],
+    "bank_loader": true,
+    "bounded_readback": true,
+    "root_lease_requires_explicit_consume": true,
+    "full_stage_routed": false,
+    "executed": false
+  },
+  "device_mixer_layer_norm_sender.csl": {
+    "original_sha256": "a81cab5f4714c3b6eb9b8da41cce468cdb84ec4d12b6017455bd3c46c24fb8ae",
+    "adapted_sha256": "1d58d83e52ff8c55ca7b65d71d4d7dd9bbe9011abe0c6a3a00de8e71e0b35ad8",
+    "role": "mixer_layer_norm_sender.csl",
+    "exported_symbols_removed": 14,
+    "entrypoints_preserved": [
+      "arm",
+      "start",
+      "finish",
+      "mixer_begin",
+      "mixer_consume"
+    ],
+    "bank_loader": true,
+    "bounded_readback": true,
+    "root_lease_requires_explicit_consume": true,
+    "full_stage_routed": false,
+    "executed": false
+  },
+  "device_mixer_layer_norm_bridge.csl": {
+    "original_sha256": "00d622f856c806e1b3eb703e696ab2336a3f4409c6ed474c063bbceeb9d7047e",
+    "adapted_sha256": "30641a64f5321a27a6a61acd98ff250b5119cf30a3b8df5d11b6b8884ce1a8af",
+    "role": "mixer_layer_norm_bridge.csl",
+    "exported_symbols_removed": 15,
+    "entrypoints_preserved": [
+      "arm",
+      "start",
+      "finish",
+      "mixer_begin",
+      "mixer_consume"
+    ],
+    "bank_loader": true,
+    "bounded_readback": true,
+    "root_lease_requires_explicit_consume": true,
+    "full_stage_routed": false,
+    "executed": false
+  }
+}

@@ -7,6 +7,17 @@ Independent requests may overlap with isolated state. The earlier per-request
 interpretation and whole-wafer shared-layer overlay are superseded. The target
 remains unmet; this is active development.
 
+P36 passes160 source and160 publication regression tests and admits the complete original layer00
+mixer-projection/norm/MLP bank candidate in local compilation: all11388 PEs,
+5891 ELF images, maximum48112bytes including4096 stack. Full-K QKV group row
+counts and all auxiliary locations are jointly lowered; every original tile,
+state page and396953216-byte bank capacity remains. The independent remote
+relocation verifies all454400 mixer tiles through the actual CSL descriptors,
+all53661 auxiliary pages and unchanged MLP prefixes. Both workstation services
+released; no new WSE job. Gateway control routing, C22 forwarding execution,
+complete neural stage and full-model speed remain unqualified. See
+[JOINT-BANK-PLACEMENT.md](docs/JOINT-BANK-PLACEMENT.md).
+
 P35 passes156 source and156 publication regression tests and adds credited internal-PE fabric control with real bank/config loading,
 readback and preserved cohost entrypoints. Simulator005 passes122 gateway-only
 host commands, retains the complete selected8130-word original bank and stops

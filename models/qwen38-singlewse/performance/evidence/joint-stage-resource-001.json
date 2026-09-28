@@ -1,0 +1,38 @@
+{
+  "passed": true,
+  "source_census_sha256": "1a6472045d90a3b39e84131c18218c1f409a79f10471e171fbe0b454e0133e3d",
+  "roles": {
+    "layer_projection.csl": {
+      "pes": 7833,
+      "maximum_with_stack": 48112,
+      "minimum_with_stack": 29536,
+      "minimum_margin": 16
+    },
+    "device_mixer_layer_mlp_standby.csl": {
+      "pes": 3474,
+      "maximum_with_stack": 47856,
+      "minimum_with_stack": 47760,
+      "minimum_margin": 272
+    },
+    "device_mixer_layer_norm_sender.csl": {
+      "pes": 40,
+      "maximum_with_stack": 47760,
+      "minimum_with_stack": 47728,
+      "minimum_margin": 368
+    },
+    "device_mixer_layer_norm_bridge.csl": {
+      "pes": 40,
+      "maximum_with_stack": 47776,
+      "minimum_with_stack": 46656,
+      "minimum_margin": 352
+    },
+    "mixer_layer_mlp_controller.csl": {
+      "pes": 1,
+      "maximum_with_stack": 39632,
+      "minimum_with_stack": 39632,
+      "minimum_margin": 8496
+    }
+  },
+  "physical": false,
+  "neural_execution": false
+}

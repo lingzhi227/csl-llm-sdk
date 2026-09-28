@@ -1,0 +1,102 @@
+{
+  "passed": true,
+  "over_limit_pes": 0,
+  "physical": false,
+  "executed": false,
+  "application": [
+    78,
+    146
+  ],
+  "application_pes": 11388,
+  "compiled_elf_images": 5891,
+  "maximum_with_stack": 48112,
+  "minimum_margin": 16,
+  "bytes_to_pe_count": {
+    "29536": 6,
+    "29856": 2,
+    "29872": 2,
+    "29888": 4,
+    "39632": 1,
+    "44688": 1,
+    "44976": 1,
+    "45024": 1,
+    "45040": 1,
+    "45056": 1,
+    "46656": 1,
+    "46752": 2,
+    "46784": 27,
+    "46848": 9,
+    "47184": 77,
+    "47232": 1102,
+    "47520": 48,
+    "47536": 34,
+    "47552": 12,
+    "47568": 462,
+    "47584": 606,
+    "47600": 570,
+    "47616": 271,
+    "47712": 1,
+    "47728": 14,
+    "47760": 75,
+    "47776": 645,
+    "47792": 472,
+    "47808": 208,
+    "47824": 1388,
+    "47840": 3827,
+    "47856": 431,
+    "47872": 680,
+    "47952": 113,
+    "47968": 149,
+    "47984": 140,
+    "48080": 1,
+    "48112": 3
+  },
+  "maximum_examples": [
+    {
+      "file": "out/bin/out_86_0.elf",
+      "sha256": "bca947e885ccc86f496a16d028edb53d521160a202169b15cae1c8c997e7bfad",
+      "rectangles": [
+        [
+          75,
+          4,
+          1,
+          1
+        ]
+      ],
+      "low_section_end": 44016,
+      "stack_allowance_bytes": 4096
+    },
+    {
+      "file": "out/bin/out_87_0.elf",
+      "sha256": "259cd5a650b6e2fa080189ce500a4a5cd489b4504c59635554ff72b220fc9986",
+      "rectangles": [
+        [
+          71,
+          6,
+          1,
+          1
+        ]
+      ],
+      "low_section_end": 44016,
+      "stack_allowance_bytes": 4096
+    },
+    {
+      "file": "out/bin/out_88_0.elf",
+      "sha256": "49677bdf40690b0f4de36bc8390dfcb9bfd2fffc264104176c94e4079c0db390",
+      "rectangles": [
+        [
+          67,
+          8,
+          1,
+          1
+        ]
+      ],
+      "low_section_end": 44016,
+      "stack_allowance_bytes": 4096
+    }
+  ],
+  "remote_census_bytes": 3982257,
+  "remote_census_sha256": "1a6472045d90a3b39e84131c18218c1f409a79f10471e171fbe0b454e0133e3d",
+  "source_manifest_sha256": "0b0e2ebebe7d08aca44f74da63a0c6d845c17adf306d2a504121f950a58aa203",
+  "note": "Every ELF SRAM record and every original application coordinate independently checked. A false passed field rejects admission; full census and ELF images remain on remote storage."
+}
