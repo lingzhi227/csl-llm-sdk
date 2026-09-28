@@ -1,0 +1,95 @@
+// Credited six-word commands on an internal PE, without the host memcpy/RPC
+// library. Initialization and diagnostic reads remain real fabric operations.
+// One command owns header/response and read/write buffers until its response
+// retires. The surrounding program validates segment, phase and array bounds.
+param command_task:local_task_id;
+param forward_host_commands:bool=false;
+param routed:bool=false;param reply_rx:direction=RAMP;param reply_tx:direction=NORTH;
+const tile=@import_module("<tile_config>");
+var command=@zeros([6]u32);var response=@zeros([4]u32);
+var cursor:u16=0;var count:u16=0;var mode:u16=0;var sequence:u32=0;
+var pending:bool=false;var sending:bool=false;var body_reply:bool=false;
+var first_half:u16=0;var have_half:bool=false;
+var initial_half=@zeros([1]u16);
+var wide:[*]u32=&response;var narrow:[*]u16=&initial_half;
+const iq=@get_input_queue(0);const oq=@get_output_queue(0);
+const dt=@get_data_task_id(iq);const st=@get_local_task_id(23);
+const od=@get_dsr(dsr_dest,0);const os=@get_dsr(dsr_src0,0);
+fn send_header(length:u16,bits:u16) void {
+ @assert(pending and !sending);sending=true;
+ if(comptime routed){tile.color_config.reset_routes(@get_color(13),.{.rx=RAMP,.tx=reply_tx});}
+ response[0]=sequence;response[1]=0;response[2]=@as(u32,length);response[3]=@as(u32,bits);
+ const m=@get_dsd(mem1d_dsd,.{.base_address=&response,.extent=4});
+ const f=@get_dsd(fabout_dsd,.{.output_queue=oq,.extent=4});
+ @load_to_dsr(os,m);@load_to_dsr(od,f,.{.async=true,.ut_id=@get_ut_id(0),.activate=st});@mov32(od,os,.{.async=true});
+}
+fn unblock_cmd_stream() void {body_reply=false;send_header(0,32);}
+fn write32(address:[*]u32,length:u16) void {
+ @assert(pending and !sending and length>0 and length<=256);wide=address;count=length;cursor=0;mode=1;@unblock(iq);
+}
+fn write16(address:[*]u16,length:u16) void {
+ @assert(pending and !sending and length>0 and length<=256);narrow=address;count=length;cursor=0;mode=2;@unblock(iq);
+}
+fn read32(address:[*]u32,length:u16) void {
+ @assert(pending and !sending and length>0 and length<=256);wide=address;count=length;mode=3;body_reply=true;send_header(length,32);
+}
+fn read16(address:[*]u16,length:u16) void {
+ @assert(pending and !sending and length>0 and length<=256);narrow=address;count=length;cursor=0;mode=4;body_reply=true;send_header(length,16);
+}
+inline fn accept(value:u32) void {
+ if(mode==0){
+  @assert(!pending and cursor<6);command[cursor]=value;cursor+=1;
+  if(cursor==6){@block(iq);@assert(command[0]==sequence+1 and command[0]>0);sequence=command[0];pending=true;@activate(command_task);}
+ }else{
+  @assert(pending and !sending and cursor<count and (mode==1 or mode==2));
+  if(mode==1){wide[cursor]=value;}else{@assert(value<=65535);narrow[cursor]=@as(u16,value);}
+  cursor+=1;if(cursor==count){@block(iq);unblock_cmd_stream();}
+ }
+}
+const received_type=if(routed) u16 else u32;
+task received(value:received_type) void {
+ if(comptime routed){
+  if(!have_half){first_half=value;have_half=true;}
+  else{have_half=false;accept(@as(u32,first_half)|(@as(u32,value)<<16));}
+ }else{accept(value);}
+}
+fn send_narrow_chunk() void {
+ // The response header has retired. Reuse its four words for explicit u16
+ // expansion: mov16 fabric output does not satisfy a mov32 receiver's extent.
+ var width:u16=4;if(count-cursor<4){width=count-cursor;}
+ for(@range(u16,4))|i|{if(i<width){response[i]=@as(u32,narrow[cursor+i]);}}
+ cursor+=width;
+ const m0=@get_dsd(mem1d_dsd,.{.base_address=&response,.extent=4});const m=@set_dsd_length(m0,width);
+ const f0=@get_dsd(fabout_dsd,.{.output_queue=oq,.extent=4});const f=@set_dsd_length(f0,width);
+ @load_to_dsr(os,m);@load_to_dsr(od,f,.{.async=true,.ut_id=@get_ut_id(0),.activate=st});@mov32(od,os,.{.async=true});
+}
+task sent() void {
+ @assert(sending and pending);
+ if(body_reply){
+  body_reply=false;
+  if(mode==3){
+   const m0=@get_dsd(mem1d_dsd,.{.base_address=wide,.extent=1});const m=@set_dsd_length(m0,count);
+   const f0=@get_dsd(fabout_dsd,.{.output_queue=oq,.extent=1});const f=@set_dsd_length(f0,count);
+   @load_to_dsr(os,m);@load_to_dsr(od,f,.{.async=true,.ut_id=@get_ut_id(0),.activate=st});@mov32(od,os,.{.async=true});
+  }else{@assert(mode==4);send_narrow_chunk();}
+ }else if(mode==4 and cursor<count){send_narrow_chunk();
+ }else{
+  if(comptime routed){@queue_flush(oq);}else{retire();}
+ }
+}
+fn retire() void {sending=false;pending=false;cursor=0;mode=0;@unblock(iq);}
+fn reply_empty() void {
+ @assert(sending and pending and !body_reply and !have_half);
+ tile.color_config.reset_routes(@get_color(13),.{.rx=reply_rx,.tx=reply_tx});
+ tile.queue_flush.exit(oq);retire();
+}
+comptime {
+ // This PE has no SDK command consumer. The SDK broadcasts C22 outside a
+ // host ROI too; leaving it backpressured can eventually stall a gateway.
+ // A routed production stage must forward C22 when SDK endpoints lie east.
+ if(forward_host_commands){@set_local_color_config(@get_color(22),.{.routes=.{.rx=.{WEST},.tx=.{EAST}}});}
+ else{@set_local_color_config(@get_color(22),.{.routes=.{.rx=.{WEST},.tx=.{}}});}
+ @initialize_queue(iq,.{.color=@get_color(12)});@initialize_queue(oq,.{.color=@get_color(13)});
+ @bind_data_task(received,dt);@bind_local_task(sent,st);
+ if(routed){@set_empty_queue_handler(reply_empty,oq);}
+}

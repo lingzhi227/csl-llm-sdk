@@ -1,0 +1,62 @@
+param MEMCPYH2D_DATA_1_ID:i16=14;
+const memcpy=@import_module("<memcpy/get_params>",.{.width=4,.height=3,.MEMCPYH2D_1=MEMCPYH2D_DATA_1_ID});
+fn ordinary_memcpy_params(x:i16) memcpy.Params {var p=memcpy.get_params(x);p.MEMCPYH2D_1=-1;return p;}
+layout {
+ @set_rectangle(4,3);
+ @set_tile_code(0,0,"device_mixer_layer_mlp_standby.csl",.{.memcpy_params=ordinary_memcpy_params(0),.bank_words=8609,.mixer_rank_parity=1,.mixer_input48_queue=5,.mixer_can_root=false,.control_reply_rx=RAMP,.control_reply_tx=EAST});
+ @set_tile_code(1,0,"device_mixer_layer_mlp_standby.csl",.{.memcpy_params=ordinary_memcpy_params(1),.bank_words=8545,.mixer_rank_parity=0,.mixer_input48_queue=5,.mixer_can_root=true,.control_reply_rx=WEST,.control_reply_tx=EAST});
+ @set_tile_code(2,0,"device_mixer_layer_norm_bridge.csl",.{.memcpy_params=ordinary_memcpy_params(2),.bank_words=7195,.rank=0,.mixer_rank_parity=1,.mixer_input48_queue=5,.mixer_can_root=false,.control_reply_rx=WEST,.control_reply_tx=SOUTH});
+ @set_tile_code(2,1,"device_mixer_layer_norm_bridge.csl",.{.memcpy_params=ordinary_memcpy_params(2),.bank_words=7195,.rank=1,.mixer_rank_parity=0,.mixer_input48_queue=5,.mixer_can_root=false,.control_reply_rx=NORTH,.control_reply_tx=WEST});
+ @set_tile_code(1,1,"device_mixer_layer_norm_bridge.csl",.{.memcpy_params=ordinary_memcpy_params(1),.bank_words=7214,.rank=39,.mixer_rank_parity=0,.mixer_input48_queue=5,.mixer_can_root=false,.control_reply_rx=EAST,.control_reply_tx=WEST});
+ @set_tile_code(0,1,"device_mixer_layer_norm_sender.csl",.{.memcpy_params=ordinary_memcpy_params(0),.bank_words=7311,.rank=0,.sender_id=0,.bus_rx=EAST,.bus_tx=SOUTH,.mixer_rank_parity=0,.mixer_input48_queue=4,.mixer_can_root=false,.control_reply_rx=EAST,.control_reply_tx=SOUTH});
+ @set_tile_code(0,2,"device_mixer_layer_norm_sender.csl",.{.memcpy_params=ordinary_memcpy_params(0),.bank_words=7311,.rank=1,.sender_id=1,.bus_rx=EAST,.bus_tx=WEST,.mixer_rank_parity=1,.mixer_input48_queue=4,.mixer_can_root=false,.control_reply_rx=NORTH,.control_reply_tx=EAST});
+ @set_tile_code(1,2,"device_mixer_layer_norm_sender.csl",.{.memcpy_params=ordinary_memcpy_params(1),.bank_words=7310,.rank=39,.sender_id=39,.bus_rx=EAST,.bus_tx=WEST,.mixer_rank_parity=1,.mixer_input48_queue=4,.mixer_can_root=false,.control_reply_rx=WEST,.control_reply_tx=EAST});
+ @set_tile_code(2,2,"mixer_layer_mlp_controller.csl",.{.memcpy_params=ordinary_memcpy_params(2),.gate_tail=106,.down_tail=159,.shared_inputs=true,.norm_bridge=true});
+ @set_tile_code(3,0,"sentinel.csl",.{.memcpy_params=ordinary_memcpy_params(3)});
+ @set_tile_code(3,1,"sentinel.csl",.{.memcpy_params=ordinary_memcpy_params(3)});
+ @set_tile_code(3,2,"sentinel.csl",.{.memcpy_params=ordinary_memcpy_params(3)});
+ const route_0=[3]u16{0,2,3421};
+ for(@range(u16,1))|i|{@set_color_config(route_0[3*i],route_0[3*i+1],@get_color(12),.{.routes=.{.rx=.{EAST},.tx=.{NORTH,RAMP}},.filter=.{.kind=.{.range=true},.min_idx=route_0[3*i+2],.max_idx=route_0[3*i+2]}});}
+ const route_1=[9]u16{0,1,3420,1,1,3470,2,1,3508};
+ for(@range(u16,3))|i|{@set_color_config(route_1[3*i],route_1[3*i+1],@get_color(12),.{.routes=.{.rx=.{SOUTH},.tx=.{NORTH,RAMP}},.filter=.{.kind=.{.range=true},.min_idx=route_1[3*i+2],.max_idx=route_1[3*i+2]}});}
+ const route_2=[9]u16{0,0,1,1,0,0,2,0,3509};
+ for(@range(u16,3))|i|{@set_color_config(route_2[3*i],route_2[3*i+1],@get_color(12),.{.routes=.{.rx=.{SOUTH},.tx=.{RAMP}},.filter=.{.kind=.{.range=true},.min_idx=route_2[3*i+2],.max_idx=route_2[3*i+2]}});}
+ const route_3=[3]u16{1,2,3459};
+ for(@range(u16,1))|i|{@set_color_config(route_3[3*i],route_3[3*i+1],@get_color(12),.{.routes=.{.rx=.{EAST},.tx=.{WEST,NORTH,RAMP}},.filter=.{.kind=.{.range=true},.min_idx=route_3[3*i+2],.max_idx=route_3[3*i+2]}});}
+ const route_4=[2]u16{2,2};
+ for(@range(u16,1))|i|{@set_color_config(route_4[2*i],route_4[2*i+1],@get_color(12),.{.routes=.{.rx=.{RAMP},.tx=.{WEST,NORTH}}});}
+ const route_5=[2]u16{0,0};
+ for(@range(u16,1))|i|{@set_color_config(route_5[2*i],route_5[2*i+1],@get_color(13),.{.routes=.{.rx=.{RAMP},.tx=.{EAST}}});}
+ const route_6=[4]u16{1,0,1,2};
+ for(@range(u16,2))|i|{@set_color_config(route_6[2*i],route_6[2*i+1],@get_color(13),.{.routes=.{.rx=.{WEST},.tx=.{EAST}}});}
+ const route_7=[2]u16{2,0};
+ for(@range(u16,1))|i|{@set_color_config(route_7[2*i],route_7[2*i+1],@get_color(13),.{.routes=.{.rx=.{WEST},.tx=.{SOUTH}}});}
+ const route_8=[2]u16{2,1};
+ for(@range(u16,1))|i|{@set_color_config(route_8[2*i],route_8[2*i+1],@get_color(13),.{.routes=.{.rx=.{NORTH},.tx=.{WEST}}});}
+ const route_9=[2]u16{1,1};
+ for(@range(u16,1))|i|{@set_color_config(route_9[2*i],route_9[2*i+1],@get_color(13),.{.routes=.{.rx=.{EAST},.tx=.{WEST}}});}
+ const route_10=[2]u16{0,1};
+ for(@range(u16,1))|i|{@set_color_config(route_10[2*i],route_10[2*i+1],@get_color(13),.{.routes=.{.rx=.{EAST},.tx=.{SOUTH}}});}
+ const route_11=[2]u16{0,2};
+ for(@range(u16,1))|i|{@set_color_config(route_11[2*i],route_11[2*i+1],@get_color(13),.{.routes=.{.rx=.{NORTH},.tx=.{EAST}}});}
+ const route_12=[2]u16{2,2};
+ for(@range(u16,1))|i|{@set_color_config(route_12[2*i],route_12[2*i+1],@get_color(13),.{.routes=.{.rx=.{WEST},.tx=.{RAMP}}});}
+
+ @export_name("audit",[*]u32,false);
+ @export_name("setup",[*]u16,false);
+ @export_name("mlp_output",[*]u32,false);
+ @export_name("ticks",[*]u16,false);
+ @export_name("transport_stats",[*]u32,false);
+ @export_name("successor_output",[*]u32,false);
+ @export_name("bridge_stats",[*]u32,false);
+ @export_name("arm",fn(u32)void);
+ @export_name("start",fn()void);
+ @export_name("finish",fn()void);
+ @export_name("mixer_operand_input",[*]u32,false);
+ @export_name("mixer_operand_status",[*]u32,false);
+ @export_name("mixer_send_operand",fn(u32,u16,u16)void);
+ @export_name("device_command",[*]u32,false);
+ @export_name("device_response",[*]u32,false);
+ @export_name("device_audit",[*]u32,false);
+ @export_name("sentinel",[*]u32,false);
+}

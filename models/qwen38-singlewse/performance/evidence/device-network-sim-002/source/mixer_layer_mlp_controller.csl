@@ -1,0 +1,249 @@
+// Complete original MLP controller with one-frame return prefetch. The receive
+// arena and the coalesced native packet have independent DMA lifetimes. No next
+// bus grant is issued until the previous complete response has been consumed.
+param norm_bridge:bool=false;
+param memcpy_params;param gate_tail:u16;param down_tail:u16;param shared_inputs:bool=false;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const schedule=@import_module("mlp_schedule.csl");
+const clock=@import_module("<time>");
+// start, last input packet sent, last fused packet sent, complete output/drain.
+var ticks=@zeros([12]u16);const tp:[*]u16=&ticks;
+const packet_words:u16=if(shared_inputs) 148 else 296;
+var frame=@zeros([273]u32);var packet=@zeros([packet_words]u32);var grant=@zeros([3]u32);
+var successor=@zeros([if(norm_bridge) 2560 else 1]u32);const np:[*]u32=&successor;
+var bridge_stats=@zeros([2]u32);const bsp:[*]u32=&bridge_stats;
+var output_ready:u16=0;var norm_cursor:u16=0;var packet_is_norm:bool=false;
+const grant_count:u16=if(norm_bridge) 226 else 186;
+var output=@zeros([2560]u32);var audit=@zeros([4]u32);var dummy=@zeros([5]u16);
+// Packets issued/retired; grants/received frames with an outstanding packet lease.
+// Lease overlap is not an assertion of simultaneous hardware instruction issue.
+var transport=@zeros([4]u32);const xp:[*]u32=&transport;
+const op:[*]u32=&output;const ap:[*]u32=&audit;const sp:[*]u16=&dummy;
+var epoch:u32=0;var cursor:u16=0;var packet_cursor:u16=0;
+var finish_requested:bool=false;var active:bool=false;var grant_busy:bool=false;
+var response_pending:bool=false;var frame_ready:bool=false;var packet_busy:bool=false;
+var preparing:bool=false;var prepare_cursor:u16=0;
+const nq=@get_output_queue(4);
+const rq=@get_input_queue(2);const gq=@get_output_queue(3);const oq=@get_output_queue(2);
+const rd=@get_dsr(dsr_dest,1);const rs=@get_dsr(dsr_src0,1);
+const gd=@get_dsr(dsr_dest,2);const gs=@get_dsr(dsr_src0,2);
+const od=@get_dsr(dsr_dest,3);const os=@get_dsr(dsr_src0,3);
+const rt=@get_local_task_id(8);const gt=@get_local_task_id(9);const ot=@get_local_task_id(10);
+fn transmit_grant() void {
+ const gm=@get_dsd(mem1d_dsd,.{.base_address=&grant,.extent=3});const gf=@get_dsd(fabout_dsd,.{.output_queue=gq,.extent=3});
+ @load_to_dsr(gs,gm);@load_to_dsr(gd,gf,.{.async=true,.ut_id=@get_ut_id(3),.activate=gt});@mov32(gd,gs,.{.async=true});
+ audit[1]+=1;
+}
+fn issue_prepare() void {
+ @assert(active and preparing and !grant_busy and prepare_cursor<40);
+ const target=schedule.prepare_targets[prepare_cursor];const group=schedule.prepare_indices[prepare_cursor];
+ const tag=@as(u32,target)<<16;
+ grant[0]=tag|(epoch&65535);grant[1]=tag|(epoch>>16);grant[2]=tag|3072|@as(u32,group);
+ grant_busy=true;transmit_grant();
+}
+fn issue_grant() void {
+ @assert(active and !preparing and !grant_busy and !response_pending and !frame_ready and cursor<grant_count);
+ const kind=schedule.kinds[cursor];const index=schedule.indices[cursor];
+ const tag=@as(u32,schedule.targets[cursor])<<16;
+ grant[0]=tag|(epoch&65535);grant[1]=tag|(epoch>>16);grant[2]=tag|@as(u32,(kind<<10)|index);
+ response_pending=true;grant_busy=true;if(packet_busy){transport[2]+=1;}
+ const rm=@get_dsd(mem1d_dsd,.{.base_address=&frame,.extent=1});const rf=@get_dsd(fabin_dsd,.{.input_queue=rq,.extent=1});
+ const m=@set_dsd_length(rm,schedule.words[cursor]);const f=@set_dsd_length(rf,schedule.words[cursor]);
+ @load_to_dsr(rd,m);@load_to_dsr(rs,f,.{.async=true,.ut_id=@get_ut_id(2),.activate=rt});@mov32(rd,rs,.{.async=true});
+ transmit_grant();
+}
+fn send_group() void {
+ @assert(frame_ready and !response_pending and !packet_busy and cursor<176);
+ const kind=schedule.kinds[cursor];const index=schedule.indices[cursor];
+ const columns:u16=if(kind==0) 32 else 64;
+ const tail:u16=if(kind==0) gate_tail else down_tail;const base:u16=if(kind==0) 0 else 1024;
+ const tag_stride:u16=if(kind==0) (160+gate_tail-1)/gate_tail else (272+down_tail-1)/down_tail;
+ const halves=@ptrcast([*]u16,&packet);
+ var offset:u16=0;var segment:u16=0;
+ while(segment<128/columns){
+  const k=index*(128/columns)+segment;var alias:u16=0;
+  while(alias<(if(shared_inputs) @as(u16,1) else @as(u16,2))){
+   var selector:u16=base+k;var part:u16=0;
+   if(comptime shared_inputs){selector=base+(k%tail)*tag_stride+k/tail;part=k/tail;}
+   else if(alias==1){selector=base+512+k%tail;part=k/tail;}
+   const tag=@as(u32,selector)<<16;
+   const tag_base=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]u16,&halves[2*offset+1]),.extent=1,.stride=2});
+   const tags=@set_dsd_length(tag_base,columns+5);@mov16(tags,selector);
+   const src_base=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]u16,&frame[3+segment*(columns/2)]),.extent=1});
+   const dst_base=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]u16,&packet[offset+3]),.extent=1,.stride=2});
+   const src=@set_dsd_length(src_base,columns);const dst=@set_dsd_length(dst_base,columns);@mov16(dst,src);
+   packet[offset]=tag|(epoch&65535);packet[offset+1]=tag|(epoch>>16);packet[offset+2]=tag|@as(u32,part);
+   packet[offset+3+columns]=tag|(frame[2]&65535);packet[offset+4+columns]=tag|(frame[2]>>16);
+   offset+=columns+5;alias+=1;
+  }
+  segment+=1;
+ }
+ @assert(offset<=packet_words);packet_is_norm=false;packet_cursor=cursor;cursor+=1;frame_ready=false;packet_busy=true;transport[0]+=1;
+ const mm=@get_dsd(mem1d_dsd,.{.base_address=&packet,.extent=1});const ff=@get_dsd(fabout_dsd,.{.output_queue=oq,.extent=1});
+ const m=@set_dsd_length(mm,offset);const f=@set_dsd_length(ff,offset);
+ @load_to_dsr(os,m);@load_to_dsr(od,f,.{.async=true,.ut_id=@get_ut_id(4),.activate=ot});@mov32(od,os,.{.async=true});
+}
+fn collect_output() void {
+ @assert(frame_ready and !response_pending and cursor>=176 and cursor<grant_count);
+ const first=@as(u16,frame[2]&65535);const rows=@as(u16,frame[2]>>16);
+ @assert(first==schedule.firsts[cursor] and rows==schedule.rows[cursor] and first+rows<=5120);
+ const src_base=@get_dsd(mem1d_dsd,.{.base_address=&frame[3],.extent=1});
+ var destination:[*]u32=@ptrcast([*]u32,&output[first/2]);
+ if(comptime norm_bridge){
+  if(cursor>=186){destination=@ptrcast([*]u32,&successor[first/2]);}
+  else{@assert(first==output_ready);output_ready+=rows;}
+ }
+ const dst_base=@get_dsd(mem1d_dsd,.{.base_address=destination,.extent=1});
+ const src=@set_dsd_length(src_base,rows/2);const dst=@set_dsd_length(dst_base,rows/2);@mov32(dst,src);
+ frame_ready=false;cursor+=1;
+}
+fn send_norm_chunk() void {
+ @assert(norm_bridge and !packet_busy and norm_cursor<40 and output_ready>=(norm_cursor+1)*128);
+ const tag=@as(u32,norm_cursor)<<16;packet[0]=tag|(epoch&65535);packet[1]=tag|(epoch>>16);
+ const values=@ptrcast([*]u16,&output[norm_cursor*64]);
+ for(@range(u16,128))|i|{packet[2+i]=tag|@as(u32,values[i]);}
+ packet_busy=true;packet_is_norm=true;norm_cursor+=1;bridge_stats[0]+=1;
+ const m=@get_dsd(mem1d_dsd,.{.base_address=&packet,.extent=130});
+ const f=@get_dsd(fabout_dsd,.{.output_queue=nq,.extent=130});
+ @load_to_dsr(os,m);@load_to_dsr(od,f,.{.async=true,.ut_id=@get_ut_id(4),.activate=ot});@mov32(od,os,.{.async=true});
+}
+fn pump() void {
+ if(!active or preparing){return;}
+ if(frame_ready){
+  if(cursor<176){if(packet_busy){return;}send_group();}else{collect_output();}
+ }
+ if(comptime norm_bridge){if(!packet_busy and norm_cursor<40 and output_ready>=(norm_cursor+1)*128){send_norm_chunk();}}
+ if(cursor==grant_count){
+  if(packet_busy or response_pending or grant_busy){return;}
+  @assert(!frame_ready and transport[0]==176 and transport[1]==176);
+  if(comptime norm_bridge){@assert(norm_cursor==40 and bridge_stats[0]==40 and bridge_stats[1]==40);}
+  clock.get_timestamp(@ptrcast(*[3]u16,&ticks[9]));active=false;audit[3]=1;
+  if(finish_requested){finish_requested=false;sys.unblock_cmd_stream();}
+ }else if(!response_pending and !frame_ready and !grant_busy){
+  if(!norm_bridge or cursor<186 or norm_cursor==40){issue_grant();}
+ }
+}
+task frame_arrived() void {
+ @assert(active and response_pending and !frame_ready and cursor<grant_count);
+ const kind=schedule.kinds[cursor];const index=schedule.indices[cursor];
+ @assert(frame[0]==epoch and frame[1]==((@as(u32,kind)<<16)|@as(u32,index)));
+ audit[2]+=1;response_pending=false;frame_ready=true;if(packet_busy){transport[3]+=1;}pump();
+}
+task grant_sent() void {
+ @assert(grant_busy);grant_busy=false;
+ if(preparing){prepare_cursor+=1;if(prepare_cursor<40){issue_prepare();}else{preparing=false;issue_grant();}}
+ else{pump();}
+}
+task packet_sent() void {
+ @assert(packet_busy);packet_busy=false;if(packet_is_norm){bridge_stats[1]+=1;pump();return;}transport[1]+=1;
+ if(packet_cursor==39){clock.get_timestamp(@ptrcast(*[3]u16,&ticks[3]));}
+ if(packet_cursor==175){clock.get_timestamp(@ptrcast(*[3]u16,&ticks[6]));}
+ pump();
+}
+fn arm(new_epoch:u32) void {@assert(!device_gateway_active);@assert(!mixer_operand_busy);
+ @assert(!active and !response_pending and !frame_ready and !packet_busy and !grant_busy and new_epoch>epoch);
+ epoch=new_epoch;output_ready=0;norm_cursor=0;packet_is_norm=false;bridge_stats[0]=0;bridge_stats[1]=0;cursor=0;packet_cursor=0;preparing=false;prepare_cursor=0;
+ for(@range(u16,4))|i|{audit[i]=0;transport[i]=0;}audit[0]=epoch;clock.enable_tsc();sys.unblock_cmd_stream();
+}
+fn start() void {@assert(!active and epoch>0 and cursor==0);active=true;preparing=true;clock.get_timestamp(@ptrcast(*[3]u16,&ticks[0]));issue_prepare();sys.unblock_cmd_stream();}
+fn finish() void {@assert(!finish_requested and epoch>0);if(active){finish_requested=true;}else{@assert(audit[3]==1);sys.unblock_cmd_stream();}}
+comptime {
+ if(norm_bridge){@initialize_queue(nq,.{.color=@get_color(7)});@export_symbol(np,"successor_output");@export_symbol(bsp,"bridge_stats");}
+ @initialize_queue(rq,.{.color=@get_color(18)});@initialize_queue(gq,.{.color=@get_color(20)});@initialize_queue(oq,.{.color=@get_color(2)});
+ @bind_local_task(frame_arrived,rt);@bind_local_task(grant_sent,gt);@bind_local_task(packet_sent,ot);
+ @export_symbol(tp,"ticks");@export_symbol(xp,"transport_stats");@export_symbol(ap,"audit");@export_symbol(sp,"setup");@export_symbol(op,"mlp_output");@export_symbol(arm);@export_symbol(start);@export_symbol(finish);
+}
+
+// Borrow the idle P31 controller's frame and packet arenas, with both entry
+// directions guarded. This real quantize/send port is not an automatic stage
+// scheduler or a claim that preceding/succeeding neural consumers are connected.
+const mixer_operand=@import_module("mixer_operand.csl");
+const mip:[*]u32=&frame;var mixer_operand_busy:bool=false;
+var mixer_operand_status=@zeros([3]u32);const mops:[*]u32=&mixer_operand_status;
+const mq40=@get_output_queue(5);const mq48=@get_output_queue(6);
+const mt=@get_local_task_id(11);
+task mixer_operand_sent() void {
+ @assert(mixer_operand_busy);mixer_operand_busy=false;mixer_operand_status[2]=1;
+}
+fn mixer_send_operand(invocation:u32,group:u16,parts:u16) void {@assert(!device_gateway_active);
+ @assert(!active and !mixer_operand_busy and !response_pending and !frame_ready and !packet_busy and !grant_busy);
+ // arm() precedes start(), so !active alone does not establish an idle MLP.
+ @assert(epoch==0 or cursor==grant_count);
+ mixer_operand.prepare(mip,@ptrcast([*]u32,&packet),invocation,group,parts);
+ mixer_operand_status[0]=invocation;mixer_operand_status[1]=@as(u32,group);mixer_operand_status[2]=0;mixer_operand_busy=true;
+ const m=@get_dsd(mem1d_dsd,.{.base_address=&packet,.extent=133});
+ const a=@get_dsd(fabout_dsd,.{.output_queue=mq40,.extent=133});const b=@get_dsd(fabout_dsd,.{.output_queue=mq48,.extent=133});
+ @load_to_dsr(os,m);
+ if(parts==40){@load_to_dsr(od,a,.{.async=true,.ut_id=@get_ut_id(5),.activate=mt});}
+ else{@load_to_dsr(od,b,.{.async=true,.ut_id=@get_ut_id(5),.activate=mt});}@mov32(od,os,.{.async=true});
+ sys.unblock_cmd_stream();
+}
+comptime {
+ @comptime_assert(packet_words>=133);
+ @initialize_queue(mq40,.{.color=@get_color(16)});@initialize_queue(mq48,.{.color=@get_color(17)});
+ @bind_local_task(mixer_operand_sent,mt);@export_symbol(mip,"mixer_operand_input");
+ @export_symbol(mops,"mixer_operand_status");@export_symbol(mixer_send_operand);
+}
+
+// Serialized stage-control gateway. Borrow the idle controller's frame and
+// packet; preserve neural output/successor arrays. Commands use two tagged
+// low-half words per logical32-bit word. Responses are ordinary32-bit words.
+// A reply can overwrite frame only after every command word has been encoded:
+// the selected worker replies only after consuming the complete command body.
+const device_command:[*]u32=&frame;const device_response:[*]u32=&frame;
+var device_audit=@zeros([4]u32);const device_ap:[*]u32=&device_audit;
+var device_gateway_active:bool=false;var device_tx_done:bool=false;var device_rx_done:bool=false;
+var device_words:u16=0;var device_replies:u16=0;var device_cursor:u16=0;
+var device_target:u16=0;var device_sequence:u32=0;
+const device_oq=@get_output_queue(7);const device_iq=@get_input_queue(3);
+const device_td=@get_dsr(dsr_dest,4);const device_ts=@get_dsr(dsr_src0,4);
+const device_rd=@get_dsr(dsr_dest,5);const device_rs=@get_dsr(dsr_src0,5);
+const device_tt=@get_local_task_id(12);const device_rt=@get_local_task_id(13);
+fn device_finish() void {
+ if(!device_tx_done or !device_rx_done){return;}
+ @assert(device_gateway_active and frame[0]==device_sequence and frame[1]==0);
+ @assert(frame[2]==@as(u32,device_replies-4) and (frame[3]==16 or frame[3]==32));
+ device_gateway_active=false;device_audit[0]+=1;sys.unblock_cmd_stream();
+}
+fn device_send_chunk() void {
+ @assert(device_gateway_active and !device_tx_done and device_cursor<device_words);
+ var count:u16=device_words-device_cursor;if(count>packet_words/2){count=packet_words/2;}
+ const source0=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]u16,&frame[device_cursor]),.extent=2});
+ const source=@set_dsd_length(source0,2*count);
+ const low0=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]u16,&packet),.extent=2,.stride=2});
+ const low=@set_dsd_length(low0,2*count);const high=@increment_dsd_offset(low,1,u16);
+ @load_to_dsr(device_ts,source);@load_to_dsr(device_td,low);@mov16(device_td,device_ts);
+ @load_to_dsr(device_td,high);@mov16(device_td,device_target);
+ device_cursor+=count;
+ const memory0=@get_dsd(mem1d_dsd,.{.base_address=&packet,.extent=2});const memory=@set_dsd_length(memory0,2*count);
+ const fabric0=@get_dsd(fabout_dsd,.{.output_queue=device_oq,.extent=2});const fabric=@set_dsd_length(fabric0,2*count);
+ @load_to_dsr(device_ts,memory);@load_to_dsr(device_td,fabric,.{.async=true,.ut_id=@get_ut_id(6),.activate=device_tt});@mov32(device_td,device_ts,.{.async=true});
+}
+task device_sent() void {
+ @assert(device_gateway_active and !device_tx_done);
+ if(device_cursor<device_words){device_send_chunk();}else{device_tx_done=true;device_finish();}
+}
+task device_received() void {
+ @assert(device_gateway_active and !device_rx_done and device_cursor==device_words);
+ device_rx_done=true;device_finish();
+}
+fn device_exchange(target:u16,words:u16,replies:u16) void {
+ @assert(!device_gateway_active and !active and !mixer_operand_busy and !response_pending and !frame_ready and !packet_busy and !grant_busy);
+ @assert(epoch==0 or cursor==grant_count);
+ @assert(target<3554 and words>=6 and words<=262 and replies>=4 and replies<=260);
+ @assert(words==6+(if(frame[1]==0) @as(u16,frame[4]) else @as(u16,0)));
+ @assert(replies==4+(if(frame[1]==1) @as(u16,frame[4]) else @as(u16,0)));
+ device_gateway_active=true;device_tx_done=false;device_rx_done=false;device_words=words;device_replies=replies;device_cursor=0;
+ device_target=target;device_sequence=frame[0];device_audit[1]=@as(u32,target);device_audit[2]=frame[0];device_audit[3]=frame[1];
+ const memory0=@get_dsd(mem1d_dsd,.{.base_address=&frame,.extent=1});const memory=@set_dsd_length(memory0,replies);
+ const fabric0=@get_dsd(fabin_dsd,.{.input_queue=device_iq,.extent=1});const fabric=@set_dsd_length(fabric0,replies);
+ @load_to_dsr(device_rd,memory);@load_to_dsr(device_rs,fabric,.{.async=true,.ut_id=@get_ut_id(7),.activate=device_rt});@mov32(device_rd,device_rs,.{.async=true});
+ device_send_chunk();
+}
+comptime {
+ @comptime_assert(packet_words>=12);
+ @initialize_queue(device_oq,.{.color=@get_color(12)});@initialize_queue(device_iq,.{.color=@get_color(13)});
+ @bind_local_task(device_sent,device_tt);@bind_local_task(device_received,device_rt);
+ @export_symbol(device_command,"device_command");@export_symbol(device_response,"device_response");
+ @export_symbol(device_ap,"device_audit");@export_symbol(device_exchange);
+}

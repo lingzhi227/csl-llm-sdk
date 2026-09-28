@@ -1,0 +1,32 @@
+{
+  "bindings": {
+    "mixer_layer_mlp_standby.csl": {
+      "original": "layer_mlp_standby.csl",
+      "original_sha256": "4f5dda1226ed585268a9ebf857b7bcc9006d5d399ca3024b69079106132ef63e",
+      "composition_sha256": "62a536b24697e9ff27cd832d450983fb9da2cd078c04eeeee7ae3a0d113787cf",
+      "guards": "Both entry directions require the other program drained"
+    },
+    "mixer_layer_norm_sender.csl": {
+      "original": "layer_norm_sender.csl",
+      "original_sha256": "daa2ab0710165823ec857fdba58a99b6824a5c28754df8a2e3dad37921f6dc84",
+      "composition_sha256": "62a536b24697e9ff27cd832d450983fb9da2cd078c04eeeee7ae3a0d113787cf",
+      "guards": "Both entry directions require the other program drained"
+    },
+    "mixer_layer_norm_bridge.csl": {
+      "original": "layer_norm_bridge.csl",
+      "original_sha256": "1aef8dcb15094be87891516724f66b2d9af76b3fa3c7ebf9eac8b32d1f5b8a6c",
+      "composition_sha256": "62a536b24697e9ff27cd832d450983fb9da2cd078c04eeeee7ae3a0d113787cf",
+      "guards": "Both entry directions require the other program drained"
+    },
+    "mixer_layer_mlp_controller.csl": {
+      "original": "layer_mlp_controller.csl",
+      "original_sha256": "ae3df4a30348abde968a51225eeafddeeafeae3a10b4872784f1ed7dee7cb22f",
+      "composition_sha256": "d38f5532eaccdce1cc38071ae306774cc25b5cdd9df5707a34c53ab12442c7a5",
+      "guards": "Norm/MLP arm and mixer sender require the other phase idle"
+    }
+  },
+  "wrapper": "// Composition port: the future conv/gate/residual consumer receives this local\n// root notification. Until connected, root data stays leased for explicit\n// consume; no synthetic neural result or fake automatic completion is emitted.\nparam mixer_rank_parity:u16;param mixer_input48_queue:u16;param mixer_can_root:bool;\nconst mrt=@get_local_task_id(25);const mdt=@get_local_task_id(26);\nconst mixer=@import_module(\"mixer_projection.csl\",.{.rank_parity=mixer_rank_parity,.bank_words=bank_words,\n .input48_queue=mixer_input48_queue,.can_root=mixer_can_root,.root_ready_task=mrt,.drained_task=mdt});\nvar mixer_status=@zeros([4]u32);const msp:[*]u32=&mixer_status;\nconst msetup:[*]u16=mixer.setup_pointer;const maudit:[*]u32=mixer.audit_pointer;\nconst mout:[*]u32=mixer.root_output;\ntask mixer_root_ready() void {\n @assert(mixer_status[2]==0);mixer_status[0]=mout[0];mixer_status[1]=mout[1];mixer_status[2]=1;\n}\ntask mixer_drained() void {mixer_status[3]+=1;}\nfn mixer_begin(request:u32,generation:u32,projection:u16) void {\n MIXER_COHOST_IDLE\n @assert(mixer_status[2]==0);mixer.begin(bp,request,generation,projection);sys.unblock_cmd_stream();\n}\nfn mixer_consume(generation:u32,row:u16) void {\n @assert(mixer_status[2]==1);mixer_status[2]=0;mixer.root_consumed(generation,row);sys.unblock_cmd_stream();\n}\ncomptime {\n @bind_local_task(mixer_root_ready,mrt);@bind_local_task(mixer_drained,mdt);\n @export_symbol(msp,\"mixer_status\");@export_symbol(msetup,\"mixer_setup\");\n @export_symbol(maudit,\"mixer_audit\");@export_symbol(mout,\"mixer_output\");\n @export_symbol(mixer_begin);@export_symbol(mixer_consume);\n}\n",
+  "producer_wrapper": "// Borrow the idle P31 controller's frame and packet arenas, with both entry\n// directions guarded. This real quantize/send port is not an automatic stage\n// scheduler or a claim that preceding/succeeding neural consumers are connected.\nconst mixer_operand=@import_module(\"mixer_operand.csl\");\nconst mip:[*]u32=&frame;var mixer_operand_busy:bool=false;\nvar mixer_operand_status=@zeros([3]u32);const mops:[*]u32=&mixer_operand_status;\nconst mq40=@get_output_queue(5);const mq48=@get_output_queue(6);\nconst mt=@get_local_task_id(11);\ntask mixer_operand_sent() void {\n @assert(mixer_operand_busy);mixer_operand_busy=false;mixer_operand_status[2]=1;\n}\nfn mixer_send_operand(invocation:u32,group:u16,parts:u16) void {\n @assert(!active and !mixer_operand_busy and !response_pending and !frame_ready and !packet_busy and !grant_busy);\n // arm() precedes start(), so !active alone does not establish an idle MLP.\n @assert(epoch==0 or cursor==grant_count);\n mixer_operand.prepare(mip,@ptrcast([*]u32,&packet),invocation,group,parts);\n mixer_operand_status[0]=invocation;mixer_operand_status[1]=@as(u32,group);mixer_operand_status[2]=0;mixer_operand_busy=true;\n const m=@get_dsd(mem1d_dsd,.{.base_address=&packet,.extent=133});\n const a=@get_dsd(fabout_dsd,.{.output_queue=mq40,.extent=133});const b=@get_dsd(fabout_dsd,.{.output_queue=mq48,.extent=133});\n @load_to_dsr(os,m);\n if(parts==40){@load_to_dsr(od,a,.{.async=true,.ut_id=@get_ut_id(5),.activate=mt});}\n else{@load_to_dsr(od,b,.{.async=true,.ut_id=@get_ut_id(5),.activate=mt});}@mov32(od,os,.{.async=true});\n sys.unblock_cmd_stream();\n}\ncomptime {\n @comptime_assert(packet_words>=133);\n @initialize_queue(mq40,.{.color=@get_color(16)});@initialize_queue(mq48,.{.color=@get_color(17)});\n @bind_local_task(mixer_operand_sent,mt);@export_symbol(mip,\"mixer_operand_input\");\n @export_symbol(mops,\"mixer_operand_status\");@export_symbol(mixer_send_operand);\n}\n",
+  "source_only": true,
+  "scope": "Original mixer projection cohosts with one shared original BF16/FP8 operand producer and fixed paths. Root conv/gate/state/residual consumers and complete-stage execution remain unconnected; compile admission only."
+}

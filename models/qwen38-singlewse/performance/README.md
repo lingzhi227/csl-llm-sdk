@@ -7,6 +7,18 @@ Independent requests may overlap with isolated state. The earlier per-request
 interpretation and whole-wafer shared-layer overlay are superseded. The target
 remains unmet; this is active development.
 
+P37 passes164 source and164 publication regression tests. Full routed compile017
+covers11388 PEs in7714 ELF images, at maximum48112bytes including4096 stack;
+reference002 preserves every396953216 original bank byte. Simulator019 passes
+572 gateway commands and exact retention of60178 words in eight complete
+original selected PE banks, with19 rounds of east-side SDK transfers and normal
+stop. Internal control routes use addressed arrival, an exclusive return credit,
+queue-drain restoration and explicit SDK teardown rearming. All21 workstation
+services released; failures/cancellation preserved, no new WSE job. The full
+3554-endpoint route is compiled but not executed as a whole; complete neural
+stage and model-speed acceptance remain open. See
+[ROUTED-DEVICE-CONTROL.md](docs/ROUTED-DEVICE-CONTROL.md).
+
 P36 passes160 source and160 publication regression tests and admits the complete original layer00
 mixer-projection/norm/MLP bank candidate in local compilation: all11388 PEs,
 5891 ELF images, maximum48112bytes including4096 stack. Full-K QKV group row

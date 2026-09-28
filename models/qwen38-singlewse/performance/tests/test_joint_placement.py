@@ -17,6 +17,20 @@ class JointPlacementTests(unittest.TestCase):
   cls.region,cls.plan=lower_joint_banks(stage,profiles,json.loads((e/'joint-placement-calibration-001.json').read_text()),json.loads((e/'device-control-calibration-001.json').read_text()))
   cls.mixer=lower_mixer_projections(cls.region,stage['request_controller']['pe'])
 
+ def test_routed_control_space_preserves_all_original_banks_and_state(self):
+  e=ROOT/'evidence'
+  stage=next(s for s in json.loads((e/'layer-native-schedule-002/layer-schedule.json').read_text())['stages'] if s['id']=='layer_00')
+  profiles=[dict(pe=pe,source=c['source'],parameters=dict(c['parameters'])) for c in json.loads((e/'layer-mlp-compile-015/source/profiles.json').read_text())['profiles'] for pe in c['pes']]
+  region,plan=lower_joint_banks(stage,profiles,json.loads((e/'joint-placement-calibration-001.json').read_text()),json.loads((e/'device-control-calibration-001.json').read_text()),mix_extra_reserve=256)
+  self.assertEqual(plan['original_allocated_bytes'],396953216)
+  self.assertEqual(plan['original_pages'],53661)
+  self.assertEqual(plan['extra_bytes_reserved'],256)
+  self.assertEqual(plan['mixer_additional_code_reserve'],256)
+  self.assertGreaterEqual(plan['unused_page_capacity'],0)
+  self.assertEqual(lower_mixer_projections(region,stage['request_controller']['pe'])['audit']['original_tiles_checked'],454400)
+  resolver=JointAuxiliaryPlacement(self.original,region,plan)
+  self.assertEqual(len({(*resolver.owner(p)['pe'],resolver.owner(p)['byte_offset']) for p in range(53661)}),53661)
+
  def test_every_original_qkv_row_has_exactly_original_40_k_blocks(self):
   coverage=bytearray(10240*40)
   for worker in self.mixer['workers']:

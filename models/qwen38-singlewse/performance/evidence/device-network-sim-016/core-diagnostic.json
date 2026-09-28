@@ -1,0 +1,313 @@
+{
+  "diagnostic_only": true,
+  "physical": false,
+  "neural_execution": false,
+  "core_sha256": "4f926a31489bfb9d01f8f42ba25e3b60399e0d385514d405082cbbcc91373740",
+  "core_bytes": 2935898,
+  "code_checks": [
+    {
+      "pe": [
+        6,
+        3
+      ],
+      "elf_sha256": "964068c7a9f70fdf8f49b5c6e0c873b1bddcd5649d5ff0f0af1f8bc05f7c78c0",
+      "code_bytes": 10568
+    },
+    {
+      "pe": [
+        4,
+        1
+      ],
+      "elf_sha256": "7eeedd72e3f6169876909503cd202d0a0da0bc51619f49023e51ae163ef80284",
+      "code_bytes": 7304
+    }
+  ],
+  "observations": [
+    {
+      "pe": [
+        6,
+        3
+      ],
+      "name": "device_submission",
+      "u16": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "pe": [
+        6,
+        3
+      ],
+      "name": "device_audit",
+      "u16": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "pe": [
+        6,
+        3
+      ],
+      "name": "device_submit_cursor",
+      "u16": [
+        0
+      ]
+    },
+    {
+      "pe": [
+        6,
+        3
+      ],
+      "name": "device_gateway_active",
+      "u16": [
+        0
+      ]
+    },
+    {
+      "pe": [
+        6,
+        3
+      ],
+      "name": "device_words",
+      "u16": [
+        0
+      ]
+    },
+    {
+      "pe": [
+        6,
+        3
+      ],
+      "name": "device_cursor",
+      "u16": [
+        0
+      ]
+    },
+    {
+      "pe": [
+        6,
+        3
+      ],
+      "name": "device_tx_done",
+      "u16": [
+        0
+      ]
+    },
+    {
+      "pe": [
+        6,
+        3
+      ],
+      "name": "device_rx_done",
+      "u16": [
+        0
+      ]
+    },
+    {
+      "pe": [
+        4,
+        1
+      ],
+      "name": "sys.pending",
+      "u16": [
+        0
+      ]
+    },
+    {
+      "pe": [
+        4,
+        1
+      ],
+      "name": "sys.sending",
+      "u16": [
+        0
+      ]
+    },
+    {
+      "pe": [
+        4,
+        1
+      ],
+      "name": "sys.count",
+      "u16": [
+        0
+      ]
+    },
+    {
+      "pe": [
+        4,
+        1
+      ],
+      "name": "sys.cursor",
+      "u16": [
+        0
+      ]
+    },
+    {
+      "pe": [
+        4,
+        1
+      ],
+      "name": "sys.mode",
+      "u16": [
+        0
+      ]
+    },
+    {
+      "pe": [
+        4,
+        1
+      ],
+      "name": "sys.sequence",
+      "u16": [
+        0,
+        0
+      ]
+    },
+    {
+      "pe": [
+        4,
+        1
+      ],
+      "name": "sys.have_half",
+      "u16": [
+        0
+      ]
+    },
+    {
+      "pe": [
+        4,
+        1
+      ],
+      "name": "sys.first_half",
+      "u16": [
+        0
+      ]
+    }
+  ],
+  "host_path_registers": [
+    {
+      "pe": [
+        4,
+        3
+      ],
+      "color": 21,
+      "config": 2,
+      "teardown": false
+    },
+    {
+      "pe": [
+        4,
+        3
+      ],
+      "color": 22,
+      "config": 2,
+      "teardown": false
+    },
+    {
+      "pe": [
+        4,
+        3
+      ],
+      "color": 23,
+      "config": 32770,
+      "teardown": true
+    },
+    {
+      "pe": [
+        5,
+        3
+      ],
+      "color": 21,
+      "config": 2,
+      "teardown": false
+    },
+    {
+      "pe": [
+        5,
+        3
+      ],
+      "color": 22,
+      "config": 2,
+      "teardown": false
+    },
+    {
+      "pe": [
+        5,
+        3
+      ],
+      "color": 23,
+      "config": 32770,
+      "teardown": true
+    },
+    {
+      "pe": [
+        6,
+        3
+      ],
+      "color": 21,
+      "config": 32770,
+      "teardown": true
+    },
+    {
+      "pe": [
+        6,
+        3
+      ],
+      "color": 22,
+      "config": 18,
+      "teardown": false
+    },
+    {
+      "pe": [
+        6,
+        3
+      ],
+      "color": 23,
+      "config": 18,
+      "teardown": false
+    },
+    {
+      "pe": [
+        7,
+        3
+      ],
+      "color": 21,
+      "config": 32770,
+      "teardown": true
+    },
+    {
+      "pe": [
+        7,
+        3
+      ],
+      "color": 22,
+      "config": 16,
+      "teardown": false
+    },
+    {
+      "pe": [
+        7,
+        3
+      ],
+      "color": 23,
+      "config": 0,
+      "teardown": false
+    }
+  ],
+  "inspector_sha256": "a1871bf4fdb71a7dec189071f3fe5c850badb9666561b824f1102f7c188a875e"
+}

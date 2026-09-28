@@ -1,0 +1,38 @@
+{
+  "roles": {
+    "layer_projection.csl": {
+      "pes": 7833,
+      "maximum_with_stack": 48112,
+      "minimum_with_stack": 47232,
+      "minimum_margin": 16
+    },
+    "device_mixer_layer_mlp_standby.csl": {
+      "pes": 3474,
+      "maximum_with_stack": 48016,
+      "minimum_with_stack": 47936,
+      "minimum_margin": 112
+    },
+    "device_mixer_layer_norm_sender.csl": {
+      "pes": 40,
+      "maximum_with_stack": 47968,
+      "minimum_with_stack": 47936,
+      "minimum_margin": 160
+    },
+    "device_mixer_layer_norm_bridge.csl": {
+      "pes": 40,
+      "maximum_with_stack": 48016,
+      "minimum_with_stack": 46848,
+      "minimum_margin": 112
+    },
+    "mixer_layer_mlp_controller.csl": {
+      "pes": 1,
+      "maximum_with_stack": 41328,
+      "minimum_with_stack": 41328,
+      "minimum_margin": 6800
+    }
+  },
+  "source_manifest_sha256": "8581b7e14a20348c74af6133b2582f2e2d9e2efa8a4a5c35c6531861022f6a94",
+  "remote_census_sha256": "11127781812fac22b62a489ae0aa03ebcac90d03f9abd3ac0f8c6d70fbe3cc6a",
+  "physical": false,
+  "executed": false
+}

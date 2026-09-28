@@ -1,0 +1,90 @@
+{
+  "passed": true,
+  "over_limit_pes": 0,
+  "physical": false,
+  "executed": false,
+  "application": [
+    78,
+    146
+  ],
+  "application_pes": 11388,
+  "compiled_elf_images": 7714,
+  "maximum_with_stack": 48112,
+  "minimum_margin": 16,
+  "bytes_to_pe_count": {
+    "41328": 1,
+    "46848": 1,
+    "46976": 29,
+    "47040": 9,
+    "47232": 562,
+    "47568": 215,
+    "47584": 329,
+    "47600": 297,
+    "47616": 198,
+    "47728": 7,
+    "47760": 11,
+    "47776": 692,
+    "47792": 509,
+    "47808": 214,
+    "47824": 1712,
+    "47840": 679,
+    "47856": 708,
+    "47872": 1294,
+    "47936": 13,
+    "47952": 140,
+    "47968": 179,
+    "47984": 140,
+    "48000": 10,
+    "48016": 3435,
+    "48080": 1,
+    "48112": 3
+  },
+  "maximum_examples": [
+    {
+      "file": "out/bin/out_93_0.elf",
+      "sha256": "66b84c281e4c73cab278a16de84e64545bc3ba1e3043b06fc83a5e15de7ff659",
+      "rectangles": [
+        [
+          75,
+          4,
+          1,
+          1
+        ]
+      ],
+      "low_section_end": 44016,
+      "stack_allowance_bytes": 4096
+    },
+    {
+      "file": "out/bin/out_94_0.elf",
+      "sha256": "f5d8754de6acf091d722532017de68aef4a65c621154a3de5cf702905e7e33d9",
+      "rectangles": [
+        [
+          71,
+          6,
+          1,
+          1
+        ]
+      ],
+      "low_section_end": 44016,
+      "stack_allowance_bytes": 4096
+    },
+    {
+      "file": "out/bin/out_95_0.elf",
+      "sha256": "046bbb2aa31e3707f143df9ef29b408a339a6b5e39722c53eedf30d2d04eded2",
+      "rectangles": [
+        [
+          67,
+          8,
+          1,
+          1
+        ]
+      ],
+      "low_section_end": 44016,
+      "stack_allowance_bytes": 4096
+    }
+  ],
+  "remote_census_bytes": 4974083,
+  "remote_census_sha256": "11127781812fac22b62a489ae0aa03ebcac90d03f9abd3ac0f8c6d70fbe3cc6a",
+  "source_manifest_sha256": "8581b7e14a20348c74af6133b2582f2e2d9e2efa8a4a5c35c6531861022f6a94",
+  "note": "Every ELF SRAM record and every original application coordinate independently checked. A false passed field rejects admission; full census and ELF images remain on remote storage."
+}

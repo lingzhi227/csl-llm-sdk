@@ -1,10 +1,11 @@
 // Segment IDs are a device ABI, never arbitrary host-provided pointers.
 const device_task=@get_local_task_id(24);
 fn device_transfer() void {
- const c=sys.command;const segment=c[2];const first=c[3];const length=c[4];
- @assert(length>0 and length<=256 and first<65536 and first+length<65536);
- var pointer:[*]u32=bp;var half:[*]u16=msetup;var extent:u32=0;var bits:u16=32;var writable:bool=false;
- if(segment==0){pointer=bp;extent=@as(u32,bank_words);writable=true;}
+ const c=sys.command;const segment=c[2];
+ @assert(c[4]>0 and c[4]<=256 and c[3]<65536 and c[3]+c[4]<65536);
+ const first=@as(u16,c[3]);const length=@as(u16,c[4]);
+ var pointer:[*]u32=bp;var half:[*]u16=msetup;var extent:u16=0;var bits:u16=32;var writable:bool=false;
+ if(segment==0){pointer=bp;extent=bank_words;writable=true;}
  else if(segment==1){half=msetup;extent=40;bits=16;writable=true;}
  else if(segment==2){pointer=maudit;extent=6;}
  else if(segment==3){pointer=msp;extent=4;}
@@ -19,7 +20,7 @@ fn device_transfer() void {
  }else{
   @assert(c[1]==1);
   if(bits==32){sys.read32(@ptrcast([*]u32,&pointer[@as(u16,first)]),@as(u16,length));}
-  else{sys.read16(@ptrcast([*]u16,&half[@as(u16,first)]),@as(u16,length));}
+  else{if(comptime sys.routed){@assert(first%2==0 and length%2==0);}sys.read16(@ptrcast([*]u16,&half[first]),length);}
  }
 }
 task device_command() void {

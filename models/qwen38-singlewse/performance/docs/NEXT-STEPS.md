@@ -14,22 +14,25 @@
    advance to complete mixer/layer execution rather than an open-ended isolated
    optimization sweep. Host arm/start/finish and phase logging are diagnostic;
    device-driven admission and full backpressure remain future serving work.
-3. P36 admits the full original layer00 projection/norm/MLP bank candidate:
-   local compile016 covers11388 PEs, maximum48112incl4096stack; independent
-   reference001 conserves396953216 original bank bytes and verifies454400
-   mixed tiles through actual CSL descriptors. Use the explicit joint auxiliary
-   map for all53661 pages, including49152 GDN pages; old P31 state addresses are
-   superseded only in this candidate. The original four non-QKV row assignments
-   and every MLP bank prefix remain. All160 source and160 publication tests pass.
-   Next route the actual internal device control through the SDK gateway and
-   qualify C22 forwarding, full-bank initialization and neural contractions.
-   Preserve current SRAM gates; internal mixer minimum272B, norm352/368B and
-   controller8496B margins bound added code/buffers. Connect real conv/gates/GDN
-   consumers and adjacent stages with device-triggered input/retirement credits.
-   Place state arithmetic using the actual new state map; capacity-driven spills
-   reach133 relocation hops and are not evidence of efficient executed traffic.
-   Additional GDN/attention code and state communications need their own full
-   resource and numerical admission; do not call the current graph a full layer.
+3. P37 full routed compile017 covers11388 PEs with7714 ELF images and a
+   maximum48112bytes including4096 stack. Reference002 verifies396953216
+   original bank bytes,454400 mixed tiles,53661 auxiliary pages and every MLP
+   prefix against the actual emitted descriptors. Use its exact joint auxiliary
+   map, including49152 GDN pages; old P31/P36 auxiliary addresses do not apply
+   to this candidate. Selected full-bank control simulation019 passes572 commands, full retention
+   of60178 original words,19 SDK sentinel rounds and normal stop. All164 source
+   and publication tests pass.
+   Keep the full initialization/diagnostic control plane separate from neural
+   data paths: the3554-hop worst-case serialized return line is not a serving
+   schedule. Replace or correctly scope the prototype mixer SDK RPC with an
+   arrival-triggered device entry, then qualify original complete contractions.
+   Connect real conv/gates/GDN consumers and adjacent stages with device input
+   and retirement credits. Internal roles now have112–160bytes minimum SRAM
+   margin; the actual gateway has6800bytes. Place state arithmetic using the new
+   explicit map; capacity-driven spills reach154 relocation hops, which is not
+   evidence of efficient executed communication. Additional GDN/attention code,
+   state transport, numerical correctness and full-stage execution still require
+   separate admission. Preserve P31 as the accepted physical neural graph.
 4. Measure real stage and full request service. Current packing admits only two
    context96 request states; it does not establish concurrency sufficient for
    >=2000 aggregate tokens/s. Revisit bank program/loader size and distributed

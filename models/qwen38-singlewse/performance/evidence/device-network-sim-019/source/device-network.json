@@ -1,0 +1,360 @@
+{
+  "rect": [
+    0,
+    0,
+    3,
+    3
+  ],
+  "gateway": [
+    2,
+    2
+  ],
+  "workers": [
+    {
+      "pe": [
+        0,
+        0
+      ],
+      "tag": 1,
+      "reply_rx": "RAMP",
+      "reply_tx": "EAST"
+    },
+    {
+      "pe": [
+        1,
+        0
+      ],
+      "tag": 0,
+      "reply_rx": "WEST",
+      "reply_tx": "EAST"
+    },
+    {
+      "pe": [
+        2,
+        0
+      ],
+      "tag": 3509,
+      "reply_rx": "WEST",
+      "reply_tx": "SOUTH"
+    },
+    {
+      "pe": [
+        2,
+        1
+      ],
+      "tag": 3508,
+      "reply_rx": "NORTH",
+      "reply_tx": "WEST"
+    },
+    {
+      "pe": [
+        1,
+        1
+      ],
+      "tag": 3470,
+      "reply_rx": "EAST",
+      "reply_tx": "WEST"
+    },
+    {
+      "pe": [
+        0,
+        1
+      ],
+      "tag": 3420,
+      "reply_rx": "EAST",
+      "reply_tx": "SOUTH"
+    },
+    {
+      "pe": [
+        0,
+        2
+      ],
+      "tag": 3421,
+      "reply_rx": "NORTH",
+      "reply_tx": "EAST"
+    },
+    {
+      "pe": [
+        1,
+        2
+      ],
+      "tag": 3459,
+      "reply_rx": "WEST",
+      "reply_tx": "EAST"
+    }
+  ],
+  "routes": [
+    {
+      "pe": [
+        0,
+        2
+      ],
+      "color": 12,
+      "rx": [
+        "EAST"
+      ],
+      "tx": [
+        "NORTH",
+        "RAMP"
+      ],
+      "filter_tag": 3421
+    },
+    {
+      "pe": [
+        0,
+        1
+      ],
+      "color": 12,
+      "rx": [
+        "SOUTH"
+      ],
+      "tx": [
+        "NORTH",
+        "RAMP"
+      ],
+      "filter_tag": 3420
+    },
+    {
+      "pe": [
+        0,
+        0
+      ],
+      "color": 12,
+      "rx": [
+        "SOUTH"
+      ],
+      "tx": [
+        "RAMP"
+      ],
+      "filter_tag": 1
+    },
+    {
+      "pe": [
+        1,
+        2
+      ],
+      "color": 12,
+      "rx": [
+        "EAST"
+      ],
+      "tx": [
+        "WEST",
+        "NORTH",
+        "RAMP"
+      ],
+      "filter_tag": 3459
+    },
+    {
+      "pe": [
+        1,
+        1
+      ],
+      "color": 12,
+      "rx": [
+        "SOUTH"
+      ],
+      "tx": [
+        "NORTH",
+        "RAMP"
+      ],
+      "filter_tag": 3470
+    },
+    {
+      "pe": [
+        1,
+        0
+      ],
+      "color": 12,
+      "rx": [
+        "SOUTH"
+      ],
+      "tx": [
+        "RAMP"
+      ],
+      "filter_tag": 0
+    },
+    {
+      "pe": [
+        2,
+        2
+      ],
+      "color": 12,
+      "rx": [
+        "RAMP"
+      ],
+      "tx": [
+        "WEST",
+        "NORTH"
+      ]
+    },
+    {
+      "pe": [
+        2,
+        1
+      ],
+      "color": 12,
+      "rx": [
+        "SOUTH"
+      ],
+      "tx": [
+        "NORTH",
+        "RAMP"
+      ],
+      "filter_tag": 3508
+    },
+    {
+      "pe": [
+        2,
+        0
+      ],
+      "color": 12,
+      "rx": [
+        "SOUTH"
+      ],
+      "tx": [
+        "RAMP"
+      ],
+      "filter_tag": 3509
+    },
+    {
+      "pe": [
+        0,
+        0
+      ],
+      "color": 13,
+      "rx": [
+        "RAMP"
+      ],
+      "tx": [
+        "EAST"
+      ],
+      "exclusive_control_response": true
+    },
+    {
+      "pe": [
+        1,
+        0
+      ],
+      "color": 13,
+      "rx": [
+        "WEST"
+      ],
+      "tx": [
+        "EAST"
+      ],
+      "exclusive_control_response": true
+    },
+    {
+      "pe": [
+        2,
+        0
+      ],
+      "color": 13,
+      "rx": [
+        "WEST"
+      ],
+      "tx": [
+        "SOUTH"
+      ],
+      "exclusive_control_response": true
+    },
+    {
+      "pe": [
+        2,
+        1
+      ],
+      "color": 13,
+      "rx": [
+        "NORTH"
+      ],
+      "tx": [
+        "WEST"
+      ],
+      "exclusive_control_response": true
+    },
+    {
+      "pe": [
+        1,
+        1
+      ],
+      "color": 13,
+      "rx": [
+        "EAST"
+      ],
+      "tx": [
+        "WEST"
+      ],
+      "exclusive_control_response": true
+    },
+    {
+      "pe": [
+        0,
+        1
+      ],
+      "color": 13,
+      "rx": [
+        "EAST"
+      ],
+      "tx": [
+        "SOUTH"
+      ],
+      "exclusive_control_response": true
+    },
+    {
+      "pe": [
+        0,
+        2
+      ],
+      "color": 13,
+      "rx": [
+        "NORTH"
+      ],
+      "tx": [
+        "EAST"
+      ],
+      "exclusive_control_response": true
+    },
+    {
+      "pe": [
+        1,
+        2
+      ],
+      "color": 13,
+      "rx": [
+        "WEST"
+      ],
+      "tx": [
+        "EAST"
+      ],
+      "exclusive_control_response": true
+    },
+    {
+      "pe": [
+        2,
+        2
+      ],
+      "color": 13,
+      "rx": [
+        "WEST"
+      ],
+      "tx": [
+        "RAMP"
+      ],
+      "exclusive_control_response": true
+    }
+  ],
+  "maximum_outstanding": 1,
+  "command_encoding": "Two tag16|payload16 words per logical32-bit word",
+  "response_rule": "Only the addressed command owns injection. Restore transit RX after complete-response OQ flush.",
+  "compiled": false,
+  "executed": false,
+  "physical": false,
+  "audit": {
+    "passed": true,
+    "endpoints": 8,
+    "command_color": 12,
+    "response_color": 13,
+    "maximum_response_hops": 8,
+    "physical": false
+  }
+}

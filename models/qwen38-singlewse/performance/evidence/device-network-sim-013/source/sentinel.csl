@@ -1,0 +1,4 @@
+param memcpy_params;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+var sentinel=@zeros([2]u32);const sp:[*]u32=&sentinel;
+comptime {@export_symbol(sp,"sentinel");}

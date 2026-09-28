@@ -1,0 +1,20 @@
+{
+  "utc": "2026-09-28T11:33:26.953582+00:00",
+  "cancelled": true,
+  "physical": false,
+  "accepted": false,
+  "reason": "Proactive stop: observed simulator progress predicts full original-bank verification will exceed the frozen600s run cap. Preserve partial diagnostics; next attempt puts protocol checks first and has an explicit1200s cap.",
+  "last_progress": {
+    "phase": "exchange",
+    "command": 183,
+    "target": 3508,
+    "sequence": 23,
+    "opcode": 0
+  },
+  "prior_unit": {
+    "MainPID": "1643694",
+    "WorkingDirectory": "/srv/model-storage/qwen38-singlewse/runs/device-network-sim-018",
+    "ActiveState": "active"
+  },
+  "prior_command": "/usr/bin/flock -n /srv/cerebras-workstation/heavy.lock /usr/bin/python3 execute.py "
+}
