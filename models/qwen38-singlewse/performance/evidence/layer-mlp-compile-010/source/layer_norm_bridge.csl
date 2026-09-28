@@ -1,0 +1,120 @@
+// Two real residual/RMS operations around the complete original MLP. Each
+// owner retains128 residual BF16 values and two original128-value gain slices.
+// Fixed-color reductions/inverse broadcast; no output-queue color rebinding.
+// Diagnostic arm/start/finish remains; automatic request admission is future work.
+param memcpy_params;param bank_words:u16;param rank:u16;
+param sender_id:u16;param bus_rx:direction;param bus_tx:direction;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const fused=@import_module("mlp_fused.csl");const qwen=@import_module("qwen_math.csl");
+const math=@import_module("<math>");
+const ready=@get_local_task_id(13);
+const sender=@import_module("layer_mlp_sender.csl",.{.enabled=true,.norm_bridge=true,
+ .drained_task=ready,.bus_rx=bus_rx,.bus_tx=bus_tx,.actor=fused,.fusion_actor=false,
+ .sender_id=sender_id,.input_quantizer=true,.input_group=rank,
+ .output_sink=false,.sink_color=0,.sink_index=0,.sink_first=0,.sink_rows=4});
+var bank=@zeros([if(bank_words>0) bank_words else 1]u32);
+var residual=@zeros([64]u32);var gains=@zeros([128]u32);
+var chunk=@zeros([130]u32);var child=@zeros([1]f32);var total=@zeros([1]f32);var inverse=@zeros([1]f32);
+var audit=@zeros([4]u32);var setup=@zeros([5]u16);
+const bp:[*]u32=&bank;const rp:[*]u32=&residual;const gp:[*]u32=&gains;
+const ap:[*]u32=&audit;const sp:[*]u16=&setup;const qp:[*]u32=sender.input;const sa:[*]u32=sender.status_pointer;
+const cq=@get_input_queue(2);const iq=@get_input_queue(3);const dq=@get_input_queue(4);
+const oq=@get_output_queue(2);const bq=@get_output_queue(4);
+const cd=@get_dsr(dsr_dest,2);const cs=@get_dsr(dsr_src0,2);
+const id=@get_dsr(dsr_dest,3);const is=@get_dsr(dsr_src0,3);
+const dd=@get_dsr(dsr_dest,4);const ds=@get_dsr(dsr_src0,4);
+const od=@get_dsr(dsr_dest,6);const os=@get_dsr(dsr_src0,6);
+const bd=@get_dsr(dsr_dest,7);const bs=@get_dsr(dsr_src0,7);
+const ct=@get_local_task_id(8);const it=@get_local_task_id(9);const dt=@get_local_task_id(10);
+const ot=@get_local_task_id(11);const bt=@get_local_task_id(12);
+var epoch:u32=0;var round_index:u16=0;var active:bool=false;var started:bool=false;var finish_requested:bool=false;
+var local_ready:bool=false;var child_ready:bool=false;var inverse_ready:bool=false;var joined:bool=false;
+var reduction_busy:bool=false;var inverse_busy:bool=false;var normalized:bool=false;
+var square:f32=0.0;var correction:f32=0.0;
+fn receive_child() void {
+ if(comptime rank<39){
+  const m=@get_dsd(mem1d_dsd,.{.base_address=&child,.extent=1});const f=@get_dsd(fabin_dsd,.{.input_queue=cq,.extent=1});
+  @load_to_dsr(cd,m);@load_to_dsr(cs,f,.{.async=true,.ut_id=@get_ut_id(2),.activate=ct});@mov32(cd,cs,.{.async=true});
+ }
+}
+fn receive_inverse() void {
+ if(comptime rank>0){
+  const m=@get_dsd(mem1d_dsd,.{.base_address=&inverse,.extent=1});const f=@get_dsd(fabin_dsd,.{.input_queue=iq,.extent=1});
+  @load_to_dsr(id,m);@load_to_dsr(is,f,.{.async=true,.ut_id=@get_ut_id(3),.activate=it});@mov32(id,is,.{.async=true});
+ }
+}
+fn accumulate(value:f32) void {
+ const adjusted:f32=value*value-correction;const next:f32=square+adjusted;correction=(next-square)-adjusted;square=next;
+}
+fn residual_sum() void {
+ square=0.0;correction=0.0;
+ for(@range(u16,64))|i|{
+  const left=residual[i];const right=sender.input[i];
+  const a=qwen.round(qwen.expand(fused.low(left))+qwen.expand(fused.low(right)));
+  const b=qwen.round(qwen.expand(fused.high(left))+qwen.expand(fused.high(right)));
+  residual[i]=fused.pack(a,b);accumulate(qwen.expand(a));accumulate(qwen.expand(b));
+ }
+ local_ready=true;join_norm();
+}
+fn finish_if_drained() void {
+ if(round_index!=1 or !normalized or reduction_busy or inverse_busy or !sender.drained()){return;}
+ active=false;audit[3]=1;if(finish_requested){finish_requested=false;sys.unblock_cmd_stream();}
+}
+fn normalize_ready() void {
+ if(!inverse_ready or reduction_busy or normalized){return;}
+ normalized=true;
+ for(@range(u16,64))|i|{sender.input[i]=fused.normalized_pair(residual[i],gains[round_index*64+i],inverse[0]);}
+ audit[1]+=1;
+ if(round_index==0){
+  // The first partial has retired. Its receive buffers can now accept round1;
+  // the retained residual remains live through the down projection return.
+  round_index=1;local_ready=false;child_ready=rank==39;inverse_ready=false;joined=false;normalized=false;
+  receive_child();receive_inverse();sender.input_available();
+ }else{sender.successor_available();finish_if_drained();}
+}
+fn join_norm() void {
+ if(!local_ready or !child_ready or joined or reduction_busy or inverse_busy){return;}
+ joined=true;total[0]=square;if(comptime rank<39){total[0]+=child[0];}audit[2]+=1;
+ if(comptime rank==0){
+  inverse[0]=1.0/math.sqrt_f32(total[0]/5120.0+0.000001);inverse_ready=true;inverse_busy=true;
+  const m=@get_dsd(mem1d_dsd,.{.base_address=&inverse,.extent=1});const f=@get_dsd(fabout_dsd,.{.output_queue=bq,.extent=1});
+  @load_to_dsr(bs,m);@load_to_dsr(bd,f,.{.async=true,.ut_id=@get_ut_id(5),.activate=bt});@mov32(bd,bs,.{.async=true});
+  normalize_ready();
+ }else{
+  reduction_busy=true;
+  const m=@get_dsd(mem1d_dsd,.{.base_address=&total,.extent=1});const f=@get_dsd(fabout_dsd,.{.output_queue=oq,.extent=1});
+  @load_to_dsr(os,m);@load_to_dsr(od,f,.{.async=true,.ut_id=@get_ut_id(5),.activate=ot});@mov32(od,os,.{.async=true});
+ }
+}
+task child_arrived() void {child_ready=true;join_norm();}
+task inverse_arrived() void {inverse_ready=true;normalize_ready();}
+task partial_sent() void {reduction_busy=false;normalize_ready();}
+task inverse_sent() void {inverse_busy=false;join_norm();finish_if_drained();}
+task sender_drained() void {finish_if_drained();}
+task down_arrived() void {
+ @assert(active and round_index==1 and !local_ready and !normalized);
+ @assert(((chunk[0]&65535)|((chunk[1]&65535)<<16))==epoch);
+ for(@range(u16,130))|i|{@assert(chunk[i]>>16==@as(u32,rank));}
+ for(@range(u16,64))|i|{sender.input[i]=fused.pack(@as(u16,chunk[2+2*i]&65535),@as(u16,chunk[3+2*i]&65535));}
+ residual_sum();
+}
+fn arm(new_epoch:u32) void {
+ @assert(!active and !reduction_busy and !inverse_busy and (epoch==0 or sender.drained()) and new_epoch>epoch);
+ epoch=new_epoch;round_index=0;active=true;started=false;local_ready=false;child_ready=rank==39;inverse_ready=false;joined=false;normalized=false;
+ for(@range(u16,4))|i|{audit[i]=0;}audit[0]=epoch;sender.begin(epoch);receive_child();receive_inverse();
+ const m=@get_dsd(mem1d_dsd,.{.base_address=&chunk,.extent=130});const f=@get_dsd(fabin_dsd,.{.input_queue=dq,.extent=130});
+ @load_to_dsr(dd,m);@load_to_dsr(ds,f,.{.async=true,.ut_id=@get_ut_id(7),.activate=dt});@mov32(dd,ds,.{.async=true});
+ sys.unblock_cmd_stream();
+}
+fn start() void {@assert(active and !started);started=true;residual_sum();sys.unblock_cmd_stream();}
+fn finish() void {@assert(!finish_requested and epoch>0);finish_requested=true;finish_if_drained();}
+comptime {
+ @comptime_assert(rank<40);
+ if(rank<39){@initialize_queue(cq,.{.color=@get_color(4+(rank+1)%2)});@bind_local_task(child_arrived,ct);}
+ if(rank>0){@initialize_queue(iq,.{.color=@get_color(6)});@initialize_queue(oq,.{.color=@get_color(4+rank%2)});@bind_local_task(inverse_arrived,it);@bind_local_task(partial_sent,ot);}
+ else{@initialize_queue(bq,.{.color=@get_color(6)});@bind_local_task(inverse_sent,bt);}
+ @initialize_queue(dq,.{.color=@get_color(7)});@bind_local_task(down_arrived,dt);@bind_local_task(sender_drained,ready);
+ @export_symbol(bp,"bank");@export_symbol(ap,"audit");@export_symbol(sp,"setup");@export_symbol(qp,"quant_input");
+ @export_symbol(sa,"sender_status");@export_symbol(rp,"residual_input");@export_symbol(gp,"norm_gains");
+ @export_symbol(arm);@export_symbol(start);@export_symbol(finish);
+}

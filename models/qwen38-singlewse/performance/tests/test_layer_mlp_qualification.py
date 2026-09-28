@@ -38,9 +38,14 @@ class MlpQualificationTests(unittest.TestCase):
         for node in ast.walk(tree):
             if isinstance(node,ast.Call) and isinstance(node.func,ast.Name) and node.func.id=='copy':
                 if any(k.arg=='value' for k in node.keywords):uploads.add(node.args[0].value)
-        self.assertEqual(uploads,{'bank','silu_lut','setup','quant_input'})
+        self.assertEqual(uploads,{'bank','silu_lut','setup','quant_input','norm_gains','residual_input'})
         code=(ROOT/'runtime/run_layer_mlp.py').read_text()
         self.assertIn("runner.launch('finish',nonblock=False)",code)
+        # The extended graph admits original gains and the two initial boundary
+        # operands. MLP intermediates, norm oracle outputs and final residuals
+        # remain comparison-only; no additional neural upload endpoint exists.
+        for prohibited in ['successor_output','norm_pre_output','mlp_output','native_input','native_scales']:
+            self.assertNotIn(prohibited,uploads)
 
 
 if __name__=='__main__':unittest.main()

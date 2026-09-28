@@ -1,0 +1,18 @@
+{
+  "utc": "2026-09-28T06:39:45.482097+00:00",
+  "physical": false,
+  "full_model": false,
+  "first_complete_suite": {
+    "tests": 138,
+    "seconds": 98.983,
+    "failures": 1,
+    "reason": "Upload whitelist had not included newly authorized initial residual and original norm gain endpoints; no candidate output was uploaded."
+  },
+  "first_norm_test_failure": "Bit-pattern test treated negative zero as nonzero. Changed test to compare decoded floating zero, preserving exact residual bit comparisons.",
+  "focused_norm_tests": {
+    "passed": 4,
+    "seconds": 16.045
+  },
+  "final_full_suite_pending": false,
+  "final_test_receipt": "norm-bridge-tests-001.json"
+}

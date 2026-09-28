@@ -67,7 +67,8 @@ def main():
     if lut.shape!=(3328,) or banks.nbytes!=meta['allocated_bank_bytes']:raise ValueError('Fixture shape')
     index=json.loads(Path('bank-index.json').read_text())['records']
     workers=json.loads(Path('workers.json').read_text());binding=json.loads(Path('network-binding.json').read_text())
-    setups=json.loads(Path('worker-setups.json').read_text());senders=binding['senders']
+    setups=json.loads(Path('worker-setups.json').read_text());senders=binding['senders'];norm_bridge=bool(meta.get('norm_bridge'))
+    if norm_bridge!=bool(config.get('norm_bridge')) or norm_bridge!=bool(binding.get('norm_bridge')):raise ValueError('Norm graph/fixture mismatch')
     origin=config['logical_origin'];width,height=config['application'];controller=meta['controller']
     expected_audit=np.zeros((height,width,4),np.uint32)
     setup_array=np.zeros((height,width,5),np.uint32)
@@ -75,11 +76,16 @@ def main():
     for worker in workers:
         x,y=worker['pe'];expected_audit[y-origin[1],x-origin[0],1:]=[worker['parts'],worker['iterations'],1]
     expected_audit[controller[1]-origin[1],controller[0]-origin[0],1:]=[len(binding['prepare_schedule'])+len(binding['grant_schedule']),len(binding['grant_schedule']),1]
+    for sender in senders:
+        if sender.get('norm_bridge'):
+            x,y=sender['pe'];expected_audit[y-origin[1],x-origin[0],1:]=[2,0,1]
+            x,y=sender['norm_pe'];expected_audit[y-origin[1],x-origin[0],1:]=[2,2,1]
     grants=Counter(g['target'] for g in binding['grant_schedule']);prepares=Counter(g['target'] for g in binding['prepare_schedule']);captured={};observations=[]
     def save():np.savez('actual.npz',**captured)
     began=time.monotonic()
     with runtime(physical) as (runner,dtype,order):
         loaded=time.monotonic();names=['bank','setup','quant_input','silu_lut','audit','mlp_output','sender_status','native_input','native_scales','ticks','transport_stats']
+        if norm_bridge:names += ['residual_input','norm_gains','successor_output','bridge_stats','norm_pre_output']
         ids={name:runner.get_id(name) for name in names}
         def copy(name,pe,count,*,value=None,span=1,lines=1,half=False):
             opts=dict(streaming=False,order=order.ROW_MAJOR,nonblock=False,
@@ -100,6 +106,11 @@ def main():
             copy('bank',run[0]['pe'],count,value=banks[start:start+length],span=len(run))
         for sender in senders:
             if sender.get('fusion_producer') is not None:copy('silu_lut',sender['pe'],3328,value=lut.astype(np.uint32),half=True)
+        if norm_bridge:
+            for sender in senders:
+                if sender.get('norm_bridge'):
+                    g=sender['input_group'];gain=data['norm_gains'][:,g*128:(g+1)*128].astype('<u2',copy=True)
+                    copy('norm_gains',sender['norm_pe'],128,value=gain.reshape(-1).view('<u4'))
         copy('setup',origin,5,value=setup_array,span=width,lines=height,half=True)
         initialized=time.monotonic();print(json.dumps(dict(phase='initialized',seconds=initialized-loaded)),flush=True)
         input_runs=list(row_runs(workers,lambda w:(w['columns'],w['max_parts'])))
@@ -108,11 +119,15 @@ def main():
             for sender in senders:
                 if 'input_group' in sender:
                     group=sender['input_group'];values=data[f'input_{i}'][group*128:(group+1)*128]
-                    copy('quant_input',sender['pe'],64,value=values.astype('<u2',copy=False).view('<u4'))
+                    if norm_bridge:
+                        copy('residual_input',sender['norm_pe'],64,value=data[f'left_{i}'][group*128:(group+1)*128].astype('<u2',copy=False).view('<u4'))
+                        copy('quant_input',sender['norm_pe'],64,value=data[f'mixer_{i}'][group*128:(group+1)*128].astype('<u2',copy=False).view('<u4'))
+                    else:copy('quant_input',sender['pe'],64,value=values.astype('<u2',copy=False).view('<u4'))
             started=time.monotonic();runner.launch('arm',np.uint32(epoch),nonblock=False)
             runner.launch('start',nonblock=False);runner.launch('finish',nonblock=False)
             finished=time.monotonic()
             output=copy('mlp_output',controller,2560).view(np.uint16)
+            successor=copy('successor_output',controller,2560).view(np.uint16) if norm_bridge else None
             completed_output=time.monotonic();ticks=copy('ticks',controller,12,half=True)
             audit=copy('audit',origin,4,span=width,lines=height).reshape(height,width,4)
             captured[f'output_{i}']=output;captured[f'ticks_{i}']=ticks;captured[f'audit_{i}']=audit;save()
@@ -121,6 +136,17 @@ def main():
             np.testing.assert_array_equal(transport[:2],[packet_count,packet_count])
             if np.any(transport[2:]>len(binding['grant_schedule'])):raise ValueError('Invalid prefetch lease counters')
             np.testing.assert_array_equal(output,data[f'down_bf16_{i}'])
+            if norm_bridge:
+                captured[f'successor_{i}']=successor;bridge=copy('bridge_stats',controller,2);captured[f'bridge_{i}']=bridge;save()
+                np.testing.assert_array_equal(successor,data[f'successor_{i}']);np.testing.assert_array_equal(bridge,[40,40])
+                for sender in senders:
+                    if sender.get('norm_bridge'):
+                        group=sender['input_group'];first=group*128
+                        residual=copy('residual_input',sender['norm_pe'],64).view(np.uint16)
+                        preceding=copy('norm_pre_output',sender['pe'],64).view(np.uint16)
+                        captured[f'residual_{i}_{group}']=residual;captured[f'preceding_{i}_{group}']=preceding;save()
+                        np.testing.assert_array_equal(residual,data[f'residual_{i}'][first:first+128])
+                        np.testing.assert_array_equal(preceding,data[f'input_{i}'][first:first+128])
             expected_audit[:,:,0]=epoch;np.testing.assert_array_equal(audit,expected_audit)
             for sender in senders:
                 actual=copy('sender_status',sender['pe'],4);sid=sender['id'];captured[f'sender_{i}_{sid}']=actual
@@ -143,7 +169,8 @@ def main():
                         except AssertionError:save();raise
             stamps=[sum(int(ticks[offset+j])<<(16*j) for j in range(3)) for offset in range(0,12,3)]
             phases={name:(b-a)%(1<<48) for name,a,b in zip(['input_prepare_and_distribute','fused_gate_up_and_distribute','down_and_collect'],stamps,stamps[1:])}
-            observation=dict(**case,all_outputs_bit_exact=True,all_native_inputs_exact=True,all_counters_exact=True,
+            if norm_bridge:phases['down_residual_successor_rms_and_collect']=phases.pop('down_and_collect')
+            observation=dict(**case,all_norm_and_residuals_exact=True if norm_bridge else None,all_outputs_bit_exact=True,all_native_inputs_exact=True,all_counters_exact=True,
                 all_pe_drained=True,host_arm_start_finish_seconds=finished-started,completed_output_seconds=completed_output-started,
                 controller_cycles=(stamps[-1]-stamps[0])%(1<<48),controller_phase_cycles=phases,
                 controller_transport=dict(zip(['packets_issued','packets_retired','grants_during_packet_lease','frames_arrived_during_packet_lease'],map(int,transport))))
@@ -154,12 +181,19 @@ def main():
             np.testing.assert_array_equal(copy('bank',run[0]['pe'],count,span=len(run)),banks[start:start+length])
         for sender in senders:
             if sender.get('fusion_producer') is not None:np.testing.assert_array_equal(copy('silu_lut',sender['pe'],3328,half=True),lut)
+        if norm_bridge:
+            for sender in senders:
+                if sender.get('norm_bridge'):
+                    first=sender['input_group']*128
+                    retained_gains=copy('norm_gains',sender['norm_pe'],128).view(np.uint16).reshape(2,128)
+                    np.testing.assert_array_equal(retained_gains,data['norm_gains'][:,first:first+128])
         retained=time.monotonic();save()
     result=dict(passed=True,physical=physical,normal_stop=True,full_model=False,scope=meta['scope'],
         fixture_metadata_sha256=config['fixture_metadata_sha256'],original_weights_resident=True,
         all_original_banks_retained=True,all_luts_retained=True,all_native_inputs_exact=True,
         all_counters_exact=True,all_pe_drained=True,epochs=observations,
-        original_output_values_checked=4*5120,runtime_load_seconds=loaded-began,
+        norm_bridge=norm_bridge,all_norm_gains_retained=True if norm_bridge else None,
+        original_output_values_checked=4*5120,additional_norm_and_residual_values_checked=3*4*5120 if norm_bridge else 0,runtime_load_seconds=loaded-began,
         initialization_seconds=initialized-loaded,full_runtime_seconds=time.monotonic()-began,
         normal_stop_seconds=time.monotonic()-retained,full_model_tps=None)
     Path('result.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result),flush=True)

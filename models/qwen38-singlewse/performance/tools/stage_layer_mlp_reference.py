@@ -2,13 +2,14 @@
 import argparse,hashlib,io,json,shlex,subprocess,tarfile
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[2]
-parser=argparse.ArgumentParser();parser.add_argument('attempt');args=parser.parse_args()
+parser=argparse.ArgumentParser();parser.add_argument('attempt');parser.add_argument('--norm-bridge',action='store_true');parser.add_argument('--compiled',default='layer-mlp-compile-007');args=parser.parse_args()
 if len(args.attempt)!=3 or not args.attempt.isdigit():raise ValueError('Attempt')
 name='layer-mlp-reference-'+args.attempt;out=ROOT/'performance/evidence'/name
 if out.exists():raise ValueError('Frozen attempt')
 active=subprocess.run(['ssh','workstation','systemctl --user list-units --type=service --state=active,activating,deactivating --no-legend qwen38-single-*'],capture_output=True,text=True,check=True,timeout=20)
 if active.stdout.strip():raise ValueError('Active workstation owner: '+active.stdout)
-compiled=ROOT/'performance/evidence/layer-mlp-compile-007'
+if not __import__('re').fullmatch('layer-mlp-compile-[0-9]{3}',args.compiled):raise ValueError('Compiled attempt identity')
+compiled=ROOT/'performance/evidence'/args.compiled
 assert json.loads((compiled/'COMPLETE.json').read_text())['passed']
 assert json.loads((compiled/'workstation-release.json').read_text())['workstation_released']
 plan=json.loads((ROOT/'performance/evidence/layer-native-schedule-002/layer-schedule.json').read_text())
@@ -19,7 +20,19 @@ for dest,source in {'prepare_layer_mlp.py':'performance/reference/prepare_layer_
                     'weights.py':'runtime/weights.py','source_gate.py':'runtime/source_gate.py','tensors.json':'configs/tensors.json','hub.json':'configs/hub.json'}.items():files[dest]=(ROOT/source).read_bytes()
 files['stage.json']=(json.dumps(stage,separators=(',',':'))+'\n').encode()
 files['profiles.json']=(compiled/'source/profiles.json').read_bytes()
-files['binding.json']=(json.dumps(dict(compiled_profiles_sha256=hashlib.sha256(files['profiles.json']).hexdigest(),compile='layer-mlp-compile-007',scope='Complete original-layer bank initialization and full-MLP reference; no device/model execution.'),indent=2)+'\n').encode()
+binding=dict(compiled_profiles_sha256=hashlib.sha256(files['profiles.json']).hexdigest(),compile=args.compiled,scope='Complete original-layer bank initialization and full-MLP reference; no device/model execution.')
+if args.norm_bridge:
+    profiles=json.loads(files['profiles.json'])['profiles']
+    if sum(len(p['pes']) for p in profiles if p['source']=='layer_norm_bridge.csl')!=40:raise ValueError('Admitted forty norm owners required')
+    base=ROOT/'performance/evidence/layer-mlp-reference-001'
+    original=json.loads((base/'source/profiles.json').read_text())['profiles']
+    def banks(records):return {tuple(pe):r['parameters'].get('bank_words',0) for r in records for pe in r['pes']}
+    remaps=json.loads((compiled/'source/state-page-remap.json').read_text())
+    files['state-page-remap.json']=(json.dumps(remaps,indent=2)+'\n').encode()
+    if sum(banks(profiles).values())!=sum(banks(original).values()):raise ValueError('Original resident capacity changed')
+    binding.update(norm_bridge=True,bank_source='/srv/model-storage/qwen38-singlewse/runs/layer-mlp-reference-001',base_fixture_sha256=hashlib.sha256((base/'fixture.json').read_bytes()).hexdigest())
+    for module_name in ['prepare_layer_norm','norm_oracle','remap_banks']:files[module_name+'.py']=(ROOT/'performance/reference'/f'{module_name}.py').read_bytes()
+files['binding.json']=(json.dumps(binding,indent=2)+'\n').encode()
 files['execute.py']=b'''import json
 from pathlib import Path
 from source_gate import verify
@@ -30,6 +43,7 @@ try:
 except BaseException as e:
  Path('FAILURE.json').write_text(json.dumps(dict(error=type(e).__name__,message=str(e)))+'\\n');raise
 '''
+if args.norm_bridge:files['execute.py']=files['execute.py'].replace(b'from prepare_layer_mlp import main',b'from prepare_layer_norm import main')
 files['source-manifest.json']=(json.dumps(dict(files={n:hashlib.sha256(b).hexdigest() for n,b in files.items()}),indent=2)+'\n').encode()
 buffer=io.BytesIO()
 with tarfile.open(fileobj=buffer,mode='w') as archive:

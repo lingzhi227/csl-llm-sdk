@@ -5,8 +5,11 @@
    nonzero counts564289–564333. Four host observations improve versus P29 but
    remain slower than P28; no sustained wall speedup is established. Physical
    maximum48128incl4096stack controls admission, despite local compile48112.
-2. Integrate the preceding residual/RMS producer and following residual/next
-   normalization with the actual complete MLP. Use explicit stream endpoints,
+2. Qualify the implemented P31 preceding residual/RMS and following residual/next
+   normalization around the complete MLP: physical007 is dispatched against
+   admitted compile012 and independent reference002. Preserve every terminal
+   result and release receipt. The explicit800-page recurrent-state address map
+   is mandatory for subsequent mixer lowering. Use explicit stream endpoints,
    short credits and retained original gains/activations. Drive subsequent epoch
    arming from device arrivals after each PE retires its local leases; host-wide
    arm/finish RPCs in the diagnostic driver are outside the future serving path.

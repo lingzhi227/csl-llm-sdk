@@ -19,9 +19,10 @@ dispatch_hash=None
 if args.attempt.startswith('layer-'):
     import hashlib
     dispatch=destination.parent/'dispatch.json';raw=dispatch.read_bytes();record=json.loads(raw)
-    if record['remote']!=remote or record['physical'] is not False:
+    if not re.fullmatch('/srv/model-storage/qwen38-singlewse/runs/[a-zA-Z0-9_-]+',record['remote']) or record['physical'] is not False:
         raise ValueError('Invocation identity differs from the bounded workstation dispatch')
-    unit=record['unit'].removesuffix('.service')+'.service'
+    remote=record['remote'];unit=record['unit'].removesuffix('.service')+'.service'
+    if unit!='qwen38-single-'+Path(remote).name+'.service':raise ValueError('Frozen unit and directory do not name the same invocation')
     if not re.fullmatch(r'qwen38-single-[a-z0-9_-]+\.service',unit):raise ValueError('Unit identity')
     dispatch_hash=hashlib.sha256(raw).hexdigest()
 script = 'name=' + repr(args.attempt) + '\nunit='+repr(unit)+'\nexpected_remote='+repr(remote)+'\ndispatch_hash='+repr(dispatch_hash)+'\n' + '''import datetime,fcntl,hashlib,json,os,subprocess
@@ -57,7 +58,7 @@ with open('/srv/cerebras-workstation/heavy.lock','a') as f:
  try:fcntl.flock(f,fcntl.LOCK_EX|fcntl.LOCK_NB);free=True
  except BlockingIOError:free=False
 active=subprocess.run(['systemctl','--user','list-units','--type=service','--state=active,activating,deactivating','--no-legend','qwen38-single-*'],capture_output=True,text=True,check=True,timeout=10).stdout.strip()
-root=Path('/srv/model-storage/qwen38-singlewse/runs')/name
+root=Path(expected_remote)
 logs={}
 for name in ['prepare.log','compile.log','run.log','sim.log']:
  p=root/name

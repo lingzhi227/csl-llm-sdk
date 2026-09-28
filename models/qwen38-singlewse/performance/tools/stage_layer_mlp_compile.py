@@ -8,17 +8,18 @@ from pathlib import Path
 ROOT=Path(__file__).resolve().parents[2];sys.path.insert(0,str(ROOT/'performance'))
 from spatial.layer_mlp_network import build_mlp_network,worker_profiles,emit_routes
 from spatial.layer_schedule import rank_xy
+from spatial.layer_norm_banks import lower_norm_banks
 from spatial.layer_fused_routes import translate_routes
 
 
-def build(stage_name,native_loop="map",shared_inputs=False):
+def build(stage_name,native_loop="map",shared_inputs=False,norm_bridge=False):
     if native_loop not in ["map","unroll"]:raise ValueError("Native loop candidate")
     evidence=ROOT/'performance/evidence';schedule=evidence/'layer-native-schedule-002/layer-schedule.json'
     plan=json.loads(schedule.read_text());stage=next(s for s in plan['stages'] if s['id']==stage_name)
     gate=next(r for r in stage['regions'] if r['role']=='gate_up');shape='x'.join(map(str,gate['rect'][2:]))
     route_file=evidence/f'layer-fused-routes-003/routes-{shape}.json';template=json.loads(route_file.read_text())
     original=next(r for s in plan['stages'] for r in s['regions'] if r['id']==template['region'])
-    routes=translate_routes(template,original,gate);network=build_mlp_network(stage,routes,shared_inputs)
+    routes=translate_routes(template,original,gate);network=build_mlp_network(stage,routes,shared_inputs,norm_bridge)
     profiles=worker_profiles(stage,routes,network);ox,oy,width,height=stage['rect']
     mixer=next(r for r in stage['regions'] if r['role']=='mix')
     for c in mixer['banks']['classes']:
@@ -30,18 +31,27 @@ def build(stage_name,native_loop="map",shared_inputs=False):
             if pe==stage['request_controller']['pe']:
                 if payload:raise ValueError('Controller displaces an original bank')
                 continue
-            profiles.append(dict(pe=pe,parameters=dict(bank_words=payload//4),source='layer_mlp_standby.csl'))
-    profiles.append(dict(pe=stage['request_controller']['pe'],parameters=dict(gate_tail=network['gate_tail_workers'],down_tail=network['down_tail_workers'],shared_inputs=shared_inputs),source='layer_mlp_controller.csl'))
+            norm=next((s for s in network['senders'] if s.get('norm_bridge') and s['pe']==pe),None)
+            if norm:
+                bus=next(r for r in network['routes'] if r['color']==18 and r['pe']==pe)
+                profiles.append(dict(pe=pe,parameters=dict(bank_words=payload//4,rank=norm['input_group'],sender_id=norm['id'],
+                    bus_rx=bus['rx'][0],bus_tx=bus['tx'][0]),source='layer_norm_sender.csl'))
+            elif norm_bridge and any(s.get('norm_pe')==pe for s in network['senders']):
+                owner=next(s for s in network['senders'] if s.get('norm_pe')==pe)
+                profiles.append(dict(pe=pe,parameters=dict(bank_words=payload//4,rank=owner['input_group']),source='layer_norm_bridge.csl'))
+            else:profiles.append(dict(pe=pe,parameters=dict(bank_words=payload//4),source='layer_mlp_standby.csl'))
+    profiles.append(dict(pe=stage['request_controller']['pe'],parameters=dict(gate_tail=network['gate_tail_workers'],down_tail=network['down_tail_workers'],shared_inputs=shared_inputs,norm_bridge=norm_bridge),source='layer_mlp_controller.csl'))
     if len(profiles)!=width*height or len({tuple(p['pe']) for p in profiles})!=width*height:raise ValueError('Whole stage coverage')
-    files={}
+    page_remaps=lower_norm_banks(stage,profiles,norm_bridge)
+    files={'state-page-remap.json':(json.dumps(dict(pages=page_remaps,scope='Only these original recurrent state pages relocate; matrix ownership and total state capacity unchanged.'),indent=2)+'\n').encode()}
     module_files=['layer_native','layer_fusion_transport','layer_fusion_ingress','layer_fusion','layer_mlp_sender','mlp_fused','fp8_encode','fp8_unpack_shift']
     for name in module_files:files[name+'.csl']=(ROOT/f'performance/csl/{name}.csl').read_bytes()
-    for name in ['layer_projection','layer_mlp_controller','layer_mlp_standby']:files[name+'.csl']=(ROOT/f'performance/runtime/{name}.csl').read_bytes()
+    for name in ['layer_projection','layer_mlp_controller','layer_mlp_standby','layer_norm_bridge','layer_norm_sender']:files[name+'.csl']=(ROOT/f'performance/runtime/{name}.csl').read_bytes()
     for dest,source in {'fp8_shape.csl':'performance/probes/native_shapes/fp8_shape.csl','qwen_math.csl':'csl/qwen_math.csl',
                         'source_gate.py':'runtime/source_gate.py','elf_inventory.py':'runtime/elf_inventory.py',
                         'check_sram.py':'performance/runtime/check_sram.py','placement.py':'performance/runtime/placement.py',
                         'layer_mlp_network.py':'performance/spatial/layer_mlp_network.py','layer_fused_routes.py':'performance/spatial/layer_fused_routes.py',
-                        'layer_routes.py':'performance/spatial/layer_routes.py','layer_schedule.py':'performance/spatial/layer_schedule.py'}.items():files[dest]=(ROOT/source).read_bytes()
+                        'layer_norm_banks.py':'performance/spatial/layer_norm_banks.py','layer_routes.py':'performance/spatial/layer_routes.py','layer_schedule.py':'performance/spatial/layer_schedule.py'}.items():files[dest]=(ROOT/source).read_bytes()
     if native_loop=='unroll':files['fp8_shape.csl']=(ROOT/'performance/probes/native_shapes/fp8_unroll.csl').read_bytes()
     grants=network['grant_schedule'];fields={'targets':'target','kinds':'kind','indices':'index','words':'words','firsts':'first_row','rows':'rows'}
     preparations=network['prepare_schedule']
@@ -62,26 +72,27 @@ def build(stage_name,native_loop="map",shared_inputs=False):
         layout.append(' for(@range(u16,%d))|i|{@set_tile_code(%s[2*i],%s[2*i+1],"%s",.{.memcpy_params=memcpy.get_params(%s[2*i]),%s});}'%(len(coords)//2,name,name,c['source'],name,params))
     layout.append(emit_routes(network))
     layout += [' @export_name("%s",[*]%s,false);'%(n,t) for n,t in [('bank','u32'),('audit','u32'),('setup','u16'),('fusion_signal','u32'),('quant_input','u32'),('mlp_output','u32'),('sender_status','u32'),('silu_lut','u16'),('native_input','u16'),('native_scales','f32'),('ticks','u16'),('transport_stats','u32')]]
+    if norm_bridge:layout += [' @export_name("%s",[*]u32,false);'%n for n in ['residual_input','norm_gains','successor_output','bridge_stats','norm_pre_output']]
     layout += [' @export_name("arm",fn(u32)void);',' @export_name("start",fn()void);',' @export_name("finish",fn()void);',' @export_name("fusion_step",fn(u16,u32,u16,u16)void);','}']
     files['layout.csl']=('\n'.join(layout)+'\n').encode()
     files['profiles.json']=(json.dumps(dict(profiles=list(classes.values()),application=[width,height],physical=False,executed=False,
-        whole_stage=stage_name,scope='Original connected MLP component; mixer/state banks retained but inactive; no full-layer or model execution.'),separators=(',',':'))+'\n').encode()
+        whole_stage=stage_name,scope=('Residual/RMS -> complete original MLP -> residual/successor RMS; mixer/state banks retained but neural mixer inactive; numerical execution unqualified.' if norm_bridge else 'Original connected MLP component; mixer/state banks retained but inactive; no full-layer or model execution.')),separators=(',',':'))+'\n').encode()
     files['worker-setups.json']=(json.dumps(setups,separators=(',',':'))+'\n').encode()
     files['network-binding.json']=(json.dumps(dict(stage=stage_name,audit=network['audit'],senders=network['senders'],sinks=network['down_sinks'],grant_schedule=grants,prepare_schedule=preparations,
-        distribution_packets=network['distribution_packets'],shared_inputs=shared_inputs,controller_transport=network['controller_transport'],
+        distribution_packets=network['distribution_packets'],shared_inputs=shared_inputs,norm_bridge=norm_bridge,controller_transport=network['controller_transport'],
         network_sha256=hashlib.sha256(json.dumps(network,sort_keys=True,separators=(',',':')).encode()).hexdigest(),
         source_bindings={str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in [schedule,route_file]}),indent=2)+'\n').encode()
     return files,width,height,profiles
 
 
 def main():
-    parser=argparse.ArgumentParser();parser.add_argument('attempt');parser.add_argument('--stage',default='layer_00');parser.add_argument('--native-loop',choices=['map','unroll'],default='map');parser.add_argument('--shared-inputs',action='store_true');args=parser.parse_args()
+    parser=argparse.ArgumentParser();parser.add_argument('attempt');parser.add_argument('--stage',default='layer_00');parser.add_argument('--native-loop',choices=['map','unroll'],default='map');parser.add_argument('--shared-inputs',action='store_true');parser.add_argument('--norm-bridge',action='store_true');args=parser.parse_args()
     if len(args.attempt)!=3 or not args.attempt.isdigit():raise ValueError('Attempt')
     name='layer-mlp-compile-'+args.attempt;out=ROOT/'performance/evidence'/name
     if out.exists():raise ValueError('Frozen attempt')
     active=subprocess.run(['ssh','workstation','systemctl --user list-units --type=service --state=active,activating,deactivating --no-legend qwen38-single-*'],capture_output=True,text=True,check=True,timeout=20)
     if active.stdout.strip():raise ValueError('Live workstation owner: '+active.stdout)
-    files,width,height,profiles=build(args.stage,args.native_loop,args.shared_inputs)
+    files,width,height,profiles=build(args.stage,args.native_loop,args.shared_inputs,args.norm_bridge)
     script=r'''import json,os,signal,subprocess,time
 from pathlib import Path
 from source_gate import verify

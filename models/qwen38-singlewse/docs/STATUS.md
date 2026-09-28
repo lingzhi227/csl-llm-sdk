@@ -8,6 +8,20 @@ sentences and >=2000 aggregate completed generated tokens/s in sustained steady
 state. Independent requests may overlap. The old per-request target and broad
 whole-wafer shared-layer time overlay are superseded.
 
+P31 now has a compiled residual/RMS -> complete original MLP -> residual/next
+RMS graph. Forty norm owners and forty adjacent quantizer/bus endpoints use
+fixed-color arrivals and explicit buffer retirement. Compile012 admits all11388
+PEs, maximum48112 bytes including4096 stack. Two earlier SRAM rejections remain
+preserved. An explicit800-page local recurrent-state relocation conserves every
+original resident word and every native matrix coordinate. Future mixer lowering
+must honor that state-address map. Independent original-weight reference002 and
+139 source tests pass. The four workstation jobs are released; physical007 is
+now being compiled/qualified, so no new physical numerical or speed acceptance
+is claimed. See [NORM-MLP-BRIDGE.md](../performance/docs/NORM-MLP-BRIDGE.md).
+
+P30 remains the accepted physical MLP baseline described below; its resource
+release and timings refer to that completed attempt.
+
 P30 qualifies shared full/tail native input on physical006. One tagged wire
 copy now serves both original owner classes through exact/range RAMP filters.
 Native broadcast words halve from49,376 to24,688;176 group packets and all

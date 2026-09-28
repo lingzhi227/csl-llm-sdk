@@ -982,3 +982,16 @@ shapes, and a locally faster unroll exceeds full-layout SRAM on68PE; both are
 preserved without hardware trials. See SHARED-NATIVE-INPUTS.md and the bound
 shared-input-milestone-001.json. Residual/norm/device handoff, adjacent complete
 layers, complete original sentences and>=2000 aggregate tokens/s remain open.
+
+## P31: complete residual/RMS and MLP graph admission
+
+The new arrival-driven graph includes both full5120 residual/RMS operations,
+forty adjacent norm/quantizer pairs and the original full MLP, with no host
+intermediate neural uploads. Compile010 rejects40 combined actors at51872B;
+compile011 rejects80 split actors at49264B. Compile012 relocates800 explicit
+128B recurrent-state pages two rows north while conserving all396953216 resident
+bytes and every native matrix coordinate. All11388 PE gates pass, maximum48112B
+including4096 stack. Reference002 and139 source tests pass. All four workstation
+services release. Physical007 is dispatched; physical numeric, timing and final
+resource receipts remain pending. See NORM-MLP-BRIDGE.md. This is graph/compiler
+admission, not full-layer, full-model or model-speed acceptance.

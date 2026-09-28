@@ -1,0 +1,43 @@
+{
+  "utc": "2026-09-28T06:48:19.262248+00:00",
+  "unit": "qwen38-single-remap_banks.service",
+  "status": {
+    "MainPID": "0",
+    "Result": "success",
+    "ExecMainStatus": "0",
+    "ControlGroup": "",
+    "WorkingDirectory": "",
+    "LoadState": "not-found",
+    "ActiveState": "inactive",
+    "SubState": "dead"
+  },
+  "dispatch_sha256": "bfba69e962d889d47a94f46f64ec46efd8370a69f008cfc1206eab92a95395c6",
+  "invocation_journal": [
+    {
+      "USER_UNIT": "qwen38-single-remap_banks.service",
+      "USER_INVOCATION_ID": "7f33bbb15b6f42539194b5ae78ef62e7",
+      "MESSAGE": "Started /usr/bin/taskset --cpu-list 6,7 /usr/bin/flock -n /srv/cerebras-workstation/heavy.lock /usr/bin/python3 execute.py.",
+      "__REALTIME_TIMESTAMP": "1790578015405727"
+    },
+    {
+      "USER_UNIT": "qwen38-single-remap_banks.service",
+      "USER_INVOCATION_ID": "7f33bbb15b6f42539194b5ae78ef62e7",
+      "MESSAGE": "qwen38-single-remap_banks.service: Consumed 26.910s CPU time.",
+      "__REALTIME_TIMESTAMP": "1790578047665212",
+      "CPU_USAGE_NSEC": "26910816000"
+    }
+  ],
+  "cgroup_members": [],
+  "matching_processes": [],
+  "shared_lock_available": true,
+  "own_running_services": "",
+  "workstation_released": true,
+  "physical": false,
+  "logs": {
+    "run.log": {
+      "bytes": 32408,
+      "sha256": "e522f2be54f4826c0d0ee2b87df503854acc910e59b58d3f0091c3c8689d88ff",
+      "tail": "s.0.mlp.up_proj.weight\", \"through_row\": 16616, \"total_rows\": 17408}\n{\"phase\": \"reference\", \"case\": 2, \"matrix\": \"model.language_model.layers.0.mlp.up_proj.weight\", \"through_row\": 17152, \"total_rows\": 17408}\n{\"phase\": \"reference\", \"case\": 2, \"matrix\": \"model.language_model.layers.0.mlp.up_proj.weight\", \"through_row\": 17408, \"total_rows\": 17408}\n{\"phase\": \"reference\", \"case\": 2, \"matrix\": \"model.language_model.layers.0.mlp.down_proj.weight\", \"through_row\": 540, \"total_rows\": 5120}\n{\"phase\": \"reference\", \"case\": 2, \"matrix\": \"model.language_model.layers.0.mlp.down_proj.weight\", \"through_row\": 1080, \"total_rows\": 5120}\n{\"phase\": \"reference\", \"case\": 2, \"matrix\": \"model.language_model.layers.0.mlp.down_proj.weight\", \"through_row\": 1620, \"total_rows\": 5120}\n{\"phase\": \"reference\", \"case\": 2, \"matrix\": \"model.language_model.layers.0.mlp.down_proj.weight\", \"through_row\": 2160, \"total_rows\": 5120}\n{\"phase\": \"reference\", \"case\": 2, \"matrix\": \"model.language_model.layers.0.mlp.down_proj.weight\", \"through_row\": 2700, \"total_rows\": 5120}\n{\"phase\": \"reference\", \"case\": 2, \"matrix\": \"model.language_model.layers.0.mlp.down_proj.weight\", \"through_row\": 3240, \"total_rows\": 5120}\n{\"phase\": \"reference\", \"case\": 2, \"matrix\": \"model.language_model.layers.0.mlp.down_proj.weight\", \"through_row\": 3780, \"total_rows\": 5120}\n{\"phase\": \"reference\", \"case\": 2, \"matrix\": \"model.language_model.layers.0.mlp.down_proj.weight\", \"through_row\": 4320, \"total_rows\": 5120}\n{\"phase\": \"reference\", \"case\": 2, \"matrix\": \"model.language_model.layers.0.mlp.down_proj.weight\", \"through_row\": 4860, \"total_rows\": 5120}\n{\"phase\": \"reference\", \"case\": 2, \"matrix\": \"model.language_model.layers.0.mlp.down_proj.weight\", \"through_row\": 5120, \"total_rows\": 5120}\n{\"phase\": \"complete\", \"seconds\": 30.959565985947847, \"scope\": \"Actual residual/RMS -> complete original layer0 MLP -> residual/next-layer RMS subgraph. Host provides two initial BF16 boundary operands only. Original mixer/state banks retained but mixer/state neural execution and full model remain unqualified.\"}\n"
+    }
+  }
+}

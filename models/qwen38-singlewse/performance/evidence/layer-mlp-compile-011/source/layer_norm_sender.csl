@@ -1,0 +1,44 @@
+// Adjacent companion of one residual/RMS owner. Its first arrival is quantized
+// and sent to the original MLP; its second is the successor normalized output.
+// Separate PEs keep both actual programs inside the original resident bank map.
+param memcpy_params;param bank_words:u16;param rank:u16;
+param sender_id:u16;param bus_rx:direction;param bus_tx:direction;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const helper=@import_module("mlp_fused.csl");const dt=@get_local_task_id(9);
+const sender=@import_module("layer_mlp_sender.csl",.{.enabled=true,.norm_bridge=true,
+ .drained_task=dt,.bus_rx=bus_rx,.bus_tx=bus_tx,.actor=helper,.fusion_actor=false,
+ .sender_id=sender_id,.input_quantizer=true,.input_group=rank,
+ .output_sink=false,.sink_color=0,.sink_index=0,.sink_first=0,.sink_rows=4});
+var bank=@zeros([if(bank_words>0) bank_words else 1]u32);var incoming=@zeros([66]u32);
+var audit=@zeros([4]u32);var setup=@zeros([5]u16);var epoch:u32=0;var received:u16=0;
+var active:bool=false;var finish_requested:bool=false;
+const bp:[*]u32=&bank;const ap:[*]u32=&audit;const sp:[*]u16=&setup;const sa:[*]u32=sender.status_pointer;
+const iq=@get_input_queue(2);const id=@get_dsr(dsr_dest,2);const is=@get_dsr(dsr_src0,2);const it=@get_local_task_id(8);
+fn receive() void {
+ const m=@get_dsd(mem1d_dsd,.{.base_address=&incoming,.extent=66});const f=@get_dsd(fabin_dsd,.{.input_queue=iq,.extent=66});
+ @load_to_dsr(id,m);@load_to_dsr(is,f,.{.async=true,.ut_id=@get_ut_id(2),.activate=it});@mov32(id,is,.{.async=true});
+}
+fn finish_if_drained() void {
+ if(received!=2 or !sender.drained()){return;}active=false;audit[3]=1;
+ if(finish_requested){finish_requested=false;sys.unblock_cmd_stream();}
+}
+task arrived() void {
+ @assert(active and received<2 and incoming[0]==epoch and incoming[1]==@as(u32,received));
+ const src=@get_dsd(mem1d_dsd,.{.base_address=&incoming[2],.extent=64});
+ const dst=@get_dsd(mem1d_dsd,.{.base_address=sender.input,.extent=64});@mov32(dst,src);
+ received+=1;audit[1]+=1;
+ if(received==1){sender.input_available();receive();}else{sender.successor_available();finish_if_drained();}
+}
+task drained() void {finish_if_drained();}
+fn arm(new_epoch:u32) void {
+ @assert(!active and (epoch==0 or sender.drained()) and new_epoch>epoch);
+ epoch=new_epoch;received=0;active=true;for(@range(u16,4))|i|{audit[i]=0;}audit[0]=epoch;
+ sender.begin(epoch);receive();sys.unblock_cmd_stream();
+}
+fn start() void {sys.unblock_cmd_stream();}
+fn finish() void {@assert(!finish_requested and epoch>0);finish_requested=true;finish_if_drained();}
+comptime {
+ @initialize_queue(iq,.{.color=@get_color(8)});@bind_local_task(arrived,it);@bind_local_task(drained,dt);
+ @export_symbol(bp,"bank");@export_symbol(ap,"audit");@export_symbol(sp,"setup");@export_symbol(sa,"sender_status");
+ @export_symbol(arm);@export_symbol(start);@export_symbol(finish);
+}

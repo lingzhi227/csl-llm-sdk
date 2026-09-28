@@ -10,7 +10,7 @@ from stage_layer_mlp_compile import build
 
 
 def main():
-    parser=argparse.ArgumentParser();parser.add_argument('attempt');parser.add_argument('--reuse-download');parser.add_argument('--reuse-admitted');parser.add_argument('--reuse-payload');parser.add_argument('--shared-inputs',action='store_true');args=parser.parse_args()
+    parser=argparse.ArgumentParser();parser.add_argument('attempt');parser.add_argument('--reuse-download');parser.add_argument('--reuse-admitted');parser.add_argument('--reuse-payload');parser.add_argument('--shared-inputs',action='store_true');parser.add_argument('--norm-bridge',action='store_true');parser.add_argument('--reference',default='layer-mlp-reference-001');args=parser.parse_args()
     if args.reuse_payload and (args.reuse_download or not re.fullmatch('layer-mlp-hw-[0-9]{3}',args.reuse_payload)):
         raise ValueError('Payload-only reuse requires one valid attempt and a fresh compiler')
     if args.reuse_admitted and (not args.reuse_download or not re.fullmatch('layer-mlp-hw-[0-9]{3}',args.reuse_admitted)):
@@ -18,13 +18,15 @@ def main():
     if not re.fullmatch('[0-9]{3}',args.attempt):raise ValueError('Attempt')
     name='layer-mlp-hw-'+args.attempt;out=ROOT/'performance/evidence'/name
     if out.exists():raise ValueError('Frozen attempt')
-    reference=ROOT/'performance/evidence/layer-mlp-reference-001'
+    if not re.fullmatch('layer-mlp-reference-[0-9]{3}',args.reference):raise ValueError('Reference identity')
+    reference=ROOT/'performance/evidence'/args.reference
     receipt=json.loads((reference/'COMPLETE.json').read_text());meta=json.loads((reference/'fixture.json').read_text())
     if not receipt['passed'] or not json.loads((reference/'workstation-release.json').read_text())['workstation_released']:
         raise ValueError('Completed and released independent reference required')
     expected=receipt['fixture_sha256']
     if hashlib.sha256((reference/'fixture.json').read_bytes()).hexdigest()!=expected:raise ValueError('Fixture identity')
-    files,width,height,profiles=build('layer_00',shared_inputs=args.shared_inputs)
+    if bool(meta.get('norm_bridge'))!=args.norm_bridge:raise ValueError('Reference graph mismatch')
+    files,width,height,profiles=build('layer_00',shared_inputs=args.shared_inputs,norm_bridge=args.norm_bridge)
     # The bank fixture was built against actual complete compile007 payloads.
     compiled={tuple(pe):p['parameters'].get('bank_words',0) for p in json.loads((reference/'source/profiles.json').read_text())['profiles'] for pe in p['pes']}
     if compiled!={tuple(p['pe']):p['parameters'].get('bank_words',0) for p in profiles}:raise ValueError('Original bank extents changed')
@@ -36,7 +38,7 @@ def main():
             native_input_slices=p['native_input_slices']))
     files['workers.json']=(json.dumps(workers,separators=(',',':'))+'\n').encode()
     for n in ['fixture.json','bank-index.json','silu-proof.json']:files[n]=(reference/n).read_bytes()
-    config=dict(complete_original_mlp=True,stage='layer_00',revision=meta['revision'],application=[width,height],
+    config=dict(norm_bridge=args.norm_bridge,complete_original_mlp=True,stage='layer_00',revision=meta['revision'],application=[width,height],
         application_pes=width*height,mlp_shape=meta['original_mlp_shape'],fabric_offset=[67,1],logical_origin=[63,0],
         artifact_single_message_limit=64<<20,compiler_timeout_seconds=900,run_timeout_seconds=900,
         fixture_metadata_sha256=expected,acceptance=meta['acceptance'],full_model=False,scope=meta['scope'])
@@ -81,7 +83,7 @@ print(json.dumps(dict(artifact_name=p.name,artifact_sha256=h.hexdigest(),artifac
     # Record the immutable source before payload transport so a transfer failure
     # cannot be confused with an absent or reusable attempt.
     out.mkdir();(out/'source-manifest.json').write_bytes(files['source-manifest.json'])
-    (out/'staging.json').write_text(json.dumps(dict(remote=dest,reference='layer-mlp-reference-001',physical_dispatched=False),indent=2)+'\n')
+    (out/'staging.json').write_text(json.dumps(dict(remote=dest,reference=args.reference,physical_dispatched=False),indent=2)+'\n')
     if reuse:
         admitted='/srv/qwen38-singlewse-hardware/'+args.reuse_admitted if args.reuse_admitted else None
         script='previous='+repr(previous)+'\nroot='+repr(dest)+'\ninfo='+repr(reuse)+'\nadmitted='+repr(admitted)+'\n'+'''import hashlib,json,os,resource
@@ -143,7 +145,8 @@ verify();print(json.dumps(dict(payload_verified=True,reused_remote_files=True,pa
         (out/'payload-staging.json').write_text(result.stdout)
         print(json.dumps(dict(name=name,payload_reused=args.reuse_payload,fresh_compilation_required=True,physical_dispatched=False)),flush=True)
         return
-    remote='/srv/model-storage/qwen38-singlewse/runs/layer-mlp-reference-001'
+    remote=json.loads((reference/'dispatch.json').read_text())['remote']
+    if not re.fullmatch('/srv/model-storage/qwen38-singlewse/runs/[a-zA-Z0-9_-]+',remote):raise ValueError('Frozen reference dispatch identity')
     reader=subprocess.Popen(['ssh','workstation','tar -cf - -C '+shlex.quote(remote)+' banks.npy fixture.npz silu-table.npy'],stdout=subprocess.PIPE)
     try:subprocess.run(session+['tar -xf - -C '+shlex.quote(dest)],stdin=reader.stdout,check=True,timeout=600)
     finally:

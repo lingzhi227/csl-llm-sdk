@@ -1,0 +1,8 @@
+{
+  "utc": "2026-09-28T06:48:03.483179+00:00",
+  "expected_name": "layer-mlp-reference-002",
+  "actual_remote": "/srv/model-storage/qwen38-singlewse/runs/remap_banks",
+  "actual_unit": "qwen38-single-remap_banks.service",
+  "reason": "New module copy loop reused the deployer run-name variable. The frozen sources/fixture body are unchanged. Existing invocation observed through its actual dispatch binding; no duplicate run or directory rename. Deployer now uses module_name.",
+  "accepted_result": false
+}
