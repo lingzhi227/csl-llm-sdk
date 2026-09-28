@@ -1,0 +1,70 @@
+{
+  "passed": true,
+  "physical": true,
+  "normal_stop": true,
+  "full_model": false,
+  "scope": "Complete original-weight MLP component; host supplies only initial BF16 boundary fixtures. Enclosing mixer weights are loaded but mixer/state operations are inactive. Not complete neural layer or model inference.",
+  "fixture_metadata_sha256": "128f186bae76c0876cddd399e46fe57b6fd450991379bc9f0a519be616c7bc7f",
+  "original_weights_resident": true,
+  "all_original_banks_retained": true,
+  "all_luts_retained": true,
+  "all_native_inputs_exact": true,
+  "all_counters_exact": true,
+  "all_pe_drained": true,
+  "epochs": [
+    {
+      "index": 0,
+      "epoch": 1,
+      "mode": "normalized_nonzero",
+      "replay_of": null,
+      "all_outputs_bit_exact": true,
+      "all_native_inputs_exact": true,
+      "all_counters_exact": true,
+      "all_pe_drained": true,
+      "host_arm_start_finish_seconds": 0.0018003862351179123,
+      "controller_cycles": 2844472
+    },
+    {
+      "index": 1,
+      "epoch": 2,
+      "mode": "zero_after_nonzero",
+      "replay_of": null,
+      "all_outputs_bit_exact": true,
+      "all_native_inputs_exact": true,
+      "all_counters_exact": true,
+      "all_pe_drained": true,
+      "host_arm_start_finish_seconds": 0.001989087089896202,
+      "controller_cycles": 2358523
+    },
+    {
+      "index": 2,
+      "epoch": 3,
+      "mode": "changed_nonzero",
+      "replay_of": null,
+      "all_outputs_bit_exact": true,
+      "all_native_inputs_exact": true,
+      "all_counters_exact": true,
+      "all_pe_drained": true,
+      "host_arm_start_finish_seconds": 0.0016099335625767708,
+      "controller_cycles": 2844301
+    },
+    {
+      "index": 3,
+      "epoch": 4,
+      "mode": "warm_replay",
+      "replay_of": 0,
+      "all_outputs_bit_exact": true,
+      "all_native_inputs_exact": true,
+      "all_counters_exact": true,
+      "all_pe_drained": true,
+      "host_arm_start_finish_seconds": 0.0014846734702587128,
+      "controller_cycles": 2844443
+    }
+  ],
+  "original_output_values_checked": 20480,
+  "runtime_load_seconds": 323.4856069153175,
+  "initialization_seconds": 3.1223131930455565,
+  "full_runtime_seconds": 340.38765877112746,
+  "normal_stop_seconds": 1.86972273606807,
+  "full_model_tps": null
+}

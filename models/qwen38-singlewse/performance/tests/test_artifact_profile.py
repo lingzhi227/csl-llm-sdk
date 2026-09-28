@@ -7,6 +7,20 @@ spec=importlib.util.spec_from_file_location('performance_backend',Path(__file__)
 backend=importlib.util.module_from_spec(spec);spec.loader.exec_module(backend)
 
 class ArtifactProfileTests(unittest.TestCase):
+    def test_complete_mlp_has_exact_separate_64_mib_gate(self):
+        profile=dict(complete_original_mlp=True,stage='layer_00',application=[78,146],application_pes=11388,
+                     mlp_shape=[5120,17408,5120],fabric_offset=[67,1],
+                     revision='017b9c7af6b5689d5dd426a76e0bc077eb5ca20a',artifact_single_message_limit=64<<20)
+        self.assertTrue(backend.complete_mlp_profile(profile))
+        self.assertEqual(backend.message_limit(profile),64<<20)
+        for key in profile:
+            if key=='artifact_single_message_limit':continue
+            changed=dict(profile);changed.pop(key)
+            self.assertFalse(backend.complete_mlp_profile(changed))
+            with self.assertRaises(ValueError):backend.message_limit(changed)
+        for value in [0,(64<<20)+1,128<<20]:
+            with self.assertRaises(ValueError):backend.message_limit(dict(profile,artifact_single_message_limit=value))
+
     def test_larger_archive_requires_every_exact_matrix_geometry_field(self):
         profile=dict(complete_original_matrix=True,application=[631,2],application_pes=1262,
                      matrix_shape=[48,5120],fabric_offset=[123,706],artifact_single_message_limit=16<<20)

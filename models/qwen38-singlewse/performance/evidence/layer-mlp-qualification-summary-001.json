@@ -1,0 +1,58 @@
+{
+  "milestone": "P27",
+  "scope": "Complete original-weight MLP component; host supplies only initial BF16 boundary fixtures. Enclosing mixer weights are loaded but mixer/state operations are inactive. Not complete neural layer or model inference.",
+  "physical_complete_original_mlp": true,
+  "full_model": false,
+  "full_model_speed_target_achieved": false,
+  "accepted_physical": "layer-mlp-hw-003",
+  "compiler_service": "layer-mlp-hw-001",
+  "independent_reference": "layer-mlp-reference-001",
+  "silu_oracle": "layer-silu-oracle-001",
+  "original_mlp_shape": [
+    5120,
+    17408,
+    5120
+  ],
+  "original_output_values_checked": 20480,
+  "application_pes": 11388,
+  "native_workers": 7833,
+  "original_resident_bank_bytes": 396953216,
+  "source_matches_executed_csl": true,
+  "source_matches_executed_driver": true,
+  "maximum_sram_with_stack": 48128,
+  "minimum_sram_margin": 0,
+  "artifact_bytes": 54461067,
+  "artifact_sha256": "e02ad7eb8fb2e7657907dc9a53bb8a844f69f573549530a80c81ca62c549799d",
+  "component_device_cycles": [
+    2844472,
+    2358523,
+    2844301,
+    2844443
+  ],
+  "runtime_load_seconds": 323.4856069153175,
+  "initialization_seconds": 3.1223131930455565,
+  "full_runtime_seconds": 340.38765877112746,
+  "cycle_to_seconds_calibration_performed": false,
+  "host_arm_start_finish_metric": "Recorded RPC call interval; not a calibrated device computation latency or model TPS.",
+  "neural_intermediates_computed_on_device": true,
+  "all_native_inputs_exact": true,
+  "all_counters_exact": true,
+  "all_original_banks_retained": true,
+  "all_pe_drained": true,
+  "warm_reset_replay_passed": true,
+  "all_owned_hardware_released": true,
+  "hardware_jobs_added": 3,
+  "source_tests_passed": 122,
+  "source_test_seconds": 40.602,
+  "preserved_failures": {
+    "001": "Compiler service SUCCEEDED/released; host file-size guard rejected two metadata-heavy ELF files before runtime; 002 admitted same artifact with2MiB file cap and unchanged48128-byte SRAM cap.",
+    "002": "Client gRPC request serialization failed before device neural execution; owned runtime cancelled/released.003 uses bounded row reads without full-bank mmap, same CSL/artifact/criteria."
+  },
+  "source_bindings": {
+    "source-manifest.json": "9ef1736f6b7bae73eb1891ddad2d6481691c3c7af9b6bf6ac63f95d18ed518b6",
+    "result.json": "0db5e57da91bce91653c0775717d1e1ee958642037bbb4d11bea4943655f1ecc",
+    "run-audit.json": "ad711844100004ba5b9dd8818f4ab0fec749d4907dc1f513f5a3fbe0dead43e2",
+    "sram-summary.json": "44e9008750056c278c1cf8820f82d7151b77fa853b090c720affe1caf45ac9bb",
+    "raw-binding.json": "d91639c1c73a9e263fdf1afd1192d4bd78c20523a908d04cde325930d0a270ae"
+  }
+}

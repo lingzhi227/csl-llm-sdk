@@ -8,7 +8,7 @@ import subprocess
 
 ROOT = Path(__file__).resolve().parents[1]
 parser = argparse.ArgumentParser(); parser.add_argument('attempt'); args = parser.parse_args()
-if not re.fullmatch('(?:[a-z][a-z0-9-]*-sim|projection-audit|atlas-audit|columnar-audit|coupled-audit|retiled-comparison-audit|layer-backend-compile|layer-projection-compile|layer-mlp-compile|layer-weight-audit)-[0-9]{3}', args.attempt):
+if not re.fullmatch('(?:[a-z][a-z0-9-]*-sim|projection-audit|atlas-audit|columnar-audit|coupled-audit|retiled-comparison-audit|layer-backend-compile|layer-projection-compile|layer-mlp-compile|layer-mlp-reference|layer-silu-oracle|layer-weight-audit)-[0-9]{3}', args.attempt):
     raise ValueError('Simulator or metadata-audit attempt required')
 destination = ROOT / 'evidence' / args.attempt / 'workstation-release.json'
 if destination.exists():

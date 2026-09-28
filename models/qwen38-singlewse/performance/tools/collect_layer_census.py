@@ -8,10 +8,11 @@ import subprocess
 
 ROOT = Path(__file__).resolve().parents[1]
 parser = argparse.ArgumentParser(); parser.add_argument('attempt'); args = parser.parse_args()
-if not re.fullmatch('layer-(projection|mlp)-compile-[0-9]{3}', args.attempt): raise ValueError('Attempt')
+if not re.fullmatch('layer-((projection|mlp)-compile|mlp-hw)-[0-9]{3}', args.attempt): raise ValueError('Attempt')
+physical='-hw-' in args.attempt
 out = ROOT/'evidence'/args.attempt/'sram-summary.json'
 if out.exists(): raise ValueError('Frozen summary')
-remote = '/srv/model-storage/qwen38-singlewse/runs/'+args.attempt
+remote = ('/srv/qwen38-singlewse-hardware/' if physical else '/srv/model-storage/qwen38-singlewse/runs/')+args.attempt
 script = 'root='+repr(remote)+'\n'+'''import hashlib,json
 from collections import Counter
 from pathlib import Path
@@ -38,7 +39,8 @@ print(json.dumps(dict(passed=True,physical=False,executed=False,application=s['a
  source_manifest_sha256=hashlib.sha256((r/'source-manifest.json').read_bytes()).hexdigest(),
  note='Every ELF SRAM record and every original application coordinate independently checked. Full census and ELF images remain on remote storage.')))
 '''
-result = subprocess.run(['ssh','workstation','python3 -c '+shlex.quote(script)],capture_output=True,text=True,check=True,timeout=30)
+connection=['sh','/path/to/alcf-session.sh','host'] if physical else ['ssh','workstation']
+result = subprocess.run(connection+['python3 -c '+shlex.quote(script)],capture_output=True,text=True,check=True,timeout=30)
 data = json.loads(result.stdout)
 with out.open('x') as f: json.dump(data,f,indent=2);f.write('\n')
 print(json.dumps({k:v for k,v in data.items() if k not in ['bytes_to_pe_count','maximum_examples']}))

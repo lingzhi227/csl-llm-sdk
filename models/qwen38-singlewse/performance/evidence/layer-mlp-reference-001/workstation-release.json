@@ -1,0 +1,43 @@
+{
+  "utc": "2026-09-28T03:54:41.716924+00:00",
+  "unit": "qwen38-single-layer-mlp-reference-001.service",
+  "status": {
+    "MainPID": "0",
+    "Result": "success",
+    "ExecMainStatus": "0",
+    "ControlGroup": "",
+    "WorkingDirectory": "",
+    "LoadState": "not-found",
+    "ActiveState": "inactive",
+    "SubState": "dead"
+  },
+  "dispatch_sha256": "f190011f8a018ff333334d3ca59500de00063f08fb0c6aa396812bf8bc1f3aba",
+  "invocation_journal": [
+    {
+      "USER_UNIT": "qwen38-single-layer-mlp-reference-001.service",
+      "USER_INVOCATION_ID": "72f469797f534de9bea9cdad9aaf6f5a",
+      "MESSAGE": "Started /usr/bin/taskset --cpu-list 6,7 /usr/bin/flock -n /srv/cerebras-workstation/heavy.lock /usr/bin/python3 execute.py.",
+      "__REALTIME_TIMESTAMP": "1790567570568950"
+    },
+    {
+      "USER_UNIT": "qwen38-single-layer-mlp-reference-001.service",
+      "USER_INVOCATION_ID": "72f469797f534de9bea9cdad9aaf6f5a",
+      "MESSAGE": "qwen38-single-layer-mlp-reference-001.service: Consumed 40.468s CPU time.",
+      "__REALTIME_TIMESTAMP": "1790567614295799",
+      "CPU_USAGE_NSEC": "40468249000"
+    }
+  ],
+  "cgroup_members": [],
+  "matching_processes": [],
+  "shared_lock_available": true,
+  "own_running_services": "",
+  "workstation_released": true,
+  "physical": false,
+  "logs": {
+    "run.log": {
+      "bytes": 34770,
+      "sha256": "41ee47594bc7d1af2d1d94da455cf4c6ac644acc8bb0a9930f85f8d159d8e28f",
+      "tail": "l_rows\": 17408}\n{\"phase\": \"reference\", \"case\": 2, \"matrix\": \"model.language_model.layers.0.mlp.up_proj.weight\", \"through_row\": 16080, \"total_rows\": 17408}\n{\"phase\": \"reference\", \"case\": 2, \"matrix\": \"model.language_model.layers.0.mlp.up_proj.weight\", \"through_row\": 16616, \"total_rows\": 17408}\n{\"phase\": \"reference\", \"case\": 2, \"matrix\": \"model.language_model.layers.0.mlp.up_proj.weight\", \"through_row\": 17152, \"total_rows\": 17408}\n{\"phase\": \"reference\", \"case\": 2, \"matrix\": \"model.language_model.layers.0.mlp.up_proj.weight\", \"through_row\": 17408, \"total_rows\": 17408}\n{\"phase\": \"reference\", \"case\": 2, \"matrix\": \"model.language_model.layers.0.mlp.down_proj.weight\", \"through_row\": 540, \"total_rows\": 5120}\n{\"phase\": \"reference\", \"case\": 2, \"matrix\": \"model.language_model.layers.0.mlp.down_proj.weight\", \"through_row\": 1080, \"total_rows\": 5120}\n{\"phase\": \"reference\", \"case\": 2, \"matrix\": \"model.language_model.layers.0.mlp.down_proj.weight\", \"through_row\": 1620, \"total_rows\": 5120}\n{\"phase\": \"reference\", \"case\": 2, \"matrix\": \"model.language_model.layers.0.mlp.down_proj.weight\", \"through_row\": 2160, \"total_rows\": 5120}\n{\"phase\": \"reference\", \"case\": 2, \"matrix\": \"model.language_model.layers.0.mlp.down_proj.weight\", \"through_row\": 2700, \"total_rows\": 5120}\n{\"phase\": \"reference\", \"case\": 2, \"matrix\": \"model.language_model.layers.0.mlp.down_proj.weight\", \"through_row\": 3240, \"total_rows\": 5120}\n{\"phase\": \"reference\", \"case\": 2, \"matrix\": \"model.language_model.layers.0.mlp.down_proj.weight\", \"through_row\": 3780, \"total_rows\": 5120}\n{\"phase\": \"reference\", \"case\": 2, \"matrix\": \"model.language_model.layers.0.mlp.down_proj.weight\", \"through_row\": 4320, \"total_rows\": 5120}\n{\"phase\": \"reference\", \"case\": 2, \"matrix\": \"model.language_model.layers.0.mlp.down_proj.weight\", \"through_row\": 4860, \"total_rows\": 5120}\n{\"phase\": \"reference\", \"case\": 2, \"matrix\": \"model.language_model.layers.0.mlp.down_proj.weight\", \"through_row\": 5120, \"total_rows\": 5120}\n{\"phase\": \"complete\", \"seconds\": 42.41570287756622, \"allocated_bank_bytes\": 396953216}\n"
+    }
+  }
+}

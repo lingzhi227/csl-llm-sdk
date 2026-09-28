@@ -1,0 +1,132 @@
+"""Full original MLP device qualification; host provides only boundary inputs.
+
+Every intermediate computation and route executes on the device. Frozen oracle
+arrays are read only for post-execution comparisons. All copies are bounded by
+one physical row; no per-layer weight streaming occurs between warm epochs.
+"""
+import argparse,json,time
+from collections import Counter
+from pathlib import Path
+import numpy as np
+from backend import runtime,file_sha256,complete_mlp_profile
+
+
+def row_runs(records,key):
+    """Consecutive X positions with identical element counts, in one row."""
+    run=[]
+    for record in sorted(records,key=lambda r:(r['pe'][1],r['pe'][0])):
+        if run and (record['pe']!=[run[-1]['pe'][0]+1,run[-1]['pe'][1]] or key(record)!=key(run[0])):
+            yield run;run=[]
+        run.append(record)
+    if run:yield run
+
+
+def native_code(code):
+    code=np.asarray(code,dtype=np.uint16)
+    return ((code&127)<<7)|((code&128)<<8)
+
+
+def main():
+    parser=argparse.ArgumentParser();parser.add_argument('--physical',action='store_true');physical=parser.parse_args().physical
+    config=json.loads(Path('experiment.json').read_text());meta=json.loads(Path('fixture.json').read_text())
+    if not complete_mlp_profile(config):raise ValueError('Exact original MLP profile required')
+    if file_sha256(Path('fixture.json'))!=config['fixture_metadata_sha256']:raise ValueError('Oracle metadata identity')
+    for name,expected in meta['hashes'].items():
+        if file_sha256(Path(name))!=expected:raise ValueError('Frozen fixture identity: '+name)
+    if meta['acceptance']!=config['acceptance']:raise ValueError('Changed acceptance')
+    data=dict(np.load('fixture.npz',allow_pickle=False));banks=np.load('banks.npy',mmap_mode='r',allow_pickle=False)
+    lut=np.load('silu-table.npy',allow_pickle=False)
+    if lut.shape!=(3328,) or banks.nbytes!=meta['allocated_bank_bytes']:raise ValueError('Fixture shape')
+    index=json.loads(Path('bank-index.json').read_text())['records']
+    workers=json.loads(Path('workers.json').read_text());binding=json.loads(Path('network-binding.json').read_text())
+    setups=json.loads(Path('worker-setups.json').read_text());senders=binding['senders']
+    origin=config['logical_origin'];width,height=config['application'];controller=meta['controller']
+    expected_audit=np.zeros((height,width,4),np.uint32)
+    setup_array=np.zeros((height,width,5),np.uint32)
+    for pe,value in setups:setup_array[pe[1]-origin[1],pe[0]-origin[0]]=value
+    for worker in workers:
+        x,y=worker['pe'];expected_audit[y-origin[1],x-origin[0],1:]=[worker['parts'],worker['iterations'],1]
+    expected_audit[controller[1]-origin[1],controller[0]-origin[0],1:]=[186,186,1]
+    grants=Counter(g['target'] for g in binding['grant_schedule']);captured={};observations=[]
+    def save():np.savez('actual.npz',**captured)
+    began=time.monotonic()
+    with runtime(physical) as (runner,dtype,order):
+        loaded=time.monotonic();names=['bank','setup','quant_input','silu_lut','audit','mlp_output','sender_status','native_input','native_scales','ticks']
+        ids={name:runner.get_id(name) for name in names}
+        def copy(name,pe,count,*,value=None,span=1,lines=1,half=False):
+            opts=dict(streaming=False,order=order.ROW_MAJOR,nonblock=False,
+                      data_type=dtype.MEMCPY_16BIT if half else dtype.MEMCPY_32BIT)
+            x,y=pe[0]-origin[0],pe[1]-origin[1]
+            if not (0<=x<x+span<=width and 0<=y<y+lines<=height):raise ValueError('Copy outside component')
+            # SDK 16-bit transfers still require one uint32 host entry per u16.
+            a=np.zeros(count*span*lines,np.uint32) if value is None else np.ascontiguousarray(value,dtype=np.uint32).reshape(-1)
+            if a.size!=count*span*lines or a.nbytes>8<<20:raise ValueError('Bounded copy extent')
+            if value is None:runner.memcpy_d2h(a,ids[name],x,y,span,lines,count,**opts)
+            else:runner.memcpy_h2d(ids[name],a,x,y,span,lines,count,**opts)
+            return a
+        bank_runs=list(row_runs(index,lambda r:r['words']))
+        print(json.dumps(dict(phase='initialize',bank_bytes=banks.nbytes,copy_calls=len(bank_runs))),flush=True)
+        for run in bank_runs:
+            count=run[0]['words'];start=run[0]['offset'];length=count*len(run)
+            if [r['offset'] for r in run]!=list(range(start,start+length,count)):raise ValueError('Noncontiguous bank fixture')
+            copy('bank',run[0]['pe'],count,value=banks[start:start+length],span=len(run))
+        for sender in senders:
+            if sender.get('fusion_producer') is not None:copy('silu_lut',sender['pe'],3328,value=lut.astype(np.uint32),half=True)
+        copy('setup',origin,5,value=setup_array,span=width,lines=height,half=True)
+        initialized=time.monotonic();print(json.dumps(dict(phase='initialized',seconds=initialized-loaded)),flush=True)
+        input_runs=list(row_runs(workers,lambda w:(w['columns'],w['max_parts'])))
+        for case in meta['cases']:
+            i=case['index'];epoch=case['epoch']
+            for sender in senders:
+                if 'input_group' in sender:
+                    group=sender['input_group'];values=data[f'input_{i}'][group*128:(group+1)*128]
+                    copy('quant_input',sender['pe'],64,value=values.astype('<u2',copy=False).view('<u4'))
+            started=time.monotonic();runner.launch('arm',np.uint32(epoch),nonblock=False)
+            runner.launch('start',nonblock=False);runner.launch('finish',nonblock=False)
+            finished=time.monotonic()
+            output=copy('mlp_output',controller,2560).view(np.uint16);ticks=copy('ticks',controller,6,half=True)
+            audit=copy('audit',origin,4,span=width,lines=height).reshape(height,width,4)
+            captured[f'output_{i}']=output;captured[f'ticks_{i}']=ticks;captured[f'audit_{i}']=audit;save()
+            np.testing.assert_array_equal(output,data[f'down_bf16_{i}'])
+            expected_audit[:,:,0]=epoch;np.testing.assert_array_equal(audit,expected_audit)
+            for sender in senders:
+                actual=copy('sender_status',sender['pe'],4);sid=sender['id'];captured[f'sender_{i}_{sid}']=actual
+                np.testing.assert_array_equal(actual,np.array([epoch,grants[sid],grants[sid],1],np.uint32))
+            # Read retained ingress, including every ragged K shard. Unused
+            # capacity is intentionally excluded: only the live parts are input.
+            for run in input_runs:
+                columns=run[0]['columns'];parts=run[0]['max_parts'];count=columns*parts
+                values=copy('native_input',run[0]['pe'],count,span=len(run),half=True).reshape(len(run),count)
+                scales=copy('native_scales',run[0]['pe'],parts,span=len(run)).reshape(len(run),parts)
+                key='_'.join(map(str,run[0]['pe']));captured[f'inputs_{i}_{key}']=values;captured[f'scales_{i}_{key}']=scales
+                for j,w in enumerate(run):
+                    family='gate' if w['role']=='gate_up' else 'down'
+                    codes=data[f'{family}_operand_codes_{i}'].reshape(-1);truth=data[f'{family}_operand_scales_{i}'].reshape(-1).view(np.uint32)
+                    for part,k in enumerate(w['native_input_slices']):
+                        first=k*columns
+                        try:
+                            np.testing.assert_array_equal(values[j,part*columns:(part+1)*columns],native_code(codes[first:first+columns]))
+                            np.testing.assert_array_equal(scales[j,part],truth[first//128])
+                        except AssertionError:save();raise
+            start_tick=sum(int(ticks[j])<<(16*j) for j in range(3));end_tick=sum(int(ticks[3+j])<<(16*j) for j in range(3))
+            observation=dict(**case,all_outputs_bit_exact=True,all_native_inputs_exact=True,all_counters_exact=True,
+                all_pe_drained=True,host_arm_start_finish_seconds=finished-started,controller_cycles=(end_tick-start_tick)%(1<<48))
+            observations.append(observation);save();print(json.dumps(dict(phase='epoch_passed',**observation)),flush=True)
+        print(json.dumps(dict(phase='retention',bank_bytes=banks.nbytes)),flush=True)
+        for run in bank_runs:
+            count=run[0]['words'];start=run[0]['offset'];length=count*len(run)
+            np.testing.assert_array_equal(copy('bank',run[0]['pe'],count,span=len(run)),banks[start:start+length])
+        for sender in senders:
+            if sender.get('fusion_producer') is not None:np.testing.assert_array_equal(copy('silu_lut',sender['pe'],3328,half=True),lut)
+        retained=time.monotonic();save()
+    result=dict(passed=True,physical=physical,normal_stop=True,full_model=False,scope=meta['scope'],
+        fixture_metadata_sha256=config['fixture_metadata_sha256'],original_weights_resident=True,
+        all_original_banks_retained=True,all_luts_retained=True,all_native_inputs_exact=True,
+        all_counters_exact=True,all_pe_drained=True,epochs=observations,
+        original_output_values_checked=4*5120,runtime_load_seconds=loaded-began,
+        initialization_seconds=initialized-loaded,full_runtime_seconds=time.monotonic()-began,
+        normal_stop_seconds=time.monotonic()-retained,full_model_tps=None)
+    Path('result.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result),flush=True)
+
+
+if __name__=='__main__':main()

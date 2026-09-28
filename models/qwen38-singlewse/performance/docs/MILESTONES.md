@@ -903,3 +903,27 @@ Changed arithmetic/whole-MLP numerical qualification, actual complete local and
 request drain, residual/norm/mixer/attention, neighboring layers and original
 full-model sentences at>=2000 aggregate tokens/s remain unfinished. See
 LAYER-MLP-NETWORK.md and layer-mlp-network-summary-001.json.
+
+## P27: physical complete original MLP fusion
+
+Physical003 passes the complete original5120 ->17408 ->5120 MLP on11,388 PEs:
+four warm cases,20,480 bit-exact BF16 outputs, every native input/scale and
+completion counter, all resident bank/table retention and complete local drain.
+The independent row-major oracle separately bounds each projection against FP64
+truth; PyTorch supplies SiLU and validates actual FP8 quantization. An exhaustive
+CPU proof covers all65,280 finite BF16 inputs using a6,656-byte resident SiLU table
+per fusion actor. Physical results cover the actual full-MLP input cases.
+
+Nonzero controller counts are2,844,472/2,844,301/2,844,443; zero is2,358,523.
+SDK loading323.486s, original initialization3.122s and full diagnostic runtime
+340.388s are reported separately. The actual SRAM maximum48,128bytes includes
+4,096 reserved stack and has zero margin. No model throughput is inferred.
+
+Compiler001 succeeded/released but host ELF-file admission failed; runtime002
+failed client serialization before neural execution and was cancelled/released.
+003 reuses the same artifact with bounded bank reads and passes normal shutdown.
+No CSL or numerical criterion was changed between those physical attempts.
+All122 source tests pass, all owned resources are released, and the original
+functional baseline remains preserved. Full layers/state, neighboring stages and
+complete original-model sentences at>=2000 aggregate generated tokens/s remain
+unfinished. See LAYER-MLP-QUALIFICATION.md and its bound summary receipt.

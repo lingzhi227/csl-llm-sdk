@@ -7,26 +7,28 @@ Independent requests may overlap with isolated state. The earlier per-request
 interpretation and whole-wafer shared-layer overlay are superseded. The target
 remains unmet; this is active development.
 
-P26 connects the original complete MLP data path: spatial group128 input
-quantization, retained native full-K gate/up, fused BF16 SiLU/multiply/group
-quantization, native down input distribution, complete down reduction and5120
-BF16 output collection. Both full enclosing stage geometries compile:78x146 GDN (11388
-PEs,4179 ELF images) and78x141 attention (10998 PEs,4894 images). Both have
-maximum47776bytes including4096 stack and352bytes minimum margin. Original matrix and live auxiliary banks remain allocated; the
-mixer/state region is resident but inactive in this component.
+P27 physically qualifies the complete original layer0 MLP on one WSE-3. All
+four warm cases pass:20,480 final BF16 values match an independent original-weight
+oracle bit for bit, all native input codes/scales and completion counters match,
+all initialized weights/tables remain unchanged, and every PE drains before
+normal shutdown. The entire78x146 enclosing stage is present; mixer/state banks
+are initialized but their neural operations are inactive in this component.
 
-WSE-3 rejected simultaneous local/transit RX even under an exclusive grant.
-The corrected return bus uses one grant-selected RX and restores transit only
-from an output-queue-empty callback. Fixed queues retain their colors. Structural
-checks cover both GDN and attention MLP geometries; all115 source tests pass.
-These are compiler/protocol results: no new neural/device execution, latency or
-model TPS is claimed. Numerical references, complete local/request drain,
-residual/norm/mixer/attention, neighboring layers and full-model speed remain open.
+Nonzero cases take2,844,301–2,844,472 controller cycle-counter ticks. These are
+component measurements, not model tokens/s. SDK runtime loading takes323.486s,
+weight/table/setup initialization3.122s, and the complete diagnostic run340.388s.
+The physical artifact covers11,388 PEs with4,179 ELF images; the maximum footprint
+is48,128bytes including4,096 reserved stack, with zero remaining margin at the
+most constrained image. All122 source tests pass.
 
-All six bounded compiler attempts are released. No WSE job was submitted;
-the final hardware snapshot has no owned active job or system assignment.
+The original numerical criteria and CSL remain fixed across two preserved host
+failures: an overly small individual ELF file guard, then a client serialization
+failure. The successful attempt uses the same compiler artifact and bounded row
+reads instead of a397MB host mmap. All owned hardware jobs are released and all
+workstation tasks have ended. Full-model sentence generation and>=2000 aggregate
+output tokens/s remain unfinished.
 
-See [LAYER-MLP-NETWORK.md](docs/LAYER-MLP-NETWORK.md) and
+See [LAYER-MLP-QUALIFICATION.md](docs/LAYER-MLP-QUALIFICATION.md) and
 [NEXT-STEPS.md](docs/NEXT-STEPS.md).
 
 Generate a fresh candidate with

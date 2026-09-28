@@ -1,0 +1,81 @@
+// Complete original MLP component controller. No host intermediate arithmetic:
+// consume spatially quantized128-value frames, broadcast exact native K slices,
+// then collect all original5120 BF16 outputs. The schedule is a finite component
+// qualification boundary; autonomous model request scheduling is still separate.
+param memcpy_params;param gate_tail:u16;param down_tail:u16;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const schedule=@import_module("mlp_schedule.csl");
+var frame=@zeros([273]u32);var packet=@zeros([69]u32);var grant=@zeros([3]u32);
+var output=@zeros([2560]u32);var audit=@zeros([4]u32);var dummy=@zeros([5]u16);
+const op:[*]u32=&output;const ap:[*]u32=&audit;const sp:[*]u16=&dummy;
+var epoch:u32=0;var cursor:u16=0;var segment:u16=0;var alias:u16=0;
+var kind:u16=0;var index:u16=0;var columns:u16=0;
+var finish_requested:bool=false;
+var active:bool=false;var grant_busy:bool=false;var frame_done:bool=false;
+const rq=@get_input_queue(2);const gq=@get_output_queue(3);const oq=@get_output_queue(2);
+const rd=@get_dsr(dsr_dest,1);const rs=@get_dsr(dsr_src0,1);
+const gd=@get_dsr(dsr_dest,2);const gs=@get_dsr(dsr_src0,2);
+const od=@get_dsr(dsr_dest,3);const os=@get_dsr(dsr_src0,3);
+const rt=@get_local_task_id(8);const gt=@get_local_task_id(9);const ot=@get_local_task_id(10);
+fn issue_grant() void {
+ @assert(active and !grant_busy and cursor<186);
+ kind=schedule.kinds[cursor];index=schedule.indices[cursor];
+ const tag=@as(u32,schedule.targets[cursor])<<16;
+ grant[0]=tag|(epoch&65535);grant[1]=tag|(epoch>>16);grant[2]=tag|@as(u32,(kind<<10)|index);
+ frame_done=false;grant_busy=true;
+ const rm=@get_dsd(mem1d_dsd,.{.base_address=&frame,.extent=1});const rf=@get_dsd(fabin_dsd,.{.input_queue=rq,.extent=1});
+ const m=@set_dsd_length(rm,schedule.words[cursor]);const f=@set_dsd_length(rf,schedule.words[cursor]);
+ @load_to_dsr(rd,m);@load_to_dsr(rs,f,.{.async=true,.ut_id=@get_ut_id(2),.activate=rt});@mov32(rd,rs,.{.async=true});
+ const gm=@get_dsd(mem1d_dsd,.{.base_address=&grant,.extent=3});const gf=@get_dsd(fabout_dsd,.{.output_queue=gq,.extent=3});
+ @load_to_dsr(gs,gm);@load_to_dsr(gd,gf,.{.async=true,.ut_id=@get_ut_id(3),.activate=gt});@mov32(gd,gs,.{.async=true});
+ audit[1]+=1;
+}
+fn advance() void {
+ if(!frame_done or grant_busy){return;}
+ cursor+=1;
+ if(cursor==186){active=false;audit[3]=1;if(finish_requested){finish_requested=false;sys.unblock_cmd_stream();}}else{issue_grant();}
+}
+fn send_slice() void {
+ const k=index*(128/columns)+segment;const tail:u16=if(kind==0) gate_tail else down_tail;
+ const base:u16=if(kind==0) 0 else 1024;
+ var selector:u16=base+k;var part:u16=0;
+ if(alias==1){selector=base+512+k%tail;part=k/tail;}
+ const tag=@as(u32,selector)<<16;
+ packet[0]=tag|(epoch&65535);packet[1]=tag|(epoch>>16);packet[2]=tag|@as(u32,part);
+ var i:u16=0;
+ while(i<columns){
+  const value=frame[3+(segment*columns+i)/2];
+  var half=value&65535;if(i%2==1){half=value>>16;}
+  packet[3+i]=tag|half;i+=1;
+ }
+ packet[3+columns]=tag|(frame[2]&65535);packet[4+columns]=tag|(frame[2]>>16);
+ const mm=@get_dsd(mem1d_dsd,.{.base_address=&packet,.extent=1});const ff=@get_dsd(fabout_dsd,.{.output_queue=oq,.extent=1});
+ const m=@set_dsd_length(mm,columns+5);const f=@set_dsd_length(ff,columns+5);
+ @load_to_dsr(os,m);@load_to_dsr(od,f,.{.async=true,.ut_id=@get_ut_id(4),.activate=ot});@mov32(od,os,.{.async=true});
+}
+task frame_arrived() void {
+ @assert(active and frame[0]==epoch and frame[1]==((@as(u32,kind)<<16)|@as(u32,index)));audit[2]+=1;
+ if(kind<2){columns=32;if(kind==1){columns=64;}segment=0;alias=0;send_slice();}
+ else{
+  const first=@as(u16,frame[2]&65535);const rows=@as(u16,frame[2]>>16);
+  @assert(first==schedule.firsts[cursor] and rows==schedule.rows[cursor] and first+rows<=5120);
+  var i:u16=0;while(i<rows/2){output[first/2+i]=frame[3+i];i+=1;}
+  frame_done=true;advance();
+ }
+}
+task grant_sent() void {@assert(grant_busy);grant_busy=false;advance();}
+task slice_sent() void {
+ if(alias==0){alias=1;send_slice();}
+ else{alias=0;segment+=1;if(segment<128/columns){send_slice();}else{frame_done=true;advance();}}
+}
+fn arm(new_epoch:u32) void {
+ @assert(!active and new_epoch>epoch);epoch=new_epoch;cursor=0;grant_busy=false;frame_done=false;
+ for(@range(u16,4))|i|{audit[i]=0;}audit[0]=epoch;sys.unblock_cmd_stream();
+}
+fn start() void {@assert(!active and epoch>0 and cursor==0);active=true;issue_grant();sys.unblock_cmd_stream();}
+fn finish() void {@assert(!finish_requested and epoch>0);if(active){finish_requested=true;}else{@assert(audit[3]==1);sys.unblock_cmd_stream();}}
+comptime {
+ @initialize_queue(rq,.{.color=@get_color(18)});@initialize_queue(gq,.{.color=@get_color(20)});@initialize_queue(oq,.{.color=@get_color(2)});
+ @bind_local_task(frame_arrived,rt);@bind_local_task(grant_sent,gt);@bind_local_task(slice_sent,ot);
+ @export_symbol(ap,"audit");@export_symbol(sp,"setup");@export_symbol(op,"mlp_output");@export_symbol(arm);@export_symbol(start);@export_symbol(finish);
+}
