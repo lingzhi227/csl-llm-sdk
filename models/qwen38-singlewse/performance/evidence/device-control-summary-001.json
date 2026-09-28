@@ -1,0 +1,68 @@
+{
+  "utc": "2026-09-28T09:54:26.332195+00:00",
+  "milestone": "P35 credited internal-PE device control",
+  "physical": false,
+  "full_layer": false,
+  "full_stage_sram_admitted": false,
+  "full_model_speed_target_achieved": false,
+  "simulator": "device-control-sim-005",
+  "simulator_passed": true,
+  "simulator_commands": 122,
+  "simulator_normal_stop": true,
+  "simulator_total_seconds": 47.701835073996335,
+  "original_selected_bank_words": 8130,
+  "original_selected_bank_not_reduced": true,
+  "selected_original_bank_loaded_and_retained": true,
+  "selected_gateway_bytes_with_stack": 11024,
+  "selected_internal_pe_bytes_with_stack": 45920,
+  "stack_allowance_bytes": 4096,
+  "simulator_neural_work": false,
+  "selected_compile_before": "layer-backend-compile-014",
+  "selected_compile_after": "layer-backend-compile-017",
+  "matched_weight_cohosts": 8,
+  "matched_weight_cohost_savings_bytes": [
+    864,
+    832,
+    656,
+    768,
+    768,
+    656,
+    640,
+    656
+  ],
+  "calibration_bank_words": 4096,
+  "calibration_payload_reduced": true,
+  "controller_delta_excluded_from_internal_savings": true,
+  "full_stage_control_routes_admitted": false,
+  "forward_host_commands_option_executed": false,
+  "preserved_failures": [
+    "layer-backend-compile-015",
+    "device-control-sim-001",
+    "device-control-sim-002",
+    "device-control-sim-003",
+    "device-control-sim-004"
+  ],
+  "workstation_services_added": 8,
+  "all_workstation_services_released": true,
+  "hardware_jobs_added": 0,
+  "resource_audit": "resource-audit-p35-final.json",
+  "source_sha256": {
+    "csl/device_control.csl": "732520dca32aad8f08d294493b9227bf2c2237c4c036a70dcd529e02b449e750",
+    "runtime/device_mixer_dispatch.cslpart": "bc591fefa95208c63b2e569553bb1fd91a64a1b3d2f7db14e79bb8de18035855",
+    "spatial/device_control.py": "1d723f40a737d3f04c38a423a0fbb534b2372198de5ab4cd661b07785809dc58",
+    "tools/stage_mixer_resource_compile.py": "591a5c7fa3bd285ed8ea490485b2959aadd9767aebaeb6bef2f1a5290f2fbb77",
+    "tools/stage_device_control_sim.py": "e4f2307a7dfe7c6d21ba91845023ec3654ffe93544312e6c595cf9ce9d76a506",
+    "tools/summarize_mixer_calibration.py": "2fa3ca680d72d947f61bcf762684f56f5691f6939336773b193ad7d352f0ecea"
+  },
+  "source_tests": {
+    "passed": true,
+    "tests": 156,
+    "seconds": 150.5234957919456
+  },
+  "publication_tests": {
+    "passed": true,
+    "tests": 156,
+    "seconds": 150.20538150006905,
+    "tested_export_manifest_sha256": "4f68d18388caac97dc07877538dc9b722823626121c8cf9093c751ba0e78be16"
+  }
+}

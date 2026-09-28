@@ -3,13 +3,13 @@ import argparse,base64,hashlib,json,re,shlex,subprocess
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 p=argparse.ArgumentParser();p.add_argument('name');a=p.parse_args()
-if not re.fullmatch('(fp8-(native|tile-fast|bank|encoder)|regional-(gemv|bank)|spatial-quant|contraction|mixed-bank|epoch-bank|gdn-bank|route-epoch|filtered-bank|coupled-bank|full-bf16-matrix|native-shapes|retiled-matrix|compact-projection|mlp-fusion|mlp-chunk|mixer-ingress)-(sim|hw)-[0-9]{3}|retiled-comparison-audit-[0-9]{3}|mlp-(integrated|full)-compile-[0-9]{3}|layer-(backend-compile|projection-compile|mlp-compile|mlp-hw|mlp-reference|silu-oracle|weight-audit)-[0-9]{3}',a.name):raise ValueError('name')
+if not re.fullmatch('(fp8-(native|tile-fast|bank|encoder)|regional-(gemv|bank)|spatial-quant|contraction|mixed-bank|epoch-bank|gdn-bank|route-epoch|filtered-bank|coupled-bank|full-bf16-matrix|native-shapes|retiled-matrix|compact-projection|mlp-fusion|mlp-chunk|mixer-ingress|device-control)-(sim|hw)-[0-9]{3}|retiled-comparison-audit-[0-9]{3}|mlp-(integrated|full)-compile-[0-9]{3}|layer-(backend-compile|projection-compile|mlp-compile|mlp-hw|mlp-reference|silu-oracle|weight-audit)-[0-9]{3}',a.name):raise ValueError('name')
 physical='-hw-' in a.name
 remote=('/srv/qwen38-singlewse-hardware/' if physical else '/srv/model-storage/qwen38-singlewse/runs/')+a.name
 dispatch=ROOT/'evidence'/a.name/'dispatch.json'
 if not physical and dispatch.exists():
  record=json.loads(dispatch.read_text());resolved=record['remote']
- if not re.fullmatch('/srv/model-storage/qwen38-singlewse/runs/[a-zA-Z0-9_-]+',resolved) or record.get('physical') is not False:raise ValueError('Frozen workstation dispatch identity')
+ if not re.fullmatch(r'/srv/model-storage/qwen38-singlewse/runs/[a-zA-Z0-9_-]+(?:\.[a-z0-9_-]+)?',resolved) or record.get('physical') is not False:raise ValueError('Frozen workstation dispatch identity')
  remote=resolved
 script='root_name='+repr(remote)+'\nrequire_terminal='+repr(physical)+'\n'+'''import json,base64
 from pathlib import Path

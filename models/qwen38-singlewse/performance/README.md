@@ -7,6 +7,16 @@ Independent requests may overlap with isolated state. The earlier per-request
 interpretation and whole-wafer shared-layer overlay are superseded. The target
 remains unmet; this is active development.
 
+P35 passes156 source and156 publication regression tests and adds credited internal-PE fabric control with real bank/config loading,
+readback and preserved cohost entrypoints. Simulator005 passes122 gateway-only
+host commands, retains the complete selected8130-word original bank and stops
+normally. Its gateway/internal PE occupy11024/45920bytes including4096 stack.
+Final selected resource compile017 saves640–864bytes on eight matched weight
+cohosts with reduced calibration banks. Complete-stage routing/SRAM and neural
+execution remain unqualified; norm cohost placement deficits remain. All eight
+workstation services released, failures preserved, no new WSE job. See
+[DEVICE-CONTROL.md](docs/DEVICE-CONTROL.md).
+
 P34 passes155 source and155 publication regression tests and fuses original A/B contractions into
 tagged operand arrival, retaining two
 FP32 partials instead of a256-byte raw-input cache. Actual CSL simulator001

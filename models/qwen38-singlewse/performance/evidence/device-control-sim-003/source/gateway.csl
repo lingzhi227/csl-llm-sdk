@@ -1,0 +1,27 @@
+param memcpy_params;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+var command=@zeros([262]u32);var response=@zeros([260]u32);var audit=@zeros([4]u32);
+const cp:[*]u32=&command;const rp:[*]u32=&response;const ap:[*]u32=&audit;
+var active:bool=false;var tx_done:bool=false;var rx_done:bool=false;
+const oq=@get_output_queue(2);const iq=@get_input_queue(2);
+const od=@get_dsr(dsr_dest,2);const os=@get_dsr(dsr_src0,2);
+const rd=@get_dsr(dsr_dest,3);const rs=@get_dsr(dsr_src0,3);
+const tt=@get_local_task_id(8);const rt=@get_local_task_id(9);
+fn finish() void {if(active and tx_done and rx_done){active=false;audit[0]+=1;sys.unblock_cmd_stream();}}
+task sent() void {@assert(active and !tx_done);tx_done=true;finish();}
+task received() void {@assert(active and !rx_done);rx_done=true;finish();}
+fn exchange(words:u16,replies:u16) void {
+ @assert(!active and words>=6 and words<=262 and replies>=4 and replies<=260);
+ active=true;tx_done=false;rx_done=false;audit[1]=command[0];audit[2]=@as(u32,words);audit[3]=@as(u32,replies);
+ const rm=@get_dsd(mem1d_dsd,.{.base_address=&response,.extent=1});const rmem=@set_dsd_length(rm,replies);
+ const rf=@get_dsd(fabin_dsd,.{.input_queue=iq,.extent=1});const rfab=@set_dsd_length(rf,replies);
+ @load_to_dsr(rd,rmem);@load_to_dsr(rs,rfab,.{.async=true,.ut_id=@get_ut_id(3),.activate=rt});@mov32(rd,rs,.{.async=true});
+ const tm=@get_dsd(mem1d_dsd,.{.base_address=&command,.extent=1});const tmem=@set_dsd_length(tm,words);
+ const tf=@get_dsd(fabout_dsd,.{.output_queue=oq,.extent=1});const tfab=@set_dsd_length(tf,words);
+ @load_to_dsr(os,tmem);@load_to_dsr(od,tfab,.{.async=true,.ut_id=@get_ut_id(2),.activate=tt});@mov32(od,os,.{.async=true});
+}
+comptime {
+ @initialize_queue(oq,.{.color=@get_color(12)});@initialize_queue(iq,.{.color=@get_color(13)});
+ @bind_local_task(sent,tt);@bind_local_task(received,rt);
+ @export_symbol(cp,"command");@export_symbol(rp,"response");@export_symbol(ap,"audit");@export_symbol(exchange);
+}

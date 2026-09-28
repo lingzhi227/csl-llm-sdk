@@ -16,14 +16,14 @@ if destination.exists():
 unit='qwen38-single-'+args.attempt+'.service'
 remote='/srv/model-storage/qwen38-singlewse/runs/'+args.attempt
 dispatch_hash=None
-if args.attempt.startswith('layer-'):
+if (destination.parent/'dispatch.json').is_file():
     import hashlib
     dispatch=destination.parent/'dispatch.json';raw=dispatch.read_bytes();record=json.loads(raw)
-    if not re.fullmatch('/srv/model-storage/qwen38-singlewse/runs/[a-zA-Z0-9_-]+',record['remote']) or record['physical'] is not False:
+    if not re.fullmatch(r'/srv/model-storage/qwen38-singlewse/runs/[a-zA-Z0-9_-]+(?:\.[a-z0-9_-]+)?',record['remote']) or record['physical'] is not False:
         raise ValueError('Invocation identity differs from the bounded workstation dispatch')
     remote=record['remote'];unit=record['unit'].removesuffix('.service')+'.service'
     if unit!='qwen38-single-'+Path(remote).name+'.service':raise ValueError('Frozen unit and directory do not name the same invocation')
-    if not re.fullmatch(r'qwen38-single-[a-z0-9_-]+\.service',unit):raise ValueError('Unit identity')
+    if not re.fullmatch(r'qwen38-single-[a-z0-9_-]+(?:\.[a-z0-9_-]+)?\.service',unit):raise ValueError('Unit identity')
     dispatch_hash=hashlib.sha256(raw).hexdigest()
 script = 'name=' + repr(args.attempt) + '\nunit='+repr(unit)+'\nexpected_remote='+repr(remote)+'\ndispatch_hash='+repr(dispatch_hash)+'\n' + '''import datetime,fcntl,hashlib,json,os,subprocess
 from pathlib import Path

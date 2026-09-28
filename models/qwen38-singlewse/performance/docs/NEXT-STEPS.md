@@ -14,17 +14,18 @@
    advance to complete mixer/layer execution rather than an open-ended isolated
    optimization sweep. Host arm/start/finish and phase logging are diagnostic;
    device-driven admission and full backpressure remain future serving work.
-3. P34 fuses original A/B computation into arrival of the shared BF16/E4M3
-   packet.24 actual CSL simulator cases match frozen P33 and independent outputs;
-   selected resource compile014 saves112bytes per matched weight cohost. Full
-   compile015 remains rejected. Matrix-only estimates already exceed the gate
-   for the selected root/norm cohosts; state relocation alone cannot be assumed
-   sufficient. Next jointly lower matrix ownership, cohost role placement and
-   scratch/state lifetimes using measured per-role program demands. Regenerate
-   the corresponding operand/reduction paths and preserve all original tiles,
-   state capacity and4KiB stack, then require complete SRAM admission. Connect
-   original GDN/conv/gates, attention and4x8 FP32 state pages to these resident
-   projections and qualify adjacent complete layers, isolated requests and reset.
+3. P35 proves the local credited gateway/internal-PE loader and control port:
+   122 commands, complete selected8130-word original bank retained, actual
+   45920-byte internal PE, normal simulator stop. Final calibration017 saves
+   640–864bytes per selected weight cohost; full-layer routing/SRAM are not
+   admitted and norm matrix-only estimates still exceed the gate by2956–4140B.
+   Next jointly lower matrix ownership, cohost roles and scratch/state lifetimes.
+   Examine nearby resident tile serving/prefetch or role relocation using exact
+   available bank margins; keep compute/data near one another, every original
+   weight/state and the4KiB stack reserve. The actual control protocol must be
+   routed with explicit SDK gateway/C22 isolation and no color/queue aliases.
+   Compile the complete stage before hardware, connect original conv/gates/GDN
+   and attention, and qualify adjacent layers with real requests and reset.
 4. Measure real stage and full request service. Current packing admits only two
    context96 request states; it does not establish concurrency sufficient for
    >=2000 aggregate tokens/s. Revisit bank program/loader size and distributed

@@ -4,7 +4,7 @@ from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT))
 from spatial.layer_schedule import local_rows,xy_rank
 
-def summarize(before,after):
+def summarize(before,after,device_control=False):
  def read(name):
   base=ROOT/'evidence'/name
   if not json.loads((base/'COMPLETE.json').read_text())['passed']:raise ValueError('Incomplete calibration')
@@ -19,13 +19,24 @@ def summarize(before,after):
   assert len(by_pe)==len(profiles)
   return profiles,by_pe
  old,old_elf=read(before);new,new_elf=read(after)
- assert old==new, 'Matched code calibration requires identical bank extents and parameters'
+ if device_control:
+  adaptation=json.loads((ROOT/'evidence'/after/'source/device-adaptation.json').read_text())
+  for a,b in zip(old,new):
+   expected=dict(a)
+   if b['source']=='device_'+a['source']:
+    expected['source']=b['source'];record=adaptation[b['source']]
+    assert record['original_sha256']==hashlib.sha256((ROOT/'evidence'/before/'source'/a['source']).read_bytes()).hexdigest()
+    assert record['adapted_sha256']==hashlib.sha256((ROOT/'evidence'/after/'source'/b['source']).read_bytes()).hexdigest()
+   assert expected==b, 'Device adaptation changed bank extents or role parameters'
+  assert len(old)==len(new)
+ else:assert old==new, 'Matched code calibration requires identical bank extents and parameters'
  schedule=json.loads((ROOT/'evidence/layer-native-schedule-002/layer-schedule.json').read_text())
  stage=next(s for s in schedule['stages'] if s['id']=='layer_00');region=next(r for r in stage['regions'] if r['role']=='mix')
  records=[]
  for profile in new:
   pe=tuple(profile['pe']);a=old_elf[pe];b=new_elf[pe]
-  assert a['source']==b['source']==profile['source'] and a['stack_allowance_bytes']==b['stack_allowance_bytes']==4096
+  assert b['source']==profile['source'] and a['stack_allowance_bytes']==b['stack_allowance_bytes']==4096
+  assert a['source']==b['source'] or (device_control and b['source']=='device_'+a['source'])
   actual=b['low_section_end']+4096;prior=a['low_section_end']+4096;payload=profile['parameters'].get('bank_words',0)*4
   matrix=0
   if payload:
@@ -36,12 +47,12 @@ def summarize(before,after):
    actual_calibration_bank_bytes=payload,overhead_with_stack=overhead,original_matrix_bytes=matrix,
    original_bank_estimate=overhead+original,matrix_only_estimate=overhead+matrix,
    matrix_only_estimated_margin=48128-overhead-matrix,before_elf_sha256=a['sha256'],after_elf_sha256=b['sha256']))
- return dict(before=before,after=after,physical=False,executed=False,full_bank_admission=False,full_stage_admission=False,samples=records,
+ return dict(before=before,after=after,device_control=device_control,physical=False,executed=False,full_bank_admission=False,full_stage_admission=False,samples=records,
   note='Actual bytes are compiled selected programs with their recorded calibration banks and4096-byte stack allowance. Original-bank and matrix-only totals are arithmetic estimates; they do not certify full-bank placement, routing-context overhead or full-stage SRAM.')
 
 def main():
- p=argparse.ArgumentParser();p.add_argument('before');p.add_argument('after');p.add_argument('--output',type=Path,required=True);a=p.parse_args()
- result=summarize(a.before,a.after)
+ p=argparse.ArgumentParser();p.add_argument('before');p.add_argument('after');p.add_argument('--device-control',action='store_true');p.add_argument('--output',type=Path,required=True);a=p.parse_args()
+ result=summarize(a.before,a.after,a.device_control)
  with a.output.open('x') as f:json.dump(result,f,indent=2);f.write('\n')
  print(json.dumps(dict(samples=len(result['samples']),saved_bytes=[r['saved_bytes'] for r in result['samples']],matrix_only_estimated_margins=[r['matrix_only_estimated_margin'] for r in result['samples']])))
 

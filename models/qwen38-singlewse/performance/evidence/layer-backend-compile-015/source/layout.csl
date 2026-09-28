@@ -1,0 +1,26 @@
+const memcpy=@import_module("<memcpy/get_params>",.{.width=9,.height=1});
+layout {
+ @set_rectangle(9,1);
+ @set_tile_code(0,0,"mixer_layer_mlp_controller.csl",.{.memcpy_params=memcpy.get_params(0),.gate_tail=106,.down_tail=159,.shared_inputs=true,.norm_bridge=true});
+ @set_tile_code(1,0,"device_mixer_layer_mlp_standby.csl",.{.memcpy_params=memcpy.get_params(1),.bank_words=4096,.mixer_rank_parity=1,.mixer_input48_queue=5,.mixer_can_root=false});
+ @set_tile_code(2,0,"device_mixer_layer_mlp_standby.csl",.{.memcpy_params=memcpy.get_params(2),.bank_words=4096,.mixer_rank_parity=0,.mixer_input48_queue=5,.mixer_can_root=true});
+ @set_tile_code(3,0,"device_mixer_layer_norm_bridge.csl",.{.memcpy_params=memcpy.get_params(3),.bank_words=4096,.rank=0,.mixer_rank_parity=1,.mixer_input48_queue=5,.mixer_can_root=false});
+ @set_tile_code(4,0,"device_mixer_layer_norm_bridge.csl",.{.memcpy_params=memcpy.get_params(4),.bank_words=4096,.rank=1,.mixer_rank_parity=0,.mixer_input48_queue=5,.mixer_can_root=false});
+ @set_tile_code(5,0,"device_mixer_layer_norm_bridge.csl",.{.memcpy_params=memcpy.get_params(5),.bank_words=4096,.rank=39,.mixer_rank_parity=0,.mixer_input48_queue=5,.mixer_can_root=false});
+ @set_tile_code(6,0,"device_mixer_layer_norm_sender.csl",.{.memcpy_params=memcpy.get_params(6),.bank_words=4096,.rank=0,.sender_id=0,.bus_rx=EAST,.bus_tx=SOUTH,.mixer_rank_parity=0,.mixer_input48_queue=4,.mixer_can_root=false});
+ @set_tile_code(7,0,"device_mixer_layer_norm_sender.csl",.{.memcpy_params=memcpy.get_params(7),.bank_words=4096,.rank=1,.sender_id=1,.bus_rx=EAST,.bus_tx=WEST,.mixer_rank_parity=1,.mixer_input48_queue=4,.mixer_can_root=false});
+ @set_tile_code(8,0,"device_mixer_layer_norm_sender.csl",.{.memcpy_params=memcpy.get_params(8),.bank_words=4096,.rank=39,.sender_id=39,.bus_rx=EAST,.bus_tx=WEST,.mixer_rank_parity=1,.mixer_input48_queue=4,.mixer_can_root=false});
+ @export_name("audit",[*]u32,false);
+ @export_name("setup",[*]u16,false);
+ @export_name("mlp_output",[*]u32,false);
+ @export_name("ticks",[*]u16,false);
+ @export_name("transport_stats",[*]u32,false);
+ @export_name("successor_output",[*]u32,false);
+ @export_name("bridge_stats",[*]u32,false);
+ @export_name("arm",fn(u32)void);
+ @export_name("start",fn()void);
+ @export_name("finish",fn()void);
+ @export_name("mixer_operand_input",[*]u32,false);
+ @export_name("mixer_operand_status",[*]u32,false);
+ @export_name("mixer_send_operand",fn(u32,u16,u16)void);
+}
