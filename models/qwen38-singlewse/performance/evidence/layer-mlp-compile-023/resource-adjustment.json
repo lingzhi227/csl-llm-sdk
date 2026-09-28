@@ -1,0 +1,24 @@
+{
+  "utc": "2026-09-28T17:58:15.284457+00:00",
+  "reason": "2GiB compilation limit caused sustained direct reclaim with no ELF images, not OOM. Raise only this active invocation to the existing3GiB allowed compiler cap.",
+  "available_bytes": 29167640576,
+  "before": {
+    "RuntimeMaxUSec": "10min 30s",
+    "MainPID": "2023709",
+    "CPUQuotaPerSecUSec": "2s",
+    "MemoryMax": "2147483648",
+    "MemorySwapMax": "0",
+    "WorkingDirectory": "/srv/model-storage/qwen38-singlewse/runs/layer-mlp-compile-023",
+    "ActiveState": "active"
+  },
+  "after": {
+    "RuntimeMaxUSec": "10min 30s",
+    "MainPID": "2023709",
+    "CPUQuotaPerSecUSec": "2s",
+    "MemoryMax": "3221225472",
+    "MemorySwapMax": "0",
+    "WorkingDirectory": "/srv/model-storage/qwen38-singlewse/runs/layer-mlp-compile-023",
+    "ActiveState": "active"
+  },
+  "physical": false
+}

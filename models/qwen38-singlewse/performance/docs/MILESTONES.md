@@ -1064,3 +1064,21 @@ frozen recurrent results; actual GDN, a complete layer and model speed remain
 unqualified.40 selected source and40 publication tests pass. Both cluster jobs
 and all seven workstation attempts release normally. See
 [Frontend numerical qualification](FRONTEND-NUMERICS.md).
+
+
+## P44: exact original MLP scale sharing and complete-bank admission
+
+Complete compile024 admits11,388 PEs/8,428 ELF images with maximum48,032B
+including4,096B stack. Exact local scale sharing removes3,912,128 bank bytes;
+the actual complete census saves3,362,352 SRAM bytes. Independent remote
+reference002 verifies all98,003,376 original source words,1,044,480 MLP tiles
+and28,605 retained pages from actual descriptors. Existing routes, original
+weight codes, arithmetic order and both work slots remain unchanged.
+
+Paired calibration032 covers20 PEs. Compile023's600-second timeout and recorded
+2/3/4GiB memory limits remain preserved; bounded024 completes in520.129s.
+Twenty selected source and twenty publication tests pass.
+All services release; no new WSE allocation. GDN math-only029 and rejected
+SDK-replacement030/031 are separately scoped. This is a storage/compiler
+milestone, not new numerical execution or model speed. See
+[Compact MLP](COMPACT-MLP.md) and [Recurrent integration](GDN-INTEGRATION.md).

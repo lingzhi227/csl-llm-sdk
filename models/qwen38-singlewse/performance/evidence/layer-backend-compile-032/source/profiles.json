@@ -1,0 +1,739 @@
+{
+  "samples": [
+    {
+      "pe": [
+        0,
+        0
+      ],
+      "pair": 0,
+      "variant": "baseline",
+      "source": "layer_projection.csl",
+      "parameters": {
+        "rows": 8,
+        "columns": 32,
+        "branches": 2,
+        "max_parts": 1,
+        "bank_words": 4096,
+        "root": false,
+        "children": 0,
+        "subtree_k": 1,
+        "left_k": 0,
+        "right_k": 0,
+        "left_color": 3,
+        "right_color": 4,
+        "out_color": 3,
+        "copy_transport": true,
+        "tagged_input": true,
+        "mlp_component": true,
+        "shared_inputs": true
+      },
+      "original_pe": [
+        63,
+        0
+      ],
+      "original_bank_words": 8806,
+      "payload_changed": true
+    },
+    {
+      "pe": [
+        1,
+        0
+      ],
+      "pair": 0,
+      "variant": "compact",
+      "source": "compact_layer_projection.csl",
+      "parameters": {
+        "rows": 8,
+        "columns": 32,
+        "branches": 2,
+        "max_parts": 1,
+        "bank_words": 4096,
+        "root": false,
+        "children": 0,
+        "subtree_k": 1,
+        "left_k": 0,
+        "right_k": 0,
+        "left_color": 3,
+        "right_color": 4,
+        "out_color": 3,
+        "copy_transport": true,
+        "tagged_input": true,
+        "mlp_component": true,
+        "shared_inputs": true
+      },
+      "original_pe": [
+        63,
+        0
+      ],
+      "original_bank_words": 8806,
+      "payload_changed": true
+    },
+    {
+      "pe": [
+        2,
+        0
+      ],
+      "pair": 1,
+      "variant": "baseline",
+      "source": "layer_projection.csl",
+      "parameters": {
+        "rows": 8,
+        "columns": 32,
+        "branches": 2,
+        "max_parts": 1,
+        "bank_words": 4096,
+        "root": true,
+        "children": 2,
+        "subtree_k": 160,
+        "left_k": 80,
+        "right_k": 79,
+        "left_color": 5,
+        "right_color": 3,
+        "out_color": 1,
+        "copy_transport": true,
+        "tagged_input": true,
+        "mlp_component": true,
+        "shared_inputs": true,
+        "fused_root": true,
+        "boundary_rows": 0
+      },
+      "original_pe": [
+        138,
+        1
+      ],
+      "original_bank_words": 8806,
+      "payload_changed": true
+    },
+    {
+      "pe": [
+        3,
+        0
+      ],
+      "pair": 1,
+      "variant": "compact",
+      "source": "compact_layer_projection.csl",
+      "parameters": {
+        "rows": 8,
+        "columns": 32,
+        "branches": 2,
+        "max_parts": 1,
+        "bank_words": 4096,
+        "root": true,
+        "children": 2,
+        "subtree_k": 160,
+        "left_k": 80,
+        "right_k": 79,
+        "left_color": 5,
+        "right_color": 3,
+        "out_color": 1,
+        "copy_transport": true,
+        "tagged_input": true,
+        "mlp_component": true,
+        "shared_inputs": true,
+        "fused_root": true,
+        "boundary_rows": 0
+      },
+      "original_pe": [
+        138,
+        1
+      ],
+      "original_bank_words": 8806,
+      "payload_changed": true
+    },
+    {
+      "pe": [
+        4,
+        0
+      ],
+      "pair": 2,
+      "variant": "baseline",
+      "source": "layer_projection.csl",
+      "parameters": {
+        "rows": 8,
+        "columns": 32,
+        "branches": 2,
+        "max_parts": 2,
+        "bank_words": 4096,
+        "root": false,
+        "children": 0,
+        "subtree_k": 2,
+        "left_k": 0,
+        "right_k": 0,
+        "left_color": 3,
+        "right_color": 4,
+        "out_color": 3,
+        "copy_transport": true,
+        "tagged_input": true,
+        "mlp_component": true,
+        "shared_inputs": true
+      },
+      "original_pe": [
+        90,
+        65
+      ],
+      "original_bank_words": 8320,
+      "payload_changed": true
+    },
+    {
+      "pe": [
+        5,
+        0
+      ],
+      "pair": 2,
+      "variant": "compact",
+      "source": "compact_layer_projection.csl",
+      "parameters": {
+        "rows": 8,
+        "columns": 32,
+        "branches": 2,
+        "max_parts": 2,
+        "bank_words": 4096,
+        "root": false,
+        "children": 0,
+        "subtree_k": 2,
+        "left_k": 0,
+        "right_k": 0,
+        "left_color": 3,
+        "right_color": 4,
+        "out_color": 3,
+        "copy_transport": true,
+        "tagged_input": true,
+        "mlp_component": true,
+        "shared_inputs": true
+      },
+      "original_pe": [
+        90,
+        65
+      ],
+      "original_bank_words": 8320,
+      "payload_changed": true
+    },
+    {
+      "pe": [
+        6,
+        0
+      ],
+      "pair": 3,
+      "variant": "baseline",
+      "source": "layer_projection.csl",
+      "parameters": {
+        "rows": 8,
+        "columns": 32,
+        "branches": 2,
+        "max_parts": 2,
+        "bank_words": 4096,
+        "root": true,
+        "children": 2,
+        "subtree_k": 160,
+        "left_k": 106,
+        "right_k": 52,
+        "left_color": 5,
+        "right_color": 3,
+        "out_color": 19,
+        "copy_transport": true,
+        "tagged_input": true,
+        "mlp_component": true,
+        "shared_inputs": true,
+        "fused_root": true,
+        "boundary_rows": 0
+      },
+      "original_pe": [
+        88,
+        66
+      ],
+      "original_bank_words": 8608,
+      "payload_changed": true
+    },
+    {
+      "pe": [
+        7,
+        0
+      ],
+      "pair": 3,
+      "variant": "compact",
+      "source": "compact_layer_projection.csl",
+      "parameters": {
+        "rows": 8,
+        "columns": 32,
+        "branches": 2,
+        "max_parts": 2,
+        "bank_words": 4096,
+        "root": true,
+        "children": 2,
+        "subtree_k": 160,
+        "left_k": 106,
+        "right_k": 52,
+        "left_color": 5,
+        "right_color": 3,
+        "out_color": 19,
+        "copy_transport": true,
+        "tagged_input": true,
+        "mlp_component": true,
+        "shared_inputs": true,
+        "fused_root": true,
+        "boundary_rows": 0
+      },
+      "original_pe": [
+        88,
+        66
+      ],
+      "original_bank_words": 8608,
+      "payload_changed": true
+    },
+    {
+      "pe": [
+        8,
+        0
+      ],
+      "pair": 4,
+      "variant": "baseline",
+      "source": "layer_projection.csl",
+      "parameters": {
+        "rows": 8,
+        "columns": 32,
+        "branches": 2,
+        "max_parts": 2,
+        "bank_words": 4096,
+        "root": false,
+        "children": 0,
+        "subtree_k": 1,
+        "left_k": 0,
+        "right_k": 0,
+        "left_color": 3,
+        "right_color": 4,
+        "out_color": 4,
+        "copy_transport": true,
+        "tagged_input": true,
+        "mlp_component": true,
+        "shared_inputs": true,
+        "fusion_actor": true,
+        "actor_main_color": 1,
+        "actor_first_output": 10184,
+        "actor_output_rows": 536,
+        "actor_has_suffix": true,
+        "actor_suffix_color": 14,
+        "mlp_sender": true,
+        "sender_id": 59,
+        "bus_rx": "RAMP",
+        "bus_tx": "EAST"
+      },
+      "original_pe": [
+        89,
+        66
+      ],
+      "original_bank_words": 4672,
+      "payload_changed": true
+    },
+    {
+      "pe": [
+        9,
+        0
+      ],
+      "pair": 4,
+      "variant": "compact",
+      "source": "compact_layer_projection.csl",
+      "parameters": {
+        "rows": 8,
+        "columns": 32,
+        "branches": 2,
+        "max_parts": 2,
+        "bank_words": 4096,
+        "root": false,
+        "children": 0,
+        "subtree_k": 1,
+        "left_k": 0,
+        "right_k": 0,
+        "left_color": 3,
+        "right_color": 4,
+        "out_color": 4,
+        "copy_transport": true,
+        "tagged_input": true,
+        "mlp_component": true,
+        "shared_inputs": true,
+        "fusion_actor": true,
+        "actor_main_color": 1,
+        "actor_first_output": 10184,
+        "actor_output_rows": 536,
+        "actor_has_suffix": true,
+        "actor_suffix_color": 14,
+        "mlp_sender": true,
+        "sender_id": 59,
+        "bus_rx": "RAMP",
+        "bus_tx": "EAST"
+      },
+      "original_pe": [
+        89,
+        66
+      ],
+      "original_bank_words": 4672,
+      "payload_changed": true
+    },
+    {
+      "pe": [
+        10,
+        0
+      ],
+      "pair": 5,
+      "variant": "baseline",
+      "source": "layer_projection.csl",
+      "parameters": {
+        "rows": 4,
+        "columns": 64,
+        "branches": 1,
+        "max_parts": 1,
+        "bank_words": 4096,
+        "root": false,
+        "children": 0,
+        "subtree_k": 1,
+        "left_k": 0,
+        "right_k": 0,
+        "left_color": 3,
+        "right_color": 4,
+        "out_color": 3,
+        "copy_transport": true,
+        "tagged_input": true,
+        "mlp_component": true,
+        "shared_inputs": true
+      },
+      "original_pe": [
+        108,
+        67
+      ],
+      "original_bank_words": 8967,
+      "payload_changed": true
+    },
+    {
+      "pe": [
+        11,
+        0
+      ],
+      "pair": 5,
+      "variant": "compact",
+      "source": "compact_layer_projection.csl",
+      "parameters": {
+        "rows": 4,
+        "columns": 64,
+        "branches": 1,
+        "max_parts": 1,
+        "bank_words": 4096,
+        "root": false,
+        "children": 0,
+        "subtree_k": 1,
+        "left_k": 0,
+        "right_k": 0,
+        "left_color": 3,
+        "right_color": 4,
+        "out_color": 3,
+        "copy_transport": true,
+        "tagged_input": true,
+        "mlp_component": true,
+        "shared_inputs": true
+      },
+      "original_pe": [
+        108,
+        67
+      ],
+      "original_bank_words": 8967,
+      "payload_changed": true
+    },
+    {
+      "pe": [
+        12,
+        0
+      ],
+      "pair": 6,
+      "variant": "baseline",
+      "source": "layer_projection.csl",
+      "parameters": {
+        "rows": 4,
+        "columns": 64,
+        "branches": 1,
+        "max_parts": 1,
+        "bank_words": 4096,
+        "root": true,
+        "children": 2,
+        "subtree_k": 272,
+        "left_k": 136,
+        "right_k": 135,
+        "left_color": 4,
+        "right_color": 3,
+        "out_color": 0,
+        "copy_transport": true,
+        "tagged_input": true,
+        "mlp_component": true,
+        "shared_inputs": true
+      },
+      "original_pe": [
+        112,
+        71
+      ],
+      "original_bank_words": 8839,
+      "payload_changed": true
+    },
+    {
+      "pe": [
+        13,
+        0
+      ],
+      "pair": 6,
+      "variant": "compact",
+      "source": "compact_layer_projection.csl",
+      "parameters": {
+        "rows": 4,
+        "columns": 64,
+        "branches": 1,
+        "max_parts": 1,
+        "bank_words": 4096,
+        "root": true,
+        "children": 2,
+        "subtree_k": 272,
+        "left_k": 136,
+        "right_k": 135,
+        "left_color": 4,
+        "right_color": 3,
+        "out_color": 0,
+        "copy_transport": true,
+        "tagged_input": true,
+        "mlp_component": true,
+        "shared_inputs": true
+      },
+      "original_pe": [
+        112,
+        71
+      ],
+      "original_bank_words": 8839,
+      "payload_changed": true
+    },
+    {
+      "pe": [
+        14,
+        0
+      ],
+      "pair": 7,
+      "variant": "baseline",
+      "source": "layer_projection.csl",
+      "parameters": {
+        "rows": 4,
+        "columns": 64,
+        "branches": 1,
+        "max_parts": 2,
+        "bank_words": 4096,
+        "root": false,
+        "children": 0,
+        "subtree_k": 2,
+        "left_k": 0,
+        "right_k": 0,
+        "left_color": 3,
+        "right_color": 4,
+        "out_color": 3,
+        "copy_transport": true,
+        "tagged_input": true,
+        "mlp_component": true,
+        "shared_inputs": true
+      },
+      "original_pe": [
+        114,
+        141
+      ],
+      "original_bank_words": 8930,
+      "payload_changed": true
+    },
+    {
+      "pe": [
+        15,
+        0
+      ],
+      "pair": 7,
+      "variant": "compact",
+      "source": "compact_layer_projection.csl",
+      "parameters": {
+        "rows": 4,
+        "columns": 64,
+        "branches": 1,
+        "max_parts": 2,
+        "bank_words": 4096,
+        "root": false,
+        "children": 0,
+        "subtree_k": 2,
+        "left_k": 0,
+        "right_k": 0,
+        "left_color": 3,
+        "right_color": 4,
+        "out_color": 3,
+        "copy_transport": true,
+        "tagged_input": true,
+        "mlp_component": true,
+        "shared_inputs": true
+      },
+      "original_pe": [
+        114,
+        141
+      ],
+      "original_bank_words": 8930,
+      "payload_changed": true
+    },
+    {
+      "pe": [
+        16,
+        0
+      ],
+      "pair": 8,
+      "variant": "baseline",
+      "source": "layer_projection.csl",
+      "parameters": {
+        "rows": 4,
+        "columns": 64,
+        "branches": 1,
+        "max_parts": 2,
+        "bank_words": 4096,
+        "root": true,
+        "children": 2,
+        "subtree_k": 272,
+        "left_k": 158,
+        "right_k": 112,
+        "left_color": 5,
+        "right_color": 3,
+        "out_color": 0,
+        "copy_transport": true,
+        "tagged_input": true,
+        "mlp_component": true,
+        "shared_inputs": true
+      },
+      "original_pe": [
+        127,
+        143
+      ],
+      "original_bank_words": 8450,
+      "payload_changed": true
+    },
+    {
+      "pe": [
+        17,
+        0
+      ],
+      "pair": 8,
+      "variant": "compact",
+      "source": "compact_layer_projection.csl",
+      "parameters": {
+        "rows": 4,
+        "columns": 64,
+        "branches": 1,
+        "max_parts": 2,
+        "bank_words": 4096,
+        "root": true,
+        "children": 2,
+        "subtree_k": 272,
+        "left_k": 158,
+        "right_k": 112,
+        "left_color": 5,
+        "right_color": 3,
+        "out_color": 0,
+        "copy_transport": true,
+        "tagged_input": true,
+        "mlp_component": true,
+        "shared_inputs": true
+      },
+      "original_pe": [
+        127,
+        143
+      ],
+      "original_bank_words": 8450,
+      "payload_changed": true
+    },
+    {
+      "pe": [
+        18,
+        0
+      ],
+      "pair": 9,
+      "variant": "baseline",
+      "source": "layer_projection.csl",
+      "parameters": {
+        "rows": 4,
+        "columns": 64,
+        "branches": 1,
+        "max_parts": 2,
+        "bank_words": 4096,
+        "root": false,
+        "children": 0,
+        "subtree_k": 1,
+        "left_k": 0,
+        "right_k": 0,
+        "left_color": 3,
+        "right_color": 4,
+        "out_color": 6,
+        "copy_transport": true,
+        "tagged_input": true,
+        "mlp_component": true,
+        "shared_inputs": true,
+        "mlp_sender": true,
+        "sender_id": 81,
+        "bus_rx": "EAST",
+        "bus_tx": "WEST",
+        "output_sink": true,
+        "sink_color": 0,
+        "sink_index": 8,
+        "sink_first": 4320,
+        "sink_rows": 540
+      },
+      "original_pe": [
+        110,
+        145
+      ],
+      "original_bank_words": 8065,
+      "payload_changed": true
+    },
+    {
+      "pe": [
+        19,
+        0
+      ],
+      "pair": 9,
+      "variant": "compact",
+      "source": "compact_layer_projection.csl",
+      "parameters": {
+        "rows": 4,
+        "columns": 64,
+        "branches": 1,
+        "max_parts": 2,
+        "bank_words": 4096,
+        "root": false,
+        "children": 0,
+        "subtree_k": 1,
+        "left_k": 0,
+        "right_k": 0,
+        "left_color": 3,
+        "right_color": 4,
+        "out_color": 6,
+        "copy_transport": true,
+        "tagged_input": true,
+        "mlp_component": true,
+        "shared_inputs": true,
+        "mlp_sender": true,
+        "sender_id": 81,
+        "bus_rx": "EAST",
+        "bus_tx": "WEST",
+        "output_sink": true,
+        "sink_color": 0,
+        "sink_index": 8,
+        "sink_first": 4320,
+        "sink_rows": 540
+      },
+      "original_pe": [
+        110,
+        145
+      ],
+      "original_bank_words": 8065,
+      "payload_changed": true
+    }
+  ],
+  "application": [
+    20,
+    1
+  ],
+  "base": "layer-mlp-compile-022",
+  "scope": "Paired compiler cost of exact MLP scale sharing, including ragged K parts.",
+  "physical": false,
+  "executed": false,
+  "full_bank_admission": false
+}

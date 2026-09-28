@@ -1,0 +1,12 @@
+const memcpy=@import_module("<memcpy/get_params>",.{.width=8,.height=1});
+layout {
+ @set_rectangle(8,1);
+ @set_tile_code(0,0,"layer_projection.csl",.{.memcpy_params=memcpy.get_params(0),.rows=4,.columns=64,.branches=1,.max_parts=1,.bank_words=4096,.root=false,.children=0,.subtree_k=1,.left_k=0,.right_k=0,.left_color=3,.right_color=4,.out_color=3,.copy_transport=true,.tagged_input=true,.mlp_component=true,.shared_inputs=true});
+ @set_tile_code(1,0,"gdn_math_layer_projection.csl",.{.memcpy_params=memcpy.get_params(1),.rows=4,.columns=64,.branches=1,.max_parts=1,.bank_words=4096,.root=false,.children=0,.subtree_k=1,.left_k=0,.right_k=0,.left_color=3,.right_color=4,.out_color=3,.copy_transport=true,.tagged_input=true,.mlp_component=true,.shared_inputs=true});
+ @set_tile_code(2,0,"layer_projection.csl",.{.memcpy_params=memcpy.get_params(2),.rows=8,.columns=32,.branches=2,.max_parts=1,.bank_words=4096,.root=false,.children=0,.subtree_k=1,.left_k=0,.right_k=0,.left_color=3,.right_color=4,.out_color=3,.copy_transport=true,.tagged_input=true,.mlp_component=true,.shared_inputs=true});
+ @set_tile_code(3,0,"gdn_math_layer_projection.csl",.{.memcpy_params=memcpy.get_params(3),.rows=8,.columns=32,.branches=2,.max_parts=1,.bank_words=4096,.root=false,.children=0,.subtree_k=1,.left_k=0,.right_k=0,.left_color=3,.right_color=4,.out_color=3,.copy_transport=true,.tagged_input=true,.mlp_component=true,.shared_inputs=true});
+ @set_tile_code(4,0,"device_mixer_layer_mlp_standby.csl",.{.memcpy_params=memcpy.get_params(4),.bank_words=4096,.mixer_rank_parity=1,.mixer_input48_queue=5,.mixer_can_root=false,.control_reply_rx=WEST,.control_reply_tx=EAST});
+ @set_tile_code(5,0,"gdn_math_device_mixer_layer_mlp_standby.csl",.{.memcpy_params=memcpy.get_params(5),.bank_words=4096,.mixer_rank_parity=1,.mixer_input48_queue=5,.mixer_can_root=false,.control_reply_rx=WEST,.control_reply_tx=EAST});
+ @set_tile_code(6,0,"device_mixer_layer_mlp_standby.csl",.{.memcpy_params=memcpy.get_params(6),.bank_words=4096,.mixer_rank_parity=0,.mixer_input48_queue=5,.mixer_can_root=true,.control_reply_rx=WEST,.control_reply_tx=EAST});
+ @set_tile_code(7,0,"gdn_math_device_mixer_layer_mlp_standby.csl",.{.memcpy_params=memcpy.get_params(7),.bank_words=4096,.mixer_rank_parity=0,.mixer_input48_queue=5,.mixer_can_root=true,.control_reply_rx=WEST,.control_reply_tx=EAST});
+}

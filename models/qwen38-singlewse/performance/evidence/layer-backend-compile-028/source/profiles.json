@@ -1,0 +1,242 @@
+{
+  "samples": [
+    {
+      "pe": [
+        0,
+        0
+      ],
+      "pair": 0,
+      "variant": "baseline",
+      "source": "layer_projection.csl",
+      "parameters": {
+        "rows": 4,
+        "columns": 64,
+        "branches": 1,
+        "max_parts": 1,
+        "bank_words": 4096,
+        "root": false,
+        "children": 0,
+        "subtree_k": 1,
+        "left_k": 0,
+        "right_k": 0,
+        "left_color": 3,
+        "right_color": 4,
+        "out_color": 3,
+        "copy_transport": true,
+        "tagged_input": true,
+        "mlp_component": true,
+        "shared_inputs": true
+      },
+      "original_pe": [
+        108,
+        67
+      ],
+      "original_bank_words": 8967,
+      "payload_changed": true
+    },
+    {
+      "pe": [
+        1,
+        0
+      ],
+      "pair": 0,
+      "variant": "math",
+      "source": "gdn_math_layer_projection.csl",
+      "parameters": {
+        "rows": 4,
+        "columns": 64,
+        "branches": 1,
+        "max_parts": 1,
+        "bank_words": 4096,
+        "root": false,
+        "children": 0,
+        "subtree_k": 1,
+        "left_k": 0,
+        "right_k": 0,
+        "left_color": 3,
+        "right_color": 4,
+        "out_color": 3,
+        "copy_transport": true,
+        "tagged_input": true,
+        "mlp_component": true,
+        "shared_inputs": true
+      },
+      "original_pe": [
+        108,
+        67
+      ],
+      "original_bank_words": 8967,
+      "payload_changed": true
+    },
+    {
+      "pe": [
+        2,
+        0
+      ],
+      "pair": 1,
+      "variant": "baseline",
+      "source": "layer_projection.csl",
+      "parameters": {
+        "rows": 8,
+        "columns": 32,
+        "branches": 2,
+        "max_parts": 1,
+        "bank_words": 4096,
+        "root": false,
+        "children": 0,
+        "subtree_k": 1,
+        "left_k": 0,
+        "right_k": 0,
+        "left_color": 3,
+        "right_color": 4,
+        "out_color": 3,
+        "copy_transport": true,
+        "tagged_input": true,
+        "mlp_component": true,
+        "shared_inputs": true
+      },
+      "original_pe": [
+        63,
+        0
+      ],
+      "original_bank_words": 8806,
+      "payload_changed": true
+    },
+    {
+      "pe": [
+        3,
+        0
+      ],
+      "pair": 1,
+      "variant": "math",
+      "source": "gdn_math_layer_projection.csl",
+      "parameters": {
+        "rows": 8,
+        "columns": 32,
+        "branches": 2,
+        "max_parts": 1,
+        "bank_words": 4096,
+        "root": false,
+        "children": 0,
+        "subtree_k": 1,
+        "left_k": 0,
+        "right_k": 0,
+        "left_color": 3,
+        "right_color": 4,
+        "out_color": 3,
+        "copy_transport": true,
+        "tagged_input": true,
+        "mlp_component": true,
+        "shared_inputs": true
+      },
+      "original_pe": [
+        63,
+        0
+      ],
+      "original_bank_words": 8806,
+      "payload_changed": true
+    },
+    {
+      "pe": [
+        4,
+        0
+      ],
+      "pair": 2,
+      "variant": "baseline",
+      "source": "device_mixer_layer_mlp_standby.csl",
+      "parameters": {
+        "bank_words": 4096,
+        "mixer_rank_parity": 1,
+        "mixer_input48_queue": 5,
+        "mixer_can_root": false,
+        "control_reply_rx": "WEST",
+        "control_reply_tx": "EAST"
+      },
+      "original_pe": [
+        64,
+        67
+      ],
+      "original_bank_words": 8483,
+      "payload_changed": true
+    },
+    {
+      "pe": [
+        5,
+        0
+      ],
+      "pair": 2,
+      "variant": "math",
+      "source": "gdn_math_device_mixer_layer_mlp_standby.csl",
+      "parameters": {
+        "bank_words": 4096,
+        "mixer_rank_parity": 1,
+        "mixer_input48_queue": 5,
+        "mixer_can_root": false,
+        "control_reply_rx": "WEST",
+        "control_reply_tx": "EAST"
+      },
+      "original_pe": [
+        64,
+        67
+      ],
+      "original_bank_words": 8483,
+      "payload_changed": true
+    },
+    {
+      "pe": [
+        6,
+        0
+      ],
+      "pair": 3,
+      "variant": "baseline",
+      "source": "device_mixer_layer_mlp_standby.csl",
+      "parameters": {
+        "bank_words": 4096,
+        "mixer_rank_parity": 0,
+        "mixer_input48_queue": 5,
+        "mixer_can_root": true,
+        "control_reply_rx": "WEST",
+        "control_reply_tx": "EAST"
+      },
+      "original_pe": [
+        69,
+        69
+      ],
+      "original_bank_words": 8356,
+      "payload_changed": true
+    },
+    {
+      "pe": [
+        7,
+        0
+      ],
+      "pair": 3,
+      "variant": "math",
+      "source": "gdn_math_device_mixer_layer_mlp_standby.csl",
+      "parameters": {
+        "bank_words": 4096,
+        "mixer_rank_parity": 0,
+        "mixer_input48_queue": 5,
+        "mixer_can_root": true,
+        "control_reply_rx": "WEST",
+        "control_reply_tx": "EAST"
+      },
+      "original_pe": [
+        69,
+        69
+      ],
+      "original_bank_words": 8356,
+      "payload_changed": true
+    }
+  ],
+  "application": [
+    8,
+    1
+  ],
+  "base": "layer-mlp-compile-022",
+  "scope": "Paired actual-cohost compiler cost of full-key FP32 state columns reusing existing decoder/partial arenas. Calibration start entry only; no new transport, numerical execution or full-bank admission.",
+  "executed": false,
+  "physical": false,
+  "full_bank_admission": false,
+  "base_source_manifest_sha256": "c4d522b6a4ae7851cc80481c3ba4f8cd5b79bf0dec76d9bb3e59c7ee7ab453ae"
+}

@@ -1,0 +1,23 @@
+// A full128-key FP32 state column: no cross-PE key reduction or rounded state.
+// The caller leases an existing512B projection decoder first to K, then to Q.
+// K is released only after the rank-one update; Q can then overwrite its arena.
+// Synchronous DSR4/7 math requires the previous projection's complete drain.
+const yd=@get_dsr(dsr_dest,4);const ys=@get_dsr(dsr_src0,4);const ws=@get_dsr(dsr_src1,4);
+const md=@get_dsr(dsr_dest,7);const ms=@get_dsr(dsr_src0,7);const ks=@get_dsr(dsr_src1,7);
+fn accumulate(value:f32) void {@fmacs(yd,ys,ws,value);}
+fn reduce(state:[*]f32,vector:[*]f32,result:[*]f32) void {
+ const out=@get_dsd(mem1d_dsd,.{.base_address=result,.extent=1});
+ const row=@get_dsd(mem1d_dsd,.{.base_address=state,.extent=1});
+ const input=@get_dsd(mem1d_dsd,.{.base_address=vector,.extent=128});
+ @fmovs(out,0.0);@load_to_dsr(yd,out,.{.save_address=false});
+ @load_to_dsr(ys,out,.{.save_address=false});@load_to_dsr(ws,row,.{.save_address=true});
+ @map(accumulate,input);
+}
+fn key(state:[*]f32,vector:[*]f32,value:f32,decay:f32,beta:f32,result:[*]f32) void {
+ const all=@get_dsd(mem1d_dsd,.{.base_address=state,.extent=128});
+ const input=@get_dsd(mem1d_dsd,.{.base_address=vector,.extent=128});
+ @load_to_dsr(md,all,.{.save_address=false});@load_to_dsr(ms,all,.{.save_address=false});
+ @fmuls(md,ms,decay);reduce(state,vector,result);
+ const delta:f32=(value-result[0])*beta;
+ @load_to_dsr(ks,input,.{.save_address=false});@fmacs(md,ms,ks,delta);
+}

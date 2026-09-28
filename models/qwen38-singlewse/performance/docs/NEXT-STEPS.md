@@ -1,20 +1,25 @@
 # Next work: resident spatial pipeline
 
-Immediate P43 follow-up: use full compile022, original-bank reference001 and
-physical mixer-frontend-hw-001. All16 original frontend groups now pass full
-six-position plus reset-replay numerical, history, parameter retention and native
-transport checks. The standalone test supplies reference projection and recurrent
-values; actual recurrent state computation is the next missing connection.
-Connect real GDN state workers/returns, gated output projection and the retained
-norm/MLP graph. Do not restart admitted layout searches or repeat isolated
-frontend sweeps. Keep CompactMixerPlacement and FrontendAuxiliaryPlacement for
-all addresses; old65-word tile/40-word descriptor assumptions are invalid.
-Production history caches still need integration with initial parameter loading.
-Keep transport retirement distinct from semantic completion before the next
-token. The harness IQ2 and downstream SDK observer are standalone adaptations;
-the full-stage native receiver retains IQ1. No complete neural stage, continuing
-conversation or model-speed claim follows from this component pass.
-See [Frontend numerics](FRONTEND-NUMERICS.md) and [Compact frontend](COMPACT-FRONTEND.md).
+Immediate P44 follow-up: use full compile024, original-bank reference002 and
+physical mixer-frontend-hw-001. CompactMlpPlacement and
+CompactMlpAuxiliaryPlacement now control MLP/all auxiliary addresses; use
+CompactMixerPlacement for mixer weights. The old frontend map alone cannot
+address the compacted MLP banks. The new census frees3,362,352 actual SRAM bytes
+without changing routes or arithmetic. The reader has full compile/bitwise
+storage qualification, not new numerical execution. Do not repeat admitted
+layout/calibration sweeps.
+
+Connect actual GDN state workers/returns, gated output projection and the retained
+norm/MLP graph. Retile every original4-key x8-value page explicitly; full-key
+columns are not contiguous old pages. Reuse decoder scratch only after full
+projection/transfer drain and retire GDN returns before the next MLP lease. The
+capacity table uses assumed code/scratch budgets, not an executable placement.
+Variable-width workers need a qualified pair gather or scalar-return frontend.
+All16 original frontend groups/48 heads pass P43 physical6+2-position checks,
+but their recurrent results were injected. Production history caches still need
+integration with parameter loading. Preserve transport retirement separately
+from semantic completion. Full64-layer dialogue and2000tps remain unmet. See
+[Compact MLP](COMPACT-MLP.md) and [Recurrent integration](GDN-INTEGRATION.md).
 
 1. Preserve physical006 as the accepted shared-input complete-MLP baseline:
    all original numerical/retention/drain checks pass,49376->24688 broadcast words,

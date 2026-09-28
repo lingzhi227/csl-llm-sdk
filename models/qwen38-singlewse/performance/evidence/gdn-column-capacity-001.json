@@ -1,0 +1,60 @@
+{
+  "physical": false,
+  "compiled_gdn": false,
+  "admitted_gdn": false,
+  "required_columns": 6144,
+  "bytes_per_full_key_fp32_column": 512,
+  "maximum_columns_per_pe": 64,
+  "recurrence_pages_to_retile": 24576,
+  "original_recurrent_state_bytes": 3145728,
+  "removed_from_ledger_only_for_retiling": true,
+  "sensitivity": [
+    {
+      "assumed_total_added_bytes_per_selected_pe": 512,
+      "all_roles_variable_columns": 10140,
+      "all_roles_even_columns": 5458,
+      "ordinary_mlp_and_mixer_variable_columns": 10091
+    },
+    {
+      "assumed_total_added_bytes_per_selected_pe": 640,
+      "all_roles_variable_columns": 8961,
+      "all_roles_even_columns": 4358,
+      "ordinary_mlp_and_mixer_variable_columns": 8938
+    },
+    {
+      "assumed_total_added_bytes_per_selected_pe": 704,
+      "all_roles_variable_columns": 7730,
+      "all_roles_even_columns": 3786,
+      "ordinary_mlp_and_mixer_variable_columns": 7711
+    },
+    {
+      "assumed_total_added_bytes_per_selected_pe": 736,
+      "all_roles_variable_columns": 7718,
+      "all_roles_even_columns": 3784,
+      "ordinary_mlp_and_mixer_variable_columns": 7699
+    },
+    {
+      "assumed_total_added_bytes_per_selected_pe": 768,
+      "all_roles_variable_columns": 7710,
+      "all_roles_even_columns": 3768,
+      "ordinary_mlp_and_mixer_variable_columns": 7691
+    },
+    {
+      "assumed_total_added_bytes_per_selected_pe": 896,
+      "all_roles_variable_columns": 5862,
+      "all_roles_even_columns": 3734,
+      "ordinary_mlp_and_mixer_variable_columns": 5850
+    },
+    {
+      "assumed_total_added_bytes_per_selected_pe": 1024,
+      "all_roles_variable_columns": 4411,
+      "all_roles_even_columns": 3364,
+      "ordinary_mlp_and_mixer_variable_columns": 4399
+    }
+  ],
+  "source_sha256": {
+    "layer-mlp-compile-024/source/mlp-bank-placement.json": "fd911dcc601409e3c47e259f3b306faf6c158123b022e4fa4effccfb5d9aef0f",
+    "compact-mlp-census-001/result.json": "1d7005fe08cf743407333b366421a584ef645782df110fde4f0b7ce9d93e58f4"
+  },
+  "scope": "Measured complete-stage spare SRAM plus all original recurrent pages available for explicit bijective retiling. Fixed added code/scratch costs are hypothetical. No routes, gate/V temporaries, buffers, logical head assignment or execution admitted. Actual transport/math must be compiled before selecting a plan."
+}

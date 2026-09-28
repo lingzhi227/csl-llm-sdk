@@ -11,6 +11,16 @@ includes appended-input processing and generation, excluding user think time and
 initial loading; decode-only speed and TTFT are reported separately. See
 [DIALOGUE-ACCEPTANCE.md](../performance/docs/DIALOGUE-ACCEPTANCE.md). The target remains unmet.
 
+P44 admits exact original MLP scale sharing on all11,388 layer00 PEs with
+8,428 ELF images, maximum48,032B including4,096B stack and minimum96B margin.
+Bank savings are3,912,128B; the measured whole-stage SRAM reduction is3,362,352B.
+Remote reference002 verifies every98,003,376 original source word, all1,044,480
+MLP tiles and28,605 retained pages. All routes, arithmetic order, original weight
+codes and both work slots remain. Compile023's timeout is preserved;024 passes
+and all services release. No new WSE job is submitted. Actual GDN transport,
+changed numerical execution, complete-layer inference and model speed remain
+unqualified. See [Compact MLP](../performance/docs/COMPACT-MLP.md).
+
 P43 physically qualifies all16 original frontend groups/48 heads over six
 continuous positions and two reset-replay positions:148224 FP32 packet values,
 49152 gated BF16 outputs,245760 exact history samples,259512 native packets and
