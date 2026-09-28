@@ -9,6 +9,17 @@ includes appended-input processing and generation, excluding user think time and
 initial loading; decode-only speed and TTFT are reported separately. See
 [DIALOGUE-ACCEPTANCE.md](docs/DIALOGUE-ACCEPTANCE.md). The target remains unmet.
 
+P41 implements direct fused projection packet output and16 shared-Q/K
+convolution/gate frontend groups. All33 selected cohost programs compile; all16
+consumer groups keep their complete original bank extents, with maximum47984bytes
+including4096 stack. Routing checks cover all16480 projected values and1408 paths.
+The new resource planner rejects the unchanged whole-stage placement:1275
+estimated matrix-prefix conflicts require joint weight/communication placement,
+not only state-page movement. New numerical execution, the recurrent core and
+complete layer/model inference remain unfinished; no speed claim is made. All
+six workstation services release and no new hardware job is submitted. See
+[Frontend fusion](docs/FRONTEND-FUSION.md).
+
 P40 specializes the complete layer00 banks for one continuing conversation,
 retaining all original weights, the complete first context and both work slots.
 Fresh compile021 admits

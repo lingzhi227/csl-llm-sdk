@@ -1,5 +1,16 @@
 # Next work: resident spatial pipeline
 
+Immediate P41 follow-up: selected fused roots and all16 shared-Q/K frontend
+consumers compile, but the unchanged P40 weight layout is rejected by
+frontend-composition-audit-002 (1275 estimated matrix-prefix conflicts). Moving
+state pages alone is insufficient. Jointly lower matrix/head ownership and the
+packet network, consider contiguous Z ownership to reduce fanout/merge sites,
+then requalify original-byte migration and every complete-program SRAM gate.
+Do not dispatch the rejected layout or present selected calibration banks as
+whole-stage admission. Qualify the new frontend numerics and connect actual
+GDN state/return traffic and output-projection ingress before layer acceptance.
+See [FRONTEND-FUSION.md](FRONTEND-FUSION.md).
+
 1. Preserve physical006 as the accepted shared-input complete-MLP baseline:
    all original numerical/retention/drain checks pass,49376->24688 broadcast words,
    nonzero counts564289–564333. Four host observations improve versus P29 but

@@ -1,0 +1,82 @@
+param control_reply_rx:direction;param control_reply_tx:direction;
+// Preserve the original mixer/state resident bank in this MLP-only component.
+// No mixer operation is executed; it is not a full-layer acceptance artifact.
+param memcpy_params;param bank_words:u16;
+const sys=@import_module("device_control.csl",.{.command_task=@get_local_task_id(24),.routed=true,.reply_rx=control_reply_rx,.reply_tx=control_reply_tx,.forward_host_commands=true});
+var bank=@zeros([if(bank_words>0) bank_words else 1]u32);var audit=@zeros([4]u32);var setup=@zeros([5]u16);
+const bp:[*]u32=&bank;const ap:[*]u32=&audit;const sp:[*]u16=&setup;
+fn arm(epoch:u32) void {@assert(packet_merge.drained());@assert(mixer.drained() and mixer_status[2]==0);audit[0]=epoch;sys.unblock_cmd_stream();}
+fn start() void {sys.unblock_cmd_stream();}
+fn finish() void {sys.unblock_cmd_stream();}
+comptime {}
+
+// Composition port: the future conv/gate/residual consumer receives this local
+// root notification. Until connected, root data stays leased for explicit
+// consume; no synthetic neural result or fake automatic completion is emitted.
+param mixer_rank_parity:u16;param mixer_input48_queue:u16;param mixer_can_root:bool;
+const mrt=@get_local_task_id(25);const mdt=@get_local_task_id(26);
+const mixer=@import_module("mixer_projection.csl",.{.rank_parity=mixer_rank_parity,.bank_words=bank_words,
+ .input48_queue=mixer_input48_queue,.can_root=mixer_can_root,.root_ready_task=mrt,.drained_task=mdt});
+var mixer_status=@zeros([4]u32);const msp:[*]u32=&mixer_status;
+const msetup:[*]u16=mixer.setup_pointer;const maudit:[*]u32=mixer.audit_pointer;
+const mout:[*]u32=mixer.root_output;
+task mixer_root_ready() void {
+ @assert(mixer_status[2]==0);mixer_status[0]=mout[0];mixer_status[1]=mout[1];mixer_status[2]=1;
+}
+task mixer_drained() void {mixer_status[3]+=1;}
+fn mixer_begin(request:u32,generation:u32,projection:u16) void {
+ 
+ @assert(mixer_status[2]==0);mixer.begin(bp,request,generation,projection);sys.unblock_cmd_stream();
+}
+fn mixer_consume(generation:u32,row:u16) void {
+ @assert(mixer_status[2]==1);mixer_status[2]=0;mixer.root_consumed(generation,row);sys.unblock_cmd_stream();
+}
+comptime {
+ @bind_local_task(mixer_root_ready,mrt);@bind_local_task(mixer_drained,mdt);
+ 
+ 
+ 
+}
+
+// Segment IDs are a device ABI, never arbitrary host-provided pointers.
+const device_task=@get_local_task_id(24);
+fn device_transfer() void {
+ const c=sys.command;const segment=c[2];
+ @assert(c[4]>0 and c[4]<=256 and c[3]<65536 and c[3]+c[4]<65536);
+ const first=@as(u16,c[3]);const length=@as(u16,c[4]);
+ var pointer:[*]u32=bp;var half:[*]u16=msetup;var extent:u16=0;var bits:u16=32;var writable:bool=false;
+ if(segment==0){pointer=bp;extent=bank_words;writable=true;}
+ else if(segment==1){half=msetup;extent=40;bits=16;writable=true;}
+ else if(segment==2){pointer=maudit;extent=6;}
+ else if(segment==3){pointer=msp;extent=4;}
+ else if(segment==4){pointer=mout;extent=5;}
+ else if(segment==8){pointer=ap;extent=4;}
+ else{@assert(false);}
+ @assert(first+length<=extent);
+ if(c[1]==0){
+  @assert(writable and mixer.drained() and mixer_status[2]==0);
+  if(bits==32){sys.write32(@ptrcast([*]u32,&pointer[@as(u16,first)]),@as(u16,length));}
+  else{sys.write16(@ptrcast([*]u16,&half[@as(u16,first)]),@as(u16,length));}
+ }else{
+  @assert(c[1]==1);
+  if(bits==32){sys.read32(@ptrcast([*]u32,&pointer[@as(u16,first)]),@as(u16,length));}
+  else{if(comptime sys.routed){@assert(first%2==0 and length%2==0);}sys.read16(@ptrcast([*]u16,&half[first]),length);}
+ }
+}
+task device_command() void {
+ const c=sys.command;
+ if(c[1]<2){device_transfer();}
+ else if(c[1]==2){arm(c[2]);}
+ else if(c[1]==3){start();}
+ else if(c[1]==4){finish();}
+ else if(c[1]==5){@assert(c[4]<5);mixer_begin(c[2],c[3],@as(u16,c[4]));}
+ else if(c[1]==6){@assert(c[3]<65536);mixer_consume(c[2],@as(u16,c[3]));}
+ else{@assert(false);}
+}
+comptime {@bind_local_task(device_command,device_task);}
+
+param frontend_horizontal0:bool;param frontend_horizontal1:bool;param frontend_horizontal2:bool;
+param frontend_vertical:bool;param frontend_incoming:u16;param frontend_outgoing:u16;
+const packet_merge=@import_module("mixer_packet_merge.csl",.{
+ .horizontal0=frontend_horizontal0,.horizontal1=frontend_horizontal1,.horizontal2=frontend_horizontal2,
+ .vertical=frontend_vertical,.incoming_vertical=frontend_incoming,.outgoing_vertical=frontend_outgoing});

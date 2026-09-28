@@ -1,0 +1,17 @@
+// Ordered native FMA for one independently packed 256-weight candidate tile.
+// Based on csl/fp8_dot.csl; only compile-time row and K extents differ.
+param rows:u16;param columns:u16;param vector_scales:bool;
+comptime {@comptime_assert(rows*columns==256 and rows>=2 and rows<=16);}
+const yd=@get_dsr(dsr_dest,4);const ys=@get_dsr(dsr_src0,4);const ws=@get_dsr(dsr_src1,4);
+fn step(value:f16) void {@fmachs(yd,ys,ws,value);}
+fn compute(weight:[*]u16,input:[*]u16,output:[*]f32,activation_scale:f32,weight_scale:f32) void {
+ const out=@get_dsd(mem1d_dsd,.{.base_address=output,.extent=rows});
+ const w=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]f16,weight),.extent=rows});
+ const x=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]f16,input),.extent=columns});
+ @fmovs(out,0.0);@load_to_dsr(yd,out,.{.save_address=false});@load_to_dsr(ys,out,.{.save_address=false});
+ @load_to_dsr(ws,w,.{.save_address=true});@map(step,x);
+ if(comptime vector_scales){
+  // Preserve all three FP32 rounding boundaries and their original order.
+  @fmuls(out,out,65536.0);@fmuls(out,out,activation_scale);@fmuls(out,out,weight_scale);
+ }else{for(@range(u16,rows))|i|{output[i]=((output[i]*65536.0)*activation_scale)*weight_scale;}}
+}

@@ -1,0 +1,91 @@
+// Two independent projected-block streams feed one original group128 fusion.
+// A following producer's early suffix is retained separately (256B maximum),
+// so copied-block credits never wait for this actor's earlier groups to finish.
+// Network DMA/credit sends use the caller's explicit queue/UT/DSR leases.
+param explicit_receipts:bool=true;param use_silu_lut:bool=false;
+// Independently exhaustively proved BF16 -> BF16 SiLU. Only active fused MLP
+// actors allocate the6656-byte immutable table, loaded once at initialization.
+var silu_lut=@zeros([if(use_silu_lut) 3328 else 1]u16);
+const lut_pointer:[*]u16=&silu_lut;
+fn table_silu(code:u16) u16 {
+ const magnitude=code&32767;const sign=code&32768;@assert(magnitude<32640);
+ if(magnitude<15232){
+  if(magnitude>=256){return sign|(magnitude-128);}
+  var half=magnitude>>1;if((magnitude&3)==3){half+=1;}return sign|half;
+ }
+ if(sign==0){if(magnitude>=16640){return code;}return silu_lut[magnitude-15232];}
+ if(magnitude>=17152){return sign;}return silu_lut[1408+magnitude-15232];
+}
+fn activate_pair(gate:u32,up:u32) u32 {
+ if(comptime !use_silu_lut){return activation.activation_pair(gate,up);}
+ const a=table_silu(activation.low(gate));const b=table_silu(activation.high(gate));
+ return activation.pack(activation.qwen.round(activation.qwen.expand(a)*activation.qwen.expand(activation.low(up))),
+                        activation.qwen.round(activation.qwen.expand(b)*activation.qwen.expand(activation.high(up))));
+}
+const fusion=@import_module("layer_fusion.csl",.{.downstream_columns=64});
+const activation=@import_module("mlp_fused.csl");
+var early=@zeros([64]u32);
+var receipts=@zeros([4]u32);var pending=[2]bool{false,false};
+var early_low:u32=0;var early_high:u32=0;
+var epoch:u32=0;var current:u16=0;var last:u16=0;
+var main_row:u16=0;var main_stop:u16=0;
+var main_first:u16=0;
+var boundary_row:u16=0;var boundary_stop:u16=0;
+var active:bool=false;
+const receipt:[*]u32=&receipts;
+
+fn begin(new_epoch:u32,first_output:u16,output_rows:u16) void {
+ @assert(!active and !pending[0] and !pending[1] and new_epoch>epoch);
+ @assert(output_rows>0 and first_output%8==0 and output_rows%8==0 and @as(u32,first_output)+@as(u32,output_rows)<=17408);
+ epoch=new_epoch;main_first=first_output;main_row=((first_output+127)/128)*128;main_stop=first_output+output_rows;
+ @assert(main_row<main_stop);
+ current=main_row/128;last=(main_stop-1)/128;
+ boundary_row=main_stop;boundary_stop=((main_stop+127)/128)*128;
+ early_low=0;early_high=0;active=true;fusion.begin(epoch,current);
+}
+fn needs_main() bool {return active and main_row<main_stop and main_row/128==current and fusion.phase==1 and !pending[0];}
+fn needs_boundary() bool {return active and boundary_row<boundary_stop and !pending[1];}
+fn consume(projected:[*]u32,comptime boundary:bool) void {
+ const slot:u16=if(boundary) 1 else 0;
+ @assert(active and !pending[slot] and projected[0]==epoch);
+ const expected:u16=if(boundary) boundary_row else main_row;
+ @assert(projected[2]==@as(u32,expected));
+ if(comptime boundary){@assert(projected[1]==@as(u32,(expected-main_stop)/8));}
+ else{@assert(projected[1]==@as(u32,(expected-main_first)/8));}
+ if(comptime boundary){@assert(needs_boundary() and expected/128==last);}
+ else{@assert(needs_main());}
+ for(@range(u16,4))|i|{
+  const pair=(expected%128)/2+i;
+  const value=activate_pair(projected[3+i],projected[7+i]);
+  if(comptime boundary){
+   if(current!=last){
+    early[pair]=value;
+    if(pair<32){const bit=@as(u32,1)<<pair;@assert((early_low&bit)==0);early_low|=bit;}
+    else{const bit=@as(u32,1)<<(pair-32);@assert((early_high&bit)==0);early_high|=bit;}
+   }else{fusion.put(epoch,last,pair,value);}
+  }else{fusion.put(epoch,current,pair,value);}
+ }
+ if(comptime boundary){boundary_row+=8;}else{main_row+=8;}
+ if(comptime explicit_receipts){receipts[2*slot]=epoch;receipts[2*slot+1]=projected[1];pending[slot]=true;}
+}
+fn credit_sent(comptime boundary:bool) void {
+ const slot:u16=if(boundary) 1 else 0;
+ @assert(pending[slot]);pending[slot]=false;
+}
+fn next_group() void {
+ @assert(active and fusion.phase==0 and !pending[0]);
+ if(current==last){
+  @assert(main_row==main_stop and boundary_row==boundary_stop and !pending[1]);active=false;
+ }else{
+  current+=1;fusion.begin(epoch,current);
+  if(current==last){
+   for(@range(u16,64))|pair|{
+    var present:bool=false;
+    if(pair<32){present=(early_low&(@as(u32,1)<<pair))!=0;}
+    else{present=(early_high&(@as(u32,1)<<(pair-32)))!=0;}
+    if(present){fusion.put(epoch,last,pair,early[pair]);}
+   }
+   early_low=0;early_high=0;
+  }
+ }
+}

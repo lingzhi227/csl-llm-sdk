@@ -1,0 +1,22 @@
+// Exact BF16 root packet -> tagged local row broadcast, with no host gather.
+// Five payload16 flits encode invocation32, semantic index16 and two BF16s.
+// The source output lease retires only after the DMA copies this frame.
+param color:u16;param done_task:local_task_id;
+var frame=@zeros([5]u32);var busy:bool=false;
+const oq=@get_output_queue(6);const os=@get_dsr(dsr_src0,5);const od=@get_dsr(dsr_dest,5);
+fn send(root:[*]u32,token:u32) void {
+ @assert(!busy and token>0 and root[4]<4 and root[1]<10240);busy=true;
+ const row=@as(u16,root[1]);const matrix=@as(u16,root[4]);var group:u16=0;var index:u16=row;
+ if(matrix==0){
+  @assert(root[2]==2 and row%2==0);
+  if(row<2048){group=row/128;}else if(row<4096){group=(row-2048)/128;}else{group=(row-4096)/384;}
+ }else if(matrix==1){@assert(root[2]==2 and row<6144 and row%2==0);group=row/384;index=10240+row;
+ }else{@assert(root[2]==1 and row<48 and root[3]<65536);group=row/3;index=16384+(matrix-2)*48+row;}
+ @assert(group<16);const tag:u32=@as(u32,group)<<16;
+ frame[0]=tag|(token&65535);frame[1]=tag|(token>>16);frame[2]=tag|@as(u32,index);
+ frame[3]=tag|(root[3]&65535);frame[4]=tag|(root[3]>>16);
+ const m=@get_dsd(mem1d_dsd,.{.base_address=&frame,.extent=5});const f=@get_dsd(fabout_dsd,.{.output_queue=oq,.extent=5});
+ @load_to_dsr(os,m);@load_to_dsr(od,f,.{.async=true,.ut_id=@get_ut_id(2),.activate=done_task});@mov32(od,os,.{.async=true});
+}
+fn copied() void {@assert(busy);busy=false;}
+comptime {@comptime_assert(color==0 or color==1 or color==19);@initialize_queue(oq,.{.color=@get_color(color)});}

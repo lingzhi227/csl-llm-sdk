@@ -1,0 +1,24 @@
+// Produce the final wire representation in the already leased outgoing arena.
+// Reuse the projection's sender DSR, microthread and completion; no second
+// output copy, mailbox, task, or source DMA lifetime is introduced.
+fn frontend_encode() void {
+ const row:u16=first+(emitted-1)*stride;var group:u16=0;var index:u16=row;
+ if(matrix==0){
+  if(row<2048){group=row>>7;}else if(row<4096){group=(row-2048)>>7;}
+  else{group=(((row-4096)>>7)*43)>>7;}
+ }else if(matrix==1){group=((row>>7)*43)>>7;index=10240+row;}
+ else{group=(row*43)>>7;index=16384+(matrix-2)*48+row;}
+ @assert(group<16);const tag:u32=@as(u32,group)<<16;
+ outgoing[0]=tag|(request&65535);outgoing[1]=tag|(request>>16);outgoing[2]=tag|@as(u32,index);
+ outgoing[3]=tag|@as(u32,math.round(partial[0]));outgoing[4]=tag;
+ if(!use_bf16){outgoing[4]|=@as(u32,math.round(partial[1]));}
+}
+fn emit_packet(to_frontend:bool) void {
+ const m=@get_dsd(mem1d_dsd,.{.base_address=&outgoing,.extent=5});
+ const f=@get_dsd(fabout_dsd,.{.output_queue=oq,.extent=5});
+ const g=@get_dsd(fabout_dsd,.{.output_queue=frontend_oq,.extent=5});
+ @load_to_dsr(os,m);
+ if(to_frontend){@load_to_dsr(od,g,.{.async=true,.ut_id=@get_ut_id(5),.activate=ot});}
+ else{@load_to_dsr(od,f,.{.async=true,.ut_id=@get_ut_id(5),.activate=ot});}
+ @mov32(od,os,.{.async=true});
+}

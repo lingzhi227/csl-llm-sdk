@@ -1,0 +1,29 @@
+// Shared-Q/K frontend with complete-frame receive and durable ready/output bits.
+// The downstream recurrent and output-projection senders attach at these leases.
+param frontend_group:u16;
+const frontend_ready=@get_local_task_id(18);const frontend_output=@get_local_task_id(19);
+const frontend=@import_module("mixer_frontend.csl",.{.group=frontend_group,.ready_task=frontend_ready,.output_task=frontend_output});
+const frontend_iq=@get_input_queue(1);
+var frontend_frame=@zeros([5]u16);var frontend_cursor:u16=0;
+var frontend_status=@zeros([8]u32);const fsp:[*]u32=&frontend_status;
+fn frontend_snapshot() void {
+ frontend_status[0]=frontend.invocation;frontend_status[1]=@as(u32,frontend.notified);
+ frontend_status[2]=@as(u32,frontend.consumed);frontend_status[3]=@as(u32,frontend.completed);
+ frontend_status[4]=@as(u32,frontend.retired);frontend_status[5]=0;
+ if(frontend.packet_busy){frontend_status[5]=1;}frontend_status[6]=@as(u32,frontend_cursor);
+ frontend_status[7]=0;if(frontend.drained()){frontend_status[7]=1;}
+}
+task frontend_arrived(value:u16) void {
+ @assert(frontend_cursor<5);frontend_frame[frontend_cursor]=value;frontend_cursor+=1;
+ if(frontend_cursor==5){
+  const token:u32=@as(u32,frontend_frame[0])|(@as(u32,frontend_frame[1])<<16);
+  frontend.accept(token,frontend_frame[2],frontend_frame[3],frontend_frame[4]);frontend_cursor=0;
+ }
+}
+task frontend_packet_ready() void {frontend_snapshot();}
+task frontend_output_ready() void {frontend_snapshot();}
+comptime {
+ @initialize_queue(frontend_iq,.{.color=@get_color(3)});
+ @bind_data_task(frontend_arrived,@get_data_task_id(frontend_iq));
+ @bind_local_task(frontend_packet_ready,frontend_ready);@bind_local_task(frontend_output_ready,frontend_output);
+}
