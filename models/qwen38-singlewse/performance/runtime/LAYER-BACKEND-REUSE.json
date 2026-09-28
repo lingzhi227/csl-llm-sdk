@@ -1,0 +1,20 @@
+{
+  "source_files": {
+    "performance/csl/fp8_unpack_shift.csl": "9fa14188758bd1dae78f1fbff7426513bc1fca004dc81b540e91df39a2c4eab3",
+    "performance/probes/native_shapes/fp8_shape.csl": "b9869927f2afebc6f48d4e680ace6e1f458713db8c3c5895465e7d5652e8d301",
+    "performance/csl/bf16_dot.csl": "df87de73558cb9549c5a4bef6522dd9a675ce9da3b0de05d598a949973350901",
+    "performance/csl/gdn_shard32.csl": "6a5b359609469e619d94f3a8dd9d0d1c2163854dc4e9854b80e932a32e71501b",
+    "performance/csl/mlp_fused.csl": "15f7449d59d216df4775e9a0ddf0c210286bb1cc00d6f02a139f27daaa2cffc3",
+    "performance/csl/fp8_encode.csl": "21dda5fde73c94da0cbc0d859412cccdd51f51ee1f863d1711036933b53f1c63",
+    "csl/qwen_math.csl": "03adca23c7dd74282093961ae51e0ae4d193e7adc14b8dd43fa2f16f4e95e137"
+  },
+  "changes": {
+    "performance/csl/layer_native.csl": "Reuse native unpack/dot arithmetic inside retained K-slice row loops with one credited partial block; ragged tail accumulation and full reductions remain numerically unqualified.",
+    "performance/csl/bf16_row.csl": "Change the preserved two-row BF16 primitive to one row, retaining ordered128 FMA and exact high-half expansion.",
+    "performance/csl/gdn_page.csl": "Retile32-key shards to4-key by8-value FP32 pages, preserving full logical128x128 state; complete page reductions/preprocessing remain unqualified.",
+    "performance/csl/layer_fusion.csl": "Direct packed BF16 projected operands feed qualified SiLU/multiply/quantization formulas with new group readiness and downstream fragment ownership.",
+    "performance/csl/pipeline_lease.csl": "Use explicit two-slot bool initializers accepted by CSL2.10.1; semantics remain tied to the P22 request/credit oracle."
+  },
+  "compiled_attempt": "layer-backend-compile-008",
+  "scope": "Reuse provenance, not a new numerical or fabric qualification. All baseline source files remain unchanged."
+}

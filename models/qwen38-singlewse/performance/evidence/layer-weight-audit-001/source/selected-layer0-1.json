@@ -1,0 +1,4956 @@
+{
+  "stages": [
+    {
+      "id": "layer_00",
+      "layer": 0,
+      "regions": [
+        {
+          "id": "layer_00/mix",
+          "role": "mix",
+          "nodes": [
+            {
+              "id": 1,
+              "op": "zero_centered_rmsnorm",
+              "inputs": [
+                "v1"
+              ],
+              "outputs": [
+                "v2"
+              ],
+              "weights": [
+                "model.language_model.layers.0.input_layernorm.weight"
+              ],
+              "attributes": {
+                "epsilon": 1e-06,
+                "arithmetic": "FP32 norm and multiply by (1+FP32 weight), then BF16"
+              }
+            },
+            {
+              "id": 2,
+              "op": "fp8_projection",
+              "inputs": [
+                "v2"
+              ],
+              "outputs": [
+                "v3"
+              ],
+              "weights": [
+                "model.language_model.layers.0.linear_attn.in_proj_qkv.weight",
+                "model.language_model.layers.0.linear_attn.in_proj_qkv.weight_scale_inv"
+              ],
+              "attributes": {
+                "activation_group": 128,
+                "weight_block": [
+                  128,
+                  128
+                ],
+                "activation": "E4M3FN nearest even; max(absmax,1e-10)/448",
+                "accumulation": "FP32 ascending128-wide contraction blocks; BF16 only after complete projection"
+              }
+            },
+            {
+              "id": 3,
+              "op": "fp8_projection",
+              "inputs": [
+                "v2"
+              ],
+              "outputs": [
+                "v4"
+              ],
+              "weights": [
+                "model.language_model.layers.0.linear_attn.in_proj_z.weight",
+                "model.language_model.layers.0.linear_attn.in_proj_z.weight_scale_inv"
+              ],
+              "attributes": {
+                "activation_group": 128,
+                "weight_block": [
+                  128,
+                  128
+                ],
+                "activation": "E4M3FN nearest even; max(absmax,1e-10)/448",
+                "accumulation": "FP32 ascending128-wide contraction blocks; BF16 only after complete projection"
+              }
+            },
+            {
+              "id": 4,
+              "op": "bf16_projection",
+              "inputs": [
+                "v2"
+              ],
+              "outputs": [
+                "v5"
+              ],
+              "weights": [
+                "model.language_model.layers.0.linear_attn.in_proj_a.weight"
+              ],
+              "attributes": {
+                "accumulation": "FP32, then BF16; no FP8 input quantization"
+              }
+            },
+            {
+              "id": 5,
+              "op": "bf16_projection",
+              "inputs": [
+                "v2"
+              ],
+              "outputs": [
+                "v6"
+              ],
+              "weights": [
+                "model.language_model.layers.0.linear_attn.in_proj_b.weight"
+              ],
+              "attributes": {
+                "accumulation": "FP32, then BF16; no FP8 input quantization"
+              }
+            },
+            {
+              "id": 6,
+              "op": "causal_depthwise_conv_silu",
+              "inputs": [
+                "v3"
+              ],
+              "outputs": [
+                "v7"
+              ],
+              "weights": [
+                "model.language_model.layers.0.linear_attn.conv1d.weight"
+              ],
+              "attributes": {
+                "state": "conv.0",
+                "kernel": 4,
+                "channels": 10240,
+                "arithmetic": "BF16 projected history; FP32 convolution sum to BF16; SiLU to BF16"
+              }
+            },
+            {
+              "id": 7,
+              "op": "delta_split_normalize_repeat",
+              "inputs": [
+                "v7"
+              ],
+              "outputs": [
+                "v8",
+                "v9",
+                "v10"
+              ],
+              "weights": [],
+              "attributes": {
+                "q_channels": [
+                  0,
+                  2048
+                ],
+                "k_channels": [
+                  2048,
+                  4096
+                ],
+                "v_channels": [
+                  4096,
+                  10240
+                ],
+                "key_heads": 16,
+                "value_heads": 48,
+                "head_dimension": 128,
+                "repeat_interleave": 3,
+                "epsilon": 1e-06,
+                "arithmetic": "FP32 Q/K L2 normalization; Q then divided by sqrt128"
+              }
+            },
+            {
+              "id": 8,
+              "op": "delta_gates",
+              "inputs": [
+                "v5",
+                "v6"
+              ],
+              "outputs": [
+                "v11",
+                "v12"
+              ],
+              "weights": [
+                "model.language_model.layers.0.linear_attn.A_log",
+                "model.language_model.layers.0.linear_attn.dt_bias"
+              ],
+              "attributes": {
+                "arithmetic": "g=-exp(FP32 A_log)*softplus(FP32 a+dt_bias); FP32 exp(g); BF16 sigmoid(b)"
+              }
+            },
+            {
+              "id": 9,
+              "op": "gated_delta_recurrence",
+              "inputs": [
+                "v8",
+                "v9",
+                "v10",
+                "v11",
+                "v12"
+              ],
+              "outputs": [
+                "v13"
+              ],
+              "weights": [],
+              "attributes": {
+                "state": "recurrent.0",
+                "heads": 48,
+                "state_shape": [
+                  48,
+                  128,
+                  128
+                ],
+                "state_dtype": "FP32",
+                "partition": "two full-key,value64 shards per head",
+                "arithmetic": "decay state, predict K^T state, beta correction, rank1 update, Q^T state; BF16 output"
+              }
+            },
+            {
+              "id": 10,
+              "op": "gated_rmsnorm",
+              "inputs": [
+                "v13",
+                "v4"
+              ],
+              "outputs": [
+                "v14"
+              ],
+              "weights": [
+                "model.language_model.layers.0.linear_attn.norm.weight"
+              ],
+              "attributes": {
+                "heads": 48,
+                "head_dimension": 128,
+                "epsilon": 1e-06,
+                "arithmetic": "FP32 norm -> BF16; multiply BF16 gain -> BF16; multiply FP32 SiLU(z) -> BF16"
+              }
+            },
+            {
+              "id": 11,
+              "op": "fp8_projection",
+              "inputs": [
+                "v14"
+              ],
+              "outputs": [
+                "v15"
+              ],
+              "weights": [
+                "model.language_model.layers.0.linear_attn.out_proj.weight",
+                "model.language_model.layers.0.linear_attn.out_proj.weight_scale_inv"
+              ],
+              "attributes": {
+                "activation_group": 128,
+                "weight_block": [
+                  128,
+                  128
+                ],
+                "activation": "E4M3FN nearest even; max(absmax,1e-10)/448",
+                "accumulation": "FP32 ascending128-wide contraction blocks; BF16 only after complete projection"
+              }
+            },
+            {
+              "id": 12,
+              "op": "residual_add",
+              "inputs": [
+                "v1",
+                "v15"
+              ],
+              "outputs": [
+                "v16"
+              ],
+              "weights": [],
+              "attributes": {
+                "arithmetic": "BF16 output"
+              }
+            }
+          ],
+          "weights": [
+            "model.language_model.layers.0.input_layernorm.weight",
+            "model.language_model.layers.0.linear_attn.in_proj_qkv.weight",
+            "model.language_model.layers.0.linear_attn.in_proj_qkv.weight_scale_inv",
+            "model.language_model.layers.0.linear_attn.in_proj_z.weight",
+            "model.language_model.layers.0.linear_attn.in_proj_z.weight_scale_inv",
+            "model.language_model.layers.0.linear_attn.in_proj_a.weight",
+            "model.language_model.layers.0.linear_attn.in_proj_b.weight",
+            "model.language_model.layers.0.linear_attn.conv1d.weight",
+            "model.language_model.layers.0.linear_attn.A_log",
+            "model.language_model.layers.0.linear_attn.dt_bias",
+            "model.language_model.layers.0.linear_attn.norm.weight",
+            "model.language_model.layers.0.linear_attn.out_proj.weight",
+            "model.language_model.layers.0.linear_attn.out_proj.weight_scale_inv"
+          ],
+          "matrices": [
+            {
+              "tensor": "model.language_model.layers.0.linear_attn.in_proj_qkv.weight",
+              "shape": [
+                10240,
+                5120
+              ],
+              "tile_shape": [
+                2,
+                128
+              ],
+              "tiles": 204800,
+              "dtype": "F8_E4M3",
+              "scale_tensor": "model.language_model.layers.0.linear_attn.in_proj_qkv.weight_scale_inv",
+              "k_blocks": 40,
+              "groups": 88,
+              "workers": 3520,
+              "output_tiles": 5120,
+              "group_rotation": 0,
+              "input_k_invariant": true,
+              "loop_output_tile": "(group - group_rotation) modulo groups + iteration * groups"
+            },
+            {
+              "tensor": "model.language_model.layers.0.linear_attn.in_proj_z.weight",
+              "shape": [
+                6144,
+                5120
+              ],
+              "tile_shape": [
+                2,
+                128
+              ],
+              "tiles": 122880,
+              "dtype": "F8_E4M3",
+              "scale_tensor": "model.language_model.layers.0.linear_attn.in_proj_z.weight_scale_inv",
+              "k_blocks": 40,
+              "groups": 88,
+              "workers": 3520,
+              "output_tiles": 3072,
+              "group_rotation": 16,
+              "input_k_invariant": true,
+              "loop_output_tile": "(group - group_rotation) modulo groups + iteration * groups"
+            },
+            {
+              "tensor": "model.language_model.layers.0.linear_attn.in_proj_a.weight",
+              "shape": [
+                48,
+                5120
+              ],
+              "tile_shape": [
+                1,
+                128
+              ],
+              "tiles": 1920,
+              "dtype": "BF16",
+              "k_blocks": 40,
+              "groups": 88,
+              "workers": 3520,
+              "output_tiles": 48,
+              "group_rotation": 8,
+              "input_k_invariant": true,
+              "loop_output_tile": "(group - group_rotation) modulo groups + iteration * groups"
+            },
+            {
+              "tensor": "model.language_model.layers.0.linear_attn.in_proj_b.weight",
+              "shape": [
+                48,
+                5120
+              ],
+              "tile_shape": [
+                1,
+                128
+              ],
+              "tiles": 1920,
+              "dtype": "BF16",
+              "k_blocks": 40,
+              "groups": 88,
+              "workers": 3520,
+              "output_tiles": 48,
+              "group_rotation": 56,
+              "input_k_invariant": true,
+              "loop_output_tile": "(group - group_rotation) modulo groups + iteration * groups"
+            },
+            {
+              "tensor": "model.language_model.layers.0.linear_attn.out_proj.weight",
+              "shape": [
+                5120,
+                6144
+              ],
+              "tile_shape": [
+                2,
+                128
+              ],
+              "tiles": 122880,
+              "dtype": "F8_E4M3",
+              "scale_tensor": "model.language_model.layers.0.linear_attn.out_proj.weight_scale_inv",
+              "k_blocks": 48,
+              "groups": 74,
+              "workers": 3552,
+              "output_tiles": 2560,
+              "group_rotation": 0,
+              "input_k_invariant": true,
+              "loop_output_tile": "(group - group_rotation) modulo groups + iteration * groups"
+            }
+          ],
+          "fp8_tiles": 450560,
+          "bf16_tiles": 3840,
+          "auxiliary": [
+            {
+              "id": "model.language_model.layers.0.input_layernorm.weight",
+              "kind": "weight",
+              "bytes": 10240,
+              "page_start": 0,
+              "pages": 80
+            },
+            {
+              "id": "model.language_model.layers.0.linear_attn.conv1d.weight",
+              "kind": "weight",
+              "bytes": 81920,
+              "page_start": 80,
+              "pages": 640
+            },
+            {
+              "id": "model.language_model.layers.0.linear_attn.A_log",
+              "kind": "weight",
+              "bytes": 96,
+              "page_start": 720,
+              "pages": 1
+            },
+            {
+              "id": "model.language_model.layers.0.linear_attn.dt_bias",
+              "kind": "weight",
+              "bytes": 96,
+              "page_start": 721,
+              "pages": 1
+            },
+            {
+              "id": "model.language_model.layers.0.linear_attn.norm.weight",
+              "kind": "weight",
+              "bytes": 256,
+              "page_start": 722,
+              "pages": 2
+            },
+            {
+              "id": "conv.0",
+              "kind": "request_state",
+              "bytes": 122880,
+              "bytes_per_request": 61440,
+              "requests": 2,
+              "page_start": 724,
+              "pages": 960
+            },
+            {
+              "id": "recurrent.0",
+              "kind": "request_state",
+              "bytes": 6291456,
+              "bytes_per_request": 3145728,
+              "requests": 2,
+              "page_start": 1684,
+              "pages": 49152
+            },
+            {
+              "id": "v1",
+              "kind": "slot_value",
+              "bytes": 20480,
+              "bytes_per_slot": 10240,
+              "slots": 2,
+              "page_start": 50836,
+              "pages": 160
+            },
+            {
+              "id": "v10",
+              "kind": "slot_value",
+              "bytes": 24576,
+              "bytes_per_slot": 12288,
+              "slots": 2,
+              "page_start": 50996,
+              "pages": 192
+            },
+            {
+              "id": "v11",
+              "kind": "slot_value",
+              "bytes": 384,
+              "bytes_per_slot": 192,
+              "slots": 2,
+              "page_start": 51188,
+              "pages": 3
+            },
+            {
+              "id": "v12",
+              "kind": "slot_value",
+              "bytes": 192,
+              "bytes_per_slot": 96,
+              "slots": 2,
+              "page_start": 51191,
+              "pages": 2
+            },
+            {
+              "id": "v13",
+              "kind": "slot_value",
+              "bytes": 24576,
+              "bytes_per_slot": 12288,
+              "slots": 2,
+              "page_start": 51193,
+              "pages": 192
+            },
+            {
+              "id": "v14",
+              "kind": "slot_value",
+              "bytes": 24576,
+              "bytes_per_slot": 12288,
+              "slots": 2,
+              "page_start": 51385,
+              "pages": 192
+            },
+            {
+              "id": "v15",
+              "kind": "slot_value",
+              "bytes": 20480,
+              "bytes_per_slot": 10240,
+              "slots": 2,
+              "page_start": 51577,
+              "pages": 160
+            },
+            {
+              "id": "v16",
+              "kind": "slot_value",
+              "bytes": 20480,
+              "bytes_per_slot": 10240,
+              "slots": 2,
+              "page_start": 51737,
+              "pages": 160
+            },
+            {
+              "id": "v2",
+              "kind": "slot_value",
+              "bytes": 20480,
+              "bytes_per_slot": 10240,
+              "slots": 2,
+              "page_start": 51897,
+              "pages": 160
+            },
+            {
+              "id": "v3",
+              "kind": "slot_value",
+              "bytes": 40960,
+              "bytes_per_slot": 20480,
+              "slots": 2,
+              "page_start": 52057,
+              "pages": 320
+            },
+            {
+              "id": "v4",
+              "kind": "slot_value",
+              "bytes": 24576,
+              "bytes_per_slot": 12288,
+              "slots": 2,
+              "page_start": 52377,
+              "pages": 192
+            },
+            {
+              "id": "v5",
+              "kind": "slot_value",
+              "bytes": 192,
+              "bytes_per_slot": 96,
+              "slots": 2,
+              "page_start": 52569,
+              "pages": 2
+            },
+            {
+              "id": "v6",
+              "kind": "slot_value",
+              "bytes": 192,
+              "bytes_per_slot": 96,
+              "slots": 2,
+              "page_start": 52571,
+              "pages": 2
+            },
+            {
+              "id": "v7",
+              "kind": "slot_value",
+              "bytes": 40960,
+              "bytes_per_slot": 20480,
+              "slots": 2,
+              "page_start": 52573,
+              "pages": 320
+            },
+            {
+              "id": "v8",
+              "kind": "slot_value",
+              "bytes": 49152,
+              "bytes_per_slot": 24576,
+              "slots": 2,
+              "page_start": 52893,
+              "pages": 384
+            },
+            {
+              "id": "v9",
+              "kind": "slot_value",
+              "bytes": 49152,
+              "bytes_per_slot": 24576,
+              "slots": 2,
+              "page_start": 53277,
+              "pages": 384
+            }
+          ],
+          "auxiliary_pages": 53661,
+          "original_weight_bytes": 116433088,
+          "resident_matrix_bytes": 118128640,
+          "matrix_macs": 115834880,
+          "minimum_pes": 3552,
+          "rect": [
+            63,
+            67,
+            45,
+            79
+          ],
+          "banks": {
+            "classes": [
+              {
+                "rank_start": 0,
+                "rank_end": 320,
+                "fp8_slots": 129,
+                "bf16_slots": 1,
+                "auxiliary_pages": 11,
+                "page_prefix": 0
+              },
+              {
+                "rank_start": 320,
+                "rank_end": 640,
+                "fp8_slots": 128,
+                "bf16_slots": 2,
+                "auxiliary_pages": 11,
+                "page_prefix": 3520
+              },
+              {
+                "rank_start": 640,
+                "rank_end": 2112,
+                "fp8_slots": 128,
+                "bf16_slots": 1,
+                "auxiliary_pages": 13,
+                "page_prefix": 7040
+              },
+              {
+                "rank_start": 2112,
+                "rank_end": 3520,
+                "fp8_slots": 127,
+                "bf16_slots": 1,
+                "auxiliary_pages": 15,
+                "page_prefix": 26176
+              },
+              {
+                "rank_start": 3520,
+                "rank_end": 3552,
+                "fp8_slots": 34,
+                "bf16_slots": 0,
+                "auxiliary_pages": 206,
+                "page_prefix": 47296
+              },
+              {
+                "rank_start": 3552,
+                "rank_end": 3555,
+                "fp8_slots": 0,
+                "bf16_slots": 0,
+                "auxiliary_pages": 275,
+                "page_prefix": 53888
+              }
+            ],
+            "matrix_payload_max": 33796,
+            "auxiliary_page_capacity": 54713,
+            "auxiliary_pages": 53661,
+            "fp8_tiles": 450560,
+            "bf16_tiles": 3840,
+            "admitted": true
+          },
+          "physical_rank_order": "serpentine rows within this region",
+          "input_distribution": "Retain the one selected K128 packet for all local output iterations",
+          "partial_output_storage": "One row/pair per invocation, released by contraction/output credit",
+          "compiled_sram_qualified": false
+        },
+        {
+          "id": "layer_00/gate_up",
+          "role": "gate_up",
+          "nodes": [
+            {
+              "id": 13,
+              "op": "zero_centered_rmsnorm",
+              "inputs": [
+                "v16"
+              ],
+              "outputs": [
+                "v17"
+              ],
+              "weights": [
+                "model.language_model.layers.0.post_attention_layernorm.weight"
+              ],
+              "attributes": {
+                "epsilon": 1e-06,
+                "arithmetic": "FP32 norm and multiply by (1+FP32 weight), then BF16"
+              }
+            },
+            {
+              "id": 14,
+              "op": "fp8_projection",
+              "inputs": [
+                "v17"
+              ],
+              "outputs": [
+                "v18"
+              ],
+              "weights": [
+                "model.language_model.layers.0.mlp.gate_proj.weight",
+                "model.language_model.layers.0.mlp.gate_proj.weight_scale_inv"
+              ],
+              "attributes": {
+                "activation_group": 128,
+                "weight_block": [
+                  128,
+                  128
+                ],
+                "activation": "E4M3FN nearest even; max(absmax,1e-10)/448",
+                "accumulation": "FP32 ascending128-wide contraction blocks; BF16 only after complete projection"
+              }
+            },
+            {
+              "id": 15,
+              "op": "fp8_projection",
+              "inputs": [
+                "v17"
+              ],
+              "outputs": [
+                "v19"
+              ],
+              "weights": [
+                "model.language_model.layers.0.mlp.up_proj.weight",
+                "model.language_model.layers.0.mlp.up_proj.weight_scale_inv"
+              ],
+              "attributes": {
+                "activation_group": 128,
+                "weight_block": [
+                  128,
+                  128
+                ],
+                "activation": "E4M3FN nearest even; max(absmax,1e-10)/448",
+                "accumulation": "FP32 ascending128-wide contraction blocks; BF16 only after complete projection"
+              }
+            },
+            {
+              "id": 16,
+              "op": "silu_multiply",
+              "inputs": [
+                "v18",
+                "v19"
+              ],
+              "outputs": [
+                "v20"
+              ],
+              "weights": [],
+              "attributes": {
+                "arithmetic": "SiLU(gate) to BF16; multiply up to BF16"
+              }
+            }
+          ],
+          "weights": [
+            "model.language_model.layers.0.post_attention_layernorm.weight",
+            "model.language_model.layers.0.mlp.gate_proj.weight",
+            "model.language_model.layers.0.mlp.gate_proj.weight_scale_inv",
+            "model.language_model.layers.0.mlp.up_proj.weight",
+            "model.language_model.layers.0.mlp.up_proj.weight_scale_inv"
+          ],
+          "matrices": [
+            {
+              "tensor": "model.language_model.layers.0.mlp.gate_proj.weight",
+              "shape": [
+                17408,
+                5120
+              ],
+              "tile_shape": [
+                8,
+                32
+              ],
+              "tiles": 348160,
+              "dtype": "F8_E4M3",
+              "scale_tensor": "model.language_model.layers.0.mlp.gate_proj.weight_scale_inv",
+              "k_blocks": 160,
+              "groups": 33,
+              "workers": 5226,
+              "output_tiles": 2176,
+              "input_k_invariant": true,
+              "loop_output_tile": "group.output_start + iteration",
+              "group_partitions": [
+                {
+                  "rank_start": 0,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 0,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 160,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 67,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 320,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 134,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 480,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 201,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 640,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 268,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 800,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 335,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 960,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 402,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 1120,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 469,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 1280,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 536,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 1440,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 603,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 1600,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 670,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 1760,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 737,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 1920,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 804,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 2080,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 871,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 2240,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 938,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 2400,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1005,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 2560,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1072,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 2720,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1139,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 2880,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1206,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 3040,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1273,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 3200,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1340,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 3360,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1407,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 3520,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1474,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 3680,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1541,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 3840,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1608,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 4000,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1675,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 4160,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1742,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 4320,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1809,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 4480,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1876,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 4640,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1943,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 4800,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 2010,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 4960,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 2077,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 5120,
+                  "workers": 106,
+                  "max_k_parts": 2,
+                  "row_capacity": 33,
+                  "output_start": 2144,
+                  "output_count": 32
+                }
+              ]
+            },
+            {
+              "tensor": "model.language_model.layers.0.mlp.up_proj.weight",
+              "shape": [
+                17408,
+                5120
+              ],
+              "tile_shape": [
+                8,
+                32
+              ],
+              "tiles": 348160,
+              "dtype": "F8_E4M3",
+              "scale_tensor": "model.language_model.layers.0.mlp.up_proj.weight_scale_inv",
+              "k_blocks": 160,
+              "groups": 33,
+              "workers": 5226,
+              "output_tiles": 2176,
+              "input_k_invariant": true,
+              "loop_output_tile": "group.output_start + iteration",
+              "group_partitions": [
+                {
+                  "rank_start": 0,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 0,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 160,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 67,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 320,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 134,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 480,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 201,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 640,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 268,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 800,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 335,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 960,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 402,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 1120,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 469,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 1280,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 536,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 1440,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 603,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 1600,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 670,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 1760,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 737,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 1920,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 804,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 2080,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 871,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 2240,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 938,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 2400,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1005,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 2560,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1072,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 2720,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1139,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 2880,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1206,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 3040,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1273,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 3200,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1340,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 3360,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1407,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 3520,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1474,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 3680,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1541,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 3840,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1608,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 4000,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1675,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 4160,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1742,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 4320,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1809,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 4480,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1876,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 4640,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1943,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 4800,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 2010,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 4960,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 2077,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 5120,
+                  "workers": 106,
+                  "max_k_parts": 2,
+                  "row_capacity": 33,
+                  "output_start": 2144,
+                  "output_count": 32
+                }
+              ]
+            }
+          ],
+          "fp8_tiles": 696320,
+          "bf16_tiles": 0,
+          "auxiliary": [
+            {
+              "id": "model.language_model.layers.0.post_attention_layernorm.weight",
+              "kind": "weight",
+              "bytes": 10240,
+              "page_start": 0,
+              "pages": 80
+            },
+            {
+              "id": "v16",
+              "kind": "slot_value",
+              "bytes": 20480,
+              "bytes_per_slot": 10240,
+              "slots": 2,
+              "page_start": 80,
+              "pages": 160
+            },
+            {
+              "id": "v17",
+              "kind": "slot_value",
+              "bytes": 20480,
+              "bytes_per_slot": 10240,
+              "slots": 2,
+              "page_start": 240,
+              "pages": 160
+            },
+            {
+              "id": "v18",
+              "kind": "slot_value",
+              "bytes": 69632,
+              "bytes_per_slot": 34816,
+              "slots": 2,
+              "page_start": 400,
+              "pages": 544
+            },
+            {
+              "id": "v19",
+              "kind": "slot_value",
+              "bytes": 69632,
+              "bytes_per_slot": 34816,
+              "slots": 2,
+              "page_start": 944,
+              "pages": 544
+            },
+            {
+              "id": "v20",
+              "kind": "slot_value",
+              "bytes": 69632,
+              "bytes_per_slot": 34816,
+              "slots": 2,
+              "page_start": 1488,
+              "pages": 544
+            }
+          ],
+          "auxiliary_pages": 2032,
+          "original_weight_bytes": 178289920,
+          "resident_matrix_bytes": 181043200,
+          "matrix_macs": 178257920,
+          "minimum_pes": 5158,
+          "rect": [
+            63,
+            0,
+            78,
+            67
+          ],
+          "banks": {
+            "classes": [
+              {
+                "rank_start": 0,
+                "rank_end": 5120,
+                "fp8_slots": 134,
+                "bf16_slots": 0,
+                "auxiliary_pages": 3,
+                "page_prefix": 0
+              },
+              {
+                "rank_start": 5120,
+                "rank_end": 5174,
+                "fp8_slots": 128,
+                "bf16_slots": 0,
+                "auxiliary_pages": 15,
+                "page_prefix": 15360
+              },
+              {
+                "rank_start": 5174,
+                "rank_end": 5226,
+                "fp8_slots": 64,
+                "bf16_slots": 0,
+                "auxiliary_pages": 145,
+                "page_prefix": 16170
+              }
+            ],
+            "matrix_payload_max": 34840,
+            "auxiliary_page_capacity": 23710,
+            "auxiliary_pages": 2032,
+            "fp8_tiles": 696320,
+            "bf16_tiles": 0,
+            "admitted": true
+          },
+          "physical_rank_order": "serpentine rows within this region",
+          "input_distribution": "Retain the one selected K128 packet for all local output iterations",
+          "partial_output_storage": "One row/pair per invocation, released by contraction/output credit",
+          "compiled_sram_qualified": false,
+          "maximum_native_invocations_per_pe": 134,
+          "native_shape": [
+            8,
+            32
+          ],
+          "epilogue": "Gate/up share output roots; BF16 SiLU/multiply is colocated. Original128-value quantization may cross two neighboring output groups.",
+          "quantization_actors": [
+            {
+              "rank": 5174,
+              "pe": [
+                89,
+                66
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                0,
+                52,
+                104
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5175,
+              "pe": [
+                90,
+                66
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                1,
+                53,
+                105
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5176,
+              "pe": [
+                91,
+                66
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                2,
+                54,
+                106
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5177,
+              "pe": [
+                92,
+                66
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                3,
+                55,
+                107
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5178,
+              "pe": [
+                93,
+                66
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                4,
+                56,
+                108
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5179,
+              "pe": [
+                94,
+                66
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                5,
+                57,
+                109
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5180,
+              "pe": [
+                95,
+                66
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                6,
+                58,
+                110
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5181,
+              "pe": [
+                96,
+                66
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                7,
+                59,
+                111
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5182,
+              "pe": [
+                97,
+                66
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                8,
+                60,
+                112
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5183,
+              "pe": [
+                98,
+                66
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                9,
+                61,
+                113
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5184,
+              "pe": [
+                99,
+                66
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                10,
+                62,
+                114
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5185,
+              "pe": [
+                100,
+                66
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                11,
+                63,
+                115
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5186,
+              "pe": [
+                101,
+                66
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                12,
+                64,
+                116
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5187,
+              "pe": [
+                102,
+                66
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                13,
+                65,
+                117
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5188,
+              "pe": [
+                103,
+                66
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                14,
+                66,
+                118
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5189,
+              "pe": [
+                104,
+                66
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                15,
+                67,
+                119
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5190,
+              "pe": [
+                105,
+                66
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                16,
+                68,
+                120
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5191,
+              "pe": [
+                106,
+                66
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                17,
+                69,
+                121
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5192,
+              "pe": [
+                107,
+                66
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                18,
+                70,
+                122
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5193,
+              "pe": [
+                108,
+                66
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                19,
+                71,
+                123
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5194,
+              "pe": [
+                109,
+                66
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                20,
+                72,
+                124
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5195,
+              "pe": [
+                110,
+                66
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                21,
+                73,
+                125
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5196,
+              "pe": [
+                111,
+                66
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                22,
+                74,
+                126
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5197,
+              "pe": [
+                112,
+                66
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                23,
+                75,
+                127
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5198,
+              "pe": [
+                113,
+                66
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                24,
+                76,
+                128
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5199,
+              "pe": [
+                114,
+                66
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                25,
+                77,
+                129
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5200,
+              "pe": [
+                115,
+                66
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                26,
+                78,
+                130
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5201,
+              "pe": [
+                116,
+                66
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                27,
+                79,
+                131
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5202,
+              "pe": [
+                117,
+                66
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                28,
+                80,
+                132
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5203,
+              "pe": [
+                118,
+                66
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                29,
+                81,
+                133
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5204,
+              "pe": [
+                119,
+                66
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                30,
+                82,
+                134
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5205,
+              "pe": [
+                120,
+                66
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                31,
+                83,
+                135
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5206,
+              "pe": [
+                121,
+                66
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                32,
+                84
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5207,
+              "pe": [
+                122,
+                66
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                33,
+                85
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5208,
+              "pe": [
+                123,
+                66
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                34,
+                86
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5209,
+              "pe": [
+                124,
+                66
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                35,
+                87
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5210,
+              "pe": [
+                125,
+                66
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                36,
+                88
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5211,
+              "pe": [
+                126,
+                66
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                37,
+                89
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5212,
+              "pe": [
+                127,
+                66
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                38,
+                90
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5213,
+              "pe": [
+                128,
+                66
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                39,
+                91
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5214,
+              "pe": [
+                129,
+                66
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                40,
+                92
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5215,
+              "pe": [
+                130,
+                66
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                41,
+                93
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5216,
+              "pe": [
+                131,
+                66
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                42,
+                94
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5217,
+              "pe": [
+                132,
+                66
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                43,
+                95
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5218,
+              "pe": [
+                133,
+                66
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                44,
+                96
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5219,
+              "pe": [
+                134,
+                66
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                45,
+                97
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5220,
+              "pe": [
+                135,
+                66
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                46,
+                98
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5221,
+              "pe": [
+                136,
+                66
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                47,
+                99
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5222,
+              "pe": [
+                137,
+                66
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                48,
+                100
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5223,
+              "pe": [
+                138,
+                66
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                49,
+                101
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5224,
+              "pe": [
+                139,
+                66
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                50,
+                102
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5225,
+              "pe": [
+                140,
+                66
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                51,
+                103
+              ],
+              "native_invocations": 64
+            }
+          ],
+          "quantization_schedule": "Each actor grants its assigned128-value groups in increasing group order within a stage request epoch; no later request overlaps mutable scratch.",
+          "native_busy_cycle_screen": 76553.78125,
+          "candidate_screen": [
+            {
+              "shape": [
+                2,
+                128
+              ],
+              "maximum_native_invocations_per_pe": 134,
+              "native_busy_cycles": 104034.25
+            },
+            {
+              "shape": [
+                4,
+                64
+              ],
+              "maximum_native_invocations_per_pe": 134,
+              "native_busy_cycles": 79110.25
+            },
+            {
+              "shape": [
+                8,
+                32
+              ],
+              "maximum_native_invocations_per_pe": 134,
+              "native_busy_cycles": 76553.78125
+            },
+            {
+              "shape": [
+                16,
+                16
+              ],
+              "maximum_native_invocations_per_pe": 134,
+              "native_busy_cycles": 77753.5
+            }
+          ],
+          "screen_scope": "Conditional reuse of qualified native tile cycles only; excludes reductions, communication, all other operators and new ragged-loop overhead. Not full stage latency or TPS."
+        },
+        {
+          "id": "layer_00/down",
+          "role": "down",
+          "nodes": [
+            {
+              "id": 17,
+              "op": "fp8_projection",
+              "inputs": [
+                "v20"
+              ],
+              "outputs": [
+                "v21"
+              ],
+              "weights": [
+                "model.language_model.layers.0.mlp.down_proj.weight",
+                "model.language_model.layers.0.mlp.down_proj.weight_scale_inv"
+              ],
+              "attributes": {
+                "activation_group": 128,
+                "weight_block": [
+                  128,
+                  128
+                ],
+                "activation": "E4M3FN nearest even; max(absmax,1e-10)/448",
+                "accumulation": "FP32 ascending128-wide contraction blocks; BF16 only after complete projection"
+              }
+            },
+            {
+              "id": 18,
+              "op": "residual_add",
+              "inputs": [
+                "v16",
+                "v21"
+              ],
+              "outputs": [
+                "v22"
+              ],
+              "weights": [],
+              "attributes": {
+                "arithmetic": "BF16 output"
+              }
+            }
+          ],
+          "weights": [
+            "model.language_model.layers.0.mlp.down_proj.weight",
+            "model.language_model.layers.0.mlp.down_proj.weight_scale_inv"
+          ],
+          "matrices": [
+            {
+              "tensor": "model.language_model.layers.0.mlp.down_proj.weight",
+              "shape": [
+                5120,
+                17408
+              ],
+              "tile_shape": [
+                4,
+                64
+              ],
+              "tiles": 348160,
+              "dtype": "F8_E4M3",
+              "scale_tensor": "model.language_model.layers.0.mlp.down_proj.weight_scale_inv",
+              "k_blocks": 272,
+              "groups": 10,
+              "workers": 2607,
+              "output_tiles": 1280,
+              "input_k_invariant": true,
+              "loop_output_tile": "group.output_start + iteration",
+              "group_partitions": [
+                {
+                  "rank_start": 0,
+                  "workers": 272,
+                  "max_k_parts": 1,
+                  "row_capacity": 135,
+                  "output_start": 0,
+                  "output_count": 135
+                },
+                {
+                  "rank_start": 272,
+                  "workers": 272,
+                  "max_k_parts": 1,
+                  "row_capacity": 135,
+                  "output_start": 135,
+                  "output_count": 135
+                },
+                {
+                  "rank_start": 544,
+                  "workers": 272,
+                  "max_k_parts": 1,
+                  "row_capacity": 135,
+                  "output_start": 270,
+                  "output_count": 135
+                },
+                {
+                  "rank_start": 816,
+                  "workers": 272,
+                  "max_k_parts": 1,
+                  "row_capacity": 135,
+                  "output_start": 405,
+                  "output_count": 135
+                },
+                {
+                  "rank_start": 1088,
+                  "workers": 272,
+                  "max_k_parts": 1,
+                  "row_capacity": 135,
+                  "output_start": 540,
+                  "output_count": 135
+                },
+                {
+                  "rank_start": 1360,
+                  "workers": 272,
+                  "max_k_parts": 1,
+                  "row_capacity": 135,
+                  "output_start": 675,
+                  "output_count": 135
+                },
+                {
+                  "rank_start": 1632,
+                  "workers": 272,
+                  "max_k_parts": 1,
+                  "row_capacity": 135,
+                  "output_start": 810,
+                  "output_count": 135
+                },
+                {
+                  "rank_start": 1904,
+                  "workers": 272,
+                  "max_k_parts": 1,
+                  "row_capacity": 135,
+                  "output_start": 945,
+                  "output_count": 135
+                },
+                {
+                  "rank_start": 2176,
+                  "workers": 272,
+                  "max_k_parts": 1,
+                  "row_capacity": 135,
+                  "output_start": 1080,
+                  "output_count": 135
+                },
+                {
+                  "rank_start": 2448,
+                  "workers": 159,
+                  "max_k_parts": 2,
+                  "row_capacity": 67,
+                  "output_start": 1215,
+                  "output_count": 65
+                }
+              ]
+            }
+          ],
+          "fp8_tiles": 348160,
+          "bf16_tiles": 0,
+          "auxiliary": [
+            {
+              "id": "v16",
+              "kind": "slot_value",
+              "bytes": 20480,
+              "bytes_per_slot": 10240,
+              "slots": 2,
+              "page_start": 0,
+              "pages": 160
+            },
+            {
+              "id": "v20",
+              "kind": "slot_value",
+              "bytes": 69632,
+              "bytes_per_slot": 34816,
+              "slots": 2,
+              "page_start": 160,
+              "pages": 544
+            },
+            {
+              "id": "v21",
+              "kind": "slot_value",
+              "bytes": 20480,
+              "bytes_per_slot": 10240,
+              "slots": 2,
+              "page_start": 704,
+              "pages": 160
+            },
+            {
+              "id": "v22",
+              "kind": "slot_value",
+              "bytes": 20480,
+              "bytes_per_slot": 10240,
+              "slots": 2,
+              "page_start": 864,
+              "pages": 160
+            }
+          ],
+          "auxiliary_pages": 1024,
+          "original_weight_bytes": 89139840,
+          "resident_matrix_bytes": 90521600,
+          "matrix_macs": 89128960,
+          "minimum_pes": 2579,
+          "rect": [
+            108,
+            67,
+            33,
+            79
+          ],
+          "banks": {
+            "classes": [
+              {
+                "rank_start": 0,
+                "rank_end": 2448,
+                "fp8_slots": 135,
+                "bf16_slots": 0,
+                "auxiliary_pages": 1,
+                "page_prefix": 0
+              },
+              {
+                "rank_start": 2448,
+                "rank_end": 2561,
+                "fp8_slots": 130,
+                "bf16_slots": 0,
+                "auxiliary_pages": 11,
+                "page_prefix": 2448
+              },
+              {
+                "rank_start": 2561,
+                "rank_end": 2607,
+                "fp8_slots": 65,
+                "bf16_slots": 0,
+                "auxiliary_pages": 143,
+                "page_prefix": 3691
+              }
+            ],
+            "matrix_payload_max": 35100,
+            "auxiliary_page_capacity": 10269,
+            "auxiliary_pages": 1024,
+            "fp8_tiles": 348160,
+            "bf16_tiles": 0,
+            "admitted": true
+          },
+          "physical_rank_order": "serpentine rows within this region",
+          "input_distribution": "Retain the one selected K128 packet for all local output iterations",
+          "partial_output_storage": "One row/pair per invocation, released by contraction/output credit",
+          "compiled_sram_qualified": false,
+          "maximum_native_invocations_per_pe": 135,
+          "native_shape": [
+            4,
+            64
+          ],
+          "epilogue": "Full-K reduction, then BF16 and retained residual",
+          "native_busy_cycle_screen": 79700.625,
+          "candidate_screen": [
+            {
+              "shape": [
+                2,
+                128
+              ],
+              "maximum_native_invocations_per_pe": 135,
+              "native_busy_cycles": 104810.625
+            },
+            {
+              "shape": [
+                4,
+                64
+              ],
+              "maximum_native_invocations_per_pe": 135,
+              "native_busy_cycles": 79700.625
+            }
+          ],
+          "screen_scope": "Conditional reuse of qualified native tile cycles only; excludes reductions, communication, all other operators and new ragged-loop overhead. Not full stage latency or TPS."
+        }
+      ],
+      "minimum_pes": 11289,
+      "matrix_macs": 383221760,
+      "rect": [
+        63,
+        0,
+        78,
+        146
+      ],
+      "macro_column": 1,
+      "request_controller": {
+        "region": "layer_00/mix",
+        "rank": 3554,
+        "pe": [
+          107,
+          145
+        ],
+        "weight_bytes": 0,
+        "auxiliary_bytes": 0,
+        "source": "runtime/layer_controller.csl"
+      },
+      "remaining_unallocated_actor_pes": 2
+    },
+    {
+      "id": "layer_01",
+      "layer": 1,
+      "regions": [
+        {
+          "id": "layer_01/mix",
+          "role": "mix",
+          "nodes": [
+            {
+              "id": 19,
+              "op": "zero_centered_rmsnorm",
+              "inputs": [
+                "v22"
+              ],
+              "outputs": [
+                "v23"
+              ],
+              "weights": [
+                "model.language_model.layers.1.input_layernorm.weight"
+              ],
+              "attributes": {
+                "epsilon": 1e-06,
+                "arithmetic": "FP32 norm and multiply by (1+FP32 weight), then BF16"
+              }
+            },
+            {
+              "id": 20,
+              "op": "fp8_projection",
+              "inputs": [
+                "v23"
+              ],
+              "outputs": [
+                "v24"
+              ],
+              "weights": [
+                "model.language_model.layers.1.linear_attn.in_proj_qkv.weight",
+                "model.language_model.layers.1.linear_attn.in_proj_qkv.weight_scale_inv"
+              ],
+              "attributes": {
+                "activation_group": 128,
+                "weight_block": [
+                  128,
+                  128
+                ],
+                "activation": "E4M3FN nearest even; max(absmax,1e-10)/448",
+                "accumulation": "FP32 ascending128-wide contraction blocks; BF16 only after complete projection"
+              }
+            },
+            {
+              "id": 21,
+              "op": "fp8_projection",
+              "inputs": [
+                "v23"
+              ],
+              "outputs": [
+                "v25"
+              ],
+              "weights": [
+                "model.language_model.layers.1.linear_attn.in_proj_z.weight",
+                "model.language_model.layers.1.linear_attn.in_proj_z.weight_scale_inv"
+              ],
+              "attributes": {
+                "activation_group": 128,
+                "weight_block": [
+                  128,
+                  128
+                ],
+                "activation": "E4M3FN nearest even; max(absmax,1e-10)/448",
+                "accumulation": "FP32 ascending128-wide contraction blocks; BF16 only after complete projection"
+              }
+            },
+            {
+              "id": 22,
+              "op": "bf16_projection",
+              "inputs": [
+                "v23"
+              ],
+              "outputs": [
+                "v26"
+              ],
+              "weights": [
+                "model.language_model.layers.1.linear_attn.in_proj_a.weight"
+              ],
+              "attributes": {
+                "accumulation": "FP32, then BF16; no FP8 input quantization"
+              }
+            },
+            {
+              "id": 23,
+              "op": "bf16_projection",
+              "inputs": [
+                "v23"
+              ],
+              "outputs": [
+                "v27"
+              ],
+              "weights": [
+                "model.language_model.layers.1.linear_attn.in_proj_b.weight"
+              ],
+              "attributes": {
+                "accumulation": "FP32, then BF16; no FP8 input quantization"
+              }
+            },
+            {
+              "id": 24,
+              "op": "causal_depthwise_conv_silu",
+              "inputs": [
+                "v24"
+              ],
+              "outputs": [
+                "v28"
+              ],
+              "weights": [
+                "model.language_model.layers.1.linear_attn.conv1d.weight"
+              ],
+              "attributes": {
+                "state": "conv.1",
+                "kernel": 4,
+                "channels": 10240,
+                "arithmetic": "BF16 projected history; FP32 convolution sum to BF16; SiLU to BF16"
+              }
+            },
+            {
+              "id": 25,
+              "op": "delta_split_normalize_repeat",
+              "inputs": [
+                "v28"
+              ],
+              "outputs": [
+                "v29",
+                "v30",
+                "v31"
+              ],
+              "weights": [],
+              "attributes": {
+                "q_channels": [
+                  0,
+                  2048
+                ],
+                "k_channels": [
+                  2048,
+                  4096
+                ],
+                "v_channels": [
+                  4096,
+                  10240
+                ],
+                "key_heads": 16,
+                "value_heads": 48,
+                "head_dimension": 128,
+                "repeat_interleave": 3,
+                "epsilon": 1e-06,
+                "arithmetic": "FP32 Q/K L2 normalization; Q then divided by sqrt128"
+              }
+            },
+            {
+              "id": 26,
+              "op": "delta_gates",
+              "inputs": [
+                "v26",
+                "v27"
+              ],
+              "outputs": [
+                "v32",
+                "v33"
+              ],
+              "weights": [
+                "model.language_model.layers.1.linear_attn.A_log",
+                "model.language_model.layers.1.linear_attn.dt_bias"
+              ],
+              "attributes": {
+                "arithmetic": "g=-exp(FP32 A_log)*softplus(FP32 a+dt_bias); FP32 exp(g); BF16 sigmoid(b)"
+              }
+            },
+            {
+              "id": 27,
+              "op": "gated_delta_recurrence",
+              "inputs": [
+                "v29",
+                "v30",
+                "v31",
+                "v32",
+                "v33"
+              ],
+              "outputs": [
+                "v34"
+              ],
+              "weights": [],
+              "attributes": {
+                "state": "recurrent.1",
+                "heads": 48,
+                "state_shape": [
+                  48,
+                  128,
+                  128
+                ],
+                "state_dtype": "FP32",
+                "partition": "two full-key,value64 shards per head",
+                "arithmetic": "decay state, predict K^T state, beta correction, rank1 update, Q^T state; BF16 output"
+              }
+            },
+            {
+              "id": 28,
+              "op": "gated_rmsnorm",
+              "inputs": [
+                "v34",
+                "v25"
+              ],
+              "outputs": [
+                "v35"
+              ],
+              "weights": [
+                "model.language_model.layers.1.linear_attn.norm.weight"
+              ],
+              "attributes": {
+                "heads": 48,
+                "head_dimension": 128,
+                "epsilon": 1e-06,
+                "arithmetic": "FP32 norm -> BF16; multiply BF16 gain -> BF16; multiply FP32 SiLU(z) -> BF16"
+              }
+            },
+            {
+              "id": 29,
+              "op": "fp8_projection",
+              "inputs": [
+                "v35"
+              ],
+              "outputs": [
+                "v36"
+              ],
+              "weights": [
+                "model.language_model.layers.1.linear_attn.out_proj.weight",
+                "model.language_model.layers.1.linear_attn.out_proj.weight_scale_inv"
+              ],
+              "attributes": {
+                "activation_group": 128,
+                "weight_block": [
+                  128,
+                  128
+                ],
+                "activation": "E4M3FN nearest even; max(absmax,1e-10)/448",
+                "accumulation": "FP32 ascending128-wide contraction blocks; BF16 only after complete projection"
+              }
+            },
+            {
+              "id": 30,
+              "op": "residual_add",
+              "inputs": [
+                "v22",
+                "v36"
+              ],
+              "outputs": [
+                "v37"
+              ],
+              "weights": [],
+              "attributes": {
+                "arithmetic": "BF16 output"
+              }
+            }
+          ],
+          "weights": [
+            "model.language_model.layers.1.input_layernorm.weight",
+            "model.language_model.layers.1.linear_attn.in_proj_qkv.weight",
+            "model.language_model.layers.1.linear_attn.in_proj_qkv.weight_scale_inv",
+            "model.language_model.layers.1.linear_attn.in_proj_z.weight",
+            "model.language_model.layers.1.linear_attn.in_proj_z.weight_scale_inv",
+            "model.language_model.layers.1.linear_attn.in_proj_a.weight",
+            "model.language_model.layers.1.linear_attn.in_proj_b.weight",
+            "model.language_model.layers.1.linear_attn.conv1d.weight",
+            "model.language_model.layers.1.linear_attn.A_log",
+            "model.language_model.layers.1.linear_attn.dt_bias",
+            "model.language_model.layers.1.linear_attn.norm.weight",
+            "model.language_model.layers.1.linear_attn.out_proj.weight",
+            "model.language_model.layers.1.linear_attn.out_proj.weight_scale_inv"
+          ],
+          "matrices": [
+            {
+              "tensor": "model.language_model.layers.1.linear_attn.in_proj_qkv.weight",
+              "shape": [
+                10240,
+                5120
+              ],
+              "tile_shape": [
+                2,
+                128
+              ],
+              "tiles": 204800,
+              "dtype": "F8_E4M3",
+              "scale_tensor": "model.language_model.layers.1.linear_attn.in_proj_qkv.weight_scale_inv",
+              "k_blocks": 40,
+              "groups": 88,
+              "workers": 3520,
+              "output_tiles": 5120,
+              "group_rotation": 0,
+              "input_k_invariant": true,
+              "loop_output_tile": "(group - group_rotation) modulo groups + iteration * groups"
+            },
+            {
+              "tensor": "model.language_model.layers.1.linear_attn.in_proj_z.weight",
+              "shape": [
+                6144,
+                5120
+              ],
+              "tile_shape": [
+                2,
+                128
+              ],
+              "tiles": 122880,
+              "dtype": "F8_E4M3",
+              "scale_tensor": "model.language_model.layers.1.linear_attn.in_proj_z.weight_scale_inv",
+              "k_blocks": 40,
+              "groups": 88,
+              "workers": 3520,
+              "output_tiles": 3072,
+              "group_rotation": 16,
+              "input_k_invariant": true,
+              "loop_output_tile": "(group - group_rotation) modulo groups + iteration * groups"
+            },
+            {
+              "tensor": "model.language_model.layers.1.linear_attn.in_proj_a.weight",
+              "shape": [
+                48,
+                5120
+              ],
+              "tile_shape": [
+                1,
+                128
+              ],
+              "tiles": 1920,
+              "dtype": "BF16",
+              "k_blocks": 40,
+              "groups": 88,
+              "workers": 3520,
+              "output_tiles": 48,
+              "group_rotation": 8,
+              "input_k_invariant": true,
+              "loop_output_tile": "(group - group_rotation) modulo groups + iteration * groups"
+            },
+            {
+              "tensor": "model.language_model.layers.1.linear_attn.in_proj_b.weight",
+              "shape": [
+                48,
+                5120
+              ],
+              "tile_shape": [
+                1,
+                128
+              ],
+              "tiles": 1920,
+              "dtype": "BF16",
+              "k_blocks": 40,
+              "groups": 88,
+              "workers": 3520,
+              "output_tiles": 48,
+              "group_rotation": 56,
+              "input_k_invariant": true,
+              "loop_output_tile": "(group - group_rotation) modulo groups + iteration * groups"
+            },
+            {
+              "tensor": "model.language_model.layers.1.linear_attn.out_proj.weight",
+              "shape": [
+                5120,
+                6144
+              ],
+              "tile_shape": [
+                2,
+                128
+              ],
+              "tiles": 122880,
+              "dtype": "F8_E4M3",
+              "scale_tensor": "model.language_model.layers.1.linear_attn.out_proj.weight_scale_inv",
+              "k_blocks": 48,
+              "groups": 74,
+              "workers": 3552,
+              "output_tiles": 2560,
+              "group_rotation": 0,
+              "input_k_invariant": true,
+              "loop_output_tile": "(group - group_rotation) modulo groups + iteration * groups"
+            }
+          ],
+          "fp8_tiles": 450560,
+          "bf16_tiles": 3840,
+          "auxiliary": [
+            {
+              "id": "model.language_model.layers.1.input_layernorm.weight",
+              "kind": "weight",
+              "bytes": 10240,
+              "page_start": 0,
+              "pages": 80
+            },
+            {
+              "id": "model.language_model.layers.1.linear_attn.conv1d.weight",
+              "kind": "weight",
+              "bytes": 81920,
+              "page_start": 80,
+              "pages": 640
+            },
+            {
+              "id": "model.language_model.layers.1.linear_attn.A_log",
+              "kind": "weight",
+              "bytes": 96,
+              "page_start": 720,
+              "pages": 1
+            },
+            {
+              "id": "model.language_model.layers.1.linear_attn.dt_bias",
+              "kind": "weight",
+              "bytes": 96,
+              "page_start": 721,
+              "pages": 1
+            },
+            {
+              "id": "model.language_model.layers.1.linear_attn.norm.weight",
+              "kind": "weight",
+              "bytes": 256,
+              "page_start": 722,
+              "pages": 2
+            },
+            {
+              "id": "conv.1",
+              "kind": "request_state",
+              "bytes": 122880,
+              "bytes_per_request": 61440,
+              "requests": 2,
+              "page_start": 724,
+              "pages": 960
+            },
+            {
+              "id": "recurrent.1",
+              "kind": "request_state",
+              "bytes": 6291456,
+              "bytes_per_request": 3145728,
+              "requests": 2,
+              "page_start": 1684,
+              "pages": 49152
+            },
+            {
+              "id": "v22",
+              "kind": "slot_value",
+              "bytes": 20480,
+              "bytes_per_slot": 10240,
+              "slots": 2,
+              "page_start": 50836,
+              "pages": 160
+            },
+            {
+              "id": "v23",
+              "kind": "slot_value",
+              "bytes": 20480,
+              "bytes_per_slot": 10240,
+              "slots": 2,
+              "page_start": 50996,
+              "pages": 160
+            },
+            {
+              "id": "v24",
+              "kind": "slot_value",
+              "bytes": 40960,
+              "bytes_per_slot": 20480,
+              "slots": 2,
+              "page_start": 51156,
+              "pages": 320
+            },
+            {
+              "id": "v25",
+              "kind": "slot_value",
+              "bytes": 24576,
+              "bytes_per_slot": 12288,
+              "slots": 2,
+              "page_start": 51476,
+              "pages": 192
+            },
+            {
+              "id": "v26",
+              "kind": "slot_value",
+              "bytes": 192,
+              "bytes_per_slot": 96,
+              "slots": 2,
+              "page_start": 51668,
+              "pages": 2
+            },
+            {
+              "id": "v27",
+              "kind": "slot_value",
+              "bytes": 192,
+              "bytes_per_slot": 96,
+              "slots": 2,
+              "page_start": 51670,
+              "pages": 2
+            },
+            {
+              "id": "v28",
+              "kind": "slot_value",
+              "bytes": 40960,
+              "bytes_per_slot": 20480,
+              "slots": 2,
+              "page_start": 51672,
+              "pages": 320
+            },
+            {
+              "id": "v29",
+              "kind": "slot_value",
+              "bytes": 49152,
+              "bytes_per_slot": 24576,
+              "slots": 2,
+              "page_start": 51992,
+              "pages": 384
+            },
+            {
+              "id": "v30",
+              "kind": "slot_value",
+              "bytes": 49152,
+              "bytes_per_slot": 24576,
+              "slots": 2,
+              "page_start": 52376,
+              "pages": 384
+            },
+            {
+              "id": "v31",
+              "kind": "slot_value",
+              "bytes": 24576,
+              "bytes_per_slot": 12288,
+              "slots": 2,
+              "page_start": 52760,
+              "pages": 192
+            },
+            {
+              "id": "v32",
+              "kind": "slot_value",
+              "bytes": 384,
+              "bytes_per_slot": 192,
+              "slots": 2,
+              "page_start": 52952,
+              "pages": 3
+            },
+            {
+              "id": "v33",
+              "kind": "slot_value",
+              "bytes": 192,
+              "bytes_per_slot": 96,
+              "slots": 2,
+              "page_start": 52955,
+              "pages": 2
+            },
+            {
+              "id": "v34",
+              "kind": "slot_value",
+              "bytes": 24576,
+              "bytes_per_slot": 12288,
+              "slots": 2,
+              "page_start": 52957,
+              "pages": 192
+            },
+            {
+              "id": "v35",
+              "kind": "slot_value",
+              "bytes": 24576,
+              "bytes_per_slot": 12288,
+              "slots": 2,
+              "page_start": 53149,
+              "pages": 192
+            },
+            {
+              "id": "v36",
+              "kind": "slot_value",
+              "bytes": 20480,
+              "bytes_per_slot": 10240,
+              "slots": 2,
+              "page_start": 53341,
+              "pages": 160
+            },
+            {
+              "id": "v37",
+              "kind": "slot_value",
+              "bytes": 20480,
+              "bytes_per_slot": 10240,
+              "slots": 2,
+              "page_start": 53501,
+              "pages": 160
+            }
+          ],
+          "auxiliary_pages": 53661,
+          "original_weight_bytes": 116433088,
+          "resident_matrix_bytes": 118128640,
+          "matrix_macs": 115834880,
+          "minimum_pes": 3552,
+          "rect": [
+            63,
+            213,
+            45,
+            79
+          ],
+          "banks": {
+            "classes": [
+              {
+                "rank_start": 0,
+                "rank_end": 320,
+                "fp8_slots": 129,
+                "bf16_slots": 1,
+                "auxiliary_pages": 11,
+                "page_prefix": 0
+              },
+              {
+                "rank_start": 320,
+                "rank_end": 640,
+                "fp8_slots": 128,
+                "bf16_slots": 2,
+                "auxiliary_pages": 11,
+                "page_prefix": 3520
+              },
+              {
+                "rank_start": 640,
+                "rank_end": 2112,
+                "fp8_slots": 128,
+                "bf16_slots": 1,
+                "auxiliary_pages": 13,
+                "page_prefix": 7040
+              },
+              {
+                "rank_start": 2112,
+                "rank_end": 3520,
+                "fp8_slots": 127,
+                "bf16_slots": 1,
+                "auxiliary_pages": 15,
+                "page_prefix": 26176
+              },
+              {
+                "rank_start": 3520,
+                "rank_end": 3552,
+                "fp8_slots": 34,
+                "bf16_slots": 0,
+                "auxiliary_pages": 206,
+                "page_prefix": 47296
+              },
+              {
+                "rank_start": 3552,
+                "rank_end": 3555,
+                "fp8_slots": 0,
+                "bf16_slots": 0,
+                "auxiliary_pages": 275,
+                "page_prefix": 53888
+              }
+            ],
+            "matrix_payload_max": 33796,
+            "auxiliary_page_capacity": 54713,
+            "auxiliary_pages": 53661,
+            "fp8_tiles": 450560,
+            "bf16_tiles": 3840,
+            "admitted": true
+          },
+          "physical_rank_order": "serpentine rows within this region",
+          "input_distribution": "Retain the one selected K128 packet for all local output iterations",
+          "partial_output_storage": "One row/pair per invocation, released by contraction/output credit",
+          "compiled_sram_qualified": false
+        },
+        {
+          "id": "layer_01/gate_up",
+          "role": "gate_up",
+          "nodes": [
+            {
+              "id": 31,
+              "op": "zero_centered_rmsnorm",
+              "inputs": [
+                "v37"
+              ],
+              "outputs": [
+                "v38"
+              ],
+              "weights": [
+                "model.language_model.layers.1.post_attention_layernorm.weight"
+              ],
+              "attributes": {
+                "epsilon": 1e-06,
+                "arithmetic": "FP32 norm and multiply by (1+FP32 weight), then BF16"
+              }
+            },
+            {
+              "id": 32,
+              "op": "fp8_projection",
+              "inputs": [
+                "v38"
+              ],
+              "outputs": [
+                "v39"
+              ],
+              "weights": [
+                "model.language_model.layers.1.mlp.gate_proj.weight",
+                "model.language_model.layers.1.mlp.gate_proj.weight_scale_inv"
+              ],
+              "attributes": {
+                "activation_group": 128,
+                "weight_block": [
+                  128,
+                  128
+                ],
+                "activation": "E4M3FN nearest even; max(absmax,1e-10)/448",
+                "accumulation": "FP32 ascending128-wide contraction blocks; BF16 only after complete projection"
+              }
+            },
+            {
+              "id": 33,
+              "op": "fp8_projection",
+              "inputs": [
+                "v38"
+              ],
+              "outputs": [
+                "v40"
+              ],
+              "weights": [
+                "model.language_model.layers.1.mlp.up_proj.weight",
+                "model.language_model.layers.1.mlp.up_proj.weight_scale_inv"
+              ],
+              "attributes": {
+                "activation_group": 128,
+                "weight_block": [
+                  128,
+                  128
+                ],
+                "activation": "E4M3FN nearest even; max(absmax,1e-10)/448",
+                "accumulation": "FP32 ascending128-wide contraction blocks; BF16 only after complete projection"
+              }
+            },
+            {
+              "id": 34,
+              "op": "silu_multiply",
+              "inputs": [
+                "v39",
+                "v40"
+              ],
+              "outputs": [
+                "v41"
+              ],
+              "weights": [],
+              "attributes": {
+                "arithmetic": "SiLU(gate) to BF16; multiply up to BF16"
+              }
+            }
+          ],
+          "weights": [
+            "model.language_model.layers.1.post_attention_layernorm.weight",
+            "model.language_model.layers.1.mlp.gate_proj.weight",
+            "model.language_model.layers.1.mlp.gate_proj.weight_scale_inv",
+            "model.language_model.layers.1.mlp.up_proj.weight",
+            "model.language_model.layers.1.mlp.up_proj.weight_scale_inv"
+          ],
+          "matrices": [
+            {
+              "tensor": "model.language_model.layers.1.mlp.gate_proj.weight",
+              "shape": [
+                17408,
+                5120
+              ],
+              "tile_shape": [
+                8,
+                32
+              ],
+              "tiles": 348160,
+              "dtype": "F8_E4M3",
+              "scale_tensor": "model.language_model.layers.1.mlp.gate_proj.weight_scale_inv",
+              "k_blocks": 160,
+              "groups": 33,
+              "workers": 5226,
+              "output_tiles": 2176,
+              "input_k_invariant": true,
+              "loop_output_tile": "group.output_start + iteration",
+              "group_partitions": [
+                {
+                  "rank_start": 0,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 0,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 160,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 67,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 320,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 134,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 480,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 201,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 640,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 268,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 800,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 335,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 960,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 402,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 1120,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 469,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 1280,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 536,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 1440,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 603,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 1600,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 670,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 1760,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 737,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 1920,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 804,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 2080,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 871,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 2240,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 938,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 2400,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1005,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 2560,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1072,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 2720,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1139,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 2880,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1206,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 3040,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1273,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 3200,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1340,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 3360,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1407,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 3520,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1474,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 3680,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1541,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 3840,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1608,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 4000,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1675,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 4160,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1742,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 4320,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1809,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 4480,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1876,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 4640,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1943,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 4800,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 2010,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 4960,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 2077,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 5120,
+                  "workers": 106,
+                  "max_k_parts": 2,
+                  "row_capacity": 33,
+                  "output_start": 2144,
+                  "output_count": 32
+                }
+              ]
+            },
+            {
+              "tensor": "model.language_model.layers.1.mlp.up_proj.weight",
+              "shape": [
+                17408,
+                5120
+              ],
+              "tile_shape": [
+                8,
+                32
+              ],
+              "tiles": 348160,
+              "dtype": "F8_E4M3",
+              "scale_tensor": "model.language_model.layers.1.mlp.up_proj.weight_scale_inv",
+              "k_blocks": 160,
+              "groups": 33,
+              "workers": 5226,
+              "output_tiles": 2176,
+              "input_k_invariant": true,
+              "loop_output_tile": "group.output_start + iteration",
+              "group_partitions": [
+                {
+                  "rank_start": 0,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 0,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 160,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 67,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 320,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 134,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 480,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 201,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 640,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 268,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 800,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 335,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 960,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 402,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 1120,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 469,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 1280,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 536,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 1440,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 603,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 1600,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 670,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 1760,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 737,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 1920,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 804,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 2080,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 871,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 2240,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 938,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 2400,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1005,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 2560,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1072,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 2720,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1139,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 2880,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1206,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 3040,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1273,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 3200,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1340,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 3360,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1407,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 3520,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1474,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 3680,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1541,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 3840,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1608,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 4000,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1675,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 4160,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1742,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 4320,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1809,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 4480,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1876,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 4640,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 1943,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 4800,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 2010,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 4960,
+                  "workers": 160,
+                  "max_k_parts": 1,
+                  "row_capacity": 67,
+                  "output_start": 2077,
+                  "output_count": 67
+                },
+                {
+                  "rank_start": 5120,
+                  "workers": 106,
+                  "max_k_parts": 2,
+                  "row_capacity": 33,
+                  "output_start": 2144,
+                  "output_count": 32
+                }
+              ]
+            }
+          ],
+          "fp8_tiles": 696320,
+          "bf16_tiles": 0,
+          "auxiliary": [
+            {
+              "id": "model.language_model.layers.1.post_attention_layernorm.weight",
+              "kind": "weight",
+              "bytes": 10240,
+              "page_start": 0,
+              "pages": 80
+            },
+            {
+              "id": "v37",
+              "kind": "slot_value",
+              "bytes": 20480,
+              "bytes_per_slot": 10240,
+              "slots": 2,
+              "page_start": 80,
+              "pages": 160
+            },
+            {
+              "id": "v38",
+              "kind": "slot_value",
+              "bytes": 20480,
+              "bytes_per_slot": 10240,
+              "slots": 2,
+              "page_start": 240,
+              "pages": 160
+            },
+            {
+              "id": "v39",
+              "kind": "slot_value",
+              "bytes": 69632,
+              "bytes_per_slot": 34816,
+              "slots": 2,
+              "page_start": 400,
+              "pages": 544
+            },
+            {
+              "id": "v40",
+              "kind": "slot_value",
+              "bytes": 69632,
+              "bytes_per_slot": 34816,
+              "slots": 2,
+              "page_start": 944,
+              "pages": 544
+            },
+            {
+              "id": "v41",
+              "kind": "slot_value",
+              "bytes": 69632,
+              "bytes_per_slot": 34816,
+              "slots": 2,
+              "page_start": 1488,
+              "pages": 544
+            }
+          ],
+          "auxiliary_pages": 2032,
+          "original_weight_bytes": 178289920,
+          "resident_matrix_bytes": 181043200,
+          "matrix_macs": 178257920,
+          "minimum_pes": 5158,
+          "rect": [
+            63,
+            146,
+            78,
+            67
+          ],
+          "banks": {
+            "classes": [
+              {
+                "rank_start": 0,
+                "rank_end": 5120,
+                "fp8_slots": 134,
+                "bf16_slots": 0,
+                "auxiliary_pages": 3,
+                "page_prefix": 0
+              },
+              {
+                "rank_start": 5120,
+                "rank_end": 5174,
+                "fp8_slots": 128,
+                "bf16_slots": 0,
+                "auxiliary_pages": 15,
+                "page_prefix": 15360
+              },
+              {
+                "rank_start": 5174,
+                "rank_end": 5226,
+                "fp8_slots": 64,
+                "bf16_slots": 0,
+                "auxiliary_pages": 145,
+                "page_prefix": 16170
+              }
+            ],
+            "matrix_payload_max": 34840,
+            "auxiliary_page_capacity": 23710,
+            "auxiliary_pages": 2032,
+            "fp8_tiles": 696320,
+            "bf16_tiles": 0,
+            "admitted": true
+          },
+          "physical_rank_order": "serpentine rows within this region",
+          "input_distribution": "Retain the one selected K128 packet for all local output iterations",
+          "partial_output_storage": "One row/pair per invocation, released by contraction/output credit",
+          "compiled_sram_qualified": false,
+          "maximum_native_invocations_per_pe": 134,
+          "native_shape": [
+            8,
+            32
+          ],
+          "epilogue": "Gate/up share output roots; BF16 SiLU/multiply is colocated. Original128-value quantization may cross two neighboring output groups.",
+          "quantization_actors": [
+            {
+              "rank": 5174,
+              "pe": [
+                89,
+                212
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                0,
+                52,
+                104
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5175,
+              "pe": [
+                90,
+                212
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                1,
+                53,
+                105
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5176,
+              "pe": [
+                91,
+                212
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                2,
+                54,
+                106
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5177,
+              "pe": [
+                92,
+                212
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                3,
+                55,
+                107
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5178,
+              "pe": [
+                93,
+                212
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                4,
+                56,
+                108
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5179,
+              "pe": [
+                94,
+                212
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                5,
+                57,
+                109
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5180,
+              "pe": [
+                95,
+                212
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                6,
+                58,
+                110
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5181,
+              "pe": [
+                96,
+                212
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                7,
+                59,
+                111
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5182,
+              "pe": [
+                97,
+                212
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                8,
+                60,
+                112
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5183,
+              "pe": [
+                98,
+                212
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                9,
+                61,
+                113
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5184,
+              "pe": [
+                99,
+                212
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                10,
+                62,
+                114
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5185,
+              "pe": [
+                100,
+                212
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                11,
+                63,
+                115
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5186,
+              "pe": [
+                101,
+                212
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                12,
+                64,
+                116
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5187,
+              "pe": [
+                102,
+                212
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                13,
+                65,
+                117
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5188,
+              "pe": [
+                103,
+                212
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                14,
+                66,
+                118
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5189,
+              "pe": [
+                104,
+                212
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                15,
+                67,
+                119
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5190,
+              "pe": [
+                105,
+                212
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                16,
+                68,
+                120
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5191,
+              "pe": [
+                106,
+                212
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                17,
+                69,
+                121
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5192,
+              "pe": [
+                107,
+                212
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                18,
+                70,
+                122
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5193,
+              "pe": [
+                108,
+                212
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                19,
+                71,
+                123
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5194,
+              "pe": [
+                109,
+                212
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                20,
+                72,
+                124
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5195,
+              "pe": [
+                110,
+                212
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                21,
+                73,
+                125
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5196,
+              "pe": [
+                111,
+                212
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                22,
+                74,
+                126
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5197,
+              "pe": [
+                112,
+                212
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                23,
+                75,
+                127
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5198,
+              "pe": [
+                113,
+                212
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                24,
+                76,
+                128
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5199,
+              "pe": [
+                114,
+                212
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                25,
+                77,
+                129
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5200,
+              "pe": [
+                115,
+                212
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                26,
+                78,
+                130
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5201,
+              "pe": [
+                116,
+                212
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                27,
+                79,
+                131
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5202,
+              "pe": [
+                117,
+                212
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                28,
+                80,
+                132
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5203,
+              "pe": [
+                118,
+                212
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                29,
+                81,
+                133
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5204,
+              "pe": [
+                119,
+                212
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                30,
+                82,
+                134
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5205,
+              "pe": [
+                120,
+                212
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                31,
+                83,
+                135
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5206,
+              "pe": [
+                121,
+                212
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                32,
+                84
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5207,
+              "pe": [
+                122,
+                212
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                33,
+                85
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5208,
+              "pe": [
+                123,
+                212
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                34,
+                86
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5209,
+              "pe": [
+                124,
+                212
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                35,
+                87
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5210,
+              "pe": [
+                125,
+                212
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                36,
+                88
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5211,
+              "pe": [
+                126,
+                212
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                37,
+                89
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5212,
+              "pe": [
+                127,
+                212
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                38,
+                90
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5213,
+              "pe": [
+                128,
+                212
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                39,
+                91
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5214,
+              "pe": [
+                129,
+                212
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                40,
+                92
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5215,
+              "pe": [
+                130,
+                212
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                41,
+                93
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5216,
+              "pe": [
+                131,
+                212
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                42,
+                94
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5217,
+              "pe": [
+                132,
+                212
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                43,
+                95
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5218,
+              "pe": [
+                133,
+                212
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                44,
+                96
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5219,
+              "pe": [
+                134,
+                212
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                45,
+                97
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5220,
+              "pe": [
+                135,
+                212
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                46,
+                98
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5221,
+              "pe": [
+                136,
+                212
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                47,
+                99
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5222,
+              "pe": [
+                137,
+                212
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                48,
+                100
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5223,
+              "pe": [
+                138,
+                212
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                49,
+                101
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5224,
+              "pe": [
+                139,
+                212
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                50,
+                102
+              ],
+              "native_invocations": 64
+            },
+            {
+              "rank": 5225,
+              "pe": [
+                140,
+                212
+              ],
+              "resident_payload_bytes": 16640,
+              "groups": [
+                51,
+                103
+              ],
+              "native_invocations": 64
+            }
+          ],
+          "quantization_schedule": "Each actor grants its assigned128-value groups in increasing group order within a stage request epoch; no later request overlaps mutable scratch.",
+          "native_busy_cycle_screen": 76553.78125,
+          "candidate_screen": [
+            {
+              "shape": [
+                2,
+                128
+              ],
+              "maximum_native_invocations_per_pe": 134,
+              "native_busy_cycles": 104034.25
+            },
+            {
+              "shape": [
+                4,
+                64
+              ],
+              "maximum_native_invocations_per_pe": 134,
+              "native_busy_cycles": 79110.25
+            },
+            {
+              "shape": [
+                8,
+                32
+              ],
+              "maximum_native_invocations_per_pe": 134,
+              "native_busy_cycles": 76553.78125
+            },
+            {
+              "shape": [
+                16,
+                16
+              ],
+              "maximum_native_invocations_per_pe": 134,
+              "native_busy_cycles": 77753.5
+            }
+          ],
+          "screen_scope": "Conditional reuse of qualified native tile cycles only; excludes reductions, communication, all other operators and new ragged-loop overhead. Not full stage latency or TPS."
+        },
+        {
+          "id": "layer_01/down",
+          "role": "down",
+          "nodes": [
+            {
+              "id": 35,
+              "op": "fp8_projection",
+              "inputs": [
+                "v41"
+              ],
+              "outputs": [
+                "v42"
+              ],
+              "weights": [
+                "model.language_model.layers.1.mlp.down_proj.weight",
+                "model.language_model.layers.1.mlp.down_proj.weight_scale_inv"
+              ],
+              "attributes": {
+                "activation_group": 128,
+                "weight_block": [
+                  128,
+                  128
+                ],
+                "activation": "E4M3FN nearest even; max(absmax,1e-10)/448",
+                "accumulation": "FP32 ascending128-wide contraction blocks; BF16 only after complete projection"
+              }
+            },
+            {
+              "id": 36,
+              "op": "residual_add",
+              "inputs": [
+                "v37",
+                "v42"
+              ],
+              "outputs": [
+                "v43"
+              ],
+              "weights": [],
+              "attributes": {
+                "arithmetic": "BF16 output"
+              }
+            }
+          ],
+          "weights": [
+            "model.language_model.layers.1.mlp.down_proj.weight",
+            "model.language_model.layers.1.mlp.down_proj.weight_scale_inv"
+          ],
+          "matrices": [
+            {
+              "tensor": "model.language_model.layers.1.mlp.down_proj.weight",
+              "shape": [
+                5120,
+                17408
+              ],
+              "tile_shape": [
+                4,
+                64
+              ],
+              "tiles": 348160,
+              "dtype": "F8_E4M3",
+              "scale_tensor": "model.language_model.layers.1.mlp.down_proj.weight_scale_inv",
+              "k_blocks": 272,
+              "groups": 10,
+              "workers": 2607,
+              "output_tiles": 1280,
+              "input_k_invariant": true,
+              "loop_output_tile": "group.output_start + iteration",
+              "group_partitions": [
+                {
+                  "rank_start": 0,
+                  "workers": 272,
+                  "max_k_parts": 1,
+                  "row_capacity": 135,
+                  "output_start": 0,
+                  "output_count": 135
+                },
+                {
+                  "rank_start": 272,
+                  "workers": 272,
+                  "max_k_parts": 1,
+                  "row_capacity": 135,
+                  "output_start": 135,
+                  "output_count": 135
+                },
+                {
+                  "rank_start": 544,
+                  "workers": 272,
+                  "max_k_parts": 1,
+                  "row_capacity": 135,
+                  "output_start": 270,
+                  "output_count": 135
+                },
+                {
+                  "rank_start": 816,
+                  "workers": 272,
+                  "max_k_parts": 1,
+                  "row_capacity": 135,
+                  "output_start": 405,
+                  "output_count": 135
+                },
+                {
+                  "rank_start": 1088,
+                  "workers": 272,
+                  "max_k_parts": 1,
+                  "row_capacity": 135,
+                  "output_start": 540,
+                  "output_count": 135
+                },
+                {
+                  "rank_start": 1360,
+                  "workers": 272,
+                  "max_k_parts": 1,
+                  "row_capacity": 135,
+                  "output_start": 675,
+                  "output_count": 135
+                },
+                {
+                  "rank_start": 1632,
+                  "workers": 272,
+                  "max_k_parts": 1,
+                  "row_capacity": 135,
+                  "output_start": 810,
+                  "output_count": 135
+                },
+                {
+                  "rank_start": 1904,
+                  "workers": 272,
+                  "max_k_parts": 1,
+                  "row_capacity": 135,
+                  "output_start": 945,
+                  "output_count": 135
+                },
+                {
+                  "rank_start": 2176,
+                  "workers": 272,
+                  "max_k_parts": 1,
+                  "row_capacity": 135,
+                  "output_start": 1080,
+                  "output_count": 135
+                },
+                {
+                  "rank_start": 2448,
+                  "workers": 159,
+                  "max_k_parts": 2,
+                  "row_capacity": 67,
+                  "output_start": 1215,
+                  "output_count": 65
+                }
+              ]
+            }
+          ],
+          "fp8_tiles": 348160,
+          "bf16_tiles": 0,
+          "auxiliary": [
+            {
+              "id": "v37",
+              "kind": "slot_value",
+              "bytes": 20480,
+              "bytes_per_slot": 10240,
+              "slots": 2,
+              "page_start": 0,
+              "pages": 160
+            },
+            {
+              "id": "v41",
+              "kind": "slot_value",
+              "bytes": 69632,
+              "bytes_per_slot": 34816,
+              "slots": 2,
+              "page_start": 160,
+              "pages": 544
+            },
+            {
+              "id": "v42",
+              "kind": "slot_value",
+              "bytes": 20480,
+              "bytes_per_slot": 10240,
+              "slots": 2,
+              "page_start": 704,
+              "pages": 160
+            },
+            {
+              "id": "v43",
+              "kind": "slot_value",
+              "bytes": 20480,
+              "bytes_per_slot": 10240,
+              "slots": 2,
+              "page_start": 864,
+              "pages": 160
+            }
+          ],
+          "auxiliary_pages": 1024,
+          "original_weight_bytes": 89139840,
+          "resident_matrix_bytes": 90521600,
+          "matrix_macs": 89128960,
+          "minimum_pes": 2579,
+          "rect": [
+            108,
+            213,
+            33,
+            79
+          ],
+          "banks": {
+            "classes": [
+              {
+                "rank_start": 0,
+                "rank_end": 2448,
+                "fp8_slots": 135,
+                "bf16_slots": 0,
+                "auxiliary_pages": 1,
+                "page_prefix": 0
+              },
+              {
+                "rank_start": 2448,
+                "rank_end": 2561,
+                "fp8_slots": 130,
+                "bf16_slots": 0,
+                "auxiliary_pages": 11,
+                "page_prefix": 2448
+              },
+              {
+                "rank_start": 2561,
+                "rank_end": 2607,
+                "fp8_slots": 65,
+                "bf16_slots": 0,
+                "auxiliary_pages": 143,
+                "page_prefix": 3691
+              }
+            ],
+            "matrix_payload_max": 35100,
+            "auxiliary_page_capacity": 10269,
+            "auxiliary_pages": 1024,
+            "fp8_tiles": 348160,
+            "bf16_tiles": 0,
+            "admitted": true
+          },
+          "physical_rank_order": "serpentine rows within this region",
+          "input_distribution": "Retain the one selected K128 packet for all local output iterations",
+          "partial_output_storage": "One row/pair per invocation, released by contraction/output credit",
+          "compiled_sram_qualified": false,
+          "maximum_native_invocations_per_pe": 135,
+          "native_shape": [
+            4,
+            64
+          ],
+          "epilogue": "Full-K reduction, then BF16 and retained residual",
+          "native_busy_cycle_screen": 79700.625,
+          "candidate_screen": [
+            {
+              "shape": [
+                2,
+                128
+              ],
+              "maximum_native_invocations_per_pe": 135,
+              "native_busy_cycles": 104810.625
+            },
+            {
+              "shape": [
+                4,
+                64
+              ],
+              "maximum_native_invocations_per_pe": 135,
+              "native_busy_cycles": 79700.625
+            }
+          ],
+          "screen_scope": "Conditional reuse of qualified native tile cycles only; excludes reductions, communication, all other operators and new ragged-loop overhead. Not full stage latency or TPS."
+        }
+      ],
+      "minimum_pes": 11289,
+      "matrix_macs": 383221760,
+      "rect": [
+        63,
+        146,
+        78,
+        146
+      ],
+      "macro_column": 1,
+      "request_controller": {
+        "region": "layer_01/mix",
+        "rank": 3554,
+        "pe": [
+          107,
+          291
+        ],
+        "weight_bytes": 0,
+        "auxiliary_bytes": 0,
+        "source": "runtime/layer_controller.csl"
+      },
+      "remaining_unallocated_actor_pes": 2
+    }
+  ],
+  "config": {
+    "width": 750,
+    "height": 1160,
+    "macro_columns": 8,
+    "concurrency": 2,
+    "context": 96,
+    "slots": 2,
+    "payload_per_pe": 35256,
+    "stack_per_pe": 4096,
+    "code_sdk_allowance": 7424,
+    "communication_scratch": 1352,
+    "feedback_rows": 2
+  },
+  "source_schedule": "layer-schedule.json",
+  "neural_execution": false,
+  "complete_fabric_routes": false
+}

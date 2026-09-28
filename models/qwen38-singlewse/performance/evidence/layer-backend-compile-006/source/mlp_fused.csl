@@ -1,0 +1,44 @@
+// Qwen MLP fusion helpers. qwen_math.csl is copied unchanged from the preserved
+// functional source at staging; record its hash. These helpers do not qualify
+// that source's exp approximation or a changed projection reduction order.
+// A two-value packet is the communication boundary, not a global BF16 vector.
+const qwen=@import_module("qwen_math.csl");
+const codec=@import_module("fp8_encode.csl");
+fn low(word:u32) u16 {return @as(u16,word & 65535);}
+fn high(word:u32) u16 {return @as(u16,word>>16);}
+fn pack(a:u16,b:u16) u32 {return @as(u32,a)|(@as(u32,b)<<16);}
+
+// Projection reduction owns both FP32 sums until this packed send completes.
+fn projection_pair(sum:[*]f32) u32 {return pack(qwen.round(sum[0]),qwen.round(sum[1]));}
+fn activation_one(gate:u16,up:u16) u16 {
+ const activated=qwen.round(qwen.silu(qwen.expand(gate)));
+ return qwen.round(qwen.expand(activated)*qwen.expand(up));
+}
+fn activation_pair(gate:u32,up:u32) u32 {
+ return pack(activation_one(low(gate),low(up)),activation_one(high(gate),high(up)));
+}
+fn maximum_pair(value:u32) f32 {
+ const a=@as(u32,low(value)&32767)<<16;
+ const b=@as(u32,high(value)&32767)<<16;
+ const maximum=if(a>b) a else b;
+ return @bitcast(f32,maximum);
+}
+fn half_code(value:u16,scale:f32) u16 {
+ const code=codec.encode(qwen.expand(value)/scale);
+ return ((code&127)<<7)|((code&128)<<8);
+}
+// Called after the group's clamped absmax and original FP32 scale are ready.
+// Directly yields the native dot's packed FP16 encodings of E4M3FN/256.
+fn encoded_pair(value:u32,scale:f32) u32 {
+ return pack(half_code(low(value),scale),half_code(high(value),scale));
+}
+fn normalized_pair(input:u32,gain:u32,inverse:f32) u32 {
+ const a=(qwen.expand(low(input))*inverse)*(1.0+qwen.expand(low(gain)));
+ const b=(qwen.expand(high(input))*inverse)*(1.0+qwen.expand(high(gain)));
+ return pack(qwen.round(a),qwen.round(b));
+}
+fn residual_pair(sum:[*]f32,original:u32) u32 {
+ const a=qwen.round(qwen.expand(qwen.round(sum[0]))+qwen.expand(low(original)));
+ const b=qwen.round(qwen.expand(qwen.round(sum[1]))+qwen.expand(high(original)));
+ return pack(a,b);
+}

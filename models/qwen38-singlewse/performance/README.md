@@ -7,16 +7,22 @@ Independent requests may overlap with isolated state. The earlier per-request
 interpretation and whole-wafer shared-layer overlay are superseded. The target
 remains unmet; this is active development.
 
-P22 implements the full stage/bank allocator, layer-local kernel/stream generator,
-request/credit/feedback protocol oracle and source-only CSL slot guard. The audited
-candidate places all1251 original tensors and1172 operations in66 disjoint stages,
-with65 adjacent layer interfaces, two resident requests and a feedback corridor.
-It has not yet passed composed compilation, complete routes, neural execution or
-performance acceptance. See [ARCHITECTURE.md](docs/ARCHITECTURE.md),
+P23 adds resident native row loops, exact original-weight packing and direct
+gate/up -> SiLU/multiply -> group128 quantization -> native down fragment bodies
+inside P22's66 disjoint stages. All498 matrices retain their original weights;
+gate/up use8x32 tiles and down4x64. Six selected backend profiles compile, with
+a416-byte minimum margin including the declared stack. The layer0/1 original
+packing audit and97 source tests pass. This does not admit full layer SRAM,
+complete routes, connected neural execution or performance. See
+[RESIDENT-LAYER-BACKEND.md](docs/RESIDENT-LAYER-BACKEND.md),
+[ARCHITECTURE.md](docs/ARCHITECTURE.md),
 [MEASUREMENT.md](docs/MEASUREMENT.md) and [NEXT-STEPS.md](docs/NEXT-STEPS.md).
 
 Generate a fresh candidate with
 `python3 performance/tools/plan_pipeline.py --output <new-directory>`.
+Lower its preserved resident rectangles to native-loop ownership with
+`python3 performance/tools/plan_layer_schedule.py --output <new-directory>`
+(currently bound to frozen stage-map002 and qualified tile calibration).
 Run checks with `python3 -m unittest discover -s performance/tests`.
 
 The functional baseline commit6c2f4f5685478ee100f167e42a9f7f22f57dca35, original

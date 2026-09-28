@@ -12,7 +12,8 @@ and full-run throughput separately. The full contract is
 Full model/weight identity, correct complete sentences, independent numerical
 qualification of changed operations, actual request isolation and warm reset are
 required. Layout/byte estimates and component rates do not pass this contract.
-Current metadata/protocol checks do not establish executable model acceptance.
+Current metadata/protocol checks, original packing samples and selected backend
+compiler admission do not establish connected neural or model acceptance.
 The original strict functional criteria and unsuccessful comparisons below remain
 preserved as historical evidence; they are not retroactively marked passed.
 

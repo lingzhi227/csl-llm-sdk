@@ -1,0 +1,26 @@
+const memcpy=@import_module("<memcpy/get_params>",.{.width=5,.height=1});
+layout {
+ @set_rectangle(5,1);
+ @set_tile_code(0,0,"layer_backend.csl",.{.memcpy_params=memcpy.get_params(0),.rows=2,.columns=128,.branches=1,.mix=true});
+ @set_tile_code(1,0,"layer_backend.csl",.{.memcpy_params=memcpy.get_params(1),.rows=8,.columns=32,.branches=2,.mix=false});
+ @set_tile_code(2,0,"layer_backend.csl",.{.memcpy_params=memcpy.get_params(2),.rows=4,.columns=64,.branches=1,.mix=false});
+ @set_tile_code(3,0,"layer_backend.csl",.{.memcpy_params=memcpy.get_params(3),.rows=2,.columns=128,.branches=1,.mix=false});
+ @set_tile_code(4,0,"layer_controller.csl",.{.memcpy_params=memcpy.get_params(4)});
+ @export_name("bank",[*]u32,false);
+ @export_name("packet",[*]u32,false);
+ @export_name("info",[*]u32,false);
+ @export_name("state_operands",[*]f32,false);
+ @export_name("state_result",[*]f32,false);
+ @export_name("partial",[*]f32,false);
+ @export_name("control",[*]u32,false);
+ @export_name("begin",fn(u32,u16,u16,u16,u16)void);
+ @export_name("capture",fn(u16)void);
+ @export_name("compute",fn()void);
+ @export_name("completed",fn(u16,u16,u16)void);
+ @export_name("request_begin",fn(u16,u32,u16)void);
+ @export_name("request_chunk",fn(u16,u32,u16,u16)void);
+ @export_name("request_committed",fn()void);
+ @export_name("request_completed",fn(u16,u16)void);
+ @export_name("request_reset",fn(u16,u32,u16)void);
+ @export_name("state_operation",fn(u16,u16)void);
+}

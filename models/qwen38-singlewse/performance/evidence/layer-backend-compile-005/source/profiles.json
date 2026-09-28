@@ -1,0 +1,39 @@
+{
+  "profiles": [
+    {
+      "rows": 2,
+      "columns": 128,
+      "branches": 1,
+      "mix": true
+    },
+    {
+      "rows": 8,
+      "columns": 32,
+      "branches": 2,
+      "mix": false
+    },
+    {
+      "rows": 4,
+      "columns": 64,
+      "branches": 1,
+      "mix": false
+    },
+    {
+      "rows": 2,
+      "columns": 128,
+      "branches": 1,
+      "mix": false
+    }
+  ],
+  "application": [
+    5,
+    1
+  ],
+  "controller": {
+    "source": "layer_controller.csl",
+    "weight_payload_bytes": 0
+  },
+  "payload_bytes": 35256,
+  "scope": "Selected backend resource census only; no fabric or full-layer execution",
+  "physical": false
+}

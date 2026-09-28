@@ -1,13 +1,16 @@
 # Next work: resident spatial pipeline
 
-1. Keep P22's two-request full stage map and actual model identities authoritative.
-   Lower real layer0/1 original tensor owners to their boundary ports and local
+1. Keep P22's two-request stage rectangles and P23's layer-native-schedule-002
+   original tensor addresses authoritative. Lower real layer0/1 owners to their
+   boundary ports and local
    distributions; instantiate the real GDN, norm, gate/up, fused activation,
    down/residual and successor consumption on those disjoint rectangles.
-2. Compose layer-local native loops, state shards and request-slot guards. Admit
+2. Connect the P23 native loops,4x8 FP32 state pages,1x128 BF16 rows, direct
+   projected-pair fusion actors and separate stage request controllers. Admit
    simultaneous colors/queues/DSRs/threads and actual code/data/stack for every
-   participating role before execution. Source-only leases and planning allowances
-   are not SRAM or fabric admission. Include the original1x128 BF16 bank tails.
+   participating role before execution. Selected compile008 has only416bytes
+   minimum margin; its six profiles do not admit full neural/fabric composition.
+   Implement actual full-K reductions before projected BF16 rounding.
 3. Freeze independent numerical references and changed-reduction tolerances for
    two different real requests before device results. Validate complete neighboring
    layers, retained states, backpressure, both send/credit orders and warm reset.

@@ -1,0 +1,71 @@
+// Compile-admission shell for actual resident layer modules. Exported entrypoints
+// are later driven by fabric callbacks. This file has no neural input producer,
+// inter-PE reduction or complete layer scheduler and is not inference by itself.
+param memcpy_params;param rows:u16;param columns:u16;param branches:u16;param mix:bool;param bank_words:u16;param fusion_actor:bool;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const native=@import_module("layer_native.csl",.{.rows=rows,.columns=columns,.branches=branches,.max_parts=if(columns==128) 1 else 2});
+const fusion=@import_module("layer_fusion.csl",.{.downstream_columns=64});
+const bf16=@import_module("bf16_row.csl");
+const rounding=@import_module("qwen_math.csl");
+var bf16_result=@zeros([1]f32);
+const br:[*]f32=&bf16_result;
+const gdn=@import_module("gdn_page.csl");
+var bank=@zeros([bank_words]u32);var packet=@zeros([columns/2+1]u32);
+var state_operands=@zeros([if(mix) 24 else 1]f32);
+var state_result=@zeros([if(mix) 8 else 1]f32);
+var info=@zeros([8]u32);var control=@zeros([12]u32);
+const cp:[*]u32=&control;const fp:[*]u32=if(fusion_actor) fusion.output else &info;
+const bp:[*]u32=&bank;const pp:[*]u32=&packet;const ip:[*]u32=&info;
+const np:[*]f32=native.result;
+const sp:[*]f32=&state_operands;const rp:[*]f32=&state_result;
+fn begin(epoch:u32,parts:u16,count:u16,base0:u16,base1:u16) void {
+ native.configure(epoch,parts,count,base0,base1);info[0]=epoch;
+}
+fn capture(epoch:u32,part:u16) void {native.capture(epoch,part,pp);}
+fn compute() void {native.compute(bp,bank_words);}
+fn completed(epoch:u32,row:u16,send:u16,credit:u16) void {
+ if(send!=0){native.send_completed(epoch,row);}if(credit!=0){native.consumer_credit(epoch,row);}
+}
+fn state_operation(word_offset:u16,operation:u16) void {
+ if(comptime mix){
+  @assert(word_offset+32<=bank_words and operation<3);const state=@ptrcast([*]f32,&bank[word_offset]);
+  if(operation==0){gdn.reset(state);}
+  else if(operation==1){gdn.predict(state,@ptrcast([*]f32,&state_operands[4]),state_operands[16],rp);}
+  else{gdn.update(state,@ptrcast([*]f32,&state_operands[0]),@ptrcast([*]f32,&state_operands[4]),@ptrcast([*]f32,&state_operands[8]),rp);}
+ }else{@assert(false);}
+}
+fn command(op:u16) void {
+ if(op==0){begin(control[0],@as(u16,control[1]),@as(u16,control[2]),@as(u16,control[3]),@as(u16,control[4]));}
+ else if(op==1){capture(control[0],@as(u16,control[1]));}
+ else if(op==2){compute();}
+ else if(op==3){completed(control[0],@as(u16,control[1]),@as(u16,control[2]),@as(u16,control[3]));}
+ else if(op==4){state_operation(@as(u16,control[0]),@as(u16,control[1]));}
+ else if(op==10){
+  if(comptime branches==2){
+   const pair=@as(u16,control[0]);@assert(pair<rows/2);
+   info[3]=@as(u32,rounding.round(native.partial[2*pair]))|(@as(u32,rounding.round(native.partial[2*pair+1]))<<16);
+   info[4]=@as(u32,rounding.round(native.partial[rows+2*pair]))|(@as(u32,rounding.round(native.partial[rows+2*pair+1]))<<16);
+  }else{@assert(false);}
+ }
+ else if(op==11){
+  if(comptime mix){
+   const offset=@as(u16,control[0]);@assert(offset+64<=bank_words);
+   bf16.compute(@ptrcast([*]u16,&bank[offset]),@ptrcast([*]u16,pp),br);
+  }else{@assert(false);}
+ }
+ else if(comptime fusion_actor){
+  if(op==5){fusion.begin(control[0],@as(u16,control[1]));}
+  else if(op==6){fusion.put(control[0],@as(u16,control[1]),@as(u16,control[2]),control[3]);}
+  else if(op==7){fusion.prepare_fragment();}
+  else if(op==8){fusion.send_completed(control[0],@as(u16,control[1]),@as(u16,control[2]));}
+  else if(op==9){fusion.consumer_credit(control[0],@as(u16,control[1]),@as(u16,control[2]));}
+  else if(op==12){fusion.put_projected(control[0],@as(u16,control[1]),@as(u16,control[2]),control[3],control[4]);}
+  else{@assert(false);}
+ }else{@assert(false);}
+ sys.unblock_cmd_stream();
+}
+comptime {
+ @export_symbol(bp,"bank");@export_symbol(pp,"packet");@export_symbol(ip,"info");@export_symbol(cp,"control");
+ @export_symbol(sp,"state_operands");@export_symbol(rp,"state_result");@export_symbol(np,"partial");
+ @export_symbol(br,"bf16_result");@export_symbol(fp,"fusion_packet");@export_symbol(command);
+}

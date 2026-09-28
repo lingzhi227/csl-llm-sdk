@@ -1,0 +1,26 @@
+// Stage-level request ownership belongs on an unallocated stage-local PE, not
+// duplicated in every matrix bank. Native workers retain their local operand,
+// row-epoch, send and consumption guards. Actual routing supplies these events.
+param memcpy_params;param requests:u16;param context:u16;param chunks:u16;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const leases=@import_module("pipeline_lease.csl",.{.requests=requests,.context=context,.chunks=chunks});
+var control=@zeros([8]u32);
+const cp:[*]u32=&control;
+fn request_begin(request:u16,generation:u32,position:u16) void {
+ const slot=leases.grant(request,generation,position);control[0]=slot;control[1]=leases.lease[slot];sys.unblock_cmd_stream();
+}
+fn request_chunk(slot:u16,lease:u32,request:u16,generation:u32,position:u16,chunk:u16) void {
+ leases.arrive(slot,request,generation,position,lease,chunk);sys.unblock_cmd_stream();
+}
+fn request_committed(slot:u16,lease:u32) void {@assert(slot<2 and leases.lease[slot]==lease);leases.state_committed(slot);sys.unblock_cmd_stream();}
+fn request_completed(slot:u16,lease:u32,send:u16,credit:u16) void {
+ if(send!=0){leases.send_completed(slot,lease);}
+ if(credit!=0){leases.consumer_credit(slot,lease);}sys.unblock_cmd_stream();
+}
+fn request_reset(request:u16,generation:u32,state_clear_ack:u16) void {
+ leases.reset_request(request,generation,state_clear_ack==1);sys.unblock_cmd_stream();
+}
+comptime {
+ @export_symbol(cp,"control");@export_symbol(request_begin);@export_symbol(request_chunk);
+ @export_symbol(request_committed);@export_symbol(request_completed);@export_symbol(request_reset);
+}

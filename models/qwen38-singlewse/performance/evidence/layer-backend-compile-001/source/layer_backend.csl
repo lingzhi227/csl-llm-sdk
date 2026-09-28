@@ -1,0 +1,52 @@
+// Compile-admission shell for actual resident layer modules. Exported entrypoints
+// are later driven by fabric callbacks. This file has no neural input producer,
+// inter-PE reduction or complete layer scheduler and is not inference by itself.
+param memcpy_params;param rows:u16;param columns:u16;param branches:u16;param mix:bool;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const native=@import_module("layer_native.csl",.{.rows=rows,.columns=columns,.branches=branches});
+const leases=@import_module("pipeline_lease.csl",.{.requests=2,.context=96,.chunks=40});
+const gdn=@import_module("gdn_page.csl");
+var bank=@zeros([8814]u32);var packet=@zeros([65]u32);
+var state_operands=@zeros([if(mix) 24 else 1]f32);
+var state_result=@zeros([if(mix) 8 else 1]f32);
+var info=@zeros([8]u32);
+const bp:[*]u32=&bank;const pp:[*]u32=&packet;const ip:[*]u32=&info;
+const np:[*]f32=native.result;
+const sp:[*]f32=&state_operands;const rp:[*]f32=&state_result;
+fn begin(epoch:u32,parts:u16,count:u16,base0:u16,base1:u16) void {
+ native.configure(epoch,parts,count,base0,base1);info[0]=epoch;sys.unblock_cmd_stream();
+}
+fn capture(part:u16,subgroup:u16) void {native.capture(info[0],part,subgroup,pp);sys.unblock_cmd_stream();}
+fn compute() void {native.compute(bp,8814);sys.unblock_cmd_stream();}
+fn completed(row:u16,send:u16,credit:u16) void {
+ if(send!=0){native.send_completed(info[0],row);}if(credit!=0){native.consumer_credit(info[0],row);}sys.unblock_cmd_stream();
+}
+fn request_begin(request:u16,generation:u32,position:u16) void {
+ const slot=leases.grant(request,generation,position);info[1]=slot;info[2]=leases.lease[slot];sys.unblock_cmd_stream();
+}
+fn request_chunk(request:u16,generation:u32,position:u16,chunk:u16) void {
+ leases.arrive(@as(u16,info[1]),request,generation,position,info[2],chunk);sys.unblock_cmd_stream();
+}
+fn request_committed() void {leases.state_committed(@as(u16,info[1]));sys.unblock_cmd_stream();}
+fn request_completed(send:u16,credit:u16) void {
+ if(send!=0){leases.send_completed(@as(u16,info[1]),info[2]);}
+ if(credit!=0){leases.consumer_credit(@as(u16,info[1]),info[2]);}sys.unblock_cmd_stream();
+}
+fn request_reset(request:u16,generation:u32,state_clear_ack:u16) void {
+ leases.reset_request(request,generation,state_clear_ack==1);sys.unblock_cmd_stream();
+}
+fn state_operation(word_offset:u16,operation:u16) void {
+ if(comptime mix){
+  @assert(word_offset+32<=8814 and operation<3);const state=@ptrcast([*]f32,&bank[word_offset]);
+  if(operation==0){gdn.reset(state);}
+  else if(operation==1){gdn.predict(state,&state_operands[4],state_operands[16],rp);}
+  else{gdn.update(state,&state_operands[0],&state_operands[4],&state_operands[8],rp);}
+ }else{@assert(false);}sys.unblock_cmd_stream();
+}
+comptime {
+ @export_symbol(bp,"bank");@export_symbol(pp,"packet");@export_symbol(ip,"info");
+ @export_symbol(sp,"state_operands");@export_symbol(rp,"state_result");@export_symbol(np,"partial");
+ @export_symbol(begin);@export_symbol(capture);@export_symbol(compute);@export_symbol(completed);
+ @export_symbol(request_begin);@export_symbol(request_chunk);@export_symbol(request_committed);
+ @export_symbol(request_completed);@export_symbol(request_reset);@export_symbol(state_operation);
+}

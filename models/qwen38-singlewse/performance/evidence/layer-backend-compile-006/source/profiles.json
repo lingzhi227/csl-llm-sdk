@@ -1,0 +1,55 @@
+{
+  "profiles": [
+    {
+      "rows": 2,
+      "columns": 128,
+      "branches": 1,
+      "mix": true,
+      "bank_words": 8814,
+      "fusion_actor": false
+    },
+    {
+      "rows": 8,
+      "columns": 32,
+      "branches": 2,
+      "mix": false,
+      "bank_words": 8814,
+      "fusion_actor": false
+    },
+    {
+      "rows": 4,
+      "columns": 64,
+      "branches": 1,
+      "mix": false,
+      "bank_words": 8814,
+      "fusion_actor": false
+    },
+    {
+      "rows": 2,
+      "columns": 128,
+      "branches": 1,
+      "mix": false,
+      "bank_words": 8814,
+      "fusion_actor": false
+    },
+    {
+      "rows": 8,
+      "columns": 32,
+      "branches": 2,
+      "mix": false,
+      "bank_words": 4160,
+      "fusion_actor": true
+    }
+  ],
+  "application": [
+    6,
+    1
+  ],
+  "controller": {
+    "source": "layer_controller.csl",
+    "weight_payload_bytes": 0
+  },
+  "payload_bytes": 35256,
+  "scope": "Selected backend resource census only; no fabric or full-layer execution",
+  "physical": false
+}

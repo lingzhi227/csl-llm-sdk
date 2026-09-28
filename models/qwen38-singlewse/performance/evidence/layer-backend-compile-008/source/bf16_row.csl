@@ -1,0 +1,23 @@
+// Exact BF16 high-half expansion, one FP32 temporary, native ordered FMA.
+// Adapted from preserved csl/bf16_gemv.csl; provenance in probes/mixed_bank/REUSE.json.
+// DSR7 streams BF16 weights; DSR4 is shared sequentially with fp8_dot.
+const rows:u16=1;
+
+var expanded=@zeros([rows]f32);
+const pd=@get_dsr(dsr_dest,7);const ps=@get_dsr(dsr_src0,7);
+const yd=@get_dsr(dsr_dest,4);const ys=@get_dsr(dsr_src0,4);const ws=@get_dsr(dsr_src1,4);
+fn step(value:u16) void {
+ @mov16(pd,ps);@fmacs(yd,ys,ws,@bitcast(f32,@as(u32,value)<<16));
+}
+fn compute(weights:[*]u16,input:[*]u16,output:[*]f32) void {
+ const out=@get_dsd(mem1d_dsd,.{.base_address=output,.extent=rows});
+ const scratch=@get_dsd(mem1d_dsd,.{.base_address=&expanded,.extent=rows});
+ const low=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]u16,&expanded),.extent=rows,.stride=2});
+ const high=@increment_dsd_offset(low,1,u16);
+ const w=@get_dsd(mem1d_dsd,.{.base_address=weights,.extent=rows});
+ const x=@get_dsd(mem1d_dsd,.{.base_address=input,.extent=128});
+ @fmovs(out,0.0);@fmovs(scratch,0.0);
+ @load_to_dsr(pd,high,.{.save_address=false});@load_to_dsr(ps,w,.{.save_address=true});
+ @load_to_dsr(yd,out,.{.save_address=false});@load_to_dsr(ys,out,.{.save_address=false});
+ @load_to_dsr(ws,scratch,.{.save_address=false});@map(step,x);
+}

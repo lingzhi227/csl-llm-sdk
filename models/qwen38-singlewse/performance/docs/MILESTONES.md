@@ -802,3 +802,34 @@ directory and unit, then owner-cancelled. Logs, sources, cancellation and empty-
 cgroup receipt are retained. No new physical job or speed result is claimed.
 See ARCHITECTURE.md and the pipeline-stage-map-002 evidence. Next work is actual
 connected layer0/1 execution in this layout, followed by full64-layer feedback.
+
+## P23: resident native loops and selected fused backend compiler admission
+
+The unchanged disjoint stage rectangles now have executable native-loop addresses
+for all498 original matrices and115077120 tiles. Each PE retains fixed K inputs
+and streams one partial output block. Paired8x32 gate/up and4x64 down shapes reduce
+conditional native busy costs under measured primitive reuse; new-loop/full-stage
+latencies remain unmeasured. Original BF16 rows remain1x128, and GDN states use
+4x8 FP32 pages with independent request ownership.
+
+The direct fused body accepts actual complete-K packed BF16 gate/up pairs, then
+performs SiLU, multiply, original group128 quantization and credited native down
+fragments. Low-payload resident PEs host the larger fused actor. Stage request
+controllers occupy proved unused local PEs, fixing attempt004's SRAM overage.
+Selected six-role compile008 passes at47712bytes including4KiB stack, leaving416.
+Earlier syntax/resource failures and earlier accepted005/006 compositions remain
+frozen. This is not all-role/full-layer SRAM admission or fabric execution.
+
+Original layer0/1 packing audit001 passes6080 sampled tiles across all16 matrices,
+complete12 small parameters and selected original publisher shard hashes. The
+new weight stream never changes original precision. All97 source tests pass,
+including the11 evidence-scoped prediction tests. The supplied P22 predictor
+still lacks full-stage costs and clock calibration, so it supplies no full-model
+TPS result and does not silently treat P23 native-loop costs as measured latency.
+
+All eight bounded compiler services and the weight audit are released, no WSE
+jobs were added, and the final account snapshot has no own active job/system
+assignment. See RESIDENT-LAYER-BACKEND.md and resident-layer-backend-summary-001.
+Next work remains actual connected layer0 -> layer1 routing and neural execution;
+complete64-layer correct sentences and>=2000 aggregate generated tokens/s are
+still unachieved.

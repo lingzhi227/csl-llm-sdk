@@ -1,0 +1,41 @@
+{
+  "utc": "2026-09-28T01:11:38.342367+00:00",
+  "unit": "qwen38-single-layer-weight-audit-001.service",
+  "status": {
+    "MainPID": "0",
+    "Result": "success",
+    "ExecMainStatus": "0",
+    "ControlGroup": "",
+    "WorkingDirectory": "",
+    "LoadState": "not-found",
+    "ActiveState": "inactive",
+    "SubState": "dead"
+  },
+  "dispatch_sha256": "ffecda6f6ad5d0a3e3ea8cd05cae3e6cc1d1b4db3f4876eb7e0cd73ba9bb1f1a",
+  "invocation_journal": [
+    {
+      "USER_UNIT": "qwen38-single-layer-weight-audit-001.service",
+      "USER_INVOCATION_ID": "347bb5f45c014d08af4429c96c43e967",
+      "MESSAGE": "Started /usr/bin/taskset --cpu-list 6 /usr/bin/flock -n /srv/cerebras-workstation/heavy.lock /usr/bin/python3 execute.py.",
+      "__REALTIME_TIMESTAMP": "1790557027409777"
+    },
+    {
+      "MESSAGE": "{\"passed\": true, \"matrices\": 16, \"small_parameters\": 12, \"sampled_tiles\": 6080, \"seconds\": 4.146987296640873}",
+      "__REALTIME_TIMESTAMP": "1790557031657814"
+    },
+    {
+      "USER_UNIT": "qwen38-single-layer-weight-audit-001.service",
+      "USER_INVOCATION_ID": "347bb5f45c014d08af4429c96c43e967",
+      "MESSAGE": "qwen38-single-layer-weight-audit-001.service: Consumed 2.232s CPU time.",
+      "__REALTIME_TIMESTAMP": "1790557031672642",
+      "CPU_USAGE_NSEC": "2232336000"
+    }
+  ],
+  "cgroup_members": [],
+  "matching_processes": [],
+  "shared_lock_available": true,
+  "own_running_services": "",
+  "workstation_released": true,
+  "physical": false,
+  "logs": {}
+}

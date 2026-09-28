@@ -8,12 +8,16 @@ sentences and >=2000 aggregate completed generated tokens/s in sustained steady
 state. Independent requests may overlap. The old per-request target and broad
 whole-wafer shared-layer time overlay are superseded.
 
-P22 source and independent metadata/protocol checks provide the complete two-
-request stage map, layer-local kernel/stream IR and source-only CSL slot guard.
-Complete internal routes, composed SRAM, neural execution and speed are still
-unqualified. See ../performance/docs/ARCHITECTURE.md and NEXT-STEPS.md.
-The identified obsolete compile003 was cancelled and its cgroup released; no new
-physical WSE job was submitted. Historical functional results below are unchanged.
+P23 implements resident native-loop ownership and original-weight packing within
+P22's two-request stage map, with direct packed gate/up -> SiLU/multiply -> group128
+quantization -> down-fragment fusion. Six selected backend roles compile with a
+416-byte minimum SRAM margin including the declared stack. Original layer0/1
+packing samples and97 source tests pass. Complete routes, whole-layer SRAM,
+connected neural execution and speed remain unqualified. See
+../performance/docs/RESIDENT-LAYER-BACKEND.md and NEXT-STEPS.md.
+All eight compiler attempts and the weight audit are released. No new physical
+WSE job was submitted; the final snapshot has no own active jobs or assignments.
+Historical functional results below are unchanged.
 
 ## Latest: initial functional phase closed for publication
 

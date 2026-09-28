@@ -1,0 +1,54 @@
+// Fused actual full-K gate/up -> BF16 SiLU/multiply -> original group128
+// quantization -> native column subpackets. Groups may cross root boundaries;
+// external routes supply the actual tagged pairs. No host neural operands.
+param downstream_columns:u16;
+comptime {@comptime_assert(128%downstream_columns==0 and downstream_columns%2==0);}
+const math=@import_module("qwen_math.csl");
+const fused=@import_module("mlp_fused.csl");
+var values=@zeros([64]u32);
+var packet=@zeros([downstream_columns/2+1]u32);
+var low:u32=0;var high:u32=0;var epoch:u32=0;var group:u16=0;
+var phase:u16=0;var fragment:u16=0;var scale:f32=0.0;
+var outgoing:bool=false;var sent:bool=false;var credited:bool=false;
+const output:[*]u32=&packet;
+fn activate_pair(gate:[*]f32,up:[*]f32,pair:u16) u32 {
+ const g=@as(u32,math.round(gate[2*pair]))|(@as(u32,math.round(gate[2*pair+1]))<<16);
+ const u=@as(u32,math.round(up[2*pair]))|(@as(u32,math.round(up[2*pair+1]))<<16);
+ return fused.activation_pair(g,u);
+}
+fn begin(new_epoch:u32,new_group:u16) void {
+ @assert(phase==0 and !outgoing and (new_epoch>epoch or (new_epoch==epoch and new_group>group)));
+ epoch=new_epoch;group=new_group;
+ phase=1;fragment=0;low=0;high=0;
+}
+fn put(observed_epoch:u32,observed_group:u16,pair:u16,value:u32) void {
+ @assert(phase==1 and observed_epoch==epoch and observed_group==group and pair<64);
+ if(pair<32){const bit=@as(u32,1)<<pair;@assert((low&bit)==0);low|=bit;}
+ else{const bit=@as(u32,1)<<(pair-32);@assert((high&bit)==0);high|=bit;}
+ values[pair]=value;
+ if(low==4294967295 and high==4294967295){
+  var maximum:f32=0.0000000001;
+  for(@range(u16,64))|i|{const v=fused.maximum_pair(values[i]);if(v>maximum){maximum=v;}}
+  scale=maximum*0.002232142857142857;
+  for(@range(u16,64))|i|{values[i]=fused.encoded_pair(values[i],scale);}
+  phase=2;
+ }
+}
+fn ready() bool {return phase==2 and !outgoing;}
+fn prepare_fragment() void {
+ @assert(ready());
+ const src=@get_dsd(mem1d_dsd,.{.base_address=&values[fragment*(downstream_columns/2)],.extent=downstream_columns/2});
+ const dst=@get_dsd(mem1d_dsd,.{.base_address=&packet,.extent=downstream_columns/2});@mov32(dst,src);
+ packet[downstream_columns/2]=@bitcast(u32,scale);outgoing=true;sent=false;credited=false;
+}
+fn release_if_done() void {
+ if(sent and credited){outgoing=false;fragment+=1;if(fragment==128/downstream_columns){phase=0;}}
+}
+fn send_completed(observed_epoch:u32,observed_group:u16,part:u16) void {
+ @assert(outgoing and observed_epoch==epoch and observed_group==group and fragment==part and !sent);
+ sent=true;release_if_done();
+}
+fn consumer_credit(observed_epoch:u32,observed_group:u16,part:u16) void {
+ @assert(outgoing and observed_epoch==epoch and observed_group==group and fragment==part and !credited);
+ credited=true;release_if_done();
+}

@@ -43,9 +43,26 @@ and exact FP32 expansions of their original BF16 scales. This lossless ownership
 change is audited; its composed executable remains unqualified. No weight is
 re-quantized or streamed from the host between layers.
 
+## P23 native-loop lowering within the same rectangles
+
+`spatial/layer_schedule.py` supersedes P22's cyclic matrix addresses with fixed-K
+native row-loop ownership. Full stage rectangles and original tensor identities
+remain unchanged. Gate/up now use paired8x32 contractions and down4x64; BF16
+retains1x128 rows. The full194-region address census passes, and original layer0/1
+packing samples match the publisher-verified checkpoint. GDN state uses4x8 FP32
+pages so it fits actual small bank tails without assuming a4KiB contiguous gap.
+
+The actual fused actor consumes packed complete-K gate/up BF16 pairs and performs
+SiLU/multiply, group128 quantization and native down packet slicing. Selected
+actors have16640bytes of original payload; heavy roots retain only projection
+rounding. One unused stage PE owns the stage request lease. Six selected profiles
+compile at maximum47712bytes including4096 stack, leaving416bytes. This does not
+include complete fabric or neural-layer execution. Current exact sources and
+evidence are described in [RESIDENT-LAYER-BACKEND.md](RESIDENT-LAYER-BACKEND.md).
+
 ## Explicit resource limits
 
-Every region has exact cyclic matrix slots and a prefix allocation of128-byte
+P22 gave every region exact cyclic matrix slots and a prefix allocation of128-byte
 auxiliary pages. `local_tile_owner` and `auxiliary_owner` return a PE and local
 byte offset for original weights, values and disjoint request states. All1251
 tensors are covered once; all1172 operations are bound once. Conservative value
@@ -54,7 +71,7 @@ any lifetime optimization. Mutable request states never alias these two slots.
 
 The candidate reserves35256B payload,7424B code/SDK,4096B stack and1352B
 communication scratch per data PE, totaling48128B. These are **planning
-allowances**, not a compiled role census. The old selected MLP compile does not
+allowances**, not a complete compiled role census. The old selected MLP compile does not
 admit these new layer/state/scheduler programs. Per-role compiled ELF plus stack,
 physical routes and executable schedule are mandatory next gates.
 
@@ -106,8 +123,9 @@ freedom from a one-hop interface audit. Logical eastern output is not evidence o
 a physical east-side host port; the actual SDK endpoint mapping must be checked.
 
 `spatial/pipeline_protocol.py` provides an adversarial protocol oracle.
-`csl/pipeline_lease.csl` is the source-only layer-slot guard to compose into the
-backend. It requires complete operand masks and once-only state commit, separates
+`csl/pipeline_lease.csl` is the layer-slot guard compiled in P23's selected
+stage-controller role; its full fabric integration remains unqualified. It
+requires complete operand masks and once-only state commit, separates
 local send completion from remote consumption credit, and refuses slot reuse
 until both arrive. Request generations and monotonically changing leases reject
 stale warm-run traffic. Actual callbacks and distributed acknowledgements must

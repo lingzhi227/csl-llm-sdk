@@ -1,0 +1,103 @@
+{
+  "schema": "wse-resident-layer-backend-summary-v1",
+  "utc": "2026-09-28T01:14:59.419515+00:00",
+  "scope": "Original native address/packing and selected fused backend compiler admission; no connected neural execution.",
+  "native_schedule": "layer-native-schedule-002",
+  "address_audit": {
+    "passed": true,
+    "regions": 194,
+    "matrices": 498,
+    "native_tiles": 115077120,
+    "maximum_matrix_payload": 35100,
+    "minimum_region_spare_auxiliary_pages": 1052,
+    "full_model_layer_residency": true,
+    "compiled_sram": false,
+    "executed": false
+  },
+  "selected_compiler_attempt": "layer-backend-compile-008",
+  "selected_roles": [
+    {
+      "role": "gdn_mix_fp8_bf16_state",
+      "sram_including_stack": 47712,
+      "margin_bytes": 416,
+      "elf_sha256": "0eb7a73e59d20f23028c1719f65262d260e7d71f1ec1bc6d87b9057e4a46b799"
+    },
+    {
+      "role": "gate_up_native_round",
+      "sram_including_stack": 47200,
+      "margin_bytes": 928,
+      "elf_sha256": "478e6a844fffa11edb27aa4f6ab4453042f314868431ebfaecc0e9aef23144a9"
+    },
+    {
+      "role": "down_native",
+      "sram_including_stack": 46560,
+      "margin_bytes": 1568,
+      "elf_sha256": "babec39eaaeec4b9fab68fe67f9fae65b2f7861cb14f13d44e2966c96cfdec76"
+    },
+    {
+      "role": "attention_mix_native",
+      "sram_including_stack": 46656,
+      "margin_bytes": 1472,
+      "elf_sha256": "48d6ae8932a32d2ac26102b0b9265b1c11386d0a1112aa8f351b9ccb1c044122"
+    },
+    {
+      "role": "gate_up_fusion_actor",
+      "sram_including_stack": 32080,
+      "margin_bytes": 16048,
+      "elf_sha256": "eaa0009604cf98c6538526633a84826097d3865e2292b6f5996c3cf01fcfbe8c"
+    },
+    {
+      "role": "stage_request_controller",
+      "sram_including_stack": 10144,
+      "margin_bytes": 37984,
+      "elf_sha256": "90c955a69a94150e4ef2b2ee415ad7a9522575d20e17923060205672db78f89e"
+    }
+  ],
+  "original_weight_audit": {
+    "attempt": "layer-weight-audit-001",
+    "layers": [
+      0,
+      1
+    ],
+    "matrices": 16,
+    "small_parameters": 12,
+    "sampled_tiles": 6080,
+    "exhaustive_device_readback": false
+  },
+  "packing_schedule_binding": "Selected-layer schedule001 and002 differ only in two epilogue explanation strings; all weight/state/actor/controller addresses identical.",
+  "compiled_source_binding": "Active bf16_row.csl differs from008 only in its provenance comment; all other compiled CSL module bodies identical. Execution manifests are preserved.",
+  "failures": {
+    "layer-backend-compile-001": "CSL does not support @zeros for bool arrays; fixed explicit two-slot initializers. Dispatch unit name had a local variable-shadowing bug; exact actual unit is retained and reconciled.",
+    "layer-backend-compile-002": "CSL *u16 element address did not match [*]u16 primitive argument; fixed explicit typed pointer casts.",
+    "layer-backend-compile-003": "LLVM pthread_create resource unavailable. Explicit taskset restored within bounded service; root cause not independently proved.",
+    "layer-backend-compile-004": "Compiler succeeded but full-bank replicated stage guard exceeded48128-byte gate; maximum49200 incl4096 stack. Stage controller moved to proven unused local PE.",
+    "layer-backend-compile-007": "Module alias bf16 shadows builtin type; renamed bf16_math, then008 passes."
+  },
+  "source_tests": {
+    "passed": 97,
+    "seconds": 18.14
+  },
+  "new_physical_jobs": 0,
+  "workstation_released": true,
+  "no_owned_hardware_allocation": true,
+  "provider_billed_node_hours": null,
+  "input_sha256": {
+    "layer-native-schedule-002/layer-schedule.json": "2d220526bf89f5763ad26a4f385590c47aee3023a79245d6de956a646d892672",
+    "layer-native-schedule-002/source-manifest.json": "634433d03589f8eb374f529349fd66c38b269a17ca794bd3bdfd8556f36d53fe",
+    "layer-backend-compile-008/source-manifest.json": "8b8da17fa1e41d501381a1f97e6f9b632bbc6572ed5c4aa1f77f3e74aa34f818",
+    "layer-backend-compile-008/COMPLETE.json": "13807c2efbfb78bc6179209cf7ad48bfd9db566318917516fa774849a1cb20a0",
+    "layer-backend-compile-008/sram.json": "769515a915561ea60674a519a2e225f73b64d7270c71cf76d59dff895aefcce4",
+    "layer-weight-audit-001/source-manifest.json": "42dc7425df8dd0f4f7dd07510477ea4a819e19820d0c8e702193df2d80230651",
+    "layer-weight-audit-001/COMPLETE.json": "e67be7c63f5969d5434a3a0072a6beac4c2097f8ae451166fe7975cacc04c273",
+    "pipeline-prediction-002/report.json": "434af6f8d5e01e6a4a3dd9feabb501067004e38cda84215ba63d7794f298f8e3",
+    "resource-audit-p23-workstation-001.json": "138ca77a90642343572296aa4536a237c2c498a33c7dcb7c415dd35f2d37ef77",
+    "resource-audit-p23-hardware-001.json": "3c8d07bf204f43750490286908b2c8e2e4175cb928978e7717d3232f46ebd3c4"
+  },
+  "prediction_scope": "pipeline-prediction-002 is bound to P22 cyclic ownership. Retiled-native conditional screens are in the new native schedule; no full-model TPS prediction.",
+  "complete_fabric_routes_admitted": false,
+  "complete_layer_compiled": false,
+  "neural_executed": false,
+  "full_model": false,
+  "target_achieved": false,
+  "next": "Connect actual layer0/1 distributions, full-K reductions, GDN preparation/state, RMS/fused MLP and successor ownership before numeric multi-request/reset execution; do not resume old whole-wafer overlay."
+}
