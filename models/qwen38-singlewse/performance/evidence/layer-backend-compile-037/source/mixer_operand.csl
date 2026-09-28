@@ -1,0 +1,19 @@
+// One original group128 preparation shared by its FP8 and BF16 consumers.
+// Input:64 packed BF16 pairs. Output:133 tagged u32 wavelets. The tag is the
+// high byte, leaving the next byte for E4M3 and the low half for original BF16.
+const quant=@import_module("mlp_fused.csl");
+fn prepare(input:[*]u32,packet:[*]u32,invocation:u32,group:u16,parts:u16) void {
+ @assert((parts==40 or parts==48) and group<parts and invocation>0);
+ var maximum:f32=0.0000000001;
+ for(@range(u16,64))|i|{const m=quant.maximum_pair(input[i]);if(m>maximum){maximum=m;}}
+ const scale=maximum*0.002232142857142857;const scale_bits=@bitcast(u32,scale);const tag=@as(u32,group)<<24;
+ packet[0]=tag|(invocation&65535);packet[1]=tag|(invocation>>16);packet[2]=tag|@as(u32,parts);
+ packet[3]=tag|(scale_bits&65535);packet[4]=tag|(scale_bits>>16);
+ for(@range(u16,64))|i|{
+  const original=input[i];const native=quant.encoded_pair(original,scale);
+  const a=quant.low(native);const b=quant.high(native);
+  const code_a=((a>>7)&127)|((a>>8)&128);const code_b=((b>>7)&127)|((b>>8)&128);
+  packet[5+2*i]=tag|(@as(u32,code_a)<<16)|@as(u32,quant.low(original));
+  packet[6+2*i]=tag|(@as(u32,code_b)<<16)|@as(u32,quant.high(original));
+ }
+}

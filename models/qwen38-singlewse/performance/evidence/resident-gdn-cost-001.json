@@ -1,0 +1,163 @@
+{
+  "attempt": "layer-backend-compile-037",
+  "executed": false,
+  "physical": false,
+  "full_stage_admission": false,
+  "pairs": [
+    {
+      "pair": 0,
+      "original_pe": [
+        109,
+        132
+      ],
+      "rows": 4,
+      "children": 0,
+      "group": null,
+      "baseline": 47952,
+      "compact": 47968,
+      "saved": -16
+    },
+    {
+      "pair": 1,
+      "original_pe": [
+        108,
+        132
+      ],
+      "rows": 4,
+      "children": 1,
+      "group": null,
+      "baseline": 48304,
+      "compact": 48336,
+      "saved": -32
+    },
+    {
+      "pair": 2,
+      "original_pe": [
+        108,
+        133
+      ],
+      "rows": 4,
+      "children": 2,
+      "group": null,
+      "baseline": 48304,
+      "compact": 48320,
+      "saved": -16
+    },
+    {
+      "pair": 3,
+      "original_pe": [
+        82,
+        64
+      ],
+      "rows": 8,
+      "children": 0,
+      "group": null,
+      "baseline": 48304,
+      "compact": 48320,
+      "saved": -16
+    },
+    {
+      "pair": 4,
+      "original_pe": [
+        103,
+        64
+      ],
+      "rows": 8,
+      "children": 1,
+      "group": null,
+      "baseline": 48032,
+      "compact": 48048,
+      "saved": -16
+    },
+    {
+      "pair": 5,
+      "original_pe": [
+        91,
+        64
+      ],
+      "rows": 8,
+      "children": 2,
+      "group": null,
+      "baseline": 48000,
+      "compact": 48032,
+      "saved": -32
+    },
+    {
+      "pair": 6,
+      "original_pe": [
+        84,
+        145
+      ],
+      "rows": null,
+      "children": null,
+      "group": null,
+      "baseline": 48384,
+      "compact": 48320,
+      "saved": 64
+    },
+    {
+      "pair": 7,
+      "original_pe": [
+        86,
+        145
+      ],
+      "rows": null,
+      "children": null,
+      "group": 0,
+      "baseline": 48592,
+      "compact": 48480,
+      "saved": 112
+    },
+    {
+      "pair": 8,
+      "original_pe": [
+        87,
+        145
+      ],
+      "rows": null,
+      "children": null,
+      "group": 1,
+      "baseline": 48560,
+      "compact": 48448,
+      "saved": 112
+    },
+    {
+      "pair": 9,
+      "original_pe": [
+        88,
+        145
+      ],
+      "rows": null,
+      "children": null,
+      "group": 2,
+      "baseline": 48176,
+      "compact": 48048,
+      "saved": 128
+    },
+    {
+      "pair": 10,
+      "original_pe": [
+        101,
+        145
+      ],
+      "rows": null,
+      "children": null,
+      "group": 15,
+      "baseline": 48544,
+      "compact": 48432,
+      "saved": 112
+    }
+  ],
+  "source_manifest_sha256": "afc7fac5fdcd85a62bf09c4b31d37e660721975058f12d0d18264af407745f3c",
+  "census_sha256": "72ca54098b53295cc76dc9d94e33173e84f5c5214e97090d8e4a53819082e3cb",
+  "selection": {
+    "compact_worker_selected": false,
+    "worker_reason": "Most MLP cohosts grew16-32B; reject for this layout. The mixer saves64B but retain one qualified worker protocol.",
+    "compact_producer_selected": true,
+    "frontend_saving_bytes": [
+      112,
+      128
+    ],
+    "numerical_requalification_required": true
+  }
+}

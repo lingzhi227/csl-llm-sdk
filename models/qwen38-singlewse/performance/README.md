@@ -9,6 +9,18 @@ includes appended-input processing and generation, excluding user think time and
 initial loading; decode-only speed and TTFT are reported separately. See
 [DIALOGUE-ACCEPTANCE.md](docs/DIALOGUE-ACCEPTANCE.md). The target remains unmet.
 
+P48 fits the connected recurrent endpoint code into the complete original
+layer00 banks. Compile029 covers 11,388 PEs / 8,240 ELF images; maximum SRAM is
+48,096 bytes including a 4,096-byte stack, with 32 bytes minimum margin.
+Reference004 verifies all 97,025,344 original source words, 1,044,480 MLP tiles,
+7,085 auxiliary pages and 786,432 recurrent state elements across 789 cohosts.
+The first three original-coordinate chains preserve all 75,317 existing router
+entries and add 892 entries. The remaining 13 groups, changed numerical
+execution, complete layer/model and multi-turn speed remain unqualified.
+Thirty-three source and 33 publication regressions pass. All five workstation
+services are released; no new WSE job was submitted.
+See [Resident endpoint integration](docs/RESIDENT-GDN.md).
+
 P47 connects the actual original frontend directly to all48 recurrent heads and
 back to gated normalization on real WSE-3. Six continuous plus two reset positions
 pass6,291,456 FP32 state observations,148,224 frontend FP32 values and49,152 each

@@ -1,0 +1,50 @@
+{
+  "passed": true,
+  "scope": "Static bank/address and route planning only; full029 compiler result pending.",
+  "physical": false,
+  "executed": false,
+  "whole_stage_admitted": false,
+  "original_bank_bytes": 388094976,
+  "matrix_prefixes_unchanged": true,
+  "recurrent_elements": 786432,
+  "auxiliary_pages": 7085,
+  "workers": 789,
+  "new_state_cohosts": 36,
+  "new_cohost_roles": {
+    "mix": 3,
+    "down": 33
+  },
+  "auxiliary_pages_rehomed": 314,
+  "widths": {
+    "32": 5,
+    "8": 617,
+    "6": 151,
+    "4": 2,
+    "2": 1,
+    "10": 12,
+    "12": 1
+  },
+  "routed_groups": [
+    0,
+    1,
+    2
+  ],
+  "all_groups_routed": false,
+  "files": {
+    "gdn-bank-placement.json": "600a94c4c1cb804db1f65cef7c922e3aba8c75ed1fcaff30159c7f3cf69a1bb5",
+    "profiles.json": "e97625cac7ebcd2adfea4f2f9a0c07fc7097c86542c983d8ce1ea8cdf59e917c",
+    "resident-gdn-routes.json": "740bfc2184e130cf6c6fb312206a93bc7a765edec3c796b7c7b36a4d1cae5e6a",
+    "layout.csl": "a86089cd38048db6f7ae6e8e626b0b73a98e846fda5b03cd7032c8d5fd3db8ef",
+    "resident_frontend_native_001_device_mixer_layer_mlp_standby.csl": "6b5278092b655532afa5187ec4a233de8201e137a983df2feaa35c456c735933"
+  },
+  "cost_assumptions": {
+    "guard_bytes": 32,
+    "changed_width_code_reserve": 64,
+    "new_port_code_reserve": 2560,
+    "assumed_frontend_code_saving": 96,
+    "measured_frontend_saving_range": [
+      112,
+      128
+    ]
+  }
+}

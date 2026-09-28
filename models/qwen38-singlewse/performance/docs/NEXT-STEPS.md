@@ -1,18 +1,23 @@
 # Next work: resident spatial pipeline
 
-Immediate P47 follow-up: lower the qualified connected frontend/GDN/gated graph
-into the complete resident layer. P47 physical001 passes all16 groups/48 heads,
-753 slices, six continuous plus two reset positions, independent numerical
-intervals and exact replay. It uses projected-input/terminal-output diagnostic
-boundaries. Its800PE serpentine geometry is not the production layer placement.
-P45 compile027/reference003 remain the full-bank and address authority.
+Immediate P48 follow-up: connect the remaining 13 recurrent groups in the
+actual resident layer and qualify every changed state slice and frontend lease.
+Compile029/reference004 are now the latest complete-bank and emitted-address
+authority: 11,388 PEs, 48,096-byte maximum including stack, 789 state cohosts and
+all original values conserved. The first three chains compile on original
+coordinates without displacing any old route; they are not numerically executed.
+P47 physical001 remains the accepted connected numerical baseline, using all
+16 groups/48 heads in its diagnostic 800-PE geometry.
 
-Use the now-qualified separate launch/source-buffer/output lifetimes and
-pop-on-advance return markers. Preserve all original state slices, model banks
-and the earlier complete norm/MLP graph. Jointly lower the routes and cohost
-resource lifetimes: gate/up, down and mixer regions have different occupied
-colors, and the P45 minimum SRAM margin is only16B. A fixed diagnostic color or
-an unchanged bank budget cannot simply be copied onto every cohost.
+Keep the qualified paired-return arithmetic and explicit source/output leases.
+Remaining groups span incompatible occupied color domains; joint lowering must
+include explicit translation or drained phase ownership. Original return markers
+do not by themselves prove local DMA callbacks have retired. An arriving next
+phase must wait for local cohost admission before sharing projection scratch.
+Do not infer serving safety from the diagnostic host's completion/readback fence.
+The new frontend debt protocol and widths 2/4/6/10/12 need numerical and lifetime
+qualification on their actual cohosts. Preserve full bank admission when adding
+controller or bridge code; 32 bytes minimum SRAM margin is not free capacity.
 
 Measured first-launch-to-group-drain is227519–250397 physical cycles, with
 substantial return/consumer serialization. Optimize the actual connected path:
@@ -26,7 +31,7 @@ Connect the original output projection to retained residual/normalization/MLP,
 then all64 stages, full vocabulary head and dependent token feedback. Preserve
 committed conversation state across appended prompts and account for context
 growth. The continuing-dialogue>=2000tps target remains unmet. See
-[Connected GDN](GDN-FUSION.md), [Co-placement](GDN-CO-PLACEMENT.md) and
+[Resident integration](RESIDENT-GDN.md), [Connected GDN](GDN-FUSION.md), [Co-placement](GDN-CO-PLACEMENT.md) and
 [Dialogue acceptance](DIALOGUE-ACCEPTANCE.md).
 
 1. Preserve physical006 as the accepted shared-input complete-MLP baseline:

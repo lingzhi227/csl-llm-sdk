@@ -1,0 +1,41 @@
+{
+  "utc": "2026-09-28T22:59:37.131447+00:00",
+  "unit": "qwen38-single-layer-frontend-reference-004.service",
+  "status": {
+    "MainPID": "0",
+    "Result": "success",
+    "ExecMainStatus": "0",
+    "ControlGroup": "",
+    "WorkingDirectory": "",
+    "LoadState": "not-found",
+    "ActiveState": "inactive",
+    "SubState": "dead"
+  },
+  "dispatch_sha256": "2eaf66ea729ceef2a8ed9d7459f0cfadeea8d00af1925e17f39d8d561e516238",
+  "invocation_journal": [
+    {
+      "USER_UNIT": "qwen38-single-layer-frontend-reference-004.service",
+      "USER_INVOCATION_ID": "58fbfdc588fd44d2adc89be08a7fc941",
+      "MESSAGE": "Started /usr/bin/taskset --cpu-list 6 /usr/bin/flock -n /srv/cerebras-workstation/heavy.lock /usr/bin/python3 execute.py.",
+      "__REALTIME_TIMESTAMP": "1790636339398809"
+    },
+    {
+      "MESSAGE": "{\"passed\": true, \"physical\": false, \"neural_execution\": false, \"multi_turn_qualified\": false, \"source_bytes\": 388101376, \"allocated_bytes\": 388094976, \"verified_source_words\": 97025344, \"original_mlp_tiles\": 1044480, \"preserved_auxiliary_pages\": 7085, \"recurrent_elements\": 786432, \"workers\": 789, \"source_scale_words\": 66448, \"scale_table_delta_bytes\": -6400, \"all_source_words_classified\": true, \"all_original_values_verified_from_actual_csl_descriptors\": true, \"no_requantization\": true, \"hashes\": {\"banks.npy\": \"a4d0daf86b18f159ddc338fd786a006c038e7f2d80e1b8b7eba24159915cf3c4\", \"bank-index.json\": \"2753c00595c34d9978cc9839f4e1c28a9a858f192d1167a72cb1f28f91378f91\"}, \"seconds\": 9.74500633077696}",
+      "__REALTIME_TIMESTAMP": "1790636349308840"
+    },
+    {
+      "USER_UNIT": "qwen38-single-layer-frontend-reference-004.service",
+      "USER_INVOCATION_ID": "58fbfdc588fd44d2adc89be08a7fc941",
+      "MESSAGE": "qwen38-single-layer-frontend-reference-004.service: Consumed 7.446s CPU time.",
+      "__REALTIME_TIMESTAMP": "1790636349405549",
+      "CPU_USAGE_NSEC": "7446126000"
+    }
+  ],
+  "cgroup_members": [],
+  "matching_processes": [],
+  "shared_lock_available": true,
+  "own_running_services": "",
+  "workstation_released": true,
+  "physical": false,
+  "logs": {}
+}

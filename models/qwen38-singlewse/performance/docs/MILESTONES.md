@@ -1176,3 +1176,34 @@ return phase reaches138,991 cycles. This guides fusion work; it does not admit
 an extrapolated whole-layer or token rate. Next connect production routes and
 the original output projection to retained normalization/MLP, with fresh complete
 cohost SRAM/lifetime checks and numerical bounds for changed reduction order.
+
+## P48: resident recurrent endpoints with full original bank admission
+
+P48 fits the connected recurrent endpoint code into the complete original
+layer00 banks. Compile029 covers 11,388 PEs / 8,240 ELF images; maximum SRAM is
+48,096 bytes including a 4,096-byte stack, with 32 bytes minimum margin.
+Reference004 verifies all 97,025,344 original source words, 1,044,480 MLP tiles,
+7,085 auxiliary pages and 786,432 recurrent state elements across 789 cohosts.
+The first three original-coordinate chains preserve all 75,317 existing router
+entries and add 892 entries. The remaining 13 groups, changed numerical
+execution, complete layer/model and multi-turn speed remain unqualified.
+Thirty-three source and 33 publication regressions pass. All five workstation
+services are released; no new WSE job was submitted.
+See [Resident endpoint integration](RESIDENT-GDN.md).
+
+Compile028 first exposes 245 overflowing PEs, including 158 protected prefixes
+that auxiliary-page relocation cannot repair. A paired calibration rejects
+shared worker TX setup because it grows most MLP programs by 16–32 bytes.
+Frontend outstanding-debt bookkeeping saves 112–128 bytes and is selected.
+The refined placement narrows affected state slices and adds 36 cohosts without
+moving matrix prefixes or changing total bank bytes. All original state values
+have exact, inverse-checked addresses; 314 auxiliary pages move.
+
+Three static chains cover 135 workers with 134/147/162 hops. Emitted-route walks
+check broadcasts, two packet-counter periods, return switches and retirement
+markers. Source callbacks and downstream output consumption remain separate
+leases; the serving controller still needs explicit local admission fences.
+The other groups need additional color-domain lowering. Compilation and original
+storage conservation do not qualify their neural execution or establish speed.
+Failed snapshots and rejected variants remain preserved. See
+`evidence/resident-gdn-summary-001.json` for the bounded attempt inventory.

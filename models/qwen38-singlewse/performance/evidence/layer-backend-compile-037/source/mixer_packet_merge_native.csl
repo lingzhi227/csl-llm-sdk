@@ -1,0 +1,52 @@
+// Whole native packet merge; compile away disabled ports and their mailboxes.
+// Receive callbacks block their own input only after retaining all five words.
+// A copied output frame retires that mailbox and fairly advances the next port.
+param horizontal0:bool;param horizontal1:bool;param horizontal2:bool;param vertical:bool;
+param incoming_vertical:u16;param outgoing_vertical:u16;
+const h0:u16=if(horizontal0) 1 else 0;const h1:u16=if(horizontal1) 1 else 0;
+const h2:u16=if(horizontal2) 1 else 0;const vv:u16=if(vertical) 1 else 0;
+const ports:u16=h0+h1+h2+vv;
+const iq0=@get_input_queue(1);const iq1=@get_input_queue(2);
+const iq2=@get_input_queue(3);const iq3=@get_input_queue(4);const oq=@get_output_queue(1);
+const os=@get_dsr(dsr_src0,1);const od=@get_dsr(dsr_dest,1);const done=@get_local_task_id(27);
+var buffers=@zeros([5*ports]u32);var lengths=@zeros([ports]u16);
+var sending:bool=false;var selected:u16=0;var next:u16=0;var packets:u32=0;
+fn pump() void {
+ if(sending){return;}
+ for(@range(u16,ports))|i|{
+  var candidate:u16=next+i;if(candidate>=ports){candidate-=ports;}
+  if(lengths[candidate]==5){
+   selected=candidate;sending=true;next=candidate+1;if(next==ports){next=0;}
+   const m=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]u32,&buffers[5*candidate]),.extent=5});
+   const f=@get_dsd(fabout_dsd,.{.output_queue=oq,.extent=5});
+   @load_to_dsr(os,m);@load_to_dsr(od,f,.{.async=true,.ut_id=@get_ut_id(1),.activate=done});@mov32(od,os,.{.async=true});return;
+  }
+ }
+}
+fn receive(port:u16,value:u32) void {
+ @assert(lengths[port]<5);buffers[5*port+lengths[port]]=value;lengths[port]+=1;
+ if(lengths[port]==5){pump();}
+}
+task arrived0(value:u32) void {receive(0,value);if(lengths[0]==5){@block(iq0);}}
+task arrived1(value:u32) void {receive(h0,value);if(lengths[h0]==5){@block(iq1);}}
+task arrived2(value:u32) void {receive(h0+h1,value);if(lengths[h0+h1]==5){@block(iq2);}}
+task arrived3(value:u32) void {receive(h0+h1+h2,value);if(lengths[h0+h1+h2]==5){@block(iq3);}}
+task sent() void {
+ @assert(sending and lengths[selected]==5);lengths[selected]=0;sending=false;packets+=1;
+ if(comptime horizontal0){if(selected==0){@unblock(iq0);}}
+ if(comptime horizontal1){if(selected==h0){@unblock(iq1);}}
+ if(comptime horizontal2){if(selected==h0+h1){@unblock(iq2);}}
+ if(comptime vertical){if(selected==h0+h1+h2){@unblock(iq3);}}
+ pump();
+}
+fn drained() bool {
+ if(sending){return false;}for(@range(u16,ports))|i|{if(lengths[i]!=0){return false;}}return true;
+}
+comptime {
+ @comptime_assert(ports>0 and ports<=4 and (incoming_vertical==3 or incoming_vertical==9) and outgoing_vertical==12-incoming_vertical);
+ if(horizontal0){@initialize_queue(iq0,.{.color=@get_color(0)});@bind_data_task(arrived0,@get_data_task_id(iq0));}
+ if(horizontal1){@initialize_queue(iq1,.{.color=@get_color(1)});@bind_data_task(arrived1,@get_data_task_id(iq1));}
+ if(horizontal2){@initialize_queue(iq2,.{.color=@get_color(19)});@bind_data_task(arrived2,@get_data_task_id(iq2));}
+ if(vertical){@initialize_queue(iq3,.{.color=@get_color(incoming_vertical)});@bind_data_task(arrived3,@get_data_task_id(iq3));}
+ @initialize_queue(oq,.{.color=@get_color(outgoing_vertical)});@bind_local_task(sent,done);
+}
