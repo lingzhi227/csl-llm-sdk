@@ -8,6 +8,20 @@ sentences and >=2000 aggregate completed generated tokens/s in sustained steady
 state. Independent requests may overlap. The old per-request target and broad
 whole-wafer shared-layer time overlay are superseded.
 
+P38 passes170 source and170 publication regression tests. Full routed compile018
+admits all11388 PEs with7714 ELF images, maximum48112bytes including4096 stack;
+reference003 verifies the unchanged396953216 original bank bytes. Simulator025
+passes584 commands, exact retention of60178 words across eight complete original
+PE banks, eight arrival-triggered operand cases and normal stop. Backpressured
+inline commands coalesce239 bank writes into four bounded H2D streams; C15
+completion events replace bulk symbol polling while sharing a drained output
+queue. This is initialization/diagnostic API reduction, not measured model TPS.
+An independent original full-matrix reference covers86400 BF16 outputs before
+candidate projection observations. All nine workstation services released,
+failures020-024 retained; no new WSE job or owned hardware allocation. Complete
+projection contractions, root neural consumers and the full model target remain
+open. See [STREAMED-GATEWAY.md](../performance/docs/STREAMED-GATEWAY.md).
+
 P37 passes164 source and164 publication regression tests. Full routed compile017
 covers11388 PEs in7714 ELF images, at maximum48112bytes including4096 stack;
 reference002 preserves every396953216 original bank byte. Simulator019 passes

@@ -1,0 +1,43 @@
+{
+  "utc": "2026-09-28T12:25:32.794550+00:00",
+  "unit": "qwen38-single-layer-joint-reference-003.service",
+  "status": {
+    "MainPID": "0",
+    "Result": "success",
+    "ExecMainStatus": "0",
+    "ControlGroup": "",
+    "WorkingDirectory": "",
+    "LoadState": "not-found",
+    "ActiveState": "inactive",
+    "SubState": "dead"
+  },
+  "dispatch_sha256": "6d96fd9ed7a04354a3f80b6eb32f891edea65ac44f86dca7361cb327415d1156",
+  "invocation_journal": [
+    {
+      "USER_UNIT": "qwen38-single-layer-joint-reference-003.service",
+      "USER_INVOCATION_ID": "04604c4bb02942ecb73ae8023ece1b8b",
+      "MESSAGE": "Started /usr/bin/taskset --cpu-list 6 /usr/bin/flock -n /srv/cerebras-workstation/heavy.lock /usr/bin/python3 execute.py.",
+      "__REALTIME_TIMESTAMP": "1790598288522777"
+    },
+    {
+      "USER_UNIT": "qwen38-single-layer-joint-reference-003.service",
+      "USER_INVOCATION_ID": "04604c4bb02942ecb73ae8023ece1b8b",
+      "MESSAGE": "qwen38-single-layer-joint-reference-003.service: Consumed 25.362s CPU time.",
+      "__REALTIME_TIMESTAMP": "1790598318529421",
+      "CPU_USAGE_NSEC": "25362065000"
+    }
+  ],
+  "cgroup_members": [],
+  "matching_processes": [],
+  "shared_lock_available": true,
+  "own_running_services": "",
+  "workstation_released": true,
+  "physical": false,
+  "logs": {
+    "prepare.log": {
+      "bytes": 2153,
+      "sha256": "eede0ab37aedf17e6a9f1131a02d53e6eec883284b00c37b61f77985512f5ae8",
+      "tail": "tiles\": 204800}\n{\"phase\": \"matrix_relocated\", \"tensor\": \"model.language_model.layers.0.linear_attn.in_proj_z.weight\", \"tiles\": 122880}\n{\"phase\": \"matrix_relocated\", \"tensor\": \"model.language_model.layers.0.linear_attn.in_proj_a.weight\", \"tiles\": 1920}\n{\"phase\": \"matrix_relocated\", \"tensor\": \"model.language_model.layers.0.linear_attn.in_proj_b.weight\", \"tiles\": 1920}\n{\"phase\": \"matrix_relocated\", \"tensor\": \"model.language_model.layers.0.linear_attn.out_proj.weight\", \"tiles\": 122880}\n{\"passed\": true, \"physical\": false, \"neural_execution\": false, \"all_source_and_destination_words_covered_once\": true, \"allocated_bytes\": 396953216, \"transfers\": 515894, \"original_mixer_tiles_verified\": 454400, \"original_auxiliary_pages_verified\": 53661, \"original_mlp_prefixes_verified\": true, \"descriptor_digests\": [{\"tensor\": \"model.language_model.layers.0.linear_attn.in_proj_qkv.weight\", \"descriptor_order_sha256\": \"1611279c2b10e5a4c9cf3fa1eb336298b861f3e3196f3780c265c8e6a7dbf108\"}, {\"tensor\": \"model.language_model.layers.0.linear_attn.in_proj_z.weight\", \"descriptor_order_sha256\": \"a92222998160f55f44d6be17ff89540c39dbd3375bdb1c0af859c6cbe199de41\"}, {\"tensor\": \"model.language_model.layers.0.linear_attn.in_proj_a.weight\", \"descriptor_order_sha256\": \"ff9e6d0a05fc85c2a61e5f73200d6778c84d76df3df2ce6c80e1e9a4c99c0ce1\"}, {\"tensor\": \"model.language_model.layers.0.linear_attn.in_proj_b.weight\", \"descriptor_order_sha256\": \"456ccb4123605081f5263bb5bef4bcadc3cf87b94ca064cfeda44e7ebfbaf3be\"}, {\"tensor\": \"model.language_model.layers.0.linear_attn.out_proj.weight\", \"descriptor_order_sha256\": \"ace853031026ad7efd03e43ad36e33be6b58255d995a7295bf7bd6b8c3a9a4e4\"}], \"source_hashes\": {\"banks.npy\": \"284942f0addfbb717f18e3dd6f2918d6ee0aadafb789308a2a4d058ce76277d8\", \"bank-index.json\": \"a7c03775bc99320ace313565caf412a9f7916777aa23e1790e5c6f16a85bc599\"}, \"hashes\": {\"banks.npy\": \"abeaa66f1271604eda2afa37aacacfc4d673f13d5d0de23eb75fa76c6bf63288\", \"bank-index.json\": \"67295f8b430a92baa83e54b09141e45338298c292ab651127f469d4bc8f86833\"}, \"seconds\": 29.79818418715149}\n"
+    }
+  }
+}

@@ -1,0 +1,302 @@
+{
+  "milestone": "P38",
+  "utc": "2026-09-28T12:36:31.560515+00:00",
+  "passed": true,
+  "scope": "Complete-stage compiler/storage admission and selected event-driven stream/operand execution; no complete projection, neural stage, physical or full-model throughput acceptance.",
+  "full_compile": "layer-mlp-compile-018",
+  "full_compile_summary": {
+    "passed": true,
+    "over_limit_pes": 0,
+    "physical": false,
+    "executed": false,
+    "application": [
+      78,
+      146
+    ],
+    "application_pes": 11388,
+    "compiled_elf_images": 7714,
+    "maximum_with_stack": 48112,
+    "minimum_margin": 16,
+    "bytes_to_pe_count": {
+      "42288": 1,
+      "46848": 1,
+      "46976": 29,
+      "47040": 9,
+      "47232": 562,
+      "47568": 215,
+      "47584": 329,
+      "47600": 297,
+      "47616": 198,
+      "47728": 7,
+      "47760": 11,
+      "47776": 692,
+      "47792": 509,
+      "47808": 214,
+      "47824": 1712,
+      "47840": 679,
+      "47856": 708,
+      "47872": 1294,
+      "47936": 13,
+      "47952": 140,
+      "47968": 179,
+      "47984": 140,
+      "48000": 10,
+      "48016": 3435,
+      "48080": 1,
+      "48112": 3
+    },
+    "maximum_examples": [
+      {
+        "file": "out/bin/out_93_0.elf",
+        "sha256": "dd0ed4fa3c936d15a2bbbd980732d4784baafad6a2a0394d70347e638b34f7ee",
+        "rectangles": [
+          [
+            75,
+            4,
+            1,
+            1
+          ]
+        ],
+        "low_section_end": 44016,
+        "stack_allowance_bytes": 4096
+      },
+      {
+        "file": "out/bin/out_94_0.elf",
+        "sha256": "2b7abcdbf56ecba27372a9c5869eb66a05ce50cd1678d11201c1cbea2d601a08",
+        "rectangles": [
+          [
+            71,
+            6,
+            1,
+            1
+          ]
+        ],
+        "low_section_end": 44016,
+        "stack_allowance_bytes": 4096
+      },
+      {
+        "file": "out/bin/out_95_0.elf",
+        "sha256": "b340f32a6ff3b00771bd8dad2457fd5a35815fef9adfd0809ee1ebbd7bf4fa3f",
+        "rectangles": [
+          [
+            67,
+            8,
+            1,
+            1
+          ]
+        ],
+        "low_section_end": 44016,
+        "stack_allowance_bytes": 4096
+      }
+    ],
+    "remote_census_bytes": 4974083,
+    "remote_census_sha256": "ef52d555c1dcfb1a17fb9561ca77b3596c4cde60924345a51f58ea2824054666",
+    "source_manifest_sha256": "229bd70b8f290d696ed33b45cae66e039974a83a7f95c9e755691f475764b995",
+    "note": "Every ELF SRAM record and every original application coordinate independently checked. A false passed field rejects admission; full census and ELF images remain on remote storage."
+  },
+  "sram_roles": {
+    "layer_projection.csl": {
+      "pes": 7833,
+      "maximum_with_stack": 48112,
+      "minimum_with_stack": 47232,
+      "minimum_margin": 16
+    },
+    "device_mixer_layer_mlp_standby.csl": {
+      "pes": 3474,
+      "maximum_with_stack": 48016,
+      "minimum_with_stack": 47936,
+      "minimum_margin": 112
+    },
+    "device_mixer_layer_norm_sender.csl": {
+      "pes": 40,
+      "maximum_with_stack": 47968,
+      "minimum_with_stack": 47936,
+      "minimum_margin": 160
+    },
+    "device_mixer_layer_norm_bridge.csl": {
+      "pes": 40,
+      "maximum_with_stack": 48016,
+      "minimum_with_stack": 46848,
+      "minimum_margin": 112
+    },
+    "mixer_layer_mlp_controller.csl": {
+      "pes": 1,
+      "maximum_with_stack": 42288,
+      "minimum_with_stack": 42288,
+      "minimum_margin": 5840
+    }
+  },
+  "joint_bank_reference": "layer-joint-reference-003",
+  "original_bank_proof": {
+    "passed": true,
+    "physical": false,
+    "neural_execution": false,
+    "all_source_and_destination_words_covered_once": true,
+    "allocated_bytes": 396953216,
+    "transfers": 515894,
+    "original_mixer_tiles_verified": 454400,
+    "original_auxiliary_pages_verified": 53661,
+    "original_mlp_prefixes_verified": true,
+    "descriptor_digests": [
+      {
+        "tensor": "model.language_model.layers.0.linear_attn.in_proj_qkv.weight",
+        "descriptor_order_sha256": "1611279c2b10e5a4c9cf3fa1eb336298b861f3e3196f3780c265c8e6a7dbf108"
+      },
+      {
+        "tensor": "model.language_model.layers.0.linear_attn.in_proj_z.weight",
+        "descriptor_order_sha256": "a92222998160f55f44d6be17ff89540c39dbd3375bdb1c0af859c6cbe199de41"
+      },
+      {
+        "tensor": "model.language_model.layers.0.linear_attn.in_proj_a.weight",
+        "descriptor_order_sha256": "ff9e6d0a05fc85c2a61e5f73200d6778c84d76df3df2ce6c80e1e9a4c99c0ce1"
+      },
+      {
+        "tensor": "model.language_model.layers.0.linear_attn.in_proj_b.weight",
+        "descriptor_order_sha256": "456ccb4123605081f5263bb5bef4bcadc3cf87b94ca064cfeda44e7ebfbaf3be"
+      },
+      {
+        "tensor": "model.language_model.layers.0.linear_attn.out_proj.weight",
+        "descriptor_order_sha256": "ace853031026ad7efd03e43ad36e33be6b58255d995a7295bf7bd6b8c3a9a4e4"
+      }
+    ],
+    "source_hashes": {
+      "banks.npy": "284942f0addfbb717f18e3dd6f2918d6ee0aadafb789308a2a4d058ce76277d8",
+      "bank-index.json": "a7c03775bc99320ace313565caf412a9f7916777aa23e1790e5c6f16a85bc599"
+    },
+    "hashes": {
+      "banks.npy": "abeaa66f1271604eda2afa37aacacfc4d673f13d5d0de23eb75fa76c6bf63288",
+      "bank-index.json": "67295f8b430a92baa83e54b09141e45338298c292ab651127f469d4bc8f86833"
+    },
+    "seconds": 29.79818418715149
+  },
+  "accepted_selected_simulator": "device-network-sim-025",
+  "selected_result": {
+    "passed": true,
+    "physical": false,
+    "normal_stop": true,
+    "commands": 584,
+    "commands_by_tag": {
+      "1": 93,
+      "0": 91,
+      "3509": 64,
+      "3508": 64,
+      "3470": 64,
+      "3420": 66,
+      "3421": 66,
+      "3459": 68
+    },
+    "sdk_east_sentinel_rounds": 16,
+    "sdk_east_sentinel_pes": 3,
+    "selected_complete_original_banks": 8,
+    "original_selected_bank_words": 60178,
+    "all_selected_banks_loaded_and_retained": true,
+    "all_descriptor16_values_exact": true,
+    "high_half32_values_exact": true,
+    "gateway_only_worker_access": true,
+    "interleaved_return_sources": true,
+    "standby_zero_work_epochs": 3,
+    "legacy_protocol_commands": 94,
+    "inline_bulk_commands": 239,
+    "inline_bulk_sdk_stream_calls": 4,
+    "maximum_inline_batch_words": 16384,
+    "arrival_operand_cases": 8,
+    "arrival_operand_packets_exact": true,
+    "operand_preparation_executed": true,
+    "complete_contraction_executed": false,
+    "neural_execution": false,
+    "complete_stage": false,
+    "full_model_speed_target_achieved": false,
+    "simulator_host_seconds": 529.3550730547868
+  },
+  "independent_original_mixer_reference": "layer-mixer-reference-001",
+  "reference_output_values": 86400,
+  "reference_device_observations": false,
+  "reference_nonzero_relative_bound_norm_maximum": 0.00047006661190048476,
+  "reference_fixture_sha256": "0b19822cfa60b4b7964d8f7222af055e60480cafe81f2b94a7426e278b28fa0a",
+  "source_tests": 170,
+  "publication_tests": 170,
+  "all_workstation_invocations_released": [
+    "device-network-sim-020",
+    "device-network-sim-021",
+    "device-network-sim-022",
+    "device-network-sim-023",
+    "device-network-sim-024",
+    "device-network-sim-025",
+    "layer-mlp-compile-018",
+    "layer-joint-reference-003",
+    "layer-mixer-reference-001"
+  ],
+  "new_physical_jobs": 0,
+  "resource_audit": {
+    "utc": "2026-09-28T12:30:43.405422+00:00",
+    "own_jobs": 164,
+    "own_active": [],
+    "own_assignments": [],
+    "other_assignment_count": 0,
+    "no_owned_hardware_allocation": true,
+    "provider_billed_node_hours": null,
+    "note": "Job/system accounting snapshot; final provider billing is not available from these fields. SSH disconnect is not resource release."
+  },
+  "failures_preserved": {
+    "020": "Legacy94 and eight arrival operand cases passed; first61-write bulk symbol polling timed out.",
+    "021": "Two-write/two-read inline batch passed; first61-write bulk polling observed only60 completions.",
+    "022": "Stopped core contains all61 completed commands and drained workers after bounded poll timeout; failed runtime acceptance preserved.",
+    "023": "Same tail behavior with50ms polling backoff; backoff alone is not a fix. Exact simulator/SDK cause remains unproven.",
+    "024": "Live C15 event exactly matches61 completed commands. Original stopped-core inspector failed on compiler base-address symbol naming; separate post-read matches all9 code sections and drained state. Original failure retained."
+  },
+  "full_model_speed_target_achieved": false,
+  "next_work": "Qualify all original QKV/Z/A/B/out contractions against the frozen full references, then connect actual conv/gate/GDN root consumers and adjacent-stage credits using the joint state map. The serialized control return line is not a neural serving schedule.",
+  "evidence_sha256": {
+    "device-network-sim-020/FAILURE.json": "0680f4f1ec88895468bac776d4f4fbfd93674ea03bcddf2329291df6b23ed69e",
+    "device-network-sim-020/fixture.json": "0489df774e6201ee673dddc87f6e7b6b920cb93bd32653ac0aa5212013af7d64",
+    "device-network-sim-020/source-manifest.json": "92a7844c6215dbfc4007af171a68af1bee1f305fd48e1bec4908295e7321988b",
+    "device-network-sim-020/sram.json": "47f8bd28da79df57b9004f39999a2f6a20e01f46ba669f4314bc2d250df113e1",
+    "device-network-sim-020/workstation-release.json": "2cb8dbbe9048a412c342a8ee682f5eeee4f91e022966f7ce39b9cedb75506a43",
+    "device-network-sim-021/FAILURE.json": "0680f4f1ec88895468bac776d4f4fbfd93674ea03bcddf2329291df6b23ed69e",
+    "device-network-sim-021/fixture.json": "0489df774e6201ee673dddc87f6e7b6b920cb93bd32653ac0aa5212013af7d64",
+    "device-network-sim-021/source-manifest.json": "c2f2b299c27d2fcbd8a5e5b9de7c94080afaf90c74d383cfc023808eeb058188",
+    "device-network-sim-021/sram.json": "3bd248c8a46b69a35e0ae41896b924b824cba1fb716989f3e81cddd637db769f",
+    "device-network-sim-021/workstation-release.json": "7a1eb85d5f944f4a8b7df85f6b3724c9d985279430c9b0540f16e539ff92945c",
+    "device-network-sim-022/FAILURE.json": "0680f4f1ec88895468bac776d4f4fbfd93674ea03bcddf2329291df6b23ed69e",
+    "device-network-sim-022/fixture.json": "0489df774e6201ee673dddc87f6e7b6b920cb93bd32653ac0aa5212013af7d64",
+    "device-network-sim-022/result.json": "85f79f0190a7f40b635d679be26e016c148c024f93b1dd1fed9b1e67085a6b84",
+    "device-network-sim-022/source-manifest.json": "42a0d86db2295e40ef9a3b985050741258e2bf130fca4d0fc911077d0739a49b",
+    "device-network-sim-022/sram.json": "627a4cdbcc6292373894218aa328c58de561507090ba6058f181ad77f34aae46",
+    "device-network-sim-022/workstation-release.json": "c2b1d9459eeac63eded0f8d0863582df51ed782285ade7dc145efba04e5f0cc1",
+    "device-network-sim-023/FAILURE.json": "0680f4f1ec88895468bac776d4f4fbfd93674ea03bcddf2329291df6b23ed69e",
+    "device-network-sim-023/fixture.json": "0489df774e6201ee673dddc87f6e7b6b920cb93bd32653ac0aa5212013af7d64",
+    "device-network-sim-023/result.json": "c3a73c3851bab8ce138a70f7665af2308eaf617dc646af2da05ca9d876a3e328",
+    "device-network-sim-023/source-manifest.json": "786595943df0ea29afc142762b4582ccd6f1dbe39fc14782789df6ce18aa0349",
+    "device-network-sim-023/sram.json": "a699faad72e0536991018d26093c165160dd902c879dca30a543959c1c4681fd",
+    "device-network-sim-023/workstation-release.json": "978918ac352fafd323c532216f699bfff0dd7bd15d49c0b38ddf48c892f4208d",
+    "device-network-sim-024/FAILURE.json": "0680f4f1ec88895468bac776d4f4fbfd93674ea03bcddf2329291df6b23ed69e",
+    "device-network-sim-024/core-after.json": "6b30ce638bc5fac28094a9dbf5b4b03590cb87f1328f957fb62a85dc4447e15d",
+    "device-network-sim-024/fixture.json": "0489df774e6201ee673dddc87f6e7b6b920cb93bd32653ac0aa5212013af7d64",
+    "device-network-sim-024/source-manifest.json": "9fbd46342157f2032bb1c3f15765fc5907491bb3367973c5f8843cd075277d6a",
+    "device-network-sim-024/sram.json": "ba5a152ba7de8ffcf310e9c1b7a933258f175776633054d18505a0c1d26806e0",
+    "device-network-sim-024/workstation-release.json": "2fba2c10590a915d3fa394b3f6421d6d33ae16ff98df347919fa996e323585f2",
+    "device-network-sim-025/COMPLETE.json": "7e868ceccad3cf1105f86b4de7596bbeafe8742681ee08c0ebec6ee39a582492",
+    "device-network-sim-025/fixture.json": "0489df774e6201ee673dddc87f6e7b6b920cb93bd32653ac0aa5212013af7d64",
+    "device-network-sim-025/result.json": "2aacb1ff9c802e22f40f5878e13d8ef9d2b4b26cdd5906c1f08dc38a3d60c4f7",
+    "device-network-sim-025/source-manifest.json": "51f2b3a6feb4db712618ca71d43b693c8cca75b44864bcd222bd87fd67d12154",
+    "device-network-sim-025/sram.json": "09178a7fcbe5f9213035a4a4aaa394264152dfa8f395b7e96562b61e22e3b612",
+    "device-network-sim-025/workstation-release.json": "9b005dd2883c9345b7a59168a44aa7536b70b3e56328f8d6c0d9248a7a7830eb",
+    "layer-mlp-compile-018/COMPLETE.json": "c7dd23e1de19a6a316ad194976d7fdf6494d950f39568eb88c9a2ec10983cba5",
+    "layer-mlp-compile-018/source-manifest.json": "229bd70b8f290d696ed33b45cae66e039974a83a7f95c9e755691f475764b995",
+    "layer-mlp-compile-018/sram-roles.json": "a61f54d1dad9da4df7ad19a0d088e10bc9a4cf958133b9df5dc1a20cca1055f0",
+    "layer-mlp-compile-018/sram-summary.json": "20f4596f087b93912e0cf56cb1fc931cddfc115e031a429be8ff66d8f50aab73",
+    "layer-mlp-compile-018/workstation-release.json": "45a3011bed9468047d0628a9072f2502813cc3c13647e92dc650f5b12a749cbe",
+    "layer-joint-reference-003/COMPLETE.json": "e37b7a0838f2751329b0550e3c5d062e0d7fb51b141a86bcc86162d07573dbc8",
+    "layer-joint-reference-003/bank-index.json": "67295f8b430a92baa83e54b09141e45338298c292ab651127f469d4bc8f86833",
+    "layer-joint-reference-003/bank-remap-proof.json": "08493ecaddfba04aad7f7e2aeb4a3b3854eff609bb10f9c5e0382c897b0ec777",
+    "layer-joint-reference-003/source-manifest.json": "02a02a7bae37b0db9269e55e3119b44f09293efaaf6d718a7ac63943e70e21e5",
+    "layer-joint-reference-003/workstation-release.json": "70c9bb38e7f292fc597a2c16da74cf4ecbe14038c5b739834c73f5afb5c3ffd2",
+    "layer-mixer-reference-001/COMPLETE.json": "73ae33ba7da866f3f26af82a9b016bc483b7ccc4ab7e58eeb97c1c15c281a756",
+    "layer-mixer-reference-001/fixture.json": "b11667d60c1067353df80cdbdb67d20a20247ff7d828565b06e71b44b276237f",
+    "layer-mixer-reference-001/source-manifest.json": "dec4cac5d9359fd74ed4a889b783dd93f8adfae291a611530a264fbab2c061c5",
+    "layer-mixer-reference-001/workstation-release.json": "553b990fa345d81525654f5eb046c8290e4a06e9fa28e3774006585d346acc9e",
+    "stream-gateway-tests-001.json": "38170bd7c1c22d4c78ee907f91f4b860d60f8a7fd525bc3bf70a536f8f51fb8f",
+    "stream-gateway-publication-tests-001.json": "16a6338667335ef472e9e0945978219acf4c4a5f6b2e5c327c667f616533ea8a",
+    "resource-audit-p38-close.json": "6c34a112eefe1e72bf06afa7363ffe3082c057147d6d011f39bd8770d0a32166"
+  }
+}

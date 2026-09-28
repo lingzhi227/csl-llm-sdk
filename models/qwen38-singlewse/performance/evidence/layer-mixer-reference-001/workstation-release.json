@@ -1,0 +1,43 @@
+{
+  "utc": "2026-09-28T12:10:03.932036+00:00",
+  "unit": "qwen38-single-layer-mixer-reference-001.service",
+  "status": {
+    "MainPID": "0",
+    "Result": "success",
+    "ExecMainStatus": "0",
+    "ControlGroup": "",
+    "WorkingDirectory": "",
+    "LoadState": "not-found",
+    "ActiveState": "inactive",
+    "SubState": "dead"
+  },
+  "dispatch_sha256": "ec94dc8a8d62e01028c9be85f5b2733274c74b86699fb78377151edc8f102853",
+  "invocation_journal": [
+    {
+      "USER_UNIT": "qwen38-single-layer-mixer-reference-001.service",
+      "USER_INVOCATION_ID": "930e360894384089aa95fcf0a15df6bb",
+      "MESSAGE": "Started /usr/bin/taskset --cpu-list 6 /usr/bin/flock -n /srv/cerebras-workstation/heavy.lock /usr/bin/python3 execute.py.",
+      "__REALTIME_TIMESTAMP": "1790597365651974"
+    },
+    {
+      "USER_UNIT": "qwen38-single-layer-mixer-reference-001.service",
+      "USER_INVOCATION_ID": "930e360894384089aa95fcf0a15df6bb",
+      "MESSAGE": "qwen38-single-layer-mixer-reference-001.service: Consumed 18.403s CPU time.",
+      "__REALTIME_TIMESTAMP": "1790597384105664",
+      "CPU_USAGE_NSEC": "18403159000"
+    }
+  ],
+  "cgroup_members": [],
+  "matching_processes": [],
+  "shared_lock_available": true,
+  "own_running_services": "",
+  "workstation_released": true,
+  "physical": false,
+  "logs": {
+    "prepare.log": {
+      "bytes": 4995,
+      "sha256": "735a7800d14106601e9f2bae8dda2df0569e9f095a34c4ef2820b340d76bc51f",
+      "tail": "\"relative_bound_norm\": 0.0002340369903941922}, {\"tensor\": \"model.language_model.layers.0.linear_attn.in_proj_b.weight\", \"shape\": [48, 5120], \"outputs\": 48, \"maximum_fp64_bound\": 0.00015234962284448752, \"relative_bound_norm\": 0.0002823261945967428}, {\"tensor\": \"model.language_model.layers.0.linear_attn.out_proj.weight\", \"shape\": [5120, 6144], \"outputs\": 5120, \"maximum_fp64_bound\": 0.0035032238374555972, \"relative_bound_norm\": 0.0003243049250207097}]}, {\"case\": 3, \"mode\": \"replay\", \"matrices\": [{\"tensor\": \"model.language_model.layers.0.linear_attn.in_proj_qkv.weight\", \"shape\": [10240, 5120], \"outputs\": 10240, \"maximum_fp64_bound\": 0.0016006355399462977, \"relative_bound_norm\": 0.0004274703061722187}, {\"tensor\": \"model.language_model.layers.0.linear_attn.in_proj_z.weight\", \"shape\": [6144, 5120], \"outputs\": 6144, \"maximum_fp64_bound\": 0.0006720648567015758, \"relative_bound_norm\": 0.00042384077886713705}, {\"tensor\": \"model.language_model.layers.0.linear_attn.in_proj_a.weight\", \"shape\": [48, 5120], \"outputs\": 48, \"maximum_fp64_bound\": 0.000669174347368054, \"relative_bound_norm\": 0.00043597637242777674}, {\"tensor\": \"model.language_model.layers.0.linear_attn.in_proj_b.weight\", \"shape\": [48, 5120], \"outputs\": 48, \"maximum_fp64_bound\": 0.00032347449141152684, \"relative_bound_norm\": 0.00045215111652960777}, {\"tensor\": \"model.language_model.layers.0.linear_attn.out_proj.weight\", \"shape\": [5120, 6144], \"outputs\": 5120, \"maximum_fp64_bound\": 0.007446794038064548, \"relative_bound_norm\": 0.00047006661190048476}]}], \"original_matrices\": 5, \"output_values_per_case\": 21600, \"cases_count\": 4, \"fixture_sha256\": \"0b19822cfa60b4b7964d8f7222af055e60480cafe81f2b94a7426e278b28fa0a\", \"seconds\": 18.247575313784182, \"criterion\": \"Original full-K ordered native FP32 and exact BF16 boundary; zero sign may be canonicalized. Independent FP64 absolute roundoff bound frozen before device output. Zero/change/replay and original bank retention required.\", \"physical\": false, \"neural_device_execution\": false, \"full_model_speed_target_achieved\": false}\n"
+    }
+  }
+}

@@ -1,0 +1,975 @@
+{
+  "diagnostic_only": true,
+  "physical": false,
+  "neural_execution": false,
+  "core_sha256": "a891df0453d20afdbc5b7181f0e024bfd80d29f67931cc511e8231caa2ab5649",
+  "core_bytes": 2935898,
+  "code_checks": [
+    {
+      "pe": [
+        6,
+        3
+      ],
+      "elf_sha256": "ed1f74a2c0ae91c0283cf102a9c548ddc90d9d357ef829912b4129c0d0f701d5",
+      "code_bytes": 11124
+    },
+    {
+      "pe": [
+        4,
+        1
+      ],
+      "elf_sha256": "fe86a3ba25b56e6e8bc460f8a38c68c4f9fcaa9bdad3509845622946c17a4c76",
+      "code_bytes": 7460
+    },
+    {
+      "pe": [
+        5,
+        1
+      ],
+      "elf_sha256": "305da74b215a0e275257b643961660182c52eb5a062689bad262ac7af483913f",
+      "code_bytes": 7704
+    },
+    {
+      "pe": [
+        6,
+        1
+      ],
+      "elf_sha256": "264e2889d06f235f10135c560285a787908b97e9cf00615d9271da7d065f131e",
+      "code_bytes": 11088
+    },
+    {
+      "pe": [
+        6,
+        2
+      ],
+      "elf_sha256": "6a925871fe1bae4f6f3c67fb5afdc691851783058a55e5cd81f89d52b7298603",
+      "code_bytes": 10036
+    },
+    {
+      "pe": [
+        5,
+        2
+      ],
+      "elf_sha256": "4718720d0b593d69ec8226602b27f7a7a27701ebc34c10071a924a804e85c831",
+      "code_bytes": 9864
+    },
+    {
+      "pe": [
+        4,
+        2
+      ],
+      "elf_sha256": "692dba221835ff93b6afbe369b11e2d49538db3ece730c6301353f0dca6c891c",
+      "code_bytes": 11364
+    },
+    {
+      "pe": [
+        4,
+        3
+      ],
+      "elf_sha256": "a6d0695ec58425f036d94df84e408710e38c1f089ca67cfa6c0b68bed5c4d3cb",
+      "code_bytes": 11392
+    },
+    {
+      "pe": [
+        5,
+        3
+      ],
+      "elf_sha256": "d42a9b4223d7b4c54e5d6630232293d33bec613a13655910f6a7a136e1fc672f",
+      "code_bytes": 11396
+    }
+  ],
+  "observations": [
+    {
+      "pe": [
+        6,
+        3
+      ],
+      "name": "device_submission",
+      "u16": [
+        3509,
+        32768,
+        262,
+        0,
+        4,
+        0,
+        61,
+        0
+      ]
+    },
+    {
+      "pe": [
+        6,
+        3
+      ],
+      "name": "device_audit",
+      "u16": [
+        61,
+        0,
+        3509,
+        0,
+        8,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "pe": [
+        6,
+        3
+      ],
+      "name": "device_submit_cursor",
+      "u16": [
+        0
+      ]
+    },
+    {
+      "pe": [
+        6,
+        3
+      ],
+      "name": "device_gateway_active",
+      "u16": [
+        0
+      ]
+    },
+    {
+      "pe": [
+        6,
+        3
+      ],
+      "name": "device_words",
+      "u16": [
+        262
+      ]
+    },
+    {
+      "pe": [
+        6,
+        3
+      ],
+      "name": "device_cursor",
+      "u16": [
+        262
+      ]
+    },
+    {
+      "pe": [
+        6,
+        3
+      ],
+      "name": "device_tx_done",
+      "u16": [
+        1
+      ]
+    },
+    {
+      "pe": [
+        6,
+        3
+      ],
+      "name": "device_rx_done",
+      "u16": [
+        1
+      ]
+    },
+    {
+      "pe": [
+        4,
+        1
+      ],
+      "name": "sys.pending",
+      "u16": [
+        0
+      ]
+    },
+    {
+      "pe": [
+        4,
+        1
+      ],
+      "name": "sys.sending",
+      "u16": [
+        0
+      ]
+    },
+    {
+      "pe": [
+        4,
+        1
+      ],
+      "name": "sys.count",
+      "u16": [
+        256
+      ]
+    },
+    {
+      "pe": [
+        4,
+        1
+      ],
+      "name": "sys.cursor",
+      "u16": [
+        0
+      ]
+    },
+    {
+      "pe": [
+        4,
+        1
+      ],
+      "name": "sys.mode",
+      "u16": [
+        0
+      ]
+    },
+    {
+      "pe": [
+        4,
+        1
+      ],
+      "name": "sys.sequence",
+      "u16": [
+        8,
+        0
+      ]
+    },
+    {
+      "pe": [
+        4,
+        1
+      ],
+      "name": "sys.have_half",
+      "u16": [
+        0
+      ]
+    },
+    {
+      "pe": [
+        4,
+        1
+      ],
+      "name": "sys.first_half",
+      "u16": [
+        30181
+      ]
+    },
+    {
+      "pe": [
+        5,
+        1
+      ],
+      "name": "sys.pending",
+      "u16": [
+        0
+      ]
+    },
+    {
+      "pe": [
+        5,
+        1
+      ],
+      "name": "sys.sending",
+      "u16": [
+        0
+      ]
+    },
+    {
+      "pe": [
+        5,
+        1
+      ],
+      "name": "sys.count",
+      "u16": [
+        256
+      ]
+    },
+    {
+      "pe": [
+        5,
+        1
+      ],
+      "name": "sys.cursor",
+      "u16": [
+        0
+      ]
+    },
+    {
+      "pe": [
+        5,
+        1
+      ],
+      "name": "sys.mode",
+      "u16": [
+        0
+      ]
+    },
+    {
+      "pe": [
+        5,
+        1
+      ],
+      "name": "sys.sequence",
+      "u16": [
+        8,
+        0
+      ]
+    },
+    {
+      "pe": [
+        5,
+        1
+      ],
+      "name": "sys.have_half",
+      "u16": [
+        0
+      ]
+    },
+    {
+      "pe": [
+        5,
+        1
+      ],
+      "name": "sys.first_half",
+      "u16": [
+        53721
+      ]
+    },
+    {
+      "pe": [
+        6,
+        1
+      ],
+      "name": "sys.pending",
+      "u16": [
+        0
+      ]
+    },
+    {
+      "pe": [
+        6,
+        1
+      ],
+      "name": "sys.sending",
+      "u16": [
+        0
+      ]
+    },
+    {
+      "pe": [
+        6,
+        1
+      ],
+      "name": "sys.count",
+      "u16": [
+        256
+      ]
+    },
+    {
+      "pe": [
+        6,
+        1
+      ],
+      "name": "sys.cursor",
+      "u16": [
+        0
+      ]
+    },
+    {
+      "pe": [
+        6,
+        1
+      ],
+      "name": "sys.mode",
+      "u16": [
+        0
+      ]
+    },
+    {
+      "pe": [
+        6,
+        1
+      ],
+      "name": "sys.sequence",
+      "u16": [
+        8,
+        0
+      ]
+    },
+    {
+      "pe": [
+        6,
+        1
+      ],
+      "name": "sys.have_half",
+      "u16": [
+        0
+      ]
+    },
+    {
+      "pe": [
+        6,
+        1
+      ],
+      "name": "sys.first_half",
+      "u16": [
+        56291
+      ]
+    },
+    {
+      "pe": [
+        6,
+        2
+      ],
+      "name": "sys.pending",
+      "u16": [
+        0
+      ]
+    },
+    {
+      "pe": [
+        6,
+        2
+      ],
+      "name": "sys.sending",
+      "u16": [
+        0
+      ]
+    },
+    {
+      "pe": [
+        6,
+        2
+      ],
+      "name": "sys.count",
+      "u16": [
+        256
+      ]
+    },
+    {
+      "pe": [
+        6,
+        2
+      ],
+      "name": "sys.cursor",
+      "u16": [
+        0
+      ]
+    },
+    {
+      "pe": [
+        6,
+        2
+      ],
+      "name": "sys.mode",
+      "u16": [
+        0
+      ]
+    },
+    {
+      "pe": [
+        6,
+        2
+      ],
+      "name": "sys.sequence",
+      "u16": [
+        7,
+        0
+      ]
+    },
+    {
+      "pe": [
+        6,
+        2
+      ],
+      "name": "sys.have_half",
+      "u16": [
+        0
+      ]
+    },
+    {
+      "pe": [
+        6,
+        2
+      ],
+      "name": "sys.first_half",
+      "u16": [
+        26865
+      ]
+    },
+    {
+      "pe": [
+        5,
+        2
+      ],
+      "name": "sys.pending",
+      "u16": [
+        0
+      ]
+    },
+    {
+      "pe": [
+        5,
+        2
+      ],
+      "name": "sys.sending",
+      "u16": [
+        0
+      ]
+    },
+    {
+      "pe": [
+        5,
+        2
+      ],
+      "name": "sys.count",
+      "u16": [
+        256
+      ]
+    },
+    {
+      "pe": [
+        5,
+        2
+      ],
+      "name": "sys.cursor",
+      "u16": [
+        0
+      ]
+    },
+    {
+      "pe": [
+        5,
+        2
+      ],
+      "name": "sys.mode",
+      "u16": [
+        0
+      ]
+    },
+    {
+      "pe": [
+        5,
+        2
+      ],
+      "name": "sys.sequence",
+      "u16": [
+        7,
+        0
+      ]
+    },
+    {
+      "pe": [
+        5,
+        2
+      ],
+      "name": "sys.have_half",
+      "u16": [
+        0
+      ]
+    },
+    {
+      "pe": [
+        5,
+        2
+      ],
+      "name": "sys.first_half",
+      "u16": [
+        27345
+      ]
+    },
+    {
+      "pe": [
+        4,
+        2
+      ],
+      "name": "sys.pending",
+      "u16": [
+        0
+      ]
+    },
+    {
+      "pe": [
+        4,
+        2
+      ],
+      "name": "sys.sending",
+      "u16": [
+        0
+      ]
+    },
+    {
+      "pe": [
+        4,
+        2
+      ],
+      "name": "sys.count",
+      "u16": [
+        256
+      ]
+    },
+    {
+      "pe": [
+        4,
+        2
+      ],
+      "name": "sys.cursor",
+      "u16": [
+        0
+      ]
+    },
+    {
+      "pe": [
+        4,
+        2
+      ],
+      "name": "sys.mode",
+      "u16": [
+        0
+      ]
+    },
+    {
+      "pe": [
+        4,
+        2
+      ],
+      "name": "sys.sequence",
+      "u16": [
+        7,
+        0
+      ]
+    },
+    {
+      "pe": [
+        4,
+        2
+      ],
+      "name": "sys.have_half",
+      "u16": [
+        0
+      ]
+    },
+    {
+      "pe": [
+        4,
+        2
+      ],
+      "name": "sys.first_half",
+      "u16": [
+        54394
+      ]
+    },
+    {
+      "pe": [
+        4,
+        3
+      ],
+      "name": "sys.pending",
+      "u16": [
+        0
+      ]
+    },
+    {
+      "pe": [
+        4,
+        3
+      ],
+      "name": "sys.sending",
+      "u16": [
+        0
+      ]
+    },
+    {
+      "pe": [
+        4,
+        3
+      ],
+      "name": "sys.count",
+      "u16": [
+        256
+      ]
+    },
+    {
+      "pe": [
+        4,
+        3
+      ],
+      "name": "sys.cursor",
+      "u16": [
+        0
+      ]
+    },
+    {
+      "pe": [
+        4,
+        3
+      ],
+      "name": "sys.mode",
+      "u16": [
+        0
+      ]
+    },
+    {
+      "pe": [
+        4,
+        3
+      ],
+      "name": "sys.sequence",
+      "u16": [
+        8,
+        0
+      ]
+    },
+    {
+      "pe": [
+        4,
+        3
+      ],
+      "name": "sys.have_half",
+      "u16": [
+        0
+      ]
+    },
+    {
+      "pe": [
+        4,
+        3
+      ],
+      "name": "sys.first_half",
+      "u16": [
+        22749
+      ]
+    },
+    {
+      "pe": [
+        5,
+        3
+      ],
+      "name": "sys.pending",
+      "u16": [
+        0
+      ]
+    },
+    {
+      "pe": [
+        5,
+        3
+      ],
+      "name": "sys.sending",
+      "u16": [
+        0
+      ]
+    },
+    {
+      "pe": [
+        5,
+        3
+      ],
+      "name": "sys.count",
+      "u16": [
+        256
+      ]
+    },
+    {
+      "pe": [
+        5,
+        3
+      ],
+      "name": "sys.cursor",
+      "u16": [
+        0
+      ]
+    },
+    {
+      "pe": [
+        5,
+        3
+      ],
+      "name": "sys.mode",
+      "u16": [
+        0
+      ]
+    },
+    {
+      "pe": [
+        5,
+        3
+      ],
+      "name": "sys.sequence",
+      "u16": [
+        8,
+        0
+      ]
+    },
+    {
+      "pe": [
+        5,
+        3
+      ],
+      "name": "sys.have_half",
+      "u16": [
+        0
+      ]
+    },
+    {
+      "pe": [
+        5,
+        3
+      ],
+      "name": "sys.first_half",
+      "u16": [
+        55890
+      ]
+    }
+  ],
+  "host_path_registers": [
+    {
+      "pe": [
+        4,
+        3
+      ],
+      "color": 14,
+      "config": 160,
+      "teardown": false
+    },
+    {
+      "pe": [
+        4,
+        3
+      ],
+      "color": 21,
+      "config": 2,
+      "teardown": false
+    },
+    {
+      "pe": [
+        4,
+        3
+      ],
+      "color": 22,
+      "config": 2,
+      "teardown": false
+    },
+    {
+      "pe": [
+        4,
+        3
+      ],
+      "color": 23,
+      "config": 2,
+      "teardown": false
+    },
+    {
+      "pe": [
+        5,
+        3
+      ],
+      "color": 14,
+      "config": 160,
+      "teardown": false
+    },
+    {
+      "pe": [
+        5,
+        3
+      ],
+      "color": 21,
+      "config": 2,
+      "teardown": false
+    },
+    {
+      "pe": [
+        5,
+        3
+      ],
+      "color": 22,
+      "config": 2,
+      "teardown": false
+    },
+    {
+      "pe": [
+        5,
+        3
+      ],
+      "color": 23,
+      "config": 2,
+      "teardown": false
+    },
+    {
+      "pe": [
+        6,
+        3
+      ],
+      "color": 14,
+      "config": 144,
+      "teardown": false
+    },
+    {
+      "pe": [
+        6,
+        3
+      ],
+      "color": 21,
+      "config": 32898,
+      "teardown": true
+    },
+    {
+      "pe": [
+        6,
+        3
+      ],
+      "color": 22,
+      "config": 18,
+      "teardown": false
+    },
+    {
+      "pe": [
+        6,
+        3
+      ],
+      "color": 23,
+      "config": 32786,
+      "teardown": true
+    },
+    {
+      "pe": [
+        7,
+        3
+      ],
+      "color": 14,
+      "config": 160,
+      "teardown": false
+    },
+    {
+      "pe": [
+        7,
+        3
+      ],
+      "color": 21,
+      "config": 32770,
+      "teardown": true
+    },
+    {
+      "pe": [
+        7,
+        3
+      ],
+      "color": 22,
+      "config": 16,
+      "teardown": false
+    },
+    {
+      "pe": [
+        7,
+        3
+      ],
+      "color": 23,
+      "config": 32768,
+      "teardown": true
+    }
+  ],
+  "passed": false,
+  "normal_stop": true,
+  "completion_error": "Gateway command completion: observed [60, 3421, 8, 0] expected (61, 3509, 8, 0)",
+  "requested_commands": 61
+}

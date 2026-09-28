@@ -1,0 +1,724 @@
+{
+  "matrices": [
+    {
+      "tensor": "model.language_model.layers.0.linear_attn.in_proj_qkv.weight",
+      "shape": [
+        10240,
+        5120
+      ],
+      "tile_shape": [
+        2,
+        128
+      ],
+      "tiles": 204800,
+      "dtype": "F8_E4M3",
+      "scale_tensor": "model.language_model.layers.0.linear_attn.in_proj_qkv.weight_scale_inv",
+      "k_blocks": 40,
+      "groups": 88,
+      "workers": 3520,
+      "output_tiles": 5120,
+      "input_k_invariant": true,
+      "loop_output_tile": "group.output_start + iteration",
+      "group_partitions": [
+        {
+          "rank_start": 0,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 0,
+          "output_count": 59
+        },
+        {
+          "rank_start": 40,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 59,
+          "output_count": 59
+        },
+        {
+          "rank_start": 80,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 118,
+          "output_count": 59
+        },
+        {
+          "rank_start": 120,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 177,
+          "output_count": 59
+        },
+        {
+          "rank_start": 160,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 236,
+          "output_count": 59
+        },
+        {
+          "rank_start": 200,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 295,
+          "output_count": 59
+        },
+        {
+          "rank_start": 240,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 354,
+          "output_count": 59
+        },
+        {
+          "rank_start": 280,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 413,
+          "output_count": 59
+        },
+        {
+          "rank_start": 320,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 472,
+          "output_count": 59
+        },
+        {
+          "rank_start": 360,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 531,
+          "output_count": 59
+        },
+        {
+          "rank_start": 400,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 590,
+          "output_count": 59
+        },
+        {
+          "rank_start": 440,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 649,
+          "output_count": 59
+        },
+        {
+          "rank_start": 480,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 708,
+          "output_count": 59
+        },
+        {
+          "rank_start": 520,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 767,
+          "output_count": 59
+        },
+        {
+          "rank_start": 560,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 826,
+          "output_count": 59
+        },
+        {
+          "rank_start": 600,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 885,
+          "output_count": 59
+        },
+        {
+          "rank_start": 640,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 944,
+          "output_count": 59
+        },
+        {
+          "rank_start": 680,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 1003,
+          "output_count": 59
+        },
+        {
+          "rank_start": 720,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 1062,
+          "output_count": 59
+        },
+        {
+          "rank_start": 760,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 1121,
+          "output_count": 59
+        },
+        {
+          "rank_start": 800,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 1180,
+          "output_count": 59
+        },
+        {
+          "rank_start": 840,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 1239,
+          "output_count": 59
+        },
+        {
+          "rank_start": 880,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 1298,
+          "output_count": 59
+        },
+        {
+          "rank_start": 920,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 1357,
+          "output_count": 59
+        },
+        {
+          "rank_start": 960,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 1416,
+          "output_count": 59
+        },
+        {
+          "rank_start": 1000,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 1475,
+          "output_count": 59
+        },
+        {
+          "rank_start": 1040,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 1534,
+          "output_count": 59
+        },
+        {
+          "rank_start": 1080,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 1593,
+          "output_count": 59
+        },
+        {
+          "rank_start": 1120,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 1652,
+          "output_count": 59
+        },
+        {
+          "rank_start": 1160,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 1711,
+          "output_count": 59
+        },
+        {
+          "rank_start": 1200,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 1770,
+          "output_count": 59
+        },
+        {
+          "rank_start": 1240,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 1829,
+          "output_count": 59
+        },
+        {
+          "rank_start": 1280,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 1888,
+          "output_count": 59
+        },
+        {
+          "rank_start": 1320,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 1947,
+          "output_count": 59
+        },
+        {
+          "rank_start": 1360,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 2006,
+          "output_count": 59
+        },
+        {
+          "rank_start": 1400,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 2065,
+          "output_count": 59
+        },
+        {
+          "rank_start": 1440,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 2124,
+          "output_count": 59
+        },
+        {
+          "rank_start": 1480,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 2183,
+          "output_count": 59
+        },
+        {
+          "rank_start": 1520,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 2242,
+          "output_count": 59
+        },
+        {
+          "rank_start": 1560,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 2301,
+          "output_count": 59
+        },
+        {
+          "rank_start": 1600,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 2360,
+          "output_count": 59
+        },
+        {
+          "rank_start": 1640,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 2419,
+          "output_count": 59
+        },
+        {
+          "rank_start": 1680,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 2478,
+          "output_count": 59
+        },
+        {
+          "rank_start": 1720,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 2537,
+          "output_count": 59
+        },
+        {
+          "rank_start": 1760,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 2596,
+          "output_count": 59
+        },
+        {
+          "rank_start": 1800,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 2655,
+          "output_count": 59
+        },
+        {
+          "rank_start": 1840,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 2714,
+          "output_count": 59
+        },
+        {
+          "rank_start": 1880,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 2773,
+          "output_count": 59
+        },
+        {
+          "rank_start": 1920,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 2832,
+          "output_count": 59
+        },
+        {
+          "rank_start": 1960,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 2891,
+          "output_count": 59
+        },
+        {
+          "rank_start": 2000,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 2950,
+          "output_count": 59
+        },
+        {
+          "rank_start": 2040,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 3009,
+          "output_count": 59
+        },
+        {
+          "rank_start": 2080,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 3068,
+          "output_count": 59
+        },
+        {
+          "rank_start": 2120,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 3127,
+          "output_count": 59
+        },
+        {
+          "rank_start": 2160,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 3186,
+          "output_count": 59
+        },
+        {
+          "rank_start": 2200,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 3245,
+          "output_count": 59
+        },
+        {
+          "rank_start": 2240,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 3304,
+          "output_count": 59
+        },
+        {
+          "rank_start": 2280,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 3363,
+          "output_count": 59
+        },
+        {
+          "rank_start": 2320,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 3422,
+          "output_count": 59
+        },
+        {
+          "rank_start": 2360,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 3481,
+          "output_count": 59
+        },
+        {
+          "rank_start": 2400,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 3540,
+          "output_count": 59
+        },
+        {
+          "rank_start": 2440,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 3599,
+          "output_count": 59
+        },
+        {
+          "rank_start": 2480,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 3658,
+          "output_count": 59
+        },
+        {
+          "rank_start": 2520,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 3717,
+          "output_count": 59
+        },
+        {
+          "rank_start": 2560,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 3776,
+          "output_count": 59
+        },
+        {
+          "rank_start": 2600,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 3835,
+          "output_count": 59
+        },
+        {
+          "rank_start": 2640,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 3894,
+          "output_count": 59
+        },
+        {
+          "rank_start": 2680,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 3953,
+          "output_count": 59
+        },
+        {
+          "rank_start": 2720,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 4012,
+          "output_count": 59
+        },
+        {
+          "rank_start": 2760,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 4071,
+          "output_count": 59
+        },
+        {
+          "rank_start": 2800,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 4130,
+          "output_count": 59
+        },
+        {
+          "rank_start": 2840,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 4189,
+          "output_count": 59
+        },
+        {
+          "rank_start": 2880,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 4248,
+          "output_count": 59
+        },
+        {
+          "rank_start": 2920,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 4307,
+          "output_count": 59
+        },
+        {
+          "rank_start": 2960,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 4366,
+          "output_count": 59
+        },
+        {
+          "rank_start": 3000,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 4425,
+          "output_count": 59
+        },
+        {
+          "rank_start": 3040,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 4484,
+          "output_count": 59
+        },
+        {
+          "rank_start": 3080,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 4543,
+          "output_count": 59
+        },
+        {
+          "rank_start": 3120,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 4602,
+          "output_count": 59
+        },
+        {
+          "rank_start": 3160,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 4661,
+          "output_count": 59
+        },
+        {
+          "rank_start": 3200,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 4720,
+          "output_count": 59
+        },
+        {
+          "rank_start": 3240,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 4779,
+          "output_count": 59
+        },
+        {
+          "rank_start": 3280,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 4838,
+          "output_count": 59
+        },
+        {
+          "rank_start": 3320,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 4897,
+          "output_count": 59
+        },
+        {
+          "rank_start": 3360,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 4956,
+          "output_count": 59
+        },
+        {
+          "rank_start": 3400,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 5015,
+          "output_count": 41
+        },
+        {
+          "rank_start": 3440,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 5056,
+          "output_count": 40
+        },
+        {
+          "rank_start": 3480,
+          "workers": 40,
+          "max_k_parts": 1,
+          "output_start": 5096,
+          "output_count": 24
+        }
+      ]
+    },
+    {
+      "tensor": "model.language_model.layers.0.linear_attn.in_proj_z.weight",
+      "shape": [
+        6144,
+        5120
+      ],
+      "tile_shape": [
+        2,
+        128
+      ],
+      "tiles": 122880,
+      "dtype": "F8_E4M3",
+      "scale_tensor": "model.language_model.layers.0.linear_attn.in_proj_z.weight_scale_inv",
+      "k_blocks": 40,
+      "groups": 88,
+      "workers": 3520,
+      "output_tiles": 3072,
+      "group_rotation": 16,
+      "input_k_invariant": true,
+      "loop_output_tile": "(group - group_rotation) modulo groups + iteration * groups"
+    },
+    {
+      "tensor": "model.language_model.layers.0.linear_attn.in_proj_a.weight",
+      "shape": [
+        48,
+        5120
+      ],
+      "tile_shape": [
+        1,
+        128
+      ],
+      "tiles": 1920,
+      "dtype": "BF16",
+      "k_blocks": 40,
+      "groups": 88,
+      "workers": 3520,
+      "output_tiles": 48,
+      "group_rotation": 8,
+      "input_k_invariant": true,
+      "loop_output_tile": "(group - group_rotation) modulo groups + iteration * groups"
+    },
+    {
+      "tensor": "model.language_model.layers.0.linear_attn.in_proj_b.weight",
+      "shape": [
+        48,
+        5120
+      ],
+      "tile_shape": [
+        1,
+        128
+      ],
+      "tiles": 1920,
+      "dtype": "BF16",
+      "k_blocks": 40,
+      "groups": 88,
+      "workers": 3520,
+      "output_tiles": 48,
+      "group_rotation": 56,
+      "input_k_invariant": true,
+      "loop_output_tile": "(group - group_rotation) modulo groups + iteration * groups"
+    },
+    {
+      "tensor": "model.language_model.layers.0.linear_attn.out_proj.weight",
+      "shape": [
+        5120,
+        6144
+      ],
+      "tile_shape": [
+        2,
+        128
+      ],
+      "tiles": 122880,
+      "dtype": "F8_E4M3",
+      "scale_tensor": "model.language_model.layers.0.linear_attn.out_proj.weight_scale_inv",
+      "k_blocks": 48,
+      "groups": 74,
+      "workers": 3552,
+      "output_tiles": 2560,
+      "group_rotation": 0,
+      "input_k_invariant": true,
+      "loop_output_tile": "(group - group_rotation) modulo groups + iteration * groups"
+    }
+  ]
+}

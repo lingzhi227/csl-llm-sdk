@@ -8,23 +8,24 @@ const mq40=@get_output_queue(5);const mq48=@get_output_queue(6);
 const mt=@get_local_task_id(11);
 task mixer_operand_sent() void {
  @assert(mixer_operand_busy);mixer_operand_busy=false;mixer_operand_status[2]=1;
+ MIXER_OPERAND_COMPLETION
 }
-fn mixer_send_operand(invocation:u32,group:u16,parts:u16) void {
+fn mixer_emit_operand(input:[*]u32,invocation:u32,group:u16,parts:u16) void {
  @assert(!active and !mixer_operand_busy and !response_pending and !frame_ready and !packet_busy and !grant_busy);
  // arm() precedes start(), so !active alone does not establish an idle MLP.
  @assert(epoch==0 or cursor==grant_count);
- mixer_operand.prepare(mip,@ptrcast([*]u32,&packet),invocation,group,parts);
+ mixer_operand.prepare(input,@ptrcast([*]u32,&packet),invocation,group,parts);
  mixer_operand_status[0]=invocation;mixer_operand_status[1]=@as(u32,group);mixer_operand_status[2]=0;mixer_operand_busy=true;
  const m=@get_dsd(mem1d_dsd,.{.base_address=&packet,.extent=133});
  const a=@get_dsd(fabout_dsd,.{.output_queue=mq40,.extent=133});const b=@get_dsd(fabout_dsd,.{.output_queue=mq48,.extent=133});
  @load_to_dsr(os,m);
  if(parts==40){@load_to_dsr(od,a,.{.async=true,.ut_id=@get_ut_id(5),.activate=mt});}
  else{@load_to_dsr(od,b,.{.async=true,.ut_id=@get_ut_id(5),.activate=mt});}@mov32(od,os,.{.async=true});
- sys.unblock_cmd_stream();
 }
+MIXER_OPERAND_LEGACY_ENTRY
 comptime {
  @comptime_assert(packet_words>=133);
  @initialize_queue(mq40,.{.color=@get_color(16)});@initialize_queue(mq48,.{.color=@get_color(17)});
  @bind_local_task(mixer_operand_sent,mt);@export_symbol(mip,"mixer_operand_input");
- @export_symbol(mops,"mixer_operand_status");@export_symbol(mixer_send_operand);
+ @export_symbol(mops,"mixer_operand_status");MIXER_OPERAND_LEGACY_EXPORT
 }
