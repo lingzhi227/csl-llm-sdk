@@ -6,7 +6,7 @@ import signal
 from runtime.lifecycle import stage, query, TERMINAL
 from runtime.store import atomic_json
 from source_gate import verify
-from backend import complete_mlp_profile, message_limit
+from backend import complete_mlp_profile, complete_mixer_profile, message_limit
 
 
 def interrupted(number, frame):
@@ -30,6 +30,9 @@ def main():
             config=json.loads((root/'experiment.json').read_text()) if (root/'experiment.json').exists() else {}
             full_matrix=config.get('full_matrix',False)
             complete_mlp=complete_mlp_profile(config)
+            complete_mixer=complete_mixer_profile(config)
+            if config.get('complete_original_mixer') and not complete_mixer:
+                raise ValueError('Unexpected complete mixer profile')
             if config.get('complete_original_mlp') and not complete_mlp:
                 raise ValueError('Unexpected complete MLP profile')
             message_limit(config)
@@ -67,8 +70,8 @@ def main():
                 assert check(root)['application_pes']==config['application_pes']==reuse['application_pes']
                 receipts=[dict(stage='compile_reused',provenance=reuse)]
             else:
-                receipts = [stage(root, "compile", "compile_hw.py", 900 if full_matrix or complete_mlp else 600)]
-            receipts.append(stage(root, "run", "run_hw.py", 900 if complete_mlp else (600 if full_matrix else 300)))
+                receipts = [stage(root, "compile", "compile_hw.py", 900 if full_matrix or complete_mlp or complete_mixer else 600)]
+            receipts.append(stage(root, "run", "run_hw.py", 1800 if complete_mixer else (900 if complete_mlp else (600 if full_matrix else 300))))
             result = json.loads((root / "result.json").read_text())
             if not (result["passed"] and result["normal_stop"] and result["physical"]):
                 raise ValueError("Physical numerical acceptance failed")

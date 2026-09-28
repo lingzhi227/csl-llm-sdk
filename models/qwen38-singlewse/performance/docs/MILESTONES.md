@@ -997,3 +997,18 @@ including4096 stack. Reference002 and139 source tests pass. All four workstation
 services release. Physical007 is dispatched; physical numeric, timing and final
 resource receipts remain pending. See NORM-MLP-BRIDGE.md. This is graph/compiler
 admission, not full-layer, full-model or model-speed acceptance.
+
+## P39: complete original physical mixer projections
+
+P39 passes176 source and176 publication tests. Physical `layer-mixer-hw-002`
+executes all five complete original QKV/Z/A/B/output projections through3554
+internal endpoints. All86400 stored BF16 outputs are bit-exact to the predeclared
+independent reference, with zero/change/replay, all counters and20 warm drains.
+Every396953216 original bank byte and every descriptor is retained; normal stop
+and release are confirmed. Physical compilation covers11388 PEs/7714 images,
+maximum48128bytes including4096 stack. Download admission is now scoped to the
+measured102028613-byte complete-mixer artifact. Four cluster jobs (one actual
+WSE runtime) and both workstation services are released; failures are preserved.
+Host root read/consume and full retention timings are diagnostic, not model TPS.
+Actual conv/GDN consumers, complete neural stages and the multi-turn target remain
+unfinished. See [COMPLETE-MIXER-QUALIFICATION.md](COMPLETE-MIXER-QUALIFICATION.md).

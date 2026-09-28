@@ -1,0 +1,29 @@
+{
+  "source": "pipeline-stage-map-002/stage-map.json",
+  "source_sha256": "3e6c5220321b02d6e7e162a04c39cc038b8bc9d7d7c0e85e23e7f7d0177ff012",
+  "original_tensors": 1251,
+  "original_weight_bytes": 29468003328,
+  "persistent_state_objects": {
+    "conv": 48,
+    "recurrent": 48,
+    "kv": 16
+  },
+  "two_request_state_bytes": {
+    "conv": 5898240,
+    "recurrent": 301989888,
+    "kv": 12582912
+  },
+  "one_conversation_state_bytes": {
+    "conv": 2949120,
+    "recurrent": 150994944,
+    "kv": 6291456
+  },
+  "potential_bytes_reclaimed": 160235520,
+  "current_context_capacity": 96,
+  "current_work_slots": 2,
+  "work_slots_changed": false,
+  "compiled_sram_qualified": false,
+  "physical": false,
+  "actual_capacity_increase_qualified": false,
+  "scope": "Exact accounting of removing the unused second independent context. No persistent state of the retained conversation is removed. Original weights and temporary work-slot counts are unchanged. Reallocation, longer context, fusion and fresh SRAM/runtime admission remain required; this is not a speed prediction."
+}

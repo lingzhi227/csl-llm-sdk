@@ -1,0 +1,51 @@
+{
+  "complete_original_mixer": true,
+  "stage": "layer_00",
+  "revision": "017b9c7af6b5689d5dd426a76e0bc077eb5ca20a",
+  "application": [
+    78,
+    146
+  ],
+  "application_pes": 11388,
+  "mixer_shapes": [
+    [
+      10240,
+      5120
+    ],
+    [
+      6144,
+      5120
+    ],
+    [
+      48,
+      5120
+    ],
+    [
+      48,
+      5120
+    ],
+    [
+      5120,
+      6144
+    ]
+  ],
+  "fabric_offset": [
+    67,
+    1
+  ],
+  "logical_origin": [
+    63,
+    0
+  ],
+  "artifact_single_message_limit": 67108864,
+  "run_progress_timeout_seconds": 30,
+  "payload_hashes": {
+    "banks.npy": "abeaa66f1271604eda2afa37aacacfc4d673f13d5d0de23eb75fa76c6bf63288",
+    "bank-index.json": "67295f8b430a92baa83e54b09141e45338298c292ab651127f469d4bc8f86833",
+    "fixture.npz": "0b19822cfa60b4b7964d8f7222af055e60480cafe81f2b94a7426e278b28fa0a",
+    "fixture.json": "b11667d60c1067353df80cdbdb67d20a20247ff7d828565b06e71b44b276237f"
+  },
+  "acceptance": "Original full-K ordered native FP32 and exact BF16 boundary; zero sign may be canonicalized. Independent FP64 absolute roundoff bound frozen before device output. Zero/change/replay and original bank retention required.",
+  "full_model": false,
+  "scope": "All five complete original layer0 mixer contractions, real full-K reduction, zero/change/replay, full original bank retention and drain. Diagnostic host root consumption; no conv/GDN/complete-layer/model execution or serving-speed acceptance."
+}

@@ -24,20 +24,30 @@
    The prototype mixer SDK RPC is replaced by a tagged arrival entry in routed
    builds. Device C15 events retire bounded inline batches without symbol polls;
    these improve cold control and are not a neural serving schedule.
-   Next qualify all five complete original projections against independent
-   reference001 (86400 BF16 outputs), including zero/change/replay and full bank
-   retention. Then connect actual conv/gates/GDN root consumers and adjacent
+   P39 physical002 now qualifies all five complete original projections against
+   independent reference001:86400 bit-exact stored BF16 outputs, all3554 endpoints,
+   zero/change/replay, full bank retention,20 drains and normal released exit.
+   Connect actual conv/gates/GDN root consumers and adjacent
    stages with input and retirement credits; producer DMA completion is not
    downstream drain. Internal cohosts retain112-160bytes minimum SRAM margin;
-   the actual gateway retains5840bytes. Additional arithmetic/state transport
-   requires fresh full-program admission. Keep P31 as the accepted physical
+   the actual gateway retains5840bytes in that local census. Physical P39 reaches
+   the48128-byte ceiling. Additional arithmetic/state transport requires new
+   placement and fresh full-program admission. Keep P31 as the accepted physical
    neural graph and preserve020-024 failures; avoid another isolated sweep.
-4. Measure complete dependent stage service and optimize its critical path.
+4. For the single-conversation backend, evaluate a one-context persistent-state
+   map before placing real root consumers. The exact old-plan census identifies
+   160,235,520 bytes used only by the second independent context. Preserve the
+   remaining conversation state and every original weight; retain temporary
+   work slots where required for communication overlap. Reallocate near actual
+   conv/GDN consumers and reserve explicit longer-history capacity, then rerun
+   full bank/SRAM/numerical admission. The byte count alone admits no new context
+   or speed. Keep the existing qualification snapshot unchanged.
+5. Measure complete dependent stage service and optimize its critical path.
    The September28 target is one stateful multi-turn conversation at>=2000 average
    output tokens/s, not aggregate independent-request throughput. Report appended
    prefill/TTFT, pure decode/ITL and full response time. The primary count divides
    all actual assistant output tokens by summed turn response durations.
-5. Instantiate embedding, all64 resident stages, the full head and token feedback.
+6. Instantiate embedding, all64 resident stages, the full head and token feedback.
    Preserve GDN/conv/KV state and absolute positions across new prompts. Distinguish
    emitted tokens from fully committed positions, including a pending final token.
    Freeze at least three context-dependent turns and a longer-history capacity

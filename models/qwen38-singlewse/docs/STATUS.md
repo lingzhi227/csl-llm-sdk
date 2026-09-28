@@ -11,6 +11,19 @@ includes appended-input processing and generation, excluding user think time and
 initial loading; decode-only speed and TTFT are reported separately. See
 [DIALOGUE-ACCEPTANCE.md](../performance/docs/DIALOGUE-ACCEPTANCE.md). The target remains unmet.
 
+P39 passes176 source and176 publication tests. Physical `layer-mixer-hw-002`
+executes all five complete original QKV/Z/A/B/output projections through3554
+internal endpoints. All86400 stored BF16 outputs are bit-exact to the predeclared
+independent reference, with zero/change/replay, all counters and20 warm drains.
+Every396953216 original bank byte and every descriptor is retained; normal stop
+and release are confirmed. Physical compilation covers11388 PEs/7714 images,
+maximum48128bytes including4096 stack. Download admission is now scoped to the
+measured102028613-byte complete-mixer artifact. Four cluster jobs (one actual
+WSE runtime) and both workstation services are released; failures are preserved.
+Host root read/consume and full retention timings are diagnostic, not model TPS.
+Actual conv/GDN consumers, complete neural stages and the multi-turn target remain
+unfinished. See [COMPLETE-MIXER-QUALIFICATION.md](../performance/docs/COMPLETE-MIXER-QUALIFICATION.md).
+
 P38 passes170 source and170 publication regression tests. Full routed compile018
 admits all11388 PEs with7714 ELF images, maximum48112bytes including4096 stack;
 reference003 verifies the unchanged396953216 original bank bytes. Simulator025

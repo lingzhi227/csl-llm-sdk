@@ -78,3 +78,16 @@ stages with unrelated requests does not satisfy this target. In steady decoding,
 2000 tokens/s implies no more than500us mean feedback time for one conversation;
 prompt/turn overhead makes the primary response-inclusive target stricter.
 This is a budget to measure and optimize, not an attained performance result.
+
+## Current capacity planning observation
+
+`evidence/dialogue-state-capacity-001.json` checks the exact historical two-request
+plan: a second independent context accounts for160,235,520 persistent-state bytes
+(2,949,120 convolution,150,994,944 recurrent and6,291,456 KV at context96).
+Specializing for one continuing conversation can make those bytes available for
+longer history, consumer-local state and fused code/scratch. This does not remove
+any state belonging to the retained conversation or change original weights.
+Two temporary work slots are a separate communication-overlap decision; they are
+not removed by this accounting. No longer context, changed placement, SRAM fit
+or faster execution is admitted by the byte count. Keep the existing physical
+qualification snapshot fixed; implement and requalify a new placement separately.

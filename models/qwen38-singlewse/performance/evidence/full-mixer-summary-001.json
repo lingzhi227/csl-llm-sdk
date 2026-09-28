@@ -1,0 +1,360 @@
+{
+  "milestone": "P39",
+  "utc": "2026-09-28T13:51:55.114611+00:00",
+  "passed": true,
+  "scope": "Physical complete original layer00 QKV/Z/A/B/output projections, all routed internal endpoints, retained original banks and warm drains. No conv/GDN/full neural stage, multi-turn generation or model speed acceptance.",
+  "accepted_physical": "layer-mixer-hw-002",
+  "result": {
+    "passed": true,
+    "physical": true,
+    "normal_stop": true,
+    "scope": "All five complete original layer0 mixer contractions, real full-K reduction, zero/change/replay, full original bank retention and drain. Diagnostic host root consumption; no conv/GDN/complete-layer/model execution or serving-speed acceptance.",
+    "complete_original_mixer_projections": true,
+    "complete_neural_stage": false,
+    "full_model_speed_target_achieved": false,
+    "original_output_values": 86400,
+    "original_bank_bytes_retained": 396953216,
+    "all_internal_pes": 3554,
+    "observations": [
+      {
+        "case": 0,
+        "matrix": 0,
+        "outputs": 10240,
+        "all_original_bf16_exact_except_zero_sign": true,
+        "all3554_counters_exact": true,
+        "host_diagnostic_seconds": 28.370584183372557
+      },
+      {
+        "case": 0,
+        "matrix": 1,
+        "outputs": 6144,
+        "all_original_bf16_exact_except_zero_sign": true,
+        "all3554_counters_exact": true,
+        "host_diagnostic_seconds": 19.879078960046172
+      },
+      {
+        "case": 0,
+        "matrix": 2,
+        "outputs": 48,
+        "all_original_bf16_exact_except_zero_sign": true,
+        "all3554_counters_exact": true,
+        "host_diagnostic_seconds": 7.445409285835922
+      },
+      {
+        "case": 0,
+        "matrix": 3,
+        "outputs": 48,
+        "all_original_bf16_exact_except_zero_sign": true,
+        "all3554_counters_exact": true,
+        "host_diagnostic_seconds": 7.631849156692624
+      },
+      {
+        "case": 0,
+        "matrix": 4,
+        "outputs": 5120,
+        "all_original_bf16_exact_except_zero_sign": true,
+        "all3554_counters_exact": true,
+        "host_diagnostic_seconds": 17.42762490361929
+      },
+      {
+        "case": 1,
+        "matrix": 0,
+        "outputs": 10240,
+        "all_original_bf16_exact_except_zero_sign": true,
+        "all3554_counters_exact": true,
+        "host_diagnostic_seconds": 27.18181535322219
+      },
+      {
+        "case": 1,
+        "matrix": 1,
+        "outputs": 6144,
+        "all_original_bf16_exact_except_zero_sign": true,
+        "all3554_counters_exact": true,
+        "host_diagnostic_seconds": 19.323749448172748
+      },
+      {
+        "case": 1,
+        "matrix": 2,
+        "outputs": 48,
+        "all_original_bf16_exact_except_zero_sign": true,
+        "all3554_counters_exact": true,
+        "host_diagnostic_seconds": 7.2596240835264325
+      },
+      {
+        "case": 1,
+        "matrix": 3,
+        "outputs": 48,
+        "all_original_bf16_exact_except_zero_sign": true,
+        "all3554_counters_exact": true,
+        "host_diagnostic_seconds": 7.23111354932189
+      },
+      {
+        "case": 1,
+        "matrix": 4,
+        "outputs": 5120,
+        "all_original_bf16_exact_except_zero_sign": true,
+        "all3554_counters_exact": true,
+        "host_diagnostic_seconds": 17.3077526204288
+      },
+      {
+        "case": 2,
+        "matrix": 0,
+        "outputs": 10240,
+        "all_original_bf16_exact_except_zero_sign": true,
+        "all3554_counters_exact": true,
+        "host_diagnostic_seconds": 28.195273967459798
+      },
+      {
+        "case": 2,
+        "matrix": 1,
+        "outputs": 6144,
+        "all_original_bf16_exact_except_zero_sign": true,
+        "all3554_counters_exact": true,
+        "host_diagnostic_seconds": 19.666575926356018
+      },
+      {
+        "case": 2,
+        "matrix": 2,
+        "outputs": 48,
+        "all_original_bf16_exact_except_zero_sign": true,
+        "all3554_counters_exact": true,
+        "host_diagnostic_seconds": 7.8839689483866096
+      },
+      {
+        "case": 2,
+        "matrix": 3,
+        "outputs": 48,
+        "all_original_bf16_exact_except_zero_sign": true,
+        "all3554_counters_exact": true,
+        "host_diagnostic_seconds": 7.548899866640568
+      },
+      {
+        "case": 2,
+        "matrix": 4,
+        "outputs": 5120,
+        "all_original_bf16_exact_except_zero_sign": true,
+        "all3554_counters_exact": true,
+        "host_diagnostic_seconds": 18.010240064933896
+      },
+      {
+        "case": 3,
+        "matrix": 0,
+        "outputs": 10240,
+        "all_original_bf16_exact_except_zero_sign": true,
+        "all3554_counters_exact": true,
+        "host_diagnostic_seconds": 28.308611179701984
+      },
+      {
+        "case": 3,
+        "matrix": 1,
+        "outputs": 6144,
+        "all_original_bf16_exact_except_zero_sign": true,
+        "all3554_counters_exact": true,
+        "host_diagnostic_seconds": 19.531240101903677
+      },
+      {
+        "case": 3,
+        "matrix": 2,
+        "outputs": 48,
+        "all_original_bf16_exact_except_zero_sign": true,
+        "all3554_counters_exact": true,
+        "host_diagnostic_seconds": 7.518100596033037
+      },
+      {
+        "case": 3,
+        "matrix": 3,
+        "outputs": 48,
+        "all_original_bf16_exact_except_zero_sign": true,
+        "all3554_counters_exact": true,
+        "host_diagnostic_seconds": 7.337191904895008
+      },
+      {
+        "case": 3,
+        "matrix": 4,
+        "outputs": 5120,
+        "all_original_bf16_exact_except_zero_sign": true,
+        "all3554_counters_exact": true,
+        "host_diagnostic_seconds": 17.646345692686737
+      }
+    ],
+    "loading_seconds": 638.672076777555,
+    "initialization_seconds": 97.48054078035057,
+    "total_host_diagnostic_seconds": 1421.3892810028046,
+    "commands": 524142
+  },
+  "capture": {
+    "utc": "2026-09-28T13:49:46.116316+00:00",
+    "passed": true,
+    "physical_capture": true,
+    "normal_stop_and_release_required": true,
+    "original_bf16_values": 86400,
+    "zero_sign_only_differences": 0,
+    "stored_arrays": 61,
+    "all_final3554_leases_retired": true,
+    "all_final3554_drain_counts": 20,
+    "actual_npz_bytes": 2037582,
+    "actual_npz_sha256": "87a58306bc69b23af24c435c2189af37cab8f7ff5b12d1f0b8fc7ce9ff0f2f91",
+    "source_manifest_sha256": "bc73d53637e0fbdc470f6d9c892d2da020ba3025d7b00a9356c1c76de932932f",
+    "fixture_sha256": "0b19822cfa60b4b7964d8f7222af055e60480cafe81f2b94a7426e278b28fa0a",
+    "banks_sha256": "abeaa66f1271604eda2afa37aacacfc4d673f13d5d0de23eb75fa76c6bf63288",
+    "artifact_sha256": "9b239d3e51a3da39351065e955aa5a19144f0d1a42a55c1dfeb32480691975ab",
+    "scope": "Post-exit check of preserved raw physical arrays and frozen payload identities; no additional job or neural execution."
+  },
+  "sram": {
+    "passed": true,
+    "over_limit_pes": 0,
+    "physical": false,
+    "executed": false,
+    "application": [
+      78,
+      146
+    ],
+    "application_pes": 11388,
+    "compiled_elf_images": 7714,
+    "maximum_with_stack": 48128,
+    "minimum_margin": 0,
+    "bytes_to_pe_count": {
+      "42320": 1,
+      "46848": 1,
+      "46976": 29,
+      "47040": 9,
+      "47248": 562,
+      "47584": 140,
+      "47600": 342,
+      "47616": 359,
+      "47632": 198,
+      "47744": 7,
+      "47760": 11,
+      "47776": 4,
+      "47792": 580,
+      "47808": 295,
+      "47824": 537,
+      "47840": 336,
+      "47856": 2013,
+      "47872": 754,
+      "47888": 1289,
+      "47936": 13,
+      "47952": 27,
+      "47968": 98,
+      "47984": 175,
+      "48000": 169,
+      "48016": 3435,
+      "48096": 1,
+      "48128": 3
+    },
+    "maximum_examples": [
+      {
+        "file": "out/bin/out_93_0.elf",
+        "sha256": "025059481d27cb20efbfb28054e0870a1a0c257cc3226790ec006e048bcfcbe8",
+        "rectangles": [
+          [
+            138,
+            4,
+            1,
+            1
+          ]
+        ],
+        "low_section_end": 44032,
+        "stack_allowance_bytes": 4096
+      },
+      {
+        "file": "out/bin/out_94_0.elf",
+        "sha256": "bff2bdd9206f45709576598ba2e2ef11822b92e79b5cd52c1439db86884cdcc3",
+        "rectangles": [
+          [
+            134,
+            6,
+            1,
+            1
+          ]
+        ],
+        "low_section_end": 44032,
+        "stack_allowance_bytes": 4096
+      },
+      {
+        "file": "out/bin/out_95_0.elf",
+        "sha256": "f742e908b1681ed3ec2326a7904f708aa5d78d0b3bfcfdf95cddd0a3247e8f4f",
+        "rectangles": [
+          [
+            130,
+            8,
+            1,
+            1
+          ]
+        ],
+        "low_section_end": 44032,
+        "stack_allowance_bytes": 4096
+      }
+    ],
+    "remote_census_bytes": 5012388,
+    "remote_census_sha256": "c678fed7172f2fc3c941199ede8e70003fd4c868bfe0d8e320e9805600d98f7f",
+    "source_manifest_sha256": "bc73d53637e0fbdc470f6d9c892d2da020ba3025d7b00a9356c1c76de932932f",
+    "note": "Every ELF SRAM record and every original application coordinate independently checked. A false passed field rejects admission; full census and ELF images remain on remote storage."
+  },
+  "source_tests": 176,
+  "publication_tests": 176,
+  "new_cluster_jobs": 4,
+  "actual_device_runtime_jobs": 1,
+  "all_current_owned_hardware_released": true,
+  "resource_audit": {
+    "utc": "2026-09-28T13:48:50.450259+00:00",
+    "own_jobs": 168,
+    "own_active": [],
+    "own_assignments": [],
+    "other_assignment_count": 0,
+    "no_owned_hardware_allocation": true,
+    "provider_billed_node_hours": null,
+    "note": "Job/system accounting snapshot; final provider billing is not available from these fields. SSH disconnect is not resource release."
+  },
+  "all_workstation_invocations_released": [
+    "layer-mixer-payload-001",
+    "mixer-artifact-size-001"
+  ],
+  "failures_preserved": {
+    "layer-mixer-hw-001": "CSL compile succeeded; first artifact total rejected under old64MiB gate. Compiler FAILED/released; no runtime. Exact first total was not retained.",
+    "mixer-artifact-probe-001": "Metadata-only query succeeded/released and reported old artifact absent; no compile or runtime request.",
+    "full-mixer-publication-tests-002": "Source changed while preceding export was unfinished; rejected despite175 passing tests. After export,003 passes176 tests with unchanged source."
+  },
+  "full_model_speed_target_achieved": false,
+  "next_work": "Fuse actual conv/gate/GDN root consumers into the retained original residual/RMS/MLP path; evaluate reclaiming second-context state for one continuing conversation without removing its history or weights. Fresh complete placement/SRAM/numerical admission, all64 stages and actual multi-turn speed measurement remain required.",
+  "evidence_sha256": {
+    "dialogue-state-capacity-001.json": "f64dcd55e51e1e92198e87eeffc80a0ae26b3a243d26268b92510a2d8497e218",
+    "full-mixer-job-timelines-001.json": "d23bbfac4340d5ccff6d867045a3f5c8de7ae0f4ea9f91e35b1f486deec0766f",
+    "full-mixer-publication-tests-001.json": "d5708bc20ba31d7f88d88783fde9fd5bdcbb4138146b90c52f187c2a2a9c0a99",
+    "full-mixer-publication-tests-002.json": "a11b27b92306ad51e5169373c30a50a10a304653169c704705060fcd5aa872e3",
+    "full-mixer-publication-tests-003.json": "ccf22ee7d898097d2c1d330a733f91a77b36f0295d84948d9018a8c8e5f3f0ab",
+    "full-mixer-source-identity-001.json": "e453b6ac326ceb2957f578d66fe664584b2529712d32b173f2987975f8b11e2f",
+    "full-mixer-tests-001.json": "707062cc17cdab010e7390f1d934f5a1929f48db6cecc37058b7d10dc5c7baea",
+    "full-mixer-tests-002.json": "0e3e1ecfd77e404cd49fc1c4bc1ad9eff4c381a20dcdf4a3b09b750d4f3d94c6",
+    "layer-mixer-hw-001/FAILURE.json": "3ea59027e14e97d171d79ddcf726cc1ee6b43371dadb0063d5b2795372499bb6",
+    "layer-mixer-hw-001/bank-index.json": "67295f8b430a92baa83e54b09141e45338298c292ab651127f469d4bc8f86833",
+    "layer-mixer-hw-001/compile-audit.json": "71a0ffe13d6e9b1d73deeeb30d208fe7ced860a67da95fbe96cbf09d7957964f",
+    "layer-mixer-hw-001/fixture.json": "b11667d60c1067353df80cdbdb67d20a20247ff7d828565b06e71b44b276237f",
+    "layer-mixer-hw-001/payload-staging.json": "5f24ea051ea00b1d235a93e6c7a42d866c194f1457a519e8c198dc8acdf9b31c",
+    "layer-mixer-hw-001/source-manifest.json": "aa55a0b4151549671a3d6aac1c06ae6b3d181729a577adf040e6d202f118222f",
+    "layer-mixer-hw-002/COMPLETE.json": "06230927c18c59e8199d26705d918c980757f061e74d1e4d2a5e6a2a7ff9040e",
+    "layer-mixer-hw-002/artifact.json": "a592f0cebd970a28690c03e38489eb5a492ddf08a72038daefdde9fd2cf5b16c",
+    "layer-mixer-hw-002/bank-index.json": "67295f8b430a92baa83e54b09141e45338298c292ab651127f469d4bc8f86833",
+    "layer-mixer-hw-002/capture-audit.json": "f8a11bc56cd09a573ebe2b9e051aafc30eb9c7551d8602641b9e3dc0bcaeae21",
+    "layer-mixer-hw-002/compile-audit.json": "3bd460e0282f380e7e561721e16e873f199bc6643d92f3fb9c7be132ebc0b6f3",
+    "layer-mixer-hw-002/download-framing.json": "6aabff9d91d3bb264c1b9c71bd541eec5108053f3040de0bed16ac50d3cf25cd",
+    "layer-mixer-hw-002/fixture.json": "b11667d60c1067353df80cdbdb67d20a20247ff7d828565b06e71b44b276237f",
+    "layer-mixer-hw-002/payload-staging.json": "b9adc31d05a87ea497efefa8daf112fa2731335dad6c35cc18997a5041c30055",
+    "layer-mixer-hw-002/progress.json": "a464224d0606dd739a9c20fea3859430700324dca2c4f303891e781df802d43c",
+    "layer-mixer-hw-002/result.json": "97d3205621153c8e07e94e8e6e936b8ff9315a4fe311a13fc35fcf674b21b0a3",
+    "layer-mixer-hw-002/run-audit.json": "53efcffb515f30660c8e9543ad8c64007f3e29fe70c2a5ae75a53072d4a936c3",
+    "layer-mixer-hw-002/source-manifest.json": "bc73d53637e0fbdc470f6d9c892d2da020ba3025d7b00a9356c1c76de932932f",
+    "layer-mixer-hw-002/sram-summary.json": "ac5854d53a9b8800a152403cac3c201a28764f7719307a02fbf2fa0d41d9df69",
+    "layer-mixer-payload-001/COMPLETE.json": "db84833525c5ad588976306a9b218156d9bcd3a7a0c2db52514d27f789865251",
+    "layer-mixer-payload-001/source-manifest.json": "f20ea27a9c0b78ed41b9fca09a2a78a03425480f5504b1e5574a3bba1f9617dd",
+    "layer-mixer-payload-001/workstation-release.json": "df05b3758aadf5c3f21f0724903e9f3b0c4b3a0d5976218f97a1724022395d87",
+    "mixer-artifact-probe-001/COMPLETE.json": "210e20c62b035062e4a88303ff75962deebcfbe4a995e043948c83188f184a01",
+    "mixer-artifact-probe-001/artifact-envelope.json": "3f77f353692cfca1f7e9c797775a2d4441608b8974782d991cdbf3a296eb3251",
+    "mixer-artifact-probe-001/compile-audit.json": "b8f5a273059129f80f227ff3c8f75e4c30ef04f3049823f93788b5bb0467fdb8",
+    "mixer-artifact-probe-001/source-manifest.json": "3f8a8cd53ec59db664472204689e8f93a83f20e74d4f3e92483ce0ee833df909",
+    "mixer-artifact-size-001/COMPLETE.json": "03983ac0f8d0d38c6b7d445df98e2042c3aa88c1625ee24254c21447aff454f7",
+    "mixer-artifact-size-001/source-manifest.json": "6bb55011321496dee4c048eed3b47bcf95104dacdb881e57ab0979bc2be85cfb",
+    "mixer-artifact-size-001/workstation-release.json": "e63dcd4b5eaa3d66d8eb86da9db08e83862c6c069655cb8e08a385c702a75b95",
+    "resource-audit-p39-close.json": "2dffb8b3e79083551de0b9220727cd312c6029dffcdfd01288cfd84276c1b839"
+  }
+}

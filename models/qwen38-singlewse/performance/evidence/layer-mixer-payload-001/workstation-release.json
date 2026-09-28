@@ -1,0 +1,37 @@
+{
+  "utc": "2026-09-28T13:00:09.891829+00:00",
+  "unit": "qwen38-single-layer-mixer-payload-001.service",
+  "status": {
+    "MainPID": "0",
+    "Result": "success",
+    "ExecMainStatus": "0",
+    "ControlGroup": "",
+    "WorkingDirectory": "",
+    "LoadState": "not-found",
+    "ActiveState": "inactive",
+    "SubState": "dead"
+  },
+  "dispatch_sha256": "befe5300e188a871ea04f8e614ad0a7a9a044d77de10b20a2f36209ad2cfd858",
+  "invocation_journal": [
+    {
+      "USER_UNIT": "qwen38-single-layer-mixer-payload-001.service",
+      "USER_INVOCATION_ID": "e3eae9d597b4404abbfa011876493e2c",
+      "MESSAGE": "Started /usr/bin/flock -n /srv/cerebras-workstation/heavy.lock /usr/bin/python3 stream.py.",
+      "__REALTIME_TIMESTAMP": "1790600239508784"
+    },
+    {
+      "USER_UNIT": "qwen38-single-layer-mixer-payload-001.service",
+      "USER_INVOCATION_ID": "e3eae9d597b4404abbfa011876493e2c",
+      "MESSAGE": "qwen38-single-layer-mixer-payload-001.service: Consumed 1.696s CPU time.",
+      "__REALTIME_TIMESTAMP": "1790600364320570",
+      "CPU_USAGE_NSEC": "1696796000"
+    }
+  ],
+  "cgroup_members": [],
+  "matching_processes": [],
+  "shared_lock_available": true,
+  "own_running_services": "",
+  "workstation_released": true,
+  "physical": false,
+  "logs": {}
+}

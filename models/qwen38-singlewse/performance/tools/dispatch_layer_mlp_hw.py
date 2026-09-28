@@ -2,9 +2,9 @@
 import argparse,json,re,shlex,subprocess
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
-parser=argparse.ArgumentParser();parser.add_argument('attempt');args=parser.parse_args()
+parser=argparse.ArgumentParser();parser.add_argument('attempt');parser.add_argument('--component',choices=['mlp','mixer'],default='mlp');args=parser.parse_args()
 if not re.fullmatch('[0-9]{3}',args.attempt):raise ValueError('Attempt')
-name='layer-mlp-hw-'+args.attempt;out=ROOT/'evidence'/name
+name='layer-'+args.component+'-hw-'+args.attempt;out=ROOT/'evidence'/name
 if not json.loads((out/'payload-staging.json').read_text())['payload_verified']:raise ValueError('Fixture transfer not admitted')
 if (out/'dispatch.json').exists():raise ValueError('Previously dispatched attempt')
 root='/srv/qwen38-singlewse-hardware/'+name

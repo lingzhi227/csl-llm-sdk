@@ -21,6 +21,21 @@ class ArtifactProfileTests(unittest.TestCase):
         for value in [0,(64<<20)+1,128<<20]:
             with self.assertRaises(ValueError):backend.message_limit(dict(profile,artifact_single_message_limit=value))
 
+    def test_complete_mixer_requires_original_five_shapes_and_geometry(self):
+        profile=dict(complete_original_mixer=True,stage='layer_00',application=[78,146],application_pes=11388,
+                     mixer_shapes=[[10240,5120],[6144,5120],[48,5120],[48,5120],[5120,6144]],fabric_offset=[67,1],
+                     revision='017b9c7af6b5689d5dd426a76e0bc077eb5ca20a',artifact_single_message_limit=128<<20)
+        self.assertTrue(backend.complete_mixer_profile(profile))
+        self.assertFalse(backend.complete_mlp_profile(profile))
+        self.assertEqual(backend.message_limit(profile),128<<20)
+        for value in [0,(128<<20)+1]:
+            with self.assertRaises(ValueError):backend.message_limit(dict(profile,artifact_single_message_limit=value))
+        for key in profile:
+            if key=='artifact_single_message_limit':continue
+            changed=dict(profile);changed.pop(key)
+            self.assertFalse(backend.complete_mixer_profile(changed))
+            with self.assertRaises(ValueError):backend.message_limit(changed)
+
     def test_larger_archive_requires_every_exact_matrix_geometry_field(self):
         profile=dict(complete_original_matrix=True,application=[631,2],application_pes=1262,
                      matrix_shape=[48,5120],fabric_offset=[123,706],artifact_single_message_limit=16<<20)

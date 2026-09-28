@@ -1,5 +1,5 @@
 """Artifact framing must preserve chunks and reject oversized/truncated data."""
-import importlib.util,sys,tempfile,unittest
+import importlib.util,json,sys,tempfile,unittest
 from pathlib import Path
 from types import SimpleNamespace
 ROOT=Path(__file__).resolve().parents[1]
@@ -28,6 +28,23 @@ class BoundedCompilerTests(unittest.TestCase):
             with self.subTest(blocks=blocks),tempfile.TemporaryDirectory() as root:
                 with self.assertRaises(ValueError):compiler.receive(iter(blocks),root,'artifact',max_total=7,max_chunk=4)
                 self.assertFalse(Path(root,'artifact.tar.gz').exists())
+
+    def test_oversize_records_envelope_without_payload_and_cancels_rpc(self):
+        class Stream:
+            cancelled=False
+            def __iter__(self):return iter([response(b'secret',9)])
+            def cancel(self):self.cancelled=True;return True
+        stream=Stream()
+        with tempfile.TemporaryDirectory() as root:
+            with self.assertRaisesRegex(ValueError,'total framing'):
+                compiler.receive(stream,root,'artifact',max_total=7,max_chunk=6)
+            report=Path(root,'download-rejection.json').read_text();data=json.loads(report)
+            self.assertTrue(stream.cancelled)
+            self.assertEqual(data['last_envelope']['total_bytes'],9)
+            self.assertEqual(data['last_envelope']['chunk_bytes'],6)
+            self.assertEqual(data['bytes_written'],0)
+            self.assertEqual(Path(root,'artifact.tar.gz.partial').stat().st_size,0)
+            self.assertNotIn('secret',report)
 
 
 if __name__=='__main__':unittest.main()

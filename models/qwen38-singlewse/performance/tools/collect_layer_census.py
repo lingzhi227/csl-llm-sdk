@@ -8,7 +8,7 @@ import subprocess
 
 ROOT = Path(__file__).resolve().parents[1]
 parser = argparse.ArgumentParser(); parser.add_argument('attempt');parser.add_argument('--allow-failed',action='store_true'); args = parser.parse_args()
-if not re.fullmatch('layer-((projection|mlp)-compile|mlp-hw)-[0-9]{3}', args.attempt): raise ValueError('Attempt')
+if not re.fullmatch('layer-((projection|mlp)-compile|(mlp|mixer)-hw)-[0-9]{3}', args.attempt): raise ValueError('Attempt')
 physical='-hw-' in args.attempt
 out = ROOT/'evidence'/args.attempt/'sram-summary.json'
 if out.exists(): raise ValueError('Frozen summary')
