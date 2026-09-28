@@ -1,0 +1,41 @@
+{
+  "utc": "2026-09-28T19:43:15.773498+00:00",
+  "unit": "qwen38-single-layer-frontend-reference-003.service",
+  "status": {
+    "MainPID": "0",
+    "Result": "success",
+    "ExecMainStatus": "0",
+    "ControlGroup": "",
+    "WorkingDirectory": "",
+    "LoadState": "not-found",
+    "ActiveState": "inactive",
+    "SubState": "dead"
+  },
+  "dispatch_sha256": "e7d5bfefbd597ca28b9cf756a985c13ae42a4e67178f567369deaa1edbb68152",
+  "invocation_journal": [
+    {
+      "USER_UNIT": "qwen38-single-layer-frontend-reference-003.service",
+      "USER_INVOCATION_ID": "80677c886469461fb818025b145d4317",
+      "MESSAGE": "Started /usr/bin/taskset --cpu-list 6 /usr/bin/flock -n /srv/cerebras-workstation/heavy.lock /usr/bin/python3 execute.py.",
+      "__REALTIME_TIMESTAMP": "1790624534822765"
+    },
+    {
+      "MESSAGE": "{\"passed\": true, \"physical\": false, \"neural_execution\": false, \"multi_turn_qualified\": false, \"source_bytes\": 388101376, \"allocated_bytes\": 388094976, \"verified_source_words\": 97025344, \"original_mlp_tiles\": 1044480, \"preserved_auxiliary_pages\": 7085, \"recurrent_elements\": 786432, \"workers\": 753, \"source_scale_words\": 66448, \"scale_table_delta_bytes\": -6400, \"all_source_words_classified\": true, \"all_original_values_verified_from_actual_csl_descriptors\": true, \"no_requantization\": true, \"hashes\": {\"banks.npy\": \"7ffc3201b0724c4de05e85b34b90750e0a6f884a9ab594da2482e65acbe763d6\", \"bank-index.json\": \"ef7d00b986ea00d781fbb08a5a7ecd75d4fc3eae8154e643f787a9cc6a632fc2\"}, \"seconds\": 9.561863942071795}",
+      "__REALTIME_TIMESTAMP": "1790624544541082"
+    },
+    {
+      "USER_UNIT": "qwen38-single-layer-frontend-reference-003.service",
+      "USER_INVOCATION_ID": "80677c886469461fb818025b145d4317",
+      "MESSAGE": "qwen38-single-layer-frontend-reference-003.service: Consumed 7.479s CPU time.",
+      "__REALTIME_TIMESTAMP": "1790624544640628",
+      "CPU_USAGE_NSEC": "7479975000"
+    }
+  ],
+  "cgroup_members": [],
+  "matching_processes": [],
+  "shared_lock_available": true,
+  "own_running_services": "",
+  "workstation_released": true,
+  "physical": false,
+  "logs": {}
+}

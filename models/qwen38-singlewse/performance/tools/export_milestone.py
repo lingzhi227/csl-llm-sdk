@@ -11,7 +11,7 @@ import json
 from pathlib import Path
 import sys
 ROOT=Path(__file__).resolve().parents[1]
-SUBSTITUTIONS = [('/path/to/alcf-session.sh', '/path/to/alcf-session.sh'), ('/opt/cerebras/venv/bin/python', '/opt/cerebras/venv/bin/python'), ('/srv/model-storage/qwen38-singlewse', '/srv/model-storage/qwen38-singlewse'), ('/srv/model-storage/', '/srv/model-storage/'), ('/opt/cerebras/sdk/2.10.1', '/opt/cerebras/sdk/2.10.1'), ('/srv/cerebras-workstation/heavy.lock', '/srv/cerebras-workstation/heavy.lock'), ('/srv/qwen38-singlewse-hardware', '/srv/qwen38-singlewse-hardware'), ('/srv/cerebras-hardware/hardware.lock', '/srv/cerebras-hardware/hardware.lock')]
+SUBSTITUTIONS = [(str(ROOT.parent), "/path/to/qwen38-singlewse"), ('/path/to/alcf-session.sh', '/path/to/alcf-session.sh'), ('/opt/cerebras/venv/bin/python', '/opt/cerebras/venv/bin/python'), ('/srv/model-storage/qwen38-singlewse', '/srv/model-storage/qwen38-singlewse'), ('/srv/model-storage/', '/srv/model-storage/'), ('/opt/cerebras/sdk/2.10.1', '/opt/cerebras/sdk/2.10.1'), ('/srv/cerebras-workstation/heavy.lock', '/srv/cerebras-workstation/heavy.lock'), ('/srv/qwen38-singlewse-hardware', '/srv/qwen38-singlewse-hardware'), ('/srv/cerebras-hardware/hardware.lock', '/srv/cerebras-hardware/hardware.lock')]
 
 
 def sha(raw):return hashlib.sha256(raw).hexdigest()

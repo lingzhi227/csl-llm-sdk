@@ -1,25 +1,29 @@
 # Next work: resident spatial pipeline
 
-Immediate P44 follow-up: use full compile024, original-bank reference002 and
-physical mixer-frontend-hw-001. CompactMlpPlacement and
-CompactMlpAuxiliaryPlacement now control MLP/all auxiliary addresses; use
-CompactMixerPlacement for mixer weights. The old frontend map alone cannot
-address the compacted MLP banks. The new census frees3,362,352 actual SRAM bytes
-without changing routes or arithmetic. The reader has full compile/bitwise
-storage qualification, not new numerical execution. Do not repeat admitted
-layout/calibration sweeps.
+Immediate P45 follow-up: use complete compile027 and original-bank reference003.
+`gdn-bank-placement.json` is the address authority; its nested stage and
+`gdn-compact-mlp.json` own changed MLP intervals. `GdnBankPlacement` resolves
+namespaced auxiliary pages and every recurrent word. Old P44 maps are provenance.
+All11,388 PEs pass SRAM with16B minimum margin; all97,025,344 source words are
+verified. Do not repeat admitted placement/compiler or bank-copy sweeps.
 
-Connect actual GDN state workers/returns, gated output projection and the retained
-norm/MLP graph. Retile every original4-key x8-value page explicitly; full-key
-columns are not contiguous old pages. Reuse decoder scratch only after full
-projection/transfer drain and retire GDN returns before the next MLP lease. The
-capacity table uses assumed code/scratch budgets, not an executable placement.
-Variable-width workers need a qualified pair gather or scalar-return frontend.
-All16 original frontend groups/48 heads pass P43 physical6+2-position checks,
-but their recurrent results were injected. Production history caches still need
-integration with parameter loading. Preserve transport retirement separately
-from semantic completion. Full64-layer dialogue and2000tps remain unmet. See
-[Compact MLP](COMPACT-MLP.md) and [Recurrent integration](GDN-INTEGRATION.md).
+Connect actual frontend-to-GDN broadcast, paired BF16 returns, complete downstream
+retirement, gated output projection and the retained norm/MLP graph. Current
+753 workers own even8/32-column slices; a paired-return variant can preserve the
+physically qualified frontend contract. The current scalar frames are not
+compatible and the GDN colors are not yet routed. Existing decoder/operand arenas
+must be leased only after actual projection/transport drain. Final local DMA
+completion is not a consumer retirement fence.
+
+Before candidate output, freeze independent numerical bounds for the reassociated
+FP32 recurrence and complete changed MLP graph. Exercise all48 real heads over
+continuous positions and reset/replay, including history across new prompts.
+P43's frontend remains physically qualified with injected projection/recurrent
+references; P45 provides storage/compiler admission only. Follow with complete
+original-layer execution, then all64 stages, head and actual dependent feedback.
+The continuing-dialogue2000tps target remains unmet. See
+[Recurrent co-placement](GDN-CO-PLACEMENT.md) and
+[Dialogue acceptance](DIALOGUE-ACCEPTANCE.md).
 
 1. Preserve physical006 as the accepted shared-input complete-MLP baseline:
    all original numerical/retention/drain checks pass,49376->24688 broadcast words,

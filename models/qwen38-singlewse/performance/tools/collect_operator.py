@@ -31,6 +31,9 @@ limit=16777216 if 'joint-bank-placement.json' in m['files'] else 8388608
 # The complete compact frontend adds both old/new explicit bank maps and a
 # source-bound co-placement plan. This remains bounded text metadata only.
 if 'frontend-bank-placement.json' in m['files']:limit=33554432
+# GDN co-placement retains old/new MLP routes, descriptors and namespaced page
+# maps. This64MiB envelope still accepts only source/text, never model/ELF data.
+if 'gdn-bank-placement.json' in m['files']:limit=67108864
 assert sum(len(s) for s in source.values())+sum(len(s) for s in receipts.values())<limit
 print(json.dumps(dict(source=source,receipts=receipts)))
 '''

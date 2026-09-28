@@ -1,0 +1,27 @@
+{
+  "utc": "2026-09-28T19:22:24.514428+00:00",
+  "passed": true,
+  "source": "/path/to/qwen38-singlewse/performance/tools/stage_layer_mlp_compile.py",
+  "sha256": "aa62cba6ff586d2d4d0025d9b6d549140bca83fff21c907a0388ea5276f43960",
+  "checks": [
+    "exact8GiB host headroom boundary",
+    "insufficient memory refused before systemd dispatch",
+    "default16GiB and1800seconds reach actual generated command/script",
+    "no-swap and CPU limits preserved",
+    "dispatch receipt records effective limits"
+  ],
+  "mocked_dispatches": [
+    {
+      "available_gib": 24,
+      "dispatch_allowed": true,
+      "memory_gib": 16,
+      "compiler_seconds": 1800,
+      "service_seconds": 1830
+    },
+    {
+      "available_gib": 23,
+      "dispatch_allowed": false
+    }
+  ],
+  "real_jobs_submitted": 0
+}

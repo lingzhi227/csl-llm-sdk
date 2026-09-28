@@ -9,6 +9,18 @@ includes appended-input processing and generation, excluding user think time and
 initial loading; decode-only speed and TTFT are reported separately. See
 [DIALOGUE-ACCEPTANCE.md](docs/DIALOGUE-ACCEPTANCE.md). The target remains unmet.
 
+P45 fits the actual recurrent-port programs and all original layer00 banks on
+11,388 PEs/8,240 ELF images: maximum48,112B including4,096B stack, with16B minimum
+margin. Joint MLP output placement reserves753 state workers holding all786,432
+FP32 recurrent elements. Original-bank reference003 verifies all97,025,344 source
+words,1,044,480 MLP tiles and7,085 nonrecurrent pages; banks occupy388,094,976B.
+Compile026's five112B overflows are resolved by moving ten auxiliary pages.
+Forty-five selected source regressions, seven targeted refinement checks and
+46 final publication regressions pass. All seven workstation services release;
+no new WSE job is submitted. Actual GDN broadcast/returns, changed numerical
+execution, full-layer inference and multi-turn model speed remain unqualified.
+See [Recurrent co-placement](docs/GDN-CO-PLACEMENT.md).
+
 P44 admits exact original MLP scale sharing on all11,388 layer00 PEs with
 8,428 ELF images, maximum48,032B including4,096B stack and minimum96B margin.
 Bank savings are3,912,128B; the measured whole-stage SRAM reduction is3,362,352B.

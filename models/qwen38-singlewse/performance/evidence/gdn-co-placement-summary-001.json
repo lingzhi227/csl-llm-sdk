@@ -1,0 +1,72 @@
+{
+  "passed": true,
+  "utc": "2026-09-28T19:44:59.726402+00:00",
+  "scope": "P45 complete original layer00 recurrent co-placement, actual linked SRAM admission and original-word migration proof; no neural execution or model-speed claim",
+  "physical": false,
+  "neural_execution": false,
+  "multi_turn_qualified": false,
+  "target_achieved": false,
+  "application_pes": 11388,
+  "compiled_elf_images": 8240,
+  "maximum_sram_with_stack": 48112,
+  "minimum_margin": 16,
+  "workers": 753,
+  "worker_widths": {
+    "8": 748,
+    "32": 5
+  },
+  "recurrent_elements": 786432,
+  "verified_source_words": 97025344,
+  "original_mlp_tiles": 1044480,
+  "nonrecurrent_pages": 7085,
+  "original_to_final_changed_pe_pages": 908,
+  "original_to_final_changed_addresses": 5226,
+  "allocated_bytes": 388094976,
+  "refinement_only_changed_csl": [
+    "layout.csl"
+  ],
+  "unchanged_arithmetic_descriptors_and_routes_from_026": true,
+  "workstation_services_released": [
+    "layer-backend-compile-033",
+    "layer-backend-compile-034",
+    "layer-backend-compile-035",
+    "layer-mlp-compile-025",
+    "layer-mlp-compile-026",
+    "layer-mlp-compile-027",
+    "layer-frontend-reference-003"
+  ],
+  "new_hardware_jobs": 0,
+  "new_wse_runtime_jobs": 0,
+  "tests": {
+    "source_selected": 45,
+    "source_targeted_refinement": 7,
+    "publication_selected": 46,
+    "full_suite": false
+  },
+  "evidence": {
+    "gdn-port-calibrations-001.json": "f5cf0af009cf95c31c3b93ab64616ef29a4e703699d8b2d1ee259ab65e391883",
+    "gdn-row-order-audit-001.json": "a4af3d3cef8cd9dfe12f23b7f9706e47dd54f63246478a0db0dfa9dae83d618c",
+    "gdn-refinement-tests-001.json": "040c7f9ca7f70ebca901b911ca2c0d10d884323e772762276687e84373231180",
+    "gdn-placement-tests-003.json": "07c627eb98790a42e32e5a9d5392d8a1b97fefae207372e5a7d2de35c7e8da48",
+    "gdn-placement-publication-tests-002.json": "c1fa287509efe8d3a98a9a47b819fb51e9a4f7b36926ef017f1d476a68bdc4f7",
+    "workstation-compile-policy-fix-001.json": "fd16e9aad2698dfa7295d0ff8bc808a0ae45fe779a08acda2b844321b8fea74b",
+    "resource-audit-gdn-placement-final.json": "875348c5470410e6484d953544f3cb69804ea9108c01ad62240d0b7fc5c6449e",
+    "layer-mlp-compile-026/sram-summary.json": "82ba096b258b824fa9ea8bacd4505a209eb51a49de2d4bcfb5e9fb93fa3d1910",
+    "layer-mlp-compile-027/sram-summary.json": "71ba704cddda2e779fb816b9852d6f977ceb9e6879bfc43f978ccfe6a46197d5",
+    "layer-frontend-reference-003/bank-remap-proof.json": "5f8ca1f3c4fad693e68564e06ad22d8a88b3ded374337f97a6680d1151de1f58",
+    "layer-backend-compile-033/source-manifest.json": "d7e21346b9d7df15dd2e34a1a642c5fdf895dbc24851acb7e27e467820d9d04f",
+    "layer-backend-compile-034/source-manifest.json": "abf1209ff4653a0745925163fa52409a645af4b8816f6d5bf50119746e0787da",
+    "layer-backend-compile-035/source-manifest.json": "a72263a58f00cd9ca7b2b1fb2b7ee8661be04416d9c00e9eb4fc300c61266cae",
+    "layer-mlp-compile-025/source-manifest.json": "a7fa45823b891252a29e7d48354aebac0859e2ad1ba9c39e7d5693c3e7efb1ad",
+    "layer-mlp-compile-026/source-manifest.json": "7b19827a10e96c5ae232003aa5c3216bc313b41a271b15abf1a0e48955565e64",
+    "layer-mlp-compile-027/source-manifest.json": "cb9eea30e1583ae2debe9f8bc4db7171ef97f47a68449c8b1ccdf6cad663653d",
+    "layer-frontend-reference-003/source-manifest.json": "4ac7289f63bea9bea2a9c3d654725ac9b87815c5bac76df251087cdaff62b0e5",
+    "layer-backend-compile-033/workstation-release.json": "e6570680b1e04140fafe13cc068c8734d397c667e3c8ac3d3d668d7ce47c816b",
+    "layer-backend-compile-034/workstation-release.json": "e2446e850b06f295c7c8bc0ca368d4f6d83849c1ea5fbff59f7114b5c594efba",
+    "layer-backend-compile-035/workstation-release.json": "ac00c8677f23d3f5dd6c3ef00c6beb4b0c83c3f6701511ae5b865577cb124c30",
+    "layer-mlp-compile-025/workstation-release.json": "aea2b733a10d3f3a4dce6304dd30571af0d2173bdf28d69f2a9ef70e5bea4271",
+    "layer-mlp-compile-026/workstation-release.json": "d5832551b24f56d522d84482ca44558652df68af70e83327e2dee2e90f640d10",
+    "layer-mlp-compile-027/workstation-release.json": "4ddf261d73d6ca8a493efae22d39dbac911736cea3df19b848e4b7d74d8469f1",
+    "layer-frontend-reference-003/workstation-release.json": "3795ecf5b5b92edf43305e6c93407379eafb573e2242cd7e78c501f026b8b458"
+  }
+}

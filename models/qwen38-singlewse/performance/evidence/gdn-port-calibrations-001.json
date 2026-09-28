@@ -1,0 +1,281 @@
+{
+  "attempts": [
+    {
+      "attempt": "layer-backend-compile-033",
+      "source_manifest_sha256": "d7e21346b9d7df15dd2e34a1a642c5fdf895dbc24851acb7e27e467820d9d04f",
+      "released": true,
+      "physical": false,
+      "failure": {
+        "error": "RuntimeError",
+        "message": "Compiler exit 1"
+      }
+    },
+    {
+      "attempt": "layer-backend-compile-034",
+      "source_manifest_sha256": "abf1209ff4653a0745925163fa52409a645af4b8816f6d5bf50119746e0787da",
+      "released": true,
+      "physical": false,
+      "failure": {
+        "error": "ValueError",
+        "message": "Actual SRAM limit failed"
+      },
+      "sram_passed": false,
+      "pairs": [
+        {
+          "source": "compact_layer_projection.csl",
+          "rows": 4,
+          "mixer_can_root": null,
+          "columns": 1,
+          "baseline_total": 28400,
+          "port_total": 29888,
+          "added_bytes": 1488,
+          "passed": true
+        },
+        {
+          "source": "compact_layer_projection.csl",
+          "rows": 4,
+          "mixer_can_root": null,
+          "columns": 4,
+          "baseline_total": 28400,
+          "port_total": 29904,
+          "added_bytes": 1504,
+          "passed": true
+        },
+        {
+          "source": "compact_layer_projection.csl",
+          "rows": 4,
+          "mixer_can_root": null,
+          "columns": 32,
+          "baseline_total": 28400,
+          "port_total": 29904,
+          "added_bytes": 1504,
+          "passed": true
+        },
+        {
+          "source": "compact_layer_projection.csl",
+          "rows": 8,
+          "mixer_can_root": null,
+          "columns": 1,
+          "baseline_total": 28864,
+          "port_total": 30352,
+          "added_bytes": 1488,
+          "passed": true
+        },
+        {
+          "source": "compact_layer_projection.csl",
+          "rows": 8,
+          "mixer_can_root": null,
+          "columns": 4,
+          "baseline_total": 28864,
+          "port_total": 30352,
+          "added_bytes": 1488,
+          "passed": true
+        },
+        {
+          "source": "compact_layer_projection.csl",
+          "rows": 8,
+          "mixer_can_root": null,
+          "columns": 16,
+          "baseline_total": 28864,
+          "port_total": 30336,
+          "added_bytes": 1472,
+          "passed": true
+        },
+        {
+          "source": "device_mixer_layer_mlp_standby.csl",
+          "rows": null,
+          "mixer_can_root": false,
+          "columns": 1,
+          "baseline_total": 30288,
+          "port_total": 31904,
+          "added_bytes": 1616,
+          "passed": true
+        },
+        {
+          "source": "device_mixer_layer_mlp_standby.csl",
+          "rows": null,
+          "mixer_can_root": false,
+          "columns": 4,
+          "baseline_total": 30288,
+          "port_total": 31920,
+          "added_bytes": 1632,
+          "passed": true
+        },
+        {
+          "source": "device_mixer_layer_mlp_standby.csl",
+          "rows": null,
+          "mixer_can_root": false,
+          "columns": 64,
+          "baseline_total": 46672,
+          "port_total": 48304,
+          "added_bytes": 1632,
+          "passed": false
+        },
+        {
+          "source": "device_mixer_layer_mlp_standby.csl",
+          "rows": null,
+          "mixer_can_root": true,
+          "columns": 1,
+          "baseline_total": 30544,
+          "port_total": 32176,
+          "added_bytes": 1632,
+          "passed": true
+        },
+        {
+          "source": "device_mixer_layer_mlp_standby.csl",
+          "rows": null,
+          "mixer_can_root": true,
+          "columns": 4,
+          "baseline_total": 30544,
+          "port_total": 32176,
+          "added_bytes": 1632,
+          "passed": true
+        },
+        {
+          "source": "device_mixer_layer_mlp_standby.csl",
+          "rows": null,
+          "mixer_can_root": true,
+          "columns": 64,
+          "baseline_total": 46928,
+          "port_total": 48576,
+          "added_bytes": 1648,
+          "passed": false
+        }
+      ]
+    },
+    {
+      "attempt": "layer-backend-compile-035",
+      "source_manifest_sha256": "a72263a58f00cd9ca7b2b1fb2b7ee8661be04416d9c00e9eb4fc300c61266cae",
+      "released": true,
+      "physical": false,
+      "sram_passed": true,
+      "pairs": [
+        {
+          "source": "compact_layer_projection.csl",
+          "rows": 4,
+          "mixer_can_root": null,
+          "columns": 1,
+          "baseline_total": 28400,
+          "port_total": 30048,
+          "added_bytes": 1648,
+          "passed": true
+        },
+        {
+          "source": "compact_layer_projection.csl",
+          "rows": 4,
+          "mixer_can_root": null,
+          "columns": 4,
+          "baseline_total": 28400,
+          "port_total": 30240,
+          "added_bytes": 1840,
+          "passed": true
+        },
+        {
+          "source": "compact_layer_projection.csl",
+          "rows": 4,
+          "mixer_can_root": null,
+          "columns": 32,
+          "baseline_total": 28400,
+          "port_total": 30240,
+          "added_bytes": 1840,
+          "passed": true
+        },
+        {
+          "source": "compact_layer_projection.csl",
+          "rows": 8,
+          "mixer_can_root": null,
+          "columns": 1,
+          "baseline_total": 28864,
+          "port_total": 30512,
+          "added_bytes": 1648,
+          "passed": true
+        },
+        {
+          "source": "compact_layer_projection.csl",
+          "rows": 8,
+          "mixer_can_root": null,
+          "columns": 4,
+          "baseline_total": 28864,
+          "port_total": 30688,
+          "added_bytes": 1824,
+          "passed": true
+        },
+        {
+          "source": "compact_layer_projection.csl",
+          "rows": 8,
+          "mixer_can_root": null,
+          "columns": 16,
+          "baseline_total": 28864,
+          "port_total": 30672,
+          "added_bytes": 1808,
+          "passed": true
+        },
+        {
+          "source": "device_mixer_layer_mlp_standby.csl",
+          "rows": null,
+          "mixer_can_root": false,
+          "columns": 1,
+          "baseline_total": 30288,
+          "port_total": 31904,
+          "added_bytes": 1616,
+          "passed": true
+        },
+        {
+          "source": "device_mixer_layer_mlp_standby.csl",
+          "rows": null,
+          "mixer_can_root": false,
+          "columns": 4,
+          "baseline_total": 30288,
+          "port_total": 31920,
+          "added_bytes": 1632,
+          "passed": true
+        },
+        {
+          "source": "device_mixer_layer_mlp_standby.csl",
+          "rows": null,
+          "mixer_can_root": false,
+          "columns": 60,
+          "baseline_total": 44624,
+          "port_total": 46256,
+          "added_bytes": 1632,
+          "passed": true
+        },
+        {
+          "source": "device_mixer_layer_mlp_standby.csl",
+          "rows": null,
+          "mixer_can_root": true,
+          "columns": 1,
+          "baseline_total": 30544,
+          "port_total": 32176,
+          "added_bytes": 1632,
+          "passed": true
+        },
+        {
+          "source": "device_mixer_layer_mlp_standby.csl",
+          "rows": null,
+          "mixer_can_root": true,
+          "columns": 4,
+          "baseline_total": 30544,
+          "port_total": 32176,
+          "added_bytes": 1632,
+          "passed": true
+        },
+        {
+          "source": "device_mixer_layer_mlp_standby.csl",
+          "rows": null,
+          "mixer_can_root": true,
+          "columns": 60,
+          "baseline_total": 44880,
+          "port_total": 46528,
+          "added_bytes": 1648,
+          "passed": true
+        }
+      ]
+    }
+  ],
+  "selected_shared_transport": false,
+  "selection_reason": "Private complete port is smaller than sharing native RX/TX callbacks. Full banks require joint MLP output-row/state placement.",
+  "physical": false,
+  "neural_execution": false,
+  "scope": "Reduced-bank code costs only;033 fails source compilation and034 has two SRAM-overflow64-column samples.035 shared ports compile but grow code."
+}

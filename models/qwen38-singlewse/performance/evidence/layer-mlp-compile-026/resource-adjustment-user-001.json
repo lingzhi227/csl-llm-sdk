@@ -1,0 +1,31 @@
+{
+  "utc": "2026-09-28T19:20:35.470507+00:00",
+  "unit": "qwen38-single-layer-mlp-compile-026.service",
+  "before": {
+    "RuntimeMaxUSec": "15min 30s",
+    "MainPID": "2098480",
+    "MemoryCurrent": "5925785600",
+    "CPUQuotaPerSecUSec": "2s",
+    "MemoryMax": "6442450944",
+    "MemorySwapMax": "0",
+    "WorkingDirectory": "/srv/model-storage/qwen38-singlewse/runs/layer-mlp-compile-026",
+    "ActiveState": "active"
+  },
+  "after": {
+    "RuntimeMaxUSec": "15min 30s",
+    "MainPID": "2098480",
+    "MemoryCurrent": "5925785600",
+    "CPUQuotaPerSecUSec": "2s",
+    "MemoryMax": "17179869184",
+    "MemorySwapMax": "0",
+    "WorkingDirectory": "/srv/model-storage/qwen38-singlewse/runs/layer-mlp-compile-026",
+    "ActiveState": "active"
+  },
+  "host_available_bytes": 26466467840,
+  "pressure_before": {
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+    "memory.pressure": "some avg10=0.00 avg60=0.00 avg300=0.00 total=0\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=0\n"
+  },
+  "reason": "User requested correcting repeated undersized workstation compile caps; ample host headroom verified. Memory cap only; frozen source and numerical/PE SRAM gates unchanged.",
+  "physical": false
+}

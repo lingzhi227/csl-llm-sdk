@@ -1,0 +1,50 @@
+{
+  "source_files": {
+    "performance/evidence/layer-mlp-compile-025/source/frontend-stage.json": "98de7941fc710898ef6a5e77971ad67878fc377d29d3f6e6999e8b188708677c",
+    "performance/evidence/layer-mlp-compile-025/source/gdn-bank-placement.json": "24b654cf680ebddfeb6926a8a03d17caac52a5111211c99be8296fb3e33e2f79"
+  },
+  "regions": [
+    {
+      "role": "gate_up",
+      "matrices": 2,
+      "changed_native_output_tiles": 2,
+      "changed_rows_per_matrix": 16,
+      "changed_row_intervals": [
+        [
+          17136,
+          17144
+        ],
+        [
+          17144,
+          17152
+        ]
+      ],
+      "unchanged_k_cohort_membership": true
+    },
+    {
+      "role": "down",
+      "matrices": 1,
+      "changed_native_output_tiles": 3,
+      "changed_rows_per_matrix": 12,
+      "changed_row_intervals": [
+        [
+          4848,
+          4852
+        ],
+        [
+          4852,
+          4856
+        ],
+        [
+          4856,
+          4860
+        ]
+      ],
+      "unchanged_k_cohort_membership": true
+    }
+  ],
+  "physical": false,
+  "numerical_qualified": false,
+  "requires_complete_mlp_requalification": true,
+  "scope": "Original K-tree signatures per logical output row;16 rows in each gate/up branch and12 down rows move from full to ragged cohorts. Changed gate/up activations can affect every final MLP output."
+}

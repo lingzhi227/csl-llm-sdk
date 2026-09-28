@@ -1,0 +1,24 @@
+{
+  "utc": "2026-09-28T19:03:35.786178+00:00",
+  "unit": "qwen38-single-layer-mlp-compile-025.service",
+  "before": {
+    "RuntimeMaxUSec": "15min 30s",
+    "MemoryCurrent": "4294868992",
+    "CPUQuotaPerSecUSec": "2s",
+    "MemoryMax": "4294967296",
+    "MemorySwapMax": "0",
+    "WorkingDirectory": "/srv/model-storage/qwen38-singlewse/runs/layer-mlp-compile-025",
+    "ActiveState": "active"
+  },
+  "after": {
+    "RuntimeMaxUSec": "15min 30s",
+    "MemoryCurrent": "4295450624",
+    "CPUQuotaPerSecUSec": "2s",
+    "MemoryMax": "6442450944",
+    "MemorySwapMax": "0",
+    "WorkingDirectory": "/srv/model-storage/qwen38-singlewse/runs/layer-mlp-compile-025",
+    "ActiveState": "active"
+  },
+  "reason": "New2130-class complete GDN co-placement compiler working set reached4GiB and repeatedly refaulted file pages. Host MemAvailable exceeded25GiB; one bounded6GiB adjustment, no swap/CPU/time change.",
+  "physical": false
+}

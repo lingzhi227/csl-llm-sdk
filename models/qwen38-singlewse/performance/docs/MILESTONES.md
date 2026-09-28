@@ -1082,3 +1082,31 @@ All services release; no new WSE allocation. GDN math-only029 and rejected
 SDK-replacement030/031 are separately scoped. This is a storage/compiler
 milestone, not new numerical execution or model speed. See
 [Compact MLP](COMPACT-MLP.md) and [Recurrent integration](GDN-INTEGRATION.md).
+
+## P45: complete recurrent co-placement and original-word preservation
+
+P45 fits the actual recurrent-port programs and all original layer00 banks on
+11,388 PEs/8,240 ELF images: maximum48,112B including4,096B stack, with16B minimum
+margin. Joint MLP output placement reserves753 state workers holding all786,432
+FP32 recurrent elements. Original-bank reference003 verifies all97,025,344 source
+words,1,044,480 MLP tiles and7,085 nonrecurrent pages; banks occupy388,094,976B.
+Compile026's five112B overflows are resolved by moving ten auxiliary pages.
+Forty-five selected source regressions, seven targeted refinement checks and
+46 final publication regressions pass. All seven workstation services release;
+no new WSE job is submitted. Actual GDN broadcast/returns, changed numerical
+execution, full-layer inference and multi-turn model speed remain unqualified.
+See [Recurrent co-placement](GDN-CO-PLACEMENT.md).
+
+The complete027 compile takes849.522s under the corrected16GiB/1,800s policy.
+All48 heads retain complete128x128 FP32 state;748 cohosts own eight columns each,
+and five own32 each. Every old state coordinate has an explicit inverse mapping.
+Final placement moves908 nonrecurrent pages between PEs versus P44, including
+the ten-page refinement, while both work slots remain. The bank proof flushes
+and rereads all source values through actual compiled native descriptors.
+
+The scalar return currently differs from P43's paired frame contract and is not
+routed. Prefer a separately qualified paired variant for these even-width
+workers. Complete MLP output rebalancing moves16 gate/up rows and12 down rows
+between full and ragged K trees; changed neural execution requires fresh bounds
+and reference comparisons. Preserve failed033, rejected034, unselected035,
+timeout025 and overflow026. This milestone claims compilation and storage only.

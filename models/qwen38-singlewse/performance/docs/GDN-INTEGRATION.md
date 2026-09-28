@@ -9,6 +9,12 @@ P43 physically qualified the original convolution/gate frontend, but supplied
 its recurrent results from an independent reference. The missing edge is actual
 device state update followed by the native return and gated output projection.
 
+P45 now admits full original banks and753 actual private state-port programs in
+complete027; reference003 preserves every original word. The remaining edge is
+physical frontend broadcast, paired returns and downstream retirement. Use
+[GDN-CO-PLACEMENT.md](GDN-CO-PLACEMENT.md) and the new address authority; the older
+calibrations below explain prior decisions and are not the current placement.
+
 ## Measured cohost constraints
 
 `layer-backend-compile-029` keeps one128-key FP32 state column's arithmetic

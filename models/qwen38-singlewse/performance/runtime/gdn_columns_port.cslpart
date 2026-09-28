@@ -1,0 +1,67 @@
+// One credited state worker. Input is387 words: [token,decay,beta,V128,K128,Q128].
+// V is copied locally, then K/Q reuse the512B projection decoder. Returned
+// frames are [token,global_value_row,1,BF16,5]. Full downstream retirement is
+// owned by the frontend, not this worker's final local DMA callback.
+param gdn_columns:u16;param gdn_first:u16;param gdn_head:u16;
+param gdn_state_word:u16;param gdn_input_color:u16;param gdn_output_color:u16;
+param gdn_input_queue:u16;
+const gdn_math=@import_module("gdn_columns.csl",.{.columns=gdn_columns});
+const gdn_round=@import_module("qwen_math.csl");
+inline fn gdn_state() [*]f32 {return @ptrcast([*]f32,&bank[gdn_state_word]);}
+inline fn gdn_workspace() [*]f32 {return GDN_WORKSPACE;}
+inline fn gdn_values() [*]f32 {return GDN_VALUES;}
+const gdn_iq=@get_input_queue(gdn_input_queue);const gdn_oq=@get_output_queue(6);
+const gdn_ds=@get_dsr(dsr_src0,5);const gdn_dd=@get_dsr(dsr_dest,5);
+const gdn_task=@get_local_task_id(10);
+var gdn_header=@zeros([3]u32);var gdn_invocation:u32=0;
+var gdn_phase:u16=0;var gdn_output:u16=0;
+fn gdn_local_idle() bool {return gdn_phase==0;}
+fn gdn_receive(address:[*]u32,length:u16) void {
+ const m=@get_dsd(mem1d_dsd,.{.base_address=address,.extent=1});
+ const f=@get_dsd(fabin_dsd,.{.input_queue=gdn_iq,.extent=1});
+ @load_to_dsr(gdn_dd,@set_dsd_length(m,length));
+ @load_to_dsr(gdn_ds,@set_dsd_length(f,length),.{.async=true,.ut_id=@get_ut_id(7),.activate=gdn_task});
+ @mov32(gdn_dd,gdn_ds,.{.async=true});
+}
+fn gdn_admit() void {
+ @assert(gdn_local_idle());GDN_COHOST_IDLE
+ gdn_phase=1;gdn_receive(&gdn_header,3);
+}
+fn gdn_reset() void {
+ @assert(gdn_local_idle());GDN_COHOST_IDLE
+ const all=@get_dsd(mem1d_dsd,.{.base_address=gdn_state(),.extent=128*gdn_columns});
+ @fmovs(all,0.0);gdn_invocation=0;
+}
+fn gdn_send() void {
+ const frame=@ptrcast([*]u32,gdn_workspace());const values=gdn_values();
+ frame[0]=gdn_invocation;frame[1]=@as(u32,gdn_head*128+gdn_first+gdn_output);
+ frame[2]=1;frame[3]=@as(u32,gdn_round.round(values[gdn_output]));frame[4]=5;
+ const m=@get_dsd(mem1d_dsd,.{.base_address=frame,.extent=5});
+ const f=@get_dsd(fabout_dsd,.{.output_queue=gdn_oq,.extent=5});
+ @load_to_dsr(gdn_ds,m);@load_to_dsr(gdn_dd,f,.{.async=true,.ut_id=@get_ut_id(7),.activate=gdn_task});
+ @mov32(gdn_dd,gdn_ds,.{.async=true});
+}
+task gdn_completed() void {
+ const workspace=gdn_workspace();const values=gdn_values();
+ if(gdn_phase==1){
+  @assert(gdn_header[0]>gdn_invocation);gdn_invocation=gdn_header[0];
+ }else if(gdn_phase==2){
+  const src=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]f32,&workspace[gdn_first]),.extent=gdn_columns});
+  const dst=@get_dsd(mem1d_dsd,.{.base_address=values,.extent=gdn_columns});@fmovs(dst,src);
+ }else if(gdn_phase==3){
+  gdn_math.key(gdn_state(),workspace,values,@bitcast(f32,gdn_header[1]),@bitcast(f32,gdn_header[2]));
+ }else if(gdn_phase==4){
+  gdn_math.reduce(gdn_state(),workspace,values);gdn_phase=5;gdn_output=0;gdn_send();return;
+ }else{
+  @assert(gdn_phase==5);gdn_output+=1;
+  if(gdn_output<gdn_columns){gdn_send();}else{gdn_phase=0;}return;
+ }
+ gdn_phase+=1;gdn_receive(@ptrcast([*]u32,workspace),128);
+}
+comptime {
+ @comptime_assert(gdn_head<48 and gdn_first+gdn_columns<=128);
+ @comptime_assert(@as(u32,gdn_state_word)+128*@as(u32,gdn_columns)<=@as(u32,bank_words));
+ @initialize_queue(gdn_iq,.{.color=@get_color(gdn_input_color)});
+ @initialize_queue(gdn_oq,.{.color=@get_color(gdn_output_color)});
+ @bind_local_task(gdn_completed,gdn_task);
+}

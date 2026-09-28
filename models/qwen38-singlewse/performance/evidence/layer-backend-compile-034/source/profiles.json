@@ -1,0 +1,927 @@
+{
+  "samples": [
+    {
+      "pe": [
+        0,
+        0
+      ],
+      "pair": 0,
+      "variant": "baseline",
+      "source": "compact_layer_projection.csl",
+      "parameters": {
+        "rows": 4,
+        "columns": 64,
+        "branches": 1,
+        "max_parts": 1,
+        "bank_words": 4096,
+        "root": false,
+        "children": 0,
+        "subtree_k": 1,
+        "left_k": 0,
+        "right_k": 0,
+        "left_color": 3,
+        "right_color": 4,
+        "out_color": 3,
+        "copy_transport": true,
+        "tagged_input": true,
+        "mlp_component": true,
+        "shared_inputs": true
+      },
+      "original_pe": [
+        108,
+        67
+      ],
+      "original_bank_words": 8837,
+      "payload_changed": true
+    },
+    {
+      "pe": [
+        1,
+        0
+      ],
+      "pair": 0,
+      "variant": "port",
+      "source": "gdn_calibration_compact_layer_projection.csl",
+      "parameters": {
+        "rows": 4,
+        "columns": 64,
+        "branches": 1,
+        "max_parts": 1,
+        "bank_words": 4096,
+        "root": false,
+        "children": 0,
+        "subtree_k": 1,
+        "left_k": 0,
+        "right_k": 0,
+        "left_color": 3,
+        "right_color": 4,
+        "out_color": 3,
+        "copy_transport": true,
+        "tagged_input": true,
+        "mlp_component": true,
+        "shared_inputs": true,
+        "gdn_columns": 1,
+        "gdn_first": 127,
+        "gdn_head": 47,
+        "gdn_state_word": 3968,
+        "gdn_input_color": 0,
+        "gdn_output_color": 1,
+        "gdn_input_queue": 7
+      },
+      "original_pe": [
+        108,
+        67
+      ],
+      "original_bank_words": 8837,
+      "payload_changed": true
+    },
+    {
+      "pe": [
+        2,
+        0
+      ],
+      "pair": 1,
+      "variant": "baseline",
+      "source": "compact_layer_projection.csl",
+      "parameters": {
+        "rows": 4,
+        "columns": 64,
+        "branches": 1,
+        "max_parts": 1,
+        "bank_words": 4096,
+        "root": false,
+        "children": 0,
+        "subtree_k": 1,
+        "left_k": 0,
+        "right_k": 0,
+        "left_color": 3,
+        "right_color": 4,
+        "out_color": 3,
+        "copy_transport": true,
+        "tagged_input": true,
+        "mlp_component": true,
+        "shared_inputs": true
+      },
+      "original_pe": [
+        108,
+        67
+      ],
+      "original_bank_words": 8837,
+      "payload_changed": true
+    },
+    {
+      "pe": [
+        3,
+        0
+      ],
+      "pair": 1,
+      "variant": "port",
+      "source": "gdn_calibration_compact_layer_projection.csl",
+      "parameters": {
+        "rows": 4,
+        "columns": 64,
+        "branches": 1,
+        "max_parts": 1,
+        "bank_words": 4096,
+        "root": false,
+        "children": 0,
+        "subtree_k": 1,
+        "left_k": 0,
+        "right_k": 0,
+        "left_color": 3,
+        "right_color": 4,
+        "out_color": 3,
+        "copy_transport": true,
+        "tagged_input": true,
+        "mlp_component": true,
+        "shared_inputs": true,
+        "gdn_columns": 4,
+        "gdn_first": 124,
+        "gdn_head": 47,
+        "gdn_state_word": 3584,
+        "gdn_input_color": 0,
+        "gdn_output_color": 1,
+        "gdn_input_queue": 7
+      },
+      "original_pe": [
+        108,
+        67
+      ],
+      "original_bank_words": 8837,
+      "payload_changed": true
+    },
+    {
+      "pe": [
+        4,
+        0
+      ],
+      "pair": 2,
+      "variant": "baseline",
+      "source": "compact_layer_projection.csl",
+      "parameters": {
+        "rows": 4,
+        "columns": 64,
+        "branches": 1,
+        "max_parts": 1,
+        "bank_words": 4096,
+        "root": false,
+        "children": 0,
+        "subtree_k": 1,
+        "left_k": 0,
+        "right_k": 0,
+        "left_color": 3,
+        "right_color": 4,
+        "out_color": 3,
+        "copy_transport": true,
+        "tagged_input": true,
+        "mlp_component": true,
+        "shared_inputs": true
+      },
+      "original_pe": [
+        108,
+        67
+      ],
+      "original_bank_words": 8837,
+      "payload_changed": true
+    },
+    {
+      "pe": [
+        5,
+        0
+      ],
+      "pair": 2,
+      "variant": "port",
+      "source": "gdn_calibration_compact_layer_projection.csl",
+      "parameters": {
+        "rows": 4,
+        "columns": 64,
+        "branches": 1,
+        "max_parts": 1,
+        "bank_words": 4096,
+        "root": false,
+        "children": 0,
+        "subtree_k": 1,
+        "left_k": 0,
+        "right_k": 0,
+        "left_color": 3,
+        "right_color": 4,
+        "out_color": 3,
+        "copy_transport": true,
+        "tagged_input": true,
+        "mlp_component": true,
+        "shared_inputs": true,
+        "gdn_columns": 32,
+        "gdn_first": 96,
+        "gdn_head": 47,
+        "gdn_state_word": 0,
+        "gdn_input_color": 0,
+        "gdn_output_color": 1,
+        "gdn_input_queue": 7
+      },
+      "original_pe": [
+        108,
+        67
+      ],
+      "original_bank_words": 8837,
+      "payload_changed": true
+    },
+    {
+      "pe": [
+        6,
+        0
+      ],
+      "pair": 3,
+      "variant": "baseline",
+      "source": "compact_layer_projection.csl",
+      "parameters": {
+        "rows": 8,
+        "columns": 32,
+        "branches": 2,
+        "max_parts": 1,
+        "bank_words": 4096,
+        "root": false,
+        "children": 0,
+        "subtree_k": 1,
+        "left_k": 0,
+        "right_k": 0,
+        "left_color": 3,
+        "right_color": 4,
+        "out_color": 3,
+        "copy_transport": true,
+        "tagged_input": true,
+        "mlp_component": true,
+        "shared_inputs": true
+      },
+      "original_pe": [
+        63,
+        0
+      ],
+      "original_bank_words": 8682,
+      "payload_changed": true
+    },
+    {
+      "pe": [
+        7,
+        0
+      ],
+      "pair": 3,
+      "variant": "port",
+      "source": "gdn_calibration_compact_layer_projection.csl",
+      "parameters": {
+        "rows": 8,
+        "columns": 32,
+        "branches": 2,
+        "max_parts": 1,
+        "bank_words": 4096,
+        "root": false,
+        "children": 0,
+        "subtree_k": 1,
+        "left_k": 0,
+        "right_k": 0,
+        "left_color": 3,
+        "right_color": 4,
+        "out_color": 3,
+        "copy_transport": true,
+        "tagged_input": true,
+        "mlp_component": true,
+        "shared_inputs": true,
+        "gdn_columns": 1,
+        "gdn_first": 127,
+        "gdn_head": 47,
+        "gdn_state_word": 3968,
+        "gdn_input_color": 0,
+        "gdn_output_color": 1,
+        "gdn_input_queue": 7
+      },
+      "original_pe": [
+        63,
+        0
+      ],
+      "original_bank_words": 8682,
+      "payload_changed": true
+    },
+    {
+      "pe": [
+        8,
+        0
+      ],
+      "pair": 4,
+      "variant": "baseline",
+      "source": "compact_layer_projection.csl",
+      "parameters": {
+        "rows": 8,
+        "columns": 32,
+        "branches": 2,
+        "max_parts": 1,
+        "bank_words": 4096,
+        "root": false,
+        "children": 0,
+        "subtree_k": 1,
+        "left_k": 0,
+        "right_k": 0,
+        "left_color": 3,
+        "right_color": 4,
+        "out_color": 3,
+        "copy_transport": true,
+        "tagged_input": true,
+        "mlp_component": true,
+        "shared_inputs": true
+      },
+      "original_pe": [
+        63,
+        0
+      ],
+      "original_bank_words": 8682,
+      "payload_changed": true
+    },
+    {
+      "pe": [
+        9,
+        0
+      ],
+      "pair": 4,
+      "variant": "port",
+      "source": "gdn_calibration_compact_layer_projection.csl",
+      "parameters": {
+        "rows": 8,
+        "columns": 32,
+        "branches": 2,
+        "max_parts": 1,
+        "bank_words": 4096,
+        "root": false,
+        "children": 0,
+        "subtree_k": 1,
+        "left_k": 0,
+        "right_k": 0,
+        "left_color": 3,
+        "right_color": 4,
+        "out_color": 3,
+        "copy_transport": true,
+        "tagged_input": true,
+        "mlp_component": true,
+        "shared_inputs": true,
+        "gdn_columns": 4,
+        "gdn_first": 124,
+        "gdn_head": 47,
+        "gdn_state_word": 3584,
+        "gdn_input_color": 0,
+        "gdn_output_color": 1,
+        "gdn_input_queue": 7
+      },
+      "original_pe": [
+        63,
+        0
+      ],
+      "original_bank_words": 8682,
+      "payload_changed": true
+    },
+    {
+      "pe": [
+        10,
+        0
+      ],
+      "pair": 5,
+      "variant": "baseline",
+      "source": "compact_layer_projection.csl",
+      "parameters": {
+        "rows": 8,
+        "columns": 32,
+        "branches": 2,
+        "max_parts": 1,
+        "bank_words": 4096,
+        "root": false,
+        "children": 0,
+        "subtree_k": 1,
+        "left_k": 0,
+        "right_k": 0,
+        "left_color": 3,
+        "right_color": 4,
+        "out_color": 3,
+        "copy_transport": true,
+        "tagged_input": true,
+        "mlp_component": true,
+        "shared_inputs": true
+      },
+      "original_pe": [
+        63,
+        0
+      ],
+      "original_bank_words": 8682,
+      "payload_changed": true
+    },
+    {
+      "pe": [
+        11,
+        0
+      ],
+      "pair": 5,
+      "variant": "port",
+      "source": "gdn_calibration_compact_layer_projection.csl",
+      "parameters": {
+        "rows": 8,
+        "columns": 32,
+        "branches": 2,
+        "max_parts": 1,
+        "bank_words": 4096,
+        "root": false,
+        "children": 0,
+        "subtree_k": 1,
+        "left_k": 0,
+        "right_k": 0,
+        "left_color": 3,
+        "right_color": 4,
+        "out_color": 3,
+        "copy_transport": true,
+        "tagged_input": true,
+        "mlp_component": true,
+        "shared_inputs": true,
+        "gdn_columns": 16,
+        "gdn_first": 112,
+        "gdn_head": 47,
+        "gdn_state_word": 2048,
+        "gdn_input_color": 0,
+        "gdn_output_color": 1,
+        "gdn_input_queue": 7
+      },
+      "original_pe": [
+        63,
+        0
+      ],
+      "original_bank_words": 8682,
+      "payload_changed": true
+    },
+    {
+      "pe": [
+        12,
+        0
+      ],
+      "pair": 6,
+      "variant": "baseline",
+      "source": "device_mixer_layer_mlp_standby.csl",
+      "parameters": {
+        "bank_words": 4096,
+        "mixer_rank_parity": 1,
+        "mixer_input48_queue": 5,
+        "mixer_can_root": false,
+        "control_reply_rx": "WEST",
+        "control_reply_tx": "EAST"
+      },
+      "original_pe": [
+        64,
+        67
+      ],
+      "original_bank_words": 8483,
+      "payload_changed": true
+    },
+    {
+      "pe": [
+        13,
+        0
+      ],
+      "pair": 6,
+      "variant": "port",
+      "source": "gdn_calibration_device_mixer_layer_mlp_standby.csl",
+      "parameters": {
+        "bank_words": 4096,
+        "mixer_rank_parity": 1,
+        "mixer_input48_queue": 5,
+        "mixer_can_root": false,
+        "control_reply_rx": "WEST",
+        "control_reply_tx": "EAST",
+        "gdn_columns": 1,
+        "gdn_first": 127,
+        "gdn_head": 47,
+        "gdn_state_word": 3968,
+        "gdn_input_color": 0,
+        "gdn_output_color": 1,
+        "gdn_input_queue": 2
+      },
+      "original_pe": [
+        64,
+        67
+      ],
+      "original_bank_words": 8483,
+      "payload_changed": true
+    },
+    {
+      "pe": [
+        14,
+        0
+      ],
+      "pair": 7,
+      "variant": "baseline",
+      "source": "device_mixer_layer_mlp_standby.csl",
+      "parameters": {
+        "bank_words": 4096,
+        "mixer_rank_parity": 1,
+        "mixer_input48_queue": 5,
+        "mixer_can_root": false,
+        "control_reply_rx": "WEST",
+        "control_reply_tx": "EAST"
+      },
+      "original_pe": [
+        64,
+        67
+      ],
+      "original_bank_words": 8483,
+      "payload_changed": true
+    },
+    {
+      "pe": [
+        15,
+        0
+      ],
+      "pair": 7,
+      "variant": "port",
+      "source": "gdn_calibration_device_mixer_layer_mlp_standby.csl",
+      "parameters": {
+        "bank_words": 4096,
+        "mixer_rank_parity": 1,
+        "mixer_input48_queue": 5,
+        "mixer_can_root": false,
+        "control_reply_rx": "WEST",
+        "control_reply_tx": "EAST",
+        "gdn_columns": 4,
+        "gdn_first": 124,
+        "gdn_head": 47,
+        "gdn_state_word": 3584,
+        "gdn_input_color": 0,
+        "gdn_output_color": 1,
+        "gdn_input_queue": 2
+      },
+      "original_pe": [
+        64,
+        67
+      ],
+      "original_bank_words": 8483,
+      "payload_changed": true
+    },
+    {
+      "pe": [
+        16,
+        0
+      ],
+      "pair": 8,
+      "variant": "baseline",
+      "source": "device_mixer_layer_mlp_standby.csl",
+      "parameters": {
+        "bank_words": 8192,
+        "mixer_rank_parity": 1,
+        "mixer_input48_queue": 5,
+        "mixer_can_root": false,
+        "control_reply_rx": "WEST",
+        "control_reply_tx": "EAST"
+      },
+      "original_pe": [
+        64,
+        67
+      ],
+      "original_bank_words": 8483,
+      "payload_changed": true
+    },
+    {
+      "pe": [
+        17,
+        0
+      ],
+      "pair": 8,
+      "variant": "port",
+      "source": "gdn_calibration_device_mixer_layer_mlp_standby.csl",
+      "parameters": {
+        "bank_words": 8192,
+        "mixer_rank_parity": 1,
+        "mixer_input48_queue": 5,
+        "mixer_can_root": false,
+        "control_reply_rx": "WEST",
+        "control_reply_tx": "EAST",
+        "gdn_columns": 64,
+        "gdn_first": 64,
+        "gdn_head": 47,
+        "gdn_state_word": 0,
+        "gdn_input_color": 0,
+        "gdn_output_color": 1,
+        "gdn_input_queue": 2
+      },
+      "original_pe": [
+        64,
+        67
+      ],
+      "original_bank_words": 8483,
+      "payload_changed": true
+    },
+    {
+      "pe": [
+        18,
+        0
+      ],
+      "pair": 9,
+      "variant": "baseline",
+      "source": "device_mixer_layer_mlp_standby.csl",
+      "parameters": {
+        "bank_words": 4096,
+        "mixer_rank_parity": 0,
+        "mixer_input48_queue": 5,
+        "mixer_can_root": true,
+        "control_reply_rx": "WEST",
+        "control_reply_tx": "EAST"
+      },
+      "original_pe": [
+        69,
+        69
+      ],
+      "original_bank_words": 8356,
+      "payload_changed": true
+    },
+    {
+      "pe": [
+        19,
+        0
+      ],
+      "pair": 9,
+      "variant": "port",
+      "source": "gdn_calibration_device_mixer_layer_mlp_standby.csl",
+      "parameters": {
+        "bank_words": 4096,
+        "mixer_rank_parity": 0,
+        "mixer_input48_queue": 5,
+        "mixer_can_root": true,
+        "control_reply_rx": "WEST",
+        "control_reply_tx": "EAST",
+        "gdn_columns": 1,
+        "gdn_first": 127,
+        "gdn_head": 47,
+        "gdn_state_word": 3968,
+        "gdn_input_color": 0,
+        "gdn_output_color": 1,
+        "gdn_input_queue": 2
+      },
+      "original_pe": [
+        69,
+        69
+      ],
+      "original_bank_words": 8356,
+      "payload_changed": true
+    },
+    {
+      "pe": [
+        20,
+        0
+      ],
+      "pair": 10,
+      "variant": "baseline",
+      "source": "device_mixer_layer_mlp_standby.csl",
+      "parameters": {
+        "bank_words": 4096,
+        "mixer_rank_parity": 0,
+        "mixer_input48_queue": 5,
+        "mixer_can_root": true,
+        "control_reply_rx": "WEST",
+        "control_reply_tx": "EAST"
+      },
+      "original_pe": [
+        69,
+        69
+      ],
+      "original_bank_words": 8356,
+      "payload_changed": true
+    },
+    {
+      "pe": [
+        21,
+        0
+      ],
+      "pair": 10,
+      "variant": "port",
+      "source": "gdn_calibration_device_mixer_layer_mlp_standby.csl",
+      "parameters": {
+        "bank_words": 4096,
+        "mixer_rank_parity": 0,
+        "mixer_input48_queue": 5,
+        "mixer_can_root": true,
+        "control_reply_rx": "WEST",
+        "control_reply_tx": "EAST",
+        "gdn_columns": 4,
+        "gdn_first": 124,
+        "gdn_head": 47,
+        "gdn_state_word": 3584,
+        "gdn_input_color": 0,
+        "gdn_output_color": 1,
+        "gdn_input_queue": 2
+      },
+      "original_pe": [
+        69,
+        69
+      ],
+      "original_bank_words": 8356,
+      "payload_changed": true
+    },
+    {
+      "pe": [
+        22,
+        0
+      ],
+      "pair": 11,
+      "variant": "baseline",
+      "source": "device_mixer_layer_mlp_standby.csl",
+      "parameters": {
+        "bank_words": 8192,
+        "mixer_rank_parity": 0,
+        "mixer_input48_queue": 5,
+        "mixer_can_root": true,
+        "control_reply_rx": "WEST",
+        "control_reply_tx": "EAST"
+      },
+      "original_pe": [
+        69,
+        69
+      ],
+      "original_bank_words": 8356,
+      "payload_changed": true
+    },
+    {
+      "pe": [
+        23,
+        0
+      ],
+      "pair": 11,
+      "variant": "port",
+      "source": "gdn_calibration_device_mixer_layer_mlp_standby.csl",
+      "parameters": {
+        "bank_words": 8192,
+        "mixer_rank_parity": 0,
+        "mixer_input48_queue": 5,
+        "mixer_can_root": true,
+        "control_reply_rx": "WEST",
+        "control_reply_tx": "EAST",
+        "gdn_columns": 64,
+        "gdn_first": 64,
+        "gdn_head": 47,
+        "gdn_state_word": 0,
+        "gdn_input_color": 0,
+        "gdn_output_color": 1,
+        "gdn_input_queue": 2
+      },
+      "original_pe": [
+        69,
+        69
+      ],
+      "original_bank_words": 8356,
+      "payload_changed": true
+    }
+  ],
+  "application": [
+    24,
+    1
+  ],
+  "base": "layer-mlp-compile-024",
+  "scope": "Paired P44 cohost costs for complete recurrent receive/math/scalar-return ports.\n\nCalibration start resets/adopts dummy bank state. These banks replace payloads;\nno execution or full-bank placement is claimed. Production admission is separate.\n",
+  "physical": false,
+  "executed": false,
+  "full_bank_admission": false,
+  "compositions": [
+    {
+      "role": "compact_layer_projection.csl",
+      "original_sha256": "80afca44671cdd81e84e475e94563a2e8e6fe8447b14093219f4ec428cd230f0",
+      "adapted_sha256": "8607b71ce3b6e211233925128ecde7dd44cec5f1cd5825772a33046113760197",
+      "input_words": 387,
+      "output_words_per_value": 5,
+      "fp32_state": true,
+      "local_dma_completion_is_not_downstream_retirement": true,
+      "scratch_lease": "Previous projection and transfer drained; current MLP/mixer input must wait for recurrent return source retirement.",
+      "neural_executed": false,
+      "physical": false
+    },
+    {
+      "role": "compact_layer_projection.csl",
+      "original_sha256": "80afca44671cdd81e84e475e94563a2e8e6fe8447b14093219f4ec428cd230f0",
+      "adapted_sha256": "8607b71ce3b6e211233925128ecde7dd44cec5f1cd5825772a33046113760197",
+      "input_words": 387,
+      "output_words_per_value": 5,
+      "fp32_state": true,
+      "local_dma_completion_is_not_downstream_retirement": true,
+      "scratch_lease": "Previous projection and transfer drained; current MLP/mixer input must wait for recurrent return source retirement.",
+      "neural_executed": false,
+      "physical": false
+    },
+    {
+      "role": "compact_layer_projection.csl",
+      "original_sha256": "80afca44671cdd81e84e475e94563a2e8e6fe8447b14093219f4ec428cd230f0",
+      "adapted_sha256": "8607b71ce3b6e211233925128ecde7dd44cec5f1cd5825772a33046113760197",
+      "input_words": 387,
+      "output_words_per_value": 5,
+      "fp32_state": true,
+      "local_dma_completion_is_not_downstream_retirement": true,
+      "scratch_lease": "Previous projection and transfer drained; current MLP/mixer input must wait for recurrent return source retirement.",
+      "neural_executed": false,
+      "physical": false
+    },
+    {
+      "role": "compact_layer_projection.csl",
+      "original_sha256": "80afca44671cdd81e84e475e94563a2e8e6fe8447b14093219f4ec428cd230f0",
+      "adapted_sha256": "8607b71ce3b6e211233925128ecde7dd44cec5f1cd5825772a33046113760197",
+      "input_words": 387,
+      "output_words_per_value": 5,
+      "fp32_state": true,
+      "local_dma_completion_is_not_downstream_retirement": true,
+      "scratch_lease": "Previous projection and transfer drained; current MLP/mixer input must wait for recurrent return source retirement.",
+      "neural_executed": false,
+      "physical": false
+    },
+    {
+      "role": "compact_layer_projection.csl",
+      "original_sha256": "80afca44671cdd81e84e475e94563a2e8e6fe8447b14093219f4ec428cd230f0",
+      "adapted_sha256": "8607b71ce3b6e211233925128ecde7dd44cec5f1cd5825772a33046113760197",
+      "input_words": 387,
+      "output_words_per_value": 5,
+      "fp32_state": true,
+      "local_dma_completion_is_not_downstream_retirement": true,
+      "scratch_lease": "Previous projection and transfer drained; current MLP/mixer input must wait for recurrent return source retirement.",
+      "neural_executed": false,
+      "physical": false
+    },
+    {
+      "role": "compact_layer_projection.csl",
+      "original_sha256": "80afca44671cdd81e84e475e94563a2e8e6fe8447b14093219f4ec428cd230f0",
+      "adapted_sha256": "8607b71ce3b6e211233925128ecde7dd44cec5f1cd5825772a33046113760197",
+      "input_words": 387,
+      "output_words_per_value": 5,
+      "fp32_state": true,
+      "local_dma_completion_is_not_downstream_retirement": true,
+      "scratch_lease": "Previous projection and transfer drained; current MLP/mixer input must wait for recurrent return source retirement.",
+      "neural_executed": false,
+      "physical": false
+    },
+    {
+      "role": "device_mixer_layer_mlp_standby.csl",
+      "original_sha256": "906ab55e77fa4aa1a2dd79d18f613c224c0beab4939dd3d36d127b76f101faeb",
+      "adapted_sha256": "4e7ddb1475cf2e1af2a8a318abe38766caae9d1413ca9a2bf65f7c16280013b0",
+      "input_words": 387,
+      "output_words_per_value": 5,
+      "fp32_state": true,
+      "local_dma_completion_is_not_downstream_retirement": true,
+      "scratch_lease": "Previous projection and transfer drained; current MLP/mixer input must wait for recurrent return source retirement.",
+      "neural_executed": false,
+      "physical": false
+    },
+    {
+      "role": "device_mixer_layer_mlp_standby.csl",
+      "original_sha256": "906ab55e77fa4aa1a2dd79d18f613c224c0beab4939dd3d36d127b76f101faeb",
+      "adapted_sha256": "4e7ddb1475cf2e1af2a8a318abe38766caae9d1413ca9a2bf65f7c16280013b0",
+      "input_words": 387,
+      "output_words_per_value": 5,
+      "fp32_state": true,
+      "local_dma_completion_is_not_downstream_retirement": true,
+      "scratch_lease": "Previous projection and transfer drained; current MLP/mixer input must wait for recurrent return source retirement.",
+      "neural_executed": false,
+      "physical": false
+    },
+    {
+      "role": "device_mixer_layer_mlp_standby.csl",
+      "original_sha256": "906ab55e77fa4aa1a2dd79d18f613c224c0beab4939dd3d36d127b76f101faeb",
+      "adapted_sha256": "4e7ddb1475cf2e1af2a8a318abe38766caae9d1413ca9a2bf65f7c16280013b0",
+      "input_words": 387,
+      "output_words_per_value": 5,
+      "fp32_state": true,
+      "local_dma_completion_is_not_downstream_retirement": true,
+      "scratch_lease": "Previous projection and transfer drained; current MLP/mixer input must wait for recurrent return source retirement.",
+      "neural_executed": false,
+      "physical": false
+    },
+    {
+      "role": "device_mixer_layer_mlp_standby.csl",
+      "original_sha256": "906ab55e77fa4aa1a2dd79d18f613c224c0beab4939dd3d36d127b76f101faeb",
+      "adapted_sha256": "4e7ddb1475cf2e1af2a8a318abe38766caae9d1413ca9a2bf65f7c16280013b0",
+      "input_words": 387,
+      "output_words_per_value": 5,
+      "fp32_state": true,
+      "local_dma_completion_is_not_downstream_retirement": true,
+      "scratch_lease": "Previous projection and transfer drained; current MLP/mixer input must wait for recurrent return source retirement.",
+      "neural_executed": false,
+      "physical": false
+    },
+    {
+      "role": "device_mixer_layer_mlp_standby.csl",
+      "original_sha256": "906ab55e77fa4aa1a2dd79d18f613c224c0beab4939dd3d36d127b76f101faeb",
+      "adapted_sha256": "4e7ddb1475cf2e1af2a8a318abe38766caae9d1413ca9a2bf65f7c16280013b0",
+      "input_words": 387,
+      "output_words_per_value": 5,
+      "fp32_state": true,
+      "local_dma_completion_is_not_downstream_retirement": true,
+      "scratch_lease": "Previous projection and transfer drained; current MLP/mixer input must wait for recurrent return source retirement.",
+      "neural_executed": false,
+      "physical": false
+    },
+    {
+      "role": "device_mixer_layer_mlp_standby.csl",
+      "original_sha256": "906ab55e77fa4aa1a2dd79d18f613c224c0beab4939dd3d36d127b76f101faeb",
+      "adapted_sha256": "4e7ddb1475cf2e1af2a8a318abe38766caae9d1413ca9a2bf65f7c16280013b0",
+      "input_words": 387,
+      "output_words_per_value": 5,
+      "fp32_state": true,
+      "local_dma_completion_is_not_downstream_retirement": true,
+      "scratch_lease": "Previous projection and transfer drained; current MLP/mixer input must wait for recurrent return source retirement.",
+      "neural_executed": false,
+      "physical": false
+    }
+  ]
+}
