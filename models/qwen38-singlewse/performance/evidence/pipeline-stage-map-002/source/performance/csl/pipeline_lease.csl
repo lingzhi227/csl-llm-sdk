@@ -1,0 +1,65 @@
+// Layer-local request/slot guard for the resident pipeline. Neural and fabric
+// callbacks must supply the events; this module does not fabricate readiness.
+// Source-only: composed ELF/stack and physical warm reset remain unqualified.
+param requests:u16;
+param context:u16;
+param chunks:u16;
+const slots:u16=2;
+var busy=@zeros([slots]bool);
+var req=@zeros([slots]u16);
+var generation=@zeros([slots]u32);
+var position=@zeros([slots]u16);
+var lease=@zeros([slots]u32);
+var seen_lo=@zeros([slots]u32);
+var seen_hi=@zeros([slots]u32);
+var committed=@zeros([slots]bool);
+var sent=@zeros([slots]bool);
+var consumed=@zeros([slots]bool);
+var request_generation=@zeros([requests]u32);
+var next_position=@zeros([requests]u16);
+var serial:u32=0;
+
+fn available() bool {return !busy[0] or !busy[1];}
+fn grant(r:u16,g:u32,p:u16) u16 {
+ @assert(r<requests and p<context and available());
+ @assert(g==request_generation[r] and p==next_position[r]);
+ for(@range(u16,slots))|i|{@assert(!busy[i] or req[i]!=r);}
+ var s:u16=0;if(busy[0]){s=1;}
+ @assert(serial<4294967295);serial+=1;
+ busy[s]=true;req[s]=r;generation[s]=g;position[s]=p;lease[s]=serial;
+ seen_lo[s]=0;seen_hi[s]=0;committed[s]=false;sent[s]=false;consumed[s]=false;
+ return s;
+}
+fn check(s:u16,r:u16,g:u32,p:u16,l:u32) void {
+ @assert(s<slots);@assert(busy[s] and req[s]==r and generation[s]==g and position[s]==p and lease[s]==l);
+}
+fn arrive(s:u16,r:u16,g:u32,p:u16,l:u32,chunk:u16) void {
+ check(s,r,g,p,l);@assert(chunk<chunks and !committed[s]);
+ if(chunk<32){const bit=@as(u32,1)<<chunk;@assert((seen_lo[s]&bit)==0);seen_lo[s]|=bit;}
+ else{const bit=@as(u32,1)<<(chunk-32);@assert((seen_hi[s]&bit)==0);seen_hi[s]|=bit;}
+}
+fn operands_ready(s:u16) bool {
+ @assert(s<slots);
+ const low:u32=if(chunks>=32) 4294967295 else (@as(u32,1)<<chunks)-1;
+ const high:u32=if(chunks<=32) 0 else if(chunks==64) 4294967295 else (@as(u32,1)<<(chunks-32))-1;
+ return busy[s] and seen_lo[s]==low and seen_hi[s]==high;
+}
+fn state_committed(s:u16) void {
+ @assert(operands_ready(s) and !committed[s]);committed[s]=true;next_position[req[s]]+=1;
+}
+fn release_if_done(s:u16) void {if(sent[s] and consumed[s]){busy[s]=false;}}
+fn send_completed(s:u16,l:u32) void {
+ @assert(s<slots);@assert(busy[s] and lease[s]==l and committed[s] and !sent[s]);
+ sent[s]=true;release_if_done(s);
+}
+fn consumer_credit(s:u16,l:u32) void {
+ @assert(s<slots);@assert(busy[s] and lease[s]==l and committed[s] and !consumed[s]);
+ consumed[s]=true;release_if_done(s);
+}
+fn reset_request(r:u16,g:u32,state_clear_ack:bool) void {
+ @assert(r<requests and state_clear_ack and request_generation[r]<4294967295);
+ @assert(g==request_generation[r]+1);
+ for(@range(u16,slots))|i|{@assert(!busy[i] or req[i]!=r);}
+ request_generation[r]=g;next_position[r]=0;
+}
+comptime {@comptime_assert(requests>0 and context>0 and chunks>0 and chunks<=64);}

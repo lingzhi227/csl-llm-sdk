@@ -1,7 +1,8 @@
-"""Export only the performance subtree; leave the functional baseline unchanged.
+"""Export performance source and the two explicitly authorized active notices.
 
 Use git to inspect/commit/push separately. This tool neither claims acceptance
-nor submits hardware. Execution hashes and publication hashes remain distinct.
+nor submits hardware. Historical inference source/results remain unchanged.
+Execution hashes and publication hashes remain distinct.
 """
 import argparse
 import ast
@@ -54,6 +55,14 @@ def main():
         published=text.encode();dest=target/rel;dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(published)
         entries[str(rel)]=dict(source_sha256=sha(raw),published_sha256=sha(published),site_adapted=raw!=published)
     (target/'SOURCE_EXPORT.json').write_text(json.dumps(dict(files=entries,note='Execution manifests retain original hashes; only non-CSL site paths are adapted. No model weights or compiled artifacts.'),indent=2)+'\n')
+    notices={}
+    for rel in ['docs/STATUS.md','docs/ACCEPTANCE.md']:
+        raw=(ROOT.parent/rel).read_bytes();published=raw.decode()
+        for before,after in SUBSTITUTIONS:published=published.replace(before,after)
+        dest=target.parent/rel;dest.parent.mkdir(parents=True,exist_ok=True);dest.write_text(published)
+        notices[rel]=dict(source_sha256=sha(raw),published_sha256=sha(published.encode()))
+    (target/'ACTIVE_NOTICES_EXPORT.json').write_text(json.dumps(dict(files=notices,
+        note='Only active status and acceptance notices are updated outside performance; original inference source/results remain preserved.'),indent=2)+'\n')
     # The repository manifest is a flat map; preserve its existing convention.
     manifest={}
     for f in sorted(a.repo.rglob('*')):

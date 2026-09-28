@@ -1,0 +1,100 @@
+{
+  "schema": "wse-mlp-executable-candidate-v1",
+  "model": "Qwen/Qwen3.8-27B-FP8",
+  "revision": "017b9c7af6b5689d5dd426a76e0bc077eb5ca20a",
+  "application": [
+    750,
+    1160
+  ],
+  "fabric": [
+    762,
+    1172
+  ],
+  "offset": [
+    4,
+    1
+  ],
+  "context": 96,
+  "mlp_layer_argument_range": [
+    0,
+    63
+  ],
+  "parameter_residency": "mlp-residency-plan-001.json",
+  "norm_slots_verified": true,
+  "code_roles": [
+    "paired original gate/up and down native worker",
+    "fused activation/max/scale/encoded gather",
+    "credited collector/header or up relay",
+    "preceding residual/post-attention RMS and residual/next RMS consumer",
+    "spectator original bank"
+  ],
+  "sources": {
+    "mlp_worker.csl": {
+      "path": "performance/runtime/mlp_worker.csl",
+      "sha256": "db5e2e551b70b9eaa5dbabd0ae955e533a68db3740f4ad2174bc7a778116f450"
+    },
+    "mlp_activation.csl": {
+      "path": "performance/runtime/mlp_activation.csl",
+      "sha256": "32042db877057da6eacddfb4187ba4805d1afeb470b5ee2db23e81f65fe75f15"
+    },
+    "mlp_join.csl": {
+      "path": "performance/runtime/mlp_join.csl",
+      "sha256": "89c7934d3d8e316885dcf6e9c92b56e8b8736dda0c4ae2c8c6e740a8252485e2"
+    },
+    "mlp_norm.csl": {
+      "path": "performance/runtime/mlp_norm.csl",
+      "sha256": "52bf5b9eddb1087458eeb485439f8b8c204a2541001527aa68c3fb45011d40b6"
+    },
+    "mlp_idle.csl": {
+      "path": "performance/runtime/mlp_idle.csl",
+      "sha256": "e24894641a5af5cdd569cedc63ed195d10f933ed5a3bb6c2183d7871bda41693"
+    },
+    "fp8_shape.csl": {
+      "path": "performance/probes/native_shapes/fp8_shape.csl",
+      "sha256": "b9869927f2afebc6f48d4e680ace6e1f458713db8c3c5895465e7d5652e8d301"
+    },
+    "fp8_unpack_shift.csl": {
+      "path": "performance/csl/fp8_unpack_shift.csl",
+      "sha256": "9fa14188758bd1dae78f1fbff7426513bc1fca004dc81b540e91df39a2c4eab3"
+    },
+    "qwen_math.csl": {
+      "path": "csl/qwen_math.csl",
+      "sha256": "03adca23c7dd74282093961ae51e0ae4d193e7adc14b8dd43fa2f16f4e95e137"
+    },
+    "mlp_fused.csl": {
+      "path": "performance/csl/mlp_fused.csl",
+      "sha256": "15f7449d59d216df4775e9a0ddf0c210286bb1cc00d6f02a139f27daaa2cffc3"
+    },
+    "fp8_encode.csl": {
+      "path": "performance/csl/fp8_encode.csl",
+      "sha256": "21dda5fde73c94da0cbc0d859412cccdd51f51ee1f863d1711036933b53f1c63"
+    }
+  },
+  "source_sha256": {
+    "layout.csl": "193c50e42a71d8095721237158126fb6ef73b7a260bfbf1fbc503081e6caae34",
+    "mlp_worker.csl": "db5e2e551b70b9eaa5dbabd0ae955e533a68db3740f4ad2174bc7a778116f450",
+    "mlp_activation.csl": "32042db877057da6eacddfb4187ba4805d1afeb470b5ee2db23e81f65fe75f15",
+    "mlp_join.csl": "89c7934d3d8e316885dcf6e9c92b56e8b8736dda0c4ae2c8c6e740a8252485e2",
+    "mlp_norm.csl": "52bf5b9eddb1087458eeb485439f8b8c204a2541001527aa68c3fb45011d40b6",
+    "mlp_idle.csl": "e24894641a5af5cdd569cedc63ed195d10f933ed5a3bb6c2183d7871bda41693",
+    "fp8_shape.csl": "b9869927f2afebc6f48d4e680ace6e1f458713db8c3c5895465e7d5652e8d301",
+    "fp8_unpack_shift.csl": "9fa14188758bd1dae78f1fbff7426513bc1fca004dc81b540e91df39a2c4eab3",
+    "qwen_math.csl": "03adca23c7dd74282093961ae51e0ae4d193e7adc14b8dd43fa2f16f4e95e137",
+    "mlp_fused.csl": "15f7449d59d216df4775e9a0ddf0c210286bb1cc00d6f02a139f27daaa2cffc3",
+    "fp8_encode.csl": "21dda5fde73c94da0cbc0d859412cccdd51f51ee1f863d1711036933b53f1c63"
+  },
+  "generator_sha256": "0a9c32dbdee929c9afe941abc2725fb4a007c6a0cf4f7bd34bec26109c02dceb",
+  "full_wafer_compiled": false,
+  "full_wafer_sram_admitted": false,
+  "executed": false,
+  "physical": false,
+  "full_model": false,
+  "missing": [
+    "full layout compiler admission",
+    "original bank loader/fixture and independent ordered full MLP oracle",
+    "complete numerical execution and replay",
+    "same-controller timing",
+    "production all-layer controller and termination",
+    "other operator programs/routes and correct dependent sentence generation"
+  ]
+}

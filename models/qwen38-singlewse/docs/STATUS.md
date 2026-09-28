@@ -1,5 +1,20 @@
 # Execution status
 
+## Active: resident spatial pipeline performance phase
+
+The current target is complete original Qwen3.8-27B-FP8 on one physical WSE-3,
+64 spatially resident layers in macro west-to-east order, correct autoregressive
+sentences and >=2000 aggregate completed generated tokens/s in sustained steady
+state. Independent requests may overlap. The old per-request target and broad
+whole-wafer shared-layer time overlay are superseded.
+
+P22 source and independent metadata/protocol checks provide the complete two-
+request stage map, layer-local kernel/stream IR and source-only CSL slot guard.
+Complete internal routes, composed SRAM, neural execution and speed are still
+unqualified. See ../performance/docs/ARCHITECTURE.md and NEXT-STEPS.md.
+The identified obsolete compile003 was cancelled and its cgroup released; no new
+physical WSE job was submitted. Historical functional results below are unchanged.
+
 ## Latest: initial functional phase closed for publication
 
 The user explicitly closed this phase after complete physical sentence generation

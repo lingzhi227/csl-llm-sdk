@@ -1,0 +1,117 @@
+// Real preceding residual -> post-attention RMS/quantization/fork, followed by
+// arriving down chunks -> retained residual -> next-layer RMS consumption.
+// The two global RMS reductions use ordered distributed FP32 partial sums;
+// their full numerical difference from the sequential reference is unqualified.
+param memcpy_params;param rank:u16;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);const tile=@import_module("<tile_config>");
+const fused=@import_module("mlp_fused.csl");const qwen=@import_module("qwen_math.csl");const math=@import_module("<math>");
+const ciq=@get_input_queue(2);const siq=@get_input_queue(3);const diq=@get_input_queue(4);const oq=@get_output_queue(2);
+const cd=@get_dsr(dsr_dest,2);const cs=@get_dsr(dsr_src0,2);
+const bd=@get_dsr(dsr_dest,3);const bs=@get_dsr(dsr_src0,3);
+const dd=@get_dsr(dsr_dest,5);const ds=@get_dsr(dsr_src0,5);
+const od=@get_dsr(dsr_dest,6);const os=@get_dsr(dsr_src0,6);
+const ct=@get_local_task_id(8);const bt=@get_local_task_id(9);const dt=@get_local_task_id(10);const ot=@get_local_task_id(11);
+var gains=@zeros([16512]u16);var left=@zeros([128]u16);var right=@zeros([128]u16);
+var packet=@zeros([65]u32);var chunk=@zeros([8]u32);var child=@zeros([1]f32);var inverse=@zeros([1]f32);var sum=@zeros([1]f32);
+var audit=@zeros([8]u32);var control=@zeros([1]u16);
+const gp:[*]u16=&gains;const lp:[*]u16=&left;const rp:[*]u16=&right;const pp:[*]u32=&packet;const ap:[*]u32=&audit;
+var armed:bool=false;var started:bool=false;var complete:bool=false;
+var local_ready:bool=false;var child_ready:bool=false;var joined:bool=false;
+var inverse_ready:bool=false;var reduction_sent:bool=false;var output_idle:bool=true;
+var round_index:u16=0;var send_kind:u16=0;var chunks:u16=0;
+var square:f32=0.0;var correction:f32=0.0;
+fn finish() void {if(started and complete){started=false;armed=false;audit[7]=1;sys.unblock_cmd_stream();}}
+fn accumulate(value:f32) void {
+ const adjusted:f32=value*value-correction;const next:f32=square+adjusted;
+ correction=(next-square)-adjusted;square=next;
+}
+fn transmit(base:[*]u32,comptime words:u16) void {
+ @assert(output_idle);output_idle=false;
+ const m=@get_dsd(mem1d_dsd,.{.base_address=base,.extent=words});const f=@get_dsd(fabout_dsd,.{.output_queue=oq,.extent=words});
+ @load_to_dsr(os,m);@load_to_dsr(od,f,.{.async=true,.ut_id=@get_ut_id(5),.activate=ot});@mov32(od,os,.{.async=true});
+}
+fn receive_child() void {
+ if(comptime rank<39){
+  const m=@get_dsd(mem1d_dsd,.{.base_address=&child,.extent=1});const f=@get_dsd(fabin_dsd,.{.input_queue=ciq,.extent=1});
+  @load_to_dsr(cd,m);@load_to_dsr(cs,f,.{.async=true,.ut_id=@get_ut_id(2),.activate=ct});@mov32(cd,cs,.{.async=true});
+ }
+}
+fn receive_inverse() void {
+ if(comptime rank>0){
+  const m=@get_dsd(mem1d_dsd,.{.base_address=&inverse,.extent=1});const f=@get_dsd(fabin_dsd,.{.input_queue=siq,.extent=1});
+  @load_to_dsr(bd,m);@load_to_dsr(bs,f,.{.async=true,.ut_id=@get_ut_id(3),.activate=bt});@mov32(bd,bs,.{.async=true});
+ }
+}
+fn receive_chunk() void {
+ const m=@get_dsd(mem1d_dsd,.{.base_address=&chunk,.extent=8});const f=@get_dsd(fabin_dsd,.{.input_queue=diq,.extent=8});
+ @load_to_dsr(dd,m);@load_to_dsr(ds,f,.{.async=true,.ut_id=@get_ut_id(4),.activate=dt});@mov32(dd,ds,.{.async=true});
+}
+fn join_norm() void {
+ if(local_ready and child_ready and output_idle and !joined){
+  joined=true;sum[0]=square;if(comptime rank<39){sum[0]+=child[0];}audit[2]+=1;
+  if(comptime rank==0){
+   inverse[0]=1.0/math.sqrt_f32(sum[0]/5120.0+0.000001);inverse_ready=true;
+   tile.output_queue_config.encode_output_queue(2,6);send_kind=1;transmit(@ptrcast([*]u32,&inverse),1);
+  }else{
+   tile.output_queue_config.encode_output_queue(2,@as(i16,4+rank%2));send_kind=0;transmit(@ptrcast([*]u32,&sum),1);
+  }
+ }
+}
+fn normalize_ready() void {
+ if(inverse_ready and reduction_sent){
+  const layer=control[0];const gain_slot:u16=if(round_index==0) 2*layer+1 else 2*layer+2;
+  const input_words=@ptrcast([*]u32,&left);const output_words=@ptrcast([*]u32,&right);
+  const gain_words=@ptrcast([*]u32,&gains[gain_slot*128]);
+  var maximum:f32=0.0000000001;
+  for(@range(u16,64))|i|{
+   const value=fused.normalized_pair(input_words[i],gain_words[i],inverse[0]);output_words[i]=value;
+   const candidate=fused.maximum_pair(value);if(candidate>maximum){maximum=candidate;}
+  }
+  audit[3]+=1;
+  if(round_index==0){
+   const scale=maximum*0.002232142857142857;
+   for(@range(u16,64))|i|{packet[i]=fused.encoded_pair(output_words[i],scale);}packet[64]=@bitcast(u32,scale);
+   // The first reduction's operands are dead. Arm successor RMS before data
+   // can return; its local contribution is accumulated from real residual chunks.
+   round_index=1;local_ready=false;child_ready=rank==39;joined=false;inverse_ready=false;reduction_sent=false;
+   square=0.0;correction=0.0;receive_child();receive_inverse();
+   tile.output_queue_config.encode_output_queue(2,2);send_kind=2;transmit(pp,65);
+  }else{complete=true;finish();}
+ }
+}
+task child_arrived() void {child_ready=true;audit[1]+=1;join_norm();}
+task inverse_arrived() void {inverse_ready=true;normalize_ready();}
+task chunk_arrived() void {
+ @assert(round_index==1 and chunks<16);
+ const words=@ptrcast([*]u32,&left);
+ for(@range(u16,4))|i|{
+  const index=chunks*4+i;const value=fused.residual_pair(@ptrcast([*]f32,&chunk[2*i]),words[index]);words[index]=value;
+  accumulate(qwen.expand(fused.low(value)));accumulate(qwen.expand(fused.high(value)));
+ }
+ chunks+=1;audit[4]+=1;
+ if(chunks<16){receive_chunk();}else{local_ready=true;join_norm();}
+}
+task sent() void {
+ output_idle=true;audit[5]+=1;
+ if(send_kind<2){reduction_sent=true;normalize_ready();}else{join_norm();}
+}
+fn arm(layer:u16) void {
+ @assert(!armed and !started and layer<64);armed=true;complete=false;control[0]=layer;
+ round_index=0;chunks=0;local_ready=false;child_ready=rank==39;joined=false;inverse_ready=false;reduction_sent=false;output_idle=true;
+ square=0.0;correction=0.0;for(@range(u16,8))|i|{audit[i]=0;}audit[0]=1;
+ receive_child();receive_inverse();receive_chunk();sys.unblock_cmd_stream();
+}
+fn start() void {
+ @assert(armed and !started);started=true;
+ // This is the actual preceding residual-add operator at the subgraph boundary.
+ for(@range(u16,128))|i|{left[i]=qwen.round(qwen.expand(left[i])+qwen.expand(right[i]));accumulate(qwen.expand(left[i]));}
+ local_ready=true;join_norm();finish();
+}
+comptime {
+ @initialize_queue(oq,.{.color=@get_color(if(rank==0) 6 else 4+rank%2)});
+ if(rank<39){@initialize_queue(ciq,.{.color=@get_color(4+(rank+1)%2)});@bind_local_task(child_arrived,ct);}
+ if(rank>0){@initialize_queue(siq,.{.color=@get_color(6)});@bind_local_task(inverse_arrived,bt);}
+ @initialize_queue(diq,.{.color=@get_color(17)});@bind_local_task(chunk_arrived,dt);@bind_local_task(sent,ot);
+ @export_symbol(gp,"gains");@export_symbol(lp,"residual");@export_symbol(rp,"successor");
+ @export_symbol(pp,"packet");@export_symbol(ap,"audit");@export_symbol(arm);@export_symbol(start);
+}

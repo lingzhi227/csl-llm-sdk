@@ -1,0 +1,45 @@
+{
+  "milestone": "P22",
+  "utc": "2026-09-28T00:13:43.126747+00:00",
+  "scope": "Resident full-model spatial stage/bank map; layer-local fused kernel/interface IR and request/credit/feedback protocol source. No compiled new role or neural throughput result.",
+  "target": ">=2000 completed generated output tokens/s aggregate sustained steady state on one physical WSE-3, complete original Qwen3.8-27B-FP8 with dependent correct sentences",
+  "baseline_commit": "6c2f4f5685478ee100f167e42a9f7f22f57dca35",
+  "placement": {
+    "admitted": true,
+    "original_tensors": 1251,
+    "original_operations": 1172,
+    "stages": 66,
+    "layers": 64,
+    "original_weight_bytes": 29468003328,
+    "resident_payload_bytes": 30213126400,
+    "data_pes": 868500,
+    "maximum_reserved_payload": 35224,
+    "state_bytes_per_request": 160235520,
+    "compiled_sram_qualified": false
+  },
+  "interfaces": {
+    "stages": 66,
+    "adjacent_stage_interfaces": 65,
+    "one_hop_port_pairs": 9944,
+    "complete_fabric_routes_admitted": false,
+    "neural_execution": false
+  },
+  "source_tests_passed": 80,
+  "hardware_jobs_added": 0,
+  "workstation_active": false,
+  "source_only_csl_guard": "csl/pipeline_lease.csl",
+  "full_model_speed_target_achieved": false,
+  "sha256": {
+    "pipeline-stage-map-002/stage-map.json": "3e6c5220321b02d6e7e162a04c39cc038b8bc9d7d7c0e85e23e7f7d0177ff012",
+    "pipeline-stage-map-002/layer-kernel-ir.json": "589f059738cff9540427fb7f39f01012c28c24c8f2dab6c6e161e2db5608b973",
+    "pipeline-stage-map-002/capacity-sweep.json": "dcac1b48cf9a40e6921fb62d1edae1cb2dce2d02451237ccc8391bf1380da736",
+    "pipeline-stage-map-002/source-manifest.json": "75c2454357d1f174ce22675828610758cc974c9622fb490c7e5452f9d272af67",
+    "mlp-full-compile-003/CANCELLED.json": "4bc666f236f6b0d7db5c57777e206ed2a53f5dfbf53471b012c27ce6b833a18d",
+    "mlp-full-compile-003/attempt-release.json": "4bc666f236f6b0d7db5c57777e206ed2a53f5dfbf53471b012c27ce6b833a18d",
+    "resource-audit-p22-hardware-001.json": "98bdfdbf64f64ba8ee120f46b02e658f2bf495fbb2fd3bfdab6a4aa3f4a9ad54",
+    "resource-audit-p22-workstation-001.json": "fb5b899450610ce816c1f7129105595dc6a0e60ab64b3130542c28c0d66b89a1"
+  },
+  "previous_candidate": "pipeline-stage-map-001 retained;002 strengthens actual descriptor/page coverage audit and source freezing, with unchanged two-request geometry",
+  "old_compile": "mlp-full-compile-003 owner-cancelled/released; pending P21 snapshot preserved",
+  "next": "Connected real layer0/1 neural lowering on the resident map, per-role compiled resources and original-weight numerical execution; then complete64-layer pipeline"
+}

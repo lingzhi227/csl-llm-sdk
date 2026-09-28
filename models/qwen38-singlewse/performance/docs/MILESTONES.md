@@ -1,3 +1,7 @@
+> Current target is the resident spatial pipeline and aggregate generated-token
+> throughput in USER-SPATIAL-PIPELINE-TARGET.md. Earlier milestone targets and
+> pending snapshots below retain their historical scope.
+
 # Performance milestones
 
 ## P0: checked graph and executable stream foundation
@@ -773,3 +777,28 @@ limits. No complete layout, numerical runtime or timing result is inferred. No
 new WSE jobs are submitted; the latest hardware audit finds no own active or
 assigned jobs. See MLP-STATIC-PIPELINE.md and its bound summary. The complete
 model, correct dependent sentences and>=2000tokens/s target remain unmet.
+
+
+## P22: resident spatial stages, fused interfaces and request ownership
+
+All1251 original tensors and1172 operations now lower to66 disjoint stages:
+embedding,64 layers and full head. Eight78-wide macro columns contain alternating
+north/south layer order while the overall model advances west to east. Internal
+mix/gate-up/down rectangles are adjacent, capacity-derived2D partitions. Exact
+native tile/page ownership, conservative values and two isolated request states
+fit the planning budget; composed CSL SRAM remains unqualified. New original
+BF16 row granularity avoids unused bank tails without changing weights.
+
+The generator emits192 layer-local fusion contracts,65 adjacent stage interfaces
+and9944 one-hop port pairs across all declared internal/inter-stage interfaces.
+These counts do not include complete region-internal distribution or establish
+all-route/color legality. Numeric fusion retains required full-K, RMS, group128
+and BF16 boundaries. Python protocol tests exercise backpressure, opposite
+completion orders, partial/duplicate/stale traffic, warm resets, real token
+feedback dependency and finite context. The CSL lease guard is source-only.
+
+The superseded full-wafer shared-layer compile003 was verified by PID, working
+directory and unit, then owner-cancelled. Logs, sources, cancellation and empty-
+cgroup receipt are retained. No new physical job or speed result is claimed.
+See ARCHITECTURE.md and the pipeline-stage-map-002 evidence. Next work is actual
+connected layer0/1 execution in this layout, followed by full64-layer feedback.

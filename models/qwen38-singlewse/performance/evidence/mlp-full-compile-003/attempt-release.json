@@ -1,0 +1,12 @@
+{
+  "attempt": "mlp-full-compile-003",
+  "utc": "2026-09-27T23:52:01.173599+00:00",
+  "status": "cancelled_by_owner",
+  "reason": "User ordered immediate resident spatial layer pipeline. Superseded whole-wafer shared-layer compile is not needed for the new placement and holds the shared compiler lock.",
+  "owner_cmdline": "/usr/bin/flock -n /srv/cerebras-workstation/heavy.lock /usr/bin/python3 execute.py ",
+  "owner_cwd": "/srv/model-storage/qwen38-singlewse/runs/mlp-full-compile-003",
+  "before": "MainPID=934692\nResult=success\nExecMainStatus=0\nControlGroup=/user.slice/user-1000.slice/user@1000.service/app.slice/qwen38-single-mlp-full-compile-003.service\nWorkingDirectory=/srv/model-storage/qwen38-singlewse/runs/mlp-full-compile-003\nActiveState=active\nSubState=running\n",
+  "after": "MainPID=0\nResult=success\nExecMainStatus=0\nControlGroup=\nWorkingDirectory=\nActiveState=inactive\nSubState=dead\n",
+  "own_cgroup_empty": true,
+  "hardware_job_submitted": false
+}

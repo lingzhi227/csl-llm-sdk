@@ -1,241 +1,140 @@
-# WSE-native lowering boundaries
+# Resident west-to-east layer pipeline
 
-The prior functional program holds the original model on 870,000 PEs, but routes
-work through a serial global interpreter. The captured execution is approximately
-30.08 seconds per token. The parked fast interpreter is unqualified and bound to
-older sources; it is not a new validated baseline.
+The user's current target is defined in [USER-SPATIAL-PIPELINE-TARGET.md](USER-SPATIAL-PIPELINE-TARGET.md).
+All64 original layers occupy disjoint resident stages. The primary goal is >=2000
+completed generated output tokens/s in aggregate during sustained steady state,
+with each request obeying its full autoregressive dependency. The old batch-one
+500us/token and7.81us/layer constraints are superseded. No measured model rate is
+claimed. The original functional capture and its failed strict comparisons remain
+unchanged.
 
-The new implementation separates five inspectable, serializable levels:
+## Concrete P22 map
 
-1. **Model semantics.** Original checkpoint revision, all operators, precision and
-   rounding boundaries, recurrent/KV state and token feedback. Import the existing
-   `configs/model-graph.json`; never derive semantics from a performance paper.
-2. **Regions and ownership.** Adjacent layer/operator regions, matrix partitions,
-   distributed norm/quantization/head reduction, explicit tensor owners and
-   retained state. Manual knobs: region rectangles, row/K partition, replication,
-   compatible fusion and precision-preserving weight transforms.
-3. **Streams and events.** Producer/consumer ports, payload length, epoch, initial
-   readiness, credit return and completion. Arrival activates work; a local
-   region controller is not a full-wafer serial RPC. Manual knobs: buffer count,
-   chunk size, reduction tree, pipeline depth and tile ordering.
-4. **PE resources.** Per-PE routes, colors, queues, DSRs, microthreads, local tasks,
-   memory lifetimes and scratch reuse. Reject conflicting simultaneous routes,
-   unowned completion signals, missing consumers, and estimated SRAM overflow.
-   Final admission uses compiled ELF sections plus a declared stack allowance.
-5. **CSL and evidence.** Deterministic generated code, provenance hash, physical
-   artifact identity, same-PE timestamps and invocation-correlated release.
+`spatial/pipeline.py` imports all1172 original operations and1251 original tensors.
+The750x1160 application rectangle contains868500 data PEs and a reserved two-row,
+1500-PE westbound feedback corridor. A63x1158 embedding stage occupies the west;
+a63x1158 final norm/full248320-row head stage occupies the east. Between them are
+eight78-wide macro columns, each containing eight distinct layer stages. Model
+order proceeds south in one column, north in the next, then east to the next
+column. This is macro west-to-east flow with genuine2D stages, not64 thin equal
+strips or time overlay of64 layers on shared whole-wafer compute coordinates.
 
-The checked stream/PE/CSL multicast pattern, model dependency importer and
-compact matrix-bank ownership planner are implemented. P12 adds a complete
-physical ownership/lifetime atlas (see COMPLETE-MODEL-ATLAS.md). Full-model routes,
-actual composed SRAM admission and a complete executable schedule remain
-unimplemented. A verifier for this restricted pattern is not a general proof of
-arbitrary graph deadlock freedom. The model and region compiler will be added
-incrementally; placeholder stages must not be reported as implemented.
+```mermaid
+flowchart LR
+  E["Embedding · west"] --> A["Layers0–7 ↓"] --> B["Layers8–15 ↑"]
+  B --> C["Layers16–23 ↓"] --> D["Layers24–31 ↑"]
+  D --> F["Layers32–39 ↓"] --> G["Layers40–47 ↑"]
+  G --> H["Layers48–55 ↓"] --> I["Layers56–63 ↑"] --> O["Full head · east"]
+  O -. "actual selected token · same request" .-> E
+```
 
-## First event protocol
+GDN stages have78x146 PEs; attention stages have78x141 PEs. Their internal mix,
+gate/up and down rectangles use a capacity-checked T partition, with shared
+physical boundaries. For layer0 these are45x79,78x67 and33x79 respectively. Areas
+come from exact banks/state/values, not equal thirds. The matrix-MAC/PE proxy only
+breaks allocation ties; true service-time balance is **not measured**. Layer-local
+operator/time reuse is allowed. Other layers cannot borrow these resident banks
+as an excuse to restore the old overlay architecture.
 
-A root sends a contiguous packet down column zero and across every row through
-hardware multicast. Intermediate routers forward without a software relay task.
-Every endpoint consumes one packet, records its epoch, and contributes its unique
-PE ID plus the epoch to a reduction. A node waits for its own receive and each
-child acknowledgement before sending one sum to its parent. The root starts the
-next epoch only after the complete tree acknowledges. Input/output queues are
-separate; alternating reduction colors prevent RAMP route overlap. A send buffer
-is not reused until its send completion callback. Repeated launches reset state.
+The initial old2-row BF16 storage granularity unnecessarily wasted the tail of
+large embedding/head banks. The new address generator uses original1x128 BF16
+rows (paired execution is possible when both are local), retaining2x128 FP8 tiles
+and exact FP32 expansions of their original BF16 scales. This lossless ownership
+change is audited; its composed executable remains unqualified. No weight is
+re-quantized or streamed from the host between layers.
 
-This measures a bounded global control roundtrip, not an efficient final model
-schedule. The eventual inference graph should communicate between adjacent
-regions and avoid a full-wafer barrier at each operation.
+## Explicit resource limits
 
-## Design references and limits
+Every region has exact cyclic matrix slots and a prefix allocation of128-byte
+auxiliary pages. `local_tile_owner` and `auxiliary_owner` return a PE and local
+byte offset for original weights, values and disjoint request states. All1251
+tensors are covered once; all1172 operations are bound once. Conservative value
+reservation retains every distinct region input/output in both work slots before
+any lifetime optimization. Mutable request states never alias these two slots.
 
-- [WaferLLM, OSDI 2025](https://www.usenix.org/system/files/osdi25-he.pdf):
-  topology-aware partitioning and K-tree reduction. Evaluation uses WSE-2;
-  CodeLLaMA-34B and Qwen2-72B include subsets of layers. Current upstream has a
-  WSE-3 migration, so code-version and hardware-version comparisons are distinct.
-- [SPADA](https://github.com/spcl/spada): explicit placement, asynchronous streams
-  and multiple lowering levels. Its published stencil scaling is not a Qwen
-  inference rate. The local source archive already contains earlier qualification
-  work; no large dependency or repository is duplicated here.
-- Existing standalone matrix code in `../experiments/fp8_matrix` already exploits
-  column multicast. Its host roundtrip alone does not identify decode, local
-  arithmetic or reduction costs. Add same-PE timing before attributing speedups.
+The candidate reserves35256B payload,7424B code/SDK,4096B stack and1352B
+communication scratch per data PE, totaling48128B. These are **planning
+allowances**, not a compiled role census. The old selected MLP compile does not
+admit these new layer/state/scheduler programs. Per-role compiled ELF plus stack,
+physical routes and executable schedule are mandatory next gates.
 
-A 2,000 tokens/s target gives 500 microseconds per dependent token. It is a budget,
-not a prediction. All 64 layers, embedding, full head, state updates, selection,
-feedback and observation must be accounted for. The old baseline assigns each layer a small exclusive region; its aggregate
-wafer bandwidth cannot be applied to one layer at once. The new bank plan below
-shares broad spatial compute regions across sequential layers. Scalar FP8 expansion and nearly full local SRAM are additional
-constraints requiring measured kernel work.
+Original text weights occupy29468003328B. With scale replication, auxiliary page
+rounding, conservative live values and two independent request states, allocated
+payload is30213126400B. Each context96 request adds160235520B:150994944B GDN,
+2949120B convolution history,6291456B KV. This candidate admits concurrency2;
+concurrency3 requires753 columns and is rejected. The capacity sweep is a result
+for this packing and code budget, not a global impossibility proof. State growth,
+code footprint, scale replication and rectangle waste are explicit optimization
+terms. Do not assume64 resident layers imply64 resident independent requests.
 
-## Temporal weight banks across broad spatial compute regions
+## Fusion is ownership and direct consumption
 
-Layer regions are logical ownership boundaries, not a requirement to give each
-layer a small permanent exclusive rectangle. The native mixed-precision simulator
-probe completed 254-element FP16/FP32 FMA vectors in about 135 cycles including its
-loop (subsequently physically qualified in P2). A baseline 272x128 weight tile thus
-contains far too much sequential work for a roughly two-microsecond projection
-budget, even before scalar FP8 expansion or communication.
+`spatial/pipeline_lowering.py` emits66 layer-local kernel bindings,65 adjacent
+stage interfaces, and real semantic cross-region streams. Each model layer has
+three fusion contracts:
 
-The next placement candidate therefore distributes small tiles of **each**
-projection across many more PEs, and packs tiles from **different layers** into
-each PE's resident compressed weight bank. For example, a 2x128 tile of the
-17408x5120 gate matrix needs 348,160 participants with only 256 original FP8 bytes
-per participating PE. This is an analytical partition count, not an admitted
-layout. It must still include scales, bank descriptors, code, stack, state and
-routing, and account for phases with multiple tiles per PE.
+- Residual -> RMS -> group128 quantization -> gate/up shared operand fork. Retain
+  the residual for the down add. RMS still requires the complete5120-value sum;
+  each quantizer still requires its original128-value maximum.
+- Complete-K gate/up BF16 rows -> BF16 SiLU -> BF16 multiply -> group128 max,
+  scale and native down packet. Consume actual producer outputs and preserve
+  each specified BF16 rounding. Avoid a centralized17408-value gather.
+- Complete-K down sum -> BF16 -> retained residual add -> BF16 successor chunks.
+  Each chunk waits for all136 original K blocks. The next layer can accumulate
+  local RMS squares as chunks arrive but cannot finalize RMS before the vector.
 
-The bank exposes its next local tile early: decode into bounded scratch while
-other regions execute, receive operands asynchronously, consume the decoded tile,
-then release its buffer. A PE that is inactive in the current projection can
-prepare its next projection. Explicit buffer ownership, prefetch readiness and
-completion credits are required; a throughput claim cannot assume overlap that
-has not been measured. This preserves weight/compute locality without expanding
-the entire FP8 model into a BF16 copy that would exceed single-wafer SRAM.
+Reuse `csl/mlp_fused.csl`, the original `../csl/qwen_math.csl`, qualified native
+FP8/BF16 arithmetic and credited joins. The existing whole-wafer worker and
+activation bodies are source references; importing them does not requalify their
+coordinates, scheduler or changed reduction order in these smaller stages.
 
-Manual controls will include small-tile dimensions, tensor-to-bank phase offsets,
-regional reduction geometry, prefetch distance and one/two scratch buffers. Compare
-this candidate with dedicated layer rectangles using measured critical paths and
-link occupancy. No layout is selected merely from wafer-wide peak bandwidth.
+## Streams, queues and request epochs
 
-`spatial/banks.py` now represents the compact ownership candidate. FP8 and BF16
-have separate cyclic streams and explicit phases; first-use semantic order binds
-all 498 matrices. A tile's owner and local offset are computed from prefix counts,
-without a hundred-million-entry materialized table. Each row=2 FP8 tile uses 256
-original bytes plus four bytes holding an exact expansion of its original BF16
-scale. Each BF16 tile uses 512 original bytes. All original tensor coverage and
-aggregate payload conservation are checked.
+Each adjacent-stage boundary has40 one-hop lane pairs. BF16 activations use40
+chunks of128 elements:64 payload words plus request ID, request generation,
+position, lease ID and chunk index. Two slots per lane are a bounded interface
+contract. Direct internal region boundaries have as many lanes as fit their
+shared edge; groups reuse them with credits. No host neural intermediates are
+part of the contract. The9944 generated one-hop port pairs are audited for
+adjacency and uniqueness within an interface.
 
-The current 853,616-bank plan produces only four occupancy classes: (111 FP8,
-11 BF16), (112,11), (111,12) and (112,12). With declared code/stack/scratch/descriptor
-allowances they use 46,756 to 47,536 bytes. This leaves little space for unmodeled
-routing logic. The 16,384 reserved actor PEs are a capacity reservation, not proof
-that recurrent/KV state and other operators have legal placements. Physical bank
-coordinates, actual executable SRAM and routing remain explicit admission gates.
+**Boundary ports are not complete fabric routes.** Producer-owner to boundary,
+boundary to consumer-owner, region-internal multicast/reduction, and global
+feedback still need lowering and simultaneous color/queue/DSR/thread admission.
+IR flags remain false for those gates. Do not infer all-route legality or deadlock
+freedom from a one-hop interface audit. Logical eastern output is not evidence of
+a physical east-side host port; the actual SDK endpoint mapping must be checked.
 
-The first maximum-occupancy component compile (`fp8-bank-sim-001`) fits at
-46,768 bytes including the declared stack. This executable includes dynamic FP8
-slot addressing and the single decoded-buffer readiness lease. It does not yet
-include BF16 execution, descriptor dispatch or communication, so its 1,360-byte
-margin cannot be treated as their proven budget. Adding those paths must repeat
-compiled admission; if necessary the placement/packing policy must change before
-launch, without increasing the 48,128-byte ceiling.
+`spatial/pipeline_protocol.py` provides an adversarial protocol oracle.
+`csl/pipeline_lease.csl` is the source-only layer-slot guard to compose into the
+backend. It requires complete operand masks and once-only state commit, separates
+local send completion from remote consumption credit, and refuses slot reuse
+until both arrive. Request generations and monotonically changing leases reject
+stale warm-run traffic. Actual callbacks and distributed acknowledgements must
+supply these events; the guard does not create them. Warm reset needs drained
+routes/slots, actual state clearing and acknowledgements from all66 stages.
 
-P5 adds a checked regional computation backend: column operand multicast,
-arrival/decode readiness, native ordered FP8 dots, ascending-K row sums and returned
-completion. Same input and output contracts allow a serialized/overlapped schedule
-comparison without changing arithmetic. Its source/resource details and measured
-limits are in REGIONAL-GEMV.md. Full bank placement and dynamic activation scale
-production remain separate compiler boundaries, not implicitly supplied by the
-host fixture used for component qualification.
+The feedback oracle checks actual selected token IDs: after fixed prompt tokens,
+only the prior full-model selected token can enter the next position of that
+request. Independent requests may overlap. A single request cannot fill later
+pipeline positions speculatively. With concurrencyC, achieving2000tokens/s requires
+mean request feedback cycles <=C/2000 seconds in steady decode (a necessary
+condition, not a measured rate or a per-request500us requirement).
 
-P7 adds a role-aware composed bank plan (`spatial/banked_region.py`). Root and
-boundary roles have explicitly smaller local tile capacities, while ordinary
-compute roles retain112 FP8 tiles. All retain12 BF16-sized slots in this component.
-The full model's1,251 tensors are not assigned to these role capacities yet. A
-future allocator must preserve broad matrix parallelism and short routes as well
-as total byte capacity; merely packing the remaining tiles into fewer active PEs
-would undo the latency objective. The six-role component passes actual compiled
-SRAM after removing unused profiling, but its48-byte minimum margin rules out
-assuming additional scheduler/BF16 paths fit without another admission step.
+## Lowering and next acceptance boundary
 
+1. Pinned model/precision/state semantics.
+2. Disjoint layer and operator regions with exact bank/page ownership.
+3. Fused producer/consumer chunks, request epochs and buffer completion edges.
+4. Simultaneous fabric routes and PE queue/DSR/thread/code/stack leases.
+5. Compiled CSL, original-weight numerical execution, physical service times.
 
-P8 adds a spatial group128 producer (`spatial/quant.py`) with explicit maximum,
-scale and payload planes. Its32-PE physical executable directly feeds the native
-dot packet contract with no intermediate host transfer. Per-group receive arming
-still uses a host readiness barrier, and a single constant weight tile is prepared
-once. Full model lowering must place upstream values into these owners and replace
-that inter-group host lifecycle with device readiness/credit events. P8 is not an
-admission of producer code into the nearly full P7 bank PE.
+The first three have a concrete candidate; step4 and complete step5 remain open.
+Next compose the real layer0 -> layer1 path on these coordinates, including GDN,
+MLP, both requests and actual next-layer consumption. Use that connected path to
+validate/optimize the generator, then instantiate all64 stages and full feedback.
+Do not revert to an unbounded isolated matrix or helper benchmark series.
 
-P9 lowers complete K dimensions into static preorder contraction trees with
-explicit parent/child intervals, per-level colors, two receive queues and fixed
-addition order. Logical ranks map onto manually selected line or serpentine2D
-geometries; the qualified8x28 version packs all224 participants without holes.
-The express paths use routers through intermediate PEs and execute only at tree
-nodes. It qualifies two original output rows for each complete K width, rather
-than supplying full matrix placement. BF16 execution and shared resident-bank
-capacities are the next integration gap; see BF16-BANK-NEXT.md. An independent
-guarded-quantization proposal is documented separately and is unimplemented.
-
-P10 composes real FP8 and BF16 execution,112/12 resident slots and the tree protocol
-at47,472 bytes including stack on physical WSE-3. DSR7 streams lossless BF16
-high-half expansion through two FP32 temporaries; DSR4 is shared sequentially by
-the native dots. A checked4-byte per-PE type/slot control replaces unused per-tile
-metadata. This is representative sixPE executable admission, not the full-model
-address schedule. The next boundary is device input arrival and safe repeated
-epoch ownership without a host barrier on every contraction; see MIXED-BANK.md.
-
-P11 replaces the representative bank's per-epoch host launches with regional
-device control. Request arrival activates arithmetic; tagged child reductions
-and explicit send-completion credits govern reuse. The resource IR now separately
-assigns microthreads as well as queues, DSRs and local tasks, and rejects collisions.
-Two96-epoch physical loops pass while retaining full112/12 banks, at47,792 bytes
-including validation instrumentation/stack. A dedicated controller receives every
-root result before issuing the next request; this restricted pattern is not yet
-a whole-wafer model interpreter or arbitrary graph scheduler. Independent operand
-fixtures do not establish neural feedback. See RESIDENT-EPOCHS.md.
-
-
-P12 gives every original tensor, recurrent/KV shard and produced value an explicit
-owner or lifetime interval. P13 physically qualifies one complete4x4 GDN state
-rectangle cohosted with maximum111-slot FP8 banks. Native vector sums/delta and
-exclusive state/dot scratch leases leave1,344bytes after actual code/stack. The
-full model's routing transitions and producer integration are still unimplemented;
-ROUTE-EPOCHS-NEXT.md records the required coordinate/color/queue/quiescence gates.
-
-
-## Next complete-matrix spatial comparison
-
-P17 and the P18 retile comparison retain the same631x2 strip for a controlled
-local-shape comparison. This does not solve two-dimensional partitioning. The
-next candidate must place the same complete original matrix into compact PE
-regions, and compare a generated input distribution and physically embedded
-reduction against the strip using the same complete-input/complete-output timing
-boundary. Hardware express forwarding can pipeline; path length alone is neither
-a software serialization count nor a latency measurement.
-
-The implementation should converge repeated communication into shared protocols
-and generation, retaining the qualified hand-written native kernels. Its explicit
-manual controls are region shape, M/K splits, input owners/entrances, tree
-embedding, routes, buffers and permitted overlap. Lower model/value dependencies
-and lifetimes to partitions, distribution, local/cross-region reductions, output
-owners and direct consumers, then to routes, queue/DSR/microthread leases, buffers
-and completion events. Reject mismatched packet extents or simultaneously
-conflicting resources before compilation. This is a planned extension, not a
-claim that the current specialized probes form a general dataflow compiler.
-
-Record each directed link's bytes and maximum load, longest causal path,
-fan-in/fan-out points, readiness/credit waits and measured overlap as well as
-actual SRAM and physical complete-matrix latency. Total word-hops and local FMA
-speed alone cannot choose the placement. Original tensor identity and state
-locations must remain explicit when ownership changes; the earlier atlas is a
-reference to revise with new evidence, not a permanent address restriction.
-
-Development priority update (P18): finish the already running bounded strip
-simulation and preserve it, but do not dispatch its separate physical retile
-trial. Mainline development now requires the compact physical2D/shared-lowering
-path above. P17 supplies the existing physical baseline. Another strip experiment
-requires a specific future controlled-comparison purpose, not continuation of
-the old sequence. All candidate regions/owners remain revisable design choices.
-
-The first executable shared2D candidate is described in COMPACT-PROJECTION.md.
-Treat its40x24 workers as one tested hypothesis. Proactively revise placement,
-interfaces, ownership and scheduling when whole-matrix/layer latency or resource
-evidence demands it. Local improvements need a demonstrated critical-path role.
-Do not wait for user intervention to abandon a limiting topology, and do not
-build a general framework at the expense of complete-model integration.
-
-The next architectural acceptance boundary is a real multi-operator subgraph,
-not another isolated matrix topology. The selected planning scope is layer0
-post-attention RMS -> shared exact input quantization -> gate/up fork -> BF16
-SiLU/multiply -> output quantization -> down -> residual (original graph nodes
-13..18, full5120/17408 dimensions). Derive regions/value owners and direct
-producer-consumer streams from those semantic dependencies, including necessary
-redistribution, completion/credit and cross-operator buffer lifetimes. Preserve
-the residual input until the final add. Keep the original BF16 rounding points
-and explicitly qualify any altered reduction order. Explain the full-dimensional
-resource/critical-path design before selecting bounded execution. Current host
-prepositioned40-ingress inputs and the(0,0)sink do not solve upstream production
-or downstream consumption. This extension is required and not yet executable.
+The old overlay architecture is preserved in
+[HISTORICAL-ARCHITECTURE-P21.md](HISTORICAL-ARCHITECTURE-P21.md).
+Its evidence and useful modules survive; it is not the current final architecture.

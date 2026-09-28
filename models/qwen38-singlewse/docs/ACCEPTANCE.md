@@ -1,3 +1,23 @@
+# Active performance acceptance
+
+The complete pinned original Qwen3.8-27B-FP8 must execute on one real WSE-3 with
+all64 layers in resident spatial stages, a complete head and actual token feedback.
+The current speed criterion is >=2000 completed generated output tokens/s in
+aggregate during a predeclared sustained steady-state window. Independent real
+requests may overlap with isolated recurrent/KV state and ordinary autoregressive
+dependencies. Report concurrency, context, TTFT, per-request ITL, prefill, fill/drain
+and full-run throughput separately. The full contract is
+[performance/docs/MEASUREMENT.md](../performance/docs/MEASUREMENT.md).
+
+Full model/weight identity, correct complete sentences, independent numerical
+qualification of changed operations, actual request isolation and warm reset are
+required. Layout/byte estimates and component rates do not pass this contract.
+Current metadata/protocol checks do not establish executable model acceptance.
+The original strict functional criteria and unsuccessful comparisons below remain
+preserved as historical evidence; they are not retroactively marked passed.
+
+---
+
 > Historical strict numerical target: this contract was not met by the initial
 > functional release. The user closed the phase after complete sentence generation
 > and the final local norm check. See PHYSICAL-INFERENCE-RESULT.md and

@@ -1,14 +1,33 @@
 # Qwen3.8 WSE-3 spatial performance work
 
-This is the performance successor to the immutable functional baseline at
-`6c2f4f5685478ee100f167e42a9f7f22f57dca35`. The baseline implementation, successful
-sentence captures and failed strict CPU comparisons are retained unchanged.
+Current target: the complete original Qwen3.8-27B-FP8 on one physical WSE-3,
+64 resident spatial layer stages, correct dependent sentences, and **at least2000
+completed generated output tokens/s aggregate in sustained steady state**.
+Independent requests may overlap with isolated state. The earlier per-request
+interpretation and whole-wafer shared-layer overlay are superseded. The target
+remains unmet; this is active development.
 
-The acceptance target is **one physical WSE-3, the complete pinned original
-Qwen3.8-27B-FP8 text model, correct dependent sentence generation, at least
-2,000 output tokens/s per request**. Batched throughput, simulated time,
-partial layers, projected operator rates and commercial serving claims cannot
-satisfy that target. The full-model speed target remains unmet; qualified component milestones are recorded below.
+P22 implements the full stage/bank allocator, layer-local kernel/stream generator,
+request/credit/feedback protocol oracle and source-only CSL slot guard. The audited
+candidate places all1251 original tensors and1172 operations in66 disjoint stages,
+with65 adjacent layer interfaces, two resident requests and a feedback corridor.
+It has not yet passed composed compilation, complete routes, neural execution or
+performance acceptance. See [ARCHITECTURE.md](docs/ARCHITECTURE.md),
+[MEASUREMENT.md](docs/MEASUREMENT.md) and [NEXT-STEPS.md](docs/NEXT-STEPS.md).
+
+Generate a fresh candidate with
+`python3 performance/tools/plan_pipeline.py --output <new-directory>`.
+Run checks with `python3 -m unittest discover -s performance/tests`.
+
+The functional baseline commit6c2f4f5685478ee100f167e42a9f7f22f57dca35, original
+inference source, captures and failed strict numerical evidence remain preserved.
+Only active status/acceptance notices are updated outside the performance subtree.
+The chronology below retains historical component scopes. References there to an
+old target or next step are historical; they do not override the current contract.
+P21 full compile003 was subsequently cancelled by its verified owner and released;
+its pending milestone snapshot is retained and no old-layout WSE trial followed.
+
+## Historical component milestones
 
 P12 now provides an independently audited complete physical ownership and value
 lifetime atlas: all1251 tensors,498 matrices,64 layers and105,052,160 real matrix
