@@ -1,0 +1,84 @@
+// Actual dual-stream projection reception and copied-block credit transport.
+// Called only after the cohosted native worker has captured every operand, so
+// UT2/DSR2 no longer own its decoded arena. Buffers here are distinct from it.
+// Main RX: IQ6/UT7/DSR7. Early suffix RX: IQ7/UT2/DSR2.
+// Serialized copied-block TX: OQ3/4/UT4/DSR5. No software transit forwarding.
+param enabled:bool;
+param copy_transport:bool;
+param main_color:u16;param suffix_color:u16;param main_credit_color:u16;param suffix_credit_color:u16;
+param has_suffix:bool;param first_output:u16;param output_rows:u16;
+param ready_task:local_task_id;
+const ingress=@import_module("layer_fusion_ingress.csl",.{.explicit_receipts=!copy_transport});
+var main_packet=@zeros([11]u32);var suffix_packet=@zeros([if(has_suffix) 11 else 1]u32);
+var main_receiving:bool=false;var suffix_receiving:bool=false;
+var credit_sending:bool=false;var sending_suffix:bool=false;var notified:bool=false;
+var down_sending:bool=false;
+const mq=@get_input_queue(6);const bq=@get_input_queue(7);
+const mo=@get_output_queue(3);const bo=@get_output_queue(4);
+const md=@get_dsr(dsr_dest,7);const ms=@get_dsr(dsr_src0,7);
+const bd=@get_dsr(dsr_dest,2);const bs=@get_dsr(dsr_src0,2);
+const cd=@get_dsr(dsr_dest,5);const cs=@get_dsr(dsr_src0,5);
+const mt=@get_local_task_id(14);const bt=@get_local_task_id(15);const ct=@get_local_task_id(16);
+
+fn pump() void {
+ // A ready notification reserves UT4/DSR5 for the eventual down send. Credits
+ // arriving meanwhile retain their two independent receipts until that send's
+ // local completion. Consumer acknowledgment alone cannot release this lease.
+ if(comptime !copy_transport){
+ if(!credit_sending and !notified and !down_sending){
+  if(ingress.pending[0] or ingress.pending[1]){
+   credit_sending=true;sending_suffix=!ingress.pending[0];
+   const offset:u16=if(sending_suffix) 2 else 0;
+   const m=@get_dsd(mem1d_dsd,.{.base_address=&ingress.receipts[offset],.extent=2});
+   const f=@get_dsd(fabout_dsd,.{.output_queue=mo,.extent=2});@load_to_dsr(cs,m);
+   if(comptime has_suffix){
+    const b=@get_dsd(fabout_dsd,.{.output_queue=bo,.extent=2});
+    if(sending_suffix){@load_to_dsr(cd,b,.{.async=true,.ut_id=@get_ut_id(4),.activate=ct});}
+    else{@load_to_dsr(cd,f,.{.async=true,.ut_id=@get_ut_id(4),.activate=ct});}
+   }else{@assert(!sending_suffix);@load_to_dsr(cd,f,.{.async=true,.ut_id=@get_ut_id(4),.activate=ct});}
+   @mov32(cd,cs,.{.async=true});
+  }
+ }
+ }
+ if(ingress.active and ingress.fusion.phase==0 and !ingress.pending[0] and !ingress.pending[1]){ingress.next_group();}
+ if(ingress.needs_main() and !main_receiving){
+  main_receiving=true;
+  const m=@get_dsd(mem1d_dsd,.{.base_address=&main_packet,.extent=11});
+  const f=@get_dsd(fabin_dsd,.{.input_queue=mq,.extent=11});
+  @load_to_dsr(md,m);@load_to_dsr(ms,f,.{.async=true,.ut_id=@get_ut_id(7),.activate=mt});@mov32(md,ms,.{.async=true});
+ }
+ if(comptime has_suffix){
+  if(ingress.needs_boundary() and !suffix_receiving){
+   suffix_receiving=true;
+   const m=@get_dsd(mem1d_dsd,.{.base_address=&suffix_packet,.extent=11});
+   const f=@get_dsd(fabin_dsd,.{.input_queue=bq,.extent=11});
+   @load_to_dsr(bd,m);@load_to_dsr(bs,f,.{.async=true,.ut_id=@get_ut_id(2),.activate=bt});@mov32(bd,bs,.{.async=true});
+  }
+ }
+ if(ingress.fusion.ready() and !notified and !credit_sending and !down_sending and !ingress.pending[0] and !ingress.pending[1]){notified=true;@activate(ready_task);}
+}
+fn begin(epoch:u32) void {
+ @assert(!main_receiving and !suffix_receiving and !credit_sending and !notified and !down_sending);
+ ingress.begin(epoch,first_output,output_rows);pump();
+}
+fn prepare_fragment() void {@assert(notified and !credit_sending and !down_sending);notified=false;down_sending=true;ingress.fusion.prepare_fragment();}
+fn sent(epoch:u32,group:u16,fragment:u16) void {@assert(down_sending);down_sending=false;ingress.fusion.send_completed(epoch,group,fragment);pump();}
+fn consumed(epoch:u32,group:u16,fragment:u16) void {ingress.fusion.consumer_credit(epoch,group,fragment);pump();}
+fn drained() bool {return !ingress.active and !main_receiving and !suffix_receiving and !credit_sending and !notified and !down_sending;}
+task main_arrived() void {@assert(main_receiving);main_receiving=false;ingress.consume(@ptrcast([*]u32,&main_packet),false);pump();}
+task suffix_arrived() void {@assert(suffix_receiving);suffix_receiving=false;ingress.consume(@ptrcast([*]u32,&suffix_packet),true);pump();}
+task credit_sent() void {
+ @assert(credit_sending);
+ if(sending_suffix){ingress.credit_sent(true);}else{ingress.credit_sent(false);}
+ credit_sending=false;pump();
+}
+comptime {
+ if(enabled){
+ @initialize_queue(mq,.{.color=@get_color(main_color)});@bind_local_task(main_arrived,mt);
+ if(!copy_transport){@initialize_queue(mo,.{.color=@get_color(main_credit_color)});@bind_local_task(credit_sent,ct);}
+ if(has_suffix){
+  @initialize_queue(bq,.{.color=@get_color(suffix_color)});@bind_local_task(suffix_arrived,bt);
+  if(!copy_transport){@initialize_queue(bo,.{.color=@get_color(suffix_credit_color)});}
+ }
+ }
+}

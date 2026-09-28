@@ -1,0 +1,88 @@
+{
+  "milestone": "P25",
+  "passed_scopes": [
+    "original-owner/static-route audit",
+    "dual-stream/early-suffix protocol tests",
+    "complete gate/up region compiler/ELF SRAM census"
+  ],
+  "current_routes": "layer-fused-routes-003",
+  "rejected_routes": [
+    "layer-fused-routes-001 (WSE-3 color-swap compiler rejection)",
+    "layer-fused-routes-002 (fixed-color explicit-receipt routing failed)"
+  ],
+  "model_layers_audited": 64,
+  "projection_streams": 4032,
+  "projected_blocks": 139264,
+  "color_swaps": 0,
+  "software_block_receipt_streams": 0,
+  "full_region_compiles": [
+    {
+      "attempt": "layer-projection-compile-012",
+      "shape": [
+        78,
+        67
+      ],
+      "pes": 5226,
+      "elf_images": 1957,
+      "maximum_sram_with_stack": 47712
+    },
+    {
+      "attempt": "layer-projection-compile-013",
+      "shape": [
+        56,
+        94
+      ],
+      "pes": 5264,
+      "elf_images": 2847,
+      "maximum_sram_with_stack": 47712
+    }
+  ],
+  "source_tests": 109,
+  "weight_or_auxiliary_addresses_changed": false,
+  "arithmetic_tree_changed": false,
+  "executed": false,
+  "physical": false,
+  "numerical_qualified": false,
+  "full_model": false,
+  "full_model_speed_target_achieved": false,
+  "open_gates": [
+    "native input distribution",
+    "fused down-input fanout and callbacks",
+    "actual stage/request drain",
+    "complete GDN/norm/attention/layers",
+    "independent changed-operation numerical qualification",
+    "complete original model sentences and throughput"
+  ],
+  "hardware_jobs_added": 0,
+  "all_workstation_attempts_released": true,
+  "utc": "2026-09-28T02:42:01.908383+00:00",
+  "inputs": {
+    "evidence/layer-fused-routes-001/source-manifest.json": "901c053a2f0ba124d9e831c500a3a72bd62857b391c032821a75c03a85307e04",
+    "evidence/layer-fused-routes-002/source-manifest.json": "dd7a2c4b5c7685080fff5dd12b917a68e8899bef7266159ab63b6683dc68da5a",
+    "evidence/layer-fused-routes-003/source-manifest.json": "d68ff4356b7b2cb2b6fb240cd611657f3e2ffbad532d2da2fd076adcfba305b3",
+    "evidence/layer-fused-routes-003/audit.json": "44f4c808fceefd3c7cf17d5231d0f6a6b37759931908e1610c35d44b78927db3",
+    "evidence/resource-audit-p25-workstation-001.json": "a6b49218d04ae50e24c613e49db26a0898c11bf7405c71301aae2d6070670a2f",
+    "evidence/resource-audit-p25-hardware-001.json": "846f0c24e4b774477b25a414cdc8f217a7c49a610c0a512546454fbe7109401a",
+    "evidence/source-tests-p25-001.json": "a051a774389c7b0f03b22363ab72b9f924b57168364661cb72db7634ee0140ce",
+    "evidence/layer-projection-compile-008/source-manifest.json": "adbf77243dc48fa10b24463875030c3d761c12a75210e45932279e32cfe662ed",
+    "evidence/layer-projection-compile-009/source-manifest.json": "3890e7b303852facc68d5251f373029c49f58fab95f14eb56789d55fe333424d",
+    "evidence/layer-projection-compile-010/source-manifest.json": "b3dca825233993a402d5698f3f36d5429e89ff4fb010d6fdb31cdece49f4da2b",
+    "evidence/layer-projection-compile-011/source-manifest.json": "c83741c0e1f6b5e58bf86b06487701ebf1a18556395d1a589be42a95a291ef7a",
+    "evidence/layer-projection-compile-012/source-manifest.json": "2092e04700b59087051390c63183e79a47081c5d6956da269ff815a12c246b15",
+    "evidence/layer-projection-compile-013/source-manifest.json": "b937ef70d735b73407be9c316cda84c18b7e0fea396cc4319f59de97d6120e74",
+    "evidence/layer-backend-compile-010/source-manifest.json": "d84488cb5b42481bc1e179da1b038195684202c21d6b62b625c3ec33b3aebfd7",
+    "evidence/layer-backend-compile-011/source-manifest.json": "3841c7ca95428d4ee259461173c9f73bd24e3c0a598f74cd60f579471b0c757c",
+    "evidence/layer-projection-compile-012/sram-summary.json": "be751605bfb2edbb76ca49fc68e4ee5a4c91a71fcddc2d878ca4841cc8f88636",
+    "evidence/layer-projection-compile-013/sram-summary.json": "2fe545e559dc5397efb7975331c6355118590ce088480e7007e3134de1d8bd07",
+    "spatial/layer_fused_routes.py": "5c14c5d7556de9c109f2c7eef2157f0453c03019e37e60b5aeaf87a083851e19",
+    "spatial/layer_routes.py": "874ff34a2bd4f8bbb6553d2a88007b729fbd2341fa53046e3e51fd43e12faaa2",
+    "runtime/layer_projection.csl": "59d4794894a89c85e78d50721ea6410a6c4c0dc2e74ee3d31e1e4ea88b55f440",
+    "csl/layer_native.csl": "3ccead305aaef1ca29e94bb77216d69298250cd148182eedf8f927d4732212ea",
+    "csl/layer_fusion_ingress.csl": "51deb1d16c2b6744cbaf3679ffaabcf19fd81b9731e30218876491110cae44ed",
+    "csl/layer_fusion_transport.csl": "584b86136d60b8ca45c5df56e8fdda9244aec82862fd597bd6326eb5a3f21317",
+    "csl/layer_fusion.csl": "ee4d0b1df3448c0dd9af73a8d8ccee4ed849993587d0000f23a8640fa62447a4",
+    "tests/test_layer_fused_routes.py": "6ff5009fbb1abe905d88607e6acdfb6aebbc177e1b5ea08d17c70c450a0b7f14",
+    "tools/stage_layer_projection_compile.py": "f43be5bb6a8256db354e19b63036b08264e6a2d07986eca6824863e84c7fc833",
+    "tools/collect_layer_census.py": "23a3dd2ec621c6996645cc741c020c13547ec8d48757e3f9f20fa37959494d9f"
+  }
+}

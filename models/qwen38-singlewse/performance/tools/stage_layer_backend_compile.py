@@ -19,6 +19,7 @@ def main():
     if active.stdout.strip():raise ValueError('Live workstation owner: '+active.stdout)
     files={}
     for dest,source in {
+        'layer_fusion_ingress.csl':'performance/csl/layer_fusion_ingress.csl',
         'layer_controller.csl':'performance/runtime/layer_controller.csl','layer_backend.csl':'performance/runtime/layer_backend.csl','layer_native.csl':'performance/csl/layer_native.csl',
         'bf16_row.csl':'performance/csl/bf16_row.csl','layer_fusion.csl':'performance/csl/layer_fusion.csl','mlp_fused.csl':'performance/csl/mlp_fused.csl','fp8_encode.csl':'performance/csl/fp8_encode.csl','qwen_math.csl':'csl/qwen_math.csl','pipeline_lease.csl':'performance/csl/pipeline_lease.csl','gdn_page.csl':'performance/csl/gdn_page.csl',
         'fp8_unpack_shift.csl':'performance/csl/fp8_unpack_shift.csl','fp8_shape.csl':'performance/probes/native_shapes/fp8_shape.csl',

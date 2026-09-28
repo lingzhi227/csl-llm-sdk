@@ -81,6 +81,26 @@ Selected network compile007 admits16 maximum-actual-payload body profiles at
 SRAM, the combined native/fusion communication leases and changed arithmetic
 remain unqualified. See [LAYER-PROJECTION-NETWORK.md](LAYER-PROJECTION-NETWORK.md).
 
+## P25 static cross-kernel copy transport
+
+P25 supersedes P23's round-robin fusion scratch assignment and P24's per-block
+software-credit requirement for the new gate/up copy path. It preserves weight
+and auxiliary addresses and the original arithmetic tree. Seven-color interval
+trees plus congestion-aware fixed-color paths connect both complete gate/up
+geometries; every actual PE/ELF is admitted at maximum47712bytes including stack.
+The64-layer metadata audit checks4032 projection streams, while full-region
+compiler012/013 cover5226/5264 PEs. Input/down paths and neural execution remain
+open. The earlier color-swap candidate is rejected by actual WSE-3 compilation.
+
+Private sender memory is reusable once its packet is copied into a permanently
+bound FIFO output queue. Hardware backpressure limits outstanding traffic.
+This grants no stage/request completion. A separate256-byte early suffix buffer
+allows independently arriving neighboring projection roots to progress without
+waiting for the receiver's earlier quantization groups. Main/suffix DMA leases
+compose with the actor's native computation; final request/state drain and actual
+downstream distribution are the next integration gates. See
+[LAYER-FUSED-TRANSPORT.md](LAYER-FUSED-TRANSPORT.md).
+
 ## Explicit resource limits
 
 P22 gave every region exact cyclic matrix slots and a prefix allocation of128-byte

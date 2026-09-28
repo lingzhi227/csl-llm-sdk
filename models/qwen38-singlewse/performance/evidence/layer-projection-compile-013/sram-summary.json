@@ -1,0 +1,89 @@
+{
+  "passed": true,
+  "physical": false,
+  "executed": false,
+  "application": [
+    56,
+    94
+  ],
+  "application_pes": 5264,
+  "compiled_elf_images": 2847,
+  "maximum_with_stack": 47712,
+  "minimum_margin": 416,
+  "bytes_to_pe_count": {
+    "29120": 41,
+    "29456": 18,
+    "29472": 24,
+    "29488": 11,
+    "29584": 1,
+    "33776": 3,
+    "35328": 1,
+    "35376": 12,
+    "35712": 4,
+    "35728": 3,
+    "35744": 10,
+    "45760": 7,
+    "46096": 1,
+    "46112": 5,
+    "46128": 3,
+    "46832": 1777,
+    "47168": 751,
+    "47184": 1886,
+    "47216": 271,
+    "47296": 1,
+    "47312": 1,
+    "47328": 27,
+    "47552": 113,
+    "47568": 289,
+    "47680": 1,
+    "47712": 3
+  },
+  "maximum_examples": [
+    {
+      "file": "out/bin/out_80_0.elf",
+      "sha256": "a18b03bbcb39ae56b4beaa5f16a1a1dbe0dc942e7d55e10035451f854627ef64",
+      "rectangles": [
+        [
+          20,
+          5,
+          1,
+          1
+        ]
+      ],
+      "low_section_end": 43616,
+      "stack_allowance_bytes": 4096
+    },
+    {
+      "file": "out/bin/out_85_0.elf",
+      "sha256": "14d99f501c336b8b6db5cc1b3397ec28e7a9ea1963fac7da27cd8e3e286c6a6c",
+      "rectangles": [
+        [
+          51,
+          8,
+          1,
+          1
+        ]
+      ],
+      "low_section_end": 43616,
+      "stack_allowance_bytes": 4096
+    },
+    {
+      "file": "out/bin/out_90_0.elf",
+      "sha256": "f92455b733631144fd8dc62941401af72dbd53541e583ea60c7a3ab87fbec44a",
+      "rectangles": [
+        [
+          4,
+          11,
+          1,
+          1
+        ]
+      ],
+      "low_section_end": 43616,
+      "stack_allowance_bytes": 4096
+    }
+  ],
+  "remote_census_bytes": 1893325,
+  "remote_census_sha256": "cb4e50e3532a29ff0e76e5850144ba5a4061670b2cd544d00bc1612dd3afad36",
+  "source_manifest_sha256": "b937ef70d735b73407be9c316cda84c18b7e0fea396cc4319f59de97d6120e74",
+  "note": "Every ELF SRAM record and every original application coordinate independently checked. Full census and ELF images remain on remote storage."
+}

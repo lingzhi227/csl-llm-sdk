@@ -1,0 +1,624 @@
+{
+  "profiles": [
+    {
+      "pe": [
+        63,
+        0
+      ],
+      "rank": 0,
+      "group": "layer_00/gate_up/K0",
+      "original_matrix_bytes": 34840,
+      "live_auxiliary_bytes": 384,
+      "parameters": {
+        "rows": 8,
+        "columns": 32,
+        "branches": 2,
+        "max_parts": 1,
+        "bank_words": 8806,
+        "root": false,
+        "children": 0,
+        "subtree_k": 1,
+        "left_k": 0,
+        "right_k": 0,
+        "left_color": 3,
+        "right_color": 4,
+        "out_color": 3
+      },
+      "arm": {
+        "parts": 1,
+        "iterations": 67,
+        "base0": 0,
+        "base1": 4355,
+        "first_output": 0
+      },
+      "native_input_slices": [
+        0
+      ]
+    },
+    {
+      "pe": [
+        64,
+        0
+      ],
+      "rank": 1,
+      "group": "layer_00/gate_up/K0",
+      "original_matrix_bytes": 34840,
+      "live_auxiliary_bytes": 384,
+      "parameters": {
+        "rows": 8,
+        "columns": 32,
+        "branches": 2,
+        "max_parts": 1,
+        "bank_words": 8806,
+        "root": false,
+        "children": 1,
+        "subtree_k": 2,
+        "left_k": 1,
+        "right_k": 0,
+        "left_color": 3,
+        "right_color": 4,
+        "out_color": 4
+      },
+      "arm": {
+        "parts": 1,
+        "iterations": 67,
+        "base0": 0,
+        "base1": 4355,
+        "first_output": 0
+      },
+      "native_input_slices": [
+        1
+      ]
+    },
+    {
+      "pe": [
+        103,
+        0
+      ],
+      "rank": 40,
+      "group": "layer_00/gate_up/K0",
+      "original_matrix_bytes": 34840,
+      "live_auxiliary_bytes": 384,
+      "parameters": {
+        "rows": 8,
+        "columns": 32,
+        "branches": 2,
+        "max_parts": 1,
+        "bank_words": 8806,
+        "root": false,
+        "children": 2,
+        "subtree_k": 80,
+        "left_k": 40,
+        "right_k": 39,
+        "left_color": 4,
+        "right_color": 3,
+        "out_color": 5
+      },
+      "arm": {
+        "parts": 1,
+        "iterations": 67,
+        "base0": 0,
+        "base1": 4355,
+        "first_output": 0
+      },
+      "native_input_slices": [
+        40
+      ]
+    },
+    {
+      "pe": [
+        138,
+        1
+      ],
+      "rank": 80,
+      "group": "layer_00/gate_up/K0",
+      "original_matrix_bytes": 34840,
+      "live_auxiliary_bytes": 384,
+      "parameters": {
+        "rows": 8,
+        "columns": 32,
+        "branches": 2,
+        "max_parts": 1,
+        "bank_words": 8806,
+        "root": true,
+        "children": 2,
+        "subtree_k": 160,
+        "left_k": 80,
+        "right_k": 79,
+        "left_color": 5,
+        "right_color": 3,
+        "out_color": 10,
+        "fused_root": true,
+        "main_credit_color": 11,
+        "boundary_rows": 0
+      },
+      "arm": {
+        "parts": 1,
+        "iterations": 67,
+        "base0": 0,
+        "base1": 4355,
+        "first_output": 0
+      },
+      "native_input_slices": [
+        80
+      ]
+    },
+    {
+      "pe": [
+        134,
+        3
+      ],
+      "rank": 240,
+      "group": "layer_00/gate_up/K1",
+      "original_matrix_bytes": 34840,
+      "live_auxiliary_bytes": 384,
+      "parameters": {
+        "rows": 8,
+        "columns": 32,
+        "branches": 2,
+        "max_parts": 1,
+        "bank_words": 8806,
+        "root": true,
+        "children": 2,
+        "subtree_k": 160,
+        "left_k": 80,
+        "right_k": 79,
+        "left_color": 5,
+        "right_color": 3,
+        "out_color": 10,
+        "fused_root": true,
+        "main_credit_color": 9,
+        "boundary_rows": 13,
+        "boundary_out_color": 0,
+        "boundary_credit_color": 1
+      },
+      "arm": {
+        "parts": 1,
+        "iterations": 67,
+        "base0": 0,
+        "base1": 4355,
+        "first_output": 536
+      },
+      "native_input_slices": [
+        80
+      ]
+    },
+    {
+      "pe": [
+        90,
+        65
+      ],
+      "rank": 5120,
+      "group": "layer_00/gate_up/K32",
+      "original_matrix_bytes": 33280,
+      "live_auxiliary_bytes": 0,
+      "parameters": {
+        "rows": 8,
+        "columns": 32,
+        "branches": 2,
+        "max_parts": 2,
+        "bank_words": 8320,
+        "root": false,
+        "children": 0,
+        "subtree_k": 2,
+        "left_k": 0,
+        "right_k": 0,
+        "left_color": 3,
+        "right_color": 4,
+        "out_color": 3
+      },
+      "arm": {
+        "parts": 2,
+        "iterations": 32,
+        "base0": 0,
+        "base1": 4160,
+        "first_output": 17152
+      },
+      "native_input_slices": [
+        0,
+        106
+      ]
+    },
+    {
+      "pe": [
+        64,
+        65
+      ],
+      "rank": 5146,
+      "group": "layer_00/gate_up/K32",
+      "original_matrix_bytes": 33280,
+      "live_auxiliary_bytes": 0,
+      "parameters": {
+        "rows": 8,
+        "columns": 32,
+        "branches": 2,
+        "max_parts": 2,
+        "bank_words": 8320,
+        "root": false,
+        "children": 2,
+        "subtree_k": 106,
+        "left_k": 52,
+        "right_k": 52,
+        "left_color": 4,
+        "right_color": 3,
+        "out_color": 5
+      },
+      "arm": {
+        "parts": 2,
+        "iterations": 32,
+        "base0": 0,
+        "base1": 4160,
+        "first_output": 17152
+      },
+      "native_input_slices": [
+        26,
+        132
+      ]
+    },
+    {
+      "pe": [
+        85,
+        65
+      ],
+      "rank": 5125,
+      "group": "layer_00/gate_up/K32",
+      "original_matrix_bytes": 33280,
+      "live_auxiliary_bytes": 0,
+      "parameters": {
+        "rows": 8,
+        "columns": 32,
+        "branches": 2,
+        "max_parts": 2,
+        "bank_words": 8320,
+        "root": false,
+        "children": 1,
+        "subtree_k": 4,
+        "left_k": 2,
+        "right_k": 0,
+        "left_color": 5,
+        "right_color": 4,
+        "out_color": 3
+      },
+      "arm": {
+        "parts": 2,
+        "iterations": 32,
+        "base0": 0,
+        "base1": 4160,
+        "first_output": 17152
+      },
+      "native_input_slices": [
+        5,
+        111
+      ]
+    },
+    {
+      "pe": [
+        88,
+        66
+      ],
+      "rank": 5173,
+      "group": "layer_00/gate_up/K32",
+      "original_matrix_bytes": 33280,
+      "live_auxiliary_bytes": 0,
+      "parameters": {
+        "rows": 8,
+        "columns": 32,
+        "branches": 2,
+        "max_parts": 2,
+        "bank_words": 8320,
+        "root": true,
+        "children": 2,
+        "subtree_k": 160,
+        "left_k": 106,
+        "right_k": 52,
+        "left_color": 5,
+        "right_color": 3,
+        "out_color": 9,
+        "fused_root": true,
+        "main_credit_color": 8,
+        "boundary_rows": 0
+      },
+      "arm": {
+        "parts": 2,
+        "iterations": 32,
+        "base0": 0,
+        "base1": 4160,
+        "first_output": 17152
+      },
+      "native_input_slices": [
+        53,
+        159
+      ]
+    },
+    {
+      "pe": [
+        108,
+        67
+      ],
+      "rank": 0,
+      "group": "layer_00/down/K0",
+      "original_matrix_bytes": 35100,
+      "live_auxiliary_bytes": 128,
+      "parameters": {
+        "rows": 4,
+        "columns": 64,
+        "branches": 1,
+        "max_parts": 1,
+        "bank_words": 8807,
+        "root": false,
+        "children": 0,
+        "subtree_k": 1,
+        "left_k": 0,
+        "right_k": 0,
+        "left_color": 3,
+        "right_color": 4,
+        "out_color": 17
+      },
+      "arm": {
+        "parts": 1,
+        "iterations": 135,
+        "base0": 0,
+        "base1": 0,
+        "first_output": 0
+      },
+      "native_input_slices": [
+        0
+      ]
+    },
+    {
+      "pe": [
+        109,
+        67
+      ],
+      "rank": 1,
+      "group": "layer_00/down/K0",
+      "original_matrix_bytes": 35100,
+      "live_auxiliary_bytes": 128,
+      "parameters": {
+        "rows": 4,
+        "columns": 64,
+        "branches": 1,
+        "max_parts": 1,
+        "bank_words": 8807,
+        "root": false,
+        "children": 1,
+        "subtree_k": 2,
+        "left_k": 1,
+        "right_k": 0,
+        "left_color": 17,
+        "right_color": 4,
+        "out_color": 15
+      },
+      "arm": {
+        "parts": 1,
+        "iterations": 135,
+        "base0": 0,
+        "base1": 0,
+        "first_output": 0
+      },
+      "native_input_slices": [
+        1
+      ]
+    },
+    {
+      "pe": [
+        110,
+        69
+      ],
+      "rank": 68,
+      "group": "layer_00/down/K0",
+      "original_matrix_bytes": 35100,
+      "live_auxiliary_bytes": 128,
+      "parameters": {
+        "rows": 4,
+        "columns": 64,
+        "branches": 1,
+        "max_parts": 1,
+        "bank_words": 8807,
+        "root": false,
+        "children": 2,
+        "subtree_k": 136,
+        "left_k": 68,
+        "right_k": 67,
+        "left_color": 5,
+        "right_color": 6,
+        "out_color": 3
+      },
+      "arm": {
+        "parts": 1,
+        "iterations": 135,
+        "base0": 0,
+        "base1": 0,
+        "first_output": 0
+      },
+      "native_input_slices": [
+        68
+      ]
+    },
+    {
+      "pe": [
+        112,
+        71
+      ],
+      "rank": 136,
+      "group": "layer_00/down/K0",
+      "original_matrix_bytes": 35100,
+      "live_auxiliary_bytes": 128,
+      "parameters": {
+        "rows": 4,
+        "columns": 64,
+        "branches": 1,
+        "max_parts": 1,
+        "bank_words": 8807,
+        "root": true,
+        "children": 2,
+        "subtree_k": 272,
+        "left_k": 136,
+        "right_k": 135,
+        "left_color": 3,
+        "right_color": 4,
+        "out_color": 19
+      },
+      "arm": {
+        "parts": 1,
+        "iterations": 135,
+        "base0": 0,
+        "base1": 0,
+        "first_output": 0
+      },
+      "native_input_slices": [
+        136
+      ]
+    },
+    {
+      "pe": [
+        114,
+        141
+      ],
+      "rank": 2448,
+      "group": "layer_00/down/K9",
+      "original_matrix_bytes": 33800,
+      "live_auxiliary_bytes": 0,
+      "parameters": {
+        "rows": 4,
+        "columns": 64,
+        "branches": 1,
+        "max_parts": 2,
+        "bank_words": 8450,
+        "root": false,
+        "children": 0,
+        "subtree_k": 2,
+        "left_k": 0,
+        "right_k": 0,
+        "left_color": 3,
+        "right_color": 4,
+        "out_color": 15
+      },
+      "arm": {
+        "parts": 2,
+        "iterations": 65,
+        "base0": 0,
+        "base1": 0,
+        "first_output": 4860
+      },
+      "native_input_slices": [
+        0,
+        159
+      ]
+    },
+    {
+      "pe": [
+        115,
+        141
+      ],
+      "rank": 2449,
+      "group": "layer_00/down/K9",
+      "original_matrix_bytes": 33800,
+      "live_auxiliary_bytes": 0,
+      "parameters": {
+        "rows": 4,
+        "columns": 64,
+        "branches": 1,
+        "max_parts": 2,
+        "bank_words": 8450,
+        "root": false,
+        "children": 1,
+        "subtree_k": 4,
+        "left_k": 2,
+        "right_k": 0,
+        "left_color": 15,
+        "right_color": 4,
+        "out_color": 13
+      },
+      "arm": {
+        "parts": 2,
+        "iterations": 65,
+        "base0": 0,
+        "base1": 0,
+        "first_output": 4860
+      },
+      "native_input_slices": [
+        1,
+        160
+      ]
+    },
+    {
+      "pe": [
+        115,
+        576
+      ],
+      "rank": 2494,
+      "group": "layer_03/down/K9",
+      "original_matrix_bytes": 33800,
+      "live_auxiliary_bytes": 0,
+      "parameters": {
+        "rows": 4,
+        "columns": 64,
+        "branches": 1,
+        "max_parts": 2,
+        "bank_words": 8450,
+        "root": false,
+        "children": 2,
+        "subtree_k": 180,
+        "left_k": 92,
+        "right_k": 86,
+        "left_color": 5,
+        "right_color": 6,
+        "out_color": 3
+      },
+      "arm": {
+        "parts": 2,
+        "iterations": 65,
+        "base0": 0,
+        "base1": 0,
+        "first_output": 4860
+      },
+      "native_input_slices": [
+        46,
+        230
+      ]
+    },
+    {
+      "pe": [
+        127,
+        143
+      ],
+      "rank": 2527,
+      "group": "layer_00/down/K9",
+      "original_matrix_bytes": 33800,
+      "live_auxiliary_bytes": 0,
+      "parameters": {
+        "rows": 4,
+        "columns": 64,
+        "branches": 1,
+        "max_parts": 2,
+        "bank_words": 8450,
+        "root": true,
+        "children": 2,
+        "subtree_k": 272,
+        "left_k": 158,
+        "right_k": 112,
+        "left_color": 3,
+        "right_color": 4,
+        "out_color": 19
+      },
+      "arm": {
+        "parts": 2,
+        "iterations": 65,
+        "base0": 0,
+        "base1": 0,
+        "first_output": 4860
+      },
+      "native_input_slices": [
+        79,
+        238
+      ]
+    }
+  ],
+  "application": [
+    17,
+    1
+  ],
+  "physical": false,
+  "scope": "Actual selected resident native-network roles; no connected fabric, simulator or neural execution."
+}

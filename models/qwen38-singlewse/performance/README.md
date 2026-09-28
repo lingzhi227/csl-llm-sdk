@@ -7,17 +7,21 @@ Independent requests may overlap with isolated state. The earlier per-request
 interpretation and whole-wafer shared-layer overlay are superseded. The target
 remains unmet; this is active development.
 
-P24 adds arrival-driven native projection workers and complete original MLP
-reduction trees within the resident stages:499568 tree edges and139264 projected
-blocks feed the declared fused group owners. Sixteen selected communication-role
-profiles compile at47936bytes including the declared stack;102 source tests pass.
-Fusion receipts release copied projection blocks before waiting for a complete
-quantization group. Input distribution, root-to-consumer/credit routes, full
-layer SRAM and connected neural execution remain unfinished. No model TPS is
-claimed. See [LAYER-PROJECTION-NETWORK.md](docs/LAYER-PROJECTION-NETWORK.md),
-[RESIDENT-LAYER-BACKEND.md](docs/RESIDENT-LAYER-BACKEND.md),
-[ARCHITECTURE.md](docs/ARCHITECTURE.md),
-[MEASUREMENT.md](docs/MEASUREMENT.md) and [NEXT-STEPS.md](docs/NEXT-STEPS.md).
+P25 compiles both complete original gate/up region geometries with native workers,
+full-K reductions, static projection paths and cohosted dual-stream fusion:
+5226 GDN PEs and5264 attention PEs, maximum47712bytes including4096 stack.
+All64 layers'4032 projection streams and139264 eight-row blocks pass static
+ownership/routing checks. Fixed copied FIFO transport releases only private
+sender memory at DMA completion; hardware backpressure replaces per-block
+software receipts. Separate early-suffix buffers avoid a cross-root serial wait.
+Original weight/auxiliary addresses and arithmetic trees are preserved.
+
+The first whole-region attempt rejected unsupported WSE-3 color swapping;
+current routes003 and compiles012/013 use fixed colors. All109 source tests pass.
+Input/downstream distributions, final stage drain, neural numerical execution
+and full-model speed remain unqualified. No WSE job was added. See
+[LAYER-FUSED-TRANSPORT.md](docs/LAYER-FUSED-TRANSPORT.md) and
+[NEXT-STEPS.md](docs/NEXT-STEPS.md).
 
 Generate a fresh candidate with
 `python3 performance/tools/plan_pipeline.py --output <new-directory>`.

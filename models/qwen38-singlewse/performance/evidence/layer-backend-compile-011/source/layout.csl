@@ -1,0 +1,26 @@
+const memcpy=@import_module("<memcpy/get_params>",.{.width=6,.height=1});
+layout {
+ @set_rectangle(6,1);
+ @set_tile_code(0,0,"layer_backend.csl",.{.memcpy_params=memcpy.get_params(0),.rows=2,.columns=128,.branches=1,.mix=true,.bank_words=8814,.fusion_actor=false});
+ @set_tile_code(1,0,"layer_backend.csl",.{.memcpy_params=memcpy.get_params(1),.rows=8,.columns=32,.branches=2,.mix=false,.bank_words=8814,.fusion_actor=false});
+ @set_tile_code(2,0,"layer_backend.csl",.{.memcpy_params=memcpy.get_params(2),.rows=4,.columns=64,.branches=1,.mix=false,.bank_words=8814,.fusion_actor=false});
+ @set_tile_code(3,0,"layer_backend.csl",.{.memcpy_params=memcpy.get_params(3),.rows=2,.columns=128,.branches=1,.mix=false,.bank_words=8814,.fusion_actor=false});
+ @set_tile_code(4,0,"layer_backend.csl",.{.memcpy_params=memcpy.get_params(4),.rows=8,.columns=32,.branches=2,.mix=false,.bank_words=4160,.fusion_actor=true});
+ @set_tile_code(5,0,"layer_controller.csl",.{.memcpy_params=memcpy.get_params(5),.requests=2,.context=96,.chunks=40});
+ @export_name("bank",[*]u32,false);
+ @export_name("packet",[*]u32,false);
+ @export_name("info",[*]u32,false);
+ @export_name("state_operands",[*]f32,false);
+ @export_name("state_result",[*]f32,false);
+ @export_name("partial",[*]f32,false);
+ @export_name("control",[*]u32,false);
+ @export_name("fusion_packet",[*]u32,false);
+ @export_name("bf16_result",[*]f32,false);
+ @export_name("projection_credit",[*]u32,false);
+ @export_name("command",fn(u16)void);
+ @export_name("request_begin",fn(u16,u32,u16)void);
+ @export_name("request_chunk",fn(u16,u32,u16,u32,u16,u16)void);
+ @export_name("request_committed",fn(u16,u32)void);
+ @export_name("request_completed",fn(u16,u32,u16,u16)void);
+ @export_name("request_reset",fn(u16,u32,u16)void);
+}

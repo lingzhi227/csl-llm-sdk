@@ -1,0 +1,15 @@
+{
+  "sdk": "2.10.1",
+  "files": [
+    {
+      "path": "csl-extras/examples/tutorials/topic-14-color-swap/README.rst",
+      "finding": "The installed tutorial explicitly limits color swap to WSE-2; WSE-3 support is not available. Whole-region compile011 independently rejects color_swap_x."
+    },
+    {
+      "path": "csl-extras/examples/tutorials/topic-16-queue-flush/queue_flush_sender.csl",
+      "finding": "Completion means source data have been copied into the output queue. Queue contents may remain in flight; changing that queue color requires queue flush. The P25 copy transport never reconfigures colors/queues and only reuses private source memory after completion."
+    }
+  ],
+  "primary_repository": "https://github.com/Cerebras/sdk-examples",
+  "source": "Read directly from the installed SDK on workstation; no current-web-version equivalence asserted."
+}

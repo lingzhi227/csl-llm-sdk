@@ -8,16 +8,25 @@ sentences and >=2000 aggregate completed generated tokens/s in sustained steady
 state. Independent requests may overlap. The old per-request target and broad
 whole-wafer shared-layer time overlay are superseded.
 
-P24 adds actual arrival-driven native projection/reduction code, full original
-MLP tree routing checks and copied-block projection receipts in the fused actor.
-Sixteen selected communication-role profiles compile at47936bytes including the
-declared stack;102 source tests pass. The original weight addresses are preserved.
-Full input/root-consumer/credit routes, whole-layer SRAM, numerical execution and
-speed remain unqualified. See ../performance/docs/LAYER-PROJECTION-NETWORK.md and
-NEXT-STEPS.md. All seven new projection compile attempts and backend009 are
-released. No new physical
-WSE job was submitted; the final snapshot has no own active jobs or assignments.
-Historical functional results below are unchanged.
+P25 compiles both complete original gate/up region geometries with native workers,
+full-K reductions, static projection paths and cohosted dual-stream fusion:
+5226 GDN PEs and5264 attention PEs, maximum47712bytes including4096 stack.
+All64 layers'4032 projection streams and139264 eight-row blocks pass static
+ownership/routing checks. Fixed copied FIFO transport releases only private
+sender memory at DMA completion; hardware backpressure replaces per-block
+software receipts. Separate early-suffix buffers avoid a cross-root serial wait.
+Original weight/auxiliary addresses and arithmetic trees are preserved.
+
+The first whole-region attempt rejected unsupported WSE-3 color swapping;
+current routes003 and compiles012/013 use fixed colors. All109 source tests pass.
+Input/downstream distributions, final stage drain, neural numerical execution
+and full-model speed remain unqualified. No WSE job was added. See
+[LAYER-FUSED-TRANSPORT.md](../performance/docs/LAYER-FUSED-TRANSPORT.md) and
+[NEXT-STEPS.md](../performance/docs/NEXT-STEPS.md).
+
+All bounded P25 compiler services are released. The final hardware accounting
+snapshot has no own active jobs or assignments. Historical functional results
+below are unchanged.
 
 ## Latest: initial functional phase closed for publication
 

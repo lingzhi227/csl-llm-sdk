@@ -1,30 +1,27 @@
 # Next work: resident spatial pipeline
 
-1. Keep P22's two-request stage rectangles and P23's layer-native-schedule-002
-   original tensor addresses authoritative. Use P24's balanced contraction roots
-   and checked original-K trees. Lower still-open retained-input distributions,
-   root-to-fusion paths and actual copied-block credit fanouts; instantiate real
-   GDN, norm, gate/up, fused activation,
-   down/residual and successor consumption on those disjoint rectangles.
-2. Connect the P23 native loops,4x8 FP32 state pages,1x128 BF16 rows, direct
-   projected-pair fusion actors and separate stage request controllers. Admit
-   simultaneous colors/queues/DSRs/threads and actual code/data/stack for every
-   participating role before execution. Selected network compile007 has192bytes
-   minimum margin; backend009 admits the new projection-packet fusion interface.
-   Neither admits full neural/fabric composition. The new direct-single native
-   path and full-K reduction order require independent numerical qualification.
-3. Freeze independent numerical references and changed-reduction tolerances for
-   two different real requests before device results. Validate complete neighboring
-   layers, retained states, backpressure, both send/credit orders and warm reset.
-   No injected intermediate values may stand in for the actual predecessor.
-4. Measure complete stage service and ownership-transfer time. Rebalance areas,
-   state/scale packing, scratch reuse and spatial fusion using these measurements.
-   Current concurrency2 is a capacity result, not enough to predict2000tokens/s.
-5. Generate every layer plus embedding/full head, actual selected-token feedback,
-   physical host I/O and bounded request ingress/reset. Run complete sentences and
-   the frozen aggregate-throughput contract. Publish each actual milestone and
-   release all owned workstation/WSE resources. Preserve unsuccessful evidence.
+1. Keep P22 rectangles, P23 schedule002 original weight/auxiliary addresses and
+   P24 arithmetic trees. Use P25 routes003's fixed-color projection paths and
+   consecutive fusion group overlay. Compiles012/013 admit every actual PE in
+   both gate/up region geometries, including cohosted fusion transport.
+2. Lower retained native input distribution and fused group128 down-input fanout.
+   Bind actual down sends/consumption to the reserved transport lease, then
+   down reduction/residual and successor input. Preserve fixed queues and hardware
+   backpressure for copied packets. A local DMA/row-loop completion is not a stage
+   drain or request/state credit; connect those explicitly to the stage controller.
+3. Compose original GDN/conv/gates, RMS/norm, attention and4x8 FP32 pages on the
+   actual disjoint regions. Admit every participating program and simultaneous
+   queue/DSR/UT use before execution. Full gate/up admission leaves416B minimum
+   margin; it is not a whole-layer resource allowance or neural result.
+4. Freeze independent changed-reduction references before device observations.
+   Validate neighboring full layers on two distinct real requests, retained states,
+   backpressure and warm reset. Use actual predecessor values throughout.
+5. Measure complete stage service/ownership transfer, rebalance memory/areas and
+   concurrency, then instantiate embedding/all64 stages/full head/token feedback.
+   Run correct complete sentences and the predeclared>=2000 aggregate generated
+   tokens/s contract, publish evidenced milestones and release owned resources.
 
-Do not expand the superseded whole-wafer shared-layer MLP candidate or dispatch
-another old-layout hardware trial. Its compile003 was owner-cancelled/released on
-2026-09-27 after the immediate architecture correction, with no WSE submission.
+Do not dispatch the retired whole-wafer temporal-overlay candidate or the
+unsupported color-swap routing candidate. Preserve failed and successful source,
+compiler results and resource receipts. Protocol/byte/static-route checks and
+regional compiles do not establish complete neural execution or model TPS.

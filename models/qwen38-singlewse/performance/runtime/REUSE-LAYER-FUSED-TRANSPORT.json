@@ -1,0 +1,17 @@
+{
+  "parent_milestone": "1949829ec3fbbd4fb2935300f46e97530ce7018a",
+  "parent_sources": {
+    "layer_projection.csl": "862391501439e22db9b70b2725f5bd6638eb37b5a1a0ccd872a134f888ac03f6",
+    "layer_native.csl": "285255b2ecf0047cf167cae568e9067f9f61b103c7270c9eb7fdf5bff9b6a370",
+    "layer_routes.py": "113dc37ad7db9d5ead8a932e8d760d08d98ec6b816b8b5caee12359f0dc90c28"
+  },
+  "changes": [
+    "Recolor the same reduction intervals; use fixed WSE-3 colors for root/actor streams.",
+    "Release private source memory after copying the full packet into an immutable FIFO output queue; preserve separate stage/request drain requirements.",
+    "Cohost two independent projected-block receives with native computation; retain early final-group suffix in separate256B buffer.",
+    "Gate all queue and UT/DSR borrowing by operand capture/send lifetimes; reserve the down-output send lease."
+  ],
+  "original_arithmetic_order_preserved": true,
+  "numerical_qualification": false,
+  "physical_execution": false
+}

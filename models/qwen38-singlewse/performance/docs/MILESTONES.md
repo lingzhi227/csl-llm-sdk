@@ -861,3 +861,20 @@ service is released; no WSE job was added and the final hardware snapshot has no
 own active job/system assignment. See LAYER-PROJECTION-NETWORK.md and the bound
 layer-projection-network-summary-001 receipt. Complete layers and full-model
 correct sentences at>=2000 aggregate generated tokens/s remain unfinished.
+
+## P25: whole-region projection-to-fusion transport
+
+Both original gate/up geometries compile with every actual native/reduction and
+fusion role:5226/5264 PEs,1957/2847 ELF images, maximum47712bytes including4096
+stack. Fixed-color routes003 checks4032 projected streams and139264 original
+blocks across64 resident layers. Private DMA source ownership and hardware FIFO
+backpressure remove per-block software receipts; a separate early suffix buffer
+prevents cross-root head-of-line waiting. Original bank addresses and arithmetic
+orders are unchanged. Unsupported WSE-3 color swapping, failed fixed-color
+receipt routing and syntax failures remain frozen. All109 source tests pass.
+
+This is regional compiler/protocol admission. Input/downstream distribution,
+stage drain, changed-operation numerical qualification, neighboring-layer and
+full-model sentence generation/TPS remain unfinished. No WSE job was submitted;
+all eight P25 bounded compiler services are released and account allocation is
+empty. See LAYER-FUSED-TRANSPORT.md and layer-fused-transport-summary-001.json.
