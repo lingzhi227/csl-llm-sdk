@@ -1,0 +1,122 @@
+{
+  "passed": true,
+  "physical": false,
+  "executed": false,
+  "application": [
+    78,
+    146
+  ],
+  "application_pes": 11388,
+  "compiled_elf_images": 4179,
+  "maximum_with_stack": 48128,
+  "minimum_margin": 0,
+  "bytes_to_pe_count": {
+    "8448": 2,
+    "17280": 1,
+    "27472": 1,
+    "29312": 14,
+    "29552": 5,
+    "29632": 5,
+    "29648": 17,
+    "29872": 1,
+    "29888": 2,
+    "29904": 4,
+    "32048": 1,
+    "32592": 1,
+    "32608": 3,
+    "32928": 2,
+    "32944": 3,
+    "33072": 3,
+    "33408": 1,
+    "33424": 3,
+    "40960": 1,
+    "43632": 3200,
+    "43648": 350,
+    "44336": 1,
+    "44672": 1,
+    "44688": 1,
+    "45712": 11,
+    "45728": 1,
+    "46000": 1,
+    "46048": 6,
+    "46064": 4,
+    "46080": 7,
+    "46192": 22,
+    "46208": 45,
+    "46512": 8,
+    "46528": 22,
+    "46544": 45,
+    "46560": 23,
+    "46640": 1,
+    "46656": 1,
+    "47088": 671,
+    "47216": 481,
+    "47264": 1777,
+    "47408": 389,
+    "47424": 271,
+    "47440": 88,
+    "47536": 282,
+    "47552": 197,
+    "47568": 65,
+    "47584": 751,
+    "47600": 971,
+    "47616": 915,
+    "47648": 271,
+    "47664": 4,
+    "47712": 1,
+    "47744": 28,
+    "47968": 113,
+    "47984": 149,
+    "48000": 140,
+    "48096": 1,
+    "48128": 3
+  },
+  "maximum_examples": [
+    {
+      "file": "out/bin/out_86_0.elf",
+      "sha256": "b4db177a3b43cb7eada1bc4dafd6f2aac9a3bc5b7577ab7e9a07f9ebcc51ca50",
+      "rectangles": [
+        [
+          138,
+          4,
+          1,
+          1
+        ]
+      ],
+      "low_section_end": 44032,
+      "stack_allowance_bytes": 4096
+    },
+    {
+      "file": "out/bin/out_87_0.elf",
+      "sha256": "c14344b7287c32ce62f047cae2f098f5894a92a176cbb6f1b7f3ec0bca65770a",
+      "rectangles": [
+        [
+          134,
+          6,
+          1,
+          1
+        ]
+      ],
+      "low_section_end": 44032,
+      "stack_allowance_bytes": 4096
+    },
+    {
+      "file": "out/bin/out_88_0.elf",
+      "sha256": "3ebc09b79daede47d286d12cb2eacaeceb4d32713394d3d67defdf106838347d",
+      "rectangles": [
+        [
+          130,
+          8,
+          1,
+          1
+        ]
+      ],
+      "low_section_end": 44032,
+      "stack_allowance_bytes": 4096
+    }
+  ],
+  "remote_census_bytes": 3077215,
+  "remote_census_sha256": "d445694d1cefff3f6c2844e61b54b9fcd15627c632e81e860d383e54d8ed358d",
+  "source_manifest_sha256": "7a0643c8e9f5c5eaac828ddda4ce91a2e3f0ae80f549aa927293ad10dcd1c5e2",
+  "note": "Every ELF SRAM record and every original application coordinate independently checked. Full census and ELF images remain on remote storage."
+}

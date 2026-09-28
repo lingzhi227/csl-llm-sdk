@@ -1,31 +1,30 @@
 # Next work: resident spatial pipeline
 
-1. Keep accepted physical `layer-mlp-hw-004` as the complete original MLP
-   baseline:40 parallel initial quantizers, vector controller copies,713625–713752
-   nonzero controller ticks and2.388–2.801ms completed-output host timings. Preserve
-   the frozen original4-case outputs/ingress/counter/retention/drain contract.
-2. Coalesce all native slices/aliases of a128-value group into one immutable
-   controller packet (max296u32), reducing864 send callbacks to176. Prefetch the
-   next exclusive return frame while the current packet broadcasts, using
-   distinct frame/packet ownership and a finite one-frame credit. The previous
-   complete response must still arrive before granting the next bus source;
-   sender OQ flush must still precede RX restoration. Recheck all SRAM/UT/DSR
-   lifetimes and adversarial delays before the same full-MLP physical comparison.
-   The measured middle405913-tick interval includes both neural work and transport;
-   do not label all of it communication overhead. Then partition the shared
-   distributor where whole-component measurements justify direct fused paths.
-3. Fuse down output with residual, RMS/norm and successor input; compose original
+1. Preserve physical004 and005 as matched complete original MLP baselines with
+   the fixed four-case oracle.005 coalesces864 sends into176 packets and lowers
+   nonzero controller counts to613127–613190, but all host completed-output
+   observations are slower. Do not claim a sustained wall speedup. Every next
+   grant issues during a packet lease; no next response arrives before retirement.
+2. Reduce measured native/distribution service before enlarging the graph. A
+   small paired-input native FMA callback is a candidate to reduce loop overhead
+   while retaining exact FMA order, decoding and scale boundaries. It is not
+   implemented or qualified. Check compiled SRAM/DSR behavior and independent
+   outputs in a bounded workstation probe before spending another WSE allocation.
+   Preserve the accepted kernel until a whole-MLP physical comparison passes.
+3. Partition input/fused-producer distribution using the explicit packet/slice
+   lowering and finite buffer credits. The unchanged49376 words and static
+   routes still cross a central distributor. A native source/consumer path must
+   respect one WSE-3 RX, fixed queue colors, sender flush before RX restoration,
+   and all cohost code/stack/DSR/UT limits. Neither middle phase344874ticks nor
+   static word-hop counts alone identify pure communication time.
+4. Fuse down output with residual, RMS/norm and successor input; compose original
    GDN/conv/gates, attention and4x8 FP32 state pages on disjoint resident regions.
-   Admit all simultaneous code/queue/DSR/UT use and validate adjacent full layers
-   on two actual requests with retained state, backpressure and warm reset.
-4. Measure complete stage service times and traffic. The single granted bus is
-   an initial integration mechanism, not a maximum-speed claim. Replace its
-   bottleneck through measured sharding/overlap while preserving one WSE-3 RX,
-   fixed queue colors, empty-queue route transitions and original arithmetic.
-5. Rebalance memory/areas/concurrency and instantiate embedding, all64 stages,
-   full head and token feedback. Run correct complete sentences and the declared
-   >=2000 aggregate generated tokens/s contract; publish evidence and verify
-   resource release after each bounded experiment.
+   Validate adjacent full layers on two actual requests with retained state,
+   backpressure and warm reset. Preserve original rounding and full dimensions.
+5. Measure complete stage service times, rebalance memory/areas/concurrency and
+   instantiate embedding, all64 stages, full head and token feedback. Run correct
+   complete sentences under the declared>=2000 aggregate generated-token/s
+   contract, publish evidence and verify resource release after bounded trials.
 
 Preserve rejected compiles and exact source snapshots. Do not dispatch the
 retired whole-wafer temporal overlay, WSE-3 color-swap candidate or the rejected

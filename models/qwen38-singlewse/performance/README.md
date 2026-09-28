@@ -7,31 +7,31 @@ Independent requests may overlap with isolated state. The earlier per-request
 interpretation and whole-wafer shared-layer overlay are superseded. The target
 remains unmet; this is active development.
 
-P28 physically accelerates the complete original layer0 MLP while retaining
-all four strict warm-case checks. All20,480 final BF16 outputs, native input
-codes/scales, worker/sender counters, resident banks/tables and actual all-PE drain
-pass; the runtime stops normally. Mixer/state banks remain loaded but their
-neural operations are inactive in this78x146 component.
+P29 qualifies coalesced native distribution and one-frame return prefetch in
+complete original layer0 MLP physical005. Controller send completions fall
+from864 to176 with the same49,376 wire words, arithmetic, weights and routes.
+All20,480 final BF16 outputs, native codes/scales, counters, resident banks/tables,
+all-PE drain and normal stop pass. Mixer/state operations remain inactive.
 
-Forty input quantizers now prepare concurrently inside the measured controller
-window; controller packet/output copies are vectorized. Nonzero controller
-counts fall from2,844,301–2,844,472 to713,625–713,752 ticks: about74.91% fewer,
-a3.985–3.986 baseline/candidate counter ratio. Explicit completed-output host
-wall times are2.388–2.801ms. This is a component comparison; no clock frequency,
-wall-time speedup or model TPS is inferred from raw counter ratios.
+Nonzero controller counts fall from713,625–713,752 to613,127–613,190 ticks,
+14.07–14.10% fewer. The four completed-output host observations are2.673–2.969ms,
+all slower than their P28 counterparts. No end-to-end wall speedup is claimed.
+Each epoch grants176 responses while a packet buffer is leased, but receives
+zero responses before that lease retires; early grants are observed, effective
+response overlap is not. Raw counters are not calibrated wall ratios or model TPS.
 
-All127 source tests pass. All11,388 PEs in4,179 ELF images pass the unchanged
-48,128-byte SRAM ceiling including4,096 reserved stack; three PEs have zero
-margin. SDK loading331.653s, initialization3.034s and full diagnostic350.365s are
-reported separately. Both new jobs succeeded/released; the account has no owned
-active job/assigned system and the workstation heavy-job lock is free.
+All132 source tests and all11,388 PE SRAM gates pass. The maximum remains48,128
+bytes including4,096 reserved stack, with three PEs at zero margin. SDK loading
+321.592s, initialization3.022s and full diagnostic340.338s are separate. Both
+jobs succeeded/released; account audits find no owned allocation and the
+workstation heavy-job lock is free. No workstation heavy job was added.
 
-The frozen P27 baseline and prior failures remain preserved. Full64-layer
-resident sentence generation and>=2000 aggregate output tokens/s remain open.
-Next: coalesced native-slice sends and overlap of next-group return with current
-broadcast, followed by residual/norm and neighboring-layer integration.
+Physical004 and005 remain preserved as complete-component baselines. Next work
+reduces measured native/distribution service, partitions producer-to-consumer
+paths and integrates residual/norm and adjacent resident stages. Complete64-layer
+correct sentences and>=2000 aggregate generated tokens/s remain unfinished.
 
-See [LAYER-MLP-PERFORMANCE.md](docs/LAYER-MLP-PERFORMANCE.md),
+See [MLP-COALESCED-PREFETCH.md](docs/MLP-COALESCED-PREFETCH.md),
 [LAYER-MLP-QUALIFICATION.md](docs/LAYER-MLP-QUALIFICATION.md) and
 [NEXT-STEPS.md](docs/NEXT-STEPS.md).
 

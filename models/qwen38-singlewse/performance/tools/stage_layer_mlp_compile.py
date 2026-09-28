@@ -59,13 +59,14 @@ def build(stage_name):
         params=','.join('.%s=%s'%(k,(v if isinstance(v,str) else str(v).lower())) for k,v in c['parameters'].items())
         layout.append(' for(@range(u16,%d))|i|{@set_tile_code(%s[2*i],%s[2*i+1],"%s",.{.memcpy_params=memcpy.get_params(%s[2*i]),%s});}'%(len(coords)//2,name,name,c['source'],name,params))
     layout.append(emit_routes(network))
-    layout += [' @export_name("%s",[*]%s,false);'%(n,t) for n,t in [('bank','u32'),('audit','u32'),('setup','u16'),('fusion_signal','u32'),('quant_input','u32'),('mlp_output','u32'),('sender_status','u32'),('silu_lut','u16'),('native_input','u16'),('native_scales','f32'),('ticks','u16')]]
+    layout += [' @export_name("%s",[*]%s,false);'%(n,t) for n,t in [('bank','u32'),('audit','u32'),('setup','u16'),('fusion_signal','u32'),('quant_input','u32'),('mlp_output','u32'),('sender_status','u32'),('silu_lut','u16'),('native_input','u16'),('native_scales','f32'),('ticks','u16'),('transport_stats','u32')]]
     layout += [' @export_name("arm",fn(u32)void);',' @export_name("start",fn()void);',' @export_name("finish",fn()void);',' @export_name("fusion_step",fn(u16,u32,u16,u16)void);','}']
     files['layout.csl']=('\n'.join(layout)+'\n').encode()
     files['profiles.json']=(json.dumps(dict(profiles=list(classes.values()),application=[width,height],physical=False,executed=False,
         whole_stage=stage_name,scope='Original connected MLP component; mixer/state banks retained but inactive; no full-layer or model execution.'),separators=(',',':'))+'\n').encode()
     files['worker-setups.json']=(json.dumps(setups,separators=(',',':'))+'\n').encode()
     files['network-binding.json']=(json.dumps(dict(stage=stage_name,audit=network['audit'],senders=network['senders'],sinks=network['down_sinks'],grant_schedule=grants,prepare_schedule=preparations,
+        distribution_packets=network['distribution_packets'],controller_transport=network['controller_transport'],
         network_sha256=hashlib.sha256(json.dumps(network,sort_keys=True,separators=(',',':')).encode()).hexdigest(),
         source_bindings={str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in [schedule,route_file]}),indent=2)+'\n').encode()
     return files,width,height,profiles

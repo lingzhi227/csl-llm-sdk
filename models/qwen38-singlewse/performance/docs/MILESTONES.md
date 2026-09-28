@@ -946,3 +946,21 @@ with unchanged maximum48,128bytes including4,096 stack. Both fresh jobs succeed
 and release; no workstation heavy job or model payload retransfer is needed.
 The full64-layer correct-sentence and>=2000 aggregate tokens/s goal remains
 unmet. See LAYER-MLP-PERFORMANCE.md and layer-mlp-performance-summary-001.json.
+
+## P29: coalesced packets and one-frame prefetch
+
+Physical005 keeps all strict four-case original-MLP numerical, ingress,
+retention, drain and normal-stop checks. Spatial lowering exposes complete
+native distribution packets and independently verifies full/tail selectors.
+864 small sends become176 group packets with unchanged49,376 wire words;
+independent receive/packet/grant leases permit one prefetched response.
+
+Nonzero controller counts are613,127–613,190,14.07–14.10% lower than P28.
+Completed-output host observations are2.673–2.969ms and all slower than P28;
+no end-to-end wall speedup or model TPS is claimed. All176 next grants issue
+during packet leases, but zero next frames arrive before the lease retires.
+This limits the observed prefetch benefit and motivates native/distribution work.
+All132 source tests and11,388 PE SRAM gates pass, with unchanged maximum48,128
+bytes including4,096 stack. Both new jobs succeed/release; no workstation job
+or payload retransfer is added. See MLP-COALESCED-PREFETCH.md and the immutable
+mlp-prefetch-milestone-001.json. Complete layers/model-speed acceptance remains open.

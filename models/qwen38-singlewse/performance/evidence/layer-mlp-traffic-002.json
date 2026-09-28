@@ -1,0 +1,123 @@
+{
+  "attempt": "layer-mlp-hw-005",
+  "network_sha256": "d93cfd36b0e6b4b5b50ed18e7fc53068cb2fb3b84f5b29f75f9018ea56d8f665",
+  "source_manifest_sha256": "7a0643c8e9f5c5eaac828ddda4ce91a2e3f0ae80f549aa927293ad10dcd1c5e2",
+  "scope": "Scheduled controller input/grant/return network only; excludes native reductions, projection-to-fusion routes and SDK traffic.",
+  "phases": {
+    "initial_input": {
+      "groups": 40,
+      "native_columns": 32,
+      "wire_frames": 320,
+      "wire_words": 11840,
+      "operand_halfwords": 10240,
+      "header_words": 1600
+    },
+    "fused_activation": {
+      "groups": 136,
+      "native_columns": 64,
+      "wire_frames": 544,
+      "wire_words": 37536,
+      "operand_halfwords": 34816,
+      "header_words": 2720
+    }
+  },
+  "controller_native_broadcast_words": 49376,
+  "controller_grant_words": 678,
+  "controller_response_words": 14382,
+  "native_operand_halfwords_delivered": 343040,
+  "directed_link_count": 11550,
+  "sum_directed_word_hops": 566167197,
+  "busiest_directed_links": [
+    {
+      "from_pe": [
+        89,
+        145
+      ],
+      "to_pe": [
+        89,
+        144
+      ],
+      "words": 50054
+    },
+    {
+      "from_pe": [
+        89,
+        144
+      ],
+      "to_pe": [
+        89,
+        143
+      ],
+      "words": 50054
+    },
+    {
+      "from_pe": [
+        89,
+        143
+      ],
+      "to_pe": [
+        89,
+        142
+      ],
+      "words": 50054
+    },
+    {
+      "from_pe": [
+        89,
+        142
+      ],
+      "to_pe": [
+        89,
+        141
+      ],
+      "words": 50054
+    },
+    {
+      "from_pe": [
+        89,
+        141
+      ],
+      "to_pe": [
+        89,
+        140
+      ],
+      "words": 50054
+    },
+    {
+      "from_pe": [
+        89,
+        140
+      ],
+      "to_pe": [
+        89,
+        139
+      ],
+      "words": 50054
+    },
+    {
+      "from_pe": [
+        89,
+        139
+      ],
+      "to_pe": [
+        89,
+        138
+      ],
+      "words": 50054
+    },
+    {
+      "from_pe": [
+        89,
+        138
+      ],
+      "to_pe": [
+        89,
+        137
+      ],
+      "words": 50054
+    }
+  ],
+  "estimated_cycles": null,
+  "estimated_tps": null,
+  "physical_measurement": false
+}

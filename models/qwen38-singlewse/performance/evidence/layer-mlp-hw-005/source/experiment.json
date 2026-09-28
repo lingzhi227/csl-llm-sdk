@@ -1,0 +1,30 @@
+{
+  "complete_original_mlp": true,
+  "stage": "layer_00",
+  "revision": "017b9c7af6b5689d5dd426a76e0bc077eb5ca20a",
+  "application": [
+    78,
+    146
+  ],
+  "application_pes": 11388,
+  "mlp_shape": [
+    5120,
+    17408,
+    5120
+  ],
+  "fabric_offset": [
+    67,
+    1
+  ],
+  "logical_origin": [
+    63,
+    0
+  ],
+  "artifact_single_message_limit": 67108864,
+  "compiler_timeout_seconds": 900,
+  "run_timeout_seconds": 900,
+  "fixture_metadata_sha256": "128f186bae76c0876cddd399e46fe57b6fd450991379bc9f0a519be616c7bc7f",
+  "acceptance": "Every original5120 BF16 output bit-exact to frozen ordered native FP32/full-K/PyTorch SiLU reference; all native input codes/scales and native/sender counters exact; all initialized original banks retained; four warm epochs including zero and replay; actual all-PE drain and normal stop.",
+  "full_model": false,
+  "scope": "Complete original-weight MLP component; host supplies only initial BF16 boundary fixtures. Enclosing mixer weights are loaded but mixer/state operations are inactive. Not complete neural layer or model inference."
+}

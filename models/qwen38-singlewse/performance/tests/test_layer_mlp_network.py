@@ -201,5 +201,39 @@ class MlpNetworkTests(unittest.TestCase):
                     self.assertEqual(actual,expected)
                     self.assertTrue(all(v==0xdead for v in arena[2*(cols+5):]))
 
+    def test_coalesced_packets_preserve_all_original_wire_words(self):
+        for _,_,network in self.cases:
+            epoch=0xcafe0102;words=0;slices=0
+            for packet in network['distribution_packets']:
+                cols=packet['columns'];group=packet['group'];kind=packet['kind']
+                values=[(group*97+i*31)&65535 for i in range(128)];scale=(group*17177+0x3797231)&0xffffffff
+                arena=[0xdead]*592;scalar=[]
+                tail=network['gate_tail_workers' if kind==0 else 'down_tail_workers']
+                for s in packet['slices']:
+                    o=s['offset'];tag=s['tag'];segment=s['segment']
+                    lower=[epoch&65535,epoch>>16,s['part'],*values[segment*cols:(segment+1)*cols],scale&65535,scale>>16]
+                    arena[2*o:2*(o+cols+5):2]=lower
+                    arena[2*o+1:2*(o+cols+5):2]=[tag]*(cols+5)
+                # Independent old controller sequence, before coalescing.
+                for segment in range(128//cols):
+                    k=group*(128//cols)+segment;base=0 if kind==0 else 1024
+                    for tag,part in [(base+k,0),(base+512+k%tail,k//tail)]:
+                        scalar += [tag<<16|v for v in [epoch&65535,epoch>>16,part,*values[segment*cols:(segment+1)*cols],scale&65535,scale>>16]]
+                wire=[arena[2*i]|(arena[2*i+1]<<16) for i in range(packet['words'])]
+                self.assertEqual(wire,scalar);self.assertTrue(all(v==0xdead for v in arena[2*packet['words']:]))
+                words+=len(wire);slices+=len(packet['slices'])
+            self.assertEqual((len(network['distribution_packets']),slices,words),(176,864,49376))
+
+    def test_invalid_coalescing_and_extra_receive_capacity_rejected(self):
+        stage,_,network=self.cases[0]
+        for mutation in ('selector','part','offset','order','capacity'):
+            bad=copy.deepcopy(network);p=bad['distribution_packets'][0]
+            if mutation=='selector':p['slices'][1]['tag']+=1
+            elif mutation=='part':p['slices'][1]['part']+=1
+            elif mutation=='offset':p['slices'][1]['offset']-=1
+            elif mutation=='order':bad['distribution_packets'].reverse()
+            else:bad['controller_transport']['response_capacity']=2
+            with self.assertRaises(ValueError):audit_mlp_network(stage,bad)
+
 
 if __name__=='__main__':unittest.main()

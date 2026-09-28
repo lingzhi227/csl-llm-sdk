@@ -1,0 +1,23 @@
+{
+  "utc": "2026-09-28T05:22:08.551512+00:00",
+  "baseline": "layer-mlp-hw-004",
+  "candidate": "layer-mlp-hw-005",
+  "compiled": false,
+  "executed": false,
+  "physical": false,
+  "full_model": false,
+  "fixture": "layer-mlp-reference-001",
+  "changes": [
+    "Coalesce864 native input slices into176 group packets; same49376 words and byte order",
+    "Separate273-word receive arena and296-word output arena with one response credit",
+    "Issue next exclusive response grant while current packet DMA lease remains live",
+    "Record actual packet retirement and prefetch lease counters"
+  ],
+  "unchanged": [
+    "40 initial prepare-only quantizer commands after controller start",
+    "186 exclusive response grants and all existing PE routes/queue colors",
+    "All original weights and4-case independent numerical/native/retention/drain criteria",
+    "12 timestamp halves and explicit completed-output host timer"
+  ],
+  "claim": "Candidate only until complete original MLP physical qualification"
+}

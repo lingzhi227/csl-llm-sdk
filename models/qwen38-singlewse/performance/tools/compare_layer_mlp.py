@@ -1,8 +1,9 @@
 """Compare accepted complete-MLP controller counters at fixed oracle identity.
 
 Raw cycle ratios are not calibrated elapsed-time ratios or generated-token TPS.
-The P27 baseline has no explicit completed-output wall-time boundary, so no wall
-speedup can be inferred from that pair. Preserve every case, including zero.
+Report each observed wall-time pair only when both runs used the explicit
+completed-output boundary. Preserve every case, including zero; four diagnostic
+calls do not establish sustained serving throughput or an aggregate wall speedup.
 """
 import argparse,hashlib,json
 from pathlib import Path
@@ -30,10 +31,14 @@ def compare(before,after):
         if new['completed_output_seconds']<new['host_arm_start_finish_seconds']:raise ValueError('Invalid completed-output timer')
         cases.append(dict(index=new['index'],epoch=new['epoch'],baseline_cycles=a,candidate_cycles=b,
             baseline_to_candidate_cycle_ratio=a/b,cycle_reduction_fraction=1-b/a,
-            candidate_completed_output_seconds=new['completed_output_seconds'],candidate_phase_cycles=phases))
+            baseline_completed_output_seconds=old.get('completed_output_seconds'),
+            candidate_completed_output_seconds=new['completed_output_seconds'],
+            observed_completed_output_wall_ratio=old['completed_output_seconds']/new['completed_output_seconds'] if 'completed_output_seconds' in old else None,
+            candidate_phase_cycles=phases))
     return dict(passed=True,original_output_values_checked=20480,fixture_metadata_sha256=after['fixture_metadata_sha256'],
         cases=cases,cycle_to_seconds_calibration_performed=False,wall_time_speedup=None,full_model_tps=None,
-        note='Phase counters mark source distribution completion and final receipt, not isolated kernel durations; neural work overlaps these intervals. Baseline lacks completed-output wall time. No aggregate model speed acceptance.')
+        baseline_has_completed_output_timer=all('completed_output_seconds' in e for e in before['epochs']),
+        note='Phase counters mark source distribution completion and final receipt, not isolated kernel durations; neural work overlaps these intervals. Per-case wall ratios require both completed-output timers and are diagnostic observations only. No aggregate model speed acceptance.')
 
 
 def main():
