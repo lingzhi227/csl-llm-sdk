@@ -3,7 +3,7 @@ import argparse,base64,hashlib,json,re,shlex,subprocess
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 p=argparse.ArgumentParser();p.add_argument('name');a=p.parse_args()
-if not re.fullmatch('(fp8-(native|tile-fast|bank|encoder)|regional-(gemv|bank)|spatial-quant|contraction|mixed-bank|epoch-bank|gdn-bank|route-epoch|filtered-bank|coupled-bank|full-bf16-matrix|native-shapes|retiled-matrix|compact-projection|mlp-fusion|mlp-chunk|mixer-ingress|device-control|device-network)-(sim|hw)-[0-9]{3}|retiled-comparison-audit-[0-9]{3}|mlp-(integrated|full)-compile-[0-9]{3}|layer-(backend-compile|projection-compile|mlp-compile|mlp-hw|mixer-hw|mlp-reference|joint-reference|dialogue-reference|mixer-reference|mixer-payload|silu-oracle|weight-audit)-[0-9]{3}',a.name):raise ValueError('name')
+if not re.fullmatch('(fp8-(native|tile-fast|bank|encoder)|regional-(gemv|bank)|spatial-quant|contraction|mixed-bank|epoch-bank|gdn-bank|route-epoch|filtered-bank|coupled-bank|full-bf16-matrix|native-shapes|retiled-matrix|compact-projection|mlp-fusion|mlp-chunk|mixer-ingress|device-control|device-network)-(sim|hw)-[0-9]{3}|retiled-comparison-audit-[0-9]{3}|mlp-(integrated|full)-compile-[0-9]{3}|layer-(backend-compile|projection-compile|mlp-compile|mlp-hw|mixer-hw|mlp-reference|joint-reference|dialogue-reference|frontend-reference|mixer-reference|mixer-payload|silu-oracle|weight-audit)-[0-9]{3}',a.name):raise ValueError('name')
 physical='-hw-' in a.name
 remote=('/srv/qwen38-singlewse-hardware/' if physical else '/srv/model-storage/qwen38-singlewse/runs/')+a.name
 dispatch=ROOT/'evidence'/a.name/'dispatch.json'
@@ -28,6 +28,9 @@ receipts={n:(r/n).read_text() for n in ['source-manifest.json','COMPLETE.json','
 # stage-wide auxiliary-page map. This bounded metadata-only envelope permits
 # their additional source bytes; no model array or ELF is selected above.
 limit=16777216 if 'joint-bank-placement.json' in m['files'] else 8388608
+# The complete compact frontend adds both old/new explicit bank maps and a
+# source-bound co-placement plan. This remains bounded text metadata only.
+if 'frontend-bank-placement.json' in m['files']:limit=33554432
 assert sum(len(s) for s in source.values())+sum(len(s) for s in receipts.values())<limit
 print(json.dumps(dict(source=source,receipts=receipts)))
 '''

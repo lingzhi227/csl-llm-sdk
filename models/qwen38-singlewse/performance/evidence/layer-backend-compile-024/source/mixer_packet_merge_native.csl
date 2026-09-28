@@ -1,0 +1,46 @@
+// Whole-packet fair merge. Queue backpressure retains each five-word mailbox
+// until the outgoing DMA copies it. This local copy is not downstream retirement.
+// Each wavelet retains all32 bits; no tag filtering or half-word truncation.
+param horizontal0:bool;param horizontal1:bool;param horizontal2:bool;param vertical:bool;
+param incoming_vertical:u16;param outgoing_vertical:u16;
+const iq0=@get_input_queue(1);const iq1=@get_input_queue(2);
+const iq2=@get_input_queue(3);const iq3=@get_input_queue(4);const oq=@get_output_queue(1);
+const os=@get_dsr(dsr_src0,1);const od=@get_dsr(dsr_dest,1);const done=@get_local_task_id(27);
+var buffers=@zeros([20]u32);var lengths=@zeros([4]u16);
+var sending:bool=false;var selected:u16=0;var next:u16=0;
+var packets:u32=0;
+fn pump() void {
+ if(sending){return;}
+ for(@range(u16,4))|i|{
+  const candidate:u16=(next+i)%4;
+  if(lengths[candidate]==5){
+   selected=candidate;sending=true;next=(candidate+1)%4;
+   const m=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]u32,&buffers[5*candidate]),.extent=5});
+   const f=@get_dsd(fabout_dsd,.{.output_queue=oq,.extent=5});
+   @load_to_dsr(os,m);@load_to_dsr(od,f,.{.async=true,.ut_id=@get_ut_id(1),.activate=done});@mov32(od,os,.{.async=true});return;
+  }
+ }
+}
+fn receive(port:u16,value:u32) void {
+ @assert(lengths[port]<5);buffers[5*port+lengths[port]]=value;lengths[port]+=1;
+ if(lengths[port]==5){
+  if(port==0){@block(iq0);}else if(port==1){@block(iq1);}else if(port==2){@block(iq2);}else{@block(iq3);}
+  pump();
+ }
+}
+task arrived0(value:u32) void {receive(0,value);}task arrived1(value:u32) void {receive(1,value);}
+task arrived2(value:u32) void {receive(2,value);}task arrived3(value:u32) void {receive(3,value);}
+task sent() void {
+ @assert(sending and lengths[selected]==5);lengths[selected]=0;sending=false;packets+=1;
+ if(selected==0){@unblock(iq0);}else if(selected==1){@unblock(iq1);}else if(selected==2){@unblock(iq2);}else{@unblock(iq3);}
+ pump();
+}
+fn drained() bool {return !sending and lengths[0]==0 and lengths[1]==0 and lengths[2]==0 and lengths[3]==0;}
+comptime {
+ @comptime_assert((incoming_vertical==3 or incoming_vertical==9) and outgoing_vertical==12-incoming_vertical);
+ if(horizontal0){@initialize_queue(iq0,.{.color=@get_color(0)});@bind_data_task(arrived0,@get_data_task_id(iq0));}
+ if(horizontal1){@initialize_queue(iq1,.{.color=@get_color(1)});@bind_data_task(arrived1,@get_data_task_id(iq1));}
+ if(horizontal2){@initialize_queue(iq2,.{.color=@get_color(19)});@bind_data_task(arrived2,@get_data_task_id(iq2));}
+ if(vertical){@initialize_queue(iq3,.{.color=@get_color(incoming_vertical)});@bind_data_task(arrived3,@get_data_task_id(iq3));}
+ @initialize_queue(oq,.{.color=@get_color(outgoing_vertical)});@bind_local_task(sent,done);
+}

@@ -1,15 +1,19 @@
 # Next work: resident spatial pipeline
 
-Immediate P41 follow-up: selected fused roots and all16 shared-Q/K frontend
-consumers compile, but the unchanged P40 weight layout is rejected by
-frontend-composition-audit-002 (1275 estimated matrix-prefix conflicts). Moving
-state pages alone is insufficient. Jointly lower matrix/head ownership and the
-packet network, consider contiguous Z ownership to reduce fanout/merge sites,
-then requalify original-byte migration and every complete-program SRAM gate.
-Do not dispatch the rejected layout or present selected calibration banks as
-whole-stage admission. Qualify the new frontend numerics and connect actual
-GDN state/return traffic and output-projection ingress before layer acceptance.
-See [FRONTEND-FUSION.md](FRONTEND-FUSION.md).
+Immediate P42 follow-up: use full compile022 and original-bank reference001.
+The compact/native frontend now fits all11388 original PEs, and all original
+matrix/state values are bitwise preserved. Do not restart layout searches or
+repeat selected code-size sweeps. Qualify original convolution/gate parameters
+and persistent histories against an independent reference, then connect actual
+GDN state traffic/returns and gated output-projection ingress. Keep the accepted
+norm/MLP graph and existing static routes. Use CompactMixerPlacement and
+FrontendAuxiliaryPlacement for every candidate address; old65-word tile and
+40-word descriptor assumptions are invalid in this candidate. Keep transport
+retirement distinct from semantic completion before admitting another token.
+The frontend history caches are not yet loaded or numerically qualified, and
+real GDN/core return traffic remains unconnected. No complete neural stage or
+multi-turn speed claim follows from the compiler/bank proof.
+See [COMPACT-FRONTEND.md](COMPACT-FRONTEND.md).
 
 1. Preserve physical006 as the accepted shared-input complete-MLP baseline:
    all original numerical/retention/drain checks pass,49376->24688 broadcast words,

@@ -1039,3 +1039,16 @@ not only state-page movement. New numerical execution, the recurrent core and
 complete layer/model inference remain unfinished; no speed claim is made. All
 six workstation services release and no new hardware job is submitted. See
 [Frontend fusion](FRONTEND-FUSION.md).
+
+## P42: compact original banks and complete frontend admission
+
+P42 admits the complete original layer00 banks with native packet fusion and
+all16 shared-Q/K frontends: full compile022 covers11388PE/7919ELF, maximum48112
+bytes including4096stack. Remote reference001 verifies all454400 mixer tiles,
+28605 retained pages and every original source word;433136 identical scale
+aliases save1732544bank bytes without requantization. All existing MLP/norm/control
+routes remain. Joint row/network placement reduces merge actors1216->168;
+this is not a measured speedup.34 selected source and34 publication tests pass. All six workstation
+services release and no new WSE job is submitted. Numerical frontend execution,
+recurrent connections and complete multi-turn model speed remain unfinished.
+See [Compact frontend](COMPACT-FRONTEND.md).
