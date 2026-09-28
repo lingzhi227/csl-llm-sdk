@@ -1,19 +1,20 @@
 # Next work: resident spatial pipeline
 
-Immediate P42 follow-up: use full compile022 and original-bank reference001.
-The compact/native frontend now fits all11388 original PEs, and all original
-matrix/state values are bitwise preserved. Do not restart layout searches or
-repeat selected code-size sweeps. Qualify original convolution/gate parameters
-and persistent histories against an independent reference, then connect actual
-GDN state traffic/returns and gated output-projection ingress. Keep the accepted
-norm/MLP graph and existing static routes. Use CompactMixerPlacement and
-FrontendAuxiliaryPlacement for every candidate address; old65-word tile and
-40-word descriptor assumptions are invalid in this candidate. Keep transport
-retirement distinct from semantic completion before admitting another token.
-The frontend history caches are not yet loaded or numerically qualified, and
-real GDN/core return traffic remains unconnected. No complete neural stage or
-multi-turn speed claim follows from the compiler/bank proof.
-See [COMPACT-FRONTEND.md](COMPACT-FRONTEND.md).
+Immediate P43 follow-up: use full compile022, original-bank reference001 and
+physical mixer-frontend-hw-001. All16 original frontend groups now pass full
+six-position plus reset-replay numerical, history, parameter retention and native
+transport checks. The standalone test supplies reference projection and recurrent
+values; actual recurrent state computation is the next missing connection.
+Connect real GDN state workers/returns, gated output projection and the retained
+norm/MLP graph. Do not restart admitted layout searches or repeat isolated
+frontend sweeps. Keep CompactMixerPlacement and FrontendAuxiliaryPlacement for
+all addresses; old65-word tile/40-word descriptor assumptions are invalid.
+Production history caches still need integration with initial parameter loading.
+Keep transport retirement distinct from semantic completion before the next
+token. The harness IQ2 and downstream SDK observer are standalone adaptations;
+the full-stage native receiver retains IQ1. No complete neural stage, continuing
+conversation or model-speed claim follows from this component pass.
+See [Frontend numerics](FRONTEND-NUMERICS.md) and [Compact frontend](COMPACT-FRONTEND.md).
 
 1. Preserve physical006 as the accepted shared-input complete-MLP baseline:
    all original numerical/retention/drain checks pass,49376->24688 broadcast words,

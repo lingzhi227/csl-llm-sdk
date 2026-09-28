@@ -1,0 +1,34 @@
+// Exact admitted frontend module/arrival port; standalone numeric qualification.
+param memcpy_params;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+FRONTEND_NATIVE_PORT
+var empty=@zeros([1]u32);const ep:[*]u32=&empty;
+const wp:[*]u16=&frontend.weights;const hp:[*]u16=&frontend.history;
+const gp:[*]u16=&frontend.gains;const pp:[*]u16=&frontend.gate_parameters;
+const kp:[*]u32=&frontend.packet;const op:[*]u16=&frontend.output;const ap:[*]u32=&frontend.audit;
+// Standalone observer only: release the SDK command stream on the actual
+// downstream count. Source DMA completion is not a consumer completion fence.
+var waiting:bool=false;var target:u32=0;
+fn probe_progress() void {
+ if(waiting and frontend_wire_packets==target and frontend_cursor==0){
+  waiting=false;frontend_snapshot();sys.unblock_cmd_stream();
+ }
+}
+fn await_frames(kind:u16) void {
+ @assert(!waiting and kind<2);waiting=true;target=@as(u32,frontend_projected_packets);
+ if(kind==1){target+=192;}@assert(frontend_wire_packets<=target);probe_progress();
+}
+fn send() void {sys.unblock_cmd_stream();}
+fn inspect() void {frontend_snapshot();sys.unblock_cmd_stream();}
+fn clear() void {frontend_reset();frontend_snapshot();sys.unblock_cmd_stream();}
+fn begin(token:u32) void {frontend_begin(token);frontend_snapshot();sys.unblock_cmd_stream();}
+fn prepare(head:u16) void {frontend.prepare(head);frontend_snapshot();sys.unblock_cmd_stream();}
+fn consume(head:u16) void {frontend.packet_consumed(frontend.invocation,head);frontend_snapshot();sys.unblock_cmd_stream();}
+fn retire(head:u16) void {frontend.output_consumed(frontend.invocation,head);frontend_snapshot();sys.unblock_cmd_stream();}
+comptime {
+ @export_symbol(ep,"wire");@export_symbol(wp,"weights");@export_symbol(hp,"history");
+ @export_symbol(gp,"gain");@export_symbol(pp,"parameters");@export_symbol(kp,"packet");
+ @export_symbol(op,"output");@export_symbol(ap,"audit");@export_symbol(fsp,"status");
+ @export_symbol(send);@export_symbol(inspect);@export_symbol(clear);@export_symbol(begin);@export_symbol(prepare);@export_symbol(consume);@export_symbol(retire);
+ @export_symbol(await_frames);
+}

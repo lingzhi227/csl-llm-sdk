@@ -1,0 +1,9 @@
+{
+  "original_interval_reference": "experiments/gdn_head/prepare.py",
+  "sha256": "62024f8e98cae4c5393b451a7af802f72e925285b2a600e93371c5e3cd587aa3",
+  "adaptation": "Reuse scalar/BF16 interval helpers; new shared Q/K and3-V frontend reference with original complete projection inputs. Frozen recurrent results are injected for gated normalization only.",
+  "native_port_sha256": "0c850ca4b33f70ad5a8e11b445f1e086090bf23fdf5ab2a4f95a4a9243aeb956",
+  "probe_port_sha256": "32c5c519a1b9bf84ccde58a3d0e7ed1ac0d193ef3df4092c61004eb9ae9d27c9",
+  "native_port_adaptation": "IQ1 becomes IQ2 only because standalone SDK memcpy owns IQ1; same C3 full32 packet data task and exact arithmetic/lifecycle.",
+  "compiled_source_manifest_sha256": "c4d522b6a4ae7851cc80481c3ba4f8cd5b79bf0dec76d9bb3e59c7ee7ab453ae"
+}

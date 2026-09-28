@@ -1,0 +1,105 @@
+{
+  "passed": true,
+  "physical": false,
+  "groups": 16,
+  "heads": 48,
+  "positions": 6,
+  "reset_replay_positions": 2,
+  "revision": "017b9c7af6b5689d5dd426a76e0bc077eb5ca20a",
+  "original_shards": {
+    "layers-0.safetensors": "07f700e293baeaf3cd4240c3df1a948c4403f16961ea7979e86c8d6a9f8fd466"
+  },
+  "projection_reference_sha256": "0b19822cfa60b4b7964d8f7222af055e60480cafe81f2b94a7426e278b28fa0a",
+  "sequence": [
+    {
+      "position": 0,
+      "source_case": 0,
+      "token": 1,
+      "projection_order": [
+        0,
+        2,
+        1,
+        3
+      ]
+    },
+    {
+      "position": 1,
+      "source_case": 2,
+      "token": 2,
+      "projection_order": [
+        3,
+        1,
+        2,
+        0
+      ]
+    },
+    {
+      "position": 2,
+      "source_case": 1,
+      "token": 3,
+      "projection_order": [
+        0,
+        2,
+        1,
+        3
+      ]
+    },
+    {
+      "position": 3,
+      "source_case": 0,
+      "token": 4,
+      "projection_order": [
+        3,
+        1,
+        2,
+        0
+      ]
+    },
+    {
+      "position": 4,
+      "source_case": 2,
+      "token": 5,
+      "projection_order": [
+        0,
+        2,
+        1,
+        3
+      ]
+    },
+    {
+      "position": 5,
+      "source_case": 0,
+      "token": 6,
+      "projection_order": [
+        3,
+        1,
+        2,
+        0
+      ]
+    }
+  ],
+  "consumer_projected_packets": [
+    1802,
+    1899,
+    1619,
+    1517,
+    1617,
+    1792,
+    1998,
+    1996,
+    1990,
+    1867,
+    2049,
+    1990,
+    1895,
+    1987,
+    1791,
+    1558
+  ],
+  "maximum_packet_bound_norm_ratio": 0.0023211168642045662,
+  "maximum_gated_interval_norm_ratio": 0.0005748121896206769,
+  "fixture_sha256": "323af8b1d6ef52e60106292afccd34c8ff7330bf008a15d8997d1de4818a738b",
+  "seconds": 1.076570297125727,
+  "criterion": "All original frontend groups: predeclared FP64/BF16 intervals, exact three-sample histories, parameter retention, native packet/token drain and bit-exact reset replay.",
+  "scope": "Actual original projection-reference inputs and original conv/gate/norm weights; standalone CSL arrival frontend. Frozen recurrent results are injected to isolate gated normalization. No actual GDN, complete layer, conversation or speed admission."
+}

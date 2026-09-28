@@ -9,6 +9,16 @@ includes appended-input processing and generation, excluding user think time and
 initial loading; decode-only speed and TTFT are reported separately. See
 [DIALOGUE-ACCEPTANCE.md](docs/DIALOGUE-ACCEPTANCE.md). The target remains unmet.
 
+P43 physically qualifies all16 original frontend groups/48 heads over six
+continuous positions and two reset-replay positions:148224 FP32 packet values,
+49152 gated BF16 outputs,245760 exact history samples,259512 native packets and
+all43104 retained parameter words pass. Shared Q/K and reset replay are exact.
+This standalone32-PE test injects independent original projection values and
+frozen recurrent results; actual GDN, a complete layer and model speed remain
+unqualified.40 selected source and40 publication tests pass. Both cluster jobs
+and all seven workstation attempts release normally. See
+[Frontend numerical qualification](docs/FRONTEND-NUMERICS.md).
+
 P42 admits the complete original layer00 banks with native packet fusion and
 all16 shared-Q/K frontends: full compile022 covers11388PE/7919ELF, maximum48112
 bytes including4096stack. Remote reference001 verifies all454400 mixer tiles,

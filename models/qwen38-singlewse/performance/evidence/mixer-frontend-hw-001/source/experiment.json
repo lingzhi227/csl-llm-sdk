@@ -1,0 +1,20 @@
+{
+  "application_pes": 32,
+  "application": [
+    16,
+    2
+  ],
+  "full_model": false,
+  "original_frontend": true,
+  "frontend_shape": [
+    16,
+    3,
+    128
+  ],
+  "revision": "017b9c7af6b5689d5dd426a76e0bc077eb5ca20a",
+  "scope": "Actual original projection-reference inputs and original conv/gate/norm weights; standalone CSL arrival frontend. Frozen recurrent results are injected to isolate gated normalization. No actual GDN, complete layer, conversation or speed admission.",
+  "artifact_single_message_limit": 8388608,
+  "compiler_timeout_seconds": 600,
+  "run_timeout_seconds": 300,
+  "simulation_protocol_source": "mixer-frontend-sim-007"
+}

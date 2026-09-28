@@ -1,0 +1,81 @@
+// Exact admitted frontend module/arrival port; standalone numeric qualification.
+param memcpy_params;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+// Native root frame [token,row,rows,packed-BF16,matrix] is multicast only to
+// groups needed by this source. Foreign rows are skipped at their destination,
+// leaving root code small enough for its full-K group's weight capacity.
+param frontend_group:u16;param frontend_projected_packets:u16;
+const frontend_ready=@get_local_task_id(18);const frontend_output=@get_local_task_id(19);
+const frontend=@import_module("mixer_frontend_native.csl",.{.group=frontend_group,.ready_task=frontend_ready,.output_task=frontend_output});
+const frontend_iq=@get_input_queue(1);
+var frontend_frame=@zeros([5]u32);var frontend_cursor:u16=0;
+var frontend_wire_active:bool=false;var frontend_wire_packets:u32=0;
+var frontend_status=@zeros([10]u32);const fsp:[*]u32=&frontend_status;
+fn frontend_transport_drained() bool {return !frontend_wire_active and frontend_cursor==0;}
+fn frontend_snapshot() void {
+ frontend_status[0]=frontend.invocation;frontend_status[1]=@as(u32,frontend.notified);
+ frontend_status[2]=@as(u32,frontend.consumed);frontend_status[3]=@as(u32,frontend.completed);
+ frontend_status[4]=@as(u32,frontend.retired);frontend_status[5]=0;
+ if(frontend.packet_busy){frontend_status[5]=1;}frontend_status[6]=@as(u32,frontend_cursor);
+ frontend_status[7]=0;if(frontend.drained() and frontend_transport_drained()){frontend_status[7]=1;}
+ frontend_status[8]=frontend_wire_packets;frontend_status[9]=@as(u32,frontend_projected_packets)+192;
+}
+fn frontend_begin(token:u32) void {
+ @assert(frontend_transport_drained());frontend.begin(token);frontend_wire_packets=0;frontend_wire_active=true;
+}
+fn frontend_reset() void {
+ @assert(frontend_transport_drained());frontend.reset();frontend_wire_packets=0;
+}
+fn frontend_deliver() void {
+ const token=frontend_frame[0];@assert(token==frontend.invocation and frontend_wire_active);
+ @assert(frontend_frame[1]<10240 and (frontend_frame[4]<4 or frontend_frame[4]==5));
+ const row=@as(u16,frontend_frame[1]);const matrix=@as(u16,frontend_frame[4]);
+ var wanted:bool=false;var index:u16=row;
+ if(matrix==0){
+  @assert(frontend_frame[2]==2 and row%2==0);
+  wanted=(row>=128*frontend_group and row<128*frontend_group+128) or
+         (row>=2048+128*frontend_group and row<2048+128*frontend_group+128) or
+         (row>=4096+384*frontend_group and row<4096+384*frontend_group+384);
+ }else if(matrix==1 or matrix==5){
+  @assert(frontend_frame[2]==2 and row%2==0 and row<6144);
+  wanted=row>=384*frontend_group and row<384*frontend_group+384;
+  index=10240+row;if(matrix==5){@assert(wanted);index=16480+row;}
+ }else{
+  @assert(frontend_frame[2]==1 and row<48 and frontend_frame[3]<65536);
+  wanted=row>=3*frontend_group and row<3*frontend_group+3;index=16384+(matrix-2)*48+row;
+ }
+ if(wanted){frontend.accept(token,index,@as(u16,frontend_frame[3]&65535),@as(u16,frontend_frame[3]>>16));}
+ frontend_wire_packets+=1;
+ @assert(frontend_wire_packets<=@as(u32,frontend_projected_packets)+192);
+ if(frontend_wire_packets==@as(u32,frontend_projected_packets)+192){frontend_wire_active=false;}
+}
+task frontend_arrived(value:u32) void {
+ @assert(frontend_cursor<5);frontend_frame[frontend_cursor]=value;frontend_cursor+=1;
+ if(frontend_cursor==5){frontend_deliver();frontend_cursor=0;}
+}
+task frontend_packet_ready() void {frontend_snapshot();}
+task frontend_output_ready() void {frontend_snapshot();}
+comptime {
+ @comptime_assert(frontend_projected_packets>=518);
+ @initialize_queue(frontend_iq,.{.color=@get_color(3)});
+ @bind_data_task(frontend_arrived,@get_data_task_id(frontend_iq));
+ @bind_local_task(frontend_packet_ready,frontend_ready);@bind_local_task(frontend_output_ready,frontend_output);
+}
+
+var empty=@zeros([1]u32);const ep:[*]u32=&empty;
+const wp:[*]u16=&frontend.weights;const hp:[*]u16=&frontend.history;
+const gp:[*]u16=&frontend.gains;const pp:[*]u16=&frontend.gate_parameters;
+const kp:[*]u32=&frontend.packet;const op:[*]u16=&frontend.output;const ap:[*]u32=&frontend.audit;
+fn send() void {sys.unblock_cmd_stream();}
+fn inspect() void {frontend_snapshot();sys.unblock_cmd_stream();}
+fn clear() void {frontend_reset();frontend_snapshot();sys.unblock_cmd_stream();}
+fn begin(token:u32) void {frontend_begin(token);frontend_snapshot();sys.unblock_cmd_stream();}
+fn prepare(head:u16) void {frontend.prepare(head);frontend_snapshot();sys.unblock_cmd_stream();}
+fn consume(head:u16) void {frontend.packet_consumed(frontend.invocation,head);frontend_snapshot();sys.unblock_cmd_stream();}
+fn retire(head:u16) void {frontend.output_consumed(frontend.invocation,head);frontend_snapshot();sys.unblock_cmd_stream();}
+comptime {
+ @export_symbol(ep,"wire");@export_symbol(wp,"weights");@export_symbol(hp,"history");
+ @export_symbol(gp,"gain");@export_symbol(pp,"parameters");@export_symbol(kp,"packet");
+ @export_symbol(op,"output");@export_symbol(ap,"audit");@export_symbol(fsp,"status");
+ @export_symbol(send);@export_symbol(inspect);@export_symbol(clear);@export_symbol(begin);@export_symbol(prepare);@export_symbol(consume);@export_symbol(retire);
+}

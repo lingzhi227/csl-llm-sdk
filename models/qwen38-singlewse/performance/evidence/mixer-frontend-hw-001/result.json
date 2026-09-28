@@ -1,0 +1,108 @@
+{
+  "passed": true,
+  "physical": true,
+  "normal_stop": true,
+  "groups": 16,
+  "heads": 48,
+  "positions": 6,
+  "reset_replay_positions": 2,
+  "frontend_numerical_qualified": true,
+  "smoke_only": false,
+  "records": [
+    {
+      "replay": false,
+      "position": 0,
+      "groups": 16,
+      "packet_interval_pass": true,
+      "gated_interval_pass": true,
+      "exact_history": true,
+      "exact_shared_qk": true,
+      "exact_native_drain": true,
+      "maximum_packet_error": 1.1357780393961292e-07
+    },
+    {
+      "replay": false,
+      "position": 1,
+      "groups": 16,
+      "packet_interval_pass": true,
+      "gated_interval_pass": true,
+      "exact_history": true,
+      "exact_shared_qk": true,
+      "exact_native_drain": true,
+      "maximum_packet_error": 9.129491906900711e-08
+    },
+    {
+      "replay": false,
+      "position": 2,
+      "groups": 16,
+      "packet_interval_pass": true,
+      "gated_interval_pass": true,
+      "exact_history": true,
+      "exact_shared_qk": true,
+      "exact_native_drain": true,
+      "maximum_packet_error": 9.55375126787672e-08
+    },
+    {
+      "replay": false,
+      "position": 3,
+      "groups": 16,
+      "packet_interval_pass": true,
+      "gated_interval_pass": true,
+      "exact_history": true,
+      "exact_shared_qk": true,
+      "exact_native_drain": true,
+      "maximum_packet_error": 1.279002973531007e-07
+    },
+    {
+      "replay": false,
+      "position": 4,
+      "groups": 16,
+      "packet_interval_pass": true,
+      "gated_interval_pass": true,
+      "exact_history": true,
+      "exact_shared_qk": true,
+      "exact_native_drain": true,
+      "maximum_packet_error": 1.1822253692672646e-07
+    },
+    {
+      "replay": false,
+      "position": 5,
+      "groups": 16,
+      "packet_interval_pass": true,
+      "gated_interval_pass": true,
+      "exact_history": true,
+      "exact_shared_qk": true,
+      "exact_native_drain": true,
+      "maximum_packet_error": 9.816820495389678e-08
+    },
+    {
+      "replay": true,
+      "position": 0,
+      "groups": 16,
+      "packet_interval_pass": true,
+      "gated_interval_pass": true,
+      "exact_history": true,
+      "exact_shared_qk": true,
+      "exact_native_drain": true,
+      "maximum_packet_error": 1.1357780393961292e-07
+    },
+    {
+      "replay": true,
+      "position": 1,
+      "groups": 16,
+      "packet_interval_pass": true,
+      "gated_interval_pass": true,
+      "exact_history": true,
+      "exact_shared_qk": true,
+      "exact_native_drain": true,
+      "maximum_packet_error": 9.129491906900711e-08
+    }
+  ],
+  "parameters_retained": true,
+  "actual_native_fabric_arrival": true,
+  "exact_shared_qk": true,
+  "fixture_sha256": "323af8b1d6ef52e60106292afccd34c8ff7330bf008a15d8997d1de4818a738b",
+  "scope": "Actual original projection-reference inputs and original conv/gate/norm weights; standalone CSL arrival frontend. Frozen recurrent results are injected to isolate gated normalization. No actual GDN, complete layer, conversation or speed admission.",
+  "recurrent_device_execution": false,
+  "full_model_speed_target_achieved": false
+}

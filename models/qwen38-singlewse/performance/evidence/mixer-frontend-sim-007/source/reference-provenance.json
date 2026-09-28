@@ -1,0 +1,9 @@
+{
+  "original_interval_reference": "experiments/gdn_head/prepare.py",
+  "sha256": "62024f8e98cae4c5393b451a7af802f72e925285b2a600e93371c5e3cd587aa3",
+  "adaptation": "Reuse scalar/BF16 interval helpers; new shared Q/K and3-V frontend reference with original complete projection inputs. Frozen recurrent results are injected for gated normalization only.",
+  "native_port_sha256": "0c850ca4b33f70ad5a8e11b445f1e086090bf23fdf5ab2a4f95a4a9243aeb956",
+  "probe_port_sha256": "7a45f2b7fb8d17507dd28df107a988b06853a9dac21ffcd59f367b4c97dba7f5",
+  "native_port_adaptation": "IQ1 becomes IQ2 because standalone SDK memcpy owns IQ1; append a read-only frame-completion observer to release the SDK command stream when the requested count arrives. Same C3 decoder and exact arithmetic/lifecycle.",
+  "compiled_source_manifest_sha256": "c4d522b6a4ae7851cc80481c3ba4f8cd5b79bf0dec76d9bb3e59c7ee7ab453ae"
+}

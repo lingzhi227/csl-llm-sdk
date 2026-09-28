@@ -1052,3 +1052,15 @@ this is not a measured speedup.34 selected source and34 publication tests pass. 
 services release and no new WSE job is submitted. Numerical frontend execution,
 recurrent connections and complete multi-turn model speed remain unfinished.
 See [Compact frontend](COMPACT-FRONTEND.md).
+
+## P43: physical original frontend histories and native-arrival arithmetic
+
+P43 physically qualifies all16 original frontend groups/48 heads over six
+continuous positions and two reset-replay positions:148224 FP32 packet values,
+49152 gated BF16 outputs,245760 exact history samples,259512 native packets and
+all43104 retained parameter words pass. Shared Q/K and reset replay are exact.
+This standalone32-PE test injects independent original projection values and
+frozen recurrent results; actual GDN, a complete layer and model speed remain
+unqualified.40 selected source and40 publication tests pass. Both cluster jobs
+and all seven workstation attempts release normally. See
+[Frontend numerical qualification](FRONTEND-NUMERICS.md).
