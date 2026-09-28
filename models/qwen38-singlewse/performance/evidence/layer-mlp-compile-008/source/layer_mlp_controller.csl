@@ -1,0 +1,126 @@
+// Complete original MLP controller with one-frame return prefetch. The receive
+// arena and the coalesced native packet have independent DMA lifetimes. No next
+// bus grant is issued until the previous complete response has been consumed.
+param memcpy_params;param gate_tail:u16;param down_tail:u16;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const schedule=@import_module("mlp_schedule.csl");
+const clock=@import_module("<time>");
+// start, last input packet sent, last fused packet sent, complete output/drain.
+var ticks=@zeros([12]u16);const tp:[*]u16=&ticks;
+var frame=@zeros([273]u32);var packet=@zeros([296]u32);var grant=@zeros([3]u32);
+var output=@zeros([2560]u32);var audit=@zeros([4]u32);var dummy=@zeros([5]u16);
+// Packets issued/retired; grants/received frames with an outstanding packet lease.
+// Lease overlap is not an assertion of simultaneous hardware instruction issue.
+var transport=@zeros([4]u32);const xp:[*]u32=&transport;
+const op:[*]u32=&output;const ap:[*]u32=&audit;const sp:[*]u16=&dummy;
+var epoch:u32=0;var cursor:u16=0;var packet_cursor:u16=0;
+var finish_requested:bool=false;var active:bool=false;var grant_busy:bool=false;
+var response_pending:bool=false;var frame_ready:bool=false;var packet_busy:bool=false;
+var preparing:bool=false;var prepare_cursor:u16=0;
+const rq=@get_input_queue(2);const gq=@get_output_queue(3);const oq=@get_output_queue(2);
+const rd=@get_dsr(dsr_dest,1);const rs=@get_dsr(dsr_src0,1);
+const gd=@get_dsr(dsr_dest,2);const gs=@get_dsr(dsr_src0,2);
+const od=@get_dsr(dsr_dest,3);const os=@get_dsr(dsr_src0,3);
+const rt=@get_local_task_id(8);const gt=@get_local_task_id(9);const ot=@get_local_task_id(10);
+fn transmit_grant() void {
+ const gm=@get_dsd(mem1d_dsd,.{.base_address=&grant,.extent=3});const gf=@get_dsd(fabout_dsd,.{.output_queue=gq,.extent=3});
+ @load_to_dsr(gs,gm);@load_to_dsr(gd,gf,.{.async=true,.ut_id=@get_ut_id(3),.activate=gt});@mov32(gd,gs,.{.async=true});
+ audit[1]+=1;
+}
+fn issue_prepare() void {
+ @assert(active and preparing and !grant_busy and prepare_cursor<40);
+ const target=schedule.prepare_targets[prepare_cursor];const group=schedule.prepare_indices[prepare_cursor];
+ const tag=@as(u32,target)<<16;
+ grant[0]=tag|(epoch&65535);grant[1]=tag|(epoch>>16);grant[2]=tag|3072|@as(u32,group);
+ grant_busy=true;transmit_grant();
+}
+fn issue_grant() void {
+ @assert(active and !preparing and !grant_busy and !response_pending and !frame_ready and cursor<186);
+ const kind=schedule.kinds[cursor];const index=schedule.indices[cursor];
+ const tag=@as(u32,schedule.targets[cursor])<<16;
+ grant[0]=tag|(epoch&65535);grant[1]=tag|(epoch>>16);grant[2]=tag|@as(u32,(kind<<10)|index);
+ response_pending=true;grant_busy=true;if(packet_busy){transport[2]+=1;}
+ const rm=@get_dsd(mem1d_dsd,.{.base_address=&frame,.extent=1});const rf=@get_dsd(fabin_dsd,.{.input_queue=rq,.extent=1});
+ const m=@set_dsd_length(rm,schedule.words[cursor]);const f=@set_dsd_length(rf,schedule.words[cursor]);
+ @load_to_dsr(rd,m);@load_to_dsr(rs,f,.{.async=true,.ut_id=@get_ut_id(2),.activate=rt});@mov32(rd,rs,.{.async=true});
+ transmit_grant();
+}
+fn send_group() void {
+ @assert(frame_ready and !response_pending and !packet_busy and cursor<176);
+ const kind=schedule.kinds[cursor];const index=schedule.indices[cursor];
+ const columns:u16=if(kind==0) 32 else 64;
+ const tail:u16=if(kind==0) gate_tail else down_tail;const base:u16=if(kind==0) 0 else 1024;
+ const halves=@ptrcast([*]u16,&packet);
+ var offset:u16=0;var segment:u16=0;
+ while(segment<128/columns){
+  const k=index*(128/columns)+segment;var alias:u16=0;
+  while(alias<2){
+   var selector:u16=base+k;var part:u16=0;
+   if(alias==1){selector=base+512+k%tail;part=k/tail;}
+   const tag=@as(u32,selector)<<16;
+   const tag_base=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]u16,&halves[2*offset+1]),.extent=1,.stride=2});
+   const tags=@set_dsd_length(tag_base,columns+5);@mov16(tags,selector);
+   const src_base=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]u16,&frame[3+segment*(columns/2)]),.extent=1});
+   const dst_base=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]u16,&packet[offset+3]),.extent=1,.stride=2});
+   const src=@set_dsd_length(src_base,columns);const dst=@set_dsd_length(dst_base,columns);@mov16(dst,src);
+   packet[offset]=tag|(epoch&65535);packet[offset+1]=tag|(epoch>>16);packet[offset+2]=tag|@as(u32,part);
+   packet[offset+3+columns]=tag|(frame[2]&65535);packet[offset+4+columns]=tag|(frame[2]>>16);
+   offset+=columns+5;alias+=1;
+  }
+  segment+=1;
+ }
+ @assert(offset<=296);packet_cursor=cursor;cursor+=1;frame_ready=false;packet_busy=true;transport[0]+=1;
+ const mm=@get_dsd(mem1d_dsd,.{.base_address=&packet,.extent=1});const ff=@get_dsd(fabout_dsd,.{.output_queue=oq,.extent=1});
+ const m=@set_dsd_length(mm,offset);const f=@set_dsd_length(ff,offset);
+ @load_to_dsr(os,m);@load_to_dsr(od,f,.{.async=true,.ut_id=@get_ut_id(4),.activate=ot});@mov32(od,os,.{.async=true});
+}
+fn collect_output() void {
+ @assert(frame_ready and !response_pending and cursor>=176 and cursor<186);
+ const first=@as(u16,frame[2]&65535);const rows=@as(u16,frame[2]>>16);
+ @assert(first==schedule.firsts[cursor] and rows==schedule.rows[cursor] and first+rows<=5120);
+ const src_base=@get_dsd(mem1d_dsd,.{.base_address=&frame[3],.extent=1});
+ const dst_base=@get_dsd(mem1d_dsd,.{.base_address=&output[first/2],.extent=1});
+ const src=@set_dsd_length(src_base,rows/2);const dst=@set_dsd_length(dst_base,rows/2);@mov32(dst,src);
+ frame_ready=false;cursor+=1;
+}
+fn pump() void {
+ if(!active or preparing){return;}
+ if(frame_ready){
+  if(cursor<176){if(packet_busy){return;}send_group();}else{collect_output();}
+ }
+ if(cursor==186){
+  if(packet_busy or response_pending or grant_busy){return;}
+  @assert(!frame_ready and transport[0]==176 and transport[1]==176);
+  clock.get_timestamp(@ptrcast(*[3]u16,&ticks[9]));active=false;audit[3]=1;
+  if(finish_requested){finish_requested=false;sys.unblock_cmd_stream();}
+ }else if(!response_pending and !frame_ready and !grant_busy){issue_grant();}
+}
+task frame_arrived() void {
+ @assert(active and response_pending and !frame_ready and cursor<186);
+ const kind=schedule.kinds[cursor];const index=schedule.indices[cursor];
+ @assert(frame[0]==epoch and frame[1]==((@as(u32,kind)<<16)|@as(u32,index)));
+ audit[2]+=1;response_pending=false;frame_ready=true;if(packet_busy){transport[3]+=1;}pump();
+}
+task grant_sent() void {
+ @assert(grant_busy);grant_busy=false;
+ if(preparing){prepare_cursor+=1;if(prepare_cursor<40){issue_prepare();}else{preparing=false;issue_grant();}}
+ else{pump();}
+}
+task packet_sent() void {
+ @assert(packet_busy);packet_busy=false;transport[1]+=1;
+ if(packet_cursor==39){clock.get_timestamp(@ptrcast(*[3]u16,&ticks[3]));}
+ if(packet_cursor==175){clock.get_timestamp(@ptrcast(*[3]u16,&ticks[6]));}
+ pump();
+}
+fn arm(new_epoch:u32) void {
+ @assert(!active and !response_pending and !frame_ready and !packet_busy and !grant_busy and new_epoch>epoch);
+ epoch=new_epoch;cursor=0;packet_cursor=0;preparing=false;prepare_cursor=0;
+ for(@range(u16,4))|i|{audit[i]=0;transport[i]=0;}audit[0]=epoch;clock.enable_tsc();sys.unblock_cmd_stream();
+}
+fn start() void {@assert(!active and epoch>0 and cursor==0);active=true;preparing=true;clock.get_timestamp(@ptrcast(*[3]u16,&ticks[0]));issue_prepare();sys.unblock_cmd_stream();}
+fn finish() void {@assert(!finish_requested and epoch>0);if(active){finish_requested=true;}else{@assert(audit[3]==1);sys.unblock_cmd_stream();}}
+comptime {
+ @initialize_queue(rq,.{.color=@get_color(18)});@initialize_queue(gq,.{.color=@get_color(20)});@initialize_queue(oq,.{.color=@get_color(2)});
+ @bind_local_task(frame_arrived,rt);@bind_local_task(grant_sent,gt);@bind_local_task(packet_sent,ot);
+ @export_symbol(tp,"ticks");@export_symbol(xp,"transport_stats");@export_symbol(ap,"audit");@export_symbol(sp,"setup");@export_symbol(op,"mlp_output");@export_symbol(arm);@export_symbol(start);@export_symbol(finish);
+}

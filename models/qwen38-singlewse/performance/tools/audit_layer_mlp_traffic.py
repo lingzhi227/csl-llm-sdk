@@ -20,10 +20,11 @@ def audit(stage,network):
     def edge(pe,tx):
         dx,dy=delta[tx];return (*pe,pe[0]+dx,pe[1]+dy)
     for kind,columns in [(0,32),(1,64)]:
-        groups=sum(g['kind']==kind for g in schedule);frames=groups*(128//columns)*2
+        groups=sum(g['kind']==kind for g in schedule);copies=1 if network.get('shared_inputs') else 2
+        frames=groups*(128//columns)*copies
         words=frames*(columns+5)
         phases['initial_input' if kind==0 else 'fused_activation']=dict(groups=groups,native_columns=columns,
-            wire_frames=frames,wire_words=words,operand_halfwords=groups*128*2,header_words=frames*5)
+            wire_frames=frames,wire_words=words,operand_halfwords=groups*128*copies,header_words=frames*5)
     input_words=sum(p['wire_words'] for p in phases.values())
     grant_words=3*(len(schedule)+len(network['prepare_schedule']))
     for route in network['routes']:
@@ -49,16 +50,16 @@ def audit(stage,network):
 
 
 def main():
-    p=argparse.ArgumentParser();p.add_argument('attempt');p.add_argument('--output',type=Path,required=True);args=p.parse_args()
+    p=argparse.ArgumentParser();p.add_argument('attempt');p.add_argument('--output',type=Path,required=True);p.add_argument('--shared-inputs',action='store_true');args=p.parse_args()
     attempt=ROOT/'performance/evidence'/args.attempt
-    files,_,_,_=build('layer_00');manifest=json.loads((attempt/'source-manifest.json').read_text())['files']
+    files,_,_,_=build('layer_00',shared_inputs=args.shared_inputs);manifest=json.loads((attempt/'source-manifest.json').read_text())['files']
     for name,raw in files.items():
         if hashlib.sha256(raw).hexdigest()!=manifest[name]:raise ValueError('Current lowering differs from frozen attempt: '+name)
     plan=json.loads((ROOT/'performance/evidence/layer-native-schedule-002/layer-schedule.json').read_text())
     stage=next(s for s in plan['stages'] if s['id']=='layer_00');gate=next(r for r in stage['regions'] if r['role']=='gate_up')
     template=json.loads((ROOT/'performance/evidence/layer-fused-routes-003/routes-78x67.json').read_text())
     original=next(r for s in plan['stages'] for r in s['regions'] if r['id']==template['region'])
-    network=build_mlp_network(stage,translate_routes(template,original,gate))
+    network=build_mlp_network(stage,translate_routes(template,original,gate),args.shared_inputs)
     binding=json.loads(files['network-binding.json']);actual=hashlib.sha256(json.dumps(network,sort_keys=True,separators=(',',':')).encode()).hexdigest()
     assert actual==binding['network_sha256']
     result=dict(attempt=args.attempt,network_sha256=actual,source_manifest_sha256=hashlib.sha256((attempt/'source-manifest.json').read_bytes()).hexdigest(),**audit(stage,network))

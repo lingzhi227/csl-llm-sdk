@@ -1,0 +1,46 @@
+{
+  "milestone": "P30 candidate",
+  "physical": false,
+  "full_model": false,
+  "full_model_speed_target_achieved": false,
+  "accepted_native_variant": null,
+  "experiments": {
+    "native-shapes-sim-003": {
+      "bindings": {
+        "source-manifest.json": "e2b1a2fb46fd92d3abe8e42d4fbf9c0d63d6356a9e402e19b386d6c96d71d769",
+        "COMPLETE.json": "5af3d25ecabe69b3449fb89a2083fa0877b4cb20d0e8e9e1c2bc0991ae92cdc1",
+        "result.json": "665ca2f63309cbf01d5b81721452515d85aa21e83aba28280da2e6add0ed25df",
+        "workstation-release.json": "a66173df82821a090598a54d0b0c11a74907f9abb8deaaba7cea546722ac33e2"
+      }
+    },
+    "native-shapes-sim-004": {
+      "bindings": {
+        "source-manifest.json": "ff6a073c8c4591e41031989232e02ec2540a5d509201db4cefc7855b53f5fe2f",
+        "FAILURE.json": "6cf0c1c90cd733bc8abc7150c448f9bef955ed7b121a378b8cafc51886e8ac73",
+        "workstation-release.json": "5abcd633902571565ee677122aca3307e30bd28169221b06d410689b3270831d"
+      }
+    },
+    "native-shapes-sim-005": {
+      "bindings": {
+        "source-manifest.json": "49181d011e0698aa1f322650d6c1fc65bcbe8cd2ca1dd8b0de01ead220bce451",
+        "COMPLETE.json": "4b84b729fcce4bdac08fe2139d9a47e6a3291ef00bc1cf8f02c901fed642bcd9",
+        "result.json": "3862f135ef53e1b5272fd8e5b0ade08217c502a5dfa7109c9624b7e284c2d71c",
+        "workstation-release.json": "ab91280958de7543cc1d5e8cf0806ddfd7393aa192385b8ce2e327813130e3d8"
+      }
+    },
+    "layer-mlp-compile-008": {
+      "bindings": {
+        "source-manifest.json": "24704cb0d1c4ea4c2a6070f9151197a0f6a92dfc19c57477a7c48efead2e9eb7",
+        "FAILURE.json": "cb1e790d102979b90a0ac9a3f1da1788c5cfcc6341e03dc1cd067300d470b3df",
+        "sram-summary.json": "51f93824c793b81691100c1faf1f447edb423e8b8fb9ffcb897803e1e8e52e6b",
+        "workstation-release.json": "63daffe2ff7d61e3335e4dbb29e7e9d45be93be8c3d5514aff44496193881a8b"
+      }
+    }
+  },
+  "findings": [
+    "Pair callback retains exact numerical behavior but regresses used4x64/8x32 simulator timings; no physical trial.",
+    "Explicit ordered unroll passes all simulator original-bank checks and reduces used-shape decode-plus-dot counts4.73/4.88%, but full-stage compile008 exceeds SRAM on68PE, maximum48320incl4096stack; no physical trial.",
+    "Compile004 invalid comptime loop syntax retained;005 explicitly emits constant-index FMAs.",
+    "Neither native candidate replaces the qualified fullMLP kernel. Full-stage shared-input route compile009 is a separate candidate."
+  ]
+}

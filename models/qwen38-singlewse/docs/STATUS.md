@@ -8,31 +8,34 @@ sentences and >=2000 aggregate completed generated tokens/s in sustained steady
 state. Independent requests may overlap. The old per-request target and broad
 whole-wafer shared-layer time overlay are superseded.
 
-P29 qualifies coalesced native distribution and one-frame return prefetch in
-complete original layer0 MLP physical005. Controller send completions fall
-from864 to176 with the same49,376 wire words, arithmetic, weights and routes.
-All20,480 final BF16 outputs, native codes/scales, counters, resident banks/tables,
-all-PE drain and normal stop pass. Mixer/state operations remain inactive.
+P30 qualifies shared full/tail native input on physical006. One tagged wire
+copy now serves both original owner classes through exact/range RAMP filters.
+Native broadcast words halve from49,376 to24,688;176 group packets and all
+343,040 delivered operand halfwords remain. Original arithmetic and banks are
+unchanged. All20,480 BF16 outputs, native inputs/scales, counters, bank/table
+retention, all-PE drain and normal stop pass. Mixer/state operations are inactive.
 
-Nonzero controller counts fall from713,625–713,752 to613,127–613,190 ticks,
-14.07–14.10% fewer. The four completed-output host observations are2.673–2.969ms,
-all slower than their P28 counterparts. No end-to-end wall speedup is claimed.
-Each epoch grants176 responses while a packet buffer is leased, but receives
-zero responses before that lease retires; early grants are observed, effective
-response overlap is not. Raw counters are not calibrated wall ratios or model TPS.
+Nonzero complete-MLP controller counts fall from613,127–613,190 to564,289–564,333,
+7.965–7.972% fewer. Four completed-output host observations are2.551–2.834ms,
+shorter than P29 but still longer than P28. These four diagnostic calls do not
+establish a sustained wall-speed trend or model TPS. Each epoch grants176 next
+responses during packet leases, but no response arrives before that lease retires.
 
-All132 source tests and all11,388 PE SRAM gates pass. The maximum remains48,128
-bytes including4,096 reserved stack, with three PEs at zero margin. SDK loading
-321.592s, initialization3.022s and full diagnostic340.338s are separate. Both
-jobs succeeded/released; account audits find no owned allocation and the
-workstation heavy-job lock is free. No workstation heavy job was added.
+All134 source and publication tests pass. Local full-stage compile009 has
+48,112-byte maximum footprint; the actual physical compiler reaches48,128
+including4,096 stack, leaving zero minimum margin. All11,388 PE gates pass.
+SDK loading418.693s, initialization3.003s and full diagnostic440.328s are separate.
+Both hardware jobs and all five workstation services are released, with no owned
+active/assigned hardware and the workstation shared lock free.
 
-Physical004 and005 remain preserved as complete-component baselines. Next work
-reduces measured native/distribution service, partitions producer-to-consumer
-paths and integrates residual/norm and adjacent resident stages. Complete64-layer
-correct sentences and>=2000 aggregate generated tokens/s remain unfinished.
+Two native-loop alternatives are preserved: paired input is slightly slower on
+the used simulator shapes; unrolling improves local counts but exceeds SRAM
+on68 PEs in the complete fused layout. Neither receives a hardware trial.
+Next work integrates residual/RMS, device-triggered epoch handoff and adjacent
+complete layers. The full64-layer correct-sentence and>=2000 aggregate completed
+generated-token/s goal remains open, including sufficient request-state capacity.
 
-See [MLP-COALESCED-PREFETCH.md](../performance/docs/MLP-COALESCED-PREFETCH.md) and
+See [SHARED-NATIVE-INPUTS.md](../performance/docs/SHARED-NATIVE-INPUTS.md) and
 [NEXT-STEPS.md](../performance/docs/NEXT-STEPS.md).
 
 ## Latest: initial functional phase closed for publication

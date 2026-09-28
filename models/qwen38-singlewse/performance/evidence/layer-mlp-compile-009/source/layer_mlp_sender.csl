@@ -1,0 +1,122 @@
+// Fixed-color, exclusive-grant MLP bus endpoint. Only the controller's current
+// target can inject. A new grant is issued after the prior entire frame arrives.
+// IQ5/UT6/DSR1 grants; OQ3/UT4/DSR5 private-frame TX; optional IQ6/UT7/DSR7 sink.
+param bus_rx:direction;param bus_tx:direction;
+param drained_task:local_task_id;
+param enabled:bool;param actor:imported_module;param fusion_actor:bool;
+param sender_id:u16;param input_quantizer:bool;param input_group:u16;
+param output_sink:bool;param sink_color:u16;param sink_index:u16;
+param sink_first:u16;param sink_rows:u16;
+const tile=@import_module("<tile_config>");
+const quant=@import_module("mlp_fused.csl");
+const frame_words:u16=if(output_sink) 3+sink_rows/2 else 67;
+var status=@zeros([4]u32);const status_pointer:[*]u32=&status;
+var frame=@zeros([frame_words]u32);
+var initial_values=@zeros([if(input_quantizer) 64 else 1]u32);
+var grant=@zeros([3]u32);var projected=@zeros([5]u32);
+var epoch:u32=0;var index:u16=0;var kind:u16=0;var received:u16=0;
+var active:bool=false;var have_grant:bool=false;var sending:bool=false;
+var input_done:bool=false;var input_prepared:bool=false;var sink_done:bool=false;
+// Before arm, the host/upstream fills the128 BF16 boundary values here. This
+// component boundary is not a claim that a preceding neural layer is connected.
+const input:[*]u32=&initial_values;
+const gq=@get_input_queue(5);const oq=@get_output_queue(3);const sq=@get_input_queue(6);
+const gd=@get_dsr(dsr_dest,1);const gs=@get_dsr(dsr_src0,1);
+const od=@get_dsr(dsr_dest,5);const os=@get_dsr(dsr_src0,5);
+const sd=@get_dsr(dsr_dest,7);const ss=@get_dsr(dsr_src0,7);
+const gt=@get_local_task_id(18);const ot=@get_local_task_id(19);const st=@get_local_task_id(20);
+fn receive_grant() void {
+ const m=@get_dsd(mem1d_dsd,.{.base_address=&grant,.extent=3});
+ const f=@get_dsd(fabin_dsd,.{.input_queue=gq,.extent=3});
+ @load_to_dsr(gd,m);@load_to_dsr(gs,f,.{.async=true,.ut_id=@get_ut_id(6),.activate=gt});@mov32(gd,gs,.{.async=true});
+}
+fn receive_projected() void {
+ const m=@get_dsd(mem1d_dsd,.{.base_address=&projected,.extent=5});
+ const f=@get_dsd(fabin_dsd,.{.input_queue=sq,.extent=5});
+ @load_to_dsr(sd,m);@load_to_dsr(ss,f,.{.async=true,.ut_id=@get_ut_id(7),.activate=st});@mov32(sd,ss,.{.async=true});
+}
+fn prepare_input() void {
+ @assert(input_quantizer and !input_prepared and !input_done and !sending);
+ if(comptime input_quantizer){
+  var maximum:f32=0.0000000001;
+  for(@range(u16,64))|i|{const m=quant.maximum_pair(initial_values[i]);if(m>maximum){maximum=m;}}
+  const scale=maximum*0.002232142857142857;
+  for(@range(u16,64))|i|{frame[3+i]=quant.encoded_pair(initial_values[i],scale);}
+  frame[0]=epoch;frame[1]=@as(u32,input_group);frame[2]=@bitcast(u32,scale);
+ }
+ input_prepared=true;
+}
+fn pump() void {
+ if(!have_grant or sending){return;}
+ if(kind==0){
+  @assert(input_quantizer and index==input_group and input_prepared and !input_done);
+ }else if(kind==1){
+  @assert(fusion_actor and input_done);
+  if(comptime fusion_actor){
+   if(!actor.notified){return;}
+   @assert(actor.ingress.current==index);actor.prepare_group(@ptrcast([*]u32,&frame));
+  }
+ }else{
+  @assert(kind==2 and output_sink and index==sink_index and !sink_done);
+  if(received!=sink_rows){return;}
+ }
+ tile.color_config.reset_routes(@get_color(18),.{.rx=RAMP,.tx=bus_tx});
+ sending=true;
+ const m=@get_dsd(mem1d_dsd,.{.base_address=&frame,.extent=frame_words});
+ const f=@get_dsd(fabout_dsd,.{.output_queue=oq,.extent=frame_words});
+ @load_to_dsr(os,m);@load_to_dsr(od,f,.{.async=true,.ut_id=@get_ut_id(4),.activate=ot});@mov32(od,os,.{.async=true});
+}
+fn begin(new_epoch:u32) void {
+ @assert(!active and !sending and !have_grant and !input_prepared and new_epoch>epoch);
+ for(@range(u16,4))|i|{status[i]=0;}status[0]=new_epoch;
+ epoch=new_epoch;active=true;input_done=false;sink_done=false;received=0;
+ if(comptime output_sink){
+  frame[0]=epoch;frame[1]=131072+@as(u32,sink_index);frame[2]=@as(u32,sink_first)|(@as(u32,sink_rows)<<16);
+  receive_projected();
+ }
+ receive_grant();
+}
+fn drained() bool {
+ if(comptime output_sink){return sink_done and !sending and !have_grant;}
+ if(comptime fusion_actor){return input_done and !input_prepared and actor.drained() and !sending and !have_grant;}
+ return input_done and !input_prepared and !sending and !have_grant;
+}
+task grant_arrived() void {
+ @assert(active and !have_grant and !sending);
+ for(@range(u16,3))|i|{@assert(grant[i]>>16==@as(u32,sender_id));}
+ @assert(((grant[0]&65535)|((grant[1]&65535)<<16))==epoch);
+ const meta=@as(u16,grant[2]&65535);kind=meta>>10;index=meta&1023;
+ status[1]+=1;
+ if(kind==3){
+  // Preparation has no injection permission. Forty separate recipients can
+  // quantize concurrently before the controller requests their private frames.
+  @assert(input_quantizer and index==input_group);prepare_input();receive_grant();return;
+ }
+ have_grant=true;pump();
+}
+task frame_sent() void {@assert(sending and have_grant);@queue_flush(oq);}
+fn bus_empty() void {
+ // Local DMA completion is insufficient to change a router input: the output
+ // queue can still hold wavelets. Only this empty-queue callback restores RX.
+ tile.color_config.reset_routes(@get_color(18),.{.rx=bus_rx,.tx=bus_tx});
+ tile.queue_flush.exit(oq);
+ @assert(sending and have_grant);sending=false;have_grant=false;
+ if(kind==0){@assert(input_prepared);input_prepared=false;input_done=true;if(comptime !fusion_actor){active=false;}}
+ else if(kind==1){if(comptime fusion_actor){actor.group_sent(epoch,index);if(actor.drained()){active=false;}}}
+ else{sink_done=true;active=false;}
+ status[2]+=1;
+ if(active){receive_grant();}else{@assert(drained());status[3]=1;@activate(drained_task);}
+}
+task projected_arrived() void {
+ @assert(active and received<sink_rows and projected[0]==epoch and projected[1]==@as(u32,received/4) and projected[2]==@as(u32,sink_first+received));
+ frame[3+received/2]=projected[3];frame[4+received/2]=projected[4];received+=4;
+ if(received<sink_rows){receive_projected();}else{pump();}
+}
+comptime {
+ if(enabled){
+ @comptime_assert(input_quantizer!=output_sink and (!fusion_actor or input_quantizer));
+ @initialize_queue(gq,.{.color=@get_color(20)});@initialize_queue(oq,.{.color=@get_color(18)});
+ @bind_local_task(grant_arrived,gt);@bind_local_task(frame_sent,ot);@set_empty_queue_handler(bus_empty,oq);
+ if(output_sink){@initialize_queue(sq,.{.color=@get_color(sink_color)});@bind_local_task(projected_arrived,st);}
+ }
+}

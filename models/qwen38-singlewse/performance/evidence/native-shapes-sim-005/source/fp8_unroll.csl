@@ -1,0 +1,144 @@
+// Ordered native FMA for one independently packed 256-weight candidate tile.
+// Candidate derived from fp8_shape.csl: compile-time unrolled ascending-K FMAs.
+// No reassociation, extra accumulator, changed weight decode or scale boundary.
+param rows:u16;param columns:u16;param vector_scales:bool;
+comptime {@comptime_assert(rows*columns==256 and rows>=2 and rows<=16);}
+const yd=@get_dsr(dsr_dest,4);const ys=@get_dsr(dsr_src0,4);const ws=@get_dsr(dsr_src1,4);
+fn compute(weight:[*]u16,input:[*]u16,output:[*]f32,activation_scale:f32,weight_scale:f32) void {
+ const out=@get_dsd(mem1d_dsd,.{.base_address=output,.extent=rows});
+ const w=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]f16,weight),.extent=rows});
+ @fmovs(out,0.0);@load_to_dsr(yd,out,.{.save_address=false});@load_to_dsr(ys,out,.{.save_address=false});
+ @load_to_dsr(ws,w,.{.save_address=true});
+ if(comptime columns>0){@fmachs(yd,ys,ws,@bitcast(f16,input[0]));}
+ if(comptime columns>1){@fmachs(yd,ys,ws,@bitcast(f16,input[1]));}
+ if(comptime columns>2){@fmachs(yd,ys,ws,@bitcast(f16,input[2]));}
+ if(comptime columns>3){@fmachs(yd,ys,ws,@bitcast(f16,input[3]));}
+ if(comptime columns>4){@fmachs(yd,ys,ws,@bitcast(f16,input[4]));}
+ if(comptime columns>5){@fmachs(yd,ys,ws,@bitcast(f16,input[5]));}
+ if(comptime columns>6){@fmachs(yd,ys,ws,@bitcast(f16,input[6]));}
+ if(comptime columns>7){@fmachs(yd,ys,ws,@bitcast(f16,input[7]));}
+ if(comptime columns>8){@fmachs(yd,ys,ws,@bitcast(f16,input[8]));}
+ if(comptime columns>9){@fmachs(yd,ys,ws,@bitcast(f16,input[9]));}
+ if(comptime columns>10){@fmachs(yd,ys,ws,@bitcast(f16,input[10]));}
+ if(comptime columns>11){@fmachs(yd,ys,ws,@bitcast(f16,input[11]));}
+ if(comptime columns>12){@fmachs(yd,ys,ws,@bitcast(f16,input[12]));}
+ if(comptime columns>13){@fmachs(yd,ys,ws,@bitcast(f16,input[13]));}
+ if(comptime columns>14){@fmachs(yd,ys,ws,@bitcast(f16,input[14]));}
+ if(comptime columns>15){@fmachs(yd,ys,ws,@bitcast(f16,input[15]));}
+ if(comptime columns>16){@fmachs(yd,ys,ws,@bitcast(f16,input[16]));}
+ if(comptime columns>17){@fmachs(yd,ys,ws,@bitcast(f16,input[17]));}
+ if(comptime columns>18){@fmachs(yd,ys,ws,@bitcast(f16,input[18]));}
+ if(comptime columns>19){@fmachs(yd,ys,ws,@bitcast(f16,input[19]));}
+ if(comptime columns>20){@fmachs(yd,ys,ws,@bitcast(f16,input[20]));}
+ if(comptime columns>21){@fmachs(yd,ys,ws,@bitcast(f16,input[21]));}
+ if(comptime columns>22){@fmachs(yd,ys,ws,@bitcast(f16,input[22]));}
+ if(comptime columns>23){@fmachs(yd,ys,ws,@bitcast(f16,input[23]));}
+ if(comptime columns>24){@fmachs(yd,ys,ws,@bitcast(f16,input[24]));}
+ if(comptime columns>25){@fmachs(yd,ys,ws,@bitcast(f16,input[25]));}
+ if(comptime columns>26){@fmachs(yd,ys,ws,@bitcast(f16,input[26]));}
+ if(comptime columns>27){@fmachs(yd,ys,ws,@bitcast(f16,input[27]));}
+ if(comptime columns>28){@fmachs(yd,ys,ws,@bitcast(f16,input[28]));}
+ if(comptime columns>29){@fmachs(yd,ys,ws,@bitcast(f16,input[29]));}
+ if(comptime columns>30){@fmachs(yd,ys,ws,@bitcast(f16,input[30]));}
+ if(comptime columns>31){@fmachs(yd,ys,ws,@bitcast(f16,input[31]));}
+ if(comptime columns>32){@fmachs(yd,ys,ws,@bitcast(f16,input[32]));}
+ if(comptime columns>33){@fmachs(yd,ys,ws,@bitcast(f16,input[33]));}
+ if(comptime columns>34){@fmachs(yd,ys,ws,@bitcast(f16,input[34]));}
+ if(comptime columns>35){@fmachs(yd,ys,ws,@bitcast(f16,input[35]));}
+ if(comptime columns>36){@fmachs(yd,ys,ws,@bitcast(f16,input[36]));}
+ if(comptime columns>37){@fmachs(yd,ys,ws,@bitcast(f16,input[37]));}
+ if(comptime columns>38){@fmachs(yd,ys,ws,@bitcast(f16,input[38]));}
+ if(comptime columns>39){@fmachs(yd,ys,ws,@bitcast(f16,input[39]));}
+ if(comptime columns>40){@fmachs(yd,ys,ws,@bitcast(f16,input[40]));}
+ if(comptime columns>41){@fmachs(yd,ys,ws,@bitcast(f16,input[41]));}
+ if(comptime columns>42){@fmachs(yd,ys,ws,@bitcast(f16,input[42]));}
+ if(comptime columns>43){@fmachs(yd,ys,ws,@bitcast(f16,input[43]));}
+ if(comptime columns>44){@fmachs(yd,ys,ws,@bitcast(f16,input[44]));}
+ if(comptime columns>45){@fmachs(yd,ys,ws,@bitcast(f16,input[45]));}
+ if(comptime columns>46){@fmachs(yd,ys,ws,@bitcast(f16,input[46]));}
+ if(comptime columns>47){@fmachs(yd,ys,ws,@bitcast(f16,input[47]));}
+ if(comptime columns>48){@fmachs(yd,ys,ws,@bitcast(f16,input[48]));}
+ if(comptime columns>49){@fmachs(yd,ys,ws,@bitcast(f16,input[49]));}
+ if(comptime columns>50){@fmachs(yd,ys,ws,@bitcast(f16,input[50]));}
+ if(comptime columns>51){@fmachs(yd,ys,ws,@bitcast(f16,input[51]));}
+ if(comptime columns>52){@fmachs(yd,ys,ws,@bitcast(f16,input[52]));}
+ if(comptime columns>53){@fmachs(yd,ys,ws,@bitcast(f16,input[53]));}
+ if(comptime columns>54){@fmachs(yd,ys,ws,@bitcast(f16,input[54]));}
+ if(comptime columns>55){@fmachs(yd,ys,ws,@bitcast(f16,input[55]));}
+ if(comptime columns>56){@fmachs(yd,ys,ws,@bitcast(f16,input[56]));}
+ if(comptime columns>57){@fmachs(yd,ys,ws,@bitcast(f16,input[57]));}
+ if(comptime columns>58){@fmachs(yd,ys,ws,@bitcast(f16,input[58]));}
+ if(comptime columns>59){@fmachs(yd,ys,ws,@bitcast(f16,input[59]));}
+ if(comptime columns>60){@fmachs(yd,ys,ws,@bitcast(f16,input[60]));}
+ if(comptime columns>61){@fmachs(yd,ys,ws,@bitcast(f16,input[61]));}
+ if(comptime columns>62){@fmachs(yd,ys,ws,@bitcast(f16,input[62]));}
+ if(comptime columns>63){@fmachs(yd,ys,ws,@bitcast(f16,input[63]));}
+ if(comptime columns>64){@fmachs(yd,ys,ws,@bitcast(f16,input[64]));}
+ if(comptime columns>65){@fmachs(yd,ys,ws,@bitcast(f16,input[65]));}
+ if(comptime columns>66){@fmachs(yd,ys,ws,@bitcast(f16,input[66]));}
+ if(comptime columns>67){@fmachs(yd,ys,ws,@bitcast(f16,input[67]));}
+ if(comptime columns>68){@fmachs(yd,ys,ws,@bitcast(f16,input[68]));}
+ if(comptime columns>69){@fmachs(yd,ys,ws,@bitcast(f16,input[69]));}
+ if(comptime columns>70){@fmachs(yd,ys,ws,@bitcast(f16,input[70]));}
+ if(comptime columns>71){@fmachs(yd,ys,ws,@bitcast(f16,input[71]));}
+ if(comptime columns>72){@fmachs(yd,ys,ws,@bitcast(f16,input[72]));}
+ if(comptime columns>73){@fmachs(yd,ys,ws,@bitcast(f16,input[73]));}
+ if(comptime columns>74){@fmachs(yd,ys,ws,@bitcast(f16,input[74]));}
+ if(comptime columns>75){@fmachs(yd,ys,ws,@bitcast(f16,input[75]));}
+ if(comptime columns>76){@fmachs(yd,ys,ws,@bitcast(f16,input[76]));}
+ if(comptime columns>77){@fmachs(yd,ys,ws,@bitcast(f16,input[77]));}
+ if(comptime columns>78){@fmachs(yd,ys,ws,@bitcast(f16,input[78]));}
+ if(comptime columns>79){@fmachs(yd,ys,ws,@bitcast(f16,input[79]));}
+ if(comptime columns>80){@fmachs(yd,ys,ws,@bitcast(f16,input[80]));}
+ if(comptime columns>81){@fmachs(yd,ys,ws,@bitcast(f16,input[81]));}
+ if(comptime columns>82){@fmachs(yd,ys,ws,@bitcast(f16,input[82]));}
+ if(comptime columns>83){@fmachs(yd,ys,ws,@bitcast(f16,input[83]));}
+ if(comptime columns>84){@fmachs(yd,ys,ws,@bitcast(f16,input[84]));}
+ if(comptime columns>85){@fmachs(yd,ys,ws,@bitcast(f16,input[85]));}
+ if(comptime columns>86){@fmachs(yd,ys,ws,@bitcast(f16,input[86]));}
+ if(comptime columns>87){@fmachs(yd,ys,ws,@bitcast(f16,input[87]));}
+ if(comptime columns>88){@fmachs(yd,ys,ws,@bitcast(f16,input[88]));}
+ if(comptime columns>89){@fmachs(yd,ys,ws,@bitcast(f16,input[89]));}
+ if(comptime columns>90){@fmachs(yd,ys,ws,@bitcast(f16,input[90]));}
+ if(comptime columns>91){@fmachs(yd,ys,ws,@bitcast(f16,input[91]));}
+ if(comptime columns>92){@fmachs(yd,ys,ws,@bitcast(f16,input[92]));}
+ if(comptime columns>93){@fmachs(yd,ys,ws,@bitcast(f16,input[93]));}
+ if(comptime columns>94){@fmachs(yd,ys,ws,@bitcast(f16,input[94]));}
+ if(comptime columns>95){@fmachs(yd,ys,ws,@bitcast(f16,input[95]));}
+ if(comptime columns>96){@fmachs(yd,ys,ws,@bitcast(f16,input[96]));}
+ if(comptime columns>97){@fmachs(yd,ys,ws,@bitcast(f16,input[97]));}
+ if(comptime columns>98){@fmachs(yd,ys,ws,@bitcast(f16,input[98]));}
+ if(comptime columns>99){@fmachs(yd,ys,ws,@bitcast(f16,input[99]));}
+ if(comptime columns>100){@fmachs(yd,ys,ws,@bitcast(f16,input[100]));}
+ if(comptime columns>101){@fmachs(yd,ys,ws,@bitcast(f16,input[101]));}
+ if(comptime columns>102){@fmachs(yd,ys,ws,@bitcast(f16,input[102]));}
+ if(comptime columns>103){@fmachs(yd,ys,ws,@bitcast(f16,input[103]));}
+ if(comptime columns>104){@fmachs(yd,ys,ws,@bitcast(f16,input[104]));}
+ if(comptime columns>105){@fmachs(yd,ys,ws,@bitcast(f16,input[105]));}
+ if(comptime columns>106){@fmachs(yd,ys,ws,@bitcast(f16,input[106]));}
+ if(comptime columns>107){@fmachs(yd,ys,ws,@bitcast(f16,input[107]));}
+ if(comptime columns>108){@fmachs(yd,ys,ws,@bitcast(f16,input[108]));}
+ if(comptime columns>109){@fmachs(yd,ys,ws,@bitcast(f16,input[109]));}
+ if(comptime columns>110){@fmachs(yd,ys,ws,@bitcast(f16,input[110]));}
+ if(comptime columns>111){@fmachs(yd,ys,ws,@bitcast(f16,input[111]));}
+ if(comptime columns>112){@fmachs(yd,ys,ws,@bitcast(f16,input[112]));}
+ if(comptime columns>113){@fmachs(yd,ys,ws,@bitcast(f16,input[113]));}
+ if(comptime columns>114){@fmachs(yd,ys,ws,@bitcast(f16,input[114]));}
+ if(comptime columns>115){@fmachs(yd,ys,ws,@bitcast(f16,input[115]));}
+ if(comptime columns>116){@fmachs(yd,ys,ws,@bitcast(f16,input[116]));}
+ if(comptime columns>117){@fmachs(yd,ys,ws,@bitcast(f16,input[117]));}
+ if(comptime columns>118){@fmachs(yd,ys,ws,@bitcast(f16,input[118]));}
+ if(comptime columns>119){@fmachs(yd,ys,ws,@bitcast(f16,input[119]));}
+ if(comptime columns>120){@fmachs(yd,ys,ws,@bitcast(f16,input[120]));}
+ if(comptime columns>121){@fmachs(yd,ys,ws,@bitcast(f16,input[121]));}
+ if(comptime columns>122){@fmachs(yd,ys,ws,@bitcast(f16,input[122]));}
+ if(comptime columns>123){@fmachs(yd,ys,ws,@bitcast(f16,input[123]));}
+ if(comptime columns>124){@fmachs(yd,ys,ws,@bitcast(f16,input[124]));}
+ if(comptime columns>125){@fmachs(yd,ys,ws,@bitcast(f16,input[125]));}
+ if(comptime columns>126){@fmachs(yd,ys,ws,@bitcast(f16,input[126]));}
+ if(comptime columns>127){@fmachs(yd,ys,ws,@bitcast(f16,input[127]));}
+ if(comptime vector_scales){
+  // Preserve all three FP32 rounding boundaries and their original order.
+  @fmuls(out,out,65536.0);@fmuls(out,out,activation_scale);@fmuls(out,out,weight_scale);
+ }else{for(@range(u16,rows))|i|{output[i]=((output[i]*65536.0)*activation_scale)*weight_scale;}}
+}

@@ -964,3 +964,21 @@ All132 source tests and11,388 PE SRAM gates pass, with unchanged maximum48,128
 bytes including4,096 stack. Both new jobs succeed/release; no workstation job
 or payload retransfer is added. See MLP-COALESCED-PREFETCH.md and the immutable
 mlp-prefetch-milestone-001.json. Complete layers/model-speed acceptance remains open.
+
+## P30: shared full/tail native input
+
+Physical006 preserves full original-MLP numerical/ingress/retention/drain/normal
+stop qualification while one selector-coded wire copy serves full and ragged
+native owners. Hardware range filters and local part normalization halve native
+broadcast words49376->24688, with unchanged343040 consumed operands and176 group
+packets. Nonzero controller counts fall to564289–564333,7.965–7.972% below P29.
+Completed-output host observations2.551–2.834ms are shorter than P29 but remain
+longer than P28; no sustained wall speedup or complete-model rate is claimed.
+
+All134 source/publication tests and11388 physical PE gates pass; maximum48128
+bytes including4096stack leaves zero margin. Both physical jobs and all five
+workstation services release. Paired-input native simulation regresses on used
+shapes, and a locally faster unroll exceeds full-layout SRAM on68PE; both are
+preserved without hardware trials. See SHARED-NATIVE-INPUTS.md and the bound
+shared-input-milestone-001.json. Residual/norm/device handoff, adjacent complete
+layers, complete original sentences and>=2000 aggregate tokens/s remain open.

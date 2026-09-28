@@ -1,31 +1,40 @@
 # Next work: resident spatial pipeline
 
-1. Preserve physical004 and005 as matched complete original MLP baselines with
-   the fixed four-case oracle.005 coalesces864 sends into176 packets and lowers
-   nonzero controller counts to613127–613190, but all host completed-output
-   observations are slower. Do not claim a sustained wall speedup. Every next
-   grant issues during a packet lease; no next response arrives before retirement.
-2. Reduce measured native/distribution service before enlarging the graph. A
-   small paired-input native FMA callback is a candidate to reduce loop overhead
-   while retaining exact FMA order, decoding and scale boundaries. It is not
-   implemented or qualified. Check compiled SRAM/DSR behavior and independent
-   outputs in a bounded workstation probe before spending another WSE allocation.
-   Preserve the accepted kernel until a whole-MLP physical comparison passes.
-3. Partition input/fused-producer distribution using the explicit packet/slice
-   lowering and finite buffer credits. The unchanged49376 words and static
-   routes still cross a central distributor. A native source/consumer path must
-   respect one WSE-3 RX, fixed queue colors, sender flush before RX restoration,
-   and all cohost code/stack/DSR/UT limits. Neither middle phase344874ticks nor
-   static word-hop counts alone identify pure communication time.
-4. Fuse down output with residual, RMS/norm and successor input; compose original
-   GDN/conv/gates, attention and4x8 FP32 state pages on disjoint resident regions.
-   Validate adjacent full layers on two actual requests with retained state,
-   backpressure and warm reset. Preserve original rounding and full dimensions.
-5. Measure complete stage service times, rebalance memory/areas/concurrency and
-   instantiate embedding, all64 stages, full head and token feedback. Run correct
-   complete sentences under the declared>=2000 aggregate generated-token/s
-   contract, publish evidence and verify resource release after bounded trials.
+1. Preserve physical006 as the accepted shared-input complete-MLP baseline:
+   all original numerical/retention/drain checks pass,49376->24688 broadcast words,
+   nonzero counts564289–564333. Four host observations improve versus P29 but
+   remain slower than P28; no sustained wall speedup is established. Physical
+   maximum48128incl4096stack controls admission, despite local compile48112.
+2. Integrate the preceding residual/RMS producer and following residual/next
+   normalization with the actual complete MLP. Use explicit stream endpoints,
+   short credits and retained original gains/activations. Drive subsequent epoch
+   arming from device arrivals after each PE retires its local leases; host-wide
+   arm/finish RPCs in the diagnostic driver are outside the future serving path.
+   Exercise actual warm backpressure and full completion. Old mlp_norm.csl uses
+   an unqualified prior layout and output-queue color rebinding; do not transplant
+   it as a proven current-stage kernel. Admit the combined actual code/buffers and
+   preserve independent numerical bounds. This is the next graph integration
+   step, rather than another open-ended sweep of isolated native optimizations.
+3. Connect original GDN/conv/gates, attention and4x8 FP32 state pages to the
+   resident projections; validate adjacent complete layers on actual requests
+   with backpressure, state isolation and warm reset. Preserve every original
+   matrix dimension, operation, rounding boundary and model/token identity.
+4. Measure real stage and full request service. Current packing admits only two
+   context96 request states; it does not establish concurrency sufficient for
+   >=2000 aggregate tokens/s. Revisit bank program/loader size and distributed
+   state capacity using compiled footprints and actual request-cycle times.
+   Do not infer completed tokens from intermediate activations or raw counters.
+5. Instantiate embedding, all64 resident stages, the complete head and dependent
+   token feedback. Predeclare request mix and steady-state window, generate
+   correct complete sentences, and report aggregate completed-output throughput,
+   TTFT, ITL, initialization, prefill, fill/drain and full run separately.
 
-Preserve rejected compiles and exact source snapshots. Do not dispatch the
-retired whole-wafer temporal overlay, WSE-3 color-swap candidate or the rejected
-simultaneous RAMP/cardinal return bus. No partial scope establishes model TPS.
+Native pair simulator003 is slower on the used shapes. Native unroll005 saves
+local simulator counts but complete compile008 exceeds SRAM on68PE. Preserve
+these observations and the syntax failure004; neither variant is selected for
+hardware. The shared-input candidate retains the original native kernel.
+
+Retain all qualified kernels and failed snapshots. Do not dispatch the retired
+whole-wafer temporal overlay, unsupported WSE-3 color swap or simultaneous
+RAMP/cardinal receive. Publish evidence and verify resource release after every
+bounded experiment. No partial graph passes complete-model acceptance.

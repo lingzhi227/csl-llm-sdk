@@ -1,0 +1,601 @@
+{
+  "passed": true,
+  "normal_stop": true,
+  "physical": false,
+  "full_model": false,
+  "application": [
+    8,
+    1
+  ],
+  "scope": "Four original-weight 256-MAC shapes with equal resident bank capacity; optional matched scalar/vector scaling or single versus paired/unrolled input loops with identical per-shape operands and banks. Local arithmetic and FP8 decode-plus-arithmetic timings only; excludes input distribution, reduction, matrix coverage and dependent model inference.",
+  "fixture_sha256": "7d0b5d8160d9b0462803ed8163f2af744fb93e959ff30fc1eab078fc3601d789",
+  "shapes": [
+    {
+      "rows": 2,
+      "columns": 128,
+      "weight_elements": 256,
+      "fp8_weight_bytes": 256,
+      "bf16_weight_bytes": 512,
+      "input_packet_words": 65,
+      "partial_output_words": 3,
+      "scalar_map_steps": 128,
+      "fp32_bf16_expansion_bytes": 8,
+      "vector_scales": true,
+      "input_loop": "single",
+      "input_map_steps": 128
+    },
+    {
+      "rows": 4,
+      "columns": 64,
+      "weight_elements": 256,
+      "fp8_weight_bytes": 256,
+      "bf16_weight_bytes": 512,
+      "input_packet_words": 33,
+      "partial_output_words": 5,
+      "scalar_map_steps": 64,
+      "fp32_bf16_expansion_bytes": 16,
+      "vector_scales": true,
+      "input_loop": "single",
+      "input_map_steps": 64
+    },
+    {
+      "rows": 8,
+      "columns": 32,
+      "weight_elements": 256,
+      "fp8_weight_bytes": 256,
+      "bf16_weight_bytes": 512,
+      "input_packet_words": 17,
+      "partial_output_words": 9,
+      "scalar_map_steps": 32,
+      "fp32_bf16_expansion_bytes": 32,
+      "vector_scales": true,
+      "input_loop": "single",
+      "input_map_steps": 32
+    },
+    {
+      "rows": 16,
+      "columns": 16,
+      "weight_elements": 256,
+      "fp8_weight_bytes": 256,
+      "bf16_weight_bytes": 512,
+      "input_packet_words": 9,
+      "partial_output_words": 17,
+      "scalar_map_steps": 16,
+      "fp32_bf16_expansion_bytes": 64,
+      "vector_scales": true,
+      "input_loop": "single",
+      "input_map_steps": 16
+    },
+    {
+      "rows": 2,
+      "columns": 128,
+      "weight_elements": 256,
+      "fp8_weight_bytes": 256,
+      "bf16_weight_bytes": 512,
+      "input_packet_words": 65,
+      "partial_output_words": 3,
+      "scalar_map_steps": 128,
+      "fp32_bf16_expansion_bytes": 8,
+      "vector_scales": true,
+      "input_loop": "unroll",
+      "input_map_steps": 0
+    },
+    {
+      "rows": 4,
+      "columns": 64,
+      "weight_elements": 256,
+      "fp8_weight_bytes": 256,
+      "bf16_weight_bytes": 512,
+      "input_packet_words": 33,
+      "partial_output_words": 5,
+      "scalar_map_steps": 64,
+      "fp32_bf16_expansion_bytes": 16,
+      "vector_scales": true,
+      "input_loop": "unroll",
+      "input_map_steps": 0
+    },
+    {
+      "rows": 8,
+      "columns": 32,
+      "weight_elements": 256,
+      "fp8_weight_bytes": 256,
+      "bf16_weight_bytes": 512,
+      "input_packet_words": 17,
+      "partial_output_words": 9,
+      "scalar_map_steps": 32,
+      "fp32_bf16_expansion_bytes": 32,
+      "vector_scales": true,
+      "input_loop": "unroll",
+      "input_map_steps": 0
+    },
+    {
+      "rows": 16,
+      "columns": 16,
+      "weight_elements": 256,
+      "fp8_weight_bytes": 256,
+      "bf16_weight_bytes": 512,
+      "input_packet_words": 9,
+      "partial_output_words": 17,
+      "scalar_map_steps": 16,
+      "fp32_bf16_expansion_bytes": 64,
+      "vector_scales": true,
+      "input_loop": "unroll",
+      "input_map_steps": 0
+    }
+  ],
+  "cases": [
+    {
+      "case": 0,
+      "kind": 0,
+      "mode": "mixed",
+      "decode_modes": [
+        0,
+        1
+      ],
+      "decode_each": 0,
+      "repetitions": 32,
+      "total_cycles_by_shape": [
+        16574,
+        10622,
+        10014,
+        10270,
+        15675,
+        9723,
+        9117,
+        9403
+      ],
+      "cycles_per_invocation_by_shape": [
+        517.9375,
+        331.9375,
+        312.9375,
+        320.9375,
+        489.84375,
+        303.84375,
+        284.90625,
+        293.84375
+      ],
+      "max_fp64_error": 1.6880221664905548e-09,
+      "matched_scalar_to_vector_ratios": null,
+      "matched_single_to_candidate_ratios": [
+        1.0573524720893142,
+        1.0924611745346087,
+        1.098387627509049,
+        1.0922046155482292
+      ]
+    },
+    {
+      "case": 0,
+      "kind": 0,
+      "mode": "mixed",
+      "decode_modes": [
+        0,
+        1
+      ],
+      "decode_each": 1,
+      "repetitions": 32,
+      "total_cycles_by_shape": [
+        24286,
+        18334,
+        17726,
+        17982,
+        23419,
+        17467,
+        16861,
+        17115
+      ],
+      "cycles_per_invocation_by_shape": [
+        758.9375,
+        572.9375,
+        553.9375,
+        561.9375,
+        731.84375,
+        545.84375,
+        526.90625,
+        534.84375
+      ],
+      "max_fp64_error": 1.6880221664905548e-09,
+      "matched_scalar_to_vector_ratios": null,
+      "matched_single_to_candidate_ratios": [
+        1.0370212220846322,
+        1.0496364573195167,
+        1.051301820769824,
+        1.0506573181419807
+      ]
+    },
+    {
+      "case": 1,
+      "kind": 0,
+      "mode": "zero",
+      "decode_modes": [
+        0,
+        1
+      ],
+      "decode_each": 0,
+      "repetitions": 32,
+      "total_cycles_by_shape": [
+        16574,
+        10622,
+        10014,
+        10270,
+        15675,
+        9723,
+        9117,
+        9403
+      ],
+      "cycles_per_invocation_by_shape": [
+        517.9375,
+        331.9375,
+        312.9375,
+        320.9375,
+        489.84375,
+        303.84375,
+        284.90625,
+        293.84375
+      ],
+      "max_fp64_error": 0.0,
+      "matched_scalar_to_vector_ratios": null,
+      "matched_single_to_candidate_ratios": [
+        1.0573524720893142,
+        1.0924611745346087,
+        1.098387627509049,
+        1.0922046155482292
+      ]
+    },
+    {
+      "case": 1,
+      "kind": 0,
+      "mode": "zero",
+      "decode_modes": [
+        0,
+        1
+      ],
+      "decode_each": 1,
+      "repetitions": 32,
+      "total_cycles_by_shape": [
+        24286,
+        18334,
+        17726,
+        17982,
+        23419,
+        17467,
+        16861,
+        17115
+      ],
+      "cycles_per_invocation_by_shape": [
+        758.9375,
+        572.9375,
+        553.9375,
+        561.9375,
+        731.84375,
+        545.84375,
+        526.90625,
+        534.84375
+      ],
+      "max_fp64_error": 0.0,
+      "matched_scalar_to_vector_ratios": null,
+      "matched_single_to_candidate_ratios": [
+        1.0370212220846322,
+        1.0496364573195167,
+        1.051301820769824,
+        1.0506573181419807
+      ]
+    },
+    {
+      "case": 2,
+      "kind": 0,
+      "mode": "tiny",
+      "decode_modes": [
+        0,
+        1
+      ],
+      "decode_each": 0,
+      "repetitions": 32,
+      "total_cycles_by_shape": [
+        16574,
+        10622,
+        10014,
+        10270,
+        15675,
+        9723,
+        9117,
+        9403
+      ],
+      "cycles_per_invocation_by_shape": [
+        517.9375,
+        331.9375,
+        312.9375,
+        320.9375,
+        489.84375,
+        303.84375,
+        284.90625,
+        293.84375
+      ],
+      "max_fp64_error": 4.0245584642661925e-16,
+      "matched_scalar_to_vector_ratios": null,
+      "matched_single_to_candidate_ratios": [
+        1.0573524720893142,
+        1.0924611745346087,
+        1.098387627509049,
+        1.0922046155482292
+      ]
+    },
+    {
+      "case": 2,
+      "kind": 0,
+      "mode": "tiny",
+      "decode_modes": [
+        0,
+        1
+      ],
+      "decode_each": 1,
+      "repetitions": 32,
+      "total_cycles_by_shape": [
+        24286,
+        18334,
+        17726,
+        17982,
+        23419,
+        17467,
+        16861,
+        17115
+      ],
+      "cycles_per_invocation_by_shape": [
+        758.9375,
+        572.9375,
+        553.9375,
+        561.9375,
+        731.84375,
+        545.84375,
+        526.90625,
+        534.84375
+      ],
+      "max_fp64_error": 4.0245584642661925e-16,
+      "matched_scalar_to_vector_ratios": null,
+      "matched_single_to_candidate_ratios": [
+        1.0370212220846322,
+        1.0496364573195167,
+        1.051301820769824,
+        1.0506573181419807
+      ]
+    },
+    {
+      "case": 3,
+      "kind": 0,
+      "mode": "boundary",
+      "decode_modes": [
+        0,
+        1
+      ],
+      "decode_each": 0,
+      "repetitions": 32,
+      "total_cycles_by_shape": [
+        16574,
+        10622,
+        10014,
+        10270,
+        15675,
+        9723,
+        9117,
+        9403
+      ],
+      "cycles_per_invocation_by_shape": [
+        517.9375,
+        331.9375,
+        312.9375,
+        320.9375,
+        489.84375,
+        303.84375,
+        284.90625,
+        293.84375
+      ],
+      "max_fp64_error": 0.0,
+      "matched_scalar_to_vector_ratios": null,
+      "matched_single_to_candidate_ratios": [
+        1.0573524720893142,
+        1.0924611745346087,
+        1.098387627509049,
+        1.0922046155482292
+      ]
+    },
+    {
+      "case": 3,
+      "kind": 0,
+      "mode": "boundary",
+      "decode_modes": [
+        0,
+        1
+      ],
+      "decode_each": 1,
+      "repetitions": 32,
+      "total_cycles_by_shape": [
+        24286,
+        18334,
+        17726,
+        17982,
+        23419,
+        17467,
+        16861,
+        17115
+      ],
+      "cycles_per_invocation_by_shape": [
+        758.9375,
+        572.9375,
+        553.9375,
+        561.9375,
+        731.84375,
+        545.84375,
+        526.90625,
+        534.84375
+      ],
+      "max_fp64_error": 0.0,
+      "matched_scalar_to_vector_ratios": null,
+      "matched_single_to_candidate_ratios": [
+        1.0370212220846322,
+        1.0496364573195167,
+        1.051301820769824,
+        1.0506573181419807
+      ]
+    },
+    {
+      "case": 4,
+      "kind": 1,
+      "mode": "mixed",
+      "decode_modes": [
+        0
+      ],
+      "decode_each": 0,
+      "repetitions": 32,
+      "total_cycles_by_shape": [
+        31390,
+        21214,
+        17182,
+        14686,
+        31419,
+        21243,
+        17213,
+        14715
+      ],
+      "cycles_per_invocation_by_shape": [
+        980.9375,
+        662.9375,
+        536.9375,
+        458.9375,
+        981.84375,
+        663.84375,
+        537.90625,
+        459.84375
+      ],
+      "max_fp64_error": 1.1175870895385742e-08,
+      "matched_scalar_to_vector_ratios": null,
+      "matched_single_to_candidate_ratios": [
+        0.9990769916292689,
+        0.9986348444193381,
+        0.9981990356126184,
+        0.9980292218824329
+      ]
+    },
+    {
+      "case": 5,
+      "kind": 1,
+      "mode": "zero",
+      "decode_modes": [
+        0
+      ],
+      "decode_each": 0,
+      "repetitions": 32,
+      "total_cycles_by_shape": [
+        31390,
+        21214,
+        17182,
+        14686,
+        31419,
+        21243,
+        17213,
+        14715
+      ],
+      "cycles_per_invocation_by_shape": [
+        980.9375,
+        662.9375,
+        536.9375,
+        458.9375,
+        981.84375,
+        663.84375,
+        537.90625,
+        459.84375
+      ],
+      "max_fp64_error": 0.0,
+      "matched_scalar_to_vector_ratios": null,
+      "matched_single_to_candidate_ratios": [
+        0.9990769916292689,
+        0.9986348444193381,
+        0.9981990356126184,
+        0.9980292218824329
+      ]
+    },
+    {
+      "case": 6,
+      "kind": 1,
+      "mode": "tiny",
+      "decode_modes": [
+        0
+      ],
+      "decode_each": 0,
+      "repetitions": 32,
+      "total_cycles_by_shape": [
+        31390,
+        21214,
+        17182,
+        14686,
+        31419,
+        21243,
+        17213,
+        14715
+      ],
+      "cycles_per_invocation_by_shape": [
+        980.9375,
+        662.9375,
+        536.9375,
+        458.9375,
+        981.84375,
+        663.84375,
+        537.90625,
+        459.84375
+      ],
+      "max_fp64_error": 1.2116903504194741e-27,
+      "matched_scalar_to_vector_ratios": null,
+      "matched_single_to_candidate_ratios": [
+        0.9990769916292689,
+        0.9986348444193381,
+        0.9981990356126184,
+        0.9980292218824329
+      ]
+    },
+    {
+      "case": 7,
+      "kind": 1,
+      "mode": "boundary",
+      "decode_modes": [
+        0
+      ],
+      "decode_each": 0,
+      "repetitions": 32,
+      "total_cycles_by_shape": [
+        31390,
+        21214,
+        17182,
+        14686,
+        31419,
+        21243,
+        17213,
+        14715
+      ],
+      "cycles_per_invocation_by_shape": [
+        980.9375,
+        662.9375,
+        536.9375,
+        458.9375,
+        981.84375,
+        663.84375,
+        537.90625,
+        459.84375
+      ],
+      "max_fp64_error": 0.00146484375,
+      "matched_scalar_to_vector_ratios": null,
+      "matched_single_to_candidate_ratios": [
+        0.9990769916292689,
+        0.9986348444193381,
+        0.9981990356126184,
+        0.9980292218824329
+      ]
+    }
+  ],
+  "all_weights_retained": true,
+  "all_packets_and_counters_exact": true,
+  "all_ordered_outputs_exact": true,
+  "matched_scaling_outputs_exact": false,
+  "matched_input_loop_outputs_exact": true,
+  "compare_input_loop": "unroll",
+  "timing_note": "EachPE measures32 local invocations, including loop/control and callback-free counter overhead. Mode0 excludes one-time FP8 decode; mode1 includes decode in every FP8 invocation. No communication, reduction, complete matrix or dependent-model timing. Different shape inputs cover different original slices; equal256MAC count only.",
+  "clock_hz": null,
+  "full_model_speed_target_achieved": false
+}

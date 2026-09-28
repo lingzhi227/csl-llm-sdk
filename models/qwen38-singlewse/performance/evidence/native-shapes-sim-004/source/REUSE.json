@@ -1,0 +1,8 @@
+{
+  "source_modules": {
+    "probes/native_shapes/fp8_shape.csl": "b9869927f2afebc6f48d4e680ace6e1f458713db8c3c5895465e7d5652e8d301",
+    "csl/fp8_dot.csl": "3c8ed07cb664579ded0d7a9979ca4d62debf514ebf7e231b17e941ba62cae349",
+    "csl/bf16_dot.csl": "df87de73558cb9549c5a4bef6522dd9a675ce9da3b0de05d598a949973350901"
+  },
+  "change": "Optional fp8_pair.csl reads two adjacent native FP16 operands per u32 callback; fp8_unroll.csl unrolls ascending-K FMAs at compile time. Both retain ordered FMAs and scale boundaries. Established fp8_shape.csl and full-MLP runtime remain unchanged."
+}

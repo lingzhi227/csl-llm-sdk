@@ -1,0 +1,87 @@
+{
+  "schema": "wse-explicit-sdk-lease-audit-v1",
+  "passed": true,
+  "source_sha256": {
+    "pe.csl": "9546f65d03e985a51568b693c02f7cfd135a5e9c6d99e5a27fa19485feaabdd5",
+    "fp8_shape.csl": "b9869927f2afebc6f48d4e680ace6e1f458713db8c3c5895465e7d5652e8d301",
+    "fp8_pair.csl": "284c292705cd40d282a23573c16dc12529639c3526635c516261fee16de08201",
+    "bf16_shape.csl": "522bf6960f2a3042232d3ff8df9bf995579cda18cc137bacdcdc889ae4b0455f",
+    "fp8_unpack_shift.csl": "9fa14188758bd1dae78f1fbff7426513bc1fca004dc81b540e91df39a2c4eab3"
+  },
+  "leases": [
+    {
+      "file": "fp8_shape.csl",
+      "resource": "descriptor",
+      "index": 4,
+      "descriptor_kind": "dsr_dest"
+    },
+    {
+      "file": "fp8_shape.csl",
+      "resource": "descriptor",
+      "index": 4,
+      "descriptor_kind": "dsr_src0"
+    },
+    {
+      "file": "fp8_shape.csl",
+      "resource": "descriptor",
+      "index": 4,
+      "descriptor_kind": "dsr_src1"
+    },
+    {
+      "file": "fp8_pair.csl",
+      "resource": "descriptor",
+      "index": 4,
+      "descriptor_kind": "dsr_dest"
+    },
+    {
+      "file": "fp8_pair.csl",
+      "resource": "descriptor",
+      "index": 4,
+      "descriptor_kind": "dsr_src0"
+    },
+    {
+      "file": "fp8_pair.csl",
+      "resource": "descriptor",
+      "index": 4,
+      "descriptor_kind": "dsr_src1"
+    },
+    {
+      "file": "bf16_shape.csl",
+      "resource": "descriptor",
+      "index": 7,
+      "descriptor_kind": "dsr_dest"
+    },
+    {
+      "file": "bf16_shape.csl",
+      "resource": "descriptor",
+      "index": 7,
+      "descriptor_kind": "dsr_src0"
+    },
+    {
+      "file": "bf16_shape.csl",
+      "resource": "descriptor",
+      "index": 4,
+      "descriptor_kind": "dsr_dest"
+    },
+    {
+      "file": "bf16_shape.csl",
+      "resource": "descriptor",
+      "index": 4,
+      "descriptor_kind": "dsr_src0"
+    },
+    {
+      "file": "bf16_shape.csl",
+      "resource": "descriptor",
+      "index": 4,
+      "descriptor_kind": "dsr_src1"
+    }
+  ],
+  "sdk_reserved_descriptor_indices": [
+    0
+  ],
+  "sdk_reserved_queue_and_microthread_indices": [
+    0,
+    1
+  ],
+  "scope": "Explicit literal application leases avoid default SDK memcpy reservations; dynamic lifetimes and queue liveness require execution."
+}

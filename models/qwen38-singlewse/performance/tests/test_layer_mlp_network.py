@@ -235,5 +235,56 @@ class MlpNetworkTests(unittest.TestCase):
             else:bad['controller_transport']['response_capacity']=2
             with self.assertRaises(ValueError):audit_mlp_network(stage,bad)
 
+    def test_shared_full_tail_packets_preserve_every_original_operand(self):
+        rng=random.Random(3001)
+        for stage,routes,old in self.cases:
+            network=build_mlp_network(stage,routes,shared_inputs=True)
+            self.assertEqual(network['audit']['distribution_wire_words'],24688)
+            self.assertEqual(network['controller_transport']['packet_words'],148)
+            self.assertEqual(len(network['distribution_packets']),176)
+            # Compare actual accepted halfwords/scales at every original PE,
+            # not just counts, packet metadata or a duplicated tag formula.
+            for region in stage['regions']:
+                if region['role'] not in ('gate_up','down'):continue
+                before=input_selectors(region);after=input_selectors(region,True)
+                cols=region['matrices'][0]['tile_shape'][1]
+                values={f['k']:([rng.randrange(65536) for _ in range(cols)],rng.randrange(1<<32)) for f in before['frames']}
+                def accepted(mapping,shared):
+                    delivered={}
+                    frames=mapping['frames'][:];rng.shuffle(frames)
+                    for b in mapping['bindings']:
+                        payload={}
+                        for f in frames:
+                            if b['tag']<=f['tag']<=b.get('max_tag',b['tag']):
+                                part=0 if shared and b['parts']==1 else f['part']
+                                self.assertNotIn(part,payload)
+                                payload[part]=values[f['k']]
+                        self.assertEqual(sorted(payload),list(range(b['parts'])))
+                        delivered[tuple(b['pe'])]=payload
+                    return delivered
+                self.assertEqual(accepted(before,False),accepted(after,True))
+            # Aliasing changes only input ownership/filtering, never banks or
+            # the physical cardinal mesh and reduction/fusion routes.
+            old_profiles=worker_profiles(stage,routes,old)
+            new_profiles=worker_profiles(stage,routes,network)
+            for a,b in zip(old_profiles,new_profiles):
+                self.assertEqual(a['pe'],b['pe']);self.assertEqual(a['arm'],b['arm'])
+                self.assertEqual(a['parameters'],{k:v for k,v in b['parameters'].items() if k!='shared_inputs'})
+            strip=lambda r:{k:v for k,v in r.items() if k not in ('filter_tag','filter_max')}
+            self.assertEqual(list(map(strip,old['routes'])),list(map(strip,network['routes'])))
+            self.assertIn('.max_idx=',emit_routes(network))
+
+    def test_shared_selector_range_and_part_corruption_rejected(self):
+        stage,routes,_=self.cases[0]
+        network=build_mlp_network(stage,routes,shared_inputs=True)
+        for mutation in ('route','binding','part','tag','capacity'):
+            bad=copy.deepcopy(network)
+            if mutation=='route':next(r for r in bad['routes'] if 'filter_max' in r)['filter_max']+=1
+            elif mutation=='binding':bad['input_bindings'][0]['max_tag']+=1
+            elif mutation=='part':bad['distribution_packets'][0]['slices'][0]['part']+=1
+            elif mutation=='tag':bad['distribution_packets'][0]['slices'][0]['tag']+=1
+            else:bad['controller_transport']['packet_words']=147
+            with self.assertRaises(ValueError,msg=mutation):audit_mlp_network(stage,bad)
+
 
 if __name__=='__main__':unittest.main()

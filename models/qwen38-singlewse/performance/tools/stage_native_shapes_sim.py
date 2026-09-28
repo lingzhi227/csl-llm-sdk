@@ -6,19 +6,19 @@ ROOT=Path(__file__).resolve().parents[2];sys.path.insert(0,str(ROOT/'performance
 from spatial.native_shapes import document,emit_layout
 from spatial.sdk_leases import audit_explicit_sdk_leases
 
-p=argparse.ArgumentParser();p.add_argument('attempt');p.add_argument('--compare-scaling',action='store_true');a=p.parse_args()
+p=argparse.ArgumentParser();p.add_argument('attempt');p.add_argument('--compare-scaling',action='store_true');p.add_argument('--compare-input-loop',choices=['pair','unroll']);a=p.parse_args()
 if len(a.attempt)!=3 or not a.attempt.isdigit():raise ValueError('Three-digit attempt required')
 name='native-shapes-sim-'+a.attempt;remote='/srv/model-storage/qwen38-singlewse/runs/'+name
 out=ROOT/'performance/evidence'/name
 if out.exists():raise ValueError('Frozen local attempt exists')
 active=subprocess.run(['ssh','workstation','systemctl --user list-units --type=service --state=active,activating,deactivating --no-legend qwen38-single-*'],capture_output=True,text=True,check=True,timeout=20)
 if active.stdout.strip():raise RuntimeError('Existing workstation owner: '+active.stdout)
-files={n:(ROOT/'performance/probes/native_shapes'/n).read_bytes() for n in ['pe.csl','fp8_shape.csl','bf16_shape.csl','prepare.py','run.py']}
+files={n:(ROOT/'performance/probes/native_shapes'/n).read_bytes() for n in ['pe.csl','fp8_shape.csl','fp8_pair.csl','fp8_unroll.csl','bf16_shape.csl','prepare.py','run.py']}
 files['fp8_unpack_shift.csl']=(ROOT/'performance/csl/fp8_unpack_shift.csl').read_bytes()
 files['resource-audit.json']=(json.dumps(audit_explicit_sdk_leases({n:b for n,b in files.items() if n.endswith('.csl')}),indent=2)+'\n').encode()
-files['REUSE.json']=(json.dumps(dict(source_modules={n:hashlib.sha256((ROOT/'performance/csl'/n).read_bytes()).hexdigest() for n in ['fp8_dot.csl','bf16_dot.csl']},change='Copied native arithmetic with compile-time row/K extents generalized; established modules remain unchanged.'),indent=2)+'\n').encode()
-plan=document(a.compare_scaling);width=plan['application'][0]
-files['region.json']=(json.dumps(plan,indent=2)+'\n').encode();files['layout.csl']=emit_layout(a.compare_scaling).encode()
+files['REUSE.json']=(json.dumps(dict(source_modules={str(p.relative_to(ROOT/'performance')):hashlib.sha256(p.read_bytes()).hexdigest() for p in [ROOT/'performance/probes/native_shapes/fp8_shape.csl',ROOT/'performance/csl/fp8_dot.csl',ROOT/'performance/csl/bf16_dot.csl']},change='Optional fp8_pair.csl reads two adjacent native FP16 operands per u32 callback; fp8_unroll.csl unrolls ascending-K FMAs at compile time. Both retain ordered FMAs and scale boundaries. Established fp8_shape.csl and full-MLP runtime remain unchanged.'),indent=2)+'\n').encode()
+plan=document(a.compare_scaling,a.compare_input_loop);width=plan['application'][0]
+files['region.json']=(json.dumps(plan,indent=2)+'\n').encode();files['layout.csl']=emit_layout(a.compare_scaling,a.compare_input_loop).encode()
 files['banks.json']=(ROOT/'performance/evidence/mixed-bank-sim-002/fixture.json').read_bytes()
 files['tensors.json']=(ROOT/'configs/tensors.json').read_bytes();files['weights.py']=(ROOT/'runtime/weights.py').read_bytes()
 for n in ['backend.py','source_gate.py','elf_inventory.py']:files[n]=(ROOT/'runtime'/n).read_bytes()

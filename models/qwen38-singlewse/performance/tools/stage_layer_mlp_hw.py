@@ -10,7 +10,7 @@ from stage_layer_mlp_compile import build
 
 
 def main():
-    parser=argparse.ArgumentParser();parser.add_argument('attempt');parser.add_argument('--reuse-download');parser.add_argument('--reuse-admitted');parser.add_argument('--reuse-payload');args=parser.parse_args()
+    parser=argparse.ArgumentParser();parser.add_argument('attempt');parser.add_argument('--reuse-download');parser.add_argument('--reuse-admitted');parser.add_argument('--reuse-payload');parser.add_argument('--shared-inputs',action='store_true');args=parser.parse_args()
     if args.reuse_payload and (args.reuse_download or not re.fullmatch('layer-mlp-hw-[0-9]{3}',args.reuse_payload)):
         raise ValueError('Payload-only reuse requires one valid attempt and a fresh compiler')
     if args.reuse_admitted and (not args.reuse_download or not re.fullmatch('layer-mlp-hw-[0-9]{3}',args.reuse_admitted)):
@@ -24,7 +24,7 @@ def main():
         raise ValueError('Completed and released independent reference required')
     expected=receipt['fixture_sha256']
     if hashlib.sha256((reference/'fixture.json').read_bytes()).hexdigest()!=expected:raise ValueError('Fixture identity')
-    files,width,height,profiles=build('layer_00')
+    files,width,height,profiles=build('layer_00',shared_inputs=args.shared_inputs)
     # The bank fixture was built against actual complete compile007 payloads.
     compiled={tuple(pe):p['parameters'].get('bank_words',0) for p in json.loads((reference/'source/profiles.json').read_text())['profiles'] for pe in p['pes']}
     if compiled!={tuple(p['pe']):p['parameters'].get('bank_words',0) for p in profiles}:raise ValueError('Original bank extents changed')

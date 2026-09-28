@@ -11,13 +11,14 @@ from spatial.layer_schedule import rank_xy
 from spatial.layer_fused_routes import translate_routes
 
 
-def build(stage_name):
+def build(stage_name,native_loop="map",shared_inputs=False):
+    if native_loop not in ["map","unroll"]:raise ValueError("Native loop candidate")
     evidence=ROOT/'performance/evidence';schedule=evidence/'layer-native-schedule-002/layer-schedule.json'
     plan=json.loads(schedule.read_text());stage=next(s for s in plan['stages'] if s['id']==stage_name)
     gate=next(r for r in stage['regions'] if r['role']=='gate_up');shape='x'.join(map(str,gate['rect'][2:]))
     route_file=evidence/f'layer-fused-routes-003/routes-{shape}.json';template=json.loads(route_file.read_text())
     original=next(r for s in plan['stages'] for r in s['regions'] if r['id']==template['region'])
-    routes=translate_routes(template,original,gate);network=build_mlp_network(stage,routes)
+    routes=translate_routes(template,original,gate);network=build_mlp_network(stage,routes,shared_inputs)
     profiles=worker_profiles(stage,routes,network);ox,oy,width,height=stage['rect']
     mixer=next(r for r in stage['regions'] if r['role']=='mix')
     for c in mixer['banks']['classes']:
@@ -30,7 +31,7 @@ def build(stage_name):
                 if payload:raise ValueError('Controller displaces an original bank')
                 continue
             profiles.append(dict(pe=pe,parameters=dict(bank_words=payload//4),source='layer_mlp_standby.csl'))
-    profiles.append(dict(pe=stage['request_controller']['pe'],parameters=dict(gate_tail=network['gate_tail_workers'],down_tail=network['down_tail_workers']),source='layer_mlp_controller.csl'))
+    profiles.append(dict(pe=stage['request_controller']['pe'],parameters=dict(gate_tail=network['gate_tail_workers'],down_tail=network['down_tail_workers'],shared_inputs=shared_inputs),source='layer_mlp_controller.csl'))
     if len(profiles)!=width*height or len({tuple(p['pe']) for p in profiles})!=width*height:raise ValueError('Whole stage coverage')
     files={}
     module_files=['layer_native','layer_fusion_transport','layer_fusion_ingress','layer_fusion','layer_mlp_sender','mlp_fused','fp8_encode','fp8_unpack_shift']
@@ -41,6 +42,7 @@ def build(stage_name):
                         'check_sram.py':'performance/runtime/check_sram.py','placement.py':'performance/runtime/placement.py',
                         'layer_mlp_network.py':'performance/spatial/layer_mlp_network.py','layer_fused_routes.py':'performance/spatial/layer_fused_routes.py',
                         'layer_routes.py':'performance/spatial/layer_routes.py','layer_schedule.py':'performance/spatial/layer_schedule.py'}.items():files[dest]=(ROOT/source).read_bytes()
+    if native_loop=='unroll':files['fp8_shape.csl']=(ROOT/'performance/probes/native_shapes/fp8_unroll.csl').read_bytes()
     grants=network['grant_schedule'];fields={'targets':'target','kinds':'kind','indices':'index','words':'words','firsts':'first_row','rows':'rows'}
     preparations=network['prepare_schedule']
     schedules=['const %s=[%d]u16{%s};'%(name,len(grants),','.join(str(g.get(key,0)) for g in grants)) for name,key in fields.items()]
@@ -66,20 +68,20 @@ def build(stage_name):
         whole_stage=stage_name,scope='Original connected MLP component; mixer/state banks retained but inactive; no full-layer or model execution.'),separators=(',',':'))+'\n').encode()
     files['worker-setups.json']=(json.dumps(setups,separators=(',',':'))+'\n').encode()
     files['network-binding.json']=(json.dumps(dict(stage=stage_name,audit=network['audit'],senders=network['senders'],sinks=network['down_sinks'],grant_schedule=grants,prepare_schedule=preparations,
-        distribution_packets=network['distribution_packets'],controller_transport=network['controller_transport'],
+        distribution_packets=network['distribution_packets'],shared_inputs=shared_inputs,controller_transport=network['controller_transport'],
         network_sha256=hashlib.sha256(json.dumps(network,sort_keys=True,separators=(',',':')).encode()).hexdigest(),
         source_bindings={str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in [schedule,route_file]}),indent=2)+'\n').encode()
     return files,width,height,profiles
 
 
 def main():
-    parser=argparse.ArgumentParser();parser.add_argument('attempt');parser.add_argument('--stage',default='layer_00');args=parser.parse_args()
+    parser=argparse.ArgumentParser();parser.add_argument('attempt');parser.add_argument('--stage',default='layer_00');parser.add_argument('--native-loop',choices=['map','unroll'],default='map');parser.add_argument('--shared-inputs',action='store_true');args=parser.parse_args()
     if len(args.attempt)!=3 or not args.attempt.isdigit():raise ValueError('Attempt')
     name='layer-mlp-compile-'+args.attempt;out=ROOT/'performance/evidence'/name
     if out.exists():raise ValueError('Frozen attempt')
     active=subprocess.run(['ssh','workstation','systemctl --user list-units --type=service --state=active,activating,deactivating --no-legend qwen38-single-*'],capture_output=True,text=True,check=True,timeout=20)
     if active.stdout.strip():raise ValueError('Live workstation owner: '+active.stdout)
-    files,width,height,profiles=build(args.stage)
+    files,width,height,profiles=build(args.stage,args.native_loop,args.shared_inputs)
     script=r'''import json,os,signal,subprocess,time
 from pathlib import Path
 from source_gate import verify

@@ -1,0 +1,19 @@
+{
+  "candidate": "layer-mlp-hw-006",
+  "baseline": "layer-mlp-hw-005",
+  "unchanged_csl_sha256": {
+    "layer_native.csl": "3ccead305aaef1ca29e94bb77216d69298250cd148182eedf8f927d4732212ea",
+    "layer_fusion_transport.csl": "9fc6809026c076176bc9223a5e6953b7beef5aecfbb1a3ffff40ab1f25a60685",
+    "layer_fusion_ingress.csl": "580d23bcd7a17070c922d7ba6961a8978033260d01194c9d64191caa8900b8c1",
+    "layer_fusion.csl": "57b7955c1ac48d6109b3275fb82f2c4033c560e5c903f2b50bcc362378c02344",
+    "layer_mlp_sender.csl": "d7ae2b4cc1d6455eb60444fb2aa660243d4e30f63a7cbf32d8e9a29ae547e1f3",
+    "mlp_fused.csl": "15f7449d59d216df4775e9a0ddf0c210286bb1cc00d6f02a139f27daaa2cffc3",
+    "fp8_encode.csl": "21dda5fde73c94da0cbc0d859412cccdd51f51ee1f863d1711036933b53f1c63",
+    "fp8_unpack_shift.csl": "9fa14188758bd1dae78f1fbff7426513bc1fca004dc81b540e91df39a2c4eab3",
+    "fp8_shape.csl": "b9869927f2afebc6f48d4e680ace6e1f458713db8c3c5895465e7d5652e8d301",
+    "qwen_math.csl": "03adca23c7dd74282093961ae51e0ae4d193e7adc14b8dd43fa2f16f4e95e137"
+  },
+  "source_manifest_sha256": "1b217c8fb0210a64db8e9963be603a807b5fdb15e0880983ae5e8fc76b62a5ff",
+  "scope": "Arithmetic modules unchanged; controller header/selector packing and native ingress part normalization change with shared route ranges. Full physical neural/retention/drain qualification remains required.",
+  "physical_result_available": false
+}
