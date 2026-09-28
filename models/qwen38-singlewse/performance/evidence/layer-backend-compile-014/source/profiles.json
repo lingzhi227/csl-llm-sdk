@@ -1,0 +1,198 @@
+{
+  "samples": [
+    {
+      "pe": [
+        0,
+        0
+      ],
+      "source": "mixer_layer_mlp_controller.csl",
+      "parameters": {
+        "gate_tail": 106,
+        "down_tail": 159,
+        "shared_inputs": true,
+        "norm_bridge": true
+      },
+      "original_pe": [
+        107,
+        145
+      ],
+      "original_bank_words": 0,
+      "payload_changed": false
+    },
+    {
+      "pe": [
+        1,
+        0
+      ],
+      "source": "mixer_layer_mlp_standby.csl",
+      "parameters": {
+        "bank_words": 4096,
+        "mixer_rank_parity": 1,
+        "mixer_input48_queue": 5,
+        "mixer_can_root": false
+      },
+      "original_pe": [
+        64,
+        67
+      ],
+      "original_bank_words": 8801,
+      "payload_changed": true
+    },
+    {
+      "pe": [
+        2,
+        0
+      ],
+      "source": "mixer_layer_mlp_standby.csl",
+      "parameters": {
+        "bank_words": 4096,
+        "mixer_rank_parity": 0,
+        "mixer_input48_queue": 5,
+        "mixer_can_root": true
+      },
+      "original_pe": [
+        63,
+        67
+      ],
+      "original_bank_words": 8801,
+      "payload_changed": true
+    },
+    {
+      "pe": [
+        3,
+        0
+      ],
+      "source": "mixer_layer_norm_bridge.csl",
+      "parameters": {
+        "bank_words": 4096,
+        "rank": 0,
+        "mixer_rank_parity": 1,
+        "mixer_input48_queue": 5,
+        "mixer_can_root": false
+      },
+      "original_pe": [
+        63,
+        144
+      ],
+      "original_bank_words": 8415,
+      "payload_changed": true
+    },
+    {
+      "pe": [
+        4,
+        0
+      ],
+      "source": "mixer_layer_norm_bridge.csl",
+      "parameters": {
+        "bank_words": 4096,
+        "rank": 1,
+        "mixer_rank_parity": 0,
+        "mixer_input48_queue": 5,
+        "mixer_can_root": false
+      },
+      "original_pe": [
+        64,
+        144
+      ],
+      "original_bank_words": 8415,
+      "payload_changed": true
+    },
+    {
+      "pe": [
+        5,
+        0
+      ],
+      "source": "mixer_layer_norm_bridge.csl",
+      "parameters": {
+        "bank_words": 4096,
+        "rank": 39,
+        "mixer_rank_parity": 0,
+        "mixer_input48_queue": 5,
+        "mixer_can_root": false
+      },
+      "original_pe": [
+        102,
+        144
+      ],
+      "original_bank_words": 8415,
+      "payload_changed": true
+    },
+    {
+      "pe": [
+        6,
+        0
+      ],
+      "source": "mixer_layer_norm_sender.csl",
+      "parameters": {
+        "bank_words": 4096,
+        "rank": 0,
+        "sender_id": 0,
+        "bus_rx": "EAST",
+        "bus_tx": "SOUTH",
+        "mixer_rank_parity": 0,
+        "mixer_input48_queue": 4,
+        "mixer_can_root": false
+      },
+      "original_pe": [
+        63,
+        143
+      ],
+      "original_bank_words": 8543,
+      "payload_changed": true
+    },
+    {
+      "pe": [
+        7,
+        0
+      ],
+      "source": "mixer_layer_norm_sender.csl",
+      "parameters": {
+        "bank_words": 4096,
+        "rank": 1,
+        "sender_id": 1,
+        "bus_rx": "EAST",
+        "bus_tx": "WEST",
+        "mixer_rank_parity": 1,
+        "mixer_input48_queue": 4,
+        "mixer_can_root": false
+      },
+      "original_pe": [
+        64,
+        143
+      ],
+      "original_bank_words": 8543,
+      "payload_changed": true
+    },
+    {
+      "pe": [
+        8,
+        0
+      ],
+      "source": "mixer_layer_norm_sender.csl",
+      "parameters": {
+        "bank_words": 4096,
+        "rank": 39,
+        "sender_id": 39,
+        "bus_rx": "EAST",
+        "bus_tx": "WEST",
+        "mixer_rank_parity": 1,
+        "mixer_input48_queue": 4,
+        "mixer_can_root": false
+      },
+      "original_pe": [
+        102,
+        143
+      ],
+      "original_bank_words": 8543,
+      "payload_changed": true
+    }
+  ],
+  "application": [
+    9,
+    1
+  ],
+  "physical": false,
+  "executed": false,
+  "full_bank_admission": false,
+  "scope": "Actual producer buffers/code and selected cohost code/storage calibration with4096-word banks. No fabric execution or complete-layer/model admission."
+}

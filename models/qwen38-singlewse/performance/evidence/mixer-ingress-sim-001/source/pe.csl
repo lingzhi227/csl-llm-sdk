@@ -1,0 +1,33 @@
+// Local original-weight arithmetic qualification, no fabric/model execution.
+param memcpy_params;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const candidate=@import_module("mixer_native.csl",.{.bank_words=323});
+const baseline=@import_module("baseline_native.csl");
+const producer=@import_module("mixer_operand.csl");
+var bank=@zeros([323]u32);var input=@zeros([64]u32);var packet=@zeros([133]u32);
+var setup=@zeros([40]u16);var output=@zeros([20]f32);var audit=@zeros([4]u32);
+const bp:[*]u32=&bank;const ip:[*]u32=&input;const pp:[*]u32=&packet;
+const sp:[*]u16=&setup;const op:[*]f32=&output;const ap:[*]u32=&audit;
+fn measure(invocation:u32,group:u16,parts:u16) void {
+ producer.prepare(ip,pp,invocation,group,parts);
+ const source=@get_dsd(mem1d_dsd,.{.base_address=&packet[5],.extent=128});
+ const fresh=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]u32,&candidate.decoded),.extent=128});
+ const old=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]u32,&baseline.decoded),.extent=128});
+ @mov32(fresh,source);@mov32(old,source);
+ const scale=@bitcast(f32,(packet[3]&65535)|((packet[4]&65535)<<16));
+ candidate.capture_tagged(scale,bp,sp,parts==40);baseline.capture_tagged(scale);
+ for(@range(u16,64))|i|{@assert(candidate.encoded[i]==baseline.encoded[i]);}
+ for(@range(u16,20))|i|{output[i]=0.0;}
+ for(@range(u16,5))|m|{
+  if((parts==40 and m<4 or parts==48 and m==4) and setup[8*m+1]>0){
+   const offset=setup[8*m];candidate.compute(bp,offset,m,@ptrcast([*]f32,&output[2*m]));
+   baseline.compute(bp,offset,m==2 or m==3,@ptrcast([*]f32,&output[10+2*m]));
+  }
+ }
+ audit[0]=invocation;audit[1]=@as(u32,group);audit[2]=@as(u32,parts);audit[3]+=1;
+ sys.unblock_cmd_stream();
+}
+comptime {
+ @export_symbol(bp,"bank");@export_symbol(ip,"input");@export_symbol(pp,"packet");
+ @export_symbol(sp,"setup");@export_symbol(op,"output");@export_symbol(ap,"audit");@export_symbol(measure);
+}

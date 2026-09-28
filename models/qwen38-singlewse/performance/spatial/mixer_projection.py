@@ -107,6 +107,16 @@ def audit_mixer_projections(region,plan):
         if sorted(rows)!=list(range(m['shape'][0])) or tiles!=m['tiles']:
             raise ValueError('Missing or duplicated original projection rows/tiles')
         matrix_stats.append(dict(tensor=m['tensor'],shape=m['shape'],tiles=tiles,rows=len(rows)))
+    # Ingress fusion retains one FP32 partial per original A/B projection.
+    # Admit it only when every tile can consume the exact same arriving group
+    # as QKV, before that packet's low BF16 halves are overwritten by decoding.
+    for w in workers:
+        qkv=w['descriptors'][0]
+        for mi in (2,3):
+            d=w['descriptors'][mi]
+            if d['iterations']>1 or (d['iterations'] and
+                (not qkv['iterations'] or (d['key_index'],d['key_parts'])!=(qkv['key_index'],qkv['key_parts']))):
+                raise ValueError('A/B ingress fusion cannot cover original BF16 input lifetime')
     expected_ports=[]
     for w in workers:
         for mi,d in enumerate(w['descriptors']):
@@ -154,4 +164,5 @@ def audit_mixer_projections(region,plan):
             delivered+=len(sinks)
     return dict(passed=True,original_matrices=matrix_stats,workers=count,fixed_neighbor_colors=[10,11],
                 original_tiles_checked=sum(s['tiles'] for s in matrix_stats),input_owner_deliveries=delivered,
-                checked_input_tags=88,full_mixer=False,physical=False)
+                checked_input_tags=88,ingress_bf16_tiles=sum(s['tiles'] for s in matrix_stats[2:4]),
+                max_bf16_partials_per_pe=2,full_mixer=False,physical=False)

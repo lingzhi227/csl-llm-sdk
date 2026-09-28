@@ -1,0 +1,369 @@
+{
+  "revision": "017b9c7af6b5689d5dd426a76e0bc077eb5ca20a",
+  "original_shards": {
+    "layers-0.safetensors": "07f700e293baeaf3cd4240c3df1a948c4403f16961ea7979e86c8d6a9f8fd466"
+  },
+  "origins": [
+    {
+      "owner_rank": 320,
+      "matrix": 0,
+      "tensor": "model.language_model.layers.0.linear_attn.in_proj_qkv.weight",
+      "row": 16,
+      "column": 0,
+      "rows": 2,
+      "owned": true,
+      "original_bank_word_offset": 0,
+      "sample_bank_word_offset": 0
+    },
+    {
+      "owner_rank": 320,
+      "matrix": 1,
+      "tensor": "model.language_model.layers.0.linear_attn.in_proj_z.weight",
+      "row": 160,
+      "column": 0,
+      "rows": 2,
+      "owned": true,
+      "original_bank_word_offset": 3835,
+      "sample_bank_word_offset": 65
+    },
+    {
+      "owner_rank": 320,
+      "matrix": 2,
+      "tensor": "model.language_model.layers.0.linear_attn.in_proj_a.weight",
+      "row": 0,
+      "column": 0,
+      "rows": 1,
+      "owned": true,
+      "original_bank_word_offset": 8320,
+      "sample_bank_word_offset": 130
+    },
+    {
+      "owner_rank": 320,
+      "matrix": 3,
+      "tensor": "model.language_model.layers.0.linear_attn.in_proj_b.weight",
+      "row": 40,
+      "column": 0,
+      "rows": 1,
+      "owned": true,
+      "original_bank_word_offset": 8384,
+      "sample_bank_word_offset": 194
+    },
+    {
+      "owner_rank": 320,
+      "matrix": 4,
+      "tensor": "model.language_model.layers.0.linear_attn.out_proj.weight",
+      "row": 12,
+      "column": 4096,
+      "rows": 2,
+      "owned": true,
+      "original_bank_word_offset": 6045,
+      "sample_bank_word_offset": 258
+    },
+    {
+      "owner_rank": 641,
+      "matrix": 0,
+      "tensor": "model.language_model.layers.0.linear_attn.in_proj_qkv.weight",
+      "row": 32,
+      "column": 128,
+      "rows": 2,
+      "owned": true,
+      "original_bank_word_offset": 0,
+      "sample_bank_word_offset": 0
+    },
+    {
+      "owner_rank": 641,
+      "matrix": 1,
+      "tensor": "model.language_model.layers.0.linear_attn.in_proj_z.weight",
+      "row": 0,
+      "column": 128,
+      "rows": 2,
+      "owned": true,
+      "original_bank_word_offset": 3770,
+      "sample_bank_word_offset": 65
+    },
+    {
+      "owner_rank": 641,
+      "matrix": 2,
+      "tensor": "model.language_model.layers.0.linear_attn.in_proj_a.weight",
+      "row": 8,
+      "column": 128,
+      "rows": 1,
+      "owned": true,
+      "original_bank_word_offset": 8320,
+      "sample_bank_word_offset": 130
+    },
+    {
+      "owner_rank": 641,
+      "matrix": 3,
+      "tensor": "model.language_model.layers.0.linear_attn.in_proj_b.weight",
+      "row": 48,
+      "column": 128,
+      "rows": 1,
+      "owned": false,
+      "original_bank_word_offset": 0,
+      "sample_bank_word_offset": 194
+    },
+    {
+      "owner_rank": 641,
+      "matrix": 4,
+      "tensor": "model.language_model.layers.0.linear_attn.out_proj.weight",
+      "row": 26,
+      "column": 2176,
+      "rows": 2,
+      "owned": true,
+      "original_bank_word_offset": 6045,
+      "sample_bank_word_offset": 258
+    },
+    {
+      "owner_rank": 39,
+      "matrix": 0,
+      "tensor": "model.language_model.layers.0.linear_attn.in_proj_qkv.weight",
+      "row": 0,
+      "column": 4992,
+      "rows": 2,
+      "owned": true,
+      "original_bank_word_offset": 0,
+      "sample_bank_word_offset": 0
+    },
+    {
+      "owner_rank": 39,
+      "matrix": 1,
+      "tensor": "model.language_model.layers.0.linear_attn.in_proj_z.weight",
+      "row": 144,
+      "column": 4992,
+      "rows": 2,
+      "owned": true,
+      "original_bank_word_offset": 3835,
+      "sample_bank_word_offset": 65
+    },
+    {
+      "owner_rank": 39,
+      "matrix": 2,
+      "tensor": "model.language_model.layers.0.linear_attn.in_proj_a.weight",
+      "row": 80,
+      "column": 4992,
+      "rows": 1,
+      "owned": false,
+      "original_bank_word_offset": 0,
+      "sample_bank_word_offset": 130
+    },
+    {
+      "owner_rank": 39,
+      "matrix": 3,
+      "tensor": "model.language_model.layers.0.linear_attn.in_proj_b.weight",
+      "row": 32,
+      "column": 4992,
+      "rows": 1,
+      "owned": true,
+      "original_bank_word_offset": 8385,
+      "sample_bank_word_offset": 194
+    },
+    {
+      "owner_rank": 39,
+      "matrix": 4,
+      "tensor": "model.language_model.layers.0.linear_attn.out_proj.weight",
+      "row": 0,
+      "column": 4992,
+      "rows": 2,
+      "owned": true,
+      "original_bank_word_offset": 6110,
+      "sample_bank_word_offset": 258
+    }
+  ],
+  "cases": [
+    {
+      "case": 0,
+      "owner_rank": 320,
+      "mode": "mixed",
+      "parts": 40,
+      "group": 0,
+      "invocation": 1
+    },
+    {
+      "case": 1,
+      "owner_rank": 320,
+      "mode": "mixed",
+      "parts": 48,
+      "group": 32,
+      "invocation": 2
+    },
+    {
+      "case": 2,
+      "owner_rank": 320,
+      "mode": "zero_after",
+      "parts": 40,
+      "group": 0,
+      "invocation": 3
+    },
+    {
+      "case": 3,
+      "owner_rank": 320,
+      "mode": "zero_after",
+      "parts": 48,
+      "group": 32,
+      "invocation": 4
+    },
+    {
+      "case": 4,
+      "owner_rank": 320,
+      "mode": "changed",
+      "parts": 40,
+      "group": 0,
+      "invocation": 5
+    },
+    {
+      "case": 5,
+      "owner_rank": 320,
+      "mode": "changed",
+      "parts": 48,
+      "group": 32,
+      "invocation": 6
+    },
+    {
+      "case": 6,
+      "owner_rank": 320,
+      "mode": "replay",
+      "parts": 40,
+      "group": 0,
+      "invocation": 7
+    },
+    {
+      "case": 7,
+      "owner_rank": 320,
+      "mode": "replay",
+      "parts": 48,
+      "group": 32,
+      "invocation": 8
+    },
+    {
+      "case": 8,
+      "owner_rank": 641,
+      "mode": "mixed",
+      "parts": 40,
+      "group": 1,
+      "invocation": 9
+    },
+    {
+      "case": 9,
+      "owner_rank": 641,
+      "mode": "mixed",
+      "parts": 48,
+      "group": 17,
+      "invocation": 10
+    },
+    {
+      "case": 10,
+      "owner_rank": 641,
+      "mode": "zero_after",
+      "parts": 40,
+      "group": 1,
+      "invocation": 11
+    },
+    {
+      "case": 11,
+      "owner_rank": 641,
+      "mode": "zero_after",
+      "parts": 48,
+      "group": 17,
+      "invocation": 12
+    },
+    {
+      "case": 12,
+      "owner_rank": 641,
+      "mode": "changed",
+      "parts": 40,
+      "group": 1,
+      "invocation": 13
+    },
+    {
+      "case": 13,
+      "owner_rank": 641,
+      "mode": "changed",
+      "parts": 48,
+      "group": 17,
+      "invocation": 14
+    },
+    {
+      "case": 14,
+      "owner_rank": 641,
+      "mode": "replay",
+      "parts": 40,
+      "group": 1,
+      "invocation": 15
+    },
+    {
+      "case": 15,
+      "owner_rank": 641,
+      "mode": "replay",
+      "parts": 48,
+      "group": 17,
+      "invocation": 16
+    },
+    {
+      "case": 16,
+      "owner_rank": 39,
+      "mode": "mixed",
+      "parts": 40,
+      "group": 39,
+      "invocation": 17
+    },
+    {
+      "case": 17,
+      "owner_rank": 39,
+      "mode": "mixed",
+      "parts": 48,
+      "group": 39,
+      "invocation": 18
+    },
+    {
+      "case": 18,
+      "owner_rank": 39,
+      "mode": "zero_after",
+      "parts": 40,
+      "group": 39,
+      "invocation": 19
+    },
+    {
+      "case": 19,
+      "owner_rank": 39,
+      "mode": "zero_after",
+      "parts": 48,
+      "group": 39,
+      "invocation": 20
+    },
+    {
+      "case": 20,
+      "owner_rank": 39,
+      "mode": "changed",
+      "parts": 40,
+      "group": 39,
+      "invocation": 21
+    },
+    {
+      "case": 21,
+      "owner_rank": 39,
+      "mode": "changed",
+      "parts": 48,
+      "group": 39,
+      "invocation": 22
+    },
+    {
+      "case": 22,
+      "owner_rank": 39,
+      "mode": "replay",
+      "parts": 40,
+      "group": 39,
+      "invocation": 23
+    },
+    {
+      "case": 23,
+      "owner_rank": 39,
+      "mode": "replay",
+      "parts": 48,
+      "group": 39,
+      "invocation": 24
+    }
+  ],
+  "fixture_sha256": "de44105c53c1866defc684c025de07e09925e02b9f02a400970b95434ae8bfdd",
+  "criterion": "Exact original packet, native codes, candidate/baseline and independent ordered FP32 outputs after zero-sign canonicalization; bank/input/setup retained; zero/change/replay and normal stop. Local arithmetic only, no fabric/full-bank/full-projection/model acceptance."
+}

@@ -1,0 +1,27 @@
+// Original mixer row arithmetic. FP8 and BF16 share the exact retained BF16
+// group128 input; BF16 a/b projections never consume quantized activations.
+// DSR4/7 math is synchronous. decoded is leased to ingress only before compute.
+const unpacker=@import_module("fp8_unpack_shift.csl",.{.max_pairs=128});
+const dot=@import_module("fp8_shape.csl",.{.rows=2,.columns=128,.vector_scales=true});
+const bf=@import_module("baseline_bf16_row.csl");
+var raw=@zeros([64]u32);var encoded=@zeros([64]u32);var decoded=@zeros([256]u16);
+var scale:f32=0.0;var ready:bool=false;
+// One wire word is [K tag8 | original E4M3 code8 | original BF16 input16].
+// The producer computes the original group scale/rounding once. No division
+// or floating-point quantization is repeated at the resident weight owners.
+fn capture_tagged(shared_scale:f32) void {
+ const src=@get_dsd(mem1d_dsd,.{.base_address=&decoded,.extent=128,.stride=2});
+ const dst=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]u16,&raw),.extent=128});@mov16(dst,src);
+ const codes=@increment_dsd_offset(src,1,u16);
+ const native=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]u16,&encoded),.extent=128});
+ @sll16(native,codes,@as(u16,8));@sar16(native,native,@as(u16,1));@and16(native,native,@as(u16,0xbfff));
+ scale=shared_scale;ready=true;
+}
+fn compute(bank:[*]u32,offset:u16,use_bf16:bool,result:[*]f32) void {
+ @assert(ready);
+ if(use_bf16){bf.compute(@ptrcast([*]u16,&bank[offset]),@ptrcast([*]u16,&raw),result);result[1]=0.0;}
+ else{
+  unpacker.decode(@ptrcast([*]u16,&bank[offset]),&decoded,128);
+  dot.compute(&decoded,@ptrcast([*]u16,&encoded),result,scale,@bitcast(f32,bank[offset+64]));
+ }
+}

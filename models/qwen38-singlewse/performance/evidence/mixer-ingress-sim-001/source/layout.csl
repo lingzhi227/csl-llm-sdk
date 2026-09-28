@@ -1,0 +1,7 @@
+const memcpy=@import_module("<memcpy/get_params>",.{.width=1,.height=1});
+layout {
+ @set_rectangle(1,1);@set_tile_code(0,0,"pe.csl",.{.memcpy_params=memcpy.get_params(0)});
+ @export_name("bank",[*]u32,false);@export_name("input",[*]u32,false);@export_name("packet",[*]u32,false);
+ @export_name("setup",[*]u16,false);@export_name("output",[*]f32,false);@export_name("audit",[*]u32,false);
+ @export_name("measure",fn(u32,u16,u16)void);
+}

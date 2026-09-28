@@ -1,0 +1,286 @@
+{
+  "matrices": [
+    {
+      "tensor": "model.language_model.layers.0.linear_attn.in_proj_qkv.weight",
+      "shape": [
+        10240,
+        5120
+      ],
+      "tile_shape": [
+        2,
+        128
+      ],
+      "tiles": 204800,
+      "dtype": "F8_E4M3",
+      "scale_tensor": "model.language_model.layers.0.linear_attn.in_proj_qkv.weight_scale_inv",
+      "k_blocks": 40,
+      "groups": 88,
+      "workers": 3520,
+      "output_tiles": 5120,
+      "group_rotation": 0,
+      "input_k_invariant": true,
+      "loop_output_tile": "(group - group_rotation) modulo groups + iteration * groups"
+    },
+    {
+      "tensor": "model.language_model.layers.0.linear_attn.in_proj_z.weight",
+      "shape": [
+        6144,
+        5120
+      ],
+      "tile_shape": [
+        2,
+        128
+      ],
+      "tiles": 122880,
+      "dtype": "F8_E4M3",
+      "scale_tensor": "model.language_model.layers.0.linear_attn.in_proj_z.weight_scale_inv",
+      "k_blocks": 40,
+      "groups": 88,
+      "workers": 3520,
+      "output_tiles": 3072,
+      "group_rotation": 16,
+      "input_k_invariant": true,
+      "loop_output_tile": "(group - group_rotation) modulo groups + iteration * groups"
+    },
+    {
+      "tensor": "model.language_model.layers.0.linear_attn.in_proj_a.weight",
+      "shape": [
+        48,
+        5120
+      ],
+      "tile_shape": [
+        1,
+        128
+      ],
+      "tiles": 1920,
+      "dtype": "BF16",
+      "k_blocks": 40,
+      "groups": 88,
+      "workers": 3520,
+      "output_tiles": 48,
+      "group_rotation": 8,
+      "input_k_invariant": true,
+      "loop_output_tile": "(group - group_rotation) modulo groups + iteration * groups"
+    },
+    {
+      "tensor": "model.language_model.layers.0.linear_attn.in_proj_b.weight",
+      "shape": [
+        48,
+        5120
+      ],
+      "tile_shape": [
+        1,
+        128
+      ],
+      "tiles": 1920,
+      "dtype": "BF16",
+      "k_blocks": 40,
+      "groups": 88,
+      "workers": 3520,
+      "output_tiles": 48,
+      "group_rotation": 56,
+      "input_k_invariant": true,
+      "loop_output_tile": "(group - group_rotation) modulo groups + iteration * groups"
+    },
+    {
+      "tensor": "model.language_model.layers.0.linear_attn.out_proj.weight",
+      "shape": [
+        5120,
+        6144
+      ],
+      "tile_shape": [
+        2,
+        128
+      ],
+      "tiles": 122880,
+      "dtype": "F8_E4M3",
+      "scale_tensor": "model.language_model.layers.0.linear_attn.out_proj.weight_scale_inv",
+      "k_blocks": 48,
+      "groups": 74,
+      "workers": 3552,
+      "output_tiles": 2560,
+      "group_rotation": 0,
+      "input_k_invariant": true,
+      "loop_output_tile": "(group - group_rotation) modulo groups + iteration * groups"
+    }
+  ],
+  "workers": [
+    {
+      "pe": [
+        102,
+        74
+      ],
+      "rank": 320,
+      "descriptors": [
+        {
+          "base_words": 0,
+          "iterations": 59,
+          "first_row": 16,
+          "row_stride": 176,
+          "key_index": 0,
+          "key_parts": 40,
+          "bf16": 0,
+          "rows": 2
+        },
+        {
+          "base_words": 3835,
+          "iterations": 34,
+          "first_row": 160,
+          "row_stride": 176,
+          "key_index": 0,
+          "key_parts": 40,
+          "bf16": 0,
+          "rows": 2
+        },
+        {
+          "base_words": 8320,
+          "iterations": 1,
+          "first_row": 0,
+          "row_stride": 88,
+          "key_index": 0,
+          "key_parts": 40,
+          "bf16": 1,
+          "rows": 1
+        },
+        {
+          "base_words": 8384,
+          "iterations": 1,
+          "first_row": 40,
+          "row_stride": 88,
+          "key_index": 0,
+          "key_parts": 40,
+          "bf16": 1,
+          "rows": 1
+        },
+        {
+          "base_words": 6045,
+          "iterations": 35,
+          "first_row": 12,
+          "row_stride": 148,
+          "key_index": 32,
+          "key_parts": 48,
+          "bf16": 0,
+          "rows": 2
+        }
+      ]
+    },
+    {
+      "pe": [
+        74,
+        81
+      ],
+      "rank": 641,
+      "descriptors": [
+        {
+          "base_words": 0,
+          "iterations": 58,
+          "first_row": 32,
+          "row_stride": 176,
+          "key_index": 1,
+          "key_parts": 40,
+          "bf16": 0,
+          "rows": 2
+        },
+        {
+          "base_words": 3770,
+          "iterations": 35,
+          "first_row": 0,
+          "row_stride": 176,
+          "key_index": 1,
+          "key_parts": 40,
+          "bf16": 0,
+          "rows": 2
+        },
+        {
+          "base_words": 8320,
+          "iterations": 1,
+          "first_row": 8,
+          "row_stride": 88,
+          "key_index": 1,
+          "key_parts": 40,
+          "bf16": 1,
+          "rows": 1
+        },
+        {
+          "base_words": 0,
+          "iterations": 0,
+          "first_row": 48,
+          "row_stride": 88,
+          "key_index": 1,
+          "key_parts": 40,
+          "bf16": 1,
+          "rows": 1
+        },
+        {
+          "base_words": 6045,
+          "iterations": 35,
+          "first_row": 26,
+          "row_stride": 148,
+          "key_index": 17,
+          "key_parts": 48,
+          "bf16": 0,
+          "rows": 2
+        }
+      ]
+    },
+    {
+      "pe": [
+        102,
+        67
+      ],
+      "rank": 39,
+      "descriptors": [
+        {
+          "base_words": 0,
+          "iterations": 59,
+          "first_row": 0,
+          "row_stride": 176,
+          "key_index": 39,
+          "key_parts": 40,
+          "bf16": 0,
+          "rows": 2
+        },
+        {
+          "base_words": 3835,
+          "iterations": 35,
+          "first_row": 144,
+          "row_stride": 176,
+          "key_index": 39,
+          "key_parts": 40,
+          "bf16": 0,
+          "rows": 2
+        },
+        {
+          "base_words": 0,
+          "iterations": 0,
+          "first_row": 80,
+          "row_stride": 88,
+          "key_index": 39,
+          "key_parts": 40,
+          "bf16": 1,
+          "rows": 1
+        },
+        {
+          "base_words": 8385,
+          "iterations": 1,
+          "first_row": 32,
+          "row_stride": 88,
+          "key_index": 39,
+          "key_parts": 40,
+          "bf16": 1,
+          "rows": 1
+        },
+        {
+          "base_words": 6110,
+          "iterations": 35,
+          "first_row": 0,
+          "row_stride": 148,
+          "key_index": 39,
+          "key_parts": 48,
+          "bf16": 0,
+          "rows": 2
+        }
+      ]
+    }
+  ]
+}

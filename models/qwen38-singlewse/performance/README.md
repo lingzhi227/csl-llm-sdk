@@ -7,6 +7,18 @@ Independent requests may overlap with isolated state. The earlier per-request
 interpretation and whole-wafer shared-layer overlay are superseded. The target
 remains unmet; this is active development.
 
+P34 passes155 source and155 publication regression tests and fuses original A/B contractions into
+tagged operand arrival, retaining two
+FP32 partials instead of a256-byte raw-input cache. Actual CSL simulator001
+passes24 original-weight cases against the frozen P33 consumer and an independent
+reference, including zero/change/replay. Selected resource compile014 saves112
+bytes on each of eight matched weight cohosts; the producer remains39632bytes
+including4096 stack. Failed013 is preserved. Full-bank/stage SRAM and complete
+mixer/model execution are not admitted. Matrix-only resource estimates still
+exceed the gate on root/norm cohosts, so subsequent work must revise matrix/role
+placement together with state and workspace lifetimes. All three workstation
+services released; no new WSE job. See [INGRESS-MIXER-FUSION.md](docs/INGRESS-MIXER-FUSION.md).
+
 P33 shares original BF16/E4M3 preparation in one133-word input packet and
 specializes root code. All original dimensions/banks remain;155 source and publication tests
 pass. Matched3440 linked PEs save720–976bytes each (3290528bytes combined),

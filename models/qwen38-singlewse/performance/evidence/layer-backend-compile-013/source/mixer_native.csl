@@ -1,0 +1,34 @@
+// Original A/B partials consume BF16 directly from the arriving tagged group.
+// Only two FP32 partials survive; the original input has no persistent copy.
+// DSR4/7 math is synchronous. decoded is leased to ingress only before compute.
+param bank_words:u16;
+const unpacker=@import_module("fp8_unpack_shift.csl",.{.max_pairs=128});
+const dot=@import_module("fp8_shape.csl",.{.rows=2,.columns=128,.vector_scales=true});
+const bf=@import_module("bf16_row.csl",.{.input_stride=2});
+var ab=@zeros([2]f32);var encoded=@zeros([64]u32);var decoded=@zeros([256]u16);
+var scale:f32=0.0;var ready:bool=false;
+// One wire word is [K tag8 | original E4M3 code8 | original BF16 input16].
+// The producer computes the original group scale/rounding once. No division
+// or floating-point quantization is repeated at the resident weight owners.
+fn capture_tagged(shared_scale:f32,bank:[*]u32,setup:[*]u16,prepare_ab:bool) void {
+ if(prepare_ab){
+  for(@range(u16,2))|i|{
+   const p=16+8*i;const offset=setup[p];@assert(setup[p+1]<=1);ab[i]=0.0;
+   if(setup[p+1]==1){@assert(@as(u32,offset)+64<=@as(u32,bank_words));
+    bf.compute(@ptrcast([*]u16,&bank[offset]),&decoded,&ab[i]);}
+  }
+ }
+ const src=@get_dsd(mem1d_dsd,.{.base_address=&decoded,.extent=128,.stride=2});
+ const codes=@increment_dsd_offset(src,1,u16);
+ const native=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]u16,&encoded),.extent=128});
+ @sll16(native,codes,@as(u16,8));@sar16(native,native,@as(u16,1));@and16(native,native,@as(u16,0xbfff));
+ scale=shared_scale;ready=true;
+}
+fn compute(bank:[*]u32,offset:u16,projection:u16,result:[*]f32) void {
+ @assert(ready);
+ if(projection==2 or projection==3){result[0]=ab[projection-2];result[1]=0.0;}
+ else{
+  unpacker.decode(@ptrcast([*]u16,&bank[offset]),&decoded,128);
+  dot.compute(&decoded,@ptrcast([*]u16,&encoded),result,scale,@bitcast(f32,bank[offset+64]));
+ }
+}

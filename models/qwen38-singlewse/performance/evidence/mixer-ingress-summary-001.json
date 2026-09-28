@@ -1,0 +1,49 @@
+{
+  "utc": "2026-09-28T09:12:38.698355+00:00",
+  "milestone": "P34 original BF16 A/B ingress fusion",
+  "physical": false,
+  "full_mixer": false,
+  "full_stage_admitted": false,
+  "full_model_speed_target_achieved": false,
+  "simulator": "mixer-ingress-sim-001",
+  "simulator_passed": true,
+  "simulator_cases": 24,
+  "simulator_normal_stop": true,
+  "actual_original_weight_samples": true,
+  "whole_matrix_executed": false,
+  "static_original_bf16_tiles_checked": 3840,
+  "removed_raw_cache_bytes": 256,
+  "added_partial_cache_bytes": 8,
+  "matched_weight_cohosts": 8,
+  "measured_bytes_saved_per_selected_weight_cohost": 112,
+  "producer_bytes_with_stack": 39632,
+  "calibration_before": "layer-backend-compile-012",
+  "calibration_after": "layer-backend-compile-014",
+  "calibration_payload_words": 4096,
+  "calibration_payload_reduced": true,
+  "full_bank_admission": false,
+  "preserved_failure": "layer-backend-compile-013",
+  "hardware_jobs_added": 0,
+  "workstation_jobs_added": 3,
+  "all_jobs_released": true,
+  "resource_audit": "resource-audit-p34-final.json",
+  "source_tests": {
+    "passed": true,
+    "tests": 155,
+    "seconds": 150.757295666961
+  },
+  "source_sha256": {
+    "csl/mixer_native.csl": "132d5c45c0ff32a133c390e97b54d647ff6b2364aef536ab56785927dc52b270",
+    "csl/mixer_projection.csl": "6c712fd369613e77000f6382a55daba5de74aab9008cfabdb6ceab0acbea70d4",
+    "csl/bf16_row.csl": "03ee3a38567eada3c5a8e4bc36d3fb2e052a6e9764ad0e9b6fd26b583f5b7b3a",
+    "spatial/mixer_projection.py": "7734791e14dc08301e03bce82e82f1ed8e11e284942689e8cc7960a75a69acfd",
+    "tools/stage_mixer_ingress_sim.py": "700e05863426ca548141004f0294dd3b08e3f30b5f5fc3d73bedef35205c5194",
+    "tools/summarize_mixer_calibration.py": "ffe117814c1e8a15e51a1030b721867490302e21e825e5f3b2c62faacc283a42"
+  },
+  "publication_tests": {
+    "passed": true,
+    "tests": 155,
+    "seconds": 151.8054239579942,
+    "tested_export_manifest_sha256": "d2339167120ee8790c8c860f8c780d0b280c212f8b0c20ca2d5cc9274fbf5fdb"
+  }
+}

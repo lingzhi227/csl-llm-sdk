@@ -1,0 +1,296 @@
+{
+  "before": "layer-backend-compile-012",
+  "after": "layer-backend-compile-014",
+  "physical": false,
+  "executed": false,
+  "full_bank_admission": false,
+  "full_stage_admission": false,
+  "samples": [
+    {
+      "pe": [
+        0,
+        0
+      ],
+      "source": "mixer_layer_mlp_controller.csl",
+      "parameters": {
+        "gate_tail": 106,
+        "down_tail": 159,
+        "shared_inputs": true,
+        "norm_bridge": true
+      },
+      "original_pe": [
+        107,
+        145
+      ],
+      "original_bank_words": 0,
+      "payload_changed": false,
+      "before_bytes_with_stack": 39632,
+      "after_bytes_with_stack": 39632,
+      "saved_bytes": 0,
+      "actual_calibration_bank_bytes": 0,
+      "overhead_with_stack": 39632,
+      "original_matrix_bytes": 0,
+      "original_bank_estimate": 39632,
+      "matrix_only_estimate": 39632,
+      "matrix_only_estimated_margin": 8496,
+      "before_elf_sha256": "401faa54f927d76890f2474d58c80554e4582f2ee5c59be85011375f0dc17119",
+      "after_elf_sha256": "815369c2d18988f0acd8a9fb6bd304df552df5617245ed399f5cc90258f7cdf7"
+    },
+    {
+      "pe": [
+        1,
+        0
+      ],
+      "source": "mixer_layer_mlp_standby.csl",
+      "parameters": {
+        "bank_words": 4096,
+        "mixer_rank_parity": 1,
+        "mixer_input48_queue": 5,
+        "mixer_can_root": false
+      },
+      "original_pe": [
+        64,
+        67
+      ],
+      "original_bank_words": 8801,
+      "payload_changed": true,
+      "before_bytes_with_stack": 30768,
+      "after_bytes_with_stack": 30656,
+      "saved_bytes": 112,
+      "actual_calibration_bank_bytes": 16384,
+      "overhead_with_stack": 14272,
+      "original_matrix_bytes": 33796,
+      "original_bank_estimate": 49476,
+      "matrix_only_estimate": 48068,
+      "matrix_only_estimated_margin": 60,
+      "before_elf_sha256": "f9972c23a618d3e702927c34e367efa43d19bfd3179430b7349551332679061e",
+      "after_elf_sha256": "fc1968c3b754a84fb04b6ab294d78cf71213cea6f57ecb21aec4e7c40f8f8106"
+    },
+    {
+      "pe": [
+        2,
+        0
+      ],
+      "source": "mixer_layer_mlp_standby.csl",
+      "parameters": {
+        "bank_words": 4096,
+        "mixer_rank_parity": 0,
+        "mixer_input48_queue": 5,
+        "mixer_can_root": true
+      },
+      "original_pe": [
+        63,
+        67
+      ],
+      "original_bank_words": 8801,
+      "payload_changed": true,
+      "before_bytes_with_stack": 30992,
+      "after_bytes_with_stack": 30880,
+      "saved_bytes": 112,
+      "actual_calibration_bank_bytes": 16384,
+      "overhead_with_stack": 14496,
+      "original_matrix_bytes": 33796,
+      "original_bank_estimate": 49700,
+      "matrix_only_estimate": 48292,
+      "matrix_only_estimated_margin": -164,
+      "before_elf_sha256": "9c4d6229a45a591ea8053ae950727ef7d7af71727812d52de1cd2da0889b35d0",
+      "after_elf_sha256": "2de3b6a254812c682649ca2e210dfe9566aff8fb91679651fa21963218ab23a8"
+    },
+    {
+      "pe": [
+        3,
+        0
+      ],
+      "source": "mixer_layer_norm_bridge.csl",
+      "parameters": {
+        "bank_words": 4096,
+        "rank": 0,
+        "mixer_rank_parity": 1,
+        "mixer_input48_queue": 5,
+        "mixer_can_root": false
+      },
+      "original_pe": [
+        63,
+        144
+      ],
+      "original_bank_words": 8415,
+      "payload_changed": true,
+      "before_bytes_with_stack": 36144,
+      "after_bytes_with_stack": 36032,
+      "saved_bytes": 112,
+      "actual_calibration_bank_bytes": 16384,
+      "overhead_with_stack": 19648,
+      "original_matrix_bytes": 33276,
+      "original_bank_estimate": 53308,
+      "matrix_only_estimate": 52924,
+      "matrix_only_estimated_margin": -4796,
+      "before_elf_sha256": "7d066ad66b1f96f02642bc911131b6c35a5d6b2718685e34cb696985c033a4e2",
+      "after_elf_sha256": "8af58ef78151c5748d5ba3cd379f0894b2896887c1c0072ee1f087b86a615634"
+    },
+    {
+      "pe": [
+        4,
+        0
+      ],
+      "source": "mixer_layer_norm_bridge.csl",
+      "parameters": {
+        "bank_words": 4096,
+        "rank": 1,
+        "mixer_rank_parity": 0,
+        "mixer_input48_queue": 5,
+        "mixer_can_root": false
+      },
+      "original_pe": [
+        64,
+        144
+      ],
+      "original_bank_words": 8415,
+      "payload_changed": true,
+      "before_bytes_with_stack": 35264,
+      "after_bytes_with_stack": 35152,
+      "saved_bytes": 112,
+      "actual_calibration_bank_bytes": 16384,
+      "overhead_with_stack": 18768,
+      "original_matrix_bytes": 33276,
+      "original_bank_estimate": 52428,
+      "matrix_only_estimate": 52044,
+      "matrix_only_estimated_margin": -3916,
+      "before_elf_sha256": "0ed6d879a7043364201b43404455aab264fd6cf6a4b3c1efbe785d5f01cff810",
+      "after_elf_sha256": "c2be4992aab8ba55dbcea076edbffbcf0043cd1dd6d5c0f7fee1978d52f91ba1"
+    },
+    {
+      "pe": [
+        5,
+        0
+      ],
+      "source": "mixer_layer_norm_bridge.csl",
+      "parameters": {
+        "bank_words": 4096,
+        "rank": 39,
+        "mixer_rank_parity": 0,
+        "mixer_input48_queue": 5,
+        "mixer_can_root": false
+      },
+      "original_pe": [
+        102,
+        144
+      ],
+      "original_bank_words": 8415,
+      "payload_changed": true,
+      "before_bytes_with_stack": 35072,
+      "after_bytes_with_stack": 34960,
+      "saved_bytes": 112,
+      "actual_calibration_bank_bytes": 16384,
+      "overhead_with_stack": 18576,
+      "original_matrix_bytes": 33276,
+      "original_bank_estimate": 52236,
+      "matrix_only_estimate": 51852,
+      "matrix_only_estimated_margin": -3724,
+      "before_elf_sha256": "69f8312b4ae8a30b9a36586934764bccccb19cb986d595271a4af2c343dc7aca",
+      "after_elf_sha256": "f37116220a950ee7528c93c39b2be0e51f600ab5bac98338634a06a72c7c4a37"
+    },
+    {
+      "pe": [
+        6,
+        0
+      ],
+      "source": "mixer_layer_norm_sender.csl",
+      "parameters": {
+        "bank_words": 4096,
+        "rank": 0,
+        "sender_id": 0,
+        "bus_rx": "EAST",
+        "bus_tx": "SOUTH",
+        "mixer_rank_parity": 0,
+        "mixer_input48_queue": 4,
+        "mixer_can_root": false
+      },
+      "original_pe": [
+        63,
+        143
+      ],
+      "original_bank_words": 8543,
+      "payload_changed": true,
+      "before_bytes_with_stack": 35632,
+      "after_bytes_with_stack": 35520,
+      "saved_bytes": 112,
+      "actual_calibration_bank_bytes": 16384,
+      "overhead_with_stack": 19136,
+      "original_matrix_bytes": 33276,
+      "original_bank_estimate": 53308,
+      "matrix_only_estimate": 52412,
+      "matrix_only_estimated_margin": -4284,
+      "before_elf_sha256": "cf9b0a740b62b493b4dbe44202a5229edc64fe9756f59fca703505fdc03c7903",
+      "after_elf_sha256": "06998e085e39606c581ba033b86e2204baa4eb740cd7adb23e56456eca80696d"
+    },
+    {
+      "pe": [
+        7,
+        0
+      ],
+      "source": "mixer_layer_norm_sender.csl",
+      "parameters": {
+        "bank_words": 4096,
+        "rank": 1,
+        "sender_id": 1,
+        "bus_rx": "EAST",
+        "bus_tx": "WEST",
+        "mixer_rank_parity": 1,
+        "mixer_input48_queue": 4,
+        "mixer_can_root": false
+      },
+      "original_pe": [
+        64,
+        143
+      ],
+      "original_bank_words": 8543,
+      "payload_changed": true,
+      "before_bytes_with_stack": 35648,
+      "after_bytes_with_stack": 35536,
+      "saved_bytes": 112,
+      "actual_calibration_bank_bytes": 16384,
+      "overhead_with_stack": 19152,
+      "original_matrix_bytes": 33276,
+      "original_bank_estimate": 53324,
+      "matrix_only_estimate": 52428,
+      "matrix_only_estimated_margin": -4300,
+      "before_elf_sha256": "678c468e8826c4ea2bc4df635b6d8f9b94db507de99f675c66d91b05625cf46e",
+      "after_elf_sha256": "e6fa402ba63719d6780d1797f35551b670015796795c439eb07acf5f00946df9"
+    },
+    {
+      "pe": [
+        8,
+        0
+      ],
+      "source": "mixer_layer_norm_sender.csl",
+      "parameters": {
+        "bank_words": 4096,
+        "rank": 39,
+        "sender_id": 39,
+        "bus_rx": "EAST",
+        "bus_tx": "WEST",
+        "mixer_rank_parity": 1,
+        "mixer_input48_queue": 4,
+        "mixer_can_root": false
+      },
+      "original_pe": [
+        102,
+        143
+      ],
+      "original_bank_words": 8543,
+      "payload_changed": true,
+      "before_bytes_with_stack": 35664,
+      "after_bytes_with_stack": 35552,
+      "saved_bytes": 112,
+      "actual_calibration_bank_bytes": 16384,
+      "overhead_with_stack": 19168,
+      "original_matrix_bytes": 33276,
+      "original_bank_estimate": 53340,
+      "matrix_only_estimate": 52444,
+      "matrix_only_estimated_margin": -4316,
+      "before_elf_sha256": "af0378310cd2ec30d7f554861522be3e4d2535d2716d4c782a375aa0ce7cd2b0",
+      "after_elf_sha256": "d10b83a2e0ef74e4b7f9bc8a9bf0f75dfbf10c6efeead91b269db25d96ad18e4"
+    }
+  ],
+  "note": "Actual bytes are compiled selected programs with their recorded calibration banks and4096-byte stack allowance. Original-bank and matrix-only totals are arithmetic estimates; they do not certify full-bank placement, routing-context overhead or full-stage SRAM."
+}
