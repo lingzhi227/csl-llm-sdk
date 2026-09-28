@@ -43,12 +43,12 @@ def main():
         if not f.is_file() or '__pycache__' in f.parts:continue
         rel=f.relative_to(ROOT)
         if f.name in ['PUBLICATION_RECEIPT.json']:continue
-        if f.suffix not in ['.py','.csl','.json','.md']:continue
+        if f.suffix not in ['.py','.csl','.cslpart','.json','.md']:continue
         if f.name in ['dispatch.json','staging.json']:continue
         raw=f.read_bytes()
         if len(raw)>8<<20:raise ValueError('Noncompact artifact: '+str(rel))
         text=raw.decode()
-        if f.suffix!='.csl':
+        if f.suffix not in ['.csl','.cslpart']:
             for before,after in SUBSTITUTIONS:text=text.replace(before,after)
         if f.suffix=='.py':validate_python(f,raw,text)
         if f.suffix=='.json':json.loads(text)

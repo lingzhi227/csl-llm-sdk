@@ -1,0 +1,25 @@
+{
+  "bindings": {
+    "mixer_layer_mlp_standby.csl": {
+      "original": "layer_mlp_standby.csl",
+      "original_sha256": "4f5dda1226ed585268a9ebf857b7bcc9006d5d399ca3024b69079106132ef63e",
+      "composition_sha256": "915d53ce591c373ec0c12a23e3313a5c3147458be57bda4d23420215608277f0",
+      "guards": "Both entry directions require the other program drained"
+    },
+    "mixer_layer_norm_sender.csl": {
+      "original": "layer_norm_sender.csl",
+      "original_sha256": "daa2ab0710165823ec857fdba58a99b6824a5c28754df8a2e3dad37921f6dc84",
+      "composition_sha256": "915d53ce591c373ec0c12a23e3313a5c3147458be57bda4d23420215608277f0",
+      "guards": "Both entry directions require the other program drained"
+    },
+    "mixer_layer_norm_bridge.csl": {
+      "original": "layer_norm_bridge.csl",
+      "original_sha256": "1aef8dcb15094be87891516724f66b2d9af76b3fa3c7ebf9eac8b32d1f5b8a6c",
+      "composition_sha256": "915d53ce591c373ec0c12a23e3313a5c3147458be57bda4d23420215608277f0",
+      "guards": "Both entry directions require the other program drained"
+    }
+  },
+  "wrapper": "// Composition port: the future conv/gate/residual consumer receives this local\n// root notification. Until connected, root data stays leased for explicit\n// consume; no synthetic neural result or fake automatic completion is emitted.\nparam mixer_rank_parity:u16;param mixer_input48_queue:u16;\nconst mrt=@get_local_task_id(25);const mdt=@get_local_task_id(26);\nconst mixer=@import_module(\"mixer_projection.csl\",.{.rank_parity=mixer_rank_parity,.bank_words=bank_words,\n .input48_queue=mixer_input48_queue,.root_ready_task=mrt,.drained_task=mdt});\nvar mixer_status=@zeros([4]u32);const msp:[*]u32=&mixer_status;\nconst msetup:[*]u16=mixer.setup_pointer;const maudit:[*]u32=mixer.audit_pointer;\nconst mout:[*]u32=mixer.root_output;\ntask mixer_root_ready() void {\n @assert(mixer_status[2]==0);mixer_status[0]=mout[0];mixer_status[1]=mout[1];mixer_status[2]=1;\n}\ntask mixer_drained() void {mixer_status[3]+=1;}\nfn mixer_begin(request:u32,generation:u32,projection:u16) void {\n MIXER_COHOST_IDLE\n @assert(mixer_status[2]==0);mixer.begin(bp,request,generation,projection);sys.unblock_cmd_stream();\n}\nfn mixer_consume(generation:u32,row:u16) void {\n @assert(mixer_status[2]==1);mixer_status[2]=0;mixer.root_consumed(generation,row);sys.unblock_cmd_stream();\n}\ncomptime {\n @bind_local_task(mixer_root_ready,mrt);@bind_local_task(mixer_drained,mdt);\n @export_symbol(msp,\"mixer_status\");@export_symbol(msetup,\"mixer_setup\");\n @export_symbol(maudit,\"mixer_audit\");@export_symbol(mout,\"mixer_output\");\n @export_symbol(mixer_begin);@export_symbol(mixer_consume);\n}\n",
+  "source_only": true,
+  "scope": "Complete original mixer projection programs cohost P31 residual/norm+MLP banks and fixed paths. Root conv/gate/state/residual consumers and complete-stage execution remain unconnected; compile admission only."
+}

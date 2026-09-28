@@ -1,0 +1,25 @@
+// Original mixer row arithmetic. FP8 and BF16 share the exact retained BF16
+// group128 input; BF16 a/b projections never consume quantized activations.
+// DSR4/7 math is synchronous. decoded is leased to ingress only before compute.
+const quant=@import_module("mlp_fused.csl");
+const unpacker=@import_module("fp8_unpack_shift.csl",.{.max_pairs=128});
+const dot=@import_module("fp8_shape.csl",.{.rows=2,.columns=128,.vector_scales=true});
+const bf=@import_module("bf16_row.csl");
+var raw=@zeros([64]u32);var encoded=@zeros([64]u32);var decoded=@zeros([256]u16);
+var scale:f32=0.0;var ready:bool=false;
+fn capture_tagged() void {
+ const src=@get_dsd(mem1d_dsd,.{.base_address=&decoded,.extent=128,.stride=2});
+ const dst=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]u16,&raw),.extent=128});@mov16(dst,src);
+ const pairs:[*]u32=&raw;var maximum:f32=0.0000000001;
+ for(@range(u16,64))|i|{const m=quant.maximum_pair(pairs[i]);if(m>maximum){maximum=m;}}
+ scale=maximum*0.002232142857142857;
+ for(@range(u16,64))|i|{encoded[i]=quant.encoded_pair(pairs[i],scale);}ready=true;
+}
+fn compute(bank:[*]u32,offset:u16,use_bf16:bool,result:[*]f32) void {
+ @assert(ready);
+ if(use_bf16){bf.compute(@ptrcast([*]u16,&bank[offset]),@ptrcast([*]u16,&raw),result);result[1]=0.0;}
+ else{
+  unpacker.decode(@ptrcast([*]u16,&bank[offset]),&decoded,128);
+  dot.compute(&decoded,@ptrcast([*]u16,&encoded),result,scale,@bitcast(f32,bank[offset+64]));
+ }
+}

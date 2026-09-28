@@ -12,7 +12,7 @@ from spatial.layer_norm_banks import lower_norm_banks
 from spatial.layer_fused_routes import translate_routes
 
 
-def build(stage_name,native_loop="map",shared_inputs=False,norm_bridge=False):
+def build(stage_name,native_loop="map",shared_inputs=False,norm_bridge=False,mixer_projections=False):
     if native_loop not in ["map","unroll"]:raise ValueError("Native loop candidate")
     evidence=ROOT/'performance/evidence';schedule=evidence/'layer-native-schedule-002/layer-schedule.json'
     plan=json.loads(schedule.read_text());stage=next(s for s in plan['stages'] if s['id']==stage_name)
@@ -82,17 +82,21 @@ def build(stage_name,native_loop="map",shared_inputs=False,norm_bridge=False):
         distribution_packets=network['distribution_packets'],shared_inputs=shared_inputs,norm_bridge=norm_bridge,controller_transport=network['controller_transport'],
         network_sha256=hashlib.sha256(json.dumps(network,sort_keys=True,separators=(',',':')).encode()).hexdigest(),
         source_bindings={str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in [schedule,route_file]}),indent=2)+'\n').encode()
+    if mixer_projections:
+        if not norm_bridge:raise ValueError('Mixer composition requires the accepted norm+MLP base')
+        from spatial.mixer_composition import compose_mixer
+        return compose_mixer(files,width,height,profiles,stage,network)
     return files,width,height,profiles
 
 
 def main():
-    parser=argparse.ArgumentParser();parser.add_argument('attempt');parser.add_argument('--stage',default='layer_00');parser.add_argument('--native-loop',choices=['map','unroll'],default='map');parser.add_argument('--shared-inputs',action='store_true');parser.add_argument('--norm-bridge',action='store_true');args=parser.parse_args()
+    parser=argparse.ArgumentParser();parser.add_argument('attempt');parser.add_argument('--stage',default='layer_00');parser.add_argument('--native-loop',choices=['map','unroll'],default='map');parser.add_argument('--shared-inputs',action='store_true');parser.add_argument('--norm-bridge',action='store_true');parser.add_argument('--mixer-projections',action='store_true');args=parser.parse_args()
     if len(args.attempt)!=3 or not args.attempt.isdigit():raise ValueError('Attempt')
     name='layer-mlp-compile-'+args.attempt;out=ROOT/'performance/evidence'/name
     if out.exists():raise ValueError('Frozen attempt')
     active=subprocess.run(['ssh','workstation','systemctl --user list-units --type=service --state=active,activating,deactivating --no-legend qwen38-single-*'],capture_output=True,text=True,check=True,timeout=20)
     if active.stdout.strip():raise ValueError('Live workstation owner: '+active.stdout)
-    files,width,height,profiles=build(args.stage,args.native_loop,args.shared_inputs,args.norm_bridge)
+    files,width,height,profiles=build(args.stage,args.native_loop,args.shared_inputs,args.norm_bridge,args.mixer_projections)
     script=r'''import json,os,signal,subprocess,time
 from pathlib import Path
 from source_gate import verify

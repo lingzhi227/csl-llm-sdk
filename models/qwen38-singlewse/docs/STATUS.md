@@ -8,6 +8,18 @@ sentences and >=2000 aggregate completed generated tokens/s in sustained steady
 state. Independent requests may overlap. The old per-request target and broad
 whole-wafer shared-layer time overlay are superseded.
 
+P32 adds original mixed-projection CSL/dataflow source to the P31 cohost stage.
+All454400 original matrix tile addresses and7072 input-owner deliveries are
+checked;152 source and publication tests pass. No new WSE job was submitted.
+Compile013 failed
+on SDK task21; corrected014 reached linking but ran out of PE memory. Its partial
+ELF census covers11273PEs, of which3440 exceed48128 bytes including4096 stack;
+115PEs have no final ELF. Both workstation services are released. This candidate
+is rejected for SRAM admission and has no mixer numerical/speed acceptance.
+Next reduce duplicated operand preparation and revise cohost code/state placement,
+then connect actual conv/gate/state consumers and complete stages. See
+[MIXER-PROJECTION-COMPOSITION.md](../performance/docs/MIXER-PROJECTION-COMPOSITION.md).
+
 P31 qualifies the physical residual/RMS -> complete original layer0 MLP ->
 residual/next-layer RMS graph. All81920 checked BF16 values are bit-exact across
 four epochs, including zero/change/replay. Native inputs/scales, all11388 PE

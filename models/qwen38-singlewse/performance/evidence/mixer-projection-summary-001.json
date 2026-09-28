@@ -1,0 +1,78 @@
+{
+  "utc": "2026-09-28T08:15:38.227364+00:00",
+  "milestone": "P32 original mixed-projection source and resource rejection",
+  "accepted": false,
+  "physical": false,
+  "executed": false,
+  "full_mixer": false,
+  "full_layer": false,
+  "model_speed_achieved": false,
+  "original_matrices": 5,
+  "original_tiles_audited": 454400,
+  "input_tags_walked": 88,
+  "input_owner_deliveries": 7072,
+  "cohost_pes": 3554,
+  "full_stage_pes": 11388,
+  "original_banks_changed": false,
+  "state_relocations_unchanged": 800,
+  "source_tests": {
+    "passed": true,
+    "count": 152,
+    "seconds": 150.5896406660322
+  },
+  "attempts": {
+    "layer-mlp-compile-013": {
+      "passed": false,
+      "failure": "SDK task21 alias",
+      "released": true
+    },
+    "layer-mlp-compile-014": {
+      "passed": false,
+      "failure": "Linker ran out of PE memory for task table and data.hi",
+      "released": true,
+      "partial_census": {
+        "linked_pes": 11273,
+        "missing_pes": 115,
+        "over_limit_pes": 3440,
+        "maximum_with_4096_stack": 52080,
+        "common_mixer_with_stack": 50544,
+        "sram_limit": 48128,
+        "complete": false,
+        "accepted": false
+      }
+    }
+  },
+  "numeric_scope": "Original FP8/BF16 tile operations reused; new right-associated K reduction and complete mixer numerical execution unqualified.",
+  "missing": [
+    "Actual producer and root consumers",
+    "Convolution, Q/K normalization and gating",
+    "Resident recurrent state execution",
+    "Gated output normalization and residual handoff",
+    "Complete layer scheduler and full64-layer pipeline"
+  ],
+  "next_work": "Reduce repeated quantization/native ingress code in weight PEs using a shared operand producer; revise code/scratch/state placement from compiled footprints; reconnect actual original mixer consumers, keeping exact model/state identities and fixed SRAM/stack gates.",
+  "source_sha256": {
+    "spatial/mixer_projection.py": "b1b044811ce9e699dc23bcc44f0ceec8addf14ca03814b11a7f96872a7a4bc41",
+    "spatial/mixer_composition.py": "adb70d74ae541dcaad65297934b3a68211cf7035c37221ec97c55d504f1a84f6",
+    "csl/mixer_projection.csl": "8a0b28e14bc5fa5b548104e60a4136018f5a7dbfd52d78b778ec4f14b6d9c66e",
+    "csl/mixer_native.csl": "42101ec726996f0df4c711a104983c9d87be5e86ef8468b2dedbb4d9a7b79666",
+    "runtime/mixer_projection_port.cslpart": "915d53ce591c373ec0c12a23e3313a5c3147458be57bda4d23420215608277f0",
+    "tools/stage_layer_mlp_compile.py": "9b9e55ffb30bbcbfb1250be457b2608a7dbb6d4a638de15a9c5d04e820b4ed05",
+    "tools/export_milestone.py": "f9a4c890484ba8259981413202a26998f887a0e9cdba9fd1d7884d70fd081db2",
+    "tests/test_mixer_projection.py": "605b53d3412caf48fc53644520d5526ed2e3b5eb7bb8033488b9710e544e2a1d"
+  },
+  "physical_jobs_submitted": 0,
+  "publication_tests": {
+    "passed": true,
+    "tests": 152,
+    "seconds": 151.3411470828578,
+    "tested_export_manifest_sha256": "4db63044dcf3457afaaca463e72bdcdee698581aab6f46fb38aa1626b63c1ab2"
+  },
+  "partial_elf_identity": {
+    "files": 5978,
+    "bytes": 425040248,
+    "manifest_sha256": "01c442d894120a3bb7ea0134b84edf6e4a5bc649ce1a1bc71ef9bbd562a26d24",
+    "complete": false
+  },
+  "resource_audit": "resource-audit-p32-final.json"
+}

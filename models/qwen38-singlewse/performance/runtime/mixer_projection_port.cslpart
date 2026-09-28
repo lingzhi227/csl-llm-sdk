@@ -1,0 +1,27 @@
+// Composition port: the future conv/gate/residual consumer receives this local
+// root notification. Until connected, root data stays leased for explicit
+// consume; no synthetic neural result or fake automatic completion is emitted.
+param mixer_rank_parity:u16;param mixer_input48_queue:u16;
+const mrt=@get_local_task_id(25);const mdt=@get_local_task_id(26);
+const mixer=@import_module("mixer_projection.csl",.{.rank_parity=mixer_rank_parity,.bank_words=bank_words,
+ .input48_queue=mixer_input48_queue,.root_ready_task=mrt,.drained_task=mdt});
+var mixer_status=@zeros([4]u32);const msp:[*]u32=&mixer_status;
+const msetup:[*]u16=mixer.setup_pointer;const maudit:[*]u32=mixer.audit_pointer;
+const mout:[*]u32=mixer.root_output;
+task mixer_root_ready() void {
+ @assert(mixer_status[2]==0);mixer_status[0]=mout[0];mixer_status[1]=mout[1];mixer_status[2]=1;
+}
+task mixer_drained() void {mixer_status[3]+=1;}
+fn mixer_begin(request:u32,generation:u32,projection:u16) void {
+ MIXER_COHOST_IDLE
+ @assert(mixer_status[2]==0);mixer.begin(bp,request,generation,projection);sys.unblock_cmd_stream();
+}
+fn mixer_consume(generation:u32,row:u16) void {
+ @assert(mixer_status[2]==1);mixer_status[2]=0;mixer.root_consumed(generation,row);sys.unblock_cmd_stream();
+}
+comptime {
+ @bind_local_task(mixer_root_ready,mrt);@bind_local_task(mixer_drained,mdt);
+ @export_symbol(msp,"mixer_status");@export_symbol(msetup,"mixer_setup");
+ @export_symbol(maudit,"mixer_audit");@export_symbol(mout,"mixer_output");
+ @export_symbol(mixer_begin);@export_symbol(mixer_consume);
+}

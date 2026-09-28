@@ -14,7 +14,12 @@
    advance to complete mixer/layer execution rather than an open-ended isolated
    optimization sweep. Host arm/start/finish and phase logging are diagnostic;
    device-driven admission and full backpressure remain future serving work.
-3. Connect original GDN/conv/gates, attention and4x8 FP32 state pages to the
+3. P32 mixed-projection composition fails full SRAM admission:3440 linked PEs
+   exceed48128 including4KiB stack;115 lack final ELF. Task21 conflict013 and
+   memory failure014 remain preserved/released. Share operand quantization at
+   the producer and reduce repeated ingress/program storage before reconnecting
+   consumers; do not lower reserve or state capacity to bypass this gate.
+   Connect original GDN/conv/gates, attention and4x8 FP32 state pages to the
    resident projections; validate adjacent complete layers on actual requests
    with backpressure, state isolation and warm reset. Preserve every original
    matrix dimension, operation, rounding boundary and model/token identity.

@@ -1,0 +1,68 @@
+"""Compose mixed projection ports with the actual retained P31 stage programs.
+
+This admits complete addresses/fixed routes/program storage. Root consumers and
+automatic mixed-stage execution remain open; no host driver may call it a layer.
+"""
+import hashlib
+import json
+import re
+from pathlib import Path
+from spatial.layer_mlp_network import emit_routes
+from spatial.layer_schedule import xy_rank
+from spatial.mixer_projection import lower_mixer_projections,FIELDS
+
+
+def compose_mixer(files,width,height,profiles,stage,network):
+    root=Path(__file__).resolve().parents[1]
+    region=next(r for r in stage['regions'] if r['role']=='mix')
+    plan=lower_mixer_projections(region,stage['request_controller']['pe'])
+    workers={tuple(w['pe']):w for w in plan['workers']}
+    wrapper=(root/'runtime/mixer_projection_port.cslpart').read_bytes()
+    for name in ('mixer_native','mixer_projection','bf16_row'):
+        files[name+'.csl']=(root/'csl'/ (name+'.csl')).read_bytes()
+    bindings={};setups=[]
+    for profile in profiles:
+        pe=tuple(profile['pe'])
+        if pe not in workers or list(pe)==stage['request_controller']['pe']:continue
+        source=profile['source'];destination='mixer_'+source
+        if source not in ('layer_norm_bridge.csl','layer_norm_sender.csl','layer_mlp_standby.csl'):
+            raise ValueError('Unexpected mixer cohost role')
+        # These programs share arithmetic DSRs/microthreads across phases.
+        # Reject an overlapping norm/mixer invocation before arming any DMA.
+        guarded,n=re.subn(rb'(fn arm\([^)]*\) void \{)',rb'\1@assert(mixer.drained() and mixer_status[2]==0);',files[source])
+        if n!=1:raise ValueError('Expected exactly one original cohost arm entry')
+        idle=b'@assert(!active);' if source!='layer_mlp_standby.csl' else b''
+        files[destination]=guarded+b'\n'+wrapper.replace(b'MIXER_COHOST_IDLE',idle)
+        bindings[destination]=dict(original=source,original_sha256=hashlib.sha256(files[source]).hexdigest(),
+                                   composition_sha256=hashlib.sha256(wrapper).hexdigest(),guards='Both entry directions require the other program drained')
+        profile['source']=destination
+        profile['parameters'].update(mixer_rank_parity=xy_rank(region,pe)%2,mixer_input48_queue=4 if source=='layer_norm_sender.csl' else 5)
+        setups.append([list(pe),[d[k] for d in workers[pe]['descriptors'] for k in FIELDS]])
+    routes=network['routes']+plan['input_routes']
+    routes += [dict(pe=r['pe'],color=r['color'],rx=[r['rx']],tx=[r['tx']]) for r in plan['reduction_routes']]
+    keys=[(*r['pe'],r['color']) for r in routes]
+    if len(set(keys))!=len(keys):raise ValueError('Mixer fixed colors alias the existing MLP/norm graph')
+    ox,oy=stage['rect'][:2];classes={}
+    for p in profiles:
+        key=(p['source'],json.dumps(p['parameters'],sort_keys=True))
+        classes.setdefault(key,dict(source=p['source'],parameters=p['parameters'],pes=[]))['pes'].append(p['pe'])
+    layout=[f'const memcpy=@import_module("<memcpy/get_params>",.{{.width={width},.height={height}}});','layout {',f' @set_rectangle({width},{height});']
+    for i,c in enumerate(classes.values()):
+        coords=[v for x,y in c['pes'] for v in (x-ox,y-oy)];name=f'program_{i}'
+        layout.append(' const %s=[%d]u16{%s};'%(name,len(coords),','.join(map(str,coords))))
+        params=','.join('.%s=%s'%(k,v if isinstance(v,str) else str(v).lower()) for k,v in c['parameters'].items())
+        layout.append(' for(@range(u16,%d))|i|{@set_tile_code(%s[2*i],%s[2*i+1],"%s",.{.memcpy_params=memcpy.get_params(%s[2*i]),%s});}'%(len(coords)//2,name,name,c['source'],name,params))
+    layout.append(emit_routes(dict(rect=stage['rect'],routes=routes)))
+    layout += [line for line in files['layout.csl'].decode().splitlines() if line.strip().startswith('@export_name')]
+    for name,typ in [('mixer_setup','u16'),('mixer_status','u32'),('mixer_audit','u32'),('mixer_output','u32')]:
+        layout.append(f' @export_name("{name}",[*]{typ},false);')
+    layout += [' @export_name("mixer_begin",fn(u32,u32,u16)void);',' @export_name("mixer_consume",fn(u32,u16)void);','}']
+    files['layout.csl']=('\n'.join(layout)+'\n').encode()
+    scope='Complete original mixer projection programs cohost P31 residual/norm+MLP banks and fixed paths. Root conv/gate/state/residual consumers and complete-stage execution remain unconnected; compile admission only.'
+    files['profiles.json']=(json.dumps(dict(profiles=list(classes.values()),application=[width,height],physical=False,executed=False,whole_stage=stage['id'],scope=scope),separators=(',',':'))+'\n').encode()
+    files['mixer-setups.json']=(json.dumps(setups,separators=(',',':'))+'\n').encode()
+    files['mixer-projections.json']=(json.dumps(plan,separators=(',',':'))+'\n').encode()
+    files['mixer-composition.json']=(json.dumps(dict(bindings=bindings,wrapper=wrapper.decode(),source_only=True,scope=scope),indent=2)+'\n').encode()
+    for name in ('mixer_composition','mixer_projection'):
+        files[name+'.py']=(root/'spatial'/(name+'.py')).read_bytes()
+    return files,width,height,profiles

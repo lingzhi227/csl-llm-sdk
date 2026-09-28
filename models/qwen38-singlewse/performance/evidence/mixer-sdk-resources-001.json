@@ -1,0 +1,46 @@
+{
+  "utc": "2026-09-28T08:06:49.939296+00:00",
+  "sdk_image": "/opt/cerebras/sdk/2.10.1/sdk-cbcore-2.10.1-sdk-202606181328-8faf87a26e.sif",
+  "read_method": "Read-only singularity exec of installed csl-libs/memcpy/sys_params.csl; recursive search found no literal get_local_task_id(25) or (26) in memcpy sources.",
+  "sys_params_sha256": "e70159b986fd92a4f4a83a0a46abe209ce64ed45903ac8ccda9ca0c7a4ef47df",
+  "system_tasks": {
+    "memcpyd2h_data": 21,
+    "rxcommand": 22,
+    "memcpyh2d_data": 23,
+    "main": 24,
+    "unblock": 27,
+    "exit": 28,
+    "teardown": 29,
+    "send_control": 30,
+    "nop": 31
+  },
+  "mixer_tasks": {
+    "header": 14,
+    "body": 15,
+    "child": 16,
+    "sent": 17,
+    "root_ready": 25,
+    "drained": 26
+  },
+  "cohost_tasks": {
+    "norm_bridge": [
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "norm_sender_with_sender_module": [
+      8,
+      9,
+      18,
+      19
+    ],
+    "standby": []
+  },
+  "failed_attempt": "layer-mlp-compile-013",
+  "compiler_diagnostic": "task21 already bound by memcpy/wse3/memcpyd2h.csl",
+  "scope": "SDK source and cohost static allocation. Full composition compiler/SRAM and numeric execution are separate gates.",
+  "physical_jobs_submitted": 0
+}

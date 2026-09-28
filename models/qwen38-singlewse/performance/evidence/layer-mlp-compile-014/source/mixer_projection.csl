@@ -1,0 +1,115 @@
+// Arrival-driven original mixer projections with fixed neighbor reductions.
+// Consumers own root_output until root_consumed; it is never a global gather.
+// Child DMA, local FP8/BF16 math and outgoing DMA use distinct small buffers.
+// begin requires the preceding matrix's local leases retired. The enclosing
+// stage must issue its readiness acknowledgement before sending new operands.
+param rank_parity:u16;param bank_words:u16;param input48_queue:u16=5;
+param root_ready_task:local_task_id;param drained_task:local_task_id;
+const native=@import_module("mixer_native.csl");const math=@import_module("qwen_math.csl");
+var setup=@zeros([40]u16);const setup_pointer:[*]u16=&setup;
+var header=@zeros([3]u32);var child=@zeros([5]u32);var outgoing=@zeros([5]u32);
+var partial=@zeros([2]f32);var audit=@zeros([6]u32);const audit_pointer:[*]u32=&audit;
+const root_output:[*]u32=&outgoing;
+var bank:[*]u32=&outgoing;
+var generation:u32=0;var request:u32=0;var cache_request:u32=0;var cache_family:u16=0;
+var matrix:u16=0;var base:u16=0;var iterations:u16=0;var first:u16=0;var stride:u16=0;
+var key:u16=0;var keys:u16=0;var rows:u16=0;var use_bf16:bool=false;
+var computed:u16=0;var emitted:u16=0;var received:u16=0;
+var active:bool=false;var input_pending:bool=false;var child_pending:bool=false;
+var local_ready:bool=false;var child_ready:bool=false;var output_busy:bool=false;
+const iq=@get_input_queue(7);const jq=@get_input_queue(input48_queue);const cq=@get_input_queue(6);const oq=@get_output_queue(5);
+const id=@get_dsr(dsr_dest,2);const is=@get_dsr(dsr_src0,2);
+const cd=@get_dsr(dsr_dest,3);const cs=@get_dsr(dsr_src0,3);
+const od=@get_dsr(dsr_dest,6);const os=@get_dsr(dsr_src0,6);
+// SDK memcpy owns21..24 and27..31. Cohost norm/sender tasks occupy8..13,18..20.
+const ht=@get_local_task_id(14);const bt=@get_local_task_id(15);const ct=@get_local_task_id(16);const ot=@get_local_task_id(17);
+fn receive_child() void {
+ if(key+1==keys or received==iterations){return;}
+ @assert(!child_pending and !child_ready);child_pending=true;
+ const m=@get_dsd(mem1d_dsd,.{.base_address=&child,.extent=5});const f=@get_dsd(fabin_dsd,.{.input_queue=cq,.extent=5});
+ @load_to_dsr(cd,m);@load_to_dsr(cs,f,.{.async=true,.ut_id=@get_ut_id(6),.activate=ct});@mov32(cd,cs,.{.async=true});
+}
+fn compute_next() void {
+ if(local_ready or computed==iterations){return;}
+ const words:u16=if(use_bf16) 64 else 65;const offset=base+computed*words;
+ @assert(offset+words<=bank_words);native.compute(bank,offset,use_bf16,&partial);
+ computed+=1;local_ready=true;audit[1]+=1;
+}
+fn finish_if_drained() void {
+ if(emitted==iterations and !input_pending and !child_pending and !child_ready and !local_ready and !output_busy){
+  @assert(computed==iterations);active=false;audit[5]=1;@activate(drained_task);
+ }
+}
+fn pump() void {
+ if(!active or input_pending){return;}
+ compute_next();
+ if(!local_ready or output_busy or (key+1<keys and !child_ready)){finish_if_drained();return;}
+ @assert(computed==emitted+1);
+ if(key+1<keys){
+  @assert(child[0]==generation and child[1]==@as(u32,first+emitted*stride) and child[2]==@as(u32,keys-key-1));
+  partial[0]+=@bitcast(f32,child[3]);if(!use_bf16){partial[1]+=@bitcast(f32,child[4]);}
+  child_ready=false;
+ }
+ outgoing[0]=generation;outgoing[1]=@as(u32,first+emitted*stride);outgoing[2]=@as(u32,keys-key);
+ outgoing[3]=@bitcast(u32,partial[0]);outgoing[4]=@bitcast(u32,partial[1]);
+ local_ready=false;output_busy=true;emitted+=1;audit[3]+=1;
+ receive_child();
+ if(key==0){
+  outgoing[2]=@as(u32,rows);outgoing[3]=@as(u32,math.round(partial[0]));
+  if(!use_bf16){outgoing[3]|=@as(u32,math.round(partial[1]))<<16;}outgoing[4]=@as(u32,matrix);
+  @activate(root_ready_task);
+ }else{
+  const m=@get_dsd(mem1d_dsd,.{.base_address=&outgoing,.extent=5});const f=@get_dsd(fabout_dsd,.{.output_queue=oq,.extent=5});
+  @load_to_dsr(os,m);@load_to_dsr(od,f,.{.async=true,.ut_id=@get_ut_id(5),.activate=ot});@mov32(od,os,.{.async=true});
+ }
+ // outgoing and child are separate from the decoder and FP32 partial. The
+ // next local tile may compute while this row's packet is still in flight.
+ compute_next();
+}
+fn begin(weights:[*]u32,new_request:u32,new_generation:u32,projection:u16) void {
+ // new_request identifies a unique token invocation, not a reusable request
+ // slot: z/a/b may reuse qkv's operands only within that same invocation.
+ @assert(!active and !input_pending and !child_pending and !output_busy and projection<5 and new_generation>generation);
+ bank=weights;request=new_request;generation=new_generation;matrix=projection;
+ const p=projection*8;base=setup[p];iterations=setup[p+1];first=setup[p+2];stride=setup[p+3];
+ key=setup[p+4];keys=setup[p+5];use_bf16=setup[p+6]!=0;rows=setup[p+7];
+ @assert((keys==40 or keys==48) and key<keys and rows==(if(use_bf16) @as(u16,1) else @as(u16,2)));
+ computed=0;emitted=0;received=0;local_ready=false;child_ready=false;active=true;
+ for(@range(u16,6))|i|{audit[i]=0;}audit[0]=generation;
+ if(iterations==0){finish_if_drained();return;}
+ receive_child();
+ if(projection==0 or projection==4){
+  input_pending=true;
+  const m=@get_dsd(mem1d_dsd,.{.base_address=&header,.extent=3});
+  const f=@get_dsd(fabin_dsd,.{.input_queue=iq,.extent=3});const g=@get_dsd(fabin_dsd,.{.input_queue=jq,.extent=3});
+  @load_to_dsr(id,m);
+  if(projection==4){@load_to_dsr(is,g,.{.async=true,.ut_id=@get_ut_id(7),.activate=ht});}
+  else{@load_to_dsr(is,f,.{.async=true,.ut_id=@get_ut_id(7),.activate=ht});}@mov32(id,is,.{.async=true});
+ }else{@assert(native.ready and cache_request==request and cache_family==40);pump();}
+}
+task header_arrived() void {
+ @assert(input_pending and ((header[0]&65535)|((header[1]&65535)<<16))==request and (header[2]&65535)==@as(u32,keys));
+ for(@range(u16,3))|i|{@assert(header[i]>>16==@as(u32,key));}
+ const m=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]u32,&native.decoded),.extent=128});
+ const f=@get_dsd(fabin_dsd,.{.input_queue=iq,.extent=128});const g=@get_dsd(fabin_dsd,.{.input_queue=jq,.extent=128});
+ @load_to_dsr(id,m);
+ if(matrix==4){@load_to_dsr(is,g,.{.async=true,.ut_id=@get_ut_id(7),.activate=bt});}
+ else{@load_to_dsr(is,f,.{.async=true,.ut_id=@get_ut_id(7),.activate=bt});}@mov32(id,is,.{.async=true});
+}
+task body_arrived() void {
+ const tagged=@ptrcast([*]u32,&native.decoded);for(@range(u16,128))|i|{@assert(tagged[i]>>16==@as(u32,key));}
+ native.capture_tagged();input_pending=false;cache_request=request;cache_family=keys;audit[4]=1;pump();
+}
+task child_arrived() void {@assert(child_pending and !child_ready);child_pending=false;child_ready=true;received+=1;audit[2]+=1;pump();}
+task sent() void {@assert(output_busy and key!=0);output_busy=false;pump();}
+fn root_consumed(observed_generation:u32,observed_row:u16) void {
+ @assert(active and key==0 and output_busy and observed_generation==generation and @as(u32,observed_row)==outgoing[1]);
+ output_busy=false;pump();
+}
+fn drained() bool {return !active and !input_pending and !child_pending and !output_busy;}
+comptime {
+ @comptime_assert(rank_parity<2 and (input48_queue==4 or input48_queue==5));
+ @initialize_queue(iq,.{.color=@get_color(16)});@initialize_queue(jq,.{.color=@get_color(17)});
+ @initialize_queue(cq,.{.color=@get_color(10+(rank_parity+1)%2)});@initialize_queue(oq,.{.color=@get_color(10+rank_parity)});
+ @bind_local_task(header_arrived,ht);@bind_local_task(body_arrived,bt);@bind_local_task(child_arrived,ct);@bind_local_task(sent,ot);
+}
