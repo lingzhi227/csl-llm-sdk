@@ -1,0 +1,50 @@
+{
+  "application": [
+    3,
+    2
+  ],
+  "workers": [
+    {
+      "pe": [
+        101,
+        59
+      ],
+      "columns": 8,
+      "role": "gate_up",
+      "head": 47,
+      "first": 0,
+      "state_word": 7304
+    },
+    {
+      "pe": [
+        107,
+        60
+      ],
+      "columns": 8,
+      "role": "gate_up",
+      "head": 45,
+      "first": 120,
+      "state_word": 7304
+    },
+    {
+      "pe": [
+        85,
+        145
+      ],
+      "columns": 32,
+      "role": "mix",
+      "head": 2,
+      "first": 0,
+      "state_word": 2049
+    }
+  ],
+  "original_placement": "layer-mlp-compile-027",
+  "original_manifest_sha256": "cb9eea30e1583ae2debe9f8bc4db7171ef97f47a68449c8b1ccdf6cad663653d",
+  "paired_port_sha256": "ab18b72887931fbab5cc66641e9be6ac4ac7f50bd6b9f4eae47c3a3558b419d9",
+  "arithmetic_sha256": "64fe6a1a2ac48305a2f6cc2218a5f0a6f6ab8c6a250c6b876ebd70e7e39ac3bf",
+  "diagnostic_bank_words": 4096,
+  "full_bank_admission": false,
+  "full_original_value_coverage": false,
+  "actual_frontend_execution": false,
+  "physical": false
+}

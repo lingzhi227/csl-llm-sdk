@@ -1,0 +1,33 @@
+// Direct fabric input and complete downstream reply capture. No neural math.
+param memcpy_params;param columns:u16;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+var wire=@zeros([387]u32);var frames=@zeros([80]u32);var status=@zeros([3]u32);
+const wp:[*]u32=&wire;const fp:[*]u32=&frames;const sp:[*]u32=&status;
+const oq=@get_output_queue(2);const iq=@get_input_queue(2);
+const ss=@get_dsr(dsr_src0,1);const sd=@get_dsr(dsr_dest,1);
+const rs=@get_dsr(dsr_src0,2);const rd=@get_dsr(dsr_dest,2);
+const sent_task=@get_local_task_id(8);const received_task=@get_local_task_id(9);
+fn done() void {if(status[0]==1 and status[1]==1){status[2]+=1;sys.unblock_cmd_stream();}}
+fn exchange() void {
+ @assert(status[0]==status[1]);status[0]=0;status[1]=0;
+ const incoming=@get_dsd(fabin_dsd,.{.input_queue=iq,.extent=5*columns/2});
+ const target=@get_dsd(mem1d_dsd,.{.base_address=fp,.extent=5*columns/2});
+ @load_to_dsr(rd,target);@load_to_dsr(rs,incoming,.{.async=true,.ut_id=@get_ut_id(2),.activate=received_task});
+ @mov32(rd,rs,.{.async=true});
+ const source=@get_dsd(mem1d_dsd,.{.base_address=wp,.extent=387});
+ const outgoing=@get_dsd(fabout_dsd,.{.output_queue=oq,.extent=387});
+ @load_to_dsr(ss,source);@load_to_dsr(sd,outgoing,.{.async=true,.ut_id=@get_ut_id(1),.activate=sent_task});
+ @mov32(sd,ss,.{.async=true});
+}
+task sent() void {status[0]=1;done();}
+task received() void {status[1]=1;done();}
+fn begin() void {sys.unblock_cmd_stream();}
+fn clear() void {@assert(status[0]==status[1]);for(@range(u16,3))|i|{status[i]=0;}sys.unblock_cmd_stream();}
+fn inspect() void {sys.unblock_cmd_stream();}
+comptime {
+ @comptime_assert(columns==8 or columns==32);
+ @initialize_queue(oq,.{.color=@get_color(3)});@initialize_queue(iq,.{.color=@get_color(4)});
+ @bind_local_task(sent,sent_task);@bind_local_task(received,received_task);
+ @export_symbol(wp,"wire");@export_symbol(fp,"frames");@export_symbol(sp,"status");@export_symbol(sp,"state");
+ @export_symbol(begin);@export_symbol(clear);@export_symbol(inspect);@export_symbol(exchange);
+}

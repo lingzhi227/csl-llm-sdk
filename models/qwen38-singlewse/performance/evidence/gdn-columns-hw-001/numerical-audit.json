@@ -1,0 +1,23 @@
+{
+  "passed": true,
+  "physical": true,
+  "state_elements_verified": 6291456,
+  "bf16_outputs_verified": 49152,
+  "paired_frames": 24576,
+  "bitwise_reset_replay": true,
+  "maximum_state_error_to_bound_ratio": 0.16465532303597236,
+  "maximum_state_relative_l2": 3.201415381646189e-07,
+  "all_jobs_succeeded_and_released": [
+    "wsjob-wbihnfyjfxgdbplzx7ympd",
+    "wsjob-ectazq2653s8bmdashp8no"
+  ],
+  "hashes": {
+    "source-manifest.json": "83c5c876ec1c0873ec493dc9b9953afeed3cc44192c0047a6ece23913af10a72",
+    "fixture.npz": "2fa2cd0942a307db471989fa17cec3ae6e87cde9df4edc7ddff555c730b60fa9",
+    "actual.npz": "477d151918dc98bdd226e8a03b7024c027286faea8221adab5361d04e42bc57c",
+    "result.json": "06e43b8f7639a6195eaf5ad2ad56ccc5e74b49c5182ad64183a3aa8052d80908",
+    "compile-audit.json": "aa513ecc618fef15acf400bab27dbed14b643d52ece25cbf84308119cafe6e27",
+    "run-audit.json": "0e98b2f678798b15901e198cb02d24956dd4bc20f3e4fd0b2417928ff66e6341"
+  },
+  "scope": "All48 heads/753 original value slices over6continuous+2reset positions; exact-port component with injected original-reference frontend inputs, not a complete layer/model or speed result"
+}

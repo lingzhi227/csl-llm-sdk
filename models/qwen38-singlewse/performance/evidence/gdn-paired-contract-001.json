@@ -1,0 +1,49 @@
+{
+  "scope": "Frozen paired-return protocol and independent recurrent error envelope; no numerical or physical acceptance yet",
+  "input_words": 387,
+  "input_fields": [
+    "token",
+    "decay",
+    "beta",
+    "V128",
+    "K128",
+    "Q128"
+  ],
+  "return_frame": [
+    "token",
+    "global_value_row",
+    "2",
+    "packed_BF16",
+    "5"
+  ],
+  "heads": 48,
+  "workers": 753,
+  "width_counts": {
+    "8": 748,
+    "32": 5
+  },
+  "elements": 786432,
+  "continuous_positions": 6,
+  "reset_replay_positions": 2,
+  "oracle": "FP64 original recurrence, full propagated FP32 forward-error bounds, predeclared state norm envelope cap0.002; all state elements and every expanded BF16 return checked",
+  "source_release": "Only after all input words sent and all return frames received; local worker-send idle checked separately",
+  "full_layer_connected": false,
+  "actual_frontend_execution": false,
+  "files": {
+    "performance/spatial/gdn_columns.py": "f87cc6c70f2ca883d6071a1f347a04042825080b2c546b682c36d1e3215d37b7",
+    "performance/reference/gdn_columns_oracle.py": "6da3fbf54862ca1d64304dd694f7b46bf3e5f930abdd0202dd27af1854b53406",
+    "performance/probes/gdn_columns/prepare.py": "d14b35a7bd29909c84c22c34ec4ddd747dd2283c916861f9f0c3009a0e591b82",
+    "performance/probes/gdn_columns/run.py": "81137c884313934152b5b74f40d95b49064b83a9907ed441427fdaf04c9f0b9b",
+    "performance/probes/gdn_columns/worker.csl": "b264d4fc5fcd45a2a39ffadaad4a761dadf2cf8ea6f1c25f251560883cceb81b",
+    "performance/probes/gdn_columns/source.csl": "38bbbf30d35d5c24d1b7d9dbfcf328db8eaa53a59584c692fa03fd1ebeb47a74",
+    "performance/tools/stage_gdn_columns_sim.py": "68300dd04438b2a8ef6bceb90d94f89845b970bab45eb1d8a448b5449012d1d1",
+    "performance/tools/stage_gdn_columns_hw.py": "303038c08c9c31e44be9c655dcf7313146ea844d0656e1f0f77ff2e9ea31aed9",
+    "performance/tools/dispatch_gdn_columns_hw.py": "f0f07cc487d0a968c5b3b4c4f2da537e5bc6029d2a8cc256cdf47a9b5789949e",
+    "performance/runtime/backend.py": "a2093dbc2ba016c6b2f76a90fe66290134db10835aea7186b95c031276154955",
+    "performance/runtime/compile_component.py": "afe114f322f1ed8605ec4d0458b44e1c8353a3607bebe9bf3f3411dcf778e7fd"
+  },
+  "tests": {
+    "original_placement_and_paired_protocol": 10,
+    "artifact_and_admission_and_transport": 13
+  }
+}

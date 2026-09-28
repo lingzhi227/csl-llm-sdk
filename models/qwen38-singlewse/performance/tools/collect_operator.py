@@ -3,7 +3,7 @@ import argparse,base64,hashlib,json,re,shlex,subprocess
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 p=argparse.ArgumentParser();p.add_argument('name');a=p.parse_args()
-if not re.fullmatch('(fp8-(native|tile-fast|bank|encoder)|regional-(gemv|bank)|spatial-quant|contraction|mixed-bank|epoch-bank|gdn-bank|route-epoch|filtered-bank|coupled-bank|full-bf16-matrix|native-shapes|retiled-matrix|compact-projection|mlp-fusion|mlp-chunk|mixer-ingress|mixer-frontend|device-control|device-network)-(sim|hw)-[0-9]{3}|retiled-comparison-audit-[0-9]{3}|mlp-(integrated|full)-compile-[0-9]{3}|layer-(backend-compile|projection-compile|mlp-compile|mlp-hw|mixer-hw|mlp-reference|joint-reference|dialogue-reference|frontend-reference|mixer-reference|mixer-payload|silu-oracle|weight-audit)-[0-9]{3}',a.name):raise ValueError('name')
+if not re.fullmatch('(fp8-(native|tile-fast|bank|encoder)|regional-(gemv|bank)|spatial-quant|contraction|mixed-bank|epoch-bank|gdn-bank|gdn-columns|route-epoch|filtered-bank|coupled-bank|full-bf16-matrix|native-shapes|retiled-matrix|compact-projection|mlp-fusion|mlp-chunk|mixer-ingress|mixer-frontend|device-control|device-network)-(sim|hw)-[0-9]{3}|retiled-comparison-audit-[0-9]{3}|mlp-(integrated|full)-compile-[0-9]{3}|layer-(backend-compile|projection-compile|mlp-compile|mlp-hw|mixer-hw|mlp-reference|joint-reference|dialogue-reference|frontend-reference|mixer-reference|mixer-payload|silu-oracle|weight-audit)-[0-9]{3}',a.name):raise ValueError('name')
 physical='-hw-' in a.name
 remote=('/srv/qwen38-singlewse-hardware/' if physical else '/srv/model-storage/qwen38-singlewse/runs/')+a.name
 dispatch=ROOT/'evidence'/a.name/'dispatch.json'

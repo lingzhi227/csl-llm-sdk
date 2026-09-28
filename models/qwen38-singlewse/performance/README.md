@@ -9,6 +9,18 @@ includes appended-input processing and generation, excluding user think time and
 initial loading; decode-only speed and TTFT are reported separately. See
 [DIALOGUE-ACCEPTANCE.md](docs/DIALOGUE-ACCEPTANCE.md). The target remains unmet.
 
+P46 physically qualifies all 48 recurrent heads on their 753 original value
+slices using paired native returns. Six continuous positions and two reset-replay
+positions pass: 6,291,456 FP32 state elements, 49,152 BF16 outputs and 24,576
+five-word return frames. Fresh capture checks prove bitwise reset replay; maximum
+state relative L2 error is 3.202e-7. Physical compilation covers 1,506 diagnostic
+PEs/758 ELF images, maximum 26,992B including 4,096B stack. Twenty-seven selected
+source and 27 publication regressions pass, with four targeted builder checks.
+Both cluster jobs and all three workstation services are released. This uses
+frozen original-reference frontend inputs and diagnostic state banks; actual
+frontend connections, the complete resident neural layer and dialogue speed
+remain unqualified. See [Paired recurrent qualification](docs/PAIRED-GDN.md).
+
 P45 fits the actual recurrent-port programs and all original layer00 banks on
 11,388 PEs/8,240 ELF images: maximum48,112B including4,096B stack, with16B minimum
 margin. Joint MLP output placement reserves753 state workers holding all786,432

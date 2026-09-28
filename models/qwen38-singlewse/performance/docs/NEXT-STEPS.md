@@ -1,28 +1,32 @@
 # Next work: resident spatial pipeline
 
-Immediate P45 follow-up: use complete compile027 and original-bank reference003.
-`gdn-bank-placement.json` is the address authority; its nested stage and
-`gdn-compact-mlp.json` own changed MLP intervals. `GdnBankPlacement` resolves
-namespaced auxiliary pages and every recurrent word. Old P44 maps are provenance.
-All11,388 PEs pass SRAM with16B minimum margin; all97,025,344 source words are
-verified. Do not repeat admitted placement/compiler or bank-copy sweeps.
+Immediate P46 follow-up: connect the actual frontend and complete GDN graph in
+the resident layer. P45 complete compile027/reference003 remain the full-bank
+address authority; P46 physical gdn-columns-hw-001 qualifies every original
+8/32-column state slice and native paired return over six continuous plus two
+reset positions. These are complementary gates: P46 uses injected independent
+frontend-reference inputs and diagnostic banks. Do not repeat unchanged
+standalone recurrence, placement or compiler sweeps.
 
-Connect actual frontend-to-GDN broadcast, paired BF16 returns, complete downstream
-retirement, gated output projection and the retained norm/MLP graph. Current
-753 workers own even8/32-column slices; a paired-return variant can preserve the
-physically qualified frontend contract. The current scalar frames are not
-compatible and the GDN colors are not yet routed. Existing decoder/operand arenas
-must be leased only after actual projection/transport drain. Final local DMA
-completion is not a consumer retirement fence.
+Use `paired_port()` and the frontend producer's direct packet-store adapter.
+Ingress is `[token,decay,beta,V128,K128,Q128]`; returns are five-word frames with
+two BF16 values, exactly matching P43's native frontend contract. Preserve all
+753 state slices and explicit namespaced auxiliary addresses unless a new joint
+route/placement result requires and verifies a migration. Connecting production
+routes and composing actual cohost code requires fresh full-program admission.
 
-Before candidate output, freeze independent numerical bounds for the reassociated
-FP32 recurrence and complete changed MLP graph. Exercise all48 real heads over
-continuous positions and reset/replay, including history across new prompts.
-P43's frontend remains physically qualified with injected projection/recurrent
-references; P45 provides storage/compiler admission only. Follow with complete
-original-layer execution, then all64 stages, head and actual dependent feedback.
-The continuing-dialogue2000tps target remains unmet. See
-[Recurrent co-placement](GDN-CO-PLACEMENT.md) and
+Resolve launch, source-buffer release and return retirement separately. The
+current frontend's consumed bit is coupled to its packet-DMA callback; an early
+return must not race that callback, and last-head output retirement must still
+wait for any outstanding source lease. Frontend ingress and GDN return queues
+must drain before current-token MLP input reuses its decoder. Check color, input
+and output queues, DSRs, microthreads and local-task ownership at every cohost.
+
+Then execute the original output projection and retained norm/MLP graph. Freeze
+bounds for changed MLP reduction order before observing candidate output. Follow
+with all64 stages, full head and dependent token feedback. Preserve actual
+state across new prompts; the continuing-dialogue2000tps target remains unmet.
+See [Paired GDN](PAIRED-GDN.md), [Co-placement](GDN-CO-PLACEMENT.md) and
 [Dialogue acceptance](DIALOGUE-ACCEPTANCE.md).
 
 1. Preserve physical006 as the accepted shared-input complete-MLP baseline:

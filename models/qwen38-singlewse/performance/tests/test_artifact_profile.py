@@ -7,6 +7,19 @@ spec=importlib.util.spec_from_file_location('performance_backend',Path(__file__)
 backend=importlib.util.module_from_spec(spec);spec.loader.exec_module(backend)
 
 class ArtifactProfileTests(unittest.TestCase):
+    def test_all_original_gdn_slices_require_exact_bounded_geometry(self):
+        profile=dict(original_gdn_columns=True,full_model=False,application=[251,6],application_pes=1506,
+                     gdn_shape=[48,128,128],gdn_workers=753,fabric_offset=[4,1],
+                     revision='017b9c7af6b5689d5dd426a76e0bc077eb5ca20a',artifact_single_message_limit=16<<20)
+        self.assertTrue(backend.gdn_columns_profile(profile))
+        self.assertEqual(backend.message_limit(profile),16<<20)
+        for key in profile:
+            if key=='artifact_single_message_limit':continue
+            changed=dict(profile);changed.pop(key)
+            self.assertFalse(backend.gdn_columns_profile(changed))
+            with self.assertRaises(ValueError):backend.message_limit(changed)
+        with self.assertRaises(ValueError):backend.message_limit(dict(profile,artifact_single_message_limit=(16<<20)+1))
+
     def test_complete_mlp_has_exact_separate_64_mib_gate(self):
         profile=dict(complete_original_mlp=True,stage='layer_00',application=[78,146],application_pes=11388,
                      mlp_shape=[5120,17408,5120],fabric_offset=[67,1],

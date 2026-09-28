@@ -9,6 +9,10 @@ P43 physically qualified the original convolution/gate frontend, but supplied
 its recurrent results from an independent reference. The missing edge is actual
 device state update followed by the native return and gated output projection.
 
+P46 physically qualifies all original state slices and paired returns with
+injected independent frontend inputs; see [Paired GDN](PAIRED-GDN.md).
+The actual frontend-to-core routes and full resident layer remain unconnected.
+
 P45 now admits full original banks and753 actual private state-port programs in
 complete027; reference003 preserves every original word. The remaining edge is
 physical frontend broadcast, paired returns and downstream retirement. Use

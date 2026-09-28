@@ -1,0 +1,18 @@
+// Numeric/transport harness only. Complete model banks remain on their P45 PEs.
+param memcpy_params;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const bank_words:u16=4096;var bank=@zeros([4096]u32);
+var decoder=@zeros([128]f32);var values=@zeros([32]f32);
+PAIRED_GDN_PORT
+var status=@zeros([3]u32);
+const bp:[*]u32=&bank;const sp:[*]u32=&status;
+fn snapshot() void {status[0]=gdn_invocation;status[1]=gdn_phase;status[2]=gdn_output;}
+fn begin() void {gdn_admit();sys.unblock_cmd_stream();}
+fn clear() void {gdn_reset();snapshot();sys.unblock_cmd_stream();}
+fn inspect() void {snapshot();sys.unblock_cmd_stream();}
+fn exchange() void {sys.unblock_cmd_stream();}
+comptime {
+ @export_symbol(bp,"state");@export_symbol(sp,"status");
+ @export_symbol(sp,"wire");@export_symbol(sp,"frames");
+ @export_symbol(begin);@export_symbol(clear);@export_symbol(inspect);@export_symbol(exchange);
+}

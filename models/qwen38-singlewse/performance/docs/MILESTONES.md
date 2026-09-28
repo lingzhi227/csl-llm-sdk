@@ -1110,3 +1110,32 @@ workers. Complete MLP output rebalancing moves16 gate/up rows and12 down rows
 between full and ragged K trees; changed neural execution requires fresh bounds
 and reference comparisons. Preserve failed033, rejected034, unselected035,
 timeout025 and overflow026. This milestone claims compilation and storage only.
+
+## P46: physical full-state GDN with native paired returns
+
+P46 physically qualifies all 48 recurrent heads on their 753 original value
+slices using paired native returns. Six continuous positions and two reset-replay
+positions pass: 6,291,456 FP32 state elements, 49,152 BF16 outputs and 24,576
+five-word return frames. Fresh capture checks prove bitwise reset replay; maximum
+state relative L2 error is 3.202e-7. Physical compilation covers 1,506 diagnostic
+PEs/758 ELF images, maximum 26,992B including 4,096B stack. Twenty-seven selected
+source and 27 publication regressions pass, with four targeted builder checks.
+Both cluster jobs and all three workstation services are released. This uses
+frozen original-reference frontend inputs and diagnostic state banks; actual
+frontend connections, the complete resident neural layer and dialogue speed
+remain unqualified. See [Paired recurrent qualification](PAIRED-GDN.md).
+
+The exact worker/math sources match the selected simulator smoke and complete
+diagnostic compiler artifact. The independent FP64 oracle fixes propagated
+FP32 bounds before candidate output; observed state error reaches at most
+0.164656 of its per-element bound. The maximum predeclared bound norm ratio
+is 0.000065025, below the 0.002 admission cap. These are component criteria,
+not permission for token divergence in complete-model acceptance.
+
+Preserve the SDK-color compiler failure001 and intentional simulator stop002.
+The corrected smoke003 passes all 6,144 selected state elements and 24 frames.
+Physical001 then covers all original slices. Runtime initialization takes
+236.494s; the complete diagnostic driver takes 240.282s including host transfers,
+full state readback and verification. These timings are not neural latency or
+model TPS. Full production routes, launch/return fences and all64 layers remain
+open. Original functional code and the P45 complete-bank snapshot remain intact.

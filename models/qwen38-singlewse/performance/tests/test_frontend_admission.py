@@ -12,7 +12,9 @@ class FrontendAdmissionTests(unittest.TestCase):
         source=Path(__file__).resolve().parents[1]/'runtime/compile_component.py'
         tree=ast.parse(source.read_text())
         gate=next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name=='admitted_component')
-        namespace={};exec(compile(ast.Module(body=[gate],type_ignores=[]),str(source),'exec'),namespace)
+        backend=ast.parse((source.parent/'backend.py').read_text())
+        recurrence=next(n for n in backend.body if isinstance(n,ast.FunctionDef) and n.name=='gdn_columns_profile')
+        namespace={};exec(compile(ast.Module(body=[recurrence,gate],type_ignores=[]),str(source),'exec'),namespace)
         cls.admit=staticmethod(namespace['admitted_component'])
         cls.profile=dict(application=[16,2],application_pes=32,original_frontend=True,
                          frontend_shape=[16,3,128],revision='017b9c7af6b5689d5dd426a76e0bc077eb5ca20a',full_model=False)
