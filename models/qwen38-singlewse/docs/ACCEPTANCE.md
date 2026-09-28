@@ -2,16 +2,19 @@
 
 The complete pinned original Qwen3.8-27B-FP8 must execute on one real WSE-3 with
 all64 layers in resident spatial stages, a complete head and actual token feedback.
-The current speed criterion is >=2000 completed generated output tokens/s in
-aggregate during a predeclared sustained steady-state window. Independent real
-requests may overlap with isolated recurrent/KV state and ordinary autoregressive
-dependencies. Report concurrency, context, TTFT, per-request ITL, prefill, fill/drain
-and full-run throughput separately. The full contract is
-[performance/docs/MEASUREMENT.md](../performance/docs/MEASUREMENT.md).
+The September28 target is >=2000 average output tokens/s for one continuing
+multi-turn conversation, preserving actual prior user/assistant context. The
+primary rate is total assistant content tokens divided by summed turn response
+times, including new-input processing, TTFT and generation; user think time and
+initial loading are excluded. Report pure decode rate, ITL and complete response
+time separately. Independent-request aggregate throughput no longer qualifies.
+The complete contract, including persistent state and growing context, is in
+[performance/docs/DIALOGUE-ACCEPTANCE.md](../performance/docs/DIALOGUE-ACCEPTANCE.md)
+and [MEASUREMENT.md](../performance/docs/MEASUREMENT.md).
 
 Full model/weight identity, correct complete sentences, independent numerical
-qualification of changed operations, actual request isolation and warm reset are
-required. Layout/byte estimates and component rates do not pass this contract.
+qualification of changed operations, multi-turn context retention, explicit
+capacity, actual request isolation and warm reset are required. Layout/byte estimates and component rates do not pass this contract.
 Current metadata/protocol checks, original packing samples and selected backend
 compiler admission do not establish connected neural or model acceptance.
 The original strict functional criteria and unsuccessful comparisons below remain

@@ -1,8 +1,12 @@
 # Current user target: resident west-to-east spatial pipeline
 
-User clarification received by the control session on 2026-09-27, recorded at
-23:45 UTC. This document supersedes conflicting performance-target and placement
-statements in active plans. It does not alter the scope or results of frozen
+The spatial placement instruction below remains active. The September28
+multiturn clarification supersedes its former aggregate throughput metric; see
+[DIALOGUE-ACCEPTANCE.md](DIALOGUE-ACCEPTANCE.md).
+
+Spatial clarification received by the control session on 2026-09-27, recorded at
+23:45 UTC. This document and the later dialogue clarification supersede conflicting
+performance-target and placement statements in active plans. It does not alter the scope or results of frozen
 experiments, historical publications, or the original functional baseline.
 
 Immediate follow-up instruction: the user explicitly ordered an immediate
@@ -32,28 +36,22 @@ recurrent/KV state, backpressure, buffer ownership and next-token feedback.
 Physical host I/O endpoints must be checked against the actual ALCF SDK/runtime;
 logical west-to-east flow does not by itself prove a native east-side D2H port.
 
-## Primary performance metric
+## Primary performance metric, updated September28
 
-The target is at least 2,000 completed generated output tokens per second in
-aggregate during sustained steady-state operation of the filled spatial pipeline.
-Use a declared reproducible stream/concurrency of independent real requests as
-needed to occupy the stages. Each request must preserve ordinary autoregressive
-dependencies and produce correct outputs through all original layers and the
-complete vocabulary head. This is not a 2,000 tokens/s per-request requirement.
+A single continuing conversation must accept new user text, generate a correct
+reply, retain the actual conversation and produce the next context-dependent
+reply. The target is an average of at least2000 emitted assistant content tokens/s
+across multiple turns. The active contract uses total output tokens divided by
+summed turn response times, including new-input processing and generation while
+excluding user think time and initial model load. Report decode-only rate, TTFT,
+ITL, context lengths and turn response time separately.
 
-Compute throughput as completed generated output tokens divided by measured
-steady-state wall-clock duration. Declare request concurrency, prompt lengths,
-generation lengths, context/state capacity and the measurement window before
-observing results. Do not count input prompt tokens, internal layer tokens,
-synthetic independent hidden states, incomplete passes or projected kernel rates
-as generated output throughput. Include scheduling, backpressure, token feedback
-and transfers required by the actual serving path during that window.
-
-Report initialization, pipeline fill/drain, prefill, TTFT, per-request inter-token
-latency and full-run throughput separately. The goal does not promise that one
-request's later tokens bypass the 64-layer autoregressive feedback dependency.
-The previous 500 microseconds-per-request-token and 7.81 microseconds-per-layer
-budgets are not the acceptance constraints for this aggregate-throughput goal.
+The former aggregate sum across independent requests is superseded. Preserve
+original model/precision/state, the64 spatial stages and genuine autoregressive
+dependencies. Context/state must survive reply completion; increase supported
+history explicitly rather than resetting or silently truncating at each turn.
+The detailed counting, timing and correctness gates are in
+[DIALOGUE-ACCEPTANCE.md](DIALOGUE-ACCEPTANCE.md) and [MEASUREMENT.md](MEASUREMENT.md).
 
 ## Work continuity and active plan reconciliation
 
@@ -66,9 +64,10 @@ extend the superseded whole-wafer shared-layer design with another hardware run.
 Update the live STATE, status, acceptance, performance README, architecture,
 measurement and next-step documents to this target. Mark temporal-overlay plans
 as historical candidates, not the final architecture; preserve frozen evidence.
-Any active task goal text retaining the old per-request interpretation must be
-explicitly identified as superseded, without falsely marking unfinished work
-complete merely to change the wording.
+Any active task wording that omits multi-turn state or retains the independent-
+request aggregate metric is superseded by DIALOGUE-ACCEPTANCE.md. Keep the goal
+active until the actual complete-model dialogue objective is achieved; changing
+the acceptance wording does not complete it.
 
 Next, make the spatial stage placement and admission/feedback schedule concrete:
 full-model weight/state/code/buffer capacity, inter-stage paths, stage service

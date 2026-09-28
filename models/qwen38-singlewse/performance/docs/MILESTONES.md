@@ -1,6 +1,8 @@
-> Current target is the resident spatial pipeline and aggregate generated-token
-> throughput in USER-SPATIAL-PIPELINE-TARGET.md. Earlier milestone targets and
-> pending snapshots below retain their historical scope.
+> Current target is the resident spatial implementation of one continuing
+> multi-turn conversation, at>=2000 average output tokens/s under
+> [DIALOGUE-ACCEPTANCE.md](DIALOGUE-ACCEPTANCE.md). Earlier milestone targets and
+> pending snapshots below retain their historical scope; aggregate independent-
+> request throughput cannot qualify the current target.
 
 # Performance milestones
 

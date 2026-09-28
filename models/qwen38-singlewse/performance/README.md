@@ -1,11 +1,13 @@
 # Qwen3.8 WSE-3 spatial performance work
 
-Current target: the complete original Qwen3.8-27B-FP8 on one physical WSE-3,
-64 resident spatial layer stages, correct dependent sentences, and **at least2000
-completed generated output tokens/s aggregate in sustained steady state**.
-Independent requests may overlap with isolated state. The earlier per-request
-interpretation and whole-wafer shared-layer overlay are superseded. The target
-remains unmet; this is active development.
+Current target: complete original Qwen3.8-27B-FP8 on one physical WSE-3,
+64 resident spatial stages, and **at least2000 average output tokens/s for one
+stateful multi-turn conversation**. Each new prompt must receive a correct reply
+based on the actual preceding conversation. The September28 clarification
+supersedes aggregate independent-request throughput. The primary measurement
+includes appended-input processing and generation, excluding user think time and
+initial loading; decode-only speed and TTFT are reported separately. See
+[DIALOGUE-ACCEPTANCE.md](docs/DIALOGUE-ACCEPTANCE.md). The target remains unmet.
 
 P38 passes170 source and170 publication regression tests. Full routed compile018
 admits all11388 PEs with7714 ELF images, maximum48112bytes including4096 stack;

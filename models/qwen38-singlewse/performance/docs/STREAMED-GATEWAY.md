@@ -76,8 +76,9 @@ The largest nonzero relative bound norm is0.000470067, below the0.02 reference
 quality ceiling. This is an independent CPU reference, not device execution.
 
 Full contractions, root consumers, conv/gates/GDN state updates and adjacent
-layer handoff remain open. The complete original64-layer sentence and2000
-aggregate generated-token/s contract is unchanged.
+layer handoff remain open. The complete original64-layer model remains required. The September28 user
+clarification now requires2000 average output tokens/s for stateful multi-turn
+dialogue; see DIALOGUE-ACCEPTANCE.md. This milestone does not pass that target.
 
 ## Complete bank and program admission
 

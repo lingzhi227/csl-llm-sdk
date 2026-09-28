@@ -32,15 +32,19 @@
    the actual gateway retains5840bytes. Additional arithmetic/state transport
    requires fresh full-program admission. Keep P31 as the accepted physical
    neural graph and preserve020-024 failures; avoid another isolated sweep.
-4. Measure real stage and full request service. Current packing admits only two
-   context96 request states; it does not establish concurrency sufficient for
-   >=2000 aggregate tokens/s. Revisit bank program/loader size and distributed
-   state capacity using compiled footprints and actual request-cycle times.
-   Do not infer completed tokens from intermediate activations or raw counters.
-5. Instantiate embedding, all64 resident stages, the complete head and dependent
-   token feedback. Predeclare request mix and steady-state window, generate
-   correct complete sentences, and report aggregate completed-output throughput,
-   TTFT, ITL, initialization, prefill, fill/drain and full run separately.
+4. Measure complete dependent stage service and optimize its critical path.
+   The September28 target is one stateful multi-turn conversation at>=2000 average
+   output tokens/s, not aggregate independent-request throughput. Report appended
+   prefill/TTFT, pure decode/ITL and full response time. The primary count divides
+   all actual assistant output tokens by summed turn response durations.
+5. Instantiate embedding, all64 resident stages, the full head and token feedback.
+   Preserve GDN/conv/KV state and absolute positions across new prompts. Distinguish
+   emitted tokens from fully committed positions, including a pending final token.
+   Freeze at least three context-dependent turns and a longer-history capacity
+   workload. Qualify reference alignment, reset/replay, stop/continue, growing
+   context and overflow rejection. Current context96 packing is not a multi-turn
+   acceptance result; do not silently truncate or reset to fit it. See
+   DIALOGUE-ACCEPTANCE.md for the active contract.
 
 Native pair simulator003 is slower on the used shapes. Native unroll005 saves
 local simulator counts but complete compile008 exceeds SRAM on68PE. Preserve

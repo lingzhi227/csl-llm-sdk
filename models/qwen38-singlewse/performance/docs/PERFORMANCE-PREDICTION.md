@@ -3,8 +3,13 @@
 This tool supports layout and kernel decisions before expensive compilation or
 physical execution. It reads the same emitted stage map and layer-kernel/stream
 IR used by development. It never changes model weights, launches a job or turns
-an estimate into physical acceptance. The current target remains sustained
-aggregate generated output throughput, with per-request autoregressive semantics.
+an estimate into physical acceptance. The September28 target is now one stateful
+multi-turn conversation at>=2000 average output tokens/s, under
+[DIALOGUE-ACCEPTANCE.md](DIALOGUE-ACCEPTANCE.md). The existing abstract multi-request
+aggregate report is not this acceptance metric. Use a single active conversation
+for dependent-path latency screening; its lack of prompt ingestion, turn-boundary
+state and EOS timing prevents a multi-turn response-speed prediction. Preserve
+older aggregate scenarios as historical capacity studies, not target evidence.
 
 ## Implemented now
 

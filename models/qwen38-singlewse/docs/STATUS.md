@@ -2,11 +2,14 @@
 
 ## Active: resident spatial pipeline performance phase
 
-The current target is complete original Qwen3.8-27B-FP8 on one physical WSE-3,
-64 spatially resident layers in macro west-to-east order, correct autoregressive
-sentences and >=2000 aggregate completed generated tokens/s in sustained steady
-state. Independent requests may overlap. The old per-request target and broad
-whole-wafer shared-layer time overlay are superseded.
+Current target: complete original Qwen3.8-27B-FP8 on one physical WSE-3,
+64 resident spatial stages, and **at least2000 average output tokens/s for one
+stateful multi-turn conversation**. Each new prompt must receive a correct reply
+based on the actual preceding conversation. The September28 clarification
+supersedes aggregate independent-request throughput. The primary measurement
+includes appended-input processing and generation, excluding user think time and
+initial loading; decode-only speed and TTFT are reported separately. See
+[DIALOGUE-ACCEPTANCE.md](../performance/docs/DIALOGUE-ACCEPTANCE.md). The target remains unmet.
 
 P38 passes170 source and170 publication regression tests. Full routed compile018
 admits all11388 PEs with7714 ELF images, maximum48112bytes including4096 stack;

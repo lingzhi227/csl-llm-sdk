@@ -1,12 +1,13 @@
 # Resident west-to-east layer pipeline
 
 The user's current target is defined in [USER-SPATIAL-PIPELINE-TARGET.md](USER-SPATIAL-PIPELINE-TARGET.md).
-All64 original layers occupy disjoint resident stages. The primary goal is >=2000
-completed generated output tokens/s in aggregate during sustained steady state,
-with each request obeying its full autoregressive dependency. The old batch-one
-500us/token and7.81us/layer constraints are superseded. No measured model rate is
-claimed. The original functional capture and its failed strict comparisons remain
-unchanged.
+All64 original layers occupy disjoint resident stages. The September28 target is
+>=2000 average output tokens/s for one continuing multi-turn conversation, with
+preserved context and dependent replies to newly arriving prompts. The previous
+aggregate independent-request interpretation is superseded. The active timing
+contract includes turn input processing and generation; see
+[DIALOGUE-ACCEPTANCE.md](DIALOGUE-ACCEPTANCE.md). No measured model rate is claimed.
+The original functional capture and failed strict comparisons remain unchanged.
 
 ## Concrete P22 map
 
@@ -174,11 +175,16 @@ supply these events; the guard does not create them. Warm reset needs drained
 routes/slots, actual state clearing and acknowledgements from all66 stages.
 
 The feedback oracle checks actual selected token IDs: after fixed prompt tokens,
-only the prior full-model selected token can enter the next position of that
-request. Independent requests may overlap. A single request cannot fill later
-pipeline positions speculatively. With concurrencyC, achieving2000tokens/s requires
-mean request feedback cycles <=C/2000 seconds in steady decode (a necessary
-condition, not a measured rate or a per-request500us requirement).
+only the prior full-model selected token can enter the next position. The next
+turn must append to the actual prior transcript and preserve committed GDN/conv/KV
+state. Track emitted and fully committed positions separately, including a final
+sampled token pending its forward pass. A new turn is not a request reset.
+
+The single-conversation target requires mean dependent decode feedback no slower
+than500us before additional prompt/turn overhead. Independent requests may be
+supported separately, but summing their rates cannot meet this target. Optimize
+complete critical-path latency and cross-kernel handoff rather than relying on
+multi-request pipeline occupancy. None of these service times is qualified yet.
 
 ## Lowering and next acceptance boundary
 
@@ -190,7 +196,7 @@ condition, not a measured rate or a per-request500us requirement).
 
 The first three have a concrete candidate; step4 and complete step5 remain open.
 Next compose the real layer0 -> layer1 path on these coordinates, including GDN,
-MLP, both requests and actual next-layer consumption. Use that connected path to
+MLP, persistent conversation state and actual next-layer consumption. Use that connected path to
 validate/optimize the generator, then instantiate all64 stages and full feedback.
 Do not revert to an unbounded isolated matrix or helper benchmark series.
 
