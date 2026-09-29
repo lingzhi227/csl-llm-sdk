@@ -1,0 +1,313 @@
+{
+  "scope": "Uncompiled group5 candidate with prior routes preserved; static endpoint availability only, not routing proof for any remaining group.",
+  "probe_sha256": "5723957c235012936380b4da1a78fa8d680c69b7da5bd6a2a684ae245d1dd8c5",
+  "source_replacement": {
+    "old": "protected.get((*pe,color),group)==group",
+    "new": "profiles[pe]['parameters'].get('frontend_group',group)==group"
+  },
+  "new_routes": 1500,
+  "group5": {
+    "group": 5,
+    "frontend": [
+      91,
+      145
+    ],
+    "bridge": [
+      140,
+      145
+    ],
+    "incoming": [
+      1,
+      9
+    ],
+    "outgoing": [
+      12,
+      16
+    ],
+    "child_frames": 192,
+    "child_markers": 51
+  },
+  "old_routes_unchanged": true,
+  "impact": [
+    {
+      "group": 3,
+      "child_colors_before": [
+        15,
+        16,
+        17,
+        19,
+        20
+      ],
+      "child_colors_after": [
+        15,
+        16,
+        17,
+        19,
+        20
+      ],
+      "child_pair_remains": true,
+      "source_colors_after": [
+        1,
+        4,
+        5,
+        6,
+        8,
+        9,
+        14,
+        15
+      ],
+      "source_pair_remains": true
+    },
+    {
+      "group": 4,
+      "child_colors_before": [
+        13,
+        15,
+        16,
+        17,
+        19
+      ],
+      "child_colors_after": [
+        13,
+        15,
+        17,
+        19
+      ],
+      "child_pair_remains": true,
+      "source_colors_after": [
+        1,
+        4,
+        5,
+        6,
+        8,
+        9,
+        14,
+        15
+      ],
+      "source_pair_remains": true
+    },
+    {
+      "group": 6,
+      "child_colors_before": [
+        11,
+        12,
+        13,
+        16
+      ],
+      "child_colors_after": [
+        11,
+        13
+      ],
+      "child_pair_remains": true,
+      "source_colors_after": [
+        1,
+        4,
+        5,
+        6,
+        8,
+        9,
+        14,
+        15
+      ],
+      "source_pair_remains": true
+    },
+    {
+      "group": 7,
+      "child_colors_before": [
+        11,
+        12,
+        13,
+        16
+      ],
+      "child_colors_after": [
+        11,
+        13
+      ],
+      "child_pair_remains": true,
+      "source_colors_after": [
+        1,
+        4,
+        5,
+        6,
+        8,
+        9,
+        14,
+        15
+      ],
+      "source_pair_remains": true
+    },
+    {
+      "group": 8,
+      "child_colors_before": [
+        11,
+        12,
+        13,
+        14,
+        16
+      ],
+      "child_colors_after": [
+        11,
+        13,
+        14
+      ],
+      "child_pair_remains": true,
+      "source_colors_after": [
+        0,
+        1,
+        4,
+        5,
+        6,
+        8,
+        9,
+        14,
+        15,
+        19
+      ],
+      "source_pair_remains": true
+    },
+    {
+      "group": 9,
+      "child_colors_before": [
+        11,
+        13,
+        14,
+        16
+      ],
+      "child_colors_after": [
+        11,
+        13,
+        14
+      ],
+      "child_pair_remains": true,
+      "source_colors_after": [
+        0,
+        1,
+        4,
+        5,
+        6,
+        8,
+        9,
+        14,
+        15,
+        19
+      ],
+      "source_pair_remains": true
+    },
+    {
+      "group": 10,
+      "child_colors_before": [
+        1,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        19
+      ],
+      "child_colors_after": [
+        1,
+        11,
+        13,
+        14,
+        15,
+        17,
+        19
+      ],
+      "child_pair_remains": true,
+      "source_colors_after": [
+        8,
+        14,
+        15
+      ],
+      "source_pair_remains": true
+    },
+    {
+      "group": 11,
+      "child_colors_before": [
+        0,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        19
+      ],
+      "child_colors_after": [
+        0,
+        11,
+        13,
+        14,
+        15,
+        17,
+        19
+      ],
+      "child_pair_remains": true,
+      "source_colors_after": [
+        8,
+        9,
+        15
+      ],
+      "source_pair_remains": true
+    },
+    {
+      "group": 12,
+      "child_colors_before": [
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        19
+      ],
+      "child_colors_after": [
+        11,
+        13,
+        14,
+        15,
+        19
+      ],
+      "child_pair_remains": true,
+      "source_colors_after": [
+        9,
+        14,
+        15
+      ],
+      "source_pair_remains": true
+    },
+    {
+      "group": 13,
+      "child_colors_before": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        19
+      ],
+      "child_colors_after": [
+        10,
+        11,
+        13,
+        14,
+        15,
+        19
+      ],
+      "child_pair_remains": true,
+      "source_colors_after": [
+        9,
+        14
+      ],
+      "source_pair_remains": true
+    }
+  ],
+  "physical": false,
+  "compiled": false,
+  "executed": false
+}

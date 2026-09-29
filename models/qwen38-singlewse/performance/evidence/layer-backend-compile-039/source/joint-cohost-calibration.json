@@ -1,0 +1,297 @@
+{
+  "before": "layer-backend-compile-014",
+  "after": "layer-backend-compile-017",
+  "device_control": true,
+  "physical": false,
+  "executed": false,
+  "full_bank_admission": false,
+  "full_stage_admission": false,
+  "samples": [
+    {
+      "pe": [
+        0,
+        0
+      ],
+      "source": "mixer_layer_mlp_controller.csl",
+      "parameters": {
+        "gate_tail": 106,
+        "down_tail": 159,
+        "shared_inputs": true,
+        "norm_bridge": true
+      },
+      "original_pe": [
+        107,
+        145
+      ],
+      "original_bank_words": 0,
+      "payload_changed": false,
+      "before_bytes_with_stack": 39632,
+      "after_bytes_with_stack": 39600,
+      "saved_bytes": 32,
+      "actual_calibration_bank_bytes": 0,
+      "overhead_with_stack": 39600,
+      "original_matrix_bytes": 0,
+      "original_bank_estimate": 39600,
+      "matrix_only_estimate": 39600,
+      "matrix_only_estimated_margin": 8528,
+      "before_elf_sha256": "815369c2d18988f0acd8a9fb6bd304df552df5617245ed399f5cc90258f7cdf7",
+      "after_elf_sha256": "9babe42ea774f19188dc91215bdfa516817f7b48f4d14528917ce5ec70bddb1a"
+    },
+    {
+      "pe": [
+        1,
+        0
+      ],
+      "source": "device_mixer_layer_mlp_standby.csl",
+      "parameters": {
+        "bank_words": 4096,
+        "mixer_rank_parity": 1,
+        "mixer_input48_queue": 5,
+        "mixer_can_root": false
+      },
+      "original_pe": [
+        64,
+        67
+      ],
+      "original_bank_words": 8801,
+      "payload_changed": true,
+      "before_bytes_with_stack": 30656,
+      "after_bytes_with_stack": 29792,
+      "saved_bytes": 864,
+      "actual_calibration_bank_bytes": 16384,
+      "overhead_with_stack": 13408,
+      "original_matrix_bytes": 33796,
+      "original_bank_estimate": 48612,
+      "matrix_only_estimate": 47204,
+      "matrix_only_estimated_margin": 924,
+      "before_elf_sha256": "fc1968c3b754a84fb04b6ab294d78cf71213cea6f57ecb21aec4e7c40f8f8106",
+      "after_elf_sha256": "1b599f8669b7eb80dfee8a55233f293683ec360890814412720dce882727a22b"
+    },
+    {
+      "pe": [
+        2,
+        0
+      ],
+      "source": "device_mixer_layer_mlp_standby.csl",
+      "parameters": {
+        "bank_words": 4096,
+        "mixer_rank_parity": 0,
+        "mixer_input48_queue": 5,
+        "mixer_can_root": true
+      },
+      "original_pe": [
+        63,
+        67
+      ],
+      "original_bank_words": 8801,
+      "payload_changed": true,
+      "before_bytes_with_stack": 30880,
+      "after_bytes_with_stack": 30048,
+      "saved_bytes": 832,
+      "actual_calibration_bank_bytes": 16384,
+      "overhead_with_stack": 13664,
+      "original_matrix_bytes": 33796,
+      "original_bank_estimate": 48868,
+      "matrix_only_estimate": 47460,
+      "matrix_only_estimated_margin": 668,
+      "before_elf_sha256": "2de3b6a254812c682649ca2e210dfe9566aff8fb91679651fa21963218ab23a8",
+      "after_elf_sha256": "6d8b0a676586472462e49d554bad144c1f1b9c3c5c422cc978cfc53cde265682"
+    },
+    {
+      "pe": [
+        3,
+        0
+      ],
+      "source": "device_mixer_layer_norm_bridge.csl",
+      "parameters": {
+        "bank_words": 4096,
+        "rank": 0,
+        "mixer_rank_parity": 1,
+        "mixer_input48_queue": 5,
+        "mixer_can_root": false
+      },
+      "original_pe": [
+        63,
+        144
+      ],
+      "original_bank_words": 8415,
+      "payload_changed": true,
+      "before_bytes_with_stack": 36032,
+      "after_bytes_with_stack": 35376,
+      "saved_bytes": 656,
+      "actual_calibration_bank_bytes": 16384,
+      "overhead_with_stack": 18992,
+      "original_matrix_bytes": 33276,
+      "original_bank_estimate": 52652,
+      "matrix_only_estimate": 52268,
+      "matrix_only_estimated_margin": -4140,
+      "before_elf_sha256": "8af58ef78151c5748d5ba3cd379f0894b2896887c1c0072ee1f087b86a615634",
+      "after_elf_sha256": "d90f31e40168754816d9093f049ccebf54e17e1c6086ee763bf5aa3097d3b0fe"
+    },
+    {
+      "pe": [
+        4,
+        0
+      ],
+      "source": "device_mixer_layer_norm_bridge.csl",
+      "parameters": {
+        "bank_words": 4096,
+        "rank": 1,
+        "mixer_rank_parity": 0,
+        "mixer_input48_queue": 5,
+        "mixer_can_root": false
+      },
+      "original_pe": [
+        64,
+        144
+      ],
+      "original_bank_words": 8415,
+      "payload_changed": true,
+      "before_bytes_with_stack": 35152,
+      "after_bytes_with_stack": 34384,
+      "saved_bytes": 768,
+      "actual_calibration_bank_bytes": 16384,
+      "overhead_with_stack": 18000,
+      "original_matrix_bytes": 33276,
+      "original_bank_estimate": 51660,
+      "matrix_only_estimate": 51276,
+      "matrix_only_estimated_margin": -3148,
+      "before_elf_sha256": "c2be4992aab8ba55dbcea076edbffbcf0043cd1dd6d5c0f7fee1978d52f91ba1",
+      "after_elf_sha256": "e8e6d9d3c39d64719dc1930dc706bac9d84b7d0d8e6de222755b9281cefba5e8"
+    },
+    {
+      "pe": [
+        5,
+        0
+      ],
+      "source": "device_mixer_layer_norm_bridge.csl",
+      "parameters": {
+        "bank_words": 4096,
+        "rank": 39,
+        "mixer_rank_parity": 0,
+        "mixer_input48_queue": 5,
+        "mixer_can_root": false
+      },
+      "original_pe": [
+        102,
+        144
+      ],
+      "original_bank_words": 8415,
+      "payload_changed": true,
+      "before_bytes_with_stack": 34960,
+      "after_bytes_with_stack": 34192,
+      "saved_bytes": 768,
+      "actual_calibration_bank_bytes": 16384,
+      "overhead_with_stack": 17808,
+      "original_matrix_bytes": 33276,
+      "original_bank_estimate": 51468,
+      "matrix_only_estimate": 51084,
+      "matrix_only_estimated_margin": -2956,
+      "before_elf_sha256": "f37116220a950ee7528c93c39b2be0e51f600ab5bac98338634a06a72c7c4a37",
+      "after_elf_sha256": "3936d975335c886be461320a7a4cbb2da1d3c9b385264da929507f505368f90f"
+    },
+    {
+      "pe": [
+        6,
+        0
+      ],
+      "source": "device_mixer_layer_norm_sender.csl",
+      "parameters": {
+        "bank_words": 4096,
+        "rank": 0,
+        "sender_id": 0,
+        "bus_rx": "EAST",
+        "bus_tx": "SOUTH",
+        "mixer_rank_parity": 0,
+        "mixer_input48_queue": 4,
+        "mixer_can_root": false
+      },
+      "original_pe": [
+        63,
+        143
+      ],
+      "original_bank_words": 8543,
+      "payload_changed": true,
+      "before_bytes_with_stack": 35520,
+      "after_bytes_with_stack": 34864,
+      "saved_bytes": 656,
+      "actual_calibration_bank_bytes": 16384,
+      "overhead_with_stack": 18480,
+      "original_matrix_bytes": 33276,
+      "original_bank_estimate": 52652,
+      "matrix_only_estimate": 51756,
+      "matrix_only_estimated_margin": -3628,
+      "before_elf_sha256": "06998e085e39606c581ba033b86e2204baa4eb740cd7adb23e56456eca80696d",
+      "after_elf_sha256": "e9f2f3b1b800a5705e78652e90ceedfcd0c8d4e3dc7f240cf2b16a38f3dbc887"
+    },
+    {
+      "pe": [
+        7,
+        0
+      ],
+      "source": "device_mixer_layer_norm_sender.csl",
+      "parameters": {
+        "bank_words": 4096,
+        "rank": 1,
+        "sender_id": 1,
+        "bus_rx": "EAST",
+        "bus_tx": "WEST",
+        "mixer_rank_parity": 1,
+        "mixer_input48_queue": 4,
+        "mixer_can_root": false
+      },
+      "original_pe": [
+        64,
+        143
+      ],
+      "original_bank_words": 8543,
+      "payload_changed": true,
+      "before_bytes_with_stack": 35536,
+      "after_bytes_with_stack": 34896,
+      "saved_bytes": 640,
+      "actual_calibration_bank_bytes": 16384,
+      "overhead_with_stack": 18512,
+      "original_matrix_bytes": 33276,
+      "original_bank_estimate": 52684,
+      "matrix_only_estimate": 51788,
+      "matrix_only_estimated_margin": -3660,
+      "before_elf_sha256": "e6fa402ba63719d6780d1797f35551b670015796795c439eb07acf5f00946df9",
+      "after_elf_sha256": "a2e07460dac9426fd527190919f9a0215e5ea131ebf3475521f79c9ec52bfaa4"
+    },
+    {
+      "pe": [
+        8,
+        0
+      ],
+      "source": "device_mixer_layer_norm_sender.csl",
+      "parameters": {
+        "bank_words": 4096,
+        "rank": 39,
+        "sender_id": 39,
+        "bus_rx": "EAST",
+        "bus_tx": "WEST",
+        "mixer_rank_parity": 1,
+        "mixer_input48_queue": 4,
+        "mixer_can_root": false
+      },
+      "original_pe": [
+        102,
+        143
+      ],
+      "original_bank_words": 8543,
+      "payload_changed": true,
+      "before_bytes_with_stack": 35552,
+      "after_bytes_with_stack": 34896,
+      "saved_bytes": 656,
+      "actual_calibration_bank_bytes": 16384,
+      "overhead_with_stack": 18512,
+      "original_matrix_bytes": 33276,
+      "original_bank_estimate": 52684,
+      "matrix_only_estimate": 51788,
+      "matrix_only_estimated_margin": -3660,
+      "before_elf_sha256": "d10b83a2e0ef74e4b7f9bc8a9bf0f75dfbf10c6efeead91b269db25d96ad18e4",
+      "after_elf_sha256": "8c8571b6cfa49d82f4c628eac34a3c39f4ebc725b6dadc0d89469a1f57255f97"
+    }
+  ],
+  "note": "Actual bytes are compiled selected programs with their recorded calibration banks and4096-byte stack allowance. Original-bank and matrix-only totals are arithmetic estimates; they do not certify full-bank placement, routing-context overhead or full-stage SRAM."
+}

@@ -1,0 +1,26 @@
+{
+  "passed": true,
+  "tests": 37,
+  "suites": {
+    "test_gdn*.py": 17,
+    "test_resident_gdn*.py": 12,
+    "test_frontend_admission.py": 2,
+    "test_artifact_profile.py": 6
+  },
+  "failures": 0,
+  "errors": 0,
+  "source_hashes": {
+    "runtime/gdn_bridge.cslpart": "057b164fa104043d001e46eb208f0b4d622e64a64bbb545113332eff27c989e0",
+    "spatial/resident_gdn_bridge.py": "7e000ed0eff65e97be979d0f23bb5730e46c91a294999f23963db2f02df467d9",
+    "spatial/resident_gdn_bridge_routes.py": "1f60c54da755a85e0f2642427155257fdc518fa7e01cc83c3b360ff4be1db138",
+    "tools/build_resident_bridge_stage.py": "a7f3263bd331c87696144f5b6a9eb648b9d1e8c9ac56f5978438c76e20f52e8b",
+    "tools/stage_layer_mlp_compile.py": "63415bf6a27c0ef684bd674d9c055096f01ad58b1317be0de41eb3d0d0653174",
+    "tools/stage_gdn_bridge_sim.py": "3ea3354d08c84e6ae8ec88f95e4235c181aa17a387f25a54a6cb91ca67c7b972",
+    "tools/collect_operator.py": "7cc821835a8545e12190a73ec04a59f8c1886362a2e70c3499e16664029b5d90",
+    "tools/audit_gdn_bridge_smoke.py": "6ba06b96f83db69d0b33d2d62a0285d0fc0e17e8b1941877bf9d77cad32bdb92",
+    "probes/gdn_bridge/source.csl": "5272d23242de53b48eed92e9bbcf41fd55041fb251f1fce5e2a4764e176a9351",
+    "probes/gdn_bridge/sink.csl": "7b14ad9615b8c58fde462cb55b2d0cb35d4b569ce2b28b6289841484c79ee024",
+    "probes/gdn_bridge/run.py": "db861afb7bc254b80addcaf57768dd6569b7507fcacbb05825ca01be05db4319"
+  },
+  "scope": "Original bank/address and independent emitted route checks plus retained regressions; runtime qualification is separate frozen simulator evidence."
+}

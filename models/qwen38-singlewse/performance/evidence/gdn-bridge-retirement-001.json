@@ -1,0 +1,632 @@
+{
+  "passed": true,
+  "scope": "Frozen diagnostic sequence and successful synthetic retirement qualification; not original neural or hardware execution.",
+  "attempts": [
+    {
+      "attempt": "gdn-bridge-sim-001",
+      "source_manifest_sha256": "fd50d7c6cd3e8dd9b2bb6331b63a28c0a649a87c2a50cd7c14fffb2433804a42",
+      "released": true,
+      "FAILURE.json": {
+        "error": "RuntimeError",
+        "message": "run exit 139"
+      },
+      "run.log_sha256": "bb8549b4f7040315ee3554c821d138b32a1ef0b86ba81713a0bc1d10ba8d1c8d",
+      "sim.log_sha256": "c294171e7b8e67f75cb9096ec3f42f62a6a52ded507c319f470169b39eed8078",
+      "device_events": [
+        "@75073 Caught signal 11",
+        "@75073 Caught signal 11"
+      ],
+      "host_tail": [
+        "\u001b[34m[INFO]\u001b[0m === Calling container-hosted python ===",
+        "\u001b[34m[INFO]\u001b[0m Using SIF: /opt/cerebras/sdk/2.10.1/sdk-cbcore-2.10.1-sdk-202606181328-8faf87a26e.sif",
+        "terminate called after throwing an instance of 'std::runtime_error'",
+        "  what():  the received length (0 bytes) is not expected (32 bytes), could be a kernel stall ",
+        ""
+      ]
+    },
+    {
+      "attempt": "gdn-bridge-sim-002",
+      "source_manifest_sha256": "ae8e63765a3716863a57fbf69ca1ea3a2e0d7e70a436bad90adc018da81e2515",
+      "released": true,
+      "FAILURE.json": {
+        "error": "RuntimeError",
+        "message": "run exit 1"
+      },
+      "run.log_sha256": "a45d7095172cab944a20e0635572599751db4f831c8f84b814a5833d79e0609f",
+      "sim.log_sha256": "fa9866884aa4eb1f390759b60e3eacba5bfe5871b9661e018b6c01ada637294e",
+      "device_events": [
+        "@55031 Request to asynchronously stop simulation"
+      ],
+      "host_tail": [
+        "  File \"/srv/model-storage/qwen38-singlewse/runs/gdn-bridge-sim-002/run.py\", line 31, in <module>",
+        "    r.launch('bridge_inspect',nonblock=False);status=read('bridge_status',1,8)",
+        "                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^",
+        "  File \"/srv/model-storage/qwen38-singlewse/runs/gdn-bridge-sim-002/run.py\", line 15, in read",
+        "    phase('read',name=name,x=x,words=n)",
+        "TypeError: phase() got multiple values for argument 'name'"
+      ]
+    },
+    {
+      "attempt": "gdn-bridge-sim-003",
+      "source_manifest_sha256": "d5c93195cc5db77ab954088dbc608885be4debd86a4aa355996e5eb3ebee9eff",
+      "released": true,
+      "FAILURE.json": {
+        "error": "RuntimeError",
+        "message": "run exit 139"
+      },
+      "run.log_sha256": "ce047223d46a95724acd304a5e79de0b35a50d74c7e40cf4c83f27ced8377da0",
+      "sim.log_sha256": "8730278859f721d81fd5f190bef8b6655cf858f7c5673ac7796734ecf1308c1f",
+      "device_events": [
+        "@75128 Caught signal 11",
+        "@75128 Caught signal 11"
+      ],
+      "host_tail": [
+        "{\"phase\": \"wait_returned\", \"token\": 1}",
+        "{\"phase\": \"inspect\", \"token\": 1}",
+        "{\"phase\": \"read\", \"name\": \"bridge_status\", \"x\": 1, \"words\": 8}",
+        "terminate called after throwing an instance of 'std::runtime_error'",
+        "  what():  the received length (0 bytes) is not expected (32 bytes), could be a kernel stall ",
+        ""
+      ]
+    },
+    {
+      "attempt": "gdn-bridge-sim-004",
+      "source_manifest_sha256": "133e7cdf8f13b7b231f7e512e1314e8bd8bfbef9a2fcd853b30f917641820469",
+      "released": true,
+      "FAILURE.json": {
+        "error": "RuntimeError",
+        "message": "run exit 139"
+      },
+      "run.log_sha256": "ff652ff7fec0764e266a2ac109a1f41ca695fb1a6995041ea9f658b853eccce9",
+      "sim.log_sha256": "09d05c0d4105e555a4212bf518007c144294c8f4ba8487c8800e64145f095f1e",
+      "device_events": [
+        "@86220 Caught signal 11",
+        "@86220 Caught signal 11"
+      ],
+      "host_tail": [
+        "{\"phase\": \"wait_returned\", \"token\": 1}",
+        "{\"phase\": \"inspect\", \"token\": 1}",
+        "{\"phase\": \"read\", \"name\": \"bridge_status\", \"x\": 1, \"words\": 8}",
+        "terminate called after throwing an instance of 'std::runtime_error'",
+        "  what():  the received length (0 bytes) is not expected (32 bytes), could be a kernel stall ",
+        ""
+      ]
+    },
+    {
+      "attempt": "gdn-bridge-sim-005",
+      "source_manifest_sha256": "dd87b85b4b0ec189704293832ae55b9cc1c8d72b6f0b928bb7df4f03f8f992c6",
+      "released": true,
+      "FAILURE.json": {
+        "error": "RuntimeError",
+        "message": "run exit 139"
+      },
+      "run.log_sha256": "ff652ff7fec0764e266a2ac109a1f41ca695fb1a6995041ea9f658b853eccce9",
+      "sim.log_sha256": "4d504b059f185806ac6f2845fb145eb64aa700040e162aaf6de353fe0bbc2b0c",
+      "device_events": [
+        "@85229 Caught signal 11",
+        "@85229 Caught signal 11"
+      ],
+      "host_tail": [
+        "{\"phase\": \"wait_returned\", \"token\": 1}",
+        "{\"phase\": \"inspect\", \"token\": 1}",
+        "{\"phase\": \"read\", \"name\": \"bridge_status\", \"x\": 1, \"words\": 8}",
+        "terminate called after throwing an instance of 'std::runtime_error'",
+        "  what():  the received length (0 bytes) is not expected (32 bytes), could be a kernel stall ",
+        ""
+      ]
+    },
+    {
+      "attempt": "gdn-bridge-sim-006",
+      "source_manifest_sha256": "029431e1e1b704014154b2e2a7df407e4aa3c3c940eed18f52200f46d6c1fbd0",
+      "released": true,
+      "FAILURE.json": {
+        "error": "RuntimeError",
+        "message": "run exit 134"
+      },
+      "run.log_sha256": "b6b33c827ddc948b24cb908f498551358911e7c261f755e7976f2d5b65895695",
+      "sim.log_sha256": "5241a6eb40ea07a19373d7f43dffb979c2347cd60381c947ac5fb71e910e4f31",
+      "device_events": [],
+      "host_tail": [
+        "{\"phase\": \"wait_returned\", \"token\": 1}",
+        "{\"phase\": \"read\", \"name\": \"probe_audit\", \"x\": 0, \"words\": 8}",
+        "terminate called after throwing an instance of 'std::runtime_error'",
+        "  what():  the received length (0 bytes) is not expected (32 bytes), could be a kernel stall ",
+        "",
+        "*** stack smashing detected ***: terminated"
+      ]
+    },
+    {
+      "attempt": "gdn-bridge-sim-007",
+      "source_manifest_sha256": "76791fed64c24f91a8459d62f128f73389bb484dd021df24b5a442b43771d20e",
+      "released": true,
+      "FAILURE.json": {
+        "error": "RuntimeError",
+        "message": "run exit 139"
+      },
+      "run.log_sha256": "2b30231ca16a5a1bc6fc4916815e69d80c714e363ae3be81bfc342ae887490f5",
+      "sim.log_sha256": "0e136ab842cbb76d515a6e13fc366b8a3833ac1a3a5076616711b3a10a19eab5",
+      "device_events": [
+        "@22432 source wait",
+        "@64035 sink completed",
+        "@86319 Caught signal 11",
+        "@86319 Caught signal 11"
+      ],
+      "host_tail": [
+        "{\"phase\": \"wait\", \"token\": 1}",
+        "{\"phase\": \"wait_returned\", \"token\": 1}",
+        "{\"phase\": \"read\", \"name\": \"probe_audit\", \"x\": 0, \"words\": 8}",
+        "terminate called after throwing an instance of 'std::runtime_error'",
+        "  what():  the received length (0 bytes) is not expected (32 bytes), could be a kernel stall ",
+        ""
+      ]
+    },
+    {
+      "attempt": "gdn-bridge-sim-008",
+      "source_manifest_sha256": "a959735a4dd6e515b58b5cc99f536a0a85facd11000b0968cf8fd12484fc5122",
+      "released": true,
+      "FAILURE.json": {
+        "error": "RuntimeError",
+        "message": "run exit 139"
+      },
+      "run.log_sha256": "2b30231ca16a5a1bc6fc4916815e69d80c714e363ae3be81bfc342ae887490f5",
+      "sim.log_sha256": "d672475ac7fbab5a529581bb73ae94adad2dd2a87549e0c0a190558a9c69d8fd",
+      "device_events": [
+        "@22561 source wait",
+        "@22947 bridge chunk 1",
+        "@23462 bridge chunk 2",
+        "@23882 bridge chunk 3",
+        "@24709 bridge marker 1",
+        "@25374 bridge marker 2",
+        "@26275 bridge marker 3",
+        "@27315 bridge marker 4",
+        "@28355 bridge marker 5",
+        "@29395 bridge marker 6",
+        "@30435 bridge marker 7",
+        "@31475 bridge marker 8",
+        "@32515 bridge marker 9",
+        "@33555 bridge marker 10",
+        "@34595 bridge marker 11",
+        "@35635 bridge marker 12",
+        "@36067 bridge chunk 4",
+        "@36636 bridge chunk 5",
+        "@36745 bridge marker 13",
+        "@37180 bridge chunk 6",
+        "@37855 bridge marker 14",
+        "@38873 bridge marker 15",
+        "@39913 bridge marker 16",
+        "@40953 bridge marker 17",
+        "@41993 bridge marker 18",
+        "@43033 bridge marker 19",
+        "@44073 bridge marker 20",
+        "@45113 bridge marker 21",
+        "@46153 bridge marker 22",
+        "@47193 bridge marker 23",
+        "@48233 bridge marker 24",
+        "@49273 bridge marker 25",
+        "@50225 bridge chunk 7",
+        "@50334 bridge marker 26",
+        "@50825 bridge chunk 8",
+        "@51352 bridge chunk 9",
+        "@51641 bridge marker 27",
+        "@52522 bridge marker 28",
+        "@53582 bridge marker 29",
+        "@54642 bridge marker 30",
+        "@55702 bridge marker 31",
+        "@56762 bridge marker 32",
+        "@57822 bridge marker 33",
+        "@58882 bridge marker 34",
+        "@59942 bridge marker 35",
+        "@61002 bridge marker 36",
+        "@62062 bridge marker 37",
+        "@63122 bridge marker 38",
+        "@64182 bridge marker 39",
+        "@64253 sink completed",
+        "@65168 bridge all frames",
+        "@86345 Caught signal 11",
+        "@86345 Caught signal 11"
+      ],
+      "host_tail": [
+        "{\"phase\": \"wait\", \"token\": 1}",
+        "{\"phase\": \"wait_returned\", \"token\": 1}",
+        "{\"phase\": \"read\", \"name\": \"probe_audit\", \"x\": 0, \"words\": 8}",
+        "terminate called after throwing an instance of 'std::runtime_error'",
+        "  what():  the received length (0 bytes) is not expected (32 bytes), could be a kernel stall ",
+        ""
+      ]
+    },
+    {
+      "attempt": "gdn-bridge-sim-009",
+      "source_manifest_sha256": "6059dcdefef4676b017a1fba3e204db858b9456ad91a845738a6f6355794fcbc",
+      "released": true,
+      "FAILURE.json": {
+        "error": "RuntimeError",
+        "message": "run exit 139"
+      },
+      "run.log_sha256": "2b30231ca16a5a1bc6fc4916815e69d80c714e363ae3be81bfc342ae887490f5",
+      "sim.log_sha256": "2a14d99ee8714c261e23acb55789c566e6ac543083df36012ac11f1637d92d84",
+      "device_events": [
+        "@85749 Caught signal 11",
+        "@85749 Caught signal 11"
+      ],
+      "host_tail": [
+        "{\"phase\": \"wait\", \"token\": 1}",
+        "{\"phase\": \"wait_returned\", \"token\": 1}",
+        "{\"phase\": \"read\", \"name\": \"probe_audit\", \"x\": 0, \"words\": 8}",
+        "terminate called after throwing an instance of 'std::runtime_error'",
+        "  what():  the received length (0 bytes) is not expected (32 bytes), could be a kernel stall ",
+        ""
+      ]
+    },
+    {
+      "attempt": "gdn-bridge-sim-010",
+      "source_manifest_sha256": "5c500a6e23a016a3e10df46c5d59162561f027f6572b6aae8b7893f67f185471",
+      "released": true,
+      "COMPLETE.json": {
+        "passed": true,
+        "physical": false,
+        "neural_execution": false,
+        "seconds": 52.25800309423357
+      },
+      "result.json": {
+        "passed": true,
+        "normal_stop": true,
+        "physical": false,
+        "neural_execution": false,
+        "full_model": false,
+        "synthetic_wire": true,
+        "original_cohost": [
+          103,
+          60
+        ],
+        "original_bank_words": 7304,
+        "original_bank_extent_retained": true,
+        "bank_values_are_sentinels": true,
+        "invocations": [
+          {
+            "token": 1,
+            "source": [
+              1,
+              800,
+              40,
+              1,
+              519,
+              0,
+              0,
+              0
+            ],
+            "sink": [
+              1,
+              160,
+              3,
+              40,
+              0,
+              0,
+              0,
+              0
+            ],
+            "bridge": [
+              0,
+              0,
+              0,
+              9,
+              160,
+              40,
+              1,
+              1
+            ]
+          },
+          {
+            "token": 2,
+            "source": [
+              1,
+              800,
+              40,
+              1,
+              519,
+              0,
+              0,
+              0
+            ],
+            "sink": [
+              1,
+              160,
+              3,
+              40,
+              0,
+              0,
+              0,
+              0
+            ],
+            "bridge": [
+              0,
+              0,
+              0,
+              9,
+              160,
+              40,
+              2,
+              1
+            ]
+          },
+          {
+            "token": 99,
+            "source": [
+              1,
+              800,
+              40,
+              1,
+              519,
+              0,
+              0,
+              0
+            ],
+            "sink": [
+              1,
+              160,
+              3,
+              40,
+              0,
+              0,
+              0,
+              0
+            ],
+            "bridge": [
+              0,
+              0,
+              0,
+              9,
+              160,
+              40,
+              99,
+              1
+            ]
+          },
+          {
+            "token": 100,
+            "source": [
+              1,
+              800,
+              40,
+              1,
+              519,
+              0,
+              0,
+              0
+            ],
+            "sink": [
+              1,
+              160,
+              3,
+              40,
+              0,
+              0,
+              0,
+              0
+            ],
+            "bridge": [
+              0,
+              0,
+              0,
+              9,
+              160,
+              40,
+              100,
+              1
+            ]
+          }
+        ],
+        "exact_forward_words": 4644,
+        "exact_return_words": 3200,
+        "raw_markers_received": 160,
+        "weighted_markers_emitted": 4,
+        "early_reverse_transfer_in_every_invocation": true,
+        "local_callback_drained_every_invocation": true,
+        "capture_sha256": "61c62d8de19ad0abf11412eff804b806f781006620cffda7f2723b661a7e28e5"
+      },
+      "run.log_sha256": "078c935a5a2be0b27eef4c53eac2e5ed9dd100481858d71385d9629c03da2d90",
+      "sim.log_sha256": "d7324d92ade24ff56eb9e0406b86a329e22a42f2b487bc40df57f28b80c7cf20",
+      "device_events": [
+        "@2449549 Request to asynchronously stop simulation"
+      ],
+      "host_tail": [
+        "{\"phase\": \"read\", \"name\": \"received\", \"x\": 0, \"words\": 800}",
+        "{\"phase\": \"read\", \"name\": \"probe_audit\", \"x\": 0, \"words\": 8}",
+        "{\"phase\": \"read\", \"name\": \"probe_audit\", \"x\": 2, \"words\": 8}",
+        "{\"phase\": \"read\", \"name\": \"bank\", \"x\": 1, \"words\": 7304}",
+        "{\"phase\": \"capture\"}",
+        "{\"passed\": true, \"scope\": \"Synthetic bidirectional transport, not neural inference\"}"
+      ]
+    },
+    {
+      "attempt": "gdn-bridge-sim-011",
+      "source_manifest_sha256": "ba2092a12ce9c39e0e0a6fdb7859cb026a27443975daf478cd9c8b04db6cbd88",
+      "released": true,
+      "COMPLETE.json": {
+        "passed": true,
+        "physical": false,
+        "neural_execution": false,
+        "seconds": 41.34533124091104
+      },
+      "result.json": {
+        "passed": true,
+        "normal_stop": true,
+        "physical": false,
+        "neural_execution": false,
+        "full_model": false,
+        "synthetic_wire": true,
+        "original_cohost": [
+          109,
+          145
+        ],
+        "original_bank_words": 4419,
+        "original_bank_extent_retained": true,
+        "bank_values_are_sentinels": true,
+        "invocations": [
+          {
+            "token": 1,
+            "source": [
+              1,
+              820,
+              44,
+              1,
+              550,
+              0,
+              0,
+              0
+            ],
+            "sink": [
+              1,
+              164,
+              3,
+              44,
+              0,
+              0,
+              0,
+              0
+            ],
+            "bridge": [
+              0,
+              0,
+              0,
+              9,
+              164,
+              44,
+              1,
+              1
+            ]
+          },
+          {
+            "token": 2,
+            "source": [
+              1,
+              820,
+              44,
+              1,
+              550,
+              0,
+              0,
+              0
+            ],
+            "sink": [
+              1,
+              164,
+              3,
+              44,
+              0,
+              0,
+              0,
+              0
+            ],
+            "bridge": [
+              0,
+              0,
+              0,
+              9,
+              164,
+              44,
+              2,
+              1
+            ]
+          },
+          {
+            "token": 99,
+            "source": [
+              1,
+              820,
+              44,
+              1,
+              550,
+              0,
+              0,
+              0
+            ],
+            "sink": [
+              1,
+              164,
+              3,
+              44,
+              0,
+              0,
+              0,
+              0
+            ],
+            "bridge": [
+              0,
+              0,
+              0,
+              9,
+              164,
+              44,
+              99,
+              1
+            ]
+          },
+          {
+            "token": 100,
+            "source": [
+              1,
+              820,
+              44,
+              1,
+              550,
+              0,
+              0,
+              0
+            ],
+            "sink": [
+              1,
+              164,
+              3,
+              44,
+              0,
+              0,
+              0,
+              0
+            ],
+            "bridge": [
+              0,
+              0,
+              0,
+              9,
+              164,
+              44,
+              100,
+              1
+            ]
+          }
+        ],
+        "exact_forward_words": 4644,
+        "exact_return_words": 3280,
+        "raw_markers_received": 176,
+        "weighted_markers_emitted": 4,
+        "early_reverse_transfer_in_every_invocation": true,
+        "local_callback_drained_every_invocation": true,
+        "capture_sha256": "82374d8a67a89775d2a224ff1b762c37a48ee704e824b8814fbe8fca50623bca"
+      },
+      "run.log_sha256": "2f60320d65c256b0db0c04f773ba2f833061af2bc82800cc9ccddde4c50a1b08",
+      "sim.log_sha256": "775498dda3017b67637e2572e69db6858e94012d8aadadba4fa0ab8e66a56c06",
+      "device_events": [
+        "@1885644 Request to asynchronously stop simulation"
+      ],
+      "host_tail": [
+        "{\"phase\": \"read\", \"name\": \"received\", \"x\": 0, \"words\": 820}",
+        "{\"phase\": \"read\", \"name\": \"probe_audit\", \"x\": 0, \"words\": 8}",
+        "{\"phase\": \"read\", \"name\": \"probe_audit\", \"x\": 2, \"words\": 8}",
+        "{\"phase\": \"read\", \"name\": \"bank\", \"x\": 1, \"words\": 4419}",
+        "{\"phase\": \"capture\"}",
+        "{\"passed\": true, \"scope\": \"Synthetic bidirectional transport, not neural inference\"}"
+      ]
+    }
+  ],
+  "diagnosis": "The reverse input queue was blocked after the last data frame, preventing its final control marker. Trace008 observes9chunks/160frames/39markers. Keep queue open until data and marker join; the synthetic source requires the same fix for its weighted marker.",
+  "host_launch_return_is_not_device_completion": true,
+  "simulator_native_fault_root_cause_proven": false,
+  "rejected_microthread_change": "005 UT1->UT6 retains the failure; production remains UT1.",
+  "original_bridge_source": "layer-backend-compile-042",
+  "corrected_bridge_source": "layer-backend-compile-043",
+  "accepted_simulators": [
+    "gdn-bridge-sim-010",
+    "gdn-bridge-sim-011"
+  ],
+  "new_wse_jobs": 0
+}

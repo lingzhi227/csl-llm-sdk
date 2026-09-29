@@ -1,0 +1,190 @@
+param control_reply_rx:direction;param control_reply_tx:direction;
+// Preserve the original mixer/state resident bank in this MLP-only component.
+// No mixer operation is executed; it is not a full-layer acceptance artifact.
+param memcpy_params;param bank_words:u16;
+const sys=@import_module("device_control.csl",.{.command_task=@get_local_task_id(24),.routed=true,.reply_rx=control_reply_rx,.reply_tx=control_reply_tx,.forward_host_commands=true});
+var bank=@zeros([if(bank_words>0) bank_words else 1]u32);var audit=@zeros([4]u32);var setup=@zeros([5]u16);
+const bp:[*]u32=&bank;const ap:[*]u32=&audit;const sp:[*]u16=&setup;
+fn arm(epoch:u32) void {@assert(mixer.drained() and mixer_status[2]==0);audit[0]=epoch;sys.unblock_cmd_stream();}
+fn start() void {sys.unblock_cmd_stream();}
+fn finish() void {sys.unblock_cmd_stream();}
+comptime {}
+
+// Composition port: the future conv/gate/residual consumer receives this local
+// root notification. Until connected, root data stays leased for explicit
+// consume; no synthetic neural result or fake automatic completion is emitted.
+param mixer_rank_parity:u16;param mixer_input48_queue:u16;param mixer_can_root:bool;
+const mrt=@get_local_task_id(25);const mdt=@get_local_task_id(26);
+const mixer=@import_module("mixer_projection.csl",.{.rank_parity=mixer_rank_parity,.bank_words=bank_words,
+ .input48_queue=mixer_input48_queue,.can_root=mixer_can_root,.root_ready_task=mrt,.drained_task=mdt});
+var mixer_status=@zeros([4]u32);const msp:[*]u32=&mixer_status;
+const msetup:[*]u16=mixer.setup_pointer;const maudit:[*]u32=mixer.audit_pointer;
+const mout:[*]u32=mixer.root_output;
+task mixer_root_ready() void {
+ @assert(mixer_status[2]==0);mixer_status[0]=mout[0];mixer_status[1]=mout[1];mixer_status[2]=1;
+}
+task mixer_drained() void {mixer_status[3]+=1;}
+fn mixer_begin(request:u32,generation:u32,projection:u16) void {
+ 
+ @assert(mixer_status[2]==0);mixer.begin(bp,request,generation,projection);sys.unblock_cmd_stream();
+}
+fn mixer_consume(generation:u32,row:u16) void {
+ @assert(mixer_status[2]==1);mixer_status[2]=0;mixer.root_consumed(generation,row);sys.unblock_cmd_stream();
+}
+comptime {
+ @bind_local_task(mixer_root_ready,mrt);@bind_local_task(mixer_drained,mdt);
+ 
+ 
+ 
+}
+
+// Segment IDs are a device ABI, never arbitrary host-provided pointers.
+const device_task=@get_local_task_id(24);
+fn device_transfer() void {
+ const c=sys.command;const segment=c[2];
+ @assert(c[4]>0 and c[4]<=256 and c[3]<65536 and c[3]+c[4]<65536);
+ const first=@as(u16,c[3]);const length=@as(u16,c[4]);
+ var pointer:[*]u32=bp;var half:[*]u16=msetup;var extent:u16=0;var bits:u16=32;var writable:bool=false;
+ if(segment==0){pointer=bp;extent=bank_words;writable=true;}
+ else if(segment==1){half=msetup;extent=46;bits=16;writable=true;}
+ else if(segment==2){pointer=maudit;extent=6;}
+ else if(segment==3){pointer=msp;extent=4;}
+ else if(segment==4){pointer=mout;extent=5;}
+ else if(segment==8){pointer=ap;extent=4;}
+ else{@assert(false);}
+ @assert(first+length<=extent);
+ if(c[1]==0){
+  @assert(writable and mixer.drained() and mixer_status[2]==0);
+  if(bits==32){sys.write32(@ptrcast([*]u32,&pointer[@as(u16,first)]),@as(u16,length));}
+  else{sys.write16(@ptrcast([*]u16,&half[@as(u16,first)]),@as(u16,length));}
+ }else{
+  @assert(c[1]==1);
+  if(bits==32){sys.read32(@ptrcast([*]u32,&pointer[@as(u16,first)]),@as(u16,length));}
+  else{if(comptime sys.routed){@assert(first%2==0 and length%2==0);}sys.read16(@ptrcast([*]u16,&half[first]),length);}
+ }
+}
+task device_command() void {
+ const c=sys.command;
+ if(c[1]<2){device_transfer();}
+ else if(c[1]==2){arm(c[2]);}
+ else if(c[1]==3){start();}
+ else if(c[1]==4){finish();}
+ else if(c[1]==5){@assert(c[4]<5);mixer_begin(c[2],c[3],@as(u16,c[4]));}
+ else if(c[1]==6){@assert(c[3]<65536);mixer_consume(c[2],@as(u16,c[3]));}
+ else{@assert(false);}
+}
+comptime {@bind_local_task(device_command,device_task);}
+// A bounded color-domain translator. Forward and reverse leases are disjoint.
+// Forward129-word chunks preserve the387-word/head wire; reverse five-word
+// frames retain exact bits. One weighted terminal marker covers the child chain.
+param bridge_group:u16;param bridge_frames:u16;param bridge_workers:u16;
+param bridge_input:u16;param bridge_output:u16;
+param bridge_return_input:u16;param bridge_return_output:u16;
+param bridge_forward_queue:u16;param bridge_reverse_queue:u16;
+const bridge_control=@import_module("<control>");
+const bridge_fiq=@get_input_queue(bridge_forward_queue);
+const bridge_riq=@get_input_queue(bridge_reverse_queue);
+const bridge_foq=@get_output_queue(6);const bridge_roq=@get_output_queue(7);
+const bridge_fs=@get_dsr(dsr_src0,5);const bridge_fd=@get_dsr(dsr_dest,5);
+const bridge_rs=@get_dsr(dsr_src0,4);const bridge_rd=@get_dsr(dsr_dest,4);
+const bridge_ft=@get_local_task_id(10);const bridge_rt=@get_local_task_id(18);
+const bridge_fdt=@get_data_task_id(bridge_fiq);const bridge_rdt=@get_data_task_id(bridge_riq);
+const bridge_mt=@get_control_task_id(40);
+const bridge_weighted_mt=@get_control_task_id(41);
+var bridge_forward=@zeros([129]u32);var bridge_reverse=@zeros([5]u32);
+var bridge_status=@zeros([8]u32);const bridge_status_pointer:[*]u32=&bridge_status;
+var bridge_active:bool=false;var bridge_fp:u16=0;var bridge_rp:u16=0;
+var bridge_chunks:u16=0;var bridge_sent:u16=0;var bridge_markers:u16=0;
+var bridge_token:u32=0;
+fn bridge_idle() bool {return !bridge_active and bridge_fp==0 and bridge_rp==0;}
+fn bridge_arm() void {
+ @assert(bridge_idle());@assert(mixer.drained() and mixer_status[2]==0);
+ bridge_active=true;bridge_chunks=0;bridge_sent=0;bridge_markers=0;
+ for(@range(u16,8))|i|{bridge_status[i]=0;}
+ @unblock(bridge_fdt);@unblock(bridge_rdt);sys.unblock_cmd_stream();
+}
+fn bridge_inspect() void {
+ bridge_status[0]=@as(u32,bridge_active);bridge_status[1]=@as(u32,bridge_fp);
+ bridge_status[2]=@as(u32,bridge_rp);bridge_status[3]=@as(u32,bridge_chunks);
+ bridge_status[4]=@as(u32,bridge_sent);bridge_status[5]=@as(u32,bridge_markers);
+ bridge_status[6]=bridge_token;sys.unblock_cmd_stream();
+}
+fn bridge_finish_if_ready() void {
+ if(bridge_chunks!=9 or bridge_fp!=0 or bridge_rp!=0 or
+    bridge_sent!=bridge_frames or bridge_markers!=bridge_workers){return;}
+ // Every data DMA has finished. The marker still owns its source until callback.
+ @assert(bridge_active);bridge_rp=3;
+ bridge_reverse[0]=bridge_control.encode_single_payload(bridge_control.opcode.NOP,false,bridge_weighted_mt,bridge_workers);
+ const m=@get_dsd(mem1d_dsd,.{.base_address=&bridge_reverse,.extent=1});
+ const f=@get_dsd(fabout_dsd,.{.output_queue=bridge_roq,.extent=1,.control=true});
+ @load_to_dsr(bridge_rs,m);
+ @load_to_dsr(bridge_rd,f,.{.async=true,.ut_id=@get_ut_id(1),.activate=bridge_rt});
+ @mov32(bridge_rd,bridge_rs,.{.async=true});
+}
+task bridge_forward_start(value:u32) void {
+ @assert(bridge_active and bridge_fp==0 and bridge_chunks<9);
+ @block(bridge_fdt);bridge_forward[0]=value;bridge_fp=1;
+ if(bridge_chunks%3==0){
+  if(bridge_chunks==0){bridge_token=value;}else{@assert(value==bridge_token);}
+ }
+ const m=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]u32,&bridge_forward[1]),.extent=128});
+ const f=@get_dsd(fabin_dsd,.{.input_queue=bridge_fiq,.extent=128});
+ @load_to_dsr(bridge_fd,m);
+ @load_to_dsr(bridge_fs,f,.{.async=true,.ut_id=@get_ut_id(7),.activate=bridge_ft});
+ @mov32(bridge_fd,bridge_fs,.{.async=true});
+}
+task bridge_forward_done() void {
+ if(bridge_fp==1){
+  bridge_fp=2;
+  const m=@get_dsd(mem1d_dsd,.{.base_address=&bridge_forward,.extent=129});
+  const f=@get_dsd(fabout_dsd,.{.output_queue=bridge_foq,.extent=129});
+  @load_to_dsr(bridge_fs,m);
+  @load_to_dsr(bridge_fd,f,.{.async=true,.ut_id=@get_ut_id(7),.activate=bridge_ft});
+  @mov32(bridge_fd,bridge_fs,.{.async=true});
+ }else{
+  @assert(bridge_fp==2);bridge_fp=0;bridge_chunks+=1;
+  if(bridge_chunks<9){@unblock(bridge_fdt);}bridge_finish_if_ready();
+ }
+}
+task bridge_reverse_start(value:u32) void {
+ @assert(bridge_active and bridge_rp==0 and bridge_sent<bridge_frames);
+ @block(bridge_rdt);bridge_reverse[0]=value;bridge_rp=1;
+ const m=@get_dsd(mem1d_dsd,.{.base_address=@ptrcast([*]u32,&bridge_reverse[1]),.extent=4});
+ const f=@get_dsd(fabin_dsd,.{.input_queue=bridge_riq,.extent=4});
+ @load_to_dsr(bridge_rd,m);
+ @load_to_dsr(bridge_rs,f,.{.async=true,.ut_id=@get_ut_id(1),.activate=bridge_rt});
+ @mov32(bridge_rd,bridge_rs,.{.async=true});
+}
+task bridge_reverse_done() void {
+ if(bridge_rp==1){
+  @assert(bridge_reverse[0]==bridge_token and bridge_reverse[2]==2 and bridge_reverse[4]==5);
+  @assert(bridge_reverse[1]>=@as(u32,bridge_group)*384 and bridge_reverse[1]<@as(u32,bridge_group+1)*384 and bridge_reverse[1]%2==0);
+  bridge_rp=2;
+  const m=@get_dsd(mem1d_dsd,.{.base_address=&bridge_reverse,.extent=5});
+  const f=@get_dsd(fabout_dsd,.{.output_queue=bridge_roq,.extent=5});
+  @load_to_dsr(bridge_rs,m);
+  @load_to_dsr(bridge_rd,f,.{.async=true,.ut_id=@get_ut_id(1),.activate=bridge_rt});
+  @mov32(bridge_rd,bridge_rs,.{.async=true});
+ }else if(bridge_rp==2){
+  bridge_rp=0;bridge_sent+=1;
+  if(bridge_sent<bridge_frames){@unblock(bridge_rdt);}bridge_finish_if_ready();
+ }else{
+  @assert(bridge_rp==3 and bridge_chunks==9 and bridge_sent==bridge_frames and bridge_markers==bridge_workers);
+  bridge_rp=0;bridge_active=false;bridge_status[7]+=1;
+ }
+}
+task bridge_marker() void {
+ @assert(bridge_active and bridge_markers<bridge_workers);
+ bridge_markers+=1;bridge_finish_if_ready();
+}
+comptime {
+ @comptime_assert(bridge_group<16 and bridge_frames>0 and bridge_frames<=192 and bridge_workers>0);
+ @initialize_queue(bridge_fiq,.{.color=@get_color(bridge_input)});
+ @initialize_queue(bridge_riq,.{.color=@get_color(bridge_return_input)});
+ @initialize_queue(bridge_foq,.{.color=@get_color(bridge_output)});
+ @initialize_queue(bridge_roq,.{.color=@get_color(bridge_return_output)});
+ @bind_data_task(bridge_forward_start,bridge_fdt);@bind_data_task(bridge_reverse_start,bridge_rdt);
+ @bind_local_task(bridge_forward_done,bridge_ft);@bind_local_task(bridge_reverse_done,bridge_rt);
+ @bind_control_task(bridge_marker,bridge_mt);@block(bridge_fdt);@block(bridge_rdt);
+ @export_symbol(bridge_arm);@export_symbol(bridge_inspect);@export_symbol(bridge_status_pointer,"bridge_status");
+}

@@ -1,0 +1,132 @@
+// One original Q/K head and its three V heads, driven by projected row arrival.
+// Range-checked local indices retain an explicit mask to avoid a target
+// unsigned address-fold relocation overflow at high semantic wire indices.
+// No replicated Q/K convolution state:16 actors own all10240 original channels.
+// Cached weights are exact BF16 source slices; history is the authoritative
+// three-sample conversation state. Temporary packet/output leases are separate.
+param group:u16;param ready_task:local_task_id;param output_task:local_task_id;
+const qwen=@import_module("qwen_math.csl");const math=@import_module("<math>");
+var weights=@zeros([2560]u16);var history=@zeros([1920]u16);
+var gains=@zeros([128]u16);var gate_parameters=@zeros([6]u16);
+var values=@zeros([256]f32);var v_values=@zeros([384]u16);var z=@zeros([384]u16);var output=@zeros([384]u16);
+var gates=@zeros([6]f32);var raw_gates=@zeros([6]u16);
+var qkv_seen=@zeros([10]u32);var z_seen=@zeros([6]u32);var core_seen=@zeros([6]u32);
+var counts=@zeros([5]u16);var audit=@zeros([8]u32);
+var packet=@zeros([387]u32);
+var invocation:u32=0;var active:bool=false;var packet_busy:bool=false;
+var gate_seen:u16=0;var notified:u16=0;var consumed:u16=0;var completed:u16=0;var retired:u16=0;
+var packet_head:u16=0;
+const wp:[*]u16=&weights;const hp:[*]u16=&history;const gp:[*]u16=&gains;
+const pp:[*]u16=&gate_parameters;const vp:[*]f32=&values;const zp:[*]u16=&z;
+const vvp:[*]u16=&v_values;const op:[*]u16=&output;const ap:[*]u32=&audit;const packet_pointer:[*]u32=&packet;
+
+fn drained() bool {return !active and !packet_busy;}
+fn reset() void {
+ @assert(drained());for(@range(u16,1920))|i|{history[i]=0;}
+ invocation=0;for(@range(u16,8))|i|{audit[i]=0;}
+}
+fn begin(token:u32) void {
+ @assert(drained() and token>invocation);invocation=token;active=true;
+ gate_seen=0;notified=0;consumed=0;completed=0;retired=0;
+ for(@range(u16,10))|i|{qkv_seen[i]=0;}
+ for(@range(u16,6))|i|{z_seen[i]=0;core_seen[i]=0;}
+ for(@range(u16,5))|i|{counts[i]=0;}
+ for(@range(u16,8))|i|{audit[i]=0;}audit[0]=token;
+}
+fn normalize(head:u16) void {
+ const first:u16=head*128;var square:f32=0.0;
+ for(@range(u16,128))|i|{const x=values[first+i];square+=x*x;}
+ const inverse:f32=1.0/math.sqrt_f32(square+0.000001);
+ for(@range(u16,128))|i|{
+  values[first+i]*=inverse;
+  if(head==0){values[first+i]/=11.313708498984761;}
+ }
+}
+fn convolve(channel:u16,value:u16) void {
+ const h:u16=3*channel;const w:u16=4*channel;
+ var sum:f32=0.0;
+ for(@range(u16,3))|i|{sum+=qwen.expand(history[h+i])*qwen.expand(weights[w+i]);}
+ sum+=qwen.expand(value)*qwen.expand(weights[w+3]);
+ history[h]=history[h+1];history[h+1]=history[h+2];history[h+2]=value;
+ const rounded=qwen.round(sum);const activated=qwen.round(qwen.silu(qwen.expand(rounded)));
+ if(channel<256){values[channel]=qwen.expand(activated);}else{v_values[channel-256]=activated;}
+}
+fn maybe_ready() void {
+ if(counts[0]!=64 or counts[1]!=64){return;}
+ for(@range(u16,3))|head|{
+  const bit:u16=@as(u16,1)<<head;const gate_mask:u16=bit|(bit<<3);
+  if(counts[head+2]==64 and (gate_seen&gate_mask)==gate_mask and (notified&bit)==0){
+   const a=qwen.expand(raw_gates[head]);const b=qwen.expand(raw_gates[head+3]);
+   const decay:f32=-qwen.exp_f32(qwen.expand(gate_parameters[head]))*qwen.softplus(a+qwen.expand(gate_parameters[head+3]));
+   gates[head]=qwen.exp_f32(decay);gates[head+3]=qwen.expand(qwen.round(qwen.sigmoid(b)));
+   notified|=bit;audit[4]+=1;@activate(ready_task);
+  }
+ }
+}
+fn maybe_finish(head:u16) void {
+ const bit:u16=@as(u16,1)<<head;if((completed&bit)!=0){return;}
+ for(@range(u16,2))|i|{if(z_seen[2*head+i]!=4294967295 or core_seen[2*head+i]!=4294967295){return;}}
+ @assert((consumed&bit)!=0);const start:u16=128*head;
+ // The whole core head has arrived. RMS first reads its full sum, then writes
+ // each element in place, so the raw core buffer can become the gated output.
+ const core=@ptrcast([*]u16,&output[start]);qwen.gated_rmsnorm(core,gp,@ptrcast([*]u16,&z[start]),core);
+ completed|=bit;audit[6]+=1;@activate(output_task);
+}
+fn accept(token:u32,index:u16,first:u16,second:u16) void {
+ // Wire indices: QKV0..10239,Z10240..16383,A16384..16431,B16432..16479,
+ // BF16 recurrent-core results16480..22623. Only real GDN producers may supply
+ // the last range in complete-stage qualification.
+ @assert(active and token==invocation and index<22624);audit[1]+=1;
+ if(index<10240){
+  @assert(index%2==0);var local:u16=0;
+  if(index<2048){const start:u16=group*128;@assert(index>=start and index<start+128);local=(index-start)&127;}
+  else if(index<4096){const start:u16=2048+group*128;@assert(index>=start and index<start+128);local=128+((index-start)&127);}
+  else{const start:u16=4096+group*384;@assert(index>=start and index<start+384);local=256+((index-start)&511);}
+  const pair:u16=local/2;const word:u16=pair/32;const bit:u32=@as(u32,1)<<(pair%32);
+  @assert((qkv_seen[word]&bit)==0);qkv_seen[word]|=bit;
+  convolve(local,first);convolve(local+1,second);audit[2]+=1;
+  const head:u16=local/128;counts[head]+=1;
+  if(head<2 and counts[head]==64){normalize(head);}
+  maybe_ready();
+ }else if(index<16384){
+  const row:u16=index-10240;const start:u16=group*384;@assert(row%2==0 and row>=start and row<start+384);
+  const local:u16=(row-start)&511;const pair:u16=local/2;const word:u16=pair/32;const bit:u32=@as(u32,1)<<(pair%32);
+  @assert((z_seen[word]&bit)==0);z_seen[word]|=bit;z[local]=first;z[local+1]=second;audit[3]+=1;maybe_finish(local/128);
+ }else if(index<16480){
+  @assert(second==0);const matrix:u16=(index-16384)/48;const row:u16=(index-16384)%48;
+  @assert(matrix<2 and row>=group*3 and row<group*3+3);const slot:u16=matrix*3+row-group*3;const bit:u16=@as(u16,1)<<slot;
+  @assert((gate_seen&bit)==0);gate_seen|=bit;raw_gates[slot]=first;maybe_ready();
+ }else{
+  const row:u16=index-16480;const start:u16=group*384;@assert(row%2==0 and row>=start and row<start+384);
+  const local:u16=(row-start)&511;const head:u16=local/128;@assert((consumed&(@as(u16,1)<<head))!=0);
+  const pair:u16=local/2;const word:u16=pair/32;const bit:u32=@as(u32,1)<<(pair%32);
+  @assert((core_seen[word]&bit)==0);core_seen[word]|=bit;output[local]=first;output[local+1]=second;maybe_finish(head);
+ }
+}
+fn prepare(head:u16) void {
+ @assert(active and head<3 and !packet_busy);const bit:u16=@as(u16,1)<<head;
+ @assert((notified&bit)!=0 and (consumed&bit)==0);packet_busy=true;packet_head=head;packet[0]=invocation;
+ for(@range(u16,128))|i|{
+  packet[259+i]=@bitcast(u32,values[i]);packet[131+i]=@bitcast(u32,values[128+i]);
+  packet[3+i]=@bitcast(u32,qwen.expand(v_values[128*head+i]));
+ }
+ packet[1]=@bitcast(u32,gates[head]);packet[2]=@bitcast(u32,gates[head+3]);
+}
+fn packet_launched(token:u32,head:u16) void {
+ @assert(active and packet_busy and token==invocation and head==packet_head);
+ const bit:u16=@as(u16,1)<<head;@assert((consumed&bit)==0);
+ consumed|=bit;audit[5]+=1;
+}
+fn maybe_retire() void {
+ if(retired==7 and !packet_busy){@assert(audit[1]==710 and consumed==7);active=false;audit[7]=1;}
+}
+fn packet_consumed(token:u32,head:u16) void {
+ @assert(active and packet_busy and token==invocation and head==packet_head);
+ @assert((consumed&(@as(u16,1)<<head))!=0);packet_busy=false;maybe_retire();
+}
+fn output_consumed(token:u32,head:u16) void {
+ @assert(active and token==invocation and head<3);const bit:u16=@as(u16,1)<<head;
+ @assert((completed&bit)!=0 and (retired&bit)==0);retired|=bit;
+ maybe_retire();
+}
+comptime {@comptime_assert(group<16);}

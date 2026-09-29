@@ -3,7 +3,7 @@ import argparse,base64,hashlib,json,re,shlex,subprocess
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 p=argparse.ArgumentParser();p.add_argument('name');a=p.parse_args()
-if not re.fullmatch('(fp8-(native|tile-fast|bank|encoder)|regional-(gemv|bank)|spatial-quant|contraction|mixed-bank|epoch-bank|gdn-bank|gdn-columns|gdn-fusion|route-epoch|filtered-bank|coupled-bank|full-bf16-matrix|native-shapes|retiled-matrix|compact-projection|mlp-fusion|mlp-chunk|mixer-ingress|mixer-frontend|device-control|device-network)-(sim|hw)-[0-9]{3}|retiled-comparison-audit-[0-9]{3}|mlp-(integrated|full)-compile-[0-9]{3}|layer-(backend-compile|projection-compile|mlp-compile|mlp-hw|mixer-hw|mlp-reference|joint-reference|dialogue-reference|frontend-reference|mixer-reference|mixer-payload|silu-oracle|weight-audit)-[0-9]{3}',a.name):raise ValueError('name')
+if not re.fullmatch('(fp8-(native|tile-fast|bank|encoder)|regional-(gemv|bank)|spatial-quant|contraction|mixed-bank|epoch-bank|gdn-bank|gdn-columns|gdn-fusion|gdn-bridge|route-epoch|filtered-bank|coupled-bank|full-bf16-matrix|native-shapes|retiled-matrix|compact-projection|mlp-fusion|mlp-chunk|mixer-ingress|mixer-frontend|device-control|device-network)-(sim|hw)-[0-9]{3}|retiled-comparison-audit-[0-9]{3}|mlp-(integrated|full)-compile-[0-9]{3}|layer-(backend-compile|projection-compile|mlp-compile|mlp-hw|mixer-hw|mlp-reference|joint-reference|dialogue-reference|frontend-reference|mixer-reference|mixer-payload|silu-oracle|weight-audit)-[0-9]{3}',a.name):raise ValueError('name')
 physical='-hw-' in a.name
 remote=('/srv/qwen38-singlewse-hardware/' if physical else '/srv/model-storage/qwen38-singlewse/runs/')+a.name
 dispatch=ROOT/'evidence'/a.name/'dispatch.json'
@@ -18,7 +18,7 @@ if require_terminal:assert any((r/n).exists() for n in ['COMPLETE.json','FAILURE
 source={}
 for n in m['files']:
  p=Path(n)
- assert not p.is_absolute() and '..' not in p.parts and p.suffix in ['.py','.csl','.json']
+ assert not p.is_absolute() and '..' not in p.parts and p.suffix in ['.py','.csl','.cslpart','.json']
  source[n]=base64.b64encode((r/n).read_bytes()).decode()
 receipts={n:(r/n).read_text() for n in ['source-manifest.json','COMPLETE.json','FAILURE.json','CANCELLED.json','result.json','sram.json','fixture.json','bank-index.json','bank-remap-proof.json','silu-proof.json','artifact.json','compile-audit.json','run-audit.json','reuse-artifact.json','reused-compile-audit.json','reuse-compiler-output.json','artifact-admission.json','upload-framing.json','download-framing.json','download-rejection.json','diagnostic.json','progress.json','static-routes.json','compile.log','run.log','sim.log'] if (r/n).is_file() and (r/n).stat().st_size<1<<20}
 # Full-matrix route source plus the exact 1,262-PE ELF census is slightly above

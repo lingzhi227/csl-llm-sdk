@@ -1,0 +1,10 @@
+// Preserve the original mixer/state resident bank in this MLP-only component.
+// No mixer operation is executed; it is not a full-layer acceptance artifact.
+param memcpy_params;param bank_words:u16;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+var bank=@zeros([if(bank_words>0) bank_words else 1]u32);var audit=@zeros([4]u32);var setup=@zeros([5]u16);
+const bp:[*]u32=&bank;const ap:[*]u32=&audit;const sp:[*]u16=&setup;
+fn arm(epoch:u32) void {audit[0]=epoch;sys.unblock_cmd_stream();}
+fn start() void {sys.unblock_cmd_stream();}
+fn finish() void {sys.unblock_cmd_stream();}
+comptime {@export_symbol(bp,"bank");@export_symbol(ap,"audit");@export_symbol(sp,"setup");@export_symbol(arm);@export_symbol(start);@export_symbol(finish);}

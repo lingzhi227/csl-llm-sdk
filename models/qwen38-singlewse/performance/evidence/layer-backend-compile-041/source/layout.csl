@@ -1,0 +1,31 @@
+const memcpy=@import_module("<memcpy/get_params>",.{.width=10,.height=1});
+fn ordinary_memcpy_params(x:i16) memcpy.Params {return memcpy.get_params(x);}
+layout {
+ @set_rectangle(10,1);
+ @set_tile_code(0,0,"compact_layer_projection.csl",.{.memcpy_params=ordinary_memcpy_params(0),.rows=8,.columns=32,.branches=2,.max_parts=1,.bank_words=7304,.root=true,.children=2,.subtree_k=160,.left_k=80,.right_k=79,.left_color=5,.right_color=3,.out_color=7,.copy_transport=true,.tagged_input=true,.mlp_component=true,.shared_inputs=true,.fused_root=true,.boundary_rows=13,.boundary_out_color=14});
+ @set_tile_code(1,0,"bridge_compact_layer_projection.csl",.{.memcpy_params=ordinary_memcpy_params(1),.rows=8,.columns=32,.branches=2,.max_parts=1,.bank_words=7304,.root=true,.children=2,.subtree_k=160,.left_k=80,.right_k=79,.left_color=5,.right_color=3,.out_color=7,.copy_transport=true,.tagged_input=true,.mlp_component=true,.shared_inputs=true,.fused_root=true,.boundary_rows=13,.boundary_out_color=14,.bridge_group=15,.bridge_frames=160,.bridge_workers=40,.bridge_input=0,.bridge_return_output=6,.bridge_output=15,.bridge_return_input=20,.bridge_forward_queue=7,.bridge_reverse_queue=5});
+ @set_tile_code(2,0,"compact_layer_projection.csl",.{.memcpy_params=ordinary_memcpy_params(2),.rows=4,.columns=64,.branches=1,.max_parts=2,.bank_words=4419,.root=false,.children=2,.subtree_k=4,.left_k=2,.right_k=1,.left_color=7,.right_color=6,.out_color=3,.copy_transport=true,.tagged_input=true,.mlp_component=true,.shared_inputs=true});
+ @set_tile_code(3,0,"bridge_compact_layer_projection.csl",.{.memcpy_params=ordinary_memcpy_params(3),.rows=4,.columns=64,.branches=1,.max_parts=2,.bank_words=4419,.root=false,.children=2,.subtree_k=4,.left_k=2,.right_k=1,.left_color=7,.right_color=6,.out_color=3,.copy_transport=true,.tagged_input=true,.mlp_component=true,.shared_inputs=true,.bridge_group=14,.bridge_frames=164,.bridge_workers=44,.bridge_input=14,.bridge_return_output=9,.bridge_output=12,.bridge_return_input=16,.bridge_forward_queue=7,.bridge_reverse_queue=5});
+ @set_tile_code(4,0,"device_mixer_layer_mlp_standby.csl",.{.memcpy_params=ordinary_memcpy_params(4),.bank_words=2049,.mixer_rank_parity=1,.mixer_input48_queue=5,.mixer_can_root=false,.control_reply_rx=WEST,.control_reply_tx=EAST});
+ @set_tile_code(5,0,"bridge_device_mixer_layer_mlp_standby.csl",.{.memcpy_params=ordinary_memcpy_params(5),.bank_words=2049,.mixer_rank_parity=1,.mixer_input48_queue=5,.mixer_can_root=false,.control_reply_rx=WEST,.control_reply_tx=EAST,.bridge_group=3,.bridge_frames=72,.bridge_workers=21,.bridge_input=5,.bridge_return_output=4,.bridge_output=14,.bridge_return_input=9,.bridge_forward_queue=2,.bridge_reverse_queue=3});
+ @set_tile_code(6,0,"resident_frontend_native_001_device_mixer_layer_mlp_standby.csl",.{.memcpy_params=ordinary_memcpy_params(6),.bank_words=2049,.mixer_rank_parity=1,.mixer_input48_queue=5,.mixer_can_root=false,.control_reply_rx=WEST,.control_reply_tx=EAST,.frontend_group=14,.frontend_projected_packets=1791,.gdn_worker_count=51,.gdn_send_color=5,.gdn_return_color=4});
+ @set_tile_code(7,0,"weighted_resident_frontend_native_001_device_mixer_layer_mlp_standby.csl",.{.memcpy_params=ordinary_memcpy_params(7),.bank_words=2049,.mixer_rank_parity=1,.mixer_input48_queue=5,.mixer_can_root=false,.control_reply_rx=WEST,.control_reply_tx=EAST,.frontend_group=14,.frontend_projected_packets=1791,.gdn_worker_count=51,.gdn_send_color=5,.gdn_return_color=4});
+ @set_tile_code(8,0,"resident_frontend_native_001_device_mixer_layer_mlp_standby.csl",.{.memcpy_params=ordinary_memcpy_params(8),.bank_words=2049,.mixer_rank_parity=0,.mixer_input48_queue=5,.mixer_can_root=false,.control_reply_rx=WEST,.control_reply_tx=EAST,.frontend_group=15,.frontend_projected_packets=1558,.gdn_worker_count=42,.gdn_send_color=5,.gdn_return_color=4});
+ @set_tile_code(9,0,"weighted_resident_frontend_native_001_device_mixer_layer_mlp_standby.csl",.{.memcpy_params=ordinary_memcpy_params(9),.bank_words=2049,.mixer_rank_parity=0,.mixer_input48_queue=5,.mixer_can_root=false,.control_reply_rx=WEST,.control_reply_tx=EAST,.frontend_group=15,.frontend_projected_packets=1558,.gdn_worker_count=42,.gdn_send_color=5,.gdn_return_color=4});
+ @export_name("bank",[*]u32,false);
+ @export_name("audit",[*]u32,false);
+ @export_name("setup",[*]u16,false);
+ @export_name("fusion_signal",[*]u32,false);
+ @export_name("quant_input",[*]u32,false);
+ @export_name("sender_status",[*]u32,false);
+ @export_name("silu_lut",[*]u16,false);
+ @export_name("native_input",[*]u16,false);
+ @export_name("native_scales",[*]f32,false);
+ @export_name("arm",fn(u32)void);
+ @export_name("start",fn()void);
+ @export_name("finish",fn()void);
+ @export_name("fusion_step",fn(u16,u32,u16,u16)void);
+ @export_name("bridge_arm",fn()void);
+ @export_name("bridge_inspect",fn()void);
+ @export_name("bridge_status",[*]u32,false);
+}

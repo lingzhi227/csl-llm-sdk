@@ -1,0 +1,44 @@
+{
+  "passed": true,
+  "attempt": "layer-mlp-compile-031",
+  "application_pes": 11388,
+  "original_banks_bytes": 388094976,
+  "original_bank_maps_and_setups": {
+    "gdn-bank-placement.json": "600a94c4c1cb804db1f65cef7c922e3aba8c75ed1fcaff30159c7f3cf69a1bb5",
+    "gdn-compact-mlp.json": "9dc8043ca947fc95d95b5cc4a35501cc89991b92c533eec1b3d1b8445f918b0d",
+    "worker-setups.json": "d21a4d4ea57f8b11aaefaa0cda8e8b89e8c05dc1c4b5ce821637520554232df5",
+    "previous-worker-setups.json": "536b840e4c90e52f127f351ae01b203e1c8c66257b2988d081be2cec11619206",
+    "mixer-setups.json": "dd2aa5d8f84614429ef7329e7f526be0cba6b947e349cc6bf0f2507452f81f8a",
+    "resident-gdn-routes.json": "740bfc2184e130cf6c6fb312206a93bc7a765edec3c796b7c7b36a4d1cae5e6a"
+  },
+  "original_parameters_except_selected_transport_colors_unchanged": true,
+  "original_source_bodies_retained": true,
+  "tested_corrected_bridge_body_admitted": true,
+  "bridges": [
+    [
+      103,
+      60
+    ],
+    [
+      109,
+      145
+    ]
+  ],
+  "weighted_frontends": [
+    [
+      100,
+      145
+    ],
+    [
+      101,
+      145
+    ]
+  ],
+  "source_manifest_sha256": "85b2b266fea4d11206557d526c2f7c1e2760c28e13d2c9e08e18b8989b494fab",
+  "census_receipt_sha256": "eb15214a71e9fef383db2389e5823245950d11e5b1c14902cc8fe88f342ec1a6",
+  "reference_attempt": "layer-frontend-reference-004",
+  "reference_proof_sha256": "feb8ecfbd97a2e8014632285f6ded07661141b21b1981a36907070ab38186551",
+  "physical": false,
+  "neural_execution": false,
+  "scope": "Unchanged exact original bank maps, native parameters and original code bodies. Reference004 applies to these identical bank descriptors; no new payload readback or neural execution."
+}

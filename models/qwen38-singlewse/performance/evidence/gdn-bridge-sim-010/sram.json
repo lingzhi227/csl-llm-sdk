@@ -1,0 +1,80 @@
+{
+  "passed": true,
+  "application_pes": 3,
+  "compiled_elf_images": 3,
+  "application": [
+    3,
+    1
+  ],
+  "fabric": [
+    10,
+    3
+  ],
+  "offset": [
+    4,
+    1
+  ],
+  "records": [
+    {
+      "file": "out/bin/out_0_0.elf",
+      "sha256": "aac27c1206e36d90e9e7bea62cf4ce263e27afca80210a061b9eda0610355c4b",
+      "rectangles": [
+        [
+          4,
+          1,
+          1,
+          1
+        ]
+      ],
+      "source": "source.csl",
+      "low_section_end": 13072,
+      "low_section_bytes": 13062,
+      "static_allocated_section_bytes": 13458,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out/bin/out_1_0.elf",
+      "sha256": "f420f76399b70f46e3a56e56c2d4fb2362de3227fc40d1cab02904ebc06594ea",
+      "rectangles": [
+        [
+          5,
+          1,
+          1,
+          1
+        ]
+      ],
+      "source": "bridge_compact_layer_projection.csl",
+      "low_section_end": 40608,
+      "low_section_bytes": 40598,
+      "static_allocated_section_bytes": 41024,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    },
+    {
+      "file": "out/bin/out_2_0.elf",
+      "sha256": "63c42ccd496a63d74cd2d71597501523f2eb4be8d7f9b627506b1f394003b502",
+      "rectangles": [
+        [
+          6,
+          1,
+          1,
+          1
+        ]
+      ],
+      "source": "sink.csl",
+      "low_section_end": 10432,
+      "low_section_bytes": 10432,
+      "static_allocated_section_bytes": 10828,
+      "stack_allowance_bytes": 4096,
+      "ordinary_address_ceiling": 48128,
+      "passed": true,
+      "scope": "48 KiB application SRAM plus declared stack allowance gate; not measured dynamic stack peak"
+    }
+  ],
+  "note": "A compiler ELF may cover several PEs. All complete low-memory PT_LOAD rectangles form the exact application once; SRAM is admitted for every mapped image."
+}

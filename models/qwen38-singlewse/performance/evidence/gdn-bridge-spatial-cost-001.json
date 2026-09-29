@@ -1,0 +1,84 @@
+{
+  "scope": "Static geometry of frozen emitted routes. No bandwidth, congestion, cycle, or throughput claim.",
+  "source_plan_sha256": "49cec8f038914c7f21475a202f473d041c21390ad9d605742440a3e9661d87f7",
+  "groups": [
+    {
+      "group": 15,
+      "bridge": [
+        103,
+        60
+      ],
+      "frontend": [
+        101,
+        145
+      ],
+      "child_frames": 160,
+      "child_markers": 40,
+      "domains": {
+        "up": {
+          "multicast_edges": 97,
+          "maximum_multicast_depth": 97,
+          "return_chain_hops": 119,
+          "original_workers": 2,
+          "worker_return_hops_min": 1,
+          "worker_return_hops_max": 2,
+          "paired_frames": 32
+        },
+        "down": {
+          "multicast_edges": 41,
+          "maximum_multicast_depth": 8,
+          "return_chain_hops": 245,
+          "original_workers": 40,
+          "worker_return_hops_min": 5,
+          "worker_return_hops_max": 245,
+          "paired_frames": 160
+        }
+      }
+    },
+    {
+      "group": 14,
+      "bridge": [
+        109,
+        145
+      ],
+      "frontend": [
+        100,
+        145
+      ],
+      "child_frames": 164,
+      "child_markers": 44,
+      "domains": {
+        "up": {
+          "multicast_edges": 96,
+          "maximum_multicast_depth": 86,
+          "return_chain_hops": 185,
+          "original_workers": 7,
+          "worker_return_hops_min": 84,
+          "worker_return_hops_max": 90,
+          "paired_frames": 28
+        },
+        "down": {
+          "multicast_edges": 248,
+          "maximum_multicast_depth": 86,
+          "return_chain_hops": 116,
+          "original_workers": 44,
+          "worker_return_hops_min": 1,
+          "worker_return_hops_max": 116,
+          "paired_frames": 164
+        }
+      }
+    }
+  ],
+  "bridge_per_invocation": {
+    "forward_chunks": 9,
+    "forward_receive_words": 1161,
+    "forward_send_words": 1161,
+    "return_frame_words": 5,
+    "weighted_markers": 1
+  },
+  "measurement_missing": [
+    "Actual routed full-stage contention",
+    "Original neural end-to-end critical path",
+    "Multi-turn average assistant output TPS"
+  ]
+}

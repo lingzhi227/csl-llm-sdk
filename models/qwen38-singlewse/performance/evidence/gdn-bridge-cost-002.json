@@ -1,0 +1,64 @@
+{
+  "passed": true,
+  "attempt": "layer-backend-compile-043",
+  "source_manifest_sha256": "b095e3ca59e45385fe579cfff85e0dc61b1f6310acf85115b1c0ffe06c9b8ed8",
+  "sram_sha256": "67d1c1be1d63f0771ffaea7586d469c617d4408745a5c82e86342df08042162f",
+  "pairs": [
+    {
+      "original_pe": [
+        103,
+        60
+      ],
+      "baseline": 42192,
+      "candidate": 44432,
+      "delta": 2240,
+      "original_bank_words": 7304
+    },
+    {
+      "original_pe": [
+        109,
+        145
+      ],
+      "baseline": 30464,
+      "candidate": 32704,
+      "delta": 2240,
+      "original_bank_words": 4419
+    },
+    {
+      "original_pe": [
+        80,
+        145
+      ],
+      "baseline": 22096,
+      "candidate": 23760,
+      "delta": 1664,
+      "original_bank_words": 2049
+    },
+    {
+      "original_pe": [
+        100,
+        145
+      ],
+      "baseline": 48064,
+      "candidate": 48096,
+      "delta": 32,
+      "original_bank_words": 2049
+    },
+    {
+      "original_pe": [
+        101,
+        145
+      ],
+      "baseline": 48048,
+      "candidate": 48080,
+      "delta": 32,
+      "original_bank_words": 2049
+    }
+  ],
+  "all_ten_passed": true,
+  "stack_allowance_bytes": 4096,
+  "change": "Retain reverse queue until all data and control markers join; adds16B to each selected bridge relative to042.",
+  "physical": false,
+  "executed": false,
+  "full_stage_admission": false
+}

@@ -1207,3 +1207,29 @@ The other groups need additional color-domain lowering. Compilation and original
 storage conservation do not qualify their neural execution or establish speed.
 Failed snapshots and rejected variants remain preserved. See
 `evidence/resident-gdn-summary-001.json` for the bounded attempt inventory.
+
+## P49: bounded color-domain fusion and continuous transport retirement
+
+P49 adds bounded bidirectional color translators for resident groups 14 and 15,
+bringing the static original-coordinate plan to five of sixteen groups. It
+preserves all original banks and prior router owners while adding 1,155 entries.
+Fresh corrected compile031 covers 11,388 PEs / 8,303 ELF images, with a maximum
+48,096 bytes including 4,096 bytes of stack and a 32-byte minimum margin.
+Two exact-cohost simulations each pass four continuing calls: 9,288 forward
+words, 6,480 returned words, 336 raw markers, eight weighted completions,
+unchanged bank sentinels, transfer overlap and local callback drain. Independent
+retained-capture audits pass. The final receive queue now remains available
+until its last control marker joins all data callbacks.
+Thirty-seven source and 37 publication checks pass; all 19 workstation services
+are released and no new WSE job is submitted. These are synthetic transport
+results, not original neural or full-model speed qualification. Eleven groups,
+the serving phase controller, full-layer/model integration and >=2,000 average
+output tokens/s for actual multi-turn conversation remain unfinished.
+See [Resident color-domain bridges](GDN-BRIDGES.md).
+
+The new retirement contract keeps a shared data/control receive queue open until
+both data callbacks and terminal markers join. Failed attempts and the rejected
+UT change are retained; exact cohost simulations 010/011 and full compile031
+qualify the corrected source. A relaxed group5 route proposal is rejected for
+integration because it removes connected return colors from groups6–9. The
+remaining routing problem requires joint planning or more domain splits.

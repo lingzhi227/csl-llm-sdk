@@ -1,0 +1,73 @@
+{
+  "passed": true,
+  "attempt": "layer-backend-compile-042",
+  "physical": false,
+  "executed": false,
+  "full_stage_admission": false,
+  "stack_bytes": 4096,
+  "pairs": [
+    {
+      "original_pe": [
+        103,
+        60
+      ],
+      "source": "compact_layer_projection.csl",
+      "baseline_with_stack": 42192,
+      "candidate_with_stack": 44416,
+      "added_bytes": 2224
+    },
+    {
+      "original_pe": [
+        109,
+        145
+      ],
+      "source": "compact_layer_projection.csl",
+      "baseline_with_stack": 30464,
+      "candidate_with_stack": 32688,
+      "added_bytes": 2224
+    },
+    {
+      "original_pe": [
+        80,
+        145
+      ],
+      "source": "device_mixer_layer_mlp_standby.csl",
+      "baseline_with_stack": 22096,
+      "candidate_with_stack": 23744,
+      "added_bytes": 1648
+    },
+    {
+      "original_pe": [
+        100,
+        145
+      ],
+      "source": "resident_frontend_native_001_device_mixer_layer_mlp_standby.csl",
+      "baseline_with_stack": 48064,
+      "candidate_with_stack": 48096,
+      "added_bytes": 32
+    },
+    {
+      "original_pe": [
+        101,
+        145
+      ],
+      "source": "resident_frontend_native_001_device_mixer_layer_mlp_standby.csl",
+      "baseline_with_stack": 48048,
+      "candidate_with_stack": 48080,
+      "added_bytes": 32
+    }
+  ],
+  "source_manifest_sha256": "8f64908e2d90749d6b5622af3dff5989c1dfee50c156275ee55b67e7b8c8dd2c",
+  "census_sha256": "1c93d6894c78ad542f26990051bec8ed9d0c0291c1119b6f9b82ad9ad4719aa3",
+  "marker_abi": {
+    "original_no_argument": 40,
+    "weighted_count_argument": 41
+  },
+  "failed_attempts": {
+    "038": "Cohost mixer owns local task14.",
+    "039": "WSE3 local task7 is outside8..30.",
+    "040": "SDK command receiver owns inputqueue1.",
+    "041": "SDK D2H owns localtask21."
+  },
+  "selection": "Localtasks10/18; compact reverseIQ5 is unused under required copy_transport=true; mixer reverseIQ3; old worker marker40 remains no-argument."
+}
