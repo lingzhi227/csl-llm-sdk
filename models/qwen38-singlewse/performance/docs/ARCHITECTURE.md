@@ -1,4 +1,4 @@
-# Resident west-to-east layer pipeline
+# Whole-model architecture and preserved spatial baseline
 
 The user's current target is defined in [USER-SPATIAL-PIPELINE-TARGET.md](USER-SPATIAL-PIPELINE-TARGET.md).
 All64 original layers occupy disjoint resident stages. The September28 target is
@@ -8,6 +8,16 @@ aggregate independent-request interpretation is superseded. The active timing
 contract includes turn input processing and generation; see
 [DIALOGUE-ACCEPTANCE.md](DIALOGUE-ACCEPTANCE.md). No measured model rate is claimed.
 The original functional capture and failed strict comparisons remain unchanged.
+
+## Active P50 design
+
+[Selected complete-model dialogue architecture](DIALOGUE-ARCHITECTURE.md) is the
+current implementation decision. It compares4/8/16 macro partitions and selects
+variable widths with7/9 alternating layer counts,512-position state capacity,
+explicit controller budgets and separate logical/physical lowering. The old
+coordinates below are historical implementation evidence. Do not continue their
+bridge sequence as the active plan. New complete-network, role-SRAM, numerical
+and performance qualification is required before expansion.
 
 ## Concrete P22 map
 
@@ -195,7 +205,7 @@ multi-request pipeline occupancy. None of these service times is qualified yet.
 5. Compiled CSL, original-weight numerical execution, physical service times.
 
 The first three have a concrete candidate; step4 and complete step5 remain open.
-Next compose the real layer0 -> layer1 path on these coordinates, including GDN,
+The historical P22 next step was to compose layer0 -> layer1 on these coordinates, including GDN,
 MLP, persistent conversation state and actual next-layer consumption. Use that connected path to
 validate/optimize the generator, then instantiate all64 stages and full feedback.
 Do not revert to an unbounded isolated matrix or helper benchmark series.

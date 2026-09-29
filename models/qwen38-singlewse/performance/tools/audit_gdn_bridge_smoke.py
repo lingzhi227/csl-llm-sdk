@@ -55,6 +55,15 @@ fn probe_send() void {sys.unblock_cmd_stream();}
 fn probe_wait() void {sys.unblock_cmd_stream();}
 comptime {@export_symbol(probe_arm);@export_symbol(probe_send);@export_symbol(probe_wait);}
 '''
+    if plan.get('direct_fabric_streams', False):
+        assert plan['explicit_invocation_argument']
+        assert plan['resource_compile'] == 'layer-backend-compile-045'
+        assert parameters.get('bridge_switch', False) is False
+        assert b'param bridge_switch:bool=false;' in original
+        wrappers = wrappers.replace(b'fn probe_arm() void {bridge_arm();}',
+                                    b'fn probe_arm(token:u32) void {bridge_stream_arm(token);}')
+        segments = list(map(int, parameters['bridge_segments'].split('{')[1].rstrip('}').split(',')))
+        assert segments == plan['segments'] and len(segments) == workers and sum(segments) == frames
     assert source(sample['source']) == original + wrappers
     assert sha(original) == plan['actual_cohost_source_sha256']
     assert plan['bank_words'] == parameters['bank_words'] == result['original_bank_words']
@@ -109,6 +118,8 @@ with np.load(p,allow_pickle=False)as a:
                   compiled_cohost_sha256=sha(original), compiled_cohost_exact=True,
                   source_manifest_sha256=sha((folder/'source-manifest.json').read_bytes()),
                   capture=capture, physical=False, neural_execution=False, full_model=False,
+                  direct_fabric_streams=plan.get('direct_fabric_streams', False),
+                  switch_parent_executed=False,
                   scope='Independent retained-return/status audit; forward words and bank sentinels '
                         'were checked by the source-bound runner but are not retained in actual.npz. '
                         'Three diagnostic RPC wrappers; no original neural execution or speed acceptance.')

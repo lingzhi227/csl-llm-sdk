@@ -1233,3 +1233,25 @@ UT change are retained; exact cohost simulations 010/011 and full compile031
 qualify the corrected source. A relaxed group5 route proposal is rejected for
 integration because it removes connected return colors from groups6–9. The
 remaining routing problem requires joint planning or more domain splits.
+
+## P50: selected complete-model dialogue architecture
+
+P50 moves the main work to complete-model architecture before further spatial
+integration. A bounded comparison selects a variable-width7/9-layer macro
+partition with fresh native-bank ownership, entry/exit-aligned operator regions,
+and distributed handoff paths. The selected design reserves512 positions for
+one continuing conversation and budgets66 controllers. An exhaustive audit
+covers194 regions,498 matrices and115,077,120 original native tiles. This is
+capacity/address/design evidence; compiled SRAM, full fabric,512-position neural
+execution and the2000tps response target remain unqualified.
+
+The current primitive-reuse screen also shows that communication improvements
+alone cannot justify the target. The next work combines complete graph lowering
+with a faster exact-FP8 row loop, then representative adjacent full layers before
+64-layer expansion. Old P22–P49 coordinates and route owners are comparison
+baselines, not constraints on the new implementation. All eight new workstation
+services are released, and no new WSE job was submitted. Seventy-three source
+and73 publication regressions pass;505 original functional files and11,547
+previously frozen evidence files are byte-identical. Single-domain stream
+checks pass; the dual-domain runtime remains rejected.
+See [Design and comparison](DIALOGUE-ARCHITECTURE.md).

@@ -1,0 +1,59 @@
+{
+  "device_mixer_layer_mlp_standby.csl": {
+    "original_sha256": "f71dcd50862102b2f0dd4ac0a1f1e104ef7120241a520bdfdd3141658da53a47",
+    "adapted_sha256": "89a39b30cddc80be6f78c3b2ffa1316fdec4b86d3df67bc3f90aeb7124658853",
+    "role": "mixer_layer_mlp_standby.csl",
+    "exported_symbols_removed": 12,
+    "entrypoints_preserved": [
+      "arm",
+      "start",
+      "finish",
+      "mixer_begin",
+      "mixer_consume"
+    ],
+    "bank_loader": true,
+    "bounded_readback": true,
+    "root_lease_requires_explicit_consume": true,
+    "routed_port_mode": true,
+    "full_stage_routed": false,
+    "executed": false
+  },
+  "device_mixer_layer_norm_sender.csl": {
+    "original_sha256": "a81cab5f4714c3b6eb9b8da41cce468cdb84ec4d12b6017455bd3c46c24fb8ae",
+    "adapted_sha256": "0c73bbfc8be5df2c081412c3180d5e4c8a483e5fe7ff67cd817f36ae9895d8f1",
+    "role": "mixer_layer_norm_sender.csl",
+    "exported_symbols_removed": 14,
+    "entrypoints_preserved": [
+      "arm",
+      "start",
+      "finish",
+      "mixer_begin",
+      "mixer_consume"
+    ],
+    "bank_loader": true,
+    "bounded_readback": true,
+    "root_lease_requires_explicit_consume": true,
+    "routed_port_mode": true,
+    "full_stage_routed": false,
+    "executed": false
+  },
+  "device_mixer_layer_norm_bridge.csl": {
+    "original_sha256": "00d622f856c806e1b3eb703e696ab2336a3f4409c6ed474c063bbceeb9d7047e",
+    "adapted_sha256": "59c8440b6c4235297b9bafe6334a902bdd03f9bcdeab9bbf4bef5b4118ff2deb",
+    "role": "mixer_layer_norm_bridge.csl",
+    "exported_symbols_removed": 15,
+    "entrypoints_preserved": [
+      "arm",
+      "start",
+      "finish",
+      "mixer_begin",
+      "mixer_consume"
+    ],
+    "bank_loader": true,
+    "bounded_readback": true,
+    "root_lease_requires_explicit_consume": true,
+    "routed_port_mode": true,
+    "full_stage_routed": false,
+    "executed": false
+  }
+}

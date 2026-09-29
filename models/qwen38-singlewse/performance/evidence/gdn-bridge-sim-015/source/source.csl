@@ -1,0 +1,30 @@
+param memcpy_params;param total_frames:u16;param total_workers:u16;param send_color:u16;param return_color:u16;
+const sys=@import_module("<memcpy/memcpy>",memcpy_params);
+const oq=@get_output_queue(2);const iq=@get_input_queue(2);
+const ds=@get_dsr(dsr_src0,2);const dd=@get_dsr(dsr_dest,2);
+const done=@get_local_task_id(8);const marker=@get_control_task_id(41);
+var wire=@zeros([1161]u32);var received=@zeros([total_frames*5]u32);var audit=@zeros([8]u32);
+const wp:[*]u32=&wire;const rp:[*]u32=&received;const ap:[*]u32=&audit;
+var waiting:bool=false;
+fn progress() void {if(waiting and audit[0]==1 and audit[1]==@as(u32,total_frames)*5 and audit[2]==@as(u32,total_workers)){waiting=false;@block(@get_data_task_id(iq));sys.unblock_cmd_stream();}}
+fn probe_arm(token:u32) void {for(@range(u16,8))|i|{audit[i]=0;}waiting=false;@unblock(@get_data_task_id(iq));sys.unblock_cmd_stream();}
+fn probe_send() void {
+ const m=@get_dsd(mem1d_dsd,.{.base_address=&wire,.extent=1161});
+ const f=@get_dsd(fabout_dsd,.{.output_queue=oq,.extent=1161});
+ @load_to_dsr(ds,m);@load_to_dsr(dd,f,.{.async=true,.ut_id=@get_ut_id(2),.activate=done});@mov32(dd,ds,.{.async=true});sys.unblock_cmd_stream();
+}
+fn probe_wait() void {waiting=true;progress();}
+fn bridge_inspect() void {sys.unblock_cmd_stream();}
+task sent() void {audit[0]=1;progress();}
+task returned(value:u32) void {
+ @assert(audit[1]<@as(u32,total_frames)*5);received[@as(u16,audit[1])]=value;audit[1]+=1;
+ if(audit[0]==0){audit[4]+=1;}progress();
+}
+task marked(count:u16) void {@assert(count>0 and audit[2]+@as(u32,count)<=@as(u32,total_workers));audit[2]+=count;audit[3]+=1;progress();}
+comptime {
+ @initialize_queue(oq,.{.color=@get_color(send_color)});@initialize_queue(iq,.{.color=@get_color(return_color)});
+ @bind_local_task(sent,done);@bind_data_task(returned,@get_data_task_id(iq));@bind_control_task(marked,marker);
+ @block(@get_data_task_id(iq));
+ @export_symbol(wp,"wire");@export_symbol(rp,"received");@export_symbol(ap,"probe_audit");
+ @export_symbol(probe_arm);@export_symbol(probe_send);@export_symbol(probe_wait);@export_symbol(bridge_inspect);
+}

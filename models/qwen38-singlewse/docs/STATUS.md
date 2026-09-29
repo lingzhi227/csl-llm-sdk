@@ -11,6 +11,26 @@ includes appended-input processing and generation, excluding user think time and
 initial loading; decode-only speed and TTFT are reported separately. See
 [DIALOGUE-ACCEPTANCE.md](../performance/docs/DIALOGUE-ACCEPTANCE.md). The target remains unmet.
 
+P50 moves the main work to complete-model architecture before further spatial
+integration. A bounded comparison selects a variable-width7/9-layer macro
+partition with fresh native-bank ownership, entry/exit-aligned operator regions,
+and distributed handoff paths. The selected design reserves512 positions for
+one continuing conversation and budgets66 controllers. An exhaustive audit
+covers194 regions,498 matrices and115,077,120 original native tiles. This is
+capacity/address/design evidence; compiled SRAM, full fabric,512-position neural
+execution and the2000tps response target remain unqualified.
+
+The current primitive-reuse screen also shows that communication improvements
+alone cannot justify the target. The next work combines complete graph lowering
+with a faster exact-FP8 row loop, then representative adjacent full layers before
+64-layer expansion. Old P22–P49 coordinates and route owners are comparison
+baselines, not constraints on the new implementation. All eight new workstation
+services are released, and no new WSE job was submitted. Seventy-three source
+and73 publication regressions pass;505 original functional files and11,547
+previously frozen evidence files are byte-identical. Single-domain stream
+checks pass; the dual-domain runtime remains rejected.
+See [Selected complete-model design](../performance/docs/DIALOGUE-ARCHITECTURE.md).
+
 P49 adds bounded bidirectional color translators for resident groups 14 and 15,
 bringing the static original-coordinate plan to five of sixteen groups. It
 preserves all original banks and prior router owners while adding 1,155 entries.

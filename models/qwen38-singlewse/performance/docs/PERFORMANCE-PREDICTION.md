@@ -81,12 +81,13 @@ code cannot be hidden inside an arbitrary universal correction factor.
 
 ## Interpretation and current finding
 
-For a declared concurrency C and target X, steady state requires mean request
-feedback cycle <= C/X seconds, as well as adequate service capacity everywhere.
-With the current two-request map and X=2000, this necessary budget is 1 ms. It
-does not assert a measured 1 ms cycle or that two requests fill 64 spatial stages.
-The queue model separately exposes limits from long feedback cycles, slow stages
-and insufficient buffer slots.
+For one continuing conversation and target X, the necessary dependent decode
+feedback budget is1/X seconds:500us at2000tps. Appended prompt/TTFT/output costs
+make response-inclusive acceptance stricter. Resident request capacity does not
+relax this budget. The active predictor now defaults its service scenario to one
+request; an explicitly requested multi-request scenario is separately labeled
+aggregate capacity and cannot qualify conversation performance. Frozen older
+aggregate reports keep their historical scope.
 
 The matching native shapes cover about 94.95% of matrix MACs in stage-map-002.
 This is arithmetic coverage, not timing coverage. That layout assigns about134
@@ -97,7 +98,7 @@ not a complete layer time, an immutable bound or a hardware-frequency estimate.
 
 ## Incremental calibration alongside layer integration
 
-The executor should keep developing the connected layer0 -> layer1 neural path.
+The executor now follows the selected whole-model design in DIALOGUE-ARCHITECTURE.md before further coordinate-specific integration.
 This predictor is decision support, not a new prerequisite framework milestone.
 
 - Add measured new layer-local tile and BF16-tail costs with source/artifact,

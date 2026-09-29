@@ -57,7 +57,9 @@ class PlanPredictionTests(unittest.TestCase):
     def test_real_plan_never_turns_partial_calibration_into_full_tps(self):
         r=analyze(self.plan,self.ir,self.calibration)
         self.assertEqual(r['concurrency'],2)
-        self.assertAlmostEqual(r['requirements']['maximum_mean_request_feedback_cycle_seconds'],.001)
+        self.assertAlmostEqual(r['requirements']['maximum_mean_dependent_decode_cycle_seconds'],.0005)
+        self.assertEqual(r['target_single_conversation_response_tokens_per_second'],2000)
+        self.assertFalse(r['independent_request_capacity']['qualifies_single_conversation_target'])
         self.assertIsNone(r['predicted_generated_tokens_per_second'])
         self.assertFalse(r['complete_model_prediction'])
         self.assertGreater(r['coverage']['calibrated_shape_mac_fraction'],.9)
@@ -99,7 +101,12 @@ class PlanPredictionTests(unittest.TestCase):
         r=evaluate_scenario(self.plan,self.digest,self.scenario(),warmup=10,samples=100)
         self.assertIsNone(r['generated_tokens_per_second'])
         self.assertFalse(r['target_achieved'])
-        self.assertAlmostEqual(r['generated_completions_per_cycle'],2/(66*10+5))
+        self.assertEqual(r['scenario_concurrency'],1)
+        self.assertFalse(r['response_inclusive'])
+        self.assertAlmostEqual(r['generated_completions_per_cycle'],1/(66*10+5))
+        parallel=evaluate_scenario(self.plan,self.digest,self.scenario(),concurrency=2,warmup=10,samples=100)
+        self.assertAlmostEqual(parallel['generated_completions_per_cycle'],2/(66*10+5))
+        self.assertIn('Independent-request aggregate',parallel['metric_scope'])
 
 
 if __name__=='__main__':unittest.main()

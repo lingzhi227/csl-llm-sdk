@@ -1,0 +1,105 @@
+{
+  "milestone": "P50",
+  "scope": "Selected complete-model architecture and closed in-flight segmented-stream experiments",
+  "utc": "2026-09-29T01:19:05.810683+00:00",
+  "selected_plan": "dialogue-architecture-001/selected-plan.json",
+  "selected_plan_sha256": "1009c61a92a0ecef2a09a6cdca3943c5a10bd235faff2e35885979d01ac5979a",
+  "candidates": [
+    {
+      "attempt": "architecture-screen-005",
+      "report_sha256": "1fbeb128d32b5fd03234b7afa5a3648751145813b3adc15b647a032ee5bd6a6d",
+      "columns": 8,
+      "align_flow": false,
+      "context": 96,
+      "mean_word_distance": 158.36220056519556,
+      "maximum_path_hops": 320,
+      "maximum_directed_link_words": 3005,
+      "sum_edge_maximum_hops": 11806,
+      "complete_model_network": false
+    },
+    {
+      "attempt": "architecture-screen-009",
+      "report_sha256": "920d92f859e892567f94609255b9b9bf7b09000c25ff57f1960af1f494478241",
+      "columns": 4,
+      "align_flow": true,
+      "context": 96,
+      "mean_word_distance": 103.96806909119721,
+      "maximum_path_hops": 219,
+      "maximum_directed_link_words": 2857,
+      "sum_edge_maximum_hops": 10205,
+      "complete_model_network": false
+    },
+    {
+      "attempt": "architecture-screen-010",
+      "report_sha256": "5a4160808feff52d2640e2fa8ec47625697f5a34aeb2d3bddfd6530a081ca16c",
+      "columns": 8,
+      "align_flow": true,
+      "context": 96,
+      "mean_word_distance": 106.60167724867725,
+      "maximum_path_hops": 248,
+      "maximum_directed_link_words": 1776,
+      "sum_edge_maximum_hops": 9402,
+      "complete_model_network": false
+    },
+    {
+      "attempt": "architecture-screen-011",
+      "report_sha256": "c60233c1b0f1d6676c7d7c49c19658b087ec29d61f6181f49a32d719f331aa38",
+      "columns": 16,
+      "align_flow": true,
+      "context": 96,
+      "mean_word_distance": 148.33249346327548,
+      "maximum_path_hops": 300,
+      "maximum_directed_link_words": 3005,
+      "sum_edge_maximum_hops": 14936,
+      "complete_model_network": false
+    }
+  ],
+  "context_reserved": 512,
+  "context_runtime_qualified": false,
+  "controllers": {
+    "dedicated": 42,
+    "cohost": 24
+  },
+  "native_bank_audit": {
+    "passed": true,
+    "controller_placement_checked": false,
+    "regions": 194,
+    "matrices": 498,
+    "native_tiles": 115077120,
+    "maximum_matrix_payload": 35100,
+    "minimum_region_spare_auxiliary_pages": 3195,
+    "full_model_layer_residency": true,
+    "compiled_sram": false,
+    "executed": false
+  },
+  "state_bytes_per_request": 187498496,
+  "original_weight_bytes": 29468003328,
+  "total_payload_bytes": 30080153856,
+  "all_workstation_released": true,
+  "released_workstation_services": [
+    "layer-backend-compile-044",
+    "layer-backend-compile-045",
+    "gdn-bridge-sim-012",
+    "gdn-bridge-sim-013",
+    "gdn-bridge-sim-014",
+    "gdn-bridge-sim-015",
+    "gdn-bridge-sim-016",
+    "gdn-bridge-sim-017"
+  ],
+  "new_wse_jobs": 0,
+  "hardware_audit": "architecture-resource-audit-001.json",
+  "accepted_synthetic_streams": [
+    "gdn-bridge-sim-013",
+    "gdn-bridge-sim-014"
+  ],
+  "rejected_dual_domain_attempts": [
+    "gdn-bridge-sim-015",
+    "gdn-bridge-sim-016",
+    "gdn-bridge-sim-017"
+  ],
+  "source_tests": 73,
+  "publication_tests": null,
+  "full_model_tps": null,
+  "target_achieved": false,
+  "next_phase": "Lower and qualify selected whole-model architecture; no further fixed-old-coordinate bridge sequence"
+}

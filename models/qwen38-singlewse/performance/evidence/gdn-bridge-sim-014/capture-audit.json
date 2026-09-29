@@ -1,0 +1,34 @@
+{
+  "passed": true,
+  "attempt": "gdn-bridge-sim-014",
+  "group": 14,
+  "frames": 164,
+  "workers": 44,
+  "bank_words": 4419,
+  "original_cohost": [
+    109,
+    145
+  ],
+  "compiled_cohost_sha256": "c125acbc437bc2a587ff8016ebba1a838acfa8c87374ca05cded9f52c401b117",
+  "compiled_cohost_exact": true,
+  "source_manifest_sha256": "c722b7321c6b7dbfadbeaacdda2441a82b3a5720c77bb5e94700ab1ca52f7aa0",
+  "capture": {
+    "passed": true,
+    "result_sha256": "865c87930bdf2af2f674b26883d06051d284548700dc549471a720807db4eacd",
+    "capture_sha256": "82374d8a67a89775d2a224ff1b762c37a48ee704e824b8814fbe8fca50623bca",
+    "exact_retained_return_words": 3280,
+    "local_callback_snapshots": 4,
+    "early_return_words": [
+      518,
+      518,
+      518,
+      518
+    ]
+  },
+  "physical": false,
+  "neural_execution": false,
+  "full_model": false,
+  "direct_fabric_streams": true,
+  "switch_parent_executed": false,
+  "scope": "Independent retained-return/status audit; forward words and bank sentinels were checked by the source-bound runner but are not retained in actual.npz. Three diagnostic RPC wrappers; no original neural execution or speed acceptance."
+}

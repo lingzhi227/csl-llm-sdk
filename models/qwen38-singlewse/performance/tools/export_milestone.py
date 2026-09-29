@@ -43,7 +43,7 @@ def main():
         if not f.is_file() or '__pycache__' in f.parts:continue
         rel=f.relative_to(ROOT)
         if f.name in ['PUBLICATION_RECEIPT.json']:continue
-        if f.suffix not in ['.py','.csl','.cslpart','.json','.md']:continue
+        if f.suffix not in ['.py','.csl','.cslpart','.json','.md','.svg']:continue
         if f.name in ['dispatch.json','staging.json']:continue
         raw=f.read_bytes()
         if len(raw)>8<<20:raise ValueError('Noncompact artifact: '+str(rel))
@@ -52,6 +52,9 @@ def main():
             for before,after in SUBSTITUTIONS:text=text.replace(before,after)
         if f.suffix=='.py':validate_python(f,raw,text)
         if f.suffix=='.json':json.loads(text)
+        if f.suffix=='.svg':
+            import xml.etree.ElementTree as ET
+            ET.fromstring(text)
         published=text.encode();dest=target/rel;dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(published)
         entries[str(rel)]=dict(source_sha256=sha(raw),published_sha256=sha(published),site_adapted=raw!=published)
     (target/'SOURCE_EXPORT.json').write_text(json.dumps(dict(files=entries,note='Execution manifests retain original hashes; only non-CSL site paths are adapted. No model weights or compiled artifacts.'),indent=2)+'\n')

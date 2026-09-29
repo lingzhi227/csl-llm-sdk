@@ -19,7 +19,7 @@ def main():
     parser.add_argument('--ir',type=Path,required=True)
     parser.add_argument('--calibration',type=Path,default=ROOT/'performance/evidence/native-shapes-summary-001.json')
     parser.add_argument('--service-profile',type=Path)
-    parser.add_argument('--concurrency',type=int)
+    parser.add_argument('--concurrency',type=int,help='Scenario request count, default 1. Values >1 report separate aggregate capacity.')
     parser.add_argument('--target-tps',type=float,default=2000)
     parser.add_argument('--scalar-scales',action='store_true')
     parser.add_argument('--warmup',type=int,default=100)
@@ -45,9 +45,10 @@ def main():
     for name,obj in [('report.json',report),('service-profile-template.json',service_template(plan,plan_hash))]:
         with (args.output/name).open('x') as f:json.dump(obj,f,indent=2,allow_nan=False);f.write('\n')
     lines=['# Pipeline performance screening','',report['scope'],'',
-           f"- Resident concurrency: {report['concurrency']}; context: {report['context']}.",
-           f"- Target: {args.target_tps:g} aggregate generated tokens/s.",
-           f"- Necessary mean request cycle at that concurrency: {report['requirements']['maximum_mean_request_feedback_cycle_seconds']*1000:g} ms.",
+           f"- Resident request capacity: {report['concurrency']}; context: {report['context']}.",
+           f"- Target: {args.target_tps:g} assistant output tokens/s over complete responses in one continuing conversation.",
+           f"- Necessary mean dependent decode cycle: {report['requirements']['maximum_mean_dependent_decode_cycle_seconds']*1000:g} ms.",
+           '- Response timing includes appended prompt processing, TTFT, decode and output transport; excludes initial load and human think time.',
            f"- Matching native-shape MAC coverage: {report['coverage']['calibrated_shape_mac_fraction']:.2%}. This is not timing coverage.",
            '- Full-model TPS prediction: unavailable (unmeasured components and missing clock calibration).','',
            '## Conditional native-work bottlenecks','',
@@ -59,6 +60,7 @@ def main():
     if 'conditional_service_scenario' in report:
         s=report['conditional_service_scenario']
         lines += ['','## Explicit service scenario','',
+                  s['metric_scope'],
                   f"Simulated completions/cycle: {s['generated_completions_per_cycle']:.8g}.",
                   f"Conditional tokens/s: {s['generated_tokens_per_second']} (clock source: {s['clock_source']}).",
                   'This is a supplied-parameter queue simulation, not hardware acceptance.']
@@ -66,7 +68,7 @@ def main():
     print(json.dumps(dict(report=str(args.output/'REPORT.md'),
                          complete_model_prediction=False,
                          calibrated_shape_mac_fraction=report['coverage']['calibrated_shape_mac_fraction'],
-                         required_mean_request_cycle_ms=report['requirements']['maximum_mean_request_feedback_cycle_seconds']*1000,
+                         required_mean_dependent_decode_cycle_ms=report['requirements']['maximum_mean_dependent_decode_cycle_seconds']*1000,
                          unknowns=len(report['unknowns']))))
 
 

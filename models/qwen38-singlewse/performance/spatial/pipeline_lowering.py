@@ -66,7 +66,7 @@ def lower_pipeline(plan, graph, tensors):
                           reuse=['runtime/mlp_join.csl','runtime/mlp_norm.csl'])]
         kernels.append(dict(stage=stage['id'],layer=stage['layer'],rect=stage['rect'],regions=local,
                             fusions=fusions,protocol_module='csl/pipeline_lease.csl',
-                            protocol_params=dict(requests=plan['config']['concurrency'],context=96,chunks=1 if index==0 else 40),
+                            protocol_params=dict(requests=plan['config']['concurrency'],context=plan['config']['context'],chunks=1 if index==0 else 40),
                             semantic_precision='Original node attributes are authoritative',
                             neural_executable=False))
         # Direct semantic producer -> consumer edges across the layer's regions.
@@ -78,9 +78,14 @@ def lower_pipeline(plan, graph, tensors):
                     source=owner[producer[value]['id']]
                     if source['id']==r['id'] or not source['id'].startswith(stage['id']+'/'):continue
                     key=(source['id'],r['id'],value)
+                    try:
+                        ports=boundary_ports(source['rect'],r['rect'])
+                    except ValueError:
+                        ports=[]  # A legal partition can have nonadjacent semantic peers.
                     edges.setdefault(key,dict(source=source['id'],destination=r['id'],value=value,
                                               shape=graph['values'][value],consumers=[],
-                                              boundary_ports=boundary_ports(source['rect'],r['rect']),
+                                              boundary_ports=ports,
+                                              nonadjacent_route_required=not ports,
                                               region_local_distribution_lowered=False))['consumers'].append(n['id'])
         streams.extend(edges.values())
     boundaries=[]
@@ -100,7 +105,7 @@ def lower_pipeline(plan, graph, tensors):
                               required_events=['Head selection complete','Output observation accepted','Feedback slot granted','Token delivered'],
                               next_position='Only after this request receives its actual selected token',
                               physical_host_io_endpoints_verified=False,fabric_route_lowered=False),
-                request_isolation=dict(capacity=plan['config']['concurrency'],context=96,
+                request_isolation=dict(capacity=plan['config']['concurrency'],context=plan['config']['context'],
                                        key=['request_id','request_generation','position'],
                                        mutable_state='Disjoint resident request slices; no slot aliases request state',
                                        reset='Drain sends/receives, obtain all66 stage quiescence/state-clear acknowledgements, then advance generation'),
@@ -123,4 +128,5 @@ def audit_boundaries(ir):
     if len(ir['kernels'])!=66 or len(ir['stage_boundaries'])!=65:
         raise ValueError('Full pipeline boundaries required')
     return dict(stages=66,adjacent_stage_interfaces=65,one_hop_port_pairs=count,
+                nonadjacent_internal_streams=sum(bool(e.get('nonadjacent_route_required'))for e in ir['internal_streams']),
                 complete_fabric_routes_admitted=False,neural_execution=False)
